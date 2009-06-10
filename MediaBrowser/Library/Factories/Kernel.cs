@@ -150,6 +150,9 @@ namespace MediaBrowser.Library {
             };
 
 
+            // set up assembly resolution hooks, so earlier versions of the plugins resolve properly 
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(OnAssemblyResolve);
+
             kernel.EntityResolver = DefaultResolver(kernel.ConfigData);
 
             // we need to enforce that the root folder is an aggregate folder
@@ -171,6 +174,14 @@ namespace MediaBrowser.Library {
 
             return kernel;
 
+        }
+
+        static System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs args) {
+            Logger.ReportInfo(args.Name + " is being resolved!");
+            if (args.Name.StartsWith("MediaBrowser,")) {
+                return typeof(Kernel).Assembly;
+            }
+            return null;
         }
 
         public static Kernel Instance {
