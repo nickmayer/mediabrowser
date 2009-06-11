@@ -162,7 +162,7 @@
       <Size Name="Size" Size="625,48" />
       <Image Name="ImageFocus" Image="image://me:ButtonLeftFocus" />
       <Image Name="ImageNoFocus" Image="image://me:ButtonNoFocus" />
-      <Color Name="Color" Color="SlateGray" />
+      <Color Name="Color" Color="190,190,190" />
       <Color Name="FocusColor" Color="White" />
       <cor:Boolean Name="CenterText" Boolean="false"/>
     </Locals>

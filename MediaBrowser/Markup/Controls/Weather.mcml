@@ -140,11 +140,14 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" Content="image://i:BlankImage" SizingPolicy="SizeToChildren" Padding="5,0,5,0">
+      <Graphic Name="Bg" Content="image://i:BlankImage" SizingPolicy="SizeToChildren" Padding="0,0,5,0">
         <Layout>
           <FlowLayout Orientation="Horizontal" />
         </Layout>
         <Children>
+          <!-- Icon -->
+          <Graphic Name="Icon" Content="image://i:BlankImage" />
+          
           <!-- Information Panel -->
           <Panel>
             <Layout>
@@ -156,11 +159,11 @@
                   <Animation Type="Idle" Loop="0">
                     <Keyframes>
                       <ScaleKeyframe Time="0" Value="1,1,1" RelativeTo="Current"/>
-                      <ScaleKeyframe Time="3" Value="1,1,1" RelativeTo="Current"/>
-                      <ScaleKeyframe Time="3.5" Value="0,0,0"/>
+                      <ScaleKeyframe Time="2" Value="1,1,1" RelativeTo="Current"/>
+                      <ScaleKeyframe Time="2.5" Value="0,0,0"/>
                       <AlphaKeyframe Time="0" Value="1" RelativeTo="Current"/>
-                      <AlphaKeyframe Time="3" Value="1" RelativeTo="Current"/>
-                      <AlphaKeyframe Time="3.7" Value="0"/>
+                      <AlphaKeyframe Time="2" Value="1" RelativeTo="Current"/>
+                      <AlphaKeyframe Time="2.7" Value="0"/>
                     </Keyframes>
                   </Animation>
                 </Animations>
@@ -183,11 +186,11 @@
                   <Animation Type="Idle" Loop="0">
                     <Keyframes>
                       <PositionKeyframe Time="0" Value="500,0,0" Interpolation="SCurve"/>
-                      <PositionKeyframe Time="4.5" Value="500,0,0" Interpolation="SCurve"/>
-                      <PositionKeyframe Time="5" Value="0,0,0"/>
+                      <PositionKeyframe Time="3.5" Value="500,0,0" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="4" Value="0,0,0"/>
                       <AlphaKeyframe Time="0" Value="0"/>
-                      <AlphaKeyframe Time="4.5" Value="0"/>
-                      <AlphaKeyframe Time="5" Value="1"/>
+                      <AlphaKeyframe Time="3.5" Value="0"/>
+                      <AlphaKeyframe Time="4" Value="1"/>
                     </Keyframes>
                   </Animation>
                 </Animations>
@@ -215,8 +218,8 @@
                       <PositionKeyframe Time="5" Value="500,0,0" Interpolation="SCurve"/>
                       <PositionKeyframe Time="6" Value="0,0,0"/>-->
                       <AlphaKeyframe Time="0" Value="0"/>
-                      <AlphaKeyframe Time="5" Value="0"/>
-                      <AlphaKeyframe Time="6" Value="1"/>
+                      <AlphaKeyframe Time="3" Value="0"/>
+                      <AlphaKeyframe Time="4" Value="1"/>
                     </Keyframes>
                   </Animation>
                 </Animations>
@@ -225,8 +228,7 @@
             </Children>
           </Panel>
 
-          <!-- Icon -->
-          <Graphic Name="Icon" Content="image://i:BlankImage" />
+          
 
           <!-- Extended Day Forecast-->
 

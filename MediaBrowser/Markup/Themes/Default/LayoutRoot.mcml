@@ -276,7 +276,7 @@
               <!-- Weather Panel -->
               <wea:YahooWeatherLarge>
                 <LayoutInput>
-                  <AnchorLayoutInput Top="Parent,0,15" Left="Parent,0,35"/>
+                  <AnchorLayoutInput Top="Parent,0,10" Left="Parent,0,5"/>
                 </LayoutInput>
               </wea:YahooWeatherLarge>
 
