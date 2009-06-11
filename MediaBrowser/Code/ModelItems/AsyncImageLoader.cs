@@ -17,6 +17,7 @@ namespace MediaBrowser.Code.ModelItems {
     class AsyncImageLoader {
 
         static MethodInfo ImageFromStream = typeof(Image).GetMethod("FromStream", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic, null, new Type[] { typeof(string), typeof(Stream) }, null);
+        static BackgroundProcessor<Action> ImageLoadingProcessors = new BackgroundProcessor<Action>(2, action => action(), "Image loader");
 
         Item item;
         Func<LibraryImage> source;
@@ -54,15 +55,13 @@ namespace MediaBrowser.Code.ModelItems {
             get {
                 lock (this) {
                     if (image == null && source != null) {
-                        Async.Queue(() => LoadImage());
+                        ImageLoadingProcessors.Inject(LoadImage);
                     }
 
                     if (image != null) {
                         return image;
                     }
-                    if (!IsLoaded) {
-                        return null;
-                    } else {
+                    else {
                         // fall back
                         return defaultImage;
                     }
@@ -101,23 +100,29 @@ namespace MediaBrowser.Code.ModelItems {
                     localPath = localImage.GetLocalImagePath(Size.Width, Size.Height);
                 }
 
-                bytes = File.ReadAllBytes(localPath);
+                Logger.ReportVerbose("Loading image : " + localPath);
 
-                MemoryStream imageStream = new MemoryStream(bytes);
-                imageStream.Position = 0;
+                // This is a hacky way that is not supported. 
+                //bytes = File.ReadAllBytes(localPath);
+                //MemoryStream imageStream = new MemoryStream(bytes);
+                //imageStream.Position = 0;
+                //Image newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
 
-                Image newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
-                lock (this) {
-                    image = newImage;
-                    if (!sizeIsSet) {
-                        size = new Size(localImage.Width, localImage.Height);
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
+
+                    Image newImage = new Image("file://" + localPath);
+                    
+                    lock (this) {
+                        image = newImage;
+                        if (!sizeIsSet) {
+                            size = new Size(localImage.Width, localImage.Height);
+                        }
                     }
-                }
+                    if (afterLoad != null) {
+                        afterLoad();
+                    }
+                });
 
-                if (afterLoad != null) {
-                    // this makes it a bit more convenient 
-                    Microsoft.MediaCenter.UI.Application.DeferredInvoke( _ => afterLoad());
-                }
             }
         }
 
