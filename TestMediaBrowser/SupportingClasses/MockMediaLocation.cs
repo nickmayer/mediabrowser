@@ -41,5 +41,10 @@ namespace TestMediaBrowser.SupportingClasses {
             set;
         }
 
+
+        public System.IO.FileAttributes Attributes {
+            get;
+            set;
+        }
     }
 }

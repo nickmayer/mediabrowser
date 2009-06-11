@@ -5,6 +5,7 @@ using System.Text;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.Factories;
+using MediaBrowser.Library.Extensions;
 
 namespace MediaBrowser.Library.EntityDiscovery {
     public class FolderResolver : EntityResolver {
@@ -20,7 +21,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
             setup = null;
 
             var folder = location as IFolderMediaLocation; 
-            if (!(folder==null))
+            if (!(folder==null) && !folder.IsHidden())
             {
                 if (folder.Children.Count > 0 && !ignoreFolders.Contains(folder.Name.ToLower())) {
                     if (!folder.ContainsChild(IGNORE_FOLDER)) { 

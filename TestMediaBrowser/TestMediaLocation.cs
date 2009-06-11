@@ -11,24 +11,59 @@ using MediaBrowser.Library;
 namespace TestMediaBrowser {
     [TestFixture]
     public class TestMediaLocation {
-        string testDir =  Path.Combine(Path.GetTempPath(), "MediaBrowserTests");
+        string testFolder =  Path.Combine(Path.GetTempPath(), "MediaBrowserTests");
  
         [TearDown]
         public void Teardown() {
-            if (Directory.Exists(testDir)) {
-                Directory.Delete(testDir, true);
+            if (Directory.Exists(testFolder)) {
+                Directory.Delete(testFolder, true);
             }
         }
 
+        private void CreateDirectories(params string[] dirs){
+            foreach (var dir in dirs) {
+                Directory.CreateDirectory(dir);
+            }
+        }
+
+        [Test]
+        public void HiddenFilesAndFoldersShouldBeDetectedProperly() {
+            
+            var hiddenFolder = Path.Combine(testFolder, "hiddenFolder");
+            var folder = Path.Combine(testFolder, "folder");
+
+            CreateDirectories(testFolder, hiddenFolder, folder);
+            new DirectoryInfo(hiddenFolder).Attributes = FileAttributes.Hidden;
+
+            var hiddenFile = Path.Combine(testFolder, "hiddenFile");
+            var file = Path.Combine(testFolder, "file");
+
+            File.WriteAllText(hiddenFile, "");
+            File.WriteAllText(file, "");
+            new System.IO.FileInfo(hiddenFile).Attributes = FileAttributes.Hidden;
+
+
+            // finished setup 
+
+            var root = Kernel.Instance.GetLocation<FolderMediaLocation>(testFolder);
+
+            Assert.AreEqual(4, root.Children.Count);
+            Assert.AreEqual(FileAttributes.Hidden, root.GetChild("hiddenFolder").Attributes & FileAttributes.Hidden);
+            Assert.AreEqual(FileAttributes.Hidden, root.GetChild("hiddenFile").Attributes & FileAttributes.Hidden);
+
+            Assert.AreNotEqual(FileAttributes.Hidden, root.GetChild("folder").Attributes & FileAttributes.Hidden);
+            Assert.AreNotEqual(FileAttributes.Hidden, root.GetChild("file").Attributes & FileAttributes.Hidden);
+
+        } 
 
         // note this test can take a while.. 
         [Test]
         public void DodgyVfsShouldPartiallyLoad() {
 
-            var vf = Path.Combine(testDir, "test.vf");
+            var vf = Path.Combine(testFolder, "test.vf");
 
-            Directory.CreateDirectory(testDir);
-            var dir1 = Path.Combine(testDir, "test");
+            Directory.CreateDirectory(testFolder);
+            var dir1 = Path.Combine(testFolder, "test");
             Directory.CreateDirectory(dir1 + "\\path");
 
             VirtualFolderContents generator = new VirtualFolderContents("");
@@ -45,12 +80,12 @@ namespace TestMediaBrowser {
 
         [Test]
         public void VirtualFoldersCanContainDuplicateFiles() {
-            Directory.CreateDirectory(testDir);
+            Directory.CreateDirectory(testFolder);
 
-            var dir1 = Path.Combine(testDir, "test");
-            var dir2 = Path.Combine(testDir, "test2");
+            var dir1 = Path.Combine(testFolder, "test");
+            var dir2 = Path.Combine(testFolder, "test2");
 
-            var vf = Path.Combine(testDir, "test.vf");
+            var vf = Path.Combine(testFolder, "test.vf");
 
             Directory.CreateDirectory(dir1 + "\\path");
             Directory.CreateDirectory(dir2 + "\\path");
@@ -71,7 +106,7 @@ namespace TestMediaBrowser {
         [Test]
         public void TestStandardScanning() {
             CreateTree(3, 10, "hello world");
-            var root = Kernel.Instance.GetLocation(testDir);
+            var root = Kernel.Instance.GetLocation(testFolder);
             Assert.AreEqual(3, (root as IFolderMediaLocation).Children.Count);
 
             foreach (var item in (root as IFolderMediaLocation).Children) {
@@ -81,7 +116,7 @@ namespace TestMediaBrowser {
 
 
         public void CreateTree(int subDirs, int filesPerSubdir, string fileContents) {
-            var info = Directory.CreateDirectory(testDir);
+            var info = Directory.CreateDirectory(testFolder);
 
             for (int i = 0; i < subDirs; i++) {
                 var sub = Directory.CreateDirectory(Path.Combine(info.FullName, "SubDir" + i.ToString()));

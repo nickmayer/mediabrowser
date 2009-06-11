@@ -29,6 +29,8 @@ namespace MediaBrowser.Library.EntityDiscovery {
             MediaType mediaType = MediaType.Unknown;
             List<IMediaLocation> volumes = null;
 
+            if (location.IsHidden()) return;
+
             var folder = location as IFolderMediaLocation;
             if (folder != null && !folder.ContainsChild(FolderResolver.IGNORE_FOLDER)) {
                 DetectFolderWhichIsMovie(folder, out isMovie, out mediaType, out volumes);
@@ -98,11 +100,11 @@ namespace MediaBrowser.Library.EntityDiscovery {
                 }
 
                 var childFolder = child as IFolderMediaLocation;
-                if (childFolder != null) {
+                if (childFolder != null && !childFolder.IsHidden()) {
                     childFolders.Add(childFolder);
                 }
 
-                if (child.IsVideo()) {
+                if (!child.IsHidden() && child.IsVideo()) {
                     volumes.Add(child);
                     if (volumes.Count > maxVideosPerMovie || isoCount > 0) {
                         break;
@@ -138,6 +140,9 @@ namespace MediaBrowser.Library.EntityDiscovery {
             if (location.ContainsChild(FolderResolver.IGNORE_FOLDER)) yield break;
 
             foreach (var child in location.Children) {
+
+                if (child.IsHidden()) continue;
+
                 if (child.IsVideo()) { 
                     yield return child;
                 }

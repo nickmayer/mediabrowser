@@ -127,7 +127,8 @@ namespace MediaBrowser.Library.Filesystem {
                             DateCreated = findData.ftCreationTime.ToDateTime(),
                             DateModified = findData.ftLastWriteTime.ToDateTime(),
                             IsDirectory = isDir,
-                            Path = fullpath
+                            Path = fullpath,
+                            Attributes = findData.dwFileAttributes
                         });
                     }
                     while (FindFileApis.FindNextFile(findHandle, out findData));

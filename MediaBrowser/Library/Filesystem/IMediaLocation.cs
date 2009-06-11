@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 namespace MediaBrowser.Library.Filesystem {
     public interface IMediaLocation {
         IFolderMediaLocation Parent { get; }
@@ -8,5 +9,6 @@ namespace MediaBrowser.Library.Filesystem {
         string Contents { get; set; }
         DateTime DateModified { get; }
         DateTime DateCreated { get; }
+        FileAttributes Attributes { get; }
     }
 }

@@ -5,9 +5,14 @@ using System.Text;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Providers.TVDB;
+using System.IO;
 
 namespace MediaBrowser.Library.Extensions {
     static class IMediaLocationExtensions {
+
+        public static bool IsHidden(this IMediaLocation location) {
+            return (location.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+        } 
 
         public static bool IsIso(this IMediaLocation location) {
             return Helper.IsIso(location.Path);

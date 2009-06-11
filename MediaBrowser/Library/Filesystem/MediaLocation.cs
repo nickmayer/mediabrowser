@@ -12,6 +12,7 @@ namespace MediaBrowser.Library.Filesystem {
             this.Parent = parent;
             this.DateCreated = info.DateCreated;
             this.DateModified = info.DateModified;
+            this.Attributes = info.Attributes;
             SetName();
         }
 
@@ -24,6 +25,7 @@ namespace MediaBrowser.Library.Filesystem {
         public IFolderMediaLocation Parent { get; private set; }
         public virtual DateTime DateModified {get; private set; }
         public virtual DateTime DateCreated { get; private set; }
+        public virtual FileAttributes Attributes { get; private set; }
 
         public string Contents {
             get {

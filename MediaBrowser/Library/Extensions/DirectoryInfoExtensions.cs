@@ -12,7 +12,8 @@ namespace MediaBrowser.Library.Extensions {
                 IsDirectory = info is System.IO.DirectoryInfo,
                 Path = info.FullName,
                 DateCreated = info.CreationTimeUtc,
-                DateModified = info.LastWriteTimeUtc
+                DateModified = info.LastWriteTimeUtc,
+                Attributes = info.Attributes
             };
         }
     }

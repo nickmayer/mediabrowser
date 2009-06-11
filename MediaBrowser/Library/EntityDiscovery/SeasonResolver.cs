@@ -7,6 +7,7 @@ using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.Factories;
 using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Providers.TVDB;
+using MediaBrowser.Library.Extensions;
 
 namespace MediaBrowser.Library.EntityDiscovery {
     public class SeasonResolver : EntityResolver {
@@ -18,7 +19,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
             factory = null;
             setup = null;
 
-            if (location is IFolderMediaLocation && TVUtils.IsSeasonFolder(location.Path)) {
+            if (location is IFolderMediaLocation && !location.IsHidden() && TVUtils.IsSeasonFolder(location.Path)) {
                 factory = BaseItemFactory<Season>.Instance;
             }
         }

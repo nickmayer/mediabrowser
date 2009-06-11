@@ -13,7 +13,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
             factory = null;
             setup = null;
 
-            if (location.IsVodcast()) {
+            if (!location.IsHidden() && location.IsVodcast()) {
                 factory = BaseItemFactory<VodCast>.Instance;
             }
 

@@ -7,6 +7,7 @@ using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.Factories;
 using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Providers.TVDB;
+using MediaBrowser.Library.Extensions;
 
 namespace MediaBrowser.Library.EntityDiscovery {
     public class EpisodeResolver : EntityResolver {
@@ -18,7 +19,11 @@ namespace MediaBrowser.Library.EntityDiscovery {
             factory = null;
             setup = null;
 
-            if (!(location is IFolderMediaLocation) && Helper.IsVideo(location.Path) && TVUtils.IsEpisode(location.Path)) {
+            if (!(location is IFolderMediaLocation) && 
+                !location.IsHidden() &&
+                Helper.IsVideo(location.Path) && 
+                TVUtils.IsEpisode(location.Path)) {
+                
                 factory = BaseItemFactory<Episode>.Instance; 
             }
         }

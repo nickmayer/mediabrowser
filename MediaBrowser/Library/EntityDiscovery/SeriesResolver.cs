@@ -19,7 +19,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
             var folderLocation = location as IFolderMediaLocation;
 
-            if (folderLocation != null) {
+            if (folderLocation != null && !folderLocation.IsHidden()) {
                 if ( location.IsSeriesFolder() || folderLocation.ContainsChild("series.xml")) {
                     factory = BaseItemFactory<Series>.Instance;
                 }
