@@ -17,6 +17,7 @@ namespace MediaBrowser.Library.ImageManagement {
             base.Init();
 
             imageIsCached = System.IO.Path.GetPathRoot(this.Path).ToLower() != System.IO.Path.GetPathRoot(cachePath).ToLower();
+
         }
 
         protected override string LocalFilename {
@@ -26,22 +27,54 @@ namespace MediaBrowser.Library.ImageManagement {
             }
         }
 
-        public override string GetLocalImagePath() {
-            if (!imageIsCached) return LocalFilename;
+        private static DateTime Max(DateTime first, DateTime second) {
+            if (first > second) return first;
+            return second;
+        } 
 
+        protected DateTime CacheDate {
+            get {
+                DateTime date = DateTime.MaxValue; 
+                
+                if (imageIsCached) {
+                    var info = new System.IO.FileInfo(LocalFilename);
+                    date = Max(info.CreationTimeUtc,info.LastWriteTimeUtc);
+                } else {
+                    var files = Directory.GetFiles(cachePath, Id.ToString() + "*");
+                    if (files.Length > 0) {
+                        date = files
+                            .Select(file => new System.IO.FileInfo(file))
+                            .Select(info => Max(info.LastWriteTimeUtc, info.CreationTimeUtc))
+                            .Max();
+                    } 
+	            
+                }
+                return date; 
+            }
+        }
+
+        public override string GetLocalImagePath() {
             lock (Lock) {
                 if (!isValid && File.Exists(LocalFilename)) {
-                    var localInfo = new System.IO.FileInfo(LocalFilename);
+                    
                     var remoteInfo = new System.IO.FileInfo(Path);
-                    isValid = localInfo.LastWriteTimeUtc > remoteInfo.LastWriteTimeUtc;
+                    var localInfo = remoteInfo;
+                    if (imageIsCached) {
+                        localInfo = new System.IO.FileInfo(LocalFilename);
+                    } 
+
+                    isValid = CacheDate > Max(remoteInfo.LastWriteTimeUtc, remoteInfo.CreationTimeUtc);
                     isValid &= localInfo.Length == remoteInfo.Length;
                 }
 
                 if (!isValid) {
-                    byte[] data = File.ReadAllBytes(Path);
-                    using (var stream = ProtectedFileStream.OpenExclusiveWriter(LocalFilename)) {
-                        BinaryWriter bw = new BinaryWriter(stream);
-                        bw.Write(data);
+                    ClearLocalImages();
+                    if (imageIsCached) {
+                        byte[] data = File.ReadAllBytes(Path);
+                        using (var stream = ProtectedFileStream.OpenExclusiveWriter(LocalFilename)) {
+                            BinaryWriter bw = new BinaryWriter(stream);
+                            bw.Write(data);
+                        }
                     }
                     isValid = true;
                 }

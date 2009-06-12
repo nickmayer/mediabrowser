@@ -308,7 +308,13 @@ namespace MediaBrowser.Library
 
         public void RefreshMetadata()
         {
-            Async.Queue(() => baseItem.RefreshMetadata(MetadataRefreshOptions.Force));
+            Async.Queue(() => { 
+                baseItem.RefreshMetadata(MetadataRefreshOptions.Force); 
+                // force images to reload
+                primaryImage = null;
+                bannerImage = null;
+                primaryImageSmall = null;
+            });
         }
 
         #endregion

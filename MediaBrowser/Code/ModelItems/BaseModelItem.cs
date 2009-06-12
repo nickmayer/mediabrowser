@@ -48,6 +48,14 @@ namespace MediaBrowser.Code.ModelItems {
 
         #region IModelItemOwner Members
 
+        protected void FireAllPropertiesChanged() {
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
+                foreach (var property in this.GetType().GetProperties()) {
+                    FirePropertyChanged(property.Name);
+                }
+            });
+        } 
+
         protected void FirePropertiesChanged(params string[] properties) {
             if (PropertyChanged != null && properties != null) {
                 foreach (var property in properties) {
