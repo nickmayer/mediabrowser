@@ -263,7 +263,16 @@ namespace Configurator
 folder: {0}
 {1}
 ", dir, imagePath);
-            var destination = System.IO.Path.Combine(ApplicationPaths.AppInitialDirPath, System.IO.Path.GetFileName(dir) + ".vf");
+
+            string name = System.IO.Path.GetFileName(dir);
+            // workaround for adding c:\
+            if (name.Length == 0) {
+                name = dir;
+                foreach (var chr in System.IO.Path.GetInvalidFileNameChars()) {
+                    name = name.Replace(chr.ToString(), "");
+                }
+            }
+            var destination = System.IO.Path.Combine(ApplicationPaths.AppInitialDirPath, name + ".vf");
 
             File.WriteAllText(destination,
                 vf.Trim());
@@ -292,19 +301,6 @@ folder: {0}
                 WriteVirtualFolder(dlg.SelectedFolder);
                 RefreshItems();
             }
-
-            /* OLDFolderBrowser
-            FolderBrowser browser = new FolderBrowser();
-            browser.OnlyFilesystem = false;
-
-            var result = browser.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                WriteVirtualFolder(browser.DirectoryPath);
-                RefreshItems();
-            }
-            */
         }
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
