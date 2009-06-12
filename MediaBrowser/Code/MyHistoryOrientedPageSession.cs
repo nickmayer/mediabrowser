@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.MediaCenter.Hosting;
 using MediaBrowser.Library;
+using MediaBrowser.Library.Util;
 
 namespace MediaBrowser
 {
     public class MyHistoryOrientedPageSession : HistoryOrientedPageSession
     {
 
-        private Application myApp;
+        Application myApp;
+        BreadCrumbs breadcrumbs = new BreadCrumbs(Config.Instance.BreadcrumbCountLimit); 
 
         public Application Application
         {
@@ -17,31 +19,34 @@ namespace MediaBrowser
             set { myApp = value; }
         }
 
-        List<string> breadcrumbs = new List<string>();
+
+        public void AddBreadcrumb(string breadcrumb) {
+            breadcrumbs.Push(breadcrumb,true);
+        } 
 
         protected override void LoadPage(object target, string source, IDictionary<string, object> sourceData, IDictionary<string, object> uiProperties, bool navigateForward)
         {
             this.Application.NavigatingForward = navigateForward;
             if (navigateForward)
             {
+                string current = "";
+
                 if (breadcrumbs.Count == 0) {
-                    breadcrumbs.Add(Config.Instance.InitialBreadcrumbName);
+                    current = Config.Instance.InitialBreadcrumbName;
                 }
                 else if ((uiProperties != null) && (uiProperties.ContainsKey("Item")))
                 {
-                    Item itm = (Item)uiProperties["Item"];
-                    breadcrumbs.Add(itm.Name);
+                    current = ((Item)uiProperties["Item"]).Name;
                 } 
                 else if ((uiProperties != null) && (uiProperties.ContainsKey("Folder"))) {
-                    FolderModel folder = (FolderModel)uiProperties["Folder"];
-                    breadcrumbs.Add(folder.Name);
+                    current = ((FolderModel)uiProperties["Folder"]).Name;
                 }
-                else
-                    breadcrumbs.Add("");
+
+                breadcrumbs.Push(current);
                 
+            } else if (breadcrumbs.Count > 0) {
+                breadcrumbs.Pop();
             }
-            else if (breadcrumbs.Count > 0)
-                breadcrumbs.RemoveAt(breadcrumbs.Count - 1);
             
             base.LoadPage(target, source, sourceData, uiProperties, navigateForward);
         }
@@ -50,12 +55,7 @@ namespace MediaBrowser
         {
             get
             {
-                int max = Config.Instance.BreadcrumbCountLimit;
-                if (breadcrumbs.Count < max)
-                    max = breadcrumbs.Count;
-                if (max == 0)
-                    return "";
-                return string.Join(" | ", breadcrumbs.ToArray(), breadcrumbs.Count - max, max);
+                return breadcrumbs.ToString();
             }
         }
     }

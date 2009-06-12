@@ -475,6 +475,7 @@
     <Compile Include="Library\Factories\BaseItemFactory.cs" />
     <Compile Include="Library\Logging\Logger.cs" />
     <Compile Include="Library\Plugins\BasePlugin.cs" />
+    <Compile Include="Library\Util\BreadCrumbs.cs" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Images.mcml" />
     <Content Include="Markup\Controls\Backdrop.mcml" />

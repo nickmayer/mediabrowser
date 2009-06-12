@@ -531,12 +531,15 @@ namespace MediaBrowser
             MediaBrowser.Library.FolderModel folder = item as MediaBrowser.Library.FolderModel;
             if (folder != null)
             {
-                if (!Config.Instance.RememberIndexing)
+                if (!Config.Instance.RememberIndexing) {
                     folder.DisplayPrefs.IndexBy = IndexType.None;
-                if (Config.Instance.AutoEnterSingleDirs && (folder.Children.Count == 1))
+                }
+                if (Config.Instance.AutoEnterSingleDirs && (folder.Children.Count == 1)) {
+                    session.AddBreadcrumb(folder.Name);
                     Navigate(folder.Children[0]);
-                else
+                } else {
                     OpenFolderPage(folder);
+                }
             }
             else
             {
