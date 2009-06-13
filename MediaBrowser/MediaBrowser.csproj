@@ -281,6 +281,7 @@
     <Content Include="Images\Diamond\Overlay\dia_overlay_all_dark.png" />
     <Content Include="Images\Diamond\Overlay\dia_overlay_bottom.png" />
     <Content Include="Images\Diamond\Overlay\dia_overlay_top_dark.png" />
+    <Content Include="Images\Icons\IconFloral.png" />
     <Content Include="Images\Root\flashHorB.png" />
     <Content Include="Images\Root\flashHorT.png" />
     <Content Include="Images\Root\poster-frame.png" />

@@ -31,6 +31,7 @@
       <lib:Item Name="Item" Item="$Required"/>
       <Image Name="UpButton" Image="resx://MediaBrowser/MediaBrowser.Resources/Up"/>
       <Image Name="DownButton" Image="resx://MediaBrowser/MediaBrowser.Resources/Down"/>
+      <BooleanChoice Name="DisplayMax" Value="true" />
     </Properties>
 
     <Locals>
@@ -45,6 +46,9 @@
       <Color Name="FilterColor" Color="color://s:FilterColor" />
       <Color Name="AttributeColor" Color="Gray" />
       <Color Name="ValueColor" Color="190,190,190" />
+      <FormLayoutInput Name="FullBG" Left="Parent,0,20" Right="Parent,1,-20" Top="Parent,0.2,-15" Bottom="Parent,1,-75"/>
+      <FormLayoutInput Name="SmallBG" Left="Parent,0,20" Right="Parent,0,250" Top="Parent,0.2,-15" Bottom="Parent,0.2,350"/>
+
     </Locals>
 
     <Rules>
@@ -52,6 +56,7 @@
       <Binding Source="[Item.PreferredImage]" Target="[Preview.Content]" />
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
       <Binding Source="[Item.Overview]" Target="[Overview.Text]" />
+      <Binding Source="[CmdButtons.DisplayMax]" Target="[DisplayMax]" />
 
       <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
         <Transformer>
@@ -87,6 +92,32 @@
         </Actions>
       </Changed>
 
+      <Changed Source="[DisplayMax.Value]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[CoverOutline.Alpha]" Value="1" />
+          <Set Target="[CommonInfoPanel.Alpha]" Value="1" />
+          <Set Target="[SelectorPanel.Alpha]" Value="1" />
+          <Set Target="[OverviewPanel.Alpha]" Value="1" />
+          <Set Target="[ActorsPanel.Alpha]" Value="1" />
+          <Set Target="[DiamondBG.LayoutInput]" Value="[FullBG]" />
+        </Actions>
+      </Changed>
+      <Changed Source="[DisplayMax.Value]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectorPanel.Alpha]" Value="0" />
+          <Set Target="[OverviewPanel.Alpha]" Value="0" />
+          <Set Target="[ActorsPanel.Alpha]" Value="0" />
+          <Set Target="[CoverOutline.Alpha]" Value="0" />
+          <Set Target="[CommonInfoPanel.Alpha]" Value="0" />
+          <Set Target="[DiamondBG.LayoutInput]" Value="[SmallBG]" />
+        </Actions>
+      </Changed>
     </Rules>
 
     <Content>
@@ -119,7 +150,7 @@
 
               <!-- play/resume buttons-->
               <me:CommandButtons Application="[Application]" Item="[Item]" FilterColor="[FilterColor]"
-                                 Alpha="global://s:FilterAlpha" FocusOrder="0">
+                                 Name="CmdButtons" DisplayMax="[DisplayMax]" Alpha="global://s:FilterAlpha" FocusOrder="0">
                 <LayoutInput>
                   <AnchorLayoutInput Left="Parent,0,20" Top="Parent,0.2,25" />
                 </LayoutInput>
@@ -267,13 +298,7 @@
                 </Children>
               </Graphic>
 
-              <!-- Detail Box (Alpha Gradient Bottom of Screen)
-          <ColorFill Content="color://s:FillColor"  Name="DetailBox" Alpha="global://s:FilterAlpha">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Top="Parent,0.675" Bottom="Parent,1" Right="Parent,1"/>
-            </LayoutInput>
-          </ColorFill>-->
-              <Graphic Content="image://i:DiamondListBg">
+              <Graphic Name="DiamondBG" Content="image://i:DiamondListBg">
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0,20" Right="Parent,1,-20" Top="Parent,0.2,-15" Bottom="Parent,1,-75"/>
                 </LayoutInput>
@@ -306,11 +331,13 @@
       <lib:Item Name="Item" Item="$Required"/>
       <Color Name="FilterColor" Color="Black"/>
       <cor:Single Name="Alpha" Single="1" />
+      <BooleanChoice Name="DisplayMax" BooleanChoice="$Required" />
     </Properties>
 
     <Locals>
       <Command Name="PlayMovieCommand" />
       <Command Name="ResumeMovieCommand" />
+      <Command Name="ToggleViewCommand" />
       <Command Name="RefreshMovieCommand" />
       <Command Name="DeleteMovieCommand" />
       <Command Name="NullCommand" />
@@ -319,6 +346,23 @@
     <Rules>
       <Binding Source="[Item.CanResume]" Target="[ResumeMovieButton.Visible]" />
       <Condition Source="[Item.CanResume]" ConditionOp="Equals" SourceValue="false" Target="[ResumeMovieButton.Visible]" Value="false"/>
+
+      <Changed Source="[ToggleViewCommand.Invoked]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[DisplayMax.Value]" Value="false" />          
+        </Actions>
+      </Changed>
+      <Changed Source="[ToggleViewCommand.Invoked]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[DisplayMax.Value]" Value="true" />
+        </Actions>
+      </Changed>
 
       <Changed Source="[PlayMovieCommand.Invoked]">
         <Actions>
@@ -376,6 +420,7 @@
                 <Children>
                   <dtb:DiamondImageButton Name="ResumeMovieButton" Text="RESUME" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
                   <dtb:DiamondImageButton Name="PlayMovieButton" Text="PLAY" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <dtb:DiamondImageButton Name="ToggleViewButton" Text="DISPLAY" Command="[ToggleViewCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconFloral" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <dtb:DiamondImageButton Name="CacheMovieButton" Text="CACHE 2 XML" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                   <dtb:DiamondImageButton Name="DeleteMovieButton" Text="DELETE" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />

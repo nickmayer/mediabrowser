@@ -273,7 +273,7 @@
 
       <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
       <cor:Boolean Name="LeftAlign" Boolean="true" />
-      <cor:String Name="Text" String="" />
+      <cor:String Name="Text" String="$Required" />
       <Size Name="Size" Size="0,0" />
       <Size Name="MinSize" Size="50,50" />
       <Color Name="Color" Color="Gray"/>
@@ -316,6 +316,7 @@
         </Conditions>
         <Actions>
           <PlaySound Sound="sound://sounds:Select" />
+          <PlayAnimation Animation="animation://an:Rotate_360" Target="[graphicBullet]"  />
         </Actions>
       </Rule>
 
@@ -326,6 +327,7 @@
         </Conditions>
         <Actions>
           <PlaySound Sound="sound://sounds:Miniselect" />
+          <PlayAnimation Animation="animation://an:Rotate_360" Target="[graphicBullet]"  />
         </Actions>
       </Rule>
 

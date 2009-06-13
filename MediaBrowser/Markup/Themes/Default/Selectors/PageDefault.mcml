@@ -319,18 +319,6 @@
 								</Children>
 							</Panel>
 							
-							
-							<!-- Black Overlay to Fade Out contents -->
-							<!--
-							<Panel Name="FadeOutPanel" Visible="false">
-								<LayoutInput>
-									<FormLayoutInput Left="Parent,0" Top="Parent,.11" Right="Parent,1" Bottom="Parent,1"/>
-								</LayoutInput>
-								<Children>
-									<ColorFill Content="Black" Alpha="0"/>
-								</Children>
-							</Panel>
-							-->
 
 							<!--Banner / Breadcrumbs -->
 							<Panel Name="Breadcrumbs">
@@ -362,7 +350,7 @@
 							<!-- Now Playing View -->
 							<np:NowPlayingViewport Name="NowPlaying">
 								<LayoutInput>
-									<FormLayoutInput Left="Parent,0,10" Bottom="Parent,1,20" />
+									<FormLayoutInput Left="Parent,0,-10" Bottom="Parent,1,20" />
 								</LayoutInput>
 							</np:NowPlayingViewport>
 
