@@ -5,8 +5,8 @@
       xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
       xmlns:s="file://Styles_DoNotEdit.mcml"
       xmlns:f="file://Fonts_DoNotEdit.mcml"
-	    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"    
-	    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"	         
+	    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+	    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
       xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
       xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
       xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailAreaVanilla"
@@ -19,7 +19,7 @@
       xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
       xmlns:me="Me"
 	  >
-  
+
   <UI Name="Page">
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
@@ -55,11 +55,11 @@
       <Command Name="ConfigOptions" />
       <Command Name="NowPlayingPanel"/>
 
-      
+
       <KeyHandler Name="MenuKey" Key="D3" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
       <KeyHandler Name="ViewKey" Key="D8" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
       <ShortcutHandler Name="RecordBtn" Handle="true" Shortcut="Record" HandlerStage="Bubbled"/>
-      
+
       <TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap"  >
         <EditableText>
           <EditableText Value="" />
@@ -84,7 +84,7 @@
       <Changed Source="[TypingHandler.DisplayValue]" >
         <Conditions>
           <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="NotEquals" Value="" />
-          
+
         </Conditions>
         <Actions>
           <Invoke Target="[HideFindAsYouType.Start]" />
@@ -115,7 +115,7 @@
           <Set Target="[MainBG.Content]" Value="image://vi:BackgroundDefault"/>
         </Actions>
       </Rule>
-      
+
       <Changed Source="[RefocusViewTimer.Tick]">
         <Actions>
           <Invoke Target="[ViewConfig.NavigateInto]" />
@@ -126,7 +126,7 @@
           <Invoke Target="[Application.OpenConfiguration]" showFullOptions="true" />
         </Actions>
       </Changed>
-      
+
       <Changed Source="[ShowViewConfiguration.Invoked]">
         <Actions>
           <Set Target="[ViewConfig.Visible]" Value="true"/>
@@ -197,7 +197,7 @@
       </Changed>
 
 
-     
+
 
       <!-- Switch Views -->
       <Rule>
@@ -208,7 +208,7 @@
           <Invoke Target="[Item.DisplayPrefs.ToggleViewTypes]" />
         </Actions>
       </Rule>
-      
+
       <!-- Bring Up Options Menu -->
       <Rule ConditionLogicalOp="Or">
         <Conditions>
@@ -220,7 +220,7 @@
           <Invoke Target="[ConfigurationMenu.NavigateInto]" />
         </Actions>
       </Rule>
-     
+
       <!-- Close Options Menu -->
       <Rule>
         <Conditions>
@@ -230,17 +230,17 @@
           <Set Target="[ConfigurationMenu.Visible]" Value="false"/>
         </Actions>
       </Rule>
-      
+
       <!-- Show Configuration Button -->
       <Condition Source="[Item.IsRoot]" SourceValue="true" Target="[ConfigurationKey.Visible]" Value="true"/>
       <Condition Source="[Application.Config.ShowConfigButton]" SourceValue="true" Target="[ConfigurationKey.Visible]" Value="true"/>
-      
+
       <Changed Source="[NowPlayingPanel.Invoked]">
         <Actions>
           <Invoke Target="[Application.PlaybackController.GoToFullScreen]"/>
         </Actions>
       </Changed>
-<!--
+      <!--
       <Binding Source="[Application.ShowNowPlaying]" Target="[TrailerPanel.Visible]" />-->
 
       <Rule ConditionLogicalOp="And">
@@ -269,7 +269,7 @@
           <Invoke Target="[PreSelectedItem.RefreshMetadata]"/>
         </Actions>
       </Rule>
-      
+
       <Condition Source="[Item.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="200,110" />
       <Condition Source="[Item.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="400,220" />
 
@@ -294,99 +294,99 @@
         </Actions>
       </Changed>
     </Rules>
-    
 
-    
+
+
     <Content>
-          <Panel Layout="Center">
+      <Panel Layout="Form"  Navigation="RememberFocus">
+        <Children>
+          <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]" CenterPointPercent="0.5,0.5,0.5">
+            <Animations>
+              <Animation Animation="animation://an:PageHide" />
+            </Animations>
             <Children>
-              <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]">
+
+              <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Item]" Close="[ClosePopupPlay]" Application="[Application]" />
+
+              <!-- Now Playing View Port -->
+              <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false" >
+                <Children>
+                  <vnpv:LargeNPV Name="NowPlayingViewPort" Command="[NowPlayingPanel]" NPVSize="200,110"/>
+                </Children>
+              </Panel>
+
+              <pvm:PopupViewMenu  Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Item.DisplayPrefs]"/>
+              <prm:PopupRadioMenu Name="SortConfig"  Visible="false"  Close="[CloseSortConfiguration]"  Choice="[Item.DisplayPrefs.SortOrders]"/>
+              <prm:PopupRadioMenu Name="IndexConfig" Visible="false"  Close="[CloseIndexConfiguration]" Choice="[Item.DisplayPrefs.IndexByChoice]"/>
+
+              <!-- Configuration -->
+              <Panel Name="ConfigurationMenu" Visible="false" Navigation="ContainAll,RememberFocus">
                 <Animations>
                   <Animation Animation="animation://an:PageHide" />
+
+                  <Animation Animation="animation://an:PageShow" />
+
                 </Animations>
                 <Children>
-
-                  <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Item]" Close="[ClosePopupPlay]" Application="[Application]" />
-                  
-                  <!-- Now Playing View Port -->
-                  <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false" >
+                  <Panel Layout="Center">
                     <Children>
-                      <vnpv:LargeNPV Name="NowPlayingViewPort" Command="[NowPlayingPanel]" NPVSize="200,110"/>
-                    </Children>
-                  </Panel>
-
-                  <pvm:PopupViewMenu  Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Item.DisplayPrefs]"/>
-                  <prm:PopupRadioMenu Name="SortConfig"  Visible="false"  Close="[CloseSortConfiguration]"  Choice="[Item.DisplayPrefs.SortOrders]"/>
-                  <prm:PopupRadioMenu Name="IndexConfig" Visible="false"  Close="[CloseIndexConfiguration]" Choice="[Item.DisplayPrefs.IndexByChoice]"/>
-
-                  <!-- Configuration -->
-                  <Panel Name="ConfigurationMenu" Visible="false" Navigation="ContainAll,RememberFocus">
-                    <Animations>
-                      <Animation Animation="animation://an:PageHide" />
-                      
-                      <Animation Animation="animation://an:PageShow" />
-                      
-                    </Animations>
-                    <Children>
-                      <Panel Layout="Center">
+                      <Panel Name="ScrollButton"  Layout="HorizontalFlow">
                         <Children>
-                          <Panel Name="ScrollButton"  Layout="HorizontalFlow">
-                            <Children>
-                              <vmb:MenuButton Name="ConfigBtn"     Command="[Configure]"              Image="image://vi:MenuOptionConfiguration"/>
-                              <vmb:MenuButton Name="ViewsBtn"      Command="[ShowViewConfiguration]"  Image="image://vi:MenuOptionViews"/>
-                              <vmb:MenuButton Name="SortOrdersBtn" Command="[ShowSortConfiguration]"  Image="image://vi:MenuOptionSort"/>
-                              <vmb:MenuButton Name="IndexesBtn"    Command="[ShowIndexConfiguration]" Image="image://vi:MenuOptionIndex" />
-                              <vmb:MenuButton Name="RefreshButton" Command="[CloseCommand]"           Image="image://vi:MenuOptionClose" Red="true"/>
-                            </Children>
-                          </Panel>
+                          <vmb:MenuButton Name="ConfigBtn"     Command="[Configure]"              Image="image://vi:MenuOptionConfiguration"/>
+                          <vmb:MenuButton Name="ViewsBtn"      Command="[ShowViewConfiguration]"  Image="image://vi:MenuOptionViews"/>
+                          <vmb:MenuButton Name="SortOrdersBtn" Command="[ShowSortConfiguration]"  Image="image://vi:MenuOptionSort"/>
+                          <vmb:MenuButton Name="IndexesBtn"    Command="[ShowIndexConfiguration]" Image="image://vi:MenuOptionIndex" />
+                          <vmb:MenuButton Name="RefreshButton" Command="[CloseCommand]"           Image="image://vi:MenuOptionClose" Red="true"/>
                         </Children>
                       </Panel>
                     </Children>
                   </Panel>
-
-                  <!-- find in list panel - highest Z-Order -->
-                  <Panel Name="FindAsYouTypePanel" >
-                    <LayoutInput>
-                      <FormLayoutInput Bottom="Parent,1,-30" Right="Parent,1,-30"/>
-                    </LayoutInput>
-                    <Layout>
-                      <FlowLayout ItemAlignment="Center"/>
-                    </Layout>
-                    <Children>
-                      <ColorFill Content="Transparent" Padding="8,0,8,-3" Layout="Anchor">
-                        <Children>
-                          <Text Name="FindAsYouType" Font="Segoe Media Center Semibold,150" Content="" Color="color://s:FontColorMedium"  />
-                          <Text Name="ShadowLabel" Content="" Color="255, 0, 0, 0" Font="Segoe Media Center Semibold,150">
-                            <LayoutInput>
-                              <AnchorLayoutInput Top="FindAsYouType, 0, 2" Left="FindAsYouType, 0, 2"/>
-                            </LayoutInput>
-                          </Text>
-                        </Children>
-                      </ColorFill>
-                    </Children>
-                  </Panel>
-
-                  <!-- Configuration Key -->
-                  <Panel Name="ConfigurationKey" Visible="false">
-                    <LayoutInput>
-                      <FormLayoutInput Bottom="Parent,1,-40" Left="Parent,0,2"/>
-                    </LayoutInput>
-                    <Children>
-                      <vsb:SimpleButton Name="ConfigMenuButton" Application="[Application]" ImageNoFocus="image://i:ConfigImg" Command="[ConfigOptions]"/>
-                    </Children>
-                  </Panel>
-
-                  <pda:PageDetailArea Name="ViewPanel" Folder="[Item]" Application="[Application]"  LayoutInput="[FullScreen]"/>
-
-                  <Graphic Name="MainBG" Content="image://vi:BlankGraphic" Layout="Fill"/>
                 </Children>
-              </Clip>
+              </Panel>
 
+              <!-- find in list panel - highest Z-Order -->
+              <Panel Name="FindAsYouTypePanel" >
+                <LayoutInput>
+                  <FormLayoutInput Bottom="Parent,1,-30" Right="Parent,1,-30"/>
+                </LayoutInput>
+                <Layout>
+                  <FlowLayout ItemAlignment="Center"/>
+                </Layout>
+                <Children>
+                  <ColorFill Content="Transparent" Padding="8,0,8,-3" Layout="Anchor">
+                    <Children>
+                      <Text Name="FindAsYouType" Font="Segoe Media Center Semibold,150" Content="" Color="color://s:FontColorMedium"  />
+                      <Text Name="ShadowLabel" Content="" Color="255, 0, 0, 0" Font="Segoe Media Center Semibold,150">
+                        <LayoutInput>
+                          <AnchorLayoutInput Top="FindAsYouType, 0, 2" Left="FindAsYouType, 0, 2"/>
+                        </LayoutInput>
+                      </Text>
+                    </Children>
+                  </ColorFill>
+                </Children>
+              </Panel>
 
+              <!-- Configuration Key -->
+              <Panel Name="ConfigurationKey" Visible="false">
+                <LayoutInput>
+                  <FormLayoutInput Bottom="Parent,1,-40" Left="Parent,0,2"/>
+                </LayoutInput>
+                <Children>
+                  <vsb:SimpleButton Name="ConfigMenuButton" Application="[Application]" ImageNoFocus="image://i:ConfigImg" Command="[ConfigOptions]"/>
+                </Children>
+              </Panel>
 
+              <pda:PageDetailArea Name="ViewPanel" Folder="[Item]" Application="[Application]"  LayoutInput="[FullScreen]"/>
+
+              <Graphic Name="MainBG" Content="image://vi:BlankGraphic" Layout="Fill"/>
             </Children>
+          </Clip>
 
-          </Panel>
+
+
+        </Children>
+
+      </Panel>
 
     </Content>
   </UI>
