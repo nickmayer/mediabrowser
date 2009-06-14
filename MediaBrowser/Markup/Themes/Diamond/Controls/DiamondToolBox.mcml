@@ -81,7 +81,7 @@
       <Binding Target="[MPAARating.Value]" Source="[Item.MpaaRating]" />
       <Binding Target="[TxtRuntime.Content]" Source="[Item.RunningTimeString]"/>
       <Binding Target="[GenreRepeater.Source]" Source="[Item.Genres]"/>
-      <!--<Binding Target="[Summary.Item]" Source="[Item]"/>-->
+      <Binding Target="[TxtSubtitle.Content]" Source="[Item.SubTitle]"/>
       <Binding Target="[LastWatched.Content]" Source="[Item.LastPlayedString]"/>
       <Binding Target="[LastWatched.Visible]" Source="[Item.HaveWatched]"/>
       <Binding Target="[MediaInfo.Item]" Source="[Item]" />
@@ -93,6 +93,7 @@
           <FlowLayout Orientation="Vertical" ItemAlignment="Far" Spacing="2,2"/>
         </Layout>
         <Children>
+          <Text Name="TxtSubtitle" Color="LightGray" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>
           <Panel Name="StarMPAA">
             <Layout>
               <FlowLayout Orientation="Horizontal" Spacing="10,0"/>
@@ -316,7 +317,7 @@
         </Conditions>
         <Actions>
           <PlaySound Sound="sound://sounds:Select" />
-          <PlayAnimation Animation="animation://an:Rotate_360" Target="[graphicBullet]"  />
+          <PlayAnimation Animation="animation://an:RotateRound" Target="[graphicBullet]"  />
         </Actions>
       </Rule>
 
@@ -327,7 +328,7 @@
         </Conditions>
         <Actions>
           <PlaySound Sound="sound://sounds:Miniselect" />
-          <PlayAnimation Animation="animation://an:Rotate_360" Target="[graphicBullet]"  />
+          <PlayAnimation Animation="animation://an:RotateRound" Target="[graphicBullet]"  />
         </Actions>
       </Rule>
 

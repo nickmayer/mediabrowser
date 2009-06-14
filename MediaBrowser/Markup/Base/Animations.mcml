@@ -118,6 +118,12 @@
       <RotateKeyframe Time=".4" Value="360deg;0,1,0"/>
     </Keyframes>
   </Animation>
+  <Animation Name="RotateRound" CenterPointPercent="0.5,0.5,0.5">
+    <Keyframes>
+      <RotateKeyframe Time="0.0" Value="0deg;0,0,0" Interpolation="Linear" RelativeTo="Current" />
+      <RotateKeyframe Time="0.6" Value="360deg;0,0,0" RelativeTo="Current" />
+    </Keyframes>
+  </Animation>
 
   <Animation Name="FilterMenu.Show" Type="Show">
     <Keyframes>
