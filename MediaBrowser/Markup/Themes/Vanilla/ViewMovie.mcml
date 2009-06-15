@@ -372,12 +372,14 @@
                   <Graphic Name="DetailBackdrop" Layout="Fill" MaintainAspectRatio="false" Content="image://it:BackgroundDefault"/>
                 </Children>
               </Panel>
+              <!-- Background -->
+              <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]"/>
+              <Graphic Name="MainBG" Content="image://it:BackgroundDefault" Margins="0,0,0,0" Layout="Fill"/>
             </Children>
+            
 
           </Clip>
-          <!-- Background -->
-          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]"/>
-          <Graphic Name="MainBG" Content="image://it:BackgroundDefault" Margins="0,0,0,0" Layout="Fill"/>
+
         </Children>
 
       </Panel>

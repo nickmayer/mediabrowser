@@ -414,7 +414,7 @@
 
               <Panel>
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.30,10" Top="recentlyAdded,1,10" Right="Parent,0.85"
+                  <FormLayoutInput Left="Parent,0.30,10" Top="recentlyAdded,1,10" Right="Parent,0.9"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Children>
@@ -653,7 +653,7 @@
       <Condition Source="[Index.Value]" ConditionOp="NotEquals" SourceValue="0" Target="[ArrowLeft.Visible]" Value="true"/>
       <Condition Source="[Index.Value]" ConditionOp="Equals" SourceValue="19" Target="[ArrowRight.Visible]" Value="false"/>
       <Condition Source="[Index.Value]" ConditionOp="NotEquals" SourceValue="19" Target="[ArrowRight.Visible]" Value="true"/>
-
+      
       <Changed Source="[Clicker.Invoked]">
         <Actions>
           <PlaySound Sound="res://ehres!MiniSelect_a.wav" />
