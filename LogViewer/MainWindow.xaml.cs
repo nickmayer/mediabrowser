@@ -31,11 +31,23 @@ namespace LogViewer {
         }
 
         void LogMessagesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            listView.ScrollIntoView(listView.Items[listView.Items.Count - 1]);
+            if (listView.Items.Count > 0 &&  autoScroll.IsChecked.HasValue && autoScroll.IsChecked.Value) {
+                listView.ScrollIntoView(listView.Items[listView.Items.Count - 1]);
+            }
         }
 
         void ListViewSelectionChanged(object sender, SelectionChangedEventArgs e) {
-            textBox.Text = ((LogRow)listView.SelectedItem).FullDescription; 
+            if (listView.SelectedItem != null) {
+                textBox.Text = ((LogRow)listView.SelectedItem).FullDescription;
+            }
+        }
+
+        private void clearButton_Click(object sender, RoutedEventArgs e) {
+            logMessages.Clear();
+        }
+
+        private void filterText_TextChanged(object sender, TextChangedEventArgs e) {
+            logMessages.Highlight(filterText.Text);
         }
     }
 }

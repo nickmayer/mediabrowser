@@ -95,11 +95,15 @@ namespace LogViewer {
 
             foreach (var file in filesToLoad) {
                 foreach (var line in GetLines(file)) {
-                    LogRow row = LogRow.FromString(line);
-                    var hash = row.ToString().GetMD5();
-                    if (!rowHashs.Contains(hash)) {
-                        newRows.Add(row);
-                        rowHashs.Add(hash);
+                    try {
+                        LogRow row = LogRow.FromString(line);
+                        var hash = row.ToString().GetMD5();
+                        if (!rowHashs.Contains(hash)) {
+                            newRows.Add(row);
+                            rowHashs.Add(hash);
+                        }
+                    } catch (Exception) { 
+                        // Don't crash, ignore the bad log row
                     }
                 }
             }
@@ -133,6 +137,17 @@ namespace LogViewer {
             }
 
             return lines;
+        }
+
+        string highlightedText = "";
+
+        internal void Highlight(string text) {
+            highlightedText = text;
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        internal bool IsHighlighted(LogRow row) {
+            return !string.IsNullOrEmpty(highlightedText) && row.Message.ToLower().Contains(highlightedText.ToLower());
         }
     }
 }
