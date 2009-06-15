@@ -23,40 +23,40 @@ namespace MediaBrowser.Library.Logging {
             LoggerInstance.ReportVerbose(message);
         }
 
-        public static void ReportVerbose(string message, string category) {
-            LoggerInstance.ReportVerbose(message, category);
+        public static void ReportVerbose(string message, params object[] paramList) {
+            LoggerInstance.ReportVerbose(string.Format(message, paramList));
         }
 
         public static void ReportInfo(string message) {
             LoggerInstance.ReportInfo(message);
         }
 
-        public static void ReportInfo(string message, string category) {
-            LoggerInstance.ReportInfo(message, category);
+        public static void ReportInfo(string message, params object[] paramList) {
+            LoggerInstance.ReportInfo(message, string.Format(message, paramList));
         }
 
         public static void ReportWarning(string message) {
             LoggerInstance.ReportWarning(message);
         }
 
-        public static void ReportWarning(string message, string category) {
-            LoggerInstance.ReportWarning(message, category);
+        public static void ReportWarning(string message, params object[] paramList) {
+            LoggerInstance.ReportWarning(message, string.Format(message, paramList));
         }
 
         public static void ReportException(string message, Exception exception) {
             LoggerInstance.ReportException(message, exception);
         }
 
-        public static void ReportException(string message, Exception exception, string category) {
-            LoggerInstance.ReportException(message, exception, category);
+        public static void ReportException(string message, Exception exception, params object[] paramList) {
+            LoggerInstance.ReportException(message, exception, string.Format(message, paramList));
         }
 
         public static void ReportError(string message) {
             LoggerInstance.ReportError(message);
         }
 
-        public static void ReportError(string message, string category) {
-            LoggerInstance.ReportError(message, category);
+        public static void ReportError(string message, params object[] paramList) {
+            LoggerInstance.ReportError(message, string.Format(message, paramList));
         }
     }
 }

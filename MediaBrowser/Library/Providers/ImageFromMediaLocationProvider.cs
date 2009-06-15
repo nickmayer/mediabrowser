@@ -118,6 +118,11 @@ namespace MediaBrowser.Library.Providers
             var realBackdrops = FindImages(Backdrop);
             changed |= backdropPaths.Except(realBackdrops).Count() != 0;
 
+            // Basic item corruption fix
+            if (!changed) {
+                changed |= primaryPath != null && Item.PrimaryImagePath == null;
+            }
+
             return changed;
         }
 

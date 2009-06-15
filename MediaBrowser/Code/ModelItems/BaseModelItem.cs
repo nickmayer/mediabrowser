@@ -5,11 +5,11 @@ using System.Text;
 using Microsoft.MediaCenter.UI;
 
 namespace MediaBrowser.Code.ModelItems {
-    public class BaseModelItem : IModelItem, IDisposable{
+    public class BaseModelItem : IModelItem, IDisposable {
 
         #region IModelItem Members
 
-        string description = string.Empty; 
+        string description = string.Empty;
         public string Description {
             get {
                 return description;
@@ -49,26 +49,41 @@ namespace MediaBrowser.Code.ModelItems {
         #region IModelItemOwner Members
 
         protected void FireAllPropertiesChanged() {
-            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
+            RunInUIThread(() =>
+            {
                 foreach (var property in this.GetType().GetProperties()) {
                     FirePropertyChanged(property.Name);
                 }
             });
-        } 
+        }
 
         protected void FirePropertiesChanged(params string[] properties) {
-            if (PropertyChanged != null && properties != null) {
-                foreach (var property in properties) {
-                    PropertyChanged(this, property);
+            RunInUIThread(() =>
+            {
+                if (PropertyChanged != null && properties != null) {
+                    foreach (var property in properties) {
+                        PropertyChanged(this, property);
+                    }
                 }
+            });
+        }
+
+        void RunInUIThread(Action action) {
+            if (Microsoft.MediaCenter.UI.Application.ApplicationThread != System.Threading.Thread.CurrentThread) {
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => action());
+            } else {
+                action();
             }
         }
 
 
         protected void FirePropertyChanged(string property) {
-            if (PropertyChanged != null) {
-                PropertyChanged(this, property);
-            }
+           RunInUIThread(() =>
+           {
+               if (PropertyChanged != null) {
+                   PropertyChanged(this, property);
+               }
+           });
         }
 
         List<ModelItem> items = new List<ModelItem>();

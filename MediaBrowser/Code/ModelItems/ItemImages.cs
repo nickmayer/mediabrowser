@@ -21,9 +21,6 @@ namespace MediaBrowser.Library
 {
     public partial class Item
     {
-
-
-
         public bool HasBannerImage
         {
             get
@@ -207,60 +204,54 @@ namespace MediaBrowser.Library
         {
             get
             {
-
-                if (baseItem.PrimaryImagePath == null)
+                
+                if (baseItem.PrimaryImagePath != null)
                 {
-                    return DefaultImage;
-                }
-                EnsurePrimaryImageIsSet();
-                if (!primaryImage.IsLoaded ||
-                    preferredImageSmallSize == null ||
-                    preferredImageSmallSize.Width < 1 ||
-                    preferredImageSmallSize.Height < 1)
-                {
-                    // we have no aspect ratio... so small image may be bodge. 
-                    return DefaultImage;
-                }
+                    EnsurePrimaryImageIsSet();
 
-                if (primaryImageSmall == null)
-                {
-                    float aspect = primaryImage.Size.Height / (float)primaryImage.Size.Width;
-                    float constraintAspect = preferredImageSmallSize.Height / (float)preferredImageSmallSize.Width;
-
-                    primaryImageSmall = new AsyncImageLoader(
-                        () => baseItem.PrimaryImage,
-                        DefaultImage,
-                        PrimaryImageChanged);
-
-                    smallImageIsDistorted = Math.Abs(aspect - constraintAspect) < Config.Instance.MaximumAspectRatioDistortion;
-
-                    if (smallImageIsDistorted)
-                    {
-                        primaryImageSmall.Size = preferredImageSmallSize;
-                    }
-                    else
-                    {
-
-                        int width = preferredImageSmallSize.Width;
-                        int height = preferredImageSmallSize.Height;
-
-                        if (aspect > constraintAspect)
-                        {
-                            width = (int)((float)height / aspect);
+                    if (primaryImage.IsLoaded &&
+                        preferredImageSmallSize != null &&
+                        preferredImageSmallSize.Width > 0 &&
+                        preferredImageSmallSize.Height > 0) {
+                        
+                        if (primaryImageSmall == null) {
+                            LoadSmallPrimaryImage();
                         }
-                        else
-                        {
-                            height = (int)((float)width * aspect);
-                        }
-
-                        primaryImageSmall.Size = new Size(width, height);
                     }
-
-                    FirePropertyChanged("SmallImageIsDistorted");
                 }
 
-                return primaryImageSmall.Image;
+                return primaryImageSmall != null ? primaryImageSmall.Image : DefaultImage;
             }
+        }
+
+        private void LoadSmallPrimaryImage() {
+            float aspect = primaryImage.Size.Height / (float)primaryImage.Size.Width;
+            float constraintAspect = preferredImageSmallSize.Height / (float)preferredImageSmallSize.Width;
+
+            primaryImageSmall = new AsyncImageLoader(
+                () => baseItem.PrimaryImage,
+                DefaultImage,
+                PrimaryImageChanged);
+
+            smallImageIsDistorted = Math.Abs(aspect - constraintAspect) < Config.Instance.MaximumAspectRatioDistortion;
+
+            if (smallImageIsDistorted) {
+                primaryImageSmall.Size = preferredImageSmallSize;
+            } else {
+
+                int width = preferredImageSmallSize.Width;
+                int height = preferredImageSmallSize.Height;
+
+                if (aspect > constraintAspect) {
+                    width = (int)((float)height / aspect);
+                } else {
+                    height = (int)((float)width * aspect);
+                }
+
+                primaryImageSmall.Size = new Size(width, height);
+            }
+
+            FirePropertyChanged("SmallImageIsDistorted");
         }
 
         bool smallImageIsDistorted = false;
@@ -301,6 +292,7 @@ namespace MediaBrowser.Library
                 if (value != preferredImageSmallSize)
                 {
                     preferredImageSmallSize = value;
+                    primaryImageSmall = null;
                     FirePropertyChanged("PreferredImageSmall");
                     FirePropertyChanged("PrimaryImageSmall");
                 }

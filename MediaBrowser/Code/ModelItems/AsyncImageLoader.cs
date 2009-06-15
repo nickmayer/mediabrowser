@@ -49,6 +49,7 @@ namespace MediaBrowser.Code.ModelItems {
             this.afterLoad = afterLoad;
             this.IsLoaded = false;
             this.defaultImage = defaultImage;
+
         }
 
         public Image Image {
@@ -73,7 +74,6 @@ namespace MediaBrowser.Code.ModelItems {
             try {
                 lock (sync) {
                     LoadImageImpl();
-                    IsLoaded = true;
                 }
             } catch (Exception e) {
                 // this may fail in if we are unable to write a file... its not a huge problem cause we will pick it up next time around
@@ -85,8 +85,6 @@ namespace MediaBrowser.Code.ModelItems {
         }
 
         private void LoadImageImpl() {
-
-            byte[] bytes;
 
             bool sizeIsSet = Size != null && Size.Height > 0 && Size.Width > 0;
 
@@ -100,16 +98,9 @@ namespace MediaBrowser.Code.ModelItems {
                     localPath = localImage.GetLocalImagePath(Size.Width, Size.Height);
                 }
 
-                Logger.ReportVerbose("Loading image : " + localPath);
-
-                // This is a hacky way that is not supported. 
-                //bytes = File.ReadAllBytes(localPath);
-                //MemoryStream imageStream = new MemoryStream(bytes);
-                //imageStream.Position = 0;
-                //Image newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
-
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
 
+                    Logger.ReportVerbose("Loading image : " + localPath);
                     Image newImage = new Image("file://" + localPath);
                     
                     lock (this) {
@@ -118,6 +109,9 @@ namespace MediaBrowser.Code.ModelItems {
                             size = new Size(localImage.Width, localImage.Height);
                         }
                     }
+
+                    IsLoaded = true;
+
                     if (afterLoad != null) {
                         afterLoad();
                     }

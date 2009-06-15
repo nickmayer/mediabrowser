@@ -67,9 +67,12 @@ namespace MediaBrowser.Library.Metadata {
                 provider.Item = itemClone;
             }
 
+
             if (force || NeedsRefresh(providers, fastOnly)) {
+                Logger.ReportVerbose("Refreshing metadata for {0} fast : {1} force : {2}", item.Name, fastOnly, force);
                 changed = UpdateMetadata(item, force, fastOnly, providers);
             }
+      
             return changed;
         }
 

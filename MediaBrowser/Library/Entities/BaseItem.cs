@@ -106,7 +106,7 @@ namespace MediaBrowser.Library.Entities {
 
         private LibraryImage GetImage(string path) {
             if (string.IsNullOrEmpty(path)) return null;
-            return LibraryImageFactory.Instance.GetImage(path);
+            return Kernel.Instance.GetImage(path);
         }
 
         #endregion
