@@ -176,6 +176,7 @@
 				</Actions>
 			</Changed>
 
+      <!--
 			<Changed Source="[NavCount.Value]">
 				<Conditions>
 					<Equality Source="[NavCount.Value]" ConditionOp="Equals" Value="[SpeedUpDelay]"/>
@@ -193,6 +194,7 @@
 					<Invoke Target="[Application.FixRepeatRate]" scroller="[Scroller]" val="[NormalKeyRepeat]" />
 				</Actions>
 			</Changed>
+      -->
 
 			<!-- Give ScrollingData to ScrollingHandler. -->
 			<Binding Target="[ScrollingHandler.ScrollingData]" Source="[ScrollingData]"/>
