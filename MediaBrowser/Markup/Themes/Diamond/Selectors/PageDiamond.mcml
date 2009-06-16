@@ -41,16 +41,16 @@
       <AnchorLayoutInput Name="LayoutTopBarShow" Top="Parent,0" Left="Parent,0" Right="Parent,1" Horizontal="Center" />
       <AnchorLayoutInput Name="LayoutTopBarHide" Left="Parent,0" Top="Parent,0,-100" Right="Parent,1" Horizontal="Center" />
       <!-- Navigate Timer to bypass view triggering -->
-      <Timer Name="NavTimer" Interval="550" AutoRepeat="false" Enabled="true"/>
+      <Timer Name="NavTimer" Interval="1000" AutoRepeat="false" Enabled="true"/>
     </Locals>
 
     <Rules>
-      <!--<Changed Source="[NavTimer.Tick]">
+      <Changed Source="[NavTimer.Tick]">
         <Actions>
-          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[TheTopBar.Visible]" Value="true" />
           <Set Target="[NavTimer.Enabled]" Value="false" />
         </Actions>
-      </Changed>-->
+      </Changed><!---->
 
       <Rule>
         <Conditions>
@@ -166,7 +166,7 @@
           <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]" CenterPointPercent="0.5,0.5,0.5">
             <Children>
 
-              <me:TopBar Name="TheTopBar" Application="[Application]" Folder="[Folder]" InFocus="[TopBarHasFocus]">
+              <me:TopBar Name="TheTopBar" Application="[Application]" Folder="[Folder]" InFocus="[TopBarHasFocus]" Visible="false">
                 <LayoutInput>
                   <AnchorLayoutInput Left="Parent,0" Top="Parent,0,-100" Right="Parent,1" Horizontal="Center"/>
                 </LayoutInput>
