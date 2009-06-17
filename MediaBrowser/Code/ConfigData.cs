@@ -18,7 +18,7 @@ namespace MediaBrowser
     [Serializable]
     public class ConfigData
     {
-        public bool EnableRootPage = false;
+        public bool EnableRootPage = true;
         public bool IsFirstRun = true;
         public string ImageByNameLocation = "";
         public Vector3 OverScanScaling = new Vector3() {X=1, Y=1, Z=1};
