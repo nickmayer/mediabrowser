@@ -286,8 +286,7 @@ namespace MediaBrowser
                         }
                     });
 
-                    BaseItem initial = this.RootFolder;
-                    OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(initial));
+                    OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
                 }
             }
             catch (Exception e)
