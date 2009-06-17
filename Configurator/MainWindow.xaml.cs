@@ -27,6 +27,7 @@ using MediaBrowser.Library.Logging;
 using Configurator.Code;
 using MediaBrowser.Library.Plugins;
 using System.Diagnostics;
+using MediaBrowser.Library.Threading;
 
 namespace Configurator
 {
@@ -102,16 +103,33 @@ namespace Configurator
             var podcasts = Kernel.Instance.GetItem<Folder>(config.PodcastHome);
             podcastList.Items.Clear();
 
-
             if (podcasts != null) {
-                podcasts.ValidateChildren();
 
-                foreach (var item in podcasts.Children) {
-                    if (item is VodCast) {
-                        (item as VodCast).ValidateChildren();
-                        podcastList.Items.Add(item);
+                RefreshPodcasts(podcasts);
+
+                Async.Queue(() =>
+                {
+                    podcasts.ValidateChildren();
+
+                    foreach (var item in podcasts.Children) {
+                        if (item is VodCast) {
+                            (item as VodCast).ValidateChildren();
+                        }
                     }
-                }
+
+                }, () =>
+                {
+                    Dispatcher.Invoke((System.Windows.Forms.MethodInvoker)(() => {
+                        RefreshPodcasts(podcasts);
+                    }));
+                });
+            } 
+        }
+
+        private void RefreshPodcasts(Folder podcasts) {
+            podcastList.Items.Clear();
+            foreach (var item in podcasts.Children) {
+                podcastList.Items.Add(item);
             }
         }
 
