@@ -299,6 +299,7 @@ namespace MediaBrowser
 
         void FullRefresh(Folder folder)
         {
+            folder.RefreshMetadata();
 
             using (new Profiler("Full Library Validation"))
             {

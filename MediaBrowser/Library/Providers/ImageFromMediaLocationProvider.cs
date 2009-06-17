@@ -116,7 +116,7 @@ namespace MediaBrowser.Library.Providers
             changed |= FindImage(Banner) != bannerPath;
 
             var realBackdrops = FindImages(Backdrop);
-            changed |= backdropPaths.Except(realBackdrops).Count() != 0;
+            changed |= realBackdrops.Except(backdropPaths).Count() != 0;
 
             // Basic item corruption fix
             if (!changed) {
