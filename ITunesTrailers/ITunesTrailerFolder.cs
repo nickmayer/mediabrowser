@@ -25,11 +25,6 @@ namespace ITunesTrailers {
         [Persist]
         DateTime lastUpdated = DateTime.MinValue;
 
-        public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options) {
-            // no metadata for itunes folder please
-            return false;
-        }
-
         protected override List<BaseItem> ActualChildren {
             get {
                 if (lastUpdated == DateTime.MinValue) {

@@ -109,7 +109,7 @@ namespace MediaBrowser.Library.Providers
         public override bool NeedsRefresh()
         {
             // nothing we can do with empty location 
-            if (Location == null) return false;
+            if (string.IsNullOrEmpty(Location)) return false;
 
             // image moved or image deleted
             bool changed = FindImage(Primary) != primaryPath;
