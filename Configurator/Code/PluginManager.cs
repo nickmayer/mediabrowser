@@ -13,10 +13,18 @@ using System.Windows.Data;
 namespace Configurator.Code {
     public class PluginManager {
 
+        static PluginManager instance; 
         public static PluginManager Instance {
             get {
-                return (Application.Current.FindResource("PluginManager") as ObjectDataProvider).Data as PluginManager;
+                if (instance == null) {
+                    instance = (Application.Current.FindResource("PluginManager") as ObjectDataProvider).Data as PluginManager;
+                }
+                return instance;
             }
+        }
+
+        internal static void Init() {
+            var junk = Instance;
         }
 
         PluginCollection installedPlugins = new PluginCollection();
@@ -33,9 +41,11 @@ namespace Configurator.Code {
         }
 
         public void RefreshAvailablePlugins() {
-            foreach (var plugin in PluginSourceCollection.Instance.AvailablePlugins) {
+            availablePlugins.Clear();
+            var source = PluginSourceCollection.Instance;
+            foreach (var plugin in source.AvailablePlugins) {
                 availablePlugins.Add(plugin);
-            }
+            } 
         } 
 
         public void InstallPlugin(IPlugin plugin) {
@@ -51,6 +61,12 @@ namespace Configurator.Code {
         }
 
         private void RefreshInstalledPlugins() {
+
+            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread) {
+                Application.Current.Dispatcher.Invoke((System.Windows.Forms.MethodInvoker)RefreshInstalledPlugins, null);
+                return;
+            }
+
             installedPlugins.Clear();
             foreach (var plugin in Kernel.Instance.Plugins) {
                 installedPlugins.Add(plugin);
@@ -84,6 +100,8 @@ namespace Configurator.Code {
             get {
                 return availablePlugins;
             } 
-        } 
+        }
+
+       
     }
 }

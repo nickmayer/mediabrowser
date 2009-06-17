@@ -94,6 +94,8 @@ namespace Configurator
             RefreshDisplaySettings();
             podcastDetails(false);
             SaveConfig();
+
+            PluginManager.Init();
         }
 
         private void RefreshPodcasts() {

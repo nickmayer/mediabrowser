@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Configurator.Code;
 using MediaBrowser.Library.Plugins;
+using MediaBrowser.Library.Threading;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace Configurator {
     /// <summary>
@@ -20,6 +23,8 @@ namespace Configurator {
     public partial class AddPluginWindow : Window {
         public AddPluginWindow() {
             InitializeComponent();
+            progress.Minimum = 0;
+            progress.Maximum = 100;
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
@@ -28,9 +33,38 @@ namespace Configurator {
         }
 
         private void InstallClick(object sender, RoutedEventArgs e) {
+            InstallButton.IsEnabled = false;
+            this.progress.Visibility = Visibility.Visible;
+            FakeProgress();
+            IPlugin plugin = pluginList.SelectedItem as IPlugin;
+            Async.Queue( () => {
+                PluginManager.Instance.InstallPlugin(plugin); 
+            },
+            () => {
+                StopFakeProgress();
+                Dispatcher.Invoke((MethodInvoker)this.Close, null); 
+            });
 
-            PluginManager.Instance.InstallPlugin(pluginList.SelectedItem as IPlugin);
-            this.Close();
+        }
+
+        ManualResetEvent done = new ManualResetEvent(false);
+        ManualResetEvent exited = new ManualResetEvent(false);
+
+        private void StopFakeProgress() {
+            done.Set();
+            while (!exited.WaitOne()) ; 
+        }
+
+        private void FakeProgress() {
+            Async.Queue(() => {
+                int i = 0;
+                while (!done.WaitOne(100)) {
+                    i += 10;
+                    i = i % 100; 
+                    Dispatcher.Invoke((MethodInvoker)(() => { progress.Value = i; }));
+                }
+                exited.Set();
+            });
         }
     }
 }
