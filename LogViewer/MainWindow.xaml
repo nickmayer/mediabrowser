@@ -25,16 +25,39 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="26"/>
+            <RowDefinition Height="56"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="0.442*"/>
             <RowDefinition Height="13.832"/>
             <RowDefinition Height="0.463*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Menu  VerticalAlignment="Top" Height="24.786" d:LayoutOverrides="VerticalAlignment">
-            <MenuItem Header="File..."/>
-        </Menu>
+        <Label HorizontalAlignment="Right" Margin="0,0,12,0" x:Name="lblHeader" Width="183" FontSize="28" Background="{x:Null}" Content="mediabrowser" RenderTransformOrigin="0.5,0.5" Height="43" VerticalAlignment="Top">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    <SkewTransform AngleX="0" AngleY="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform X="0" Y="0"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.552,0.745" StartPoint="0.282,0.722">
+                    <GradientStop Color="#FF000000" Offset="0.552"/>
+                    <GradientStop Color="#FF1BAA04" Offset="0.557"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <Label Height="28" HorizontalAlignment="Right" Margin="0,31,12,0" x:Name="lblHeader2" VerticalAlignment="Top" Width="183" FontSize="14" HorizontalContentAlignment="Center" Content="l o g  v i e w e r (ALPHA)" RenderTransformOrigin="0.5,0.5">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    <SkewTransform AngleX="0" AngleY="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform X="0" Y="0"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
         <Button HorizontalAlignment="Left" Margin="8,8,0,8" Width="50" Content="Start" Grid.Row="1"/>
         <Button HorizontalAlignment="Left" Margin="78,8,0,8" Width="50" Content="Stop" Grid.Row="1"/>
         <Button HorizontalAlignment="Left" Margin="150,8,0,8" Width="50" Content="Clear" Grid.Row="1" Click="clearButton_Click" Name="clearButton" />
