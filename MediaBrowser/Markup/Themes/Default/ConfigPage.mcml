@@ -366,7 +366,7 @@
               <Graphic Name="Panel2" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
                 <Children>
                   <me:TextHeader Text="Global" />                  
-                  <cb:CheckBox Label="Enable Root Page" Checked="[EnableRootPage]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                  <cb:CheckBox Label="Enable Enhanced Home Screen" Checked="[EnableRootPage]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                   <cb:CheckBox Label="Remember Index-By State" Checked="[RememberIndexing]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                   <cb:CheckBox Label="Transparent Background" Checked="[TransparentBackground]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                   <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
