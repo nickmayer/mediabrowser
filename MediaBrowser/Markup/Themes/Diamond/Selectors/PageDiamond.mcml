@@ -46,11 +46,14 @@
 
     <Rules>
       <Changed Source="[NavTimer.Tick]">
+        <Conditions>
+          <Equality Source="[Folder.IsRoot]" Value="false"/>
+        </Conditions>
         <Actions>
           <Set Target="[TheTopBar.Visible]" Value="true" />
           <Set Target="[NavTimer.Enabled]" Value="false" />
         </Actions>
-      </Changed><!---->
+      </Changed>
 
       <Rule>
         <Conditions>
@@ -279,7 +282,7 @@
     <Rules>
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
-      
+
       <Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>
       <!-- Sort and Index current values-->
       <Binding Source="[Folder.DisplayPrefs.SortOrders.Chosen!cor:String]" Target="[SortOrdersBtn.Content]" />
@@ -338,7 +341,7 @@
           <Equality Source="[ViewConfig.Visible]" Value="true" />
         </Conditions>-->
         <Actions>
-         <!-- <Invoke Target="[ViewConfig.NavigateInto]" />-->
+          <!-- <Invoke Target="[ViewConfig.NavigateInto]" />-->
           <Set Target="[ViewConfig.Visible]" Value="false"/>
           <Invoke Target="[MainContainer.NavigateInto]" />
         </Actions>
