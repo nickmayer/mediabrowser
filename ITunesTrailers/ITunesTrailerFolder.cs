@@ -25,6 +25,15 @@ namespace ITunesTrailers {
         [Persist]
         DateTime lastUpdated = DateTime.MinValue;
 
+        public override string Name {
+            get {
+                return "Trailers";
+            }
+            set {
+                // name should never be set for this item 
+            }
+        }
+
         protected override List<BaseItem> ActualChildren {
             get {
                 if (lastUpdated == DateTime.MinValue) {

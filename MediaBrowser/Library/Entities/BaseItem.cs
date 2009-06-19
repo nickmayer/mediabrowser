@@ -134,7 +134,7 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         string name;
 
-        public string Name {
+        public virtual string Name {
             get {
                 return name ?? defaultName;
             }

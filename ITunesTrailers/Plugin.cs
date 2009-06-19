@@ -11,12 +11,11 @@ namespace ITunesTrailers {
 
         static readonly Guid TrailersGuid = new Guid("{828DCFEF-AEAF-44f2-B6A8-32AEAF27F3DA}");
 
-        public override void Init(Kernel config) {
-            var trailers = new ITunesTrailerFolder();
-            trailers.Name = "Trailers";
+        public override void Init(Kernel kernel) {
+            var trailers = kernel.ItemRepository.RetrieveItem(TrailersGuid) ?? new ITunesTrailerFolder();
             trailers.Path = "";
             trailers.Id = TrailersGuid;
-            config.RootFolder.AddVirtualChild(trailers);
+            kernel.RootFolder.AddVirtualChild(trailers);
         }
 
         public override string Name {

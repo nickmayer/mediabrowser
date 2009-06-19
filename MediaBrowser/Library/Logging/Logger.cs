@@ -32,7 +32,7 @@ namespace MediaBrowser.Library.Logging {
         }
 
         public static void ReportInfo(string message, params object[] paramList) {
-            LoggerInstance.ReportInfo(message, string.Format(message, paramList));
+            LoggerInstance.ReportInfo(string.Format(message, paramList));
         }
 
         public static void ReportWarning(string message) {
@@ -40,7 +40,7 @@ namespace MediaBrowser.Library.Logging {
         }
 
         public static void ReportWarning(string message, params object[] paramList) {
-            LoggerInstance.ReportWarning(message, string.Format(message, paramList));
+            LoggerInstance.ReportWarning(string.Format(message, paramList));
         }
 
         public static void ReportException(string message, Exception exception) {
@@ -48,7 +48,7 @@ namespace MediaBrowser.Library.Logging {
         }
 
         public static void ReportException(string message, Exception exception, params object[] paramList) {
-            LoggerInstance.ReportException(message, exception, string.Format(message, paramList));
+            LoggerInstance.ReportException(string.Format(message, paramList), exception);
         }
 
         public static void ReportError(string message) {
@@ -56,7 +56,7 @@ namespace MediaBrowser.Library.Logging {
         }
 
         public static void ReportError(string message, params object[] paramList) {
-            LoggerInstance.ReportError(message, string.Format(message, paramList));
+            LoggerInstance.ReportError(string.Format(message, paramList));
         }
     }
 }

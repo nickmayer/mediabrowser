@@ -37,10 +37,13 @@ namespace FilmTrailerPlugin
         DateTime lastUpdated = DateTime.MinValue;
 
 
-        public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options)
-        {
-            return false;
-            // do nothing .. we control the metadata ... providers do nothing
+        public override string Name {
+            get {
+                return "Trailers"; 
+            }
+            set {
+                // no control for this yet
+            }
         }
 
         // The critical override, you need to override this to take control of the children 

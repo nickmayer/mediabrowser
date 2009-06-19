@@ -67,9 +67,15 @@ namespace MediaBrowser.Library.Metadata {
                 provider.Item = itemClone;
             }
 
-
             if (force || NeedsRefresh(providers, fastOnly)) {
-                Logger.ReportVerbose("Refreshing metadata for {0} fast : {1} force : {2}", item.Name, fastOnly, force);
+
+                // something changed clear the item before pulling metadata 
+                if (!force) {
+                    ClearItem(item);
+                    ClearItem(itemClone);
+                }
+
+                Logger.ReportInfo("Metadata changed for the following item {0} (first pass : {1} forced via UI : {2})", item.Name, fastOnly, force);
                 changed = UpdateMetadata(item, force, fastOnly, providers);
             }
       
@@ -129,7 +135,7 @@ namespace MediaBrowser.Library.Metadata {
                 if ((provider.IsSlow || provider.RequiresInternet) && fastOnly) continue;
 
                 try {
-                    if (force || provider.NeedsRefresh()) {
+                    if (provider.NeedsRefresh() | force) {
                         provider.Fetch();
                         Serializer.Merge(provider.Item, item);
                         changed = true;

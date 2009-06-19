@@ -13,8 +13,8 @@ namespace FilmTrailerPlugin {
         static readonly Guid TrailersGuid = new Guid("{B70517FE-9B66-44a7-838B-CC2A2B6FEC0C}");
 
         public override void Init(Kernel kernel) {
-            var trailers = new FilmTrailerFolder();
-            trailers.Name = "Trailers";
+
+            var trailers = kernel.ItemRepository.RetrieveItem(TrailersGuid) ?? new FilmTrailerFolder(); 
             trailers.Path = "";
             trailers.Id = TrailersGuid;
 
