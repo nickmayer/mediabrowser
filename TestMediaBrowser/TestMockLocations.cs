@@ -12,6 +12,7 @@ namespace TestMediaBrowser {
 
         [Test]
         public void TestTreeCreation() {
+
             var folders = MockFolderMediaLocation.CreateMockLocations(
 @"
 |DemoLib

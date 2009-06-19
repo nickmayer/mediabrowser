@@ -5,14 +5,14 @@ using System.Text;
 using MediaBrowser.Library.Filesystem;
 
 namespace TestMediaBrowser.SupportingClasses {
-    class MockFolderMediaLocation :  MockMediaLocation, IFolderMediaLocation {
+    class MockFolderMediaLocation : MockMediaLocation, IFolderMediaLocation {
 
         class RowInfo {
             public RowInfo(string line) {
                 Depth = line.Length - line.TrimStart().Length;
                 var trimmedLine = line.TrimStart();
                 IsFolder = trimmedLine.StartsWith("|");
-                Path = IsFolder ? trimmedLine.Substring(1) : trimmedLine;  
+                Path = IsFolder ? trimmedLine.Substring(1) : trimmedLine;
             }
 
             public int Depth { get; private set; }
@@ -28,7 +28,7 @@ namespace TestMediaBrowser.SupportingClasses {
                 location.Path = "";
             }
 
-            public void AddParent(RowInfo info,int depth) {
+            public void AddParent(RowInfo info, int depth) {
                 while (depth > 0) {
                     depth--;
                     location = (MockFolderMediaLocation)location.Parent;
@@ -44,7 +44,7 @@ namespace TestMediaBrowser.SupportingClasses {
                 if (info.IsFolder) {
                     newLocation = new MockFolderMediaLocation();
                 } else {
-                    newLocation = new MockMediaLocation(); 
+                    newLocation = new MockMediaLocation();
                 }
                 if (location.Path.Length > 0) {
                     newLocation.Path = location.Path + "\\" + info.Path;
@@ -70,7 +70,7 @@ namespace TestMediaBrowser.SupportingClasses {
 
                     foreach (var item in root.Children) {
                         if (item is MockFolderMediaLocation) {
-                            rval.Add(item as MockFolderMediaLocation); 
+                            rval.Add(item as MockFolderMediaLocation);
                         }
                     }
 
@@ -89,21 +89,22 @@ namespace TestMediaBrowser.SupportingClasses {
             var builder = new Builder();
             var depth = 0;
 
-            foreach (var line in config.Split(new string[] { Environment.NewLine },
-                StringSplitOptions.RemoveEmptyEntries)) 
-                {
-                    var rowInfo = new RowInfo(line);
+            foreach (var line in config.Split('\n')) {
+                
+                if (line.Trim().Length == 0) continue;
 
-                    if (rowInfo.Depth == depth) {
-                        builder.AddSibling(rowInfo); 
-                    } else if (rowInfo.Depth > depth) {
-                        builder.AddChild(rowInfo);
-                    } else {
-                        builder.AddParent(rowInfo, depth - rowInfo.Depth);
-                    }
+                var rowInfo = new RowInfo(line.TrimEnd());
 
-                    depth = rowInfo.Depth;
+                if (rowInfo.Depth == depth) {
+                    builder.AddSibling(rowInfo);
+                } else if (rowInfo.Depth > depth) {
+                    builder.AddChild(rowInfo);
+                } else {
+                    builder.AddParent(rowInfo, depth - rowInfo.Depth);
                 }
+
+                depth = rowInfo.Depth;
+            }
 
             return builder.RootFolders;
         }
@@ -121,6 +122,6 @@ namespace TestMediaBrowser.SupportingClasses {
             return children.Where(child => child.Path.EndsWith(name.ToLower())).Count() > 0;
         }
 
- 
+
     }
 }
