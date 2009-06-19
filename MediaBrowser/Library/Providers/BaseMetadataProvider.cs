@@ -9,10 +9,25 @@ namespace MediaBrowser.Library.Providers {
 
     public abstract class BaseMetadataProvider : IMetadataProvider {
 
-        static MetadataProviderFactory factory;
+        static Dictionary<Type,MetadataProviderFactory> factoryMap = new Dictionary<Type,MetadataProviderFactory>();
 
         public BaseItem Item {
             get; set;
+        }
+
+        MetadataProviderFactory Factory {
+            get {
+                lock (factoryMap) {
+                    MetadataProviderFactory factory;
+                    if (!factoryMap.TryGetValue(this.GetType(), out factory)) {
+                        // this is a bit naughty, dependencies should be set up in kernel 
+                        factory = new MetadataProviderFactory(this.GetType());
+                        factoryMap[this.GetType()] = factory;
+                    }
+
+                    return factory;
+                } 
+            }
         }
 
         public abstract void Fetch();
@@ -20,21 +35,13 @@ namespace MediaBrowser.Library.Providers {
         
         public virtual bool IsSlow {
             get {
-                SetFactory();
-                return factory.Slow;
+                return Factory.Slow;
             }
         }
 
         public virtual bool RequiresInternet { 
             get {
-                SetFactory();
-                return factory.RequiresInternet;
-            }
-        }
-
-        void SetFactory() {
-            if (factory == null) { 
-                factory = new MetadataProviderFactory(this.GetType());
+                return Factory.RequiresInternet;
             }
         }
     }

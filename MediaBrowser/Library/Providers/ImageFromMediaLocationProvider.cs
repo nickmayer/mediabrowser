@@ -20,7 +20,7 @@ namespace MediaBrowser.Library.Providers
         
 
         [Persist]
-        List<string> backdropPaths = new List<string>();
+        List<string> backdropPaths;
         [Persist]
         string bannerPath;
         [Persist]
@@ -116,7 +116,7 @@ namespace MediaBrowser.Library.Providers
             changed |= FindImage(Banner) != bannerPath;
 
             var realBackdrops = FindImages(Backdrop);
-            changed |= realBackdrops.Except(backdropPaths).Count() != 0;
+            changed |= realBackdrops.Except(backdropPaths ?? new List<string> ()).Count() != 0;
 
             // Basic item corruption fix
             if (!changed) {

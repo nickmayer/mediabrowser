@@ -75,8 +75,13 @@ namespace MediaBrowser.Library.Metadata {
                     ClearItem(itemClone);
                 }
 
+                // we must clear the provider data as well in case it is bad or out of date! 
+                foreach (var provider in providers) {
+                    ClearItem(provider);
+                }
+
                 Logger.ReportInfo("Metadata changed for the following item {0} (first pass : {1} forced via UI : {2})", item.Name, fastOnly, force);
-                changed = UpdateMetadata(item, force, fastOnly, providers);
+                changed = UpdateMetadata(item, true, fastOnly, providers);
             }
       
             return changed;
@@ -86,7 +91,7 @@ namespace MediaBrowser.Library.Metadata {
         /// Clear all the persistable parts of the entitiy excluding parts that are updated during initialization
         /// </summary>
         /// <param name="item"></param>
-        private static void ClearItem(BaseItem item) {
+        private static void ClearItem(object item) {
             foreach (var persistable in Serializer.GetPersistables(item)) {
                 if (persistable.GetAttributes<NotSourcedFromProviderAttribute>() == null) {
                     persistable.SetValue(item, null);
