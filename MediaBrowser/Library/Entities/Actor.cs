@@ -18,10 +18,8 @@ namespace MediaBrowser.Library.Entities {
         public Person Person {
             get {
                 var person = Kernel.Instance.ItemRepository.RetrieveItem(PersonId) as Person;
-                if (person == null) {
-                    person = new Person();
-                    person.Name = Name.Trim();
-                    person.Id = PersonId;
+                if (person == null || person.Name == null) {
+                    person = new Person(PersonId, Name.Trim());
                     Kernel.Instance.ItemRepository.SaveItem(person);
                 }
                 return person;

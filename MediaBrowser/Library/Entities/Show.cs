@@ -30,5 +30,6 @@ namespace MediaBrowser.Library.Entities {
 
         [Persist]
         public int? ProductionYear { get; set; }
+
     }
 }
