@@ -313,7 +313,7 @@
                         Application="[Application]" >
             <LayoutInput>              
               <AnchorLayoutInput Left="Parent,0.3" Right="Parent,.7"
-											 Top="Parent,0.15" Bottom="Parent,.4" />
+											 Top="Parent,0.15" Bottom="Parent,.8" />
             </LayoutInput>
           </pp:PopupPlay>
           

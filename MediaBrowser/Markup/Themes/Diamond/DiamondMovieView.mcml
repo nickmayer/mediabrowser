@@ -52,6 +52,7 @@
     </Locals>
 
     <Rules>
+      <Default Target="[DisplayMax.Value]" Value="true" />
       <Binding Source="[Item]" Target="[TitleUI.Item]"/>
       <Binding Source="[Item.PreferredImage]" Target="[Preview.Content]" />
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
@@ -92,17 +93,20 @@
         </Actions>
       </Changed>
 
+      
+      
       <Changed Source="[DisplayMax.Value]">
         <Conditions>
           <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="true" />
         </Conditions>
         <Actions>
-          <Set Target="[CoverOutline.Alpha]" Value="1" />
+          <Set Target="[PosterPanel.Alpha]" Value="1" />
           <Set Target="[CommonInfoPanel.Alpha]" Value="1" />
           <Set Target="[SelectorPanel.Alpha]" Value="1" />
           <Set Target="[OverviewPanel.Alpha]" Value="1" />
           <Set Target="[ActorsPanel.Alpha]" Value="1" />
           <Set Target="[DiamondBG.LayoutInput]" Value="[FullBG]" />
+          <Set Target="[CmdButtons.Navigation]" Value="None" />
         </Actions>
       </Changed>
       <Changed Source="[DisplayMax.Value]">
@@ -113,9 +117,10 @@
           <Set Target="[SelectorPanel.Alpha]" Value="0" />
           <Set Target="[OverviewPanel.Alpha]" Value="0" />
           <Set Target="[ActorsPanel.Alpha]" Value="0" />
-          <Set Target="[CoverOutline.Alpha]" Value="0" />
+          <Set Target="[PosterPanel.Alpha]" Value="0" />
           <Set Target="[CommonInfoPanel.Alpha]" Value="0" />
           <Set Target="[DiamondBG.LayoutInput]" Value="[SmallBG]" />
+          <Set Target="[CmdButtons.Navigation]" Value="ContainAll" />
         </Actions>
       </Changed>
     </Rules>
@@ -288,7 +293,7 @@
               </Panel>
 
               <!-- Poster (large movie pick) -->
-              <Graphic Name="CoverOutline" Content="image://i:PosterFrame"  Padding="20,20,20,25" MaximumSize="350,500">
+              <!--<Graphic Name="CoverOutline" Content="image://i:PosterFrame"  Padding="20,20,20,25" MaximumSize="350,500">
                 <LayoutInput>
                   <AnchorLayoutInput Left="Parent,0.19" Top="Parent, 0.2,15"/>
                 </LayoutInput>
@@ -296,7 +301,22 @@
                   <Graphic Name="Preview" MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" >
                   </Graphic>
                 </Children>
+              </Graphic>-->
+              <!-- Thumbnail Poster -->
+              <Graphic Name="PosterPanel" SizingPolicy="SizeToChildren" Layout="Anchor">
+                <LayoutInput>
+                  <AnchorLayoutInput Top="Parent,0.19" Left="Parent,0.2,15" />
+                </LayoutInput>
+                <Children>
+                  <Graphic Name="CoverOutline" Content="image://i:PosterFrame">
+                    <LayoutInput>
+                      <AnchorLayoutInput Top="Preview,0" Bottom="Preview,1" Left="Preview,0" Right="Preview,1"/>
+                    </LayoutInput>
+                  </Graphic>
+                  <Graphic Name="Preview" MaintainAspectRatio="true" MaximumSize="280,500" Margins="25,25,25,30" />
+                </Children>
               </Graphic>
+              
 
               <Graphic Name="DiamondBG" Content="image://i:DiamondListBg">
                 <LayoutInput>
@@ -340,6 +360,7 @@
       <Command Name="ToggleViewCommand" />
       <Command Name="RefreshMovieCommand" />
       <Command Name="DeleteMovieCommand" />
+      <Command Name="LocalTrailerCommand" />
       <Command Name="NullCommand" />
     </Locals>
 
@@ -392,6 +413,13 @@
         </Actions>
       </Changed>
 
+      <Changed Source="[LocalTrailerCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.PlaybackController.PlayVideo]" path="[Item.TrailerPath]"/>
+          <Invoke Target="[Application.PlaybackController.GoToFullScreen]" />
+        </Actions>
+      </Changed>
+
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
       <Rule ConditionLogicalOp="And">
@@ -403,6 +431,8 @@
           <Set Target="[DeleteMovieButton.Visible]" Value="true" />
         </Actions>
       </Rule>
+
+      <Condition Source="[Item.TrailerPath]" ConditionOp="NotEquals" SourceValue="" Target="[TrailerButton.Visible]" Value="true"/>
 
     </Rules>
 
@@ -420,8 +450,9 @@
                 <Children>
                   <dtb:DiamondImageButton Name="ResumeMovieButton" Text="RESUME" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
                   <dtb:DiamondImageButton Name="PlayMovieButton" Text="PLAY" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <dtb:DiamondImageButton Name="TrailerButton" Text="TRAILER" Command="[LocalTrailerCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                   <dtb:DiamondImageButton Name="ToggleViewButton" Text="DISPLAY" Command="[ToggleViewCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconFloral" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />                  
                   <dtb:DiamondImageButton Name="CacheMovieButton" Text="CACHE 2 XML" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                   <dtb:DiamondImageButton Name="DeleteMovieButton" Text="DELETE" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                 </Children>
