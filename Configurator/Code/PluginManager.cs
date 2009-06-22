@@ -63,7 +63,12 @@ namespace Configurator.Code {
         private void RefreshInstalledPlugins() {
 
             if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread) {
-                Application.Current.Dispatcher.Invoke((System.Windows.Forms.MethodInvoker)RefreshInstalledPlugins, null);
+                try {
+                    Application.Current.Dispatcher.Invoke((System.Windows.Forms.MethodInvoker)RefreshInstalledPlugins, null);
+                } catch (Exception) {
+                    MessageBox.Show("You are running an old version of .Net. MediaBrowser requires .Net 3.5 SP1 in order to function! Run Windows update and upgrade your .Net framework!");
+                    Application.Current.Shutdown();
+                }
                 return;
             }
 
