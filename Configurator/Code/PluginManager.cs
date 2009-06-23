@@ -10,6 +10,7 @@ using MediaBrowser.Library.Logging;
 using System.Diagnostics;
 using System.Windows.Data;
 using System.Windows.Threading;
+using MediaBrowser.Library.Threading;
 
 namespace Configurator.Code {
     public class PluginManager {
@@ -35,9 +36,11 @@ namespace Configurator.Code {
 
         public PluginManager() {
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
-                // move this to async
-                RefreshInstalledPlugins();
-                RefreshAvailablePlugins();
+                Async.Queue(() =>
+                {
+                    RefreshInstalledPlugins();
+                    RefreshAvailablePlugins();
+                });
             }
         }
 

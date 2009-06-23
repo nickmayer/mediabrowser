@@ -9,6 +9,7 @@ using System.Xml;
 using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Extensions;
 using System.IO;
+using MediaBrowser.Library.Logging;
 
 namespace Configurator.Code {
     class PluginSourceCollection : ObservableCollection<string> {
@@ -66,15 +67,20 @@ namespace Configurator.Code {
         private List<IPlugin> DiscoverRemotePlugins(string source) {
             var list = new List<IPlugin>();
             XmlDocument doc = Helper.Fetch(source);
-            foreach (XmlNode pluginRoot in doc.SelectNodes(@"Plugins//Plugin")) {
-                list.Add(new RemotePlugin()
-                {
-                    Description = pluginRoot.SafeGetString("Description"),
-                    Filename = pluginRoot.SafeGetString("Filename"),
-                    Version = new System.Version(pluginRoot.SafeGetString("Version")),
-                    Name = pluginRoot.SafeGetString("Name"), 
-                    BaseUrl = GetPath(source)
-                });
+            if (doc != null) {
+                foreach (XmlNode pluginRoot in doc.SelectNodes(@"Plugins//Plugin")) {
+                    list.Add(new RemotePlugin()
+                    {
+                        Description = pluginRoot.SafeGetString("Description"),
+                        Filename = pluginRoot.SafeGetString("Filename"),
+                        Version = new System.Version(pluginRoot.SafeGetString("Version")),
+                        Name = pluginRoot.SafeGetString("Name"),
+                        BaseUrl = GetPath(source)
+                    });
+                }
+            } else {
+
+                Logger.ReportWarning("There appears to be no network connection. Plugin can not be installed.");
             }
             return list;
         }

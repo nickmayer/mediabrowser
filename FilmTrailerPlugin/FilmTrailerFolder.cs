@@ -15,6 +15,7 @@ using MediaBrowser.Library.Extensions;
 using MediaBrowser;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Entities.Attributes;
 
 
 namespace FilmTrailerPlugin
@@ -31,9 +32,11 @@ namespace FilmTrailerPlugin
         #region Base Item methods
 
         [Persist]
+        [NotSourcedFromProvider]
         List<BaseItem> trailers = new List<BaseItem>();
 
         [Persist]
+        [NotSourcedFromProvider]
         DateTime lastUpdated = DateTime.MinValue;
 
 

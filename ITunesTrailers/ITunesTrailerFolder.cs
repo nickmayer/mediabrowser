@@ -11,6 +11,7 @@ using MediaBrowser;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Entities.Attributes;
 
 namespace ITunesTrailers {
     public class ITunesTrailerFolder : Folder {
@@ -20,9 +21,11 @@ namespace ITunesTrailers {
         const string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
 
         [Persist]
+        [NotSourcedFromProvider]
         List<BaseItem> children = new List<BaseItem>();
 
         [Persist]
+        [NotSourcedFromProvider]
         DateTime lastUpdated = DateTime.MinValue;
 
         public override string Name {
