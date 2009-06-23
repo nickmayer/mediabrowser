@@ -23,7 +23,6 @@ namespace MediaBrowser.Library.Extensions {
         class InterceptorProxy : RealProxy {
             T proxy;
             T target;
-            EventHandler<PropertyChangedEventArgs> OnPropertyChanged;
 
             public InterceptorProxy(T target)
                 : base(typeof(T)) {

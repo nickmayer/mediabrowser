@@ -15,6 +15,7 @@ using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library.Threading;
 using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace Configurator {
     /// <summary>
@@ -42,7 +43,7 @@ namespace Configurator {
             },
             () => {
                 StopFakeProgress();
-                Dispatcher.Invoke((MethodInvoker)this.Close, null); 
+                Dispatcher.Invoke(DispatcherPriority.Background,(MethodInvoker)this.Close); 
             });
 
         }
@@ -58,10 +59,10 @@ namespace Configurator {
         private void FakeProgress() {
             Async.Queue(() => {
                 int i = 0;
-                while (!done.WaitOne(100)) {
+                while (!done.WaitOne(100,false)) {
                     i += 10;
-                    i = i % 100; 
-                    Dispatcher.Invoke((MethodInvoker)(() => { progress.Value = i; }));
+                    i = i % 100;
+                    Dispatcher.Invoke(DispatcherPriority.Background, (MethodInvoker)(() => { progress.Value = i; }));
                 }
                 exited.Set();
             });

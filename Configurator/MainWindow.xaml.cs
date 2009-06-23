@@ -28,6 +28,7 @@ using Configurator.Code;
 using MediaBrowser.Library.Plugins;
 using System.Diagnostics;
 using MediaBrowser.Library.Threading;
+using System.Windows.Threading;
 
 namespace Configurator
 {
@@ -119,7 +120,8 @@ namespace Configurator
 
                 }, () =>
                 {
-                    Dispatcher.Invoke((System.Windows.Forms.MethodInvoker)(() => {
+                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                    {
                         RefreshPodcasts(podcasts);
                     }));
                 });

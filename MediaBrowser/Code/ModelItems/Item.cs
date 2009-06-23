@@ -44,12 +44,10 @@ namespace MediaBrowser.Library
 
         PlayableItem playable;
         private PlaybackStatus playstate;
-
         protected BaseItem baseItem; 
         
         protected int unwatchedCountCache = -1;
 
-        public event PropertyChangedEventHandler MetadataPropertyChanged;
 
         #region Item Construction
         internal Item()

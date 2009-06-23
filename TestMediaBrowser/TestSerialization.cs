@@ -42,7 +42,10 @@ namespace TestMediaBrowser {
 
     class Dog : Animal {
 
-        Fur i; 
+        // its used during reflection tests 
+#pragma warning disable 169 
+        Fur i;
+#pragma warning restore 169
 
         [Persist]
         public Fur Fur { get; set; }

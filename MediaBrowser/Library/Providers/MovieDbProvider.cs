@@ -22,7 +22,6 @@ namespace MediaBrowser.Library.Providers
         private static string search = @"http://api.themoviedb.org/2.0/Movie.search?title={0}&api_key={1}";
         private static string getInfo = @"http://api.themoviedb.org/2.0/Movie.getInfo?id={0}&api_key={1}";
         private static readonly string ApiKey = "f6bd687ffa63cd282b6ff2c6877f2669";
-        static readonly string ProviderName = "MovieDbProvider";
         static readonly Regex[] nameMatches = new Regex[] {
             new Regex(@"(?<name>.*)\((?<year>\d{4})\)"), // matches "My Movie (2001)" and gives us the name and the year
             new Regex(@"(?<name>.*)") // last resort matches the whole string as the name

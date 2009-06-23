@@ -39,8 +39,8 @@ namespace Toub.MediaCenter.Dvrms.Metadata
             try {
                 _editor.GetAttributeByName("WM/Picture", 0, out attributeType, pictureParam, ref attributeValueLength);
 
-                // no support for images larger than 500K 
-                if (attributeValueLength > 0 && attributeValueLength < 1024*500) {
+                // no support for -1 sized images 
+                if (attributeValueLength > 0) {
                     //attributeValue = new byte[attributeValueLength];
                     pictureParam = Marshal.AllocHGlobal(attributeValueLength);
 

@@ -11,7 +11,6 @@ namespace MediaBrowser.Library
     {
         public Studio Studio { get; private set; }
         private FolderModel parent;
-        private Item item = null;
 
         public StudioItemWrapper(Studio studio, FolderModel parent)
         {
@@ -24,20 +23,6 @@ namespace MediaBrowser.Library
             get
             {
                 return null;
-                /*
-                if (item == null)
-                    lock (this)
-                        if (item == null)
-                        {
-                            FilterSource<Studio> source = new FilterSource<Studio>(parent.UnsortedChildren, this.Studio,
-                                                            delegate(Item itm, Studio studio) { return itm.Metadata.Studios.Find(a => a.Name == studio.Name) != null; },
-                                                            ItemType.Studio,
-                                                            delegate(Studio studio) { return studio.Name; });
-                            item = source.ConstructItem();
-                        }
-                return item;
-                 * 
-                 */
             }
         }
     }

@@ -11,7 +11,6 @@ namespace MediaBrowser.Library.Playables
 {
     class PlayableIso : PlayableItem
     {
-        Video video;
         string mountedFilename;
         PlayableExternal playableExternal = null;
 

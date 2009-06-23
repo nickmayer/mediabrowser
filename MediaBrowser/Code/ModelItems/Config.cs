@@ -498,7 +498,7 @@ namespace MediaBrowser
         
         /* End of app specific settings*/
 
-        private string[] _SortRemoveCharactersArray = null;
+        private string[] _SortRemoveCharactersArray;
         public string[] SortRemoveCharactersArray
         {
             get
@@ -508,7 +508,7 @@ namespace MediaBrowser
             }
         }
 
-        private string[] _SortReplaceCharactersArray = null;
+        private string[] _SortReplaceCharactersArray;
         public string[] SortReplaceCharactersArray
         {
             get
@@ -518,7 +518,7 @@ namespace MediaBrowser
             }
         }
 
-        private string[] _SortReplaceWordsArray = null;
+        private string[] _SortReplaceWordsArray;
         public string[] SortReplaceWordsArray
         {
             get

@@ -19,7 +19,6 @@ namespace MediaBrowser.Code.ModelItems {
         static MethodInfo ImageFromStream = typeof(Image).GetMethod("FromStream", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic, null, new Type[] { typeof(string), typeof(Stream) }, null);
         static BackgroundProcessor<Action> ImageLoadingProcessors = new BackgroundProcessor<Action>(2, action => action(), "Image loader");
 
-        Item item;
         Func<LibraryImage> source;
         Action afterLoad;
         Image image = null;
@@ -77,7 +76,7 @@ namespace MediaBrowser.Code.ModelItems {
                 }
             } catch (Exception e) {
                 // this may fail in if we are unable to write a file... its not a huge problem cause we will pick it up next time around
-                Logger.ReportException("Failed to load image: " + item.Name, e);
+                Logger.ReportException("Failed to load image", e);
                 if (Debugger.IsAttached) {
                     Debugger.Break();
                 }
