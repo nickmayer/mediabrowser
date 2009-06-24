@@ -73,6 +73,8 @@ namespace MediaBrowser.Code.ModelItems {
             // the reverse isn't really needed, but it means that metadata is acquired in the order the children are in. 
             foreach (var item in children.folder.Children.Reverse()) {
                 fastMetadataRefresher.Inject(item);
+                // this ensures images are cached earlier 
+                var ignore = item.PrimaryImage;
             }
 
             fastMetadataRefresher.Inject(children.folder);
