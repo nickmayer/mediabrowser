@@ -13,6 +13,7 @@
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
     xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
     xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
+    xmlns:dp="resx://MediaBrowser/MediaBrowser.Resources/DiamondPagination"
       
 	  xmlns:wea="resx://MediaBrowser/MediaBrowser.Resources/Weather"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
@@ -31,6 +32,7 @@
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
       <cor:Boolean Name="UseCustomAnchor" Boolean="false" />
+      <BooleanChoice Name="NavInto" Value="false" />
     </Properties>
 
     <Locals>
@@ -46,8 +48,7 @@
       <Timer Name="InfoTimer" AutoRepeat="false" Interval="200" Enabled="false"/>
       <ScrollingHandler Name="ScrollingHandler"  HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" />
-      <ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.35"  />
-
+      <ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.36"  />
 
       <cor:Boolean Name="CanPlay" Boolean="false" />
       <Timer Name="HideFindAsYouType" Interval="3000" AutoRepeat="false"/>
@@ -91,7 +92,7 @@
           <Equality Source="[Application.Config.ShowClock]" ConditionOp="Equals" Value="true" />
         </Conditions>
       </Binding>
-      
+
 
       <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
         <Transformer>
@@ -143,9 +144,7 @@
         </Conditions>
         <Actions>
           <Set Target="[RefocusViewTimer.Enabled]" Value="true" />
-          <!--<Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]"/>-->
           <Set Target="[RecentItemsPanel.Visible]" Value="true"/>
-          <!--<Invoke Target="[Application.Information.AddInformationString]" info="[SelectedItem!lib:FolderModel.Children.Count.ToString]" />-->
         </Actions>
       </Changed>
       <Changed Source="[SelectedItem]" >
@@ -166,6 +165,7 @@
         <Actions>
           <Set Target="[NowPlaying.Visible]" Value="false" />
           <Set Target="[PanelPoster.Visible]" Value="true" />
+          <Set Target="[RecentListPanel.Navigation]" Value="ContainHorizontal" />
         </Actions>
       </Rule>
       <Rule ConditionLogicalOp="And">
@@ -175,6 +175,7 @@
         <Actions>
           <Set Target="[NowPlaying.Visible]" Value="true" />
           <Set Target="[PanelPoster.Visible]" Value="false" />
+          <Set Target="[RecentListPanel.Navigation]" Value="None" />
         </Actions>
       </Rule>
 
@@ -184,11 +185,31 @@
           <IsType Source="[SelectedItem]" Type="lib:FolderModel"/>
         </Conditions>
         <Actions>
-          <Set Target="[RefocusViewTimer.Enabled]" Value="false" />
-          <Invoke Target="[ItemMenuPanel.NavigateInto]" />
+          <Set Target="[RefocusViewTimer.Enabled]" Value="false" />          
           <Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]"/>
+          <Invoke Target="[ItemMenuPanel.NavigateInto]" />
         </Actions>
       </Rule>
+
+      <!--<Rule>
+        <Conditions>
+          <Equality Source="[HardNavigate]" Value="true"/>        
+        </Conditions>
+        <Actions>
+          <Set Target="[HardNavigate]" Value="false" />
+          <Invoke Target="[ItemMenuPanel.NavigateInto]" />
+        </Actions>
+      </Rule>-->
+
+      <Changed Source="[NavInto.Value]">
+        <Conditions>
+          <Equality Source="[NavInto.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[NavInto.Value]" Value="false" />
+          <Invoke Target="[ItemMenuPanel.NavigateInto]" />
+        </Actions>
+      </Changed>
 
       <!-- Typing Handler / Jump List -->
       <Changed Source="[Application]" InitialEvaluate="true">
@@ -281,6 +302,8 @@
                 </LayoutInput>
               </wea:YahooWeatherLarge>
 
+
+
               <!-- Gradient Center Panel Borders -->
               <Panel>
                 <LayoutInput>
@@ -342,7 +365,7 @@
                   </ColorFill>
                 </Children>
               </Graphic>
-              
+
               <!-- Media Browser Name Panel -->
               <Graphic Name="TopMiniPanel" Content="resx://MediaBrowser/MediaBrowser.Resources/roottopw">
                 <LayoutInput>
@@ -364,7 +387,7 @@
                   </ColorFill>
                 </Children>
               </Graphic>
-              
+
               <!-- Right Bottom Main Menu Panel -->
               <Panel>
                 <LayoutInput>
@@ -385,7 +408,7 @@
                   <ColorFill Layout="Fill" Content="Black" Alpha="0.15" />
                 </Children>
               </Panel>
-              
+
               <!-- Left Bottom Main Menu Panel-->
               <Panel>
                 <LayoutInput>
@@ -420,7 +443,7 @@
 
               <Panel Name="recentlyAdded">
                 <LayoutInput>
-                  <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.1,-10" />
+                  <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.17" />
                 </LayoutInput>
                 <Layout>
                   <FlowLayout ItemAlignment="Center"/>
@@ -441,23 +464,23 @@
                 </Children>
               </Panel>
               <!-- Recent Items -->
-              <Panel Name="RecentListPanel">
+              <Clip Name="RecentListPanel" Navigation="ContainHorizontal">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.35,10" Top="recentlyAdded,1,10" Right="Parent,0.95"
+                  <FormLayoutInput Left="Parent,0.35,10" Top="recentlyAdded,1,10" Right="Parent,.35,660"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Layout>
-                  <FlowLayout Orientation="Vertical" Spacing="10,10"/>
+                  <FlowLayout Orientation="Vertical" Spacing="0,0"/>
                 </Layout>
                 <Children>
-                  <me:RecentItemList Name="RecentItemsPanel" Application="[Application]" />
+                  <me:RecentItemList Name="RecentItemsPanel" Application="[Application]"  NavInto="[NavInto]" />
                 </Children>
-              </Panel>
+              </Clip>
 
               <!-- Recent Panel Background Fade-->
               <Clip Name="NPClipP" FadeSize="5" Orientation="Horizontal" FadeAmount="1" >
                 <LayoutInput>
-                  <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="RecentListPanel,0,-10" Right="RecentListPanel,1,10" />
+                  <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="Parent,0,-10" Right="Parent,1,10" />
                 </LayoutInput>
                 <Children>
                   <ColorFill Content="color://s:FillColor" Alpha="0.7" Layout="Fill">
@@ -472,18 +495,6 @@
                   <AnchorLayoutInput Top="Parent,0" Bottom="Parent,1" Left="Parent,0" Right="Parent,1" />
                 </LayoutInput>
               </Graphic>
-
-              <!-- Background Fill 
-              <Panel Name="MainBGFill" Layout="Fill" Margins="-50,-20,-150,-20" >
-                <Children>
-                  <Clip FadeSize="360" Orientation="Vertical" FadeAmount="1" CenterPointPercent="0.5,0.5,0.5" FarOffset="50" NearOffset="50" >
-                    <Children>
-                      <ColorFill Content="color://s:BackgroundColor1" Layout="Fill"/>
-                    </Children>
-                  </Clip>
-                  <ColorFill Content="color://s:BackgroundColor2" Layout="Fill"/>
-                </Children>
-              </Panel>-->
 
             </Children>
           </Clip>
@@ -614,33 +625,67 @@
     <Properties>
       <lib:FolderModel Name="Folder"/>
       <a:Application Name="Application" Application="$Required"/>
+      <BooleanChoice Name="NavInto" BooleanChoice="$Required" />
     </Properties>
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler"  HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
+							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" />
+      <ScrollingData Name="ScrollingData" LockedAlignment="0.0" LockedPosition="0.01"  />
+
+      <GridLayout Name="MyLayout" Orientation="Vertical" AllowWrap="true" Spacing="4,0" Repeat="Never"
+                  RepeatGap="0" Rows="4" />
+    </Locals>
     <Rules>
+      <!-- Default Values-->
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+      <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
+      <!-- Binding for Newest Items-->
       <Binding Source="[Folder.NewestItems]" Target="[Repeater.Source]"/>
+      <!-- Pagination Rules-->
+      <Changed Source="[ScrollingData.TotalPages]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]" InvokePolicy="Synchronous" />
+          <Set Target="[NavInto.Value]" Value="true" />
+        </Actions>
+      </Changed>
+      <Binding Source="[ScrollingData.CurrentPage]" Target="[Pagination.Value]" />
+      <Binding Source="[ScrollingData.TotalPages]" Target="[Pagination.MaxPages]" />
     </Rules>
     <Content>
-      <!--<Scroller Orientation="Vertical" FadeSize="-20" Margins="0,0,0,0" Name="Scroller">
-        <LayoutInput>
-          <DockLayoutInput Alignment="Fill"  Position="Client"  />
-        </LayoutInput>
-        <Children>-->
-      <Repeater Name="Repeater"  Layout="Fill" DiscardOffscreenVisuals="true">
+      <Panel>
         <Layout>
-          <FlowLayout Orientation="Vertical" Spacing="10,10" ItemAlignment="Near"/>
+          <FlowLayout ItemAlignment="Center" Orientation="Vertical"/>
         </Layout>
-        <Content>
-          <me:RecentItems Application="[Application]" Item="[RepeatedItem!lib:Item]" Index="[RepeatedItemIndex]" />
-        </Content>
-        <Divider>
-          <Clip FadeSize="25" Orientation="Horizontal" FadeAmount="1" >
+        <Children>
+          <!-- Pagination -->
+          <dp:DiamondPagination Name="Pagination" Value="3" />
+          <!-- Poster Images-->
+          <Clip FadeSize="20" Orientation="Horizontal" FadeAmount="1" CenterPointPercent="0.5,0.5,0.5" >
             <Children>
-              <ColorFill Content="color://s:FontColorDark" Alpha="0.8" Layout="Fill" MaximumSize="0,2" />
+              <Scroller Orientation="Horizontal" Margins="0,0,0,0" Name="Scroller" FadeSize="10" ScrollingData="[ScrollingData]">
+                <Children>
+                  <Repeater Name="Repeater" Layout="[MyLayout]" >
+                    <Content>
+                      <me:RecentItems Application="[Application]" Item="[RepeatedItem!lib:Item]" Index="[RepeatedItemIndex]"  />
+                    </Content>
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" RelativeTo="Current"/>
+                          <PositionKeyframe Time="0.3" RelativeTo="Final"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Repeater>
+                </Children>
+              </Scroller>
             </Children>
           </Clip>
-        </Divider>
-      </Repeater>
-      <!--</Children>
-      </Scroller>-->
+          
+
+
+        </Children>
+      </Panel>
     </Content>
   </UI>
 
@@ -649,11 +694,12 @@
       <a:Application Name="Application" Application="$Required" />
       <lib:Item Name="Item" Item="$Required" />
       <Index Name="Index" Index="$Required"/>
+      <Size Name="MinSize" Size="640,80"/>
     </Properties>
 
     <Locals>
       <ClickHandler Name="Clicker"/>
-      <cor:Int32 Name="DisplayCount" Int32="4" />
+      <cor:Int32 Name="DisplayCount" Int32="20" />
     </Locals>
 
     <Rules>
@@ -697,7 +743,7 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3">        
+      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3" MinimumSize="[MinSize]">
         <Children>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
                    MaintainAspectRatio="true" MaximumSize="120,65" >
@@ -721,6 +767,7 @@
       </Graphic>
     </Content>
   </UI>
+
 
   <Image Name="HiliteBtn" Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusBlack" NineGrid="5,5,5,5" />
   <Image Name="HiliteBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilite" NineGrid="10,10,10,10" />
