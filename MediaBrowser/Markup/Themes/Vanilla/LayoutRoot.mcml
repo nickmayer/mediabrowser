@@ -169,6 +169,7 @@
       <Rule>
         <Conditions>
           <Modified Source="[RefocusViewTimer.Tick]"  />
+          <IsType Source="[SelectedItem]" Type="lib:FolderModel"/>
         </Conditions>
         <Actions>
           <Set Target="[RefocusViewTimer.Enabled]" Value="false" />
