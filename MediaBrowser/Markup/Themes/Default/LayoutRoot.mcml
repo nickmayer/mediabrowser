@@ -743,7 +743,7 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3" MinimumSize="[MinSize]">
+      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3" MinimumSize="[MinSize]" MaximumSize="[MinSize]">
         <Children>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
                    MaintainAspectRatio="true" MaximumSize="120,65" >
