@@ -48,14 +48,20 @@ namespace MediaBrowser.Code.ModelItems {
             this.afterLoad = afterLoad;
             this.IsLoaded = false;
             this.defaultImage = defaultImage;
-
+            this.LowPriority = false;
         }
+
+        public bool LowPriority { get; set; }
 
         public Image Image {
             get {
                 lock (this) {
                     if (image == null && source != null) {
-                        ImageLoadingProcessors.Inject(LoadImage);
+                        if (LowPriority) {
+                            ImageLoadingProcessors.Enqueue(LoadImage);
+                        } else {
+                            ImageLoadingProcessors.Inject(LoadImage);
+                        }
                     }
 
                     if (image != null) {

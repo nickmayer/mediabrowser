@@ -89,6 +89,7 @@ namespace MediaBrowser.Library
                         () => baseItem.BackdropImage,
                         null,
                         () => this.FirePropertyChanged("BackdropImage"));
+                    backdropImage.LowPriority = true;
                 }
                 return backdropImage.Image;
             }
