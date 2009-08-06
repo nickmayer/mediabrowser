@@ -55,6 +55,18 @@ namespace MediaBrowser.Library.ImageManagement {
         /// <returns></returns>
         public abstract string GetLocalImagePath();
 
+        protected string ConvertRemotePathToLocal(string remotePath)
+        {
+            string localPath  = remotePath;
+
+            if (localPath.ToLower().Contains("http://"))
+                localPath = localPath.Replace("http://", "");
+
+            localPath = System.IO.Path.Combine(cachePath,localPath.Replace('/', '\\'));
+
+            return localPath;
+            
+        }
 
         protected virtual string LocalFilename {
             get {

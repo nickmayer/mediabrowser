@@ -26,11 +26,14 @@ namespace MediaBrowser.Library.Providers.TVDB {
         public override bool NeedsRefresh() {
             bool fetch = false;
 
+            if (Config.Instance.MetadataCheckForUpdateAge == -1 && downloadDate != DateTime.MinValue)
+                Logger.ReportInfo("MetadataCheckForUpdateAge = -1 wont clear and check for updated metadata");
 
             fetch = seriesId != GetSeriesId();
             fetch |= (
+                Config.Instance.MetadataCheckForUpdateAge != -1 &&
                 seriesId != null &&
-                DateTime.Today.Subtract(downloadDate).TotalDays > 14 &&
+                DateTime.Today.Subtract(downloadDate).TotalDays > Config.Instance.MetadataCheckForUpdateAge &&
                 DateTime.Today.Subtract(Item.DateCreated).TotalDays < 180
                 );
 

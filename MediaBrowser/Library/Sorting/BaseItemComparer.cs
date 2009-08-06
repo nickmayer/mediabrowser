@@ -157,12 +157,15 @@ namespace MediaBrowser.Library {
                 // Otherwise, if we have strings, compare them alphabetically.
                 string str1 = new string(space1);
                 string str2 = new string(space2);
-
+                
                 int result;
 
-                if (char.IsDigit(space1[0]) && char.IsDigit(space2[0])) {
+                //biggest int - 2147483647
+                if (char.IsDigit(space1[0]) && char.IsDigit(space2[0]) && str1.Length < 10 && str2.Length < 10)
+                {
                     int thisNumericChunk = int.Parse(str1);
                     int thatNumericChunk = int.Parse(str2);
+                    
                     result = thisNumericChunk.CompareTo(thatNumericChunk);
                 } else {
                     result = str1.CompareTo(str2);

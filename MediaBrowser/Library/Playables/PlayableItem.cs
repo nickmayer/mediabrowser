@@ -11,6 +11,7 @@ using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Library.Configuration;
 using System.Linq;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Playables;
 
 namespace MediaBrowser.Library
 {
@@ -32,22 +33,28 @@ namespace MediaBrowser.Library
             }
         }
 
+        public bool QueueItem { get; set; }
+        public IEnumerable<string> PlayableItems { get; set; }
+
         static Transcoder transcoder;
         private string fileToPlay;
         protected PlaybackStatus PlayState { get; private set; }
         public PlayableItem()
         {
+            QueueItem = false;
 
         }
 
         public abstract void Prepare(bool resume);
         public abstract string Filename { get; }
 
+
+
         public void Play(PlaybackStatus playstate, bool resume)
         {
             this.PlayState = playstate;
             this.Prepare(resume);
-            this.PlayInternal(resume);
+            PlayInternal(resume);
         }
 
         protected virtual void PlayInternal(bool resume)
@@ -104,9 +111,10 @@ namespace MediaBrowser.Library
 
         private void PlayAndGoFullScreen(string file)
         {
-            this.fileToPlay = file;
+            this.fileToPlay = file;                
             Play(file);
-            PlaybackController.GoToFullScreen();
+            if (!QueueItem)
+                PlaybackController.GoToFullScreen();
             MarkWatched();
 
             PlaybackController.OnProgress += new EventHandler<PlaybackStateEventArgs>(PlaybackController_OnProgress);
@@ -114,9 +122,13 @@ namespace MediaBrowser.Library
 
         public virtual void Play(string file) {
             Logger.ReportInfo("About to play : " + file);
-            PlaybackController.PlayVideo(file);
-        }
-        
+            if (QueueItem && this.PlayableItems != null && this.PlayableItems.Count() > 0)
+                PlaybackController.QueueMedia(this.PlayableItems);
+            else if (QueueItem)
+                PlaybackController.QueueMedia(file);
+            else
+                PlaybackController.PlayMedia(file);
+        }         
 
         void PlaybackController_OnProgress(object sender, PlaybackStateEventArgs e) {
             if (!UpdatePosition(e.Title, e.Position)) {
@@ -162,7 +174,7 @@ namespace MediaBrowser.Library
         }
 
 
-        protected static string CreateWPLPlaylist(string name, IEnumerable<string> videoFiles) {
+        protected static string CreateWPLPlaylist(string name, IEnumerable<string> files) {
 
             // we need to filter out all invalid chars 
             name = new string(name
@@ -183,7 +195,7 @@ namespace MediaBrowser.Library
             xml.WriteStartElement("body");
             xml.WriteStartElement("seq");
 
-            foreach (string file in videoFiles) {
+            foreach (string file in files) {
                 xml.WriteStartElement("media");
                 xml.WriteAttributeString("src", file);
                 xml.WriteEndElement();
@@ -197,6 +209,7 @@ namespace MediaBrowser.Library
 
             return playListFile;
         }
+
     }
 
 }

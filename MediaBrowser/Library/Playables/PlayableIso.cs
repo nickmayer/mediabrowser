@@ -16,9 +16,10 @@ namespace MediaBrowser.Library.Playables
 
         string path; 
 
-        public PlayableIso(Video video)
+        public PlayableIso(Media media)
             : base()
         {
+            Video video = media as Video;
             if (video.MediaLocation is IFolderMediaLocation)
             {
                 List<string> files = Helper.GetIsoFiles(video.Path);
@@ -68,9 +69,9 @@ namespace MediaBrowser.Library.Playables
             get { return this.mountedFilename; }
         }
 
-        public static bool CanPlay(Video video)
+        public static bool CanPlay(Media media)
         {
-            return video.MediaType == MediaType.ISO;
+            return (media is Video) && (media as Video).MediaType == MediaType.ISO;
         }
 
         protected override void PlayInternal(bool resume)

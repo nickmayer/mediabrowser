@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -475,7 +475,9 @@
       <DependentUpon>BaseItemFactory.cs</DependentUpon>
     </Compile>
     <Compile Include="Library\Factories\BaseItemFactory.cs" />
+    <Compile Include="Library\ImageManagement\ProxyCachedRemoteImage.cs" />
     <Compile Include="Library\Logging\Logger.cs" />
+    <Compile Include="Library\Playables\PlayableMediaCollection.cs" />
     <Compile Include="Library\Plugins\BasePlugin.cs" />
     <Compile Include="Library\Util\BreadCrumbs.cs" />
     <Content Include="Markup\Base\Animations.mcml" />

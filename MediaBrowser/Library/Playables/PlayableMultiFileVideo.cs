@@ -20,10 +20,10 @@ namespace MediaBrowser.Library.Playables
         PlayableExternal playableExternal = null;
 
         
-        public PlayableMultiFileVideo(Video video)
+        public PlayableMultiFileVideo(Media media)
             : base()
         {
-            this.video = video;
+            this.video = media as Video;
         }
 
         public override void Prepare(bool resume)
@@ -100,9 +100,9 @@ namespace MediaBrowser.Library.Playables
             get { return playListFile; }
         }
 
-        public static bool CanPlay(Video video)
+        public static bool CanPlay(Media media)
         {
-            return video.VideoFiles.Count() > 1;
+            return (media is Video) && (media as Video).VideoFiles.Count() > 1;
         }
 
         protected override void PlayInternal(bool resume)

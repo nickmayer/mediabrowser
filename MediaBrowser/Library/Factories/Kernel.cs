@@ -109,17 +109,18 @@ namespace MediaBrowser.Library {
             };
         }
 
-        private static List<ImageResolver> DefaultImageResolvers {
-            get {
-                return new List<ImageResolver>() {
-                    (path) =>  { 
-                        if (path != null && path.ToLower().StartsWith("http")) {
+        private static List<ImageResolver> DefaultImageResolvers(bool enableProxyLikeCaching) {
+            return new List<ImageResolver>() {
+                (path) =>  { 
+                    if (path != null && path.ToLower().StartsWith("http")) {
+                        if (enableProxyLikeCaching)
+                            return new ProxyCachedRemoteImage();
+                        else
                             return new RemoteImage();
-                        }
-                        return null;
                     }
-                };
-            }
+                    return null;
+                }
+            };
         }
 
         static List<IPlugin> DefaultPlugins(bool forceShadow) {
@@ -143,12 +144,13 @@ namespace MediaBrowser.Library {
             {
                 PlaybackControllers = new List<IPlaybackController>(),
                 MetadataProviderFactories = MetadataProviderHelper.DefaultProviders(),
-                ImageResolvers = DefaultImageResolvers,
                 ConfigData = config,
+                ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),                
                 ItemRepository = new SafeItemRepository(new ItemRepository()),
                 MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory()
             };
 
+            kernel.PlaybackControllers.Add(new PlaybackController());
 
             // set up assembly resolution hooks, so earlier versions of the plugins resolve properly 
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(OnAssemblyResolve);

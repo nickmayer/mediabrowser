@@ -12,11 +12,11 @@ namespace MediaBrowser.Library.Playables
     {
         Video video;
         string path;
-        public PlayableVideoFile(Video video)
+        public PlayableVideoFile(Media media)
             : base()
         {
-            this.video = video;
-            this.path = video.VideoFiles.First();
+            this.video = media as Video;
+            this.path = this.video.VideoFiles.First();
         }
 
         public override void Prepare(bool resume)
@@ -29,10 +29,10 @@ namespace MediaBrowser.Library.Playables
             get { return path; }
         }
 
-        public static bool CanPlay(Video video)
+        public static bool CanPlay(Media media)
         {
             // can play DVDs and normal videos
-            return video.VideoFiles.Count() == 1 && !video.ContainsRippedMedia;
+            return (media is Video) && (media as Video).VideoFiles.Count() == 1 && !((media as Video).ContainsRippedMedia);
         }
     }
 }

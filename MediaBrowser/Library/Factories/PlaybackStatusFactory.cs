@@ -7,7 +7,7 @@ using MediaBrowser.Library.Entities;
 
 namespace MediaBrowser.Library
 {
-    class PlaybackStatusFactory 
+    public class PlaybackStatusFactory 
     {
         public static readonly PlaybackStatusFactory Instance = new PlaybackStatusFactory();
 

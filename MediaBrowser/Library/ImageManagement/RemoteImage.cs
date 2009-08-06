@@ -11,8 +11,11 @@ using MediaBrowser.Library.Logging;
 namespace MediaBrowser.Library.ImageManagement {
     public class RemoteImage : LibraryImage {
 
-
         private void DownloadImage() {
+            DownloadImage(false);
+        }
+
+        internal void DownloadImage(bool createProxyCache) {
             Logger.ReportInfo("Fetching image: " + Path);
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(Path);
             req.Timeout = 60000;
@@ -32,28 +35,55 @@ namespace MediaBrowser.Library.ImageManagement {
                 using (var stream = ProtectedFileStream.OpenExclusiveWriter(LocalFilename)) {
                     stream.Write(ms.ToArray(), 0, (int)ms.Length);
                 }
+
+                //cache like proxy
+                if (createProxyCache) {
+                    try
+                    {
+                        using (var stream = ProtectedFileStream.OpenExclusiveWriter(ConvertRemotePathToLocal(Path)))
+                        {
+                            stream.Write(ms.ToArray(), 0, (int)ms.Length);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Failed to create proxy cache item: ", e);
+                    }
+                }
             }
         }
 
         public override string GetLocalImagePath() {
             lock (Lock) {
-                if (File.Exists(LocalFilename)) {
+                string localProxyPath = ConvertRemotePathToLocal(Path);
+                if (File.Exists(LocalFilename)) {                   
                     return LocalFilename;
                 }
-                int attempt = 0;
-                bool success = false;
-                while (attempt < 2) {
-                    try {
-                        attempt++;
-                        DownloadImage();
-                        success = true;
-                        break;
-                    } catch (Exception e) {
-                        Logger.ReportException("Failed to download image: " + Path, e);
-                    }
-                }
+
+                bool success = DownloadUsingRetry();
                 return success?LocalFilename:null;
             }
+        }
+
+        internal bool DownloadUsingRetry()
+        {
+            int attempt = 0;
+            bool success = false;
+            while (attempt < 2)
+            {
+                try
+                {
+                    attempt++;
+                    DownloadImage();
+                    success = true;
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Failed to download image: " + Path, e);
+                }
+            }
+            return success;
         }
     }
 }

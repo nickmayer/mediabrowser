@@ -378,7 +378,13 @@ namespace MediaBrowser.Library.Entities {
             return items;
         }
 
-
+        public bool HasVideoChildren
+        {
+            get
+            {
+                return this.RecursiveChildren.Select(i => i as Video).Where(v => v != null).Count() > 0;
+            }
+        }
       
         
     }

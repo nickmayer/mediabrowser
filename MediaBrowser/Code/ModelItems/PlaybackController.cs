@@ -34,13 +34,28 @@ namespace MediaBrowser {
             }
         }
 
+        public virtual bool RequiresExternalPage
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         // Default controller can play everything
-        public bool CanPlay(string filename) {
+        public virtual bool CanPlay(string filename) {
+            return true;
+        }
+
+        // Default controller can play everything
+        public virtual bool CanPlay(IEnumerable<string> files)
+        {
             return true;
         }
 
         // commands are not routed in this way ... 
-        public void ProcessCommand(RemoteCommand command) { 
+        public virtual void ProcessCommand(RemoteCommand command)
+        { 
             // dont do anything (only plugins need to handle this)
         }
 
@@ -52,7 +67,7 @@ namespace MediaBrowser {
         }
 
         bool lastWasDVD = true;
-        public void PlayDVD(string path) {
+        public virtual void PlayDVD(string path) {
             PlayPath(path);
             lastWasDVD = true;
         }
@@ -63,7 +78,30 @@ namespace MediaBrowser {
             lastWasDVD = false;
         }
 
-        public void Seek(long position) {
+        public virtual void PlayMedia(string path)
+        {
+            PlayPath(path, MediaType.Video, false);
+        }
+
+        public virtual void QueueMedia(IEnumerable<string> paths)
+        {
+            foreach (string path in paths)
+                PlayPath(path, MediaType.Video, true);
+        }
+
+        public virtual void PlayMedia(IEnumerable<string> paths)
+        {
+            foreach (string path in paths)
+                PlayPath(path, MediaType.Video, false);
+        }
+
+        public virtual void QueueMedia(string path)
+        {
+            PlayPath(path, MediaType.Video, true);
+        }
+
+        public virtual void Seek(long position)
+        {
             var mce = AddInHost.Current.MediaCenterEnvironment;
             Logger.ReportInfo("Trying to seek position :" + new TimeSpan(position).ToString());
             int i = 0;
@@ -75,19 +113,29 @@ namespace MediaBrowser {
         }
 
 
-        private static void PlayPath(string path) {
-            try {
-                if (!AddInHost.Current.MediaCenterEnvironment.PlayMedia(Microsoft.MediaCenter.MediaType.Video, path, false)) {
+        private void PlayPath(string path) {
+            PlayPath(path, Microsoft.MediaCenter.MediaType.Video, false);
+        }
+
+        public void PlayPath(string path, Microsoft.MediaCenter.MediaType asType, bool addToQueue)
+        {
+            try
+            {
+                if (!AddInHost.Current.MediaCenterEnvironment.PlayMedia(asType, path, addToQueue))
+                {
                     Logger.ReportInfo("PlayMedia returned false");
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.ReportException("Playing media failed.", ex);
                 Application.ReportBrokenEnvironment();
                 return;
             }
         }
 
-        public void GoToFullScreen() {
+        public virtual void GoToFullScreen()
+        {
             try {
                 using (new Profiler("Time to go to Full Screen"))
                 {
@@ -103,15 +151,18 @@ namespace MediaBrowser {
         #region Playback status
 
 
-        public bool IsPlaying {
+        public virtual bool IsPlaying
+        {
             get { return PlayState == PlayState.Playing; }
         }
 
-        public bool IsStopped {
+        public virtual bool IsStopped
+        {
             get { return PlayState == PlayState.Stopped; }
         }
 
-        public bool IsPaused {
+        public virtual bool IsPaused
+        {
             get { return PlayState == PlayState.Paused; }
         }
 
@@ -135,7 +186,8 @@ namespace MediaBrowser {
             }
         }
 
-        private void AttachAndUpdateStatus() {
+        private void AttachAndUpdateStatus()
+        {
             try {
                 var transport = MediaTransport;
                 if (transport != null) {
@@ -151,14 +203,14 @@ namespace MediaBrowser {
             }
         }
 
-        private MediaExperience MediaExperience {
+        protected MediaExperience MediaExperience {
             get {
                 return AddInHost.Current.MediaCenterEnvironment.MediaExperience;
             }
         }
 
         private MediaTransport mediaTransport;
-        private MediaTransport MediaTransport {
+        protected MediaTransport MediaTransport {
             get {
                 if (mediaTransport != null) return mediaTransport;
                 try {
@@ -179,7 +231,8 @@ namespace MediaBrowser {
             }
         }
 
-        void ReAttach() {
+        protected virtual void ReAttach()
+        {
             var transport = MediaTransport;
             if (transport != null) {
                 transport.PropertyChanged -= new PropertyChangedEventHandler(TransportPropertyChanged);
@@ -244,7 +297,8 @@ namespace MediaBrowser {
             FirePropertyChanged("IsPaused");
         }
 
-        public void Pause() {
+        public virtual void Pause()
+        {
             var transport = MediaTransport;
             if (transport != null) {
                 transport.PlayRate = 1;

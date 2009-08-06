@@ -10,10 +10,10 @@ namespace MediaBrowser.Library.Playables
     {
         Video video;
 
-        public PlayableDvd(Video video)
+        public PlayableDvd(Media media)
             : base()
         {
-            this.video = video;
+            this.video = media as Video;
         }
 
         public override void Prepare(bool resume)
@@ -29,9 +29,9 @@ namespace MediaBrowser.Library.Playables
             get { return video.Path; }
         }
 
-        public static bool CanPlay(Video video)
+        public static bool CanPlay(Media media)
         {
-            return video.MediaType == MediaType.DVD;
+            return (media is Video) && (media as Video).MediaType == MediaType.DVD;
         }
     }
 }

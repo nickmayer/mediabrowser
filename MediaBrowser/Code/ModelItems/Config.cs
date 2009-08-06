@@ -495,7 +495,19 @@ namespace MediaBrowser
             get { return this.data.HideFocusFrame; }
             set { if (this.data.HideFocusFrame != value) { this.data.HideFocusFrame = value; Save(); FirePropertyChanged("HideFocusFrame"); } }
         }
-        
+
+        public bool EnableProxyLikeCaching
+        {
+            get { return this.data.EnableProxyLikeCaching; }
+            set { if (this.data.EnableProxyLikeCaching != value) { this.data.EnableProxyLikeCaching = value; Save(); FirePropertyChanged("EnableProxyLikeCaching"); } }
+        }
+
+        public int MetadataCheckForUpdateAge
+        {
+            get { return this.data.MetadataCheckForUpdateAge; }
+            set { if (this.data.MetadataCheckForUpdateAge != value) { this.data.MetadataCheckForUpdateAge = value; Save(); FirePropertyChanged("MetadataCheckForUpdateAge"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;

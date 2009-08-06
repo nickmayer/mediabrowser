@@ -332,13 +332,13 @@ namespace MediaBrowser.Library {
             folderChildren.Sort(this.displayPrefs.SortOrder);
         }
 
-        public DisplayPreferences DisplayPrefs {
+        public virtual DisplayPreferences DisplayPrefs {
             get {
                 if (this.displayPrefs == null)
                     LoadDisplayPreferences();
                 return this.displayPrefs;
             }
-            private set {
+            protected set {
                 if (this.displayPrefs != null)
                     throw new NotSupportedException("Attempt to set displayPrefs twice");
                 this.displayPrefs = value;
@@ -362,7 +362,7 @@ namespace MediaBrowser.Library {
         }
 
 
-        private void LoadDisplayPreferences() {
+        protected virtual void LoadDisplayPreferences() {
             Logger.ReportInfo("Loading display prefs for " + this.Path);
 
             Guid id = Id;
@@ -375,19 +375,25 @@ namespace MediaBrowser.Library {
 
             DisplayPreferences dp = Kernel.Instance.ItemRepository.RetrieveDisplayPreferences(id);
             if (dp == null) {
-                dp = new DisplayPreferences(id);
-                dp.LoadDefaults();
-                if ((this.PhysicalParent != null) && (Config.Instance.InheritDefaultView)) {
-                    // inherit some of the display properties from our parent the first time we are visited
-                    DisplayPreferences pt = this.PhysicalParent.DisplayPrefs;
-                    dp.ViewType.Chosen = pt.ViewType.Chosen;
-                    dp.ShowLabels.Value = pt.ShowLabels.Value;
-                    // after some use, carrying the sort order forward doesn;t feel right - for seasons especially it can be confusing
-                    // dp.SortOrder = pt.SortOrder;
-                    dp.VerticalScroll.Value = pt.VerticalScroll.Value;
-                }
+                LoadDefaultDisplayPreferences(ref id, ref dp);
             }
             this.DisplayPrefs = dp;
+        }
+
+        protected void LoadDefaultDisplayPreferences(ref Guid id, ref DisplayPreferences dp)
+        {
+            dp = new DisplayPreferences(id);
+            dp.LoadDefaults();
+            if ((this.PhysicalParent != null) && (Config.Instance.InheritDefaultView))
+            {
+                // inherit some of the display properties from our parent the first time we are visited
+                DisplayPreferences pt = this.PhysicalParent.DisplayPrefs;
+                dp.ViewType.Chosen = pt.ViewType.Chosen;
+                dp.ShowLabels.Value = pt.ShowLabels.Value;
+                // after some use, carrying the sort order forward doesn;t feel right - for seasons especially it can be confusing
+                // dp.SortOrder = pt.SortOrder;
+                dp.VerticalScroll.Value = pt.VerticalScroll.Value;
+            }
         }
 
 

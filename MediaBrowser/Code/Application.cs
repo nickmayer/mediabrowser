@@ -47,7 +47,8 @@ namespace MediaBrowser
         private MyHistoryOrientedPageSession session;
         private static object syncObj = new object();
         private bool navigatingForward;
-        private PlaybackController playbackController = new PlaybackController();
+        private IPlaybackController playbackController = new PlaybackController();
+        private IPlaybackController currentPlaybackController = null;
 
         public bool NavigatingForward
         {
@@ -163,11 +164,22 @@ namespace MediaBrowser
             }
         }
 
-        public PlaybackController PlaybackController
+        public IPlaybackController PlaybackController
         {
             get
             {
+                if (currentPlaybackController != null)
+                    return currentPlaybackController;
                 return playbackController;
+            }
+        }
+
+        public bool UsingDefaultPlaybackController
+        {
+            get
+            {
+
+                return this.playbackController == currentPlaybackController;
             }
         }
 
@@ -542,8 +554,9 @@ namespace MediaBrowser
                 }
             }
             else
-            {
-                item.Resume();
+            {   
+                currentPlaybackController = item.PlaybackController;             
+                item.Resume();                
             }
         }
 
@@ -554,38 +567,49 @@ namespace MediaBrowser
             if (folder != null)
             {
                 Random rnd = new Random();
-                var playableChildren = folder.RecursiveChildren.Select(i => i as Video).Where(v => v != null).OrderBy(i => rnd.Next());
-                PlayableItem playable = new PlayableCollection(item.Name, playableChildren);
+                PlayableItem playable;
+                
+                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null).OrderBy(i => rnd.Next());
+                playable = new PlayableMediaCollection<Media>(item.Name, playableChildren);
+            
+                playable.QueueItem = false;        
                 playable.Play(null, false);
             }
         }
         public void Unwatched(Item item)
         {
             Folder folder = item.BaseItem as Folder;
+            
             if (folder != null)
             {
-
-                var playableChildren = folder.RecursiveChildren.Select(i => i as Video).Where(v => v != null && !v.PlaybackStatus.WasPlayed).OrderBy(v => v.Path);
-                PlayableItem playable = new PlayableCollection(item.Name, playableChildren);
+                PlayableItem playable;
+               
+                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null && !v.PlaybackStatus.WasPlayed).OrderBy(v => v.Path);
+                playable = new PlayableMediaCollection<Media>(item.Name, playableChildren);
+            
                 playable.Play(null, false);
             }
         }
 
-        public void Play(Item item)
+        public void AddToQueue(Item item)
         {
-            if (item.IsPlayable)
+            Play(item, true);
+        }
+        public void Play(Item item)
+        {            
+            Play(item, false);
+        }
+
+        public void Play(Item item, bool queue)
+        {
+            if (item.IsPlayable || item.IsFolder)
             {
-                item.Play();
-            }
-            else
-            {
-                Folder folder = item.BaseItem as Folder;
-                if (folder != null)
-                {
-                    var playableChildren = folder.RecursiveChildren.Select(i => i as Video).Where(v => v != null).OrderBy(v => v.Path);
-                    PlayableItem playable = new PlayableCollection(item.Name, playableChildren);
-                    playable.Play(null, false);
-                }
+                currentPlaybackController = item.PlaybackController;
+
+                if (queue)
+                    item.Queue();
+                else
+                    item.Play();
             }
         }
 

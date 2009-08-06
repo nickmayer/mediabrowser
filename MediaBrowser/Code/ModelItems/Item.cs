@@ -72,9 +72,19 @@ namespace MediaBrowser.Library
         {
         }
 
-        public bool IsVideo {
+        public bool IsVideo
+        {
+            get
+            {
+               return(baseItem is Video);
+            }
+        }
+
+        public bool IsNotVideo
+        {
             get {
-                return baseItem is Video;
+                bool isVideo = (baseItem is Video) || (baseItem is Movie);
+                return (baseItem is Folder) ? !((baseItem as Folder).HasVideoChildren) : !isVideo;
             } 
         }
 
@@ -158,16 +168,22 @@ namespace MediaBrowser.Library
             }
         }
 
-
         private void Play(bool resume)
+        {
+            Play(resume, false);
+        }
+
+        private void Play(bool resume, bool queue)
         {
             try
             {
-                if (this.IsPlayable) {
+                if (this.IsPlayable || this.IsFolder) {
 
-                    if (PlayableItem.PlaybackController != Application.CurrentInstance.PlaybackController) {
+                    if (PlayableItem.PlaybackController != Application.CurrentInstance.PlaybackController && PlayableItem.PlaybackController.RequiresExternalPage)
+                    {
                         Application.CurrentInstance.OpenExternalPlaybackPage(this);
                     }
+                    this.PlayableItem.QueueItem = queue;                    
                     this.PlayableItem.Play(this.PlayState, resume);
                 }
             }
@@ -176,6 +192,11 @@ namespace MediaBrowser.Library
                 MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
                 ev.Dialog("There was a problem playing the content. Check location exists\n" + baseItem.Path, "Content Error", DialogButtons.Ok, 60, true);
             }
+        }
+
+        public void Queue()
+        {
+            Play(false, true);
         }
 
         public void Play() {
@@ -203,9 +224,12 @@ namespace MediaBrowser.Library
             {
                 if (playstate == null)
                 {
-                    Video video = baseItem as Video;
-                    if (video != null) {
-                        playstate = video.PlaybackStatus;
+
+                    Media media = baseItem as Media;
+
+                    if (media != null)
+                    {
+                        playstate = media.PlaybackStatus;
                         // if we want any chance to reclaim memory we are going to have to use 
                         // weak event handlers
                         playstate.WasPlayedChanged += new EventHandler<EventArgs>(PlaybackStatusPlayedChanged);
@@ -258,11 +282,14 @@ namespace MediaBrowser.Library
         {
             get
             {
-                int count = 0; 
-                var video = baseItem as Video;
-                if (video != null && !video.PlaybackStatus.WasPlayed) {
-                    count = 1;
-                } 
+                int count = 0;
+                if (baseItem is Video)
+                {
+                    var video = baseItem as Video;
+                    if (video != null && !video.PlaybackStatus.WasPlayed) {
+                        count = 1;
+                    }
+                }
                 return count;
             }
         }
@@ -320,7 +347,15 @@ namespace MediaBrowser.Library
 
         public bool IsPlayable {
             get {
-                return baseItem is Video;
+                return baseItem is Media;
+            }
+        }
+
+        public bool IsFolder
+        {
+            get
+            {
+                return baseItem is Folder;
             }
         }
 
@@ -329,17 +364,37 @@ namespace MediaBrowser.Library
             PlayableItem.PlaybackController.ProcessCommand(command);
         }
 
+        public IPlaybackController PlaybackController
+        {
+            get
+            {
+                return this.PlayableItem.PlaybackController;
+            }
+        }
+
         internal PlayableItem PlayableItem {
             get {
-                if (!IsPlayable) return null;
+                if (!IsPlayable && !IsFolder) return null;
 
-                Video video = baseItem as Video;
+                Media media = baseItem as Media;
 
-                if (video != null && playable == null)
+                if (media != null && playable == null)
                     lock (this)
                         if (playable == null) {
-                            playable = PlayableItemFactory.Instance.Create(video);
+                            playable = PlayableItemFactory.Instance.Create(media);
                         }
+
+                if (playable != null)
+                    return playable;
+
+                Folder folder = baseItem as Folder;
+                if (folder != null && playable == null)
+                    lock (this)
+                        if (playable == null)
+                        {
+                            playable = PlayableItemFactory.Instance.Create(folder);                            
+                        }
+
                 return playable;
             }
         }

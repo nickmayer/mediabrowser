@@ -55,9 +55,13 @@ namespace MediaBrowser.Library.Entities {
             this.MediaType = ((Video)item).MediaType;
             return changed | base.AssignFromItem(item);
         }
-
-        private PlaybackStatus playbackStatus; 
-        public PlaybackStatus PlaybackStatus {
+        
+        public override IEnumerable<string> Files
+        {
+            get { return VideoFiles; }
+        }
+        
+        public override PlaybackStatus PlaybackStatus {
             get {
 
                 if (playbackStatus != null) return playbackStatus;

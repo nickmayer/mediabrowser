@@ -38,10 +38,16 @@ namespace MediaBrowser.Library.Providers
 
         public override bool NeedsRefresh()
         {
+            if (Config.Instance.MetadataCheckForUpdateAge == -1 && downloadDate != DateTime.MinValue)
+            {
+                Logger.ReportInfo("MetadataCheckForUpdateAge = -1 wont clear and check for updated metadata");
+                return false;
+            }
+            
             if (DateTime.Today.Subtract(Item.DateCreated).TotalDays > 180 && downloadDate != DateTime.MinValue)
                 return false; // don't trigger a refresh data for item that are more than 6 months old and have been refreshed before
 
-            if (DateTime.Today.Subtract(downloadDate).TotalDays < 14) // only refresh every 14 days
+            if (DateTime.Today.Subtract(downloadDate).TotalDays < Config.Instance.MetadataCheckForUpdateAge) // only refresh every 14 days
                 return false;
 
             return true;

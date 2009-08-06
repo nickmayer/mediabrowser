@@ -85,6 +85,9 @@ namespace MediaBrowser
         public string PodcastHome = ApplicationPaths.DefaultPodcastPath;
         public bool HideFocusFrame = false;
 
+        public bool EnableProxyLikeCaching = false;
+        public int MetadataCheckForUpdateAge = 14;
+
         public class ExternalPlayer
         {
             public MediaType MediaType { get; set; }

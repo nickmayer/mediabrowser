@@ -118,7 +118,7 @@
       <Changed Source="[TrailerCommand.Invoked]">
         <Actions>
           <Set Target="[NowPlaying.Visible]"   Value="true"/>
-          <Invoke Target="[Application.PlaybackController.PlayVideo]" path="[MediaPath]"/>
+          <Invoke Target="[Application.PlaybackController.PlayMedia]" path="[MediaPath]"/>
           <Invoke Target="[NowPlaying.NavigateInto]"/>
         </Actions>
       </Changed>

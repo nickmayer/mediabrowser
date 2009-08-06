@@ -17,6 +17,7 @@
       <Locals>
         <ShortcutHandler Name="BackHandler"  Handle="true" Shortcut="Back" HandlerStage="Bubbled" Command="[Close]"/>
         <Command Name="CmdPlayAll" />
+        <Command Name="CmdAddToQueue"/>
         <Command Name="CmdPlayRandom"/>
         <Command Name="CmdPlayUnwatched"/>
       </Locals>
@@ -31,6 +32,14 @@
             <Invoke Target="[Close.Invoke]" InvokePolicy="AsynchronousNormal" />
             <PlaySound Sound="sound://sounds:Miniselect" />
             <Invoke Target="[Application.Play]" item="[Item]" />            
+          </Actions>
+        </Changed>
+
+        <Changed Source="[CmdAddToQueue.Invoked]">
+          <Actions>
+            <Invoke Target="[Close.Invoke]" InvokePolicy="AsynchronousNormal" />
+            <PlaySound Sound="sound://sounds:Miniselect" />
+            <Invoke Target="[Application.AddToQueue]" item="[Item]" />
           </Actions>
         </Changed>
 
@@ -58,6 +67,7 @@
           </Layout>
           <Children>
             <vmb:MenuButton Command="[CmdPlayAll]" Image="image://vi:MenuOptionPlayAll"/>
+            <vmb:MenuButton Command="[CmdAddToQueue]" Image="image://vi:MenuOptionPlayAll" Visible ="[Item.IsNotVideo]"/>
             <vmb:MenuButton Command="[CmdPlayRandom]" Image="image://vi:MenuOptionPlayRandom"/>
             <vmb:MenuButton Command="[CmdPlayUnwatched]" Image="image://vi:MenuOptionPlayUnwatched"/>
             <vmb:MenuButton Command="[Close]" Image="image://vi:MenuOptionClose" Red="true"/>

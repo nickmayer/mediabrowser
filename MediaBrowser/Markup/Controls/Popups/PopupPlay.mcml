@@ -24,6 +24,7 @@
         <ShortcutHandler Name="BackHandler"  Handle="true" Shortcut="Back" HandlerStage="Bubbled" Command="[Close]"/>
         <Command Name="CmdPlayAll" />
         <Command Name="CmdPlayRandom"/>
+        <Command Name="CmdAddToQueue"/>
       </Locals>
     
       <Rules>
@@ -36,6 +37,14 @@
             <Invoke Target="[Close.Invoke]" InvokePolicy="AsynchronousNormal" />
             <PlaySound Sound="sound://sounds:Miniselect" />
             <Invoke Target="[Application.Play]" item="[Item]" />            
+          </Actions>
+        </Changed>
+
+        <Changed Source="[CmdAddToQueue.Invoked]">
+          <Actions>
+            <Invoke Target="[Close.Invoke]" InvokePolicy="AsynchronousNormal" />
+            <PlaySound Sound="sound://sounds:Miniselect" />
+            <Invoke Target="[Application.AddToQueue]" item="[Item]" />
           </Actions>
         </Changed>
 
@@ -65,6 +74,9 @@
                     <Text Content="Folder Play Menu" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
                     <ib:ImageButton Name="PlayMovieButton" Text="All" Command="[CmdPlayAll]" 
                                     Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" 
+                                    Font="font://f:MM_ButtonFont" DisplayText="true" MinSize="200,50" />
+                    <ib:ImageButton Name="AddToQueueButton" Text="Queue" Command="[CmdAddToQueue]" Visible ="[Item.IsNotVideo]"
+                                    Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50"
                                     Font="font://f:MM_ButtonFont" DisplayText="true" MinSize="200,50" />
                     <ib:ImageButton Text="Random" Command="[CmdPlayRandom]"
                                     Icon="resx://MediaBrowser/MediaBrowser.Resources/IconShuffle" Size="200,50"

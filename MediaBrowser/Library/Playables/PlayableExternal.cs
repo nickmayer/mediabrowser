@@ -12,6 +12,11 @@ namespace MediaBrowser.Library.Playables
         private static object lck = new object();
         private static Dictionary<MediaType, ConfigData.ExternalPlayer> configuredPlayers = null;
         private string path;
+        public PlayableExternal(Media media)
+        {
+            this.path = (media as Video).Path;
+        }
+
         public PlayableExternal(string path)
         {
             this.path = path;
@@ -41,8 +46,15 @@ namespace MediaBrowser.Library.Playables
             MarkWatched();
         }
 
-        public static bool CanPlay(string path)
+        public static bool CanPlay(Media media)
         {
+            if (!(media is Video))
+                return false;
+            return CanPlay((media as Video).Path);
+        }
+
+        public static bool CanPlay(string path)
+        { 
             if (RunningOnExtender)
                 return false;
             if (configuredPlayers==null)
