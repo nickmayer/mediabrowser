@@ -108,7 +108,7 @@ namespace MediaBrowser.Library.Entities {
             foreach (var child in location.Children)
 	        {
                 if (child.IsVideo()) yield return child.Path;
-                else if (child is IFolderMediaLocation) {
+                else if (child is IFolderMediaLocation && Kernel.Instance.ConfigData.EnableNestedMovieFolders) {
                     foreach (var grandChild in GetChildVideos(child as IFolderMediaLocation)) {
                         yield return grandChild;
                     }
