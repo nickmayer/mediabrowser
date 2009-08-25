@@ -21,7 +21,7 @@ namespace MediaBrowser.Library.Playables
         }
 
         public override void Play(string file) {
-            Application.CurrentInstance.PlaybackController.PlayDVD(file);
+            this.PlaybackController.PlayDVD(file);
         }
 
         public override string Filename
