@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.LibraryManagement;
+using MediaBrowser.Library.Entities;
+using MusicPlugin.Util;
+using System;
 namespace MusicPlugin.LibraryManagement
 {
     public static class MusicHelper
@@ -50,7 +53,7 @@ namespace MusicPlugin.LibraryManagement
                 case ".mp3":
                 case ".wma":
                 case ".acc":
-                //case ".m3u":
+                case ".wpl":
                     return true;
 
                 default:
@@ -82,6 +85,18 @@ namespace MusicPlugin.LibraryManagement
                     return true;
 
             return false;
+        }
+
+        private static Folder _playlistFolder;
+        public static Folder GetPlaylistFolder()
+        {
+            if (_playlistFolder == null)
+            {
+                _playlistFolder = new Folder();
+                _playlistFolder.Name = Settings.PlayListFolderName;
+                _playlistFolder.Path = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.MyMusic), "Playlists");
+            }
+            return _playlistFolder;
         }
 
     }

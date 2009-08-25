@@ -9,16 +9,7 @@ namespace MusicPlugin.Library.Entities
 {
      public class Artist : Folder
     {
-        [Persist]//List<Actor>
+        [Persist]
         public string ArtistName { get; set; }
-
-        [Persist]
-        public string Genre { get; set; }
-
-        [Persist]
-        public int? RunningTime { get; set; }
-
-        [Persist]
-        public string Status { get; set; }
     }
 }
