@@ -75,9 +75,13 @@ namespace MediaBrowser.Library {
                     ApplicationPaths.SetUserSettingsPath(config.UserSettingsPath);
                 }
                 
+                // Its critical to have the logger initialized early so initialization 
+                //   routines can use the right logger.
+                // However we only ever want to initialize one logger. 
+                if (Logger.LoggerInstance == null) {
+                    Logger.LoggerInstance = GetDefaultLogger(config);
+                }
 
-                // its critical to have the logger initialized early so initialization routines can use the right logger.
-                Logger.LoggerInstance = GetDefaultLogger(config);
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
 
