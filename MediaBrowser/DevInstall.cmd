@@ -10,6 +10,11 @@ set CompanyName=MediaBrowser
 set AssemblyName=MediaBrowser
 set RegistrationName=Registration
 set ProgramImage=Application.png
+set ProgramInActiveImage=ApplicationInactive.png
+set ModifyStartMenuItems=ModifyStartMenuItems.reg
+
+ver | find "6.1." > nul
+	if %ERRORLEVEL% == 0 set RegistrationName=Registration7
  
 ECHO.Determine whether we are on an 32 or 64 bit machine
 if "%PROCESSOR_ARCHITECTURE%"=="x86" if "%PROCESSOR_ARCHITEW6432%"=="" goto x86
@@ -83,8 +88,16 @@ goto unregister
     copy /y ".\%RegistrationName%.xml" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
     ECHO.
     
+    ECHO.Copy the start menu modifier reg file to program files
+    copy /y ".\%ModifyStartMenuItems%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
+    ECHO.
+    
     ECHO.Copy the program image to program files
     copy /y ".\Images\%ProgramImage%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
+    ECHO.
+    
+    ECHO.Copy the program image to program files
+    copy /y ".\Images\%ProgramInActiveImage%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
     ECHO.
 
     ECHO.Register the DLL with the global assembly cache
@@ -94,5 +107,8 @@ goto unregister
     ECHO.Register the application with Windows Media Center
     %windir%\ehome\RegisterMCEApp.exe /allusers "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%RegistrationName%.xml"
     ECHO.
+    
+    REGEDIT /S "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%ModifyStartMenuItems%"
+	
 
 :exit

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BFC13060-06AF-4516-9898-95AE087A71AC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -142,6 +142,7 @@
       <DependentUpon>AddPodcastForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Code\BrowseForFolder.cs" />
+    <Compile Include="Code\CheckedListBox.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\FolderBrowser.cs">
       <SubType>Component</SubType>
@@ -150,6 +151,7 @@
     <Compile Include="Code\PluginManager.cs" />
     <Compile Include="Code\PluginSourceCollection.cs" />
     <Compile Include="Code\RemotePlugin.cs" />
+    <Compile Include="Code\StartMenuRegistryEditor.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PlayerArgsForm.xaml.cs">
       <DependentUpon>PlayerArgsForm.xaml</DependentUpon>
@@ -181,6 +183,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

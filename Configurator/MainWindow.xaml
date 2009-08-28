@@ -87,7 +87,7 @@
                     <Label HorizontalAlignment="Right" Margin="0,0,137,98" VerticalAlignment="Bottom" Width="90" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="latestPluginVersion"/>
                     <Button Margin="0,0,46,66" VerticalAlignment="Bottom" Height="26" Content="Upgrade ..." Width="78" HorizontalAlignment="Right" x:Name="upgradePlugin" Visibility="Visible"/>
                     <Button HorizontalAlignment="Left" Margin="21,0,0,25" VerticalAlignment="Bottom" Width="69" Height="27" Content="Add" x:Name="addPlugin" Click="addPlugin_Click" />
-                    <Button HorizontalAlignment="Left" Margin="182,0,0,25" VerticalAlignment="Bottom" Width="79" Height="27" Content="Remove" x:Name="removePlugin" Click="removePlugin_Click" />
+                    <Button HorizontalAlignment="Right" Margin="0,0,383,25" VerticalAlignment="Bottom" Width="79" Height="27" Content="Remove" x:Name="removePlugin" Click="removePlugin_Click" />
                     <Label Margin="297,41.38,71,0" VerticalAlignment="Top" Height="30.62" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS" x:Name="pluginName"/>
 
                 </Grid>
@@ -185,6 +185,38 @@
                     <Label Height="34" HorizontalAlignment="Left" Margin="52,6,0,0" x:Name="lblPlayerStep1b" VerticalAlignment="Top" Width="237" Foreground="#FF030303" Content="Add media type for external player" Grid.ColumnSpan="2" FontSize="14" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Entry Points" x:Name="multipleEntryTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsEnabled="True">
+                <Grid>
+                    <Canvas Margin="6,58,6,6" Name="canvasMultipleEntryMain" Visibility="Hidden" IsVisibleChanged="canvasMultipleEntryMain_IsVisibleChanged">
+                        <DockPanel Height="328.38" Name="dpEntryPoints" Width="269" Canvas.Left="3" Canvas.Top="0" />                        
+                        <!--<ListBox Height="321" Name="lbEntryPoints" Width="269" Canvas.Left="3" Canvas.Top="0" SelectionChanged="lbEntryPoints_SelectionChanged" />-->                        
+                        <Button Canvas.Left="125" Canvas.Top="302" Height="22" Name="btEntryPointPriorityUp" Width="15" Click="btEntryPointPriorityUp_Click" IsEnabled="True" Visibility="Hidden">^</Button>
+                        <Button Canvas.Left="143" Canvas.Top="302" Height="22" Name="btEntryPointPriorityDn" Width="15" FontSize="9" Click="btEntryPointPriorityDn_Click" IsEnabled="True" Visibility="Hidden">V</Button>
+                    </Canvas>
+                    <RadioButton Height="20" Margin="10,32,0,0" Name="rbEnableMultipleEntry" VerticalAlignment="Top" HorizontalAlignment="Left" Width="198" IsEnabled="True">Enable Multiple Entry</RadioButton>
+                    <RadioButton Height="21" HorizontalAlignment="Left" Margin="10,10,0,0" Name="rbDisableMultipleEntry" VerticalAlignment="Top" Width="198" IsChecked="True">Disable Multiple Entry</RadioButton>
+                    <Canvas Name="canvasEntryPointDetails" Visibility="Hidden" Margin="286,58,4,12">
+                        <!--<CheckBox Canvas.Left="266" Canvas.Top="273" Height="16" Name="cbEnableEntryPoint" Width="64" IsEnabled="False">Enable</CheckBox>-->
+                        <Border Canvas.Left="0" Canvas.Top="0" Height="328.38" Name="border1" Width="354" BorderThickness="1" ClipToBounds="False" BorderBrush="Black" Background="Gainsboro" />
+                        <TextBox Canvas.Left="76" Canvas.Top="84" Height="23" Name="tbEntryPointDescription" Width="201" />
+                        <Button Height="23" Name="btSaveEntryPointDetails" Width="75" Click="btSaveEntryPointDetails_Click" Canvas.Left="266" Canvas.Top="290">Update</Button>
+                        <Label Canvas.Left="77" Canvas.Top="62" Height="28" Name="label4" Width="170" FontSize="12">Description (e.g. Browse TV)</Label>
+                        <Label Canvas.Left="74" Canvas.Top="174" FontSize="12" Height="28" Name="label5" Width="75">Active Icon</Label>
+                        <Label Canvas.Left="194" Canvas.Top="173" FontSize="12" Height="28" Name="label6" Width="83">Inactive Icon</Label>
+                        <Border Canvas.Left="74" Canvas.Top="197" Height="80" Name="bdActiveImage" Width="80" Background="Black" MouseDown="bdActiveImage_MouseDown">
+                            <Image Height="75" Name="imEntryPointActive" Source="file:///C:/Program Files/MediaBrowser/MediaBrowser/Application.png" Stretch="Fill" Width="75" />
+                        </Border>
+                        <Border Background="Black" Canvas.Left="194" Canvas.Top="197" Height="80" Name="bdInActiveImage" Width="80" MouseDown="bdInActiveImage_MouseDown">
+                            <Image Height="75" Name="imEntryPointInActive" Source="file:///C:/Program Files/MediaBrowser/MediaBrowser/Application.png" Stretch="Fill" Width="75" />
+                        </Border>
+                        <ComboBox Canvas.Left="76" Canvas.Top="138" Height="23" Name="cbStartMenuItems" Width="201" />
+                        <Label Canvas.Left="77" Canvas.Top="117" FontSize="12" Height="28" Name="label8" Width="120">Start Menu Strip</Label>
+                        <Label Canvas.Left="54" Canvas.Top="1" Height="41" Name="tbEntryPointTitle" Width="231" FontSize="26" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center">Tv Shows</Label>
+                        
+                        <!--<ComboBox Canvas.Left="15" Canvas.Top="139" Height="23" Name="cbEntryPointLocation" Width="200" />-->
+                    </Canvas>
+                </Grid>
+            </TabItem>
         </TabControl>
         <Label HorizontalAlignment="Right" Margin="0,0,12,0" x:Name="lblHeader" Width="183" FontSize="28" Background="{x:Null}" Content="mediabrowser" RenderTransformOrigin="0.5,0.5" Height="43" VerticalAlignment="Top">
             <Label.RenderTransform>
@@ -223,6 +255,5 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-
     </Grid>
 </Window>
