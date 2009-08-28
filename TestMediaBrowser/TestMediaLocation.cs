@@ -75,7 +75,6 @@ namespace TestMediaBrowser {
             var root = Kernel.Instance.GetLocation<VirtualFolderMediaLocation>(vf) ;
 
             Assert.AreEqual(1, root.Children.Count);
-            
         }
 
         [Test]

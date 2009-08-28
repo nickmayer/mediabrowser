@@ -18,16 +18,6 @@ namespace TestMediaBrowser
     [TestFixture]
     public class TestTheMovieDB
     {
-        public TestTheMovieDB()
-        {
-        }
-        
-        [SetUp]
-        public void Setup()
-        {
-            typeof(Microsoft.MediaCenter.UI.Application).GetMethod("RegisterUIThread", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, null);
-        }
-
 
         private void Compare(string str1, string str2)
         {

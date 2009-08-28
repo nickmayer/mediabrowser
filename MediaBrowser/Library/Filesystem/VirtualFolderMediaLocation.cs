@@ -5,6 +5,7 @@ using MediaBrowser.Library.Util;
 using System.IO;
 using System.Linq;
 using MediaBrowser.Library.Extensions;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library.Filesystem {
     public class VirtualFolderMediaLocation : FolderMediaLocation {
@@ -27,9 +28,13 @@ namespace MediaBrowser.Library.Filesystem {
             var children = new List<IMediaLocation>();
             foreach (var folder in virtualFolder.Folders) {
 
-                var location = new FolderMediaLocation(new DirectoryInfo(folder).ToFileInfo(), null, this);
-                foreach (var child in location.Children) {
-                    children.Add(child);
+                try {
+                    var location = new FolderMediaLocation(new DirectoryInfo(folder).ToFileInfo(), null, this);
+                    foreach (var child in location.Children) {
+                        children.Add(child);
+                    }
+                } catch (Exception ex) {
+                    Logger.ReportException("Ignored invalid folder in Virtual Folder", ex);
                 }
             }
             return children;
