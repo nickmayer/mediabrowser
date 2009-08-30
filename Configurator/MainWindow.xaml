@@ -185,7 +185,7 @@
                     <Label Height="34" HorizontalAlignment="Left" Margin="52,6,0,0" x:Name="lblPlayerStep1b" VerticalAlignment="Top" Width="237" Foreground="#FF030303" Content="Add media type for external player" Grid.ColumnSpan="2" FontSize="14" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Entry Points" x:Name="multipleEntryTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsEnabled="True">
+            <TabItem Header="entry points" x:Name="multipleEntryTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsEnabled="True">
                 <Grid>
                     <Canvas Margin="6,58,6,6" Name="canvasMultipleEntryMain" Visibility="Hidden" IsVisibleChanged="canvasMultipleEntryMain_IsVisibleChanged">
                         <DockPanel Height="328.38" Name="dpEntryPoints" Width="269" Canvas.Left="3" Canvas.Top="0" />                        

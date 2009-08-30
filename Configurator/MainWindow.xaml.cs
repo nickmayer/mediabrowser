@@ -1011,7 +1011,7 @@ folder: {0}
                                         ep.Values.Enabled.Value = "false";
                                         smre.SaveEntryPoint(ep);
                                     }
-                                    catch (Exception ex)
+                                    catch (Exception)
                                     { }
                                 }
                             }
@@ -1020,7 +1020,7 @@ folder: {0}
                             break;
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     { }
                 }
                 if (!EntryPointFound)
@@ -1056,7 +1056,7 @@ folder: {0}
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Error deleting entry point.");
             }
@@ -1103,7 +1103,7 @@ folder: {0}
                             throw new Exception(String.Empty);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         MessageBox.Show("Active Image is not a valid file. Please select a valid file before enabling.");
                         return;
@@ -1121,7 +1121,7 @@ folder: {0}
                             throw new Exception(String.Empty);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         MessageBox.Show("Inactive Image is not a valid file. Please select a valid file before enabling.");
                         return;
@@ -1169,7 +1169,7 @@ folder: {0}
                             return;
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
 
                     }
@@ -1240,7 +1240,7 @@ folder: {0}
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -1265,7 +1265,7 @@ folder: {0}
                         this.imEntryPointActive.Source = imageActive;
                         imEntryPointActive.ToolTip = imageActive.UriSource.LocalPath;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         BitmapImage imageActive = new BitmapImage();
                         this.imEntryPointActive.Source = imageActive;
@@ -1279,7 +1279,7 @@ folder: {0}
                         this.imEntryPointInActive.Source = imageInActive;
                         imEntryPointInActive.ToolTip = imageInActive.UriSource.LocalPath;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         BitmapImage imageInActive = new BitmapImage();
                         this.imEntryPointInActive.Source = imageInActive;
@@ -1302,7 +1302,7 @@ folder: {0}
                     }                    
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Error formating data for " + entryPoint.EntryPointUID);
                 canvasEntryPointDetails.Visibility = Visibility.Hidden;
@@ -1316,7 +1316,7 @@ folder: {0}
                 FileInfo file = new FileInfo(new Uri(image.Source.ToString()).LocalPath);
                 return file.FullName;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return string.Empty;
             }
@@ -1338,7 +1338,7 @@ folder: {0}
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
