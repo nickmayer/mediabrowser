@@ -187,7 +187,8 @@
           <MathTransformer Divide="100"/>
         </Transformer>
       </Binding>
-      
+
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
     </Rules>
 
     <Content>
@@ -246,12 +247,13 @@
                 </Children>
               </Panel>
               
-              <Panel Name="MovieTitle" Padding="10,0,0,0">
+              <Panel Name="MovieTitle" Padding="10,0,0,0" Layout="HorizontalFlow">
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0,30" Right="ExtraInfo,0"  Top="Parent,0.67" Bottom="Parent,0.7,25"/>
                 </LayoutInput>
                 <Children>
                   <Text Name="Title" Content="[Item.Name]" Font="font://f:CV_TitleFont" Color="color://s:FontColorLight"/>
+                  <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
                   <!--<ts:TitleSet Name="TitleSet" Model="[Item]" ModelFast="[Item]" Layout="Scale" Font="font://f:CV_TitleFont" SubFont="font://f:CV_SubTitleFont"/>-->
                 </Children>
               </Panel>

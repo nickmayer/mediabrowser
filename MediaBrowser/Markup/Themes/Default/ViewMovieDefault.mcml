@@ -392,6 +392,13 @@
         </Actions>
       </Changed>
       <Binding Target="[MediaInfo.Visible]" Source="[Item.HasMediaInfo]" />
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
+      <Changed Source="[Item.MediaInfo]" InitialEvaluate="true">
+			<Actions>
+				<Set Target="[MediaInfo.Content]" Value="[Item.MediaInfo.CombinedInfo]"/>
+			</Actions>
+		</Changed>
+		<Binding Target="[MediaInfo.Visible]" Source="[Item.HasMediaInfo]" />
     </Rules>
     <Content>
       <Panel  Layout="Form" Margins="0,0,0,0">
@@ -410,6 +417,7 @@
                   <Text Name="ProductionYear" Content=""  Font="Verdana,18,Bold" Color="color://s:FontColorLight"/>
                   <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,5,0,0" />
                   <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="10,0,0,0" MaximumSize="0,30"/>
+                  <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
                 </Children>
                 <Animations>
                   <TransformAnimation Delay="0.4">

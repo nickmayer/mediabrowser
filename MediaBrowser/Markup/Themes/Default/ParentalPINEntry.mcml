@@ -1,0 +1,57 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+    xmlns:pe="resx://MediaBrowser/MediaBrowser.Resources/PINEdit">
+
+  <UI Name="ParentalPINEntry">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <cor:String Name="PromptString" cor:String="Please Enter PIN" />
+    </Properties>
+
+    <Locals>
+      <EditableText Name="PIN" Value=""/>
+      <Command Name="PINEntered" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[PIN.Value]" Value="" />
+      <Default Target="[MyText.Content]" Value="[PromptString]"/>
+      <!--if not called by us (user used "back" to get to us) exit immediately-->
+      <Condition Source="[Application.Config.RequestingPIN]" SourceValue="false">
+        <Actions>
+          <Invoke Target="[Application.Back]"/>
+        </Actions>
+      </Condition>
+      <Changed Source="[PINEntered.Invoked]" >
+        <Actions>
+          <Invoke Target="[Application.Config.ParentalPINEntered]" />
+        </Actions>
+      </Changed>
+      <Binding Source="[PIN.Value]" Target="[Application.Config.CustomPINEntry]">
+      </Binding>
+      
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form" >
+        <Children>
+          <Text Name="MyText" Color="White" Font="Calibri, 24">
+            <LayoutInput>
+              <FormLayoutInput Top="Parent,.40" Horizontal="Center"/>
+            </LayoutInput>  
+          </Text>
+          <pe:PINEdit Label="Security PIN" EditableText="[PIN]" EndCommand="[PINEntered]" Font="Segoe MediaCenter, 22">
+            <LayoutInput>
+              <FormLayoutInput Top="Parent,.50" Horizontal="Center"/>
+            </LayoutInput>
+          </pe:PINEdit>
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+
+</Mcml>

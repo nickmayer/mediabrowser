@@ -128,7 +128,6 @@ namespace MediaBrowser.Library {
             } catch (FileNotFoundException) { 
                 // we expect to be called with unknown items sometimes
             }
-
             return item;
         }
 

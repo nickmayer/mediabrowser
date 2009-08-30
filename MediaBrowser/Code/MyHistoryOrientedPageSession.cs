@@ -42,14 +42,32 @@ namespace MediaBrowser
                     current = ((FolderModel)uiProperties["Folder"]).Name;
                 }
 
+                //check to see if we are going to the PIN page
+                else if (source == "resx://MediaBrowser/MediaBrowser.Resources/ParentalPINEntry")
+                {
+                    //put special breadcrumb in that we will not show
+                    current = "PINENTRY";
+                }
                 breadcrumbs.Push(current);
                 
-            } else if (breadcrumbs.Count > 0) {
-                breadcrumbs.Pop();
+            } else {
+                if (breadcrumbs.Count > 0)
+                {
+                    breadcrumbs.Pop();
+                }
+                //clear out the protected folder list each time we go back to the root
+                if ((uiProperties != null) && (uiProperties.ContainsKey("Folder")))
+                {
+                    if (((FolderModel)uiProperties["Folder"]).IsRoot) {
+                        //we're backing into the root folder - clear the protected folder list
+                        Config.Instance.ClearProtectedAllowedList();
+                    }
+                }
             }
             
             base.LoadPage(target, source, sourceData, uiProperties, navigateForward);
         }
+
 
         public string Breadcrumbs
         {

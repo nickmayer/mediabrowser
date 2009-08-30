@@ -87,14 +87,18 @@
 
   <Image Name="HDType_1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_1080" />
   <Image Name="HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_720" />
-
   <!-- Diamond Images -->
   <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/poster_frame" NineGrid="10,10,10,10" />
   <Image Name="DiamondOverlayWhiteAll" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_overlay_all" />
   <Image Name="DiamondOverlayDarkAll" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_overlay_all_dark" />
   <Image Name="DiamondOverlayDarkTop" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_overlay_top_dark" />
-  
+
   <Image Name="DiamondListBg" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_list_bg" NineGrid="15,15,15,15" />
   <Image Name="DiamondListFocus" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_list_focus" NineGrid="5,5,0,5" />
-  
+  <!--PC images-->
+  <Image Name="Lock" Source="resx://MediaBrowser/MediaBrowser.Resources/Lock"/>
+  <Image Name="BlockedCover" Source="resx://MediaBrowser/MediaBrowser.Resources/BlockedCover"/>
+  <Image Name="RatedCustom" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_Custom" />
+  <Image Name="PlainBorder" Source="resx://MediaBrowser/MediaBrowser.Resources/plainborder" />
+
 </Mcml>

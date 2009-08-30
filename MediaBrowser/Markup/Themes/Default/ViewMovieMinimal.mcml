@@ -523,6 +523,7 @@
       <Condition Source="[Item.ImdbRating]" ConditionOp="GreaterThanOrEquals" SourceValue="0" Target="[IMDBRatingPanel.Visible]" Value="true"  />
       <Condition Source="[Item.Directors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[DirectedByPanel.Visible]" Value="true"  />
 
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
       <Changed Source="[Item.MediaInfo]" InitialEvaluate="true">
         <Actions>
           <Set Target="[MediaInfo.Content]" Value="[Item.MediaInfo.CombinedInfo]"/>
@@ -594,6 +595,7 @@
                 <Children>
                   <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,5,0,0" />
                   <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="10,0,0,0" MaximumSize="0,30"/>
+                  <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
                 </Children>
                 
               </Panel>

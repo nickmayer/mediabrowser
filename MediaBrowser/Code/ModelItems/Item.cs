@@ -168,12 +168,28 @@ namespace MediaBrowser.Library
             }
         }
 
-        private void Play(bool resume)
+        public bool ParentalAllowed { get { return Config.Instance.ParentalControls.Allowed(this); } }
+        public string ParentalRating
         {
-            Play(resume, false);
+            get
+            {
+                return baseItem.ParentalRating;
+            }
         }
 
         private void Play(bool resume, bool queue)
+        {
+            if (this.IsPlayable)
+            {
+                if (Config.Instance.ParentalControlEnabled && !this.ParentalAllowed)
+                {
+                    Config.Instance.ParentalControls.PlayProtected(this, resume, queue);
+                }
+                else PlaySecure(resume, queue);
+            }
+        }
+
+        public void PlaySecure(bool resume, bool queue)
         {
             try
             {
@@ -193,6 +209,13 @@ namespace MediaBrowser.Library
                 ev.Dialog("There was a problem playing the content. Check location exists\n" + baseItem.Path, "Content Error", DialogButtons.Ok, 60, true);
             }
         }
+
+
+        private void Play(bool resume)
+        {
+            Play(resume, false);
+        }
+
 
         public void Queue()
         {

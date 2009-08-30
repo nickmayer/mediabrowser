@@ -5,6 +5,7 @@ using MediaBrowser.Library.Util;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.EntityDiscovery;
 using MediaBrowser.Library.Extensions;
+using MediaBrowser.Library.Logging;
 using System.Collections;
 using System.Diagnostics;
 
@@ -55,7 +56,8 @@ namespace MediaBrowser.Library.Entities {
         public IList<BaseItem> Children {
             get {
                 // return a clone
-                lock (ActualChildren) {
+                lock (ActualChildren)
+                {
                     return ActualChildren.ToList();
                 }
             }
@@ -204,8 +206,12 @@ namespace MediaBrowser.Library.Entities {
                     yield return item;
                     var folder = item as Folder;
                     if (folder != null) {
-                        foreach (var subitem in folder.RecursiveChildren) {
-                            yield return subitem;
+                    //leave out protected folders (except the ones we have entered)
+                        if (folder.ParentalAllowed || Config.Instance.ProtectedFolderAllowed(folder)) {
+                            foreach (var subitem in folder.RecursiveChildren)
+                            {
+                                yield return subitem;
+                            }
                         }
                     }
                 }
@@ -280,14 +286,16 @@ namespace MediaBrowser.Library.Entities {
             }
 
             // this is a rare concurrency bug workaround - which I already fixed (it protects against regressions)
-            if (!changed && childrenCopy.Count != validChildren.Count) {
-                Debug.Assert(false,"For some reason we have duplicate items in our folder, fixing this up!");
+            if (!changed && childrenCopy.Count != validChildren.Count)
+            {
+                //Debug.Assert(false,"For some reason we have duplicate items in our folder, fixing this up!");
                 childrenCopy = childrenCopy
                     .Distinct(i => i.Id)
                     .ToList();
 
-                lock (ActualChildren) {
-                    ActualChildren.Clear(); 
+                lock (ActualChildren)
+                {
+                    ActualChildren.Clear();
                     ActualChildren.AddRange(childrenCopy);
                 }
 

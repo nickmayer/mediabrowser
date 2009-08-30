@@ -40,13 +40,31 @@ namespace MediaBrowser.Library.Util {
             }
         }
 
-        public override string ToString() {
+        //ebr - I'm sure sam can come up with a better way to do this, but we need to strip out PINEntry crumbs...
+        private List<string> displayCrumbs
+        {
+            get
+            {
+                string[] nameArray = crumbs.Select(i => i.Name).Reverse().ToArray();
+                List<string> displayNames = new List<string>();
+                foreach (string i in nameArray)
+                {
+                    if (i != "PINENTRY")
+                        displayNames.Add(i);
+                }
+                return displayNames;
+            }
+        }
+
+        public override string ToString()
+        {
             int max = maxDisplayCrumbs;
-            if (crumbs.Count < max)
-                max = crumbs.Count;
+            List<string> displCrumbs = displayCrumbs;
+            if (displCrumbs.Count < max)
+                max = displCrumbs.Count;
             if (max == 0)
                 return "";
-            return string.Join(" | ", crumbs.Select(i => i.Name).Reverse().ToArray(), crumbs.Count - max, max);
+            return string.Join(" | ",displayCrumbs.ToArray() , displCrumbs.Count - max, max);
         }
 
 

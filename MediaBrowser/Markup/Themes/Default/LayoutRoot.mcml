@@ -101,6 +101,7 @@
       </Binding>
       <Binding Source="[Folder.BackdropImage]" Target="[MainBG.Content]" >
       </Binding>
+      <Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <!-- Commands -->
       <Changed Source="[Configure.Invoked]">
@@ -427,6 +428,20 @@
                 </LayoutInput>
               </np:NowPlayingViewportLarge>
 
+              <!--Security Indicator-->
+              <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Anchor" Visible="false" Name="PCLock">
+                <LayoutInput>
+                  <AnchorLayoutInput Right="PanelPoster,1,-15" Bottom="PanelPoster,1,-15"/>
+                </LayoutInput>
+                <Children>
+                  <Graphic Name="PCLockImage" Content="image://i:Lock" Margins="0,0,5,5" MaximumSize="35,35" MaintainAspectRatio="true">
+                    <LayoutInput>
+                      <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+                    </LayoutInput>
+                  </Graphic>
+                </Children>
+              </Panel>
+
               <!-- Poster Box -->
               <Panel Name="PanelPoster" Layout="Center" Padding="10,10,10,15">
                 <LayoutInput>
@@ -709,6 +724,7 @@
       <Binding Source="[Item.PreferredImage]" Target="[ItemPoster.Content]" />
       <Binding Source="[Item.LongName]" Target="[Txt1.Content]" />
       <Binding Source="[Item.CreatedDateString]" Target="[Txt2.Content]" />
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <Condition Source="[Index.Value]" ConditionOp="GreaterThan" SourceValue="[DisplayCount]" Target="[Bg.Alpha]" Value="0" />
 
@@ -763,6 +779,11 @@
               <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 16" Margins="50,0,0,0" />
             </Children>
           </Panel>
+          <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >
+            <LayoutInput>
+              <FormLayoutInput Left="ItemPoster,1,20" Top="ItemPoster,0" />
+            </LayoutInput>
+          </Graphic>
         </Children>
       </Graphic>
     </Content>

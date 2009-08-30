@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MediaBrowser, Version=2.1.1.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MediaBrowser\bin\Debug\MediaBrowser.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.MediaCenter" />
     <Reference Include="Microsoft.MediaCenter.UI" />
     <Reference Include="nunit.core, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -68,6 +72,7 @@
     <Compile Include="TestLogging.cs" />
     <Compile Include="TestMediaLocation.cs" />
     <Compile Include="TestMetadataProvider.cs" />
+    <Compile Include="TestParentalControl.cs" />
     <Compile Include="TestResolvers.cs" />
     <Compile Include="TestSerialization.cs" />
     <Compile Include="SupportingClasses\DummyItemRepository.cs" />
@@ -97,12 +102,6 @@
     <Content Include="SampleMedia\Movies\Flawless\movie.avi" />
     <Content Include="SampleMedia\TV\South Park\Season 1\03.mpg" />
     <Content Include="SampleMedia\TV\South Park\Season 1\South.Park.S01E08.JUNK.avi" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
-      <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
-      <Name>MediaBrowser</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="MediaBrowser.snk" />

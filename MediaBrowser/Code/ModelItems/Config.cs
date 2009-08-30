@@ -8,6 +8,7 @@ using System.Xml;
 
 using Microsoft.MediaCenter.UI;
 using MediaBrowser.Library;
+using MediaBrowser.Library.Entities;
 using MediaBrowser.LibraryManagement;
 using MediaBrowser.Attributes;
 using Microsoft.MediaCenter;
@@ -21,7 +22,123 @@ namespace MediaBrowser
     {
         private ConfigData data;
 
-        public bool EnableRootPage {
+        private ParentalControl parentalControls;
+        public ParentalControl ParentalControls
+        {
+            get
+            {
+                if (this.parentalControls == null)
+                    this.parentalControls = new ParentalControl();
+                return this.parentalControls;
+            }
+
+        }
+        public string CustomPINEntry { get; set; } //holds the entry for a custom pin (entered by user to compare to pin)
+
+        public bool RequestingPIN { get; set; }
+
+        public void ParentalPINEntered()
+        {
+            this.RequestingPIN = false;
+            this.parentalControls.CustomPINEntered(CustomPINEntry);
+        }
+
+        public void UnlockPC()
+        {
+            this.parentalControls.Unlock();
+        }
+        public void RelockPC()
+        {
+            this.parentalControls.Relock();
+            FirePropertyChanged("ParentalControlEnabled");
+        }
+        public string ParentalMaxAllowedString
+        {
+            get { return this.ParentalControls.MaxAllowedString; }
+        }
+        public bool ParentalAllowed(Item item)
+        {
+            return this.ParentalControls.Allowed(item);
+        }
+        public int ParentalUnlockPeriod
+        {
+            get { return this.data.ParentalUnlockPeriod; }
+            set { if (this.data.ParentalUnlockPeriod != value) { this.data.ParentalUnlockPeriod = value; Save(); FirePropertyChanged("ParentalUnlockPeriod"); } }
+        }
+        public bool ParentalControlUnlocked
+        {
+            get { return this.ParentalControls.Unlocked; }
+        }
+        public bool ParentalControlEnabled
+        {
+            get
+            {
+                if (this.ParentalControlUnlocked)
+                {
+                    return false;
+                }
+                else return this.data.ParentalControlEnabled;
+            }
+            //we don't set this value if we are temp unlocked because it will get saved to config file as permanent - interface must force re-lock before manipulating this value
+            set { if (!this.ParentalControlUnlocked) { this.data.ParentalControlEnabled = value; Save(); FirePropertyChanged("ParentalControlEnabled"); } }
+        }
+        public string ParentalPIN
+        {
+            get { return this.data.ParentalPIN; }
+            set { if (this.data.ParentalPIN != value) { this.data.ParentalPIN = value; Save(); FirePropertyChanged("ParentalPIN"); } }
+        }
+        public void EnterNewParentalPIN()
+        {
+            this.parentalControls.EnterNewPIN();
+        }
+        public int MaxParentalLevel
+        {
+            get { return this.data.MaxParentalLevel; }
+            set { if (this.data.MaxParentalLevel != value) { this.data.MaxParentalLevel = value; Save(); FirePropertyChanged("MaxParentalLevel"); } }
+        }
+        public bool HideParentalDisAllowed
+        {
+            get { return this.data.HideParentalDisAllowed; }
+            set
+            {
+                if (this.data.HideParentalDisAllowed != value)
+                {
+                    this.data.HideParentalDisAllowed = value;
+                    Save();
+                }
+            }
+        }
+
+
+        public bool ParentalBlockUnrated
+        {
+            get { return this.data.ParentalBlockUnrated; }
+            set
+            {
+                if (this.data.ParentalBlockUnrated != value)
+                {
+                    this.data.ParentalBlockUnrated = value;
+                    Save();
+                    this.parentalControls.SwitchUnrated(value);
+                    FirePropertyChanged("ParentalBlockUnrated");
+                }
+            }
+        }
+
+        public bool ProtectedFolderAllowed(Folder folder)
+        {
+            return parentalControls.ProtectedFolderEntered(folder);
+        }
+
+        public void ClearProtectedAllowedList()
+        {
+
+            parentalControls.ClearEnteredList();
+        }
+
+
+        public bool EnableRootPage
+        {
             get { return this.data.EnableRootPage; }
             set { if (this.data.EnableRootPage != value) { this.data.EnableRootPage = value; Save(); FirePropertyChanged("EnableRootPage"); } }
         }

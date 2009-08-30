@@ -37,6 +37,7 @@ namespace MediaBrowser.Library.Metadata {
                 typeof(ImageFromMediaLocationProvider),
                 typeof(ImageByNameProvider), 
                 typeof(MovieProviderFromXml),
+                typeof(FolderProviderFromXml),
                 typeof(LocalEpisodeProvider), 
                 typeof(LocalSeriesProvider), 
                 typeof(RemoteEpisodeProvider),

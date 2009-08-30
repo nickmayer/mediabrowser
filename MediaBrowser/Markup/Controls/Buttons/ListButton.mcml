@@ -21,7 +21,8 @@
 
 		<Locals>
 			<Image Name="Tick" Image="image://i:Tick"/>
-			<Size Name="MinSize" Size="300,48" />
+      <Image Name="Lock" Image="image://i:Lock"/>
+      <Size Name="MinSize" Size="300,48" />
 			<Size Name="Size" Size="625,48" />
 			<Image Name="ImageFocus" Image="image://me:ButtonLeftFocus" />
 			<Image Name="ImageNoFocus" Image="image://me:ButtonNoFocus" />
@@ -35,8 +36,13 @@
 			<!-- Bind the button's label and command-->
 			<Binding Source="[Item.Name]" Target="[Label.Content]"/>
 			<Binding Source="[Item.HaveWatched]" Target="[TickIndicator.Visible]" />
+      <Binding Source="[Item.ParentalAllowed]" Target="[LockIndicator.Visible]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
 
-			<Changed Source="[Item.HaveWatched]">
+      <Changed Source="[Item.HaveWatched]">
 				<Conditions>
 					<Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
 					<Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="NotEquals" Value="Transparent" />
@@ -84,7 +90,17 @@
 						<Children>
 							<Panel Layout="Dock">
 								<Children>
-									<Panel Layout="Center" MaximumSize="25,25" MinimumSize="25,25" Visible="[Application.Config.EnableListViewTicks]">
+                  <Panel Layout="Center" MaximumSize="30,25" MinimumSize="25,25" Visible="[Application.Config.ParentalControlEnabled]">
+                    <LayoutInput>
+                      <DockLayoutInput Alignment="Center" Position="Left" />
+                    </LayoutInput>
+                    <Children>
+                      <Graphic Name="LockIndicator" Visible="false" Content="[Lock]" Margins="0,0,5,0">
+
+                      </Graphic>
+                    </Children>
+                  </Panel>
+                  <Panel Layout="Center" MaximumSize="25,25" MinimumSize="25,25" Visible="[Application.Config.EnableListViewTicks]">
 										<LayoutInput>
 											<DockLayoutInput Alignment="Center" Position="Left" />
 										</LayoutInput>

@@ -179,6 +179,28 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public string SubTitle { get; set; }
 
+        [Persist]
+        public string CustomRating { get; set; }
+        [Persist]
+        public string CustomPIN { get; set; }
+
+        public bool ParentalAllowed { get { return Config.Instance.ParentalControls.Allowed(this); } }
+        public string ParentalRating
+        {
+            get
+            {
+                if (this.CustomRating == null || this.CustomRating == "") {
+                    var aShow = this as IShow;
+                    if (aShow != null)
+                        return aShow.MpaaRating ?? "";
+                    else 
+                        return "G"; //if not a show and no custom rating return something valid that will always be allowed
+                }           
+                else
+                    return this.CustomRating;
+            }
+        }
+
         public virtual void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id) {
             this.Id = id;
             this.Path = location.Path;

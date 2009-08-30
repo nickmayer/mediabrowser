@@ -623,7 +623,11 @@ namespace MediaBrowser
                     session.AddBreadcrumb(folder.Name);
                     Navigate(folder.Children[0]);
                 } else {
-                    OpenFolderPage(folder);
+                    //call secured method if folder is protected
+                    if (!folder.ParentalAllowed)
+                        NavigateSecure(folder);
+                    else
+                        OpenFolderPage(folder);
                 }
             }
             else
@@ -634,6 +638,27 @@ namespace MediaBrowser
         }
 
 
+        public void NavigateSecure(FolderModel folder)
+        {
+            //just call method on parentalControls - it will callback if secure
+            Config.Instance.ParentalControls.NavigateProtected(folder);
+        }
+
+        public void OpenSecure(FolderModel folder)
+        {
+            //called if passed security
+            OpenFolderPage(folder);
+        }
+
+        public void OpenSecurityPage(object prompt)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Application"] = this;
+            properties["PromptString"] = prompt;
+            Config.Instance.RequestingPIN = true; //tell page we are calling it (not a back action)
+            session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/ParentalPINEntry", properties);
+        }
+        
         public void Shuffle(Item item)
         {
             Folder folder = item.BaseItem as Folder;

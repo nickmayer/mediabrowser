@@ -90,7 +90,13 @@ namespace MediaBrowser.Library {
         // to make mcml biniding easier
         public List<Item> NewestItems {
             get {
-                return GetNewestItems(20);
+                //only want items from non-protected folders
+                if (folder != null && folder.ParentalAllowed)
+                {
+                    return GetNewestItems(20);
+                } else {
+                    return new List<Item>(); //return empty list if folder is protected
+                }
             }
         }
         
@@ -151,7 +157,11 @@ namespace MediaBrowser.Library {
             foreach (var item in folder.Children) {
                 // skip folders
                 if (item is Folder) {
-                    FindNewestChildren(item as Folder, foundNames, maxSize);
+                    //don't return items inside protected folders
+                    if (item.ParentalAllowed)
+                    {
+                        FindNewestChildren(item as Folder, foundNames, maxSize);
+                    }
                 } else {
                     DateTime creationTime = item.DateCreated;
                     while (foundNames.ContainsKey(creationTime)) {

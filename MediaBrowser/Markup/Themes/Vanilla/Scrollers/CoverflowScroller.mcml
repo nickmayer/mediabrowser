@@ -379,6 +379,7 @@
           <MathTransformer DivideInt="-2"/>
         </Transformer>
       </Binding>
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
     </Rules>
 
     <Content>
@@ -428,6 +429,18 @@
                     </LayoutInput>
                     <Children>
                       <Graphic Name="HDImage" Content="image://i:HDLogo" Margins="0,0,5,5" MaximumSize="48,35" MaintainAspectRatio="true">
+                        <LayoutInput>
+                          <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+                        </LayoutInput>
+                      </Graphic>
+                    </Children>
+                  </Panel>
+                  <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Anchor" Visible="false" Name="PCLock">
+                    <LayoutInput>
+                      <AnchorLayoutInput Horizontal="Far" Vertical="Near"/>
+                    </LayoutInput>
+                    <Children>
+                      <Graphic Name="PCLockImage" Content="image://i:Lock" Margins="0,0,5,5" MaximumSize="20,20" MaintainAspectRatio="true">
                         <LayoutInput>
                           <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
                         </LayoutInput>

@@ -190,7 +190,7 @@ namespace MediaBrowser.Library.Providers
                             movie.MpaaRating = "NR";
                             break;
                         case 0:
-                            movie.MpaaRating = "NR";
+                            movie.MpaaRating = "UR";
                             break; 
                         case 1:
                             movie.MpaaRating = "G";
@@ -211,7 +211,14 @@ namespace MediaBrowser.Library.Providers
                             movie.MpaaRating = null;
                             break;
                     }
-                }  
+                }
+                //if there is a custom rating - use it (if not rating will be filled with MPAARating)
+                if (movie.CustomRating == null)
+                    movie.CustomRating = doc.SafeGetString("Title/CustomRating");
+
+                if (movie.CustomPIN == null)
+                    movie.CustomPIN = doc.SafeGetString("Title/CustomPIN");
+
             }
         }
 

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -266,6 +266,7 @@
     <None Include="Images\banner.png" />
     <Content Include="Images\BlackBtnAlpha50.png" />
     <Content Include="Images\BlackBtnAlpha65.png" />
+    <Content Include="Images\BlockedCover.png" />
     <Content Include="Images\Button\ButtonLeftFocusBlack.png" />
     <Content Include="Images\Button\ButtonLeftFocusDefault.png" />
     <Content Include="Images\Checkbox\CheckBoxCheckedFocus.png" />
@@ -276,12 +277,17 @@
     <None Include="Images\Icons\IconShuffle.png" />
     <None Include="Images\Root\roottopw.png" />
     <None Include="Images\Root\rootscrollhilite.png" />
-    <None Include="Images\Diamond\dia_list_bg.png" />
+    <Content Include="Images\Diamond\diabg1.png" />
+    <Content Include="Images\Diamond\dia_list_bg.png" />
     <Content Include="Images\Diamond\dia_list_focus.png" />
     <Content Include="Images\Diamond\Overlay\dia_overlay_all.png" />
     <Content Include="Images\Diamond\Overlay\dia_overlay_all_dark.png" />
     <Content Include="Images\Diamond\Overlay\dia_overlay_bottom.png" />
     <Content Include="Images\Diamond\Overlay\dia_overlay_top_dark.png" />
+    <Content Include="Images\Lock.png" />
+    <Content Include="Images\plainborder.png" />
+    <Content Include="Images\Ratings\Rated-Custom.png" />
+    <Content Include="Images\Ratings\Rated-Unrated.png" />
     <Content Include="Images\Icons\IconFloral.png" />
     <Content Include="Images\Root\flashHorB.png" />
     <Content Include="Images\Root\flashHorT.png" />
@@ -409,6 +415,48 @@
     <Content Include="Images\Unwatched\TickPosterBase.png" />
     <Content Include="Images\Unwatched\Unwatched.png" />
     <Content Include="Images\Unwatched\UnwatchedBase.png" />
+    <Content Include="Images\Vanilla\arrows\left.png" />
+    <Content Include="Images\Vanilla\arrows\right.png" />
+    <Content Include="Images\Vanilla\buttons\actor.png" />
+    <Content Include="Images\Vanilla\buttons\backdrop.png" />
+    <Content Include="Images\Vanilla\buttons\banners.png" />
+    <Content Include="Images\Vanilla\buttons\bg-focused.png" />
+    <Content Include="Images\Vanilla\buttons\bg-red.png" />
+    <Content Include="Images\Vanilla\buttons\bg-selected.png" />
+    <Content Include="Images\Vanilla\buttons\bg-unfocused.png" />
+    <Content Include="Images\Vanilla\buttons\bg-unfocusedBlack.png" />
+    <Content Include="Images\Vanilla\buttons\close.png" />
+    <Content Include="Images\Vanilla\buttons\config.png" />
+    <Content Include="Images\Vanilla\buttons\date.png" />
+    <Content Include="Images\Vanilla\buttons\director.png" />
+    <Content Include="Images\Vanilla\buttons\enlarge.png" />
+    <Content Include="Images\Vanilla\buttons\genre.png" />
+    <Content Include="Images\Vanilla\buttons\index.png" />
+    <Content Include="Images\Vanilla\buttons\labels.png" />
+    <Content Include="Images\Vanilla\buttons\name.png" />
+    <Content Include="Images\Vanilla\buttons\none.png" />
+    <Content Include="Images\Vanilla\buttons\PlayAll.png" />
+    <Content Include="Images\Vanilla\buttons\PlayRandom.png" />
+    <Content Include="Images\Vanilla\buttons\PlayUnwatched.png" />
+    <Content Include="Images\Vanilla\buttons\rating.png" />
+    <Content Include="Images\Vanilla\buttons\runtime.png" />
+    <Content Include="Images\Vanilla\buttons\shine.png" />
+    <Content Include="Images\Vanilla\buttons\shrink.png" />
+    <Content Include="Images\Vanilla\buttons\sort.png" />
+    <Content Include="Images\Vanilla\buttons\studio.png" />
+    <Content Include="Images\Vanilla\buttons\unwatched.png" />
+    <Content Include="Images\Vanilla\buttons\vertscroll.png" />
+    <Content Include="Images\Vanilla\buttons\view.png" />
+    <Content Include="Images\Vanilla\buttons\viewCoverflow.png" />
+    <Content Include="Images\Vanilla\buttons\viewDetail.png" />
+    <Content Include="Images\Vanilla\buttons\viewPoster.png" />
+    <Content Include="Images\Vanilla\buttons\viewThumb.png" />
+    <Content Include="Images\Vanilla\buttons\viewThumbstrip.png" />
+    <Content Include="Images\Vanilla\buttons\year.png" />
+    <Content Include="Images\Vanilla\LeftMenuBorderBlack.png" />
+    <Content Include="Images\Vanilla\LeftMenuBorderDefault.png" />
+    <Content Include="Images\Vanilla\RightMenuBorderBlack.png" />
+    <Content Include="Images\Vanilla\RightMenuBorderDefault.png" />
     <Content Include="Images\Weather\0.png" />
     <Content Include="Images\Weather\1.png" />
     <Content Include="Images\Weather\10.png" />
@@ -478,8 +526,10 @@
     <Compile Include="Library\Factories\BaseItemFactory.cs" />
     <Compile Include="Library\ImageManagement\ProxyCachedRemoteImage.cs" />
     <Compile Include="Library\Logging\Logger.cs" />
+    <Compile Include="Library\ParentalControl.cs" />
     <Compile Include="Library\Playables\PlayableMediaCollection.cs" />
     <Compile Include="Library\Plugins\BasePlugin.cs" />
+    <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
     <Compile Include="Library\Util\BreadCrumbs.cs" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Images.mcml" />
@@ -505,6 +555,7 @@
     <Content Include="Markup\Controls\MovieInfo.mcml" />
     <Content Include="Markup\Controls\MPAARating.mcml" />
     <Content Include="Markup\Controls\NowPlayingViewport.mcml" />
+    <Content Include="Markup\Controls\PINEdit.mcml" />
     <Content Include="Markup\Controls\Pivots\Pivot.mcml" />
     <Content Include="Markup\Controls\Pivots\PivotItem.mcml" />
     <Content Include="Markup\Controls\Popups\PopupPlay.mcml" />
@@ -538,6 +589,7 @@
     <Content Include="Markup\FontsSmall.mcml" />
     <Content Include="Markup\FontsDefault.mcml" />
     <Content Include="Markup\StylesBlack.mcml" />
+    <Content Include="Markup\Themes\Default\ParentalPINEntry.mcml" />
     <Content Include="Markup\Themes\Diamond\Controls\DiamondTab.mcml" />
     <Content Include="Markup\Themes\Diamond\Controls\DiamondToolBox.mcml" />
     <Content Include="Markup\Themes\Diamond\Controls\DiamondListView.mcml" />
@@ -558,6 +610,16 @@
     <Content Include="Markup\MovieDetailsPage.mcml" />
     <Content Include="Markup\Themes\Default\LayoutPoster.mcml" />
     <Content Include="Markup\StylesDefault.mcml" />
+    <Content Include="Markup\Themes\Diamond\Controls\DiamondListView.mcml" />
+    <Content Include="Markup\Themes\Diamond\Controls\DiamondToolBox.mcml" />
+    <Content Include="Markup\Themes\Diamond\DiamondLayoutCoverflow.mcml" />
+    <Content Include="Markup\Themes\Diamond\DiamondLayoutDetails.mcml" />
+    <Content Include="Markup\Themes\Diamond\DiamondLayoutPoster.mcml" />
+    <Content Include="Markup\Themes\Diamond\DiamondLayoutThumb.mcml" />
+    <Content Include="Markup\Themes\Diamond\DiamondLayoutThumbStrip.mcml" />
+    <Content Include="Markup\Themes\Diamond\DiamondMovieView.mcml" />
+    <Content Include="Markup\Themes\Diamond\Selectors\PageDetailAreaDiamond.mcml" />
+    <Content Include="Markup\Themes\Diamond\Selectors\PageDiamond.mcml" />
     <Content Include="Markup\Themes\Vanilla\Buttons\MenuButton.mcml" />
     <Content Include="Markup\Themes\Vanilla\Buttons\RadioButton.mcml" />
     <Content Include="Markup\Themes\Vanilla\Buttons\SimpleButton.mcml" />

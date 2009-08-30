@@ -1203,6 +1203,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap Lock {
+            get {
+                object obj = ResourceManager.GetObject("Lock", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_bluray {
             get {
                 object obj = ResourceManager.GetObject("media_bluray", resourceCulture);
@@ -1525,9 +1532,23 @@ namespace MediaBrowser {
             }
         }
         
+        internal static byte[] ParentalPINEntry {
+            get {
+                object obj = ResourceManager.GetObject("ParentalPINEntry", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] PersonButton {
             get {
                 object obj = ResourceManager.GetObject("PersonButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] PINEdit {
+            get {
+                object obj = ResourceManager.GetObject("PINEdit", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1571,6 +1592,13 @@ namespace MediaBrowser {
             get {
                 object obj = ResourceManager.GetObject("PivotItem", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap plainborder {
+            get {
+                object obj = ResourceManager.GetObject("plainborder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

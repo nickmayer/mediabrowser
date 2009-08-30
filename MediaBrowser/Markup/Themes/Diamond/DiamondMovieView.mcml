@@ -58,6 +58,7 @@
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
       <Binding Source="[Item.Overview]" Target="[Overview.Text]" />
       <Binding Source="[CmdButtons.DisplayMax]" Target="[DisplayMax]" />
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
         <Transformer>
@@ -229,6 +230,7 @@
                       <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="RUNTIME" MinimumSize="200,0"/>
                       <Text Name="Runtime" Content="[Item.RunningTimeString]"
                           Font="font://f:MM_ItemFont" Color="[ValueColor]" />
+                      <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
                     </Children>
                   </Panel>
 

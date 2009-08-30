@@ -106,6 +106,8 @@
         </Conditions>-->
       <!--</Binding>-->
 
+      <Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
+
       <!-- Commands -->
       <Changed Source="[Configure.Invoked]">
         <Actions>
@@ -244,11 +246,7 @@
           <Invoke Target="[ScrollingData.PageUp]"/>
         </Actions>
       </Rule>
-      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[RecentBG.Alpha]">
-        <Transformer>
-          <MathTransformer Divide="100"/>
-        </Transformer>
-      </Binding>
+
     </Rules>
 
     <Content>
@@ -304,7 +302,7 @@
                     <Children>
                       <Repeater Source="[Folder.Children]" Name="Repeater" ContentName="BaseItem" DiscardOffscreenVisuals="false" >
                         <Layout>
-                          <FlowLayout Orientation="Horizontal" Spacing="50,0" Repeat="WhenTooBig" RepeatGap="150,0"/>
+                          <FlowLayout Orientation="Horizontal" Spacing="50,0"/>
                         </Layout>
                         <Animations>
                           <Animation Type="Move">
@@ -373,6 +371,20 @@
                 </Children>
               </Panel>
 
+              <!--Security Indicator-->
+              <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Anchor" Visible="false" Name="PCLock">
+                <LayoutInput>
+                  <AnchorLayoutInput Right="PanelPoster,1,-15" Bottom="PanelPoster,1,-15"/>
+                </LayoutInput>
+                <Children>
+                  <Graphic Name="PCLockImage" Content="image://i:Lock" Margins="0,0,5,5" MaximumSize="35,35" MaintainAspectRatio="true">
+                    <LayoutInput>
+                      <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+                    </LayoutInput>
+                  </Graphic>
+                </Children>
+              </Panel>
+
               <!-- Poster Box -->
               <Panel Name="PanelPoster" Layout="Center" Padding="10,10,10,15">
                 <LayoutInput>
@@ -426,16 +438,7 @@
                   <me:RecentItemList Name="RecentItemsPanel" Application="[Application]" />
                 </Children>
               </Panel>
-              
-              <Panel Layout="Form">
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0" Right="Parent,1" Top="recentlyAdded,1,10" Bottom="Parent,0.7"/>
-                </LayoutInput>
-                <Children>
-                  <ColorFill Name="RecentBG" Layout="Fill" Content="Black" Alpha="0.5" />
-                </Children>
-              </Panel>
-              
+
               <!-- Main Background -->
               <bd:Backdrop4 Name="Backdrop" Visible="true" Image="[Folder.BackdropImage]" Item="[Folder]"/>
               <!--<Graphic Name="MainBG" Content="resx://MediaBrowser/MediaBrowser.Resources/Background"
@@ -633,6 +636,8 @@
 
       <!--<Condition Source="[Index.Value]" ConditionOp="GreaterThan" SourceValue="3" Target="[Bg.Alpha]" Value="0" />-->
 
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
+
       <Changed Source="[Input.KeyFocus]" >
         <Conditions>
           <Equality Source="[Input.KeyFocus]" Value="false" />
@@ -694,69 +699,68 @@
             </Animation>
           </Animations>
         </Graphic>
-          <Panel>
+          <Graphic Name="Bg" Content="image://vi:BlankGraphic" MaximumSize="600,0" Padding="30,20,30,20">
+        <Layout>
+          <FlowLayout Orientation="Vertical" Spacing="5,5" />
+        </Layout>
+        <Children>
+          <Panel Layout="HorizontalFlow">
             <Children>
-              
-              <Graphic Name="Bg" Content="image://vi:BlankGraphic" MaximumSize="600,0" Layout="Fill" Padding="20,20,20,20">
-
-                    <Layout>
-                      <FlowLayout Orientation="Vertical" Spacing="5,5" />
-                    </Layout>
-                    <Children>
-                      <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="Segoe Media Center, 20" />
-                      <Panel>
-                        <Layout>
-                          <FlowLayout Orientation="Horizontal" />
-                        </Layout>
-                        <Children>
-                          <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson" MaintainAspectRatio="true" MaximumSize="200,225" />
-                          <Panel Margins="10,0,0,0">
-                            <Layout>
-                              <FlowLayout Orientation="Vertical"/>
-                            </Layout>
-                            <Children>
-                              <vmpaa:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" MaximumSize="250,50">
-                                <Layout>
-                                  <FlowLayout StripAlignment="Near"/>
-                                </Layout>
-                              </vmpaa:MPAARating>
-                              <mdi:MediaInfoPanel Name="EpisodeMediaInfo" Item="[Item]" MaxIconSize="0,35">
-                                <Layout>
-                                  <FlowLayout Spacing="10,10" StripAlignment="Near"/>
-                                </Layout>
-                              </mdi:MediaInfoPanel>
-                              <!--                  <Text Color="color://s:FontColorDark" Content="[Item.ItemTypeString]" Font="Segoe Media Center, 16" Margins="10,0,0,0" WordWrap="true" />-->
-                              <Text Name="Txt3" Color="color://s:FontColorDark" Content="" Font="Segoe Media Center, 16" WordWrap="true" MaximumLines="5" />
-                            </Children>
-                          </Panel>
-                        </Children>
-                      </Panel>
-                      <Panel>
-                        <Layout>
-                          <FlowLayout Orientation="Horizontal" StripAlignment="Far"/>
-                        </Layout>
-                        <Children>
-                          <Text Name="Txt4" Color="color://s:FontColorDark" Content="Added On: " Font="Segoe Media Center, 14"/>
-                          <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 14" Margins="10,0,0,0" />
-                        </Children>
-                      </Panel>
-                    </Children>
-                  </Graphic>
+              <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="Segoe Media Center, 20" />
+              <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
             </Children>
           </Panel>
-              <Graphic Name="ArrowRight" MaximumSize="40,40" MinimumSize="40,40" Content="image://vi:BlankGraphic" Margins="10,0,0,0" MaintainAspectRatio="true">
-                <Animations>
-                  <Animation Loop="-1">
-                    <Keyframes>
-                      <AlphaKeyframe Time="0.00" RelativeTo="Current"  Value="0" Interpolation="Linear"/>
-                      <AlphaKeyframe Time="0.25" RelativeTo="Current" Value="1" Interpolation="Linear"/>
-                      <AlphaKeyframe Time="0.75" RelativeTo="Current" Value="1" Interpolation="Linear"/>
-                      <AlphaKeyframe Time="1.0" RelativeTo="Final" Value="0" Interpolation="Linear"/>
-                    </Keyframes>
-                  </Animation>
-                </Animations>
-              </Graphic>
+          <Panel>
+            <Layout>
+              <FlowLayout Orientation="Horizontal" />
+            </Layout>
+            <Children>
+              <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson" MaintainAspectRatio="true" MaximumSize="200,225" />
+              <Panel Margins="10,0,0,0">
+                <Layout>
+                  <FlowLayout Orientation="Vertical"/>
+                </Layout>
+                <Children>
+                  <vmpaa:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" MaximumSize="250,50">
+                    <Layout>
+                      <FlowLayout StripAlignment="Near"/>
+                    </Layout>
+                  </vmpaa:MPAARating>
+                  <mdi:MediaInfoPanel Name="EpisodeMediaInfo" Item="[Item]" MaxIconSize="0,35">
+                    <Layout>
+                      <FlowLayout Spacing="10,10" StripAlignment="Near"/>
+                    </Layout>
+                  </mdi:MediaInfoPanel>
+<!--                  <Text Color="color://s:FontColorDark" Content="[Item.ItemTypeString]" Font="Segoe Media Center, 16" Margins="10,0,0,0" WordWrap="true" />-->
+                  <Text Name="Txt3" Color="color://s:FontColorDark" Content="" Font="Segoe Media Center, 16" WordWrap="true" MaximumLines="5" />
+                </Children>
+              </Panel>
             </Children>
+          </Panel>
+          <Panel>
+            <Layout>
+              <FlowLayout Orientation="Horizontal" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <Text Name="Txt4" Color="color://s:FontColorDark" Content="Added On: " Font="Segoe Media Center, 14"/>
+              <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 14" Margins="10,0,0,0" />
+             </Children>
+            </Panel>
+        </Children>
+      </Graphic>
+          <Graphic Name="ArrowRight" MaximumSize="40,40" MinimumSize="40,40" Content="image://vi:BlankGraphic" Margins="10,0,0,0" MaintainAspectRatio="true">
+            <Animations>
+              <Animation Loop="-1">
+                <Keyframes>
+                  <AlphaKeyframe Time="0.00" RelativeTo="Current"  Value="0" Interpolation="Linear"/>
+                  <AlphaKeyframe Time="0.25" RelativeTo="Current" Value="1" Interpolation="Linear"/>
+                  <AlphaKeyframe Time="0.75" RelativeTo="Current" Value="1" Interpolation="Linear"/>
+                  <AlphaKeyframe Time="1.0" RelativeTo="Final" Value="0" Interpolation="Linear"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </Graphic>
+        </Children>
       </Panel>
     </Content>
   </UI>

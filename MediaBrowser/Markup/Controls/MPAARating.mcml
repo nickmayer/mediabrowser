@@ -33,11 +33,13 @@
 			<Condition Source="[MPAARating]" SourceValue="PG-13" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:RatedPG13" />
 			<Condition Source="[MPAARating]" SourceValue="PG" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:RatedPG" />
 			<Condition Source="[MPAARating]" SourceValue="R" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:RatedR" />
-			<!-- Unrated is just way too ugly 
-      <Condition Source="[MPAARating]" SourceValue="Unrated" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Unrated" />
-      -->
-      <!-- NR is a meaningless rating removing it (sam) -->
-      <!-- 	<Condition Source="[MPAARating]" SourceValue="NR" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:RatedNR" /> -->
+      <Condition Source="[MPAARating]" SourceValue="CS" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:RatedCustom" />
+      <!-- improved unrated graphic - useful for parental control -ebr -->
+      <Condition Source="[MPAARating]" SourceValue="UR" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Unrated" />
+      <!--<Condition Source="[MPAARating]" SourceValue="" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Unrated" />-->
+
+      <!-- NR is a valid rating putting it back -ebr :) -->
+      <Condition Source="[MPAARating]" SourceValue="NR" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Unrated" /> 
 
       <Condition Source="[MPAARating]" SourceValue="TV-G" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-G" />
 			<Condition Source="[MPAARating]" SourceValue="TV-MA" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-MA" />
