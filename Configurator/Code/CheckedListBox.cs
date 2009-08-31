@@ -161,14 +161,14 @@ namespace Configurator.Code {
         }
 
         void CheckedListBox_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            try {
-                CheckBox cb = (CheckBox)((CheckedListBox)this).SelectedItem;
+
+            CheckBox cb = (CheckBox)((CheckedListBox)this).SelectedItem;
+            if (cb != null) {
                 cb.IsChecked = !cb.IsChecked;
                 this.UpdateBackgroundAndForegroundColors();
                 cb.IsChecked = !cb.IsChecked;
-            } catch (Exception) {
-
             }
+            
         }
 
         void CheckedListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
