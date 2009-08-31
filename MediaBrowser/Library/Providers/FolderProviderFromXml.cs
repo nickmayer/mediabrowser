@@ -22,12 +22,13 @@ namespace MediaBrowser.Library.Providers
         [Persist]
         string folderFile;
 
-
-        
         #region IMetadataProvider Members
 
         public override bool NeedsRefresh()
         {
+            // fake stuff like itunes trailers may have no path 
+            if (string.IsNullOrEmpty(Item.Path)) { return false; }
+
             string lastFile = folderFile;
 
             string mfile = XmlLocation();
@@ -63,7 +64,9 @@ namespace MediaBrowser.Library.Providers
         public override void Fetch()
         {
             var folder = Item as Folder;
-             Debug.Assert(folder != null);
+
+            // fake stuff like itunes trailers may have no path 
+            if (string.IsNullOrEmpty(Item.Path)) { return; }
 
             string mfile = XmlLocation();
             //Logger.ReportInfo("Looking for XML file: " + mfile);

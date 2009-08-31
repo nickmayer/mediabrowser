@@ -116,16 +116,20 @@ namespace Configurator {
             return AppID;
         }
 
-        public bool IsMultipleEntryPointsEnabled() {
-            try {
-                RegistryKey EntryPointsTree = Registry.LocalMachine.OpenSubKey(Constants.ENTRYPOINTS_REGISTRY_PATH + @"\" + Constants.MB_MAIN_ENTRYPOINT_GUID);
-                bool isEnabled = Convert.ToBoolean(this.ReadValue(EntryPointsTree, EntryPointItem.EnabledName).Value);
-                return isEnabled;
-            } catch (Exception ex) {
-                MessageBox.Show("Error detecting if Multiple EntryPoints are enabled. " + ex.Message);
-                return true;// Default to true
+        public bool MultipleEntryPointsEnabled {
+            get {
+                try {
+                    RegistryKey EntryPointsTree = Registry.LocalMachine.OpenSubKey(Constants.ENTRYPOINTS_REGISTRY_PATH + @"\" + Constants.MB_MAIN_ENTRYPOINT_GUID);
+                    bool isEnabled = Convert.ToBoolean(this.ReadValue(EntryPointsTree, EntryPointItem.EnabledName).Value);
+                    return isEnabled;
+                } catch (Exception ex) {
+                    MessageBox.Show("Error detecting if Multiple EntryPoints are enabled. " + ex.Message);
+                    return false;
+                }
             }
         }
+
+
         public MCEntryPointItem FetchEntryPoint(String EntryPointUID) {
             RegistryKey StartMenuCategory = Registry.LocalMachine.OpenSubKey(Constants.CATEGORIES_REGISTRY_PATH);
             RegistryKey EntryPointsTree = Registry.LocalMachine.OpenSubKey(Constants.ENTRYPOINTS_REGISTRY_PATH);

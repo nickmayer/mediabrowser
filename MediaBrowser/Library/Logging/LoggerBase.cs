@@ -8,7 +8,7 @@ using System.Threading;
 namespace MediaBrowser.Library.Logging
 {
 
-    public abstract partial class LoggerBase : IDisposable, ILogger
+    public abstract partial class LoggerBase : ILogger
     {
         public LoggerBase()
         {
@@ -115,16 +115,9 @@ namespace MediaBrowser.Library.Logging
         public abstract void LogMessage(LogRow row);
 
 
-
-        #region IDisposable Members
-
-        void IDisposable.Dispose()
+        public virtual void Dispose()
         {
-            // todo signal a queue flush and terminate background thread using a signal 
-
-            // since its a BG thread its not critical to implement this  
         }
 
-        #endregion
     }
 }

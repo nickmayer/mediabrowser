@@ -39,7 +39,9 @@ namespace Configurator
     public partial class MainWindow : Window
     {
         ConfigData config;
+        StartMenuRegistryEditor startMenuRegistryEditor = new StartMenuRegistryEditor();
         CheckedListBox lbEntryPoints = new CheckedListBox();
+
 
         public MainWindow()
         {
@@ -275,15 +277,15 @@ namespace Configurator
 
         private void RefreshMultipleEntriesTab()
         {
-            StartMenuRegistryEditor smre = new StartMenuRegistryEditor();
-            if (!smre.TestRegistryAccess())
+            StartMenuRegistryEditor startMenuRegistryEditor = new StartMenuRegistryEditor();
+            if (!startMenuRegistryEditor.TestRegistryAccess())
             {
                 MessageBox.Show("You do not have the proper permissions to read/write to the registry. Multiple Entry cannot be modified using this account.");
                 return;
             }
 
-            MCEntryPointItem MainEntryPoint = smre.FetchEntryPoint(Constants.MB_MAIN_ENTRYPOINT_GUID);
-            List<MediaCenterStartMenuItem> StartMenuItems = smre.GetStartMenuItems();
+            MCEntryPointItem MainEntryPoint = startMenuRegistryEditor.FetchEntryPoint(Constants.MB_MAIN_ENTRYPOINT_GUID);
+            List<MediaCenterStartMenuItem> StartMenuItems = startMenuRegistryEditor.GetStartMenuItems();
 
             try
             {
@@ -291,7 +293,7 @@ namespace Configurator
 
                 if (MainEntryPoint != null && MainEntryPoint.EntryPointUID.ToLower() == Constants.MB_MAIN_ENTRYPOINT_GUID.ToLower())
                 {
-                    if (smre.IsMultipleEntryPointsEnabled())
+                    if (startMenuRegistryEditor.MultipleEntryPointsEnabled)
                     {
                         this.rbDisableMultipleEntry.IsChecked = true;
                         this.canvasMultipleEntryMain.Visibility = Visibility.Hidden;
@@ -962,6 +964,9 @@ folder: {0}
 
         private void RefreshlbEntryPoints()
         {
+
+            if (!startMenuRegistryEditor.MultipleEntryPointsEnabled) { return; }
+
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
             Kernel.Instance.RootFolder.ValidateChildren();
 
@@ -1084,7 +1089,7 @@ folder: {0}
             {
                 if (this.lbEntryPoints.isChecked(EntryPoint))
                 {
-                    if (cbStartMenuItems.SelectedValue.ToString() == String.Empty)
+                    if (cbStartMenuItems.SelectedValue == null || cbStartMenuItems.SelectedValue.ToString() == String.Empty)
                     {
                         MessageBox.Show("Must select a Start Menu Strip before enabling");
                         return;

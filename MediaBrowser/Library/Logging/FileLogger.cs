@@ -43,5 +43,13 @@ namespace MediaBrowser.Library.Logging {
             writer.WriteLine(row.ToString());
         }
 
+        public override void Dispose() {
+
+            base.Dispose();
+
+            if (filename != null) {
+                writer.Close();
+            }
+        }
     }
 }

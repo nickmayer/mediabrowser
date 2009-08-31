@@ -169,7 +169,7 @@ namespace ITunesTrailers {
                                             break;
 
                                         if (reader.Name == "large") {
-                                            trailer.Path = ReadToValue(reader);
+                                            trailer.Path = ReadToValue(reader).Replace("movies.apple.com", "www.apple.com");
                                         }
                                     }
                                     break;

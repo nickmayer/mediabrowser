@@ -11,6 +11,7 @@ namespace MediaBrowser.Library.Logging {
         Thread loggingThread;
         Queue<Action> queue = new Queue<Action>();
         AutoResetEvent hasNewItems = new AutoResetEvent(false);
+        volatile bool terminate = false; 
         bool waiting = false;
 
         public ThreadedLogger() : base() {
@@ -21,7 +22,7 @@ namespace MediaBrowser.Library.Logging {
 
 
         void ProcessQueue() {
-            while (true) {
+            while (!terminate) {
                 waiting = true;
                 hasNewItems.WaitOne(10000,true);
                 waiting = false;
@@ -52,6 +53,13 @@ namespace MediaBrowser.Library.Logging {
             while (!waiting) {
                 Thread.Sleep(1);
             }
+        }
+
+        public override void Dispose() {
+            Flush();
+            terminate = true;
+            hasNewItems.Set();
+            base.Dispose();
         }
     }
 }

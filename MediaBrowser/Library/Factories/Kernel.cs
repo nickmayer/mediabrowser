@@ -77,11 +77,12 @@ namespace MediaBrowser.Library {
                 
                 // Its critical to have the logger initialized early so initialization 
                 //   routines can use the right logger.
-                // However we only ever want to initialize one logger. 
-                if (Logger.LoggerInstance == null) {
-                    Logger.LoggerInstance = GetDefaultLogger(config);
+                if (Logger.LoggerInstance != null) {
+                    Logger.LoggerInstance.Dispose();
                 }
-
+                    
+                Logger.LoggerInstance = GetDefaultLogger(config);
+                
                 var kernel = GetDefaultKernel(config, directives);
                 if (kernel != null) {
                     DisposeKernel(kernel);

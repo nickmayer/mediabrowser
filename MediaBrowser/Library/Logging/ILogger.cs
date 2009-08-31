@@ -1,6 +1,6 @@
 ﻿using System;
 namespace MediaBrowser.Library.Logging {
-    public interface ILogger {
+    public interface ILogger : IDisposable {
         bool Enabled { get; set; }
         void ReportError(string message, string category);
         void ReportError(string message);
@@ -15,5 +15,6 @@ namespace MediaBrowser.Library.Logging {
         void LogMessage(LogRow row);
         void Flush();
         LogSeverity Severity { get; set; }
+        void Dispose();
     }
 }
