@@ -83,6 +83,9 @@ namespace MediaBrowser.Library {
                 }
 
                 var kernel = GetDefaultKernel(config, directives);
+                if (kernel != null) {
+                    DisposeKernel(kernel);
+                }
                 Kernel.Instance = kernel;
 
                 // add the podcast home
@@ -92,6 +95,17 @@ namespace MediaBrowser.Library {
                 }
             }
         } 
+
+        private static void DisposeKernel(Kernel kernel){
+            if (kernel.PlaybackControllers != null) {
+                foreach (var playbackController in kernel.PlaybackControllers) {
+                    var disposable = playbackController as IDisposable;
+                    if (disposable != null) {
+                        disposable.Dispose();
+                    }
+                }
+            }
+        }
 
         private static string ResolveInitialFolder(string start) {
             if (start == Helper.MY_VIDEOS)

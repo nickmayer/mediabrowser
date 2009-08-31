@@ -18,6 +18,7 @@ namespace MediaBrowser.Code.ModelItems {
 
         static MethodInfo ImageFromStream = typeof(Image).GetMethod("FromStream", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic, null, new Type[] { typeof(string), typeof(Stream) }, null);
         static BackgroundProcessor<Action> ImageLoadingProcessors = new BackgroundProcessor<Action>(2, action => action(), "Image loader");
+        static BackgroundProcessor<Action> NetImageLoadingProcessors = new BackgroundProcessor<Action>(2, action => action(), "Net Image loader");
 
         Func<LibraryImage> source;
         Action afterLoad;
@@ -53,15 +54,19 @@ namespace MediaBrowser.Code.ModelItems {
 
         public bool LowPriority { get; set; }
 
+        bool queued = false; 
+
         public Image Image {
             get {
                 lock (this) {
-                    if (image == null && source != null) {
+                    if (image == null && source != null && !queued) {
                         if (LowPriority) {
-                            ImageLoadingProcessors.Enqueue(LoadImage);
+                            ImageLoadingProcessors.Enqueue(() => LoadImage(Loader.NormalLoader));
                         } else {
-                            ImageLoadingProcessors.Inject(LoadImage);
+                            ImageLoadingProcessors.Inject(() => LoadImage(Loader.NormalLoader));
                         }
+
+                        queued = true;
                     }
 
                     if (image != null) {
@@ -75,10 +80,15 @@ namespace MediaBrowser.Code.ModelItems {
             }
         }
 
-        private void LoadImage() {
+        private enum Loader {
+            SlowLoader, 
+            NormalLoader
+        }
+
+        private void LoadImage(Loader loader) {
             try {
                 lock (sync) {
-                    LoadImageImpl();
+                    LoadImageImpl(loader);
                 }
             } catch (Exception e) {
                 // this may fail in if we are unable to write a file... its not a huge problem cause we will pick it up next time around
@@ -89,40 +99,63 @@ namespace MediaBrowser.Code.ModelItems {
             }
         }
 
-        private void LoadImageImpl() {
 
-            bool sizeIsSet = Size != null && Size.Height > 0 && Size.Width > 0;
+        private void LoadImageImpl(Loader loader) {
+
+           
 
             var localImage = source();
 
             // if the image is invalid it may be null.
             if (localImage != null) {
 
-                string localPath = localImage.GetLocalImagePath();
-                if (sizeIsSet) {
-                    localPath = localImage.GetLocalImagePath(Size.Width, Size.Height);
+                if (loader == Loader.NormalLoader && !localImage.IsCached) {
+                    if (LowPriority) {
+                        NetImageLoadingProcessors.Enqueue(() => LoadImage(Loader.SlowLoader));
+                    } else {
+                        NetImageLoadingProcessors.Inject(() => LoadImage(Loader.SlowLoader));
+                    }
+                } else {
+
+                    FetchImage(localImage);
                 }
 
-                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
-
-                    Logger.ReportVerbose("Loading image : " + localPath);
-                    Image newImage = new Image("file://" + localPath);
-                    
-                    lock (this) {
-                        image = newImage;
-                        if (!sizeIsSet) {
-                            size = new Size(localImage.Width, localImage.Height);
-                        }
-                    }
-
-                    IsLoaded = true;
-
-                    if (afterLoad != null) {
-                        afterLoad();
-                    }
-                });
-
             }
+        }
+
+        private void FetchImage(LibraryImage localImage) {
+            bool sizeIsSet = Size != null && Size.Height > 0 && Size.Width > 0;
+            string localPath = localImage.GetLocalImagePath();
+            if (sizeIsSet) {
+                localPath = localImage.GetLocalImagePath(Size.Width, Size.Height);
+            }
+
+            var bytes = File.ReadAllBytes(localPath);
+            MemoryStream imageStream = new MemoryStream(bytes);
+            imageStream.Position = 0;
+            
+            Image newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
+
+
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+            {
+
+                Logger.ReportVerbose("Loading image : " + localPath);
+                // Image newImage = new Image("file://" + localPath);
+
+                lock (this) {
+                    image = newImage;
+                    if (!sizeIsSet) {
+                        size = new Size(localImage.Width, localImage.Height);
+                    }
+                }
+
+                IsLoaded = true;
+
+                if (afterLoad != null) {
+                    afterLoad();
+                }
+            });
         }
 
     }

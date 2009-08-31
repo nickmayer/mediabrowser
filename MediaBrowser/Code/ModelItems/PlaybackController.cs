@@ -18,6 +18,9 @@ namespace MediaBrowser {
     public class PlaybackController : BaseModelItem, IPlaybackController {
 
         EventHandler<PlaybackStateEventArgs> progressHandler;
+        Thread governatorThread;
+        object sync = new object();
+        bool terminate = false;
 
         // dont allow multicast events 
         public event EventHandler<PlaybackStateEventArgs> OnProgress { 
@@ -61,9 +64,9 @@ namespace MediaBrowser {
 
         public PlaybackController() {
             PlayState = PlayState.Undefined;
-            Thread t = new Thread(GovernatorThreadProc);
-            t.IsBackground = true;
-            t.Start();
+            governatorThread = new Thread(GovernatorThreadProc);
+            governatorThread.IsBackground = true;
+            governatorThread.Start();
         }
 
         bool lastWasDVD = true;
@@ -173,10 +176,15 @@ namespace MediaBrowser {
         private void GovernatorThreadProc()
         {
             try {
-                while (true) {
-                    Thread.Sleep(ForceRefreshMillisecs);
-                    if (progressHandler != null) {
-                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => AttachAndUpdateStatus());
+                while (!terminate) {
+                    lock (sync) {
+                        Monitor.Wait(sync, ForceRefreshMillisecs);
+                        if (terminate) {
+                            break;
+                        }
+                        if (progressHandler != null) {
+                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => AttachAndUpdateStatus());
+                        }
                     }
                 }
             }
@@ -305,6 +313,17 @@ namespace MediaBrowser {
             }
         }
 
-     
+
+        protected override void Dispose(bool isDisposing) {
+            if (isDisposing) {
+                lock (sync) {
+                    terminate = true;
+                    Monitor.Pulse(sync); 
+                }
+            }
+
+            base.Dispose(isDisposing);
+
+        }
     }
 }

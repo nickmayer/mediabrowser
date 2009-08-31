@@ -74,6 +74,15 @@ namespace MediaBrowser.Library.ImageManagement {
             }
         }
 
+        /// <summary>
+        /// Will return true if the image is cached locally. 
+        /// </summary>
+        public bool IsCached {
+            get {
+                return File.Exists(LocalFilename);
+            }
+        } 
+
         public int Width { get { EnsureImageSizeInitialized(); return width; } }
        
         public int Height { get { EnsureImageSizeInitialized(); return height; } }

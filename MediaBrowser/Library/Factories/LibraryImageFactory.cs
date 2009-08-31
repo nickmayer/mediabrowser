@@ -56,7 +56,7 @@ namespace MediaBrowser.Library.Factories {
                     image.Init();
 
                     // this will trigger a download and a resize
-                    image.EnsureImageSizeInitialized();
+                    // image.EnsureImageSizeInitialized();
                 } catch (Exception ex) {
                     Logger.ReportException("Failed to load image: " + path + " ", ex);
                     image = null;
