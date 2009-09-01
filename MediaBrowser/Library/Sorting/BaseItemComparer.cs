@@ -84,7 +84,7 @@ namespace MediaBrowser.Library {
             var folder = item as Folder;
 
             if (folder != null) {
-                count = folder.UnwatchedCount == 0 ? 0 : 1;
+                count = folder.UnwatchedCount;
             } else if (video != null) {
                 count = video.PlaybackStatus.WasPlayed ? 0 : 1;
             }
