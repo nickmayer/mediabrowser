@@ -88,10 +88,6 @@ goto unregister
     copy /y ".\%RegistrationName%.xml" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
     ECHO.
     
-    ECHO.Copy the start menu modifier reg file to program files
-    copy /y ".\%ModifyStartMenuItems%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
-    ECHO.
-    
     ECHO.Copy the program image to program files
     copy /y ".\Images\%ProgramImage%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
     ECHO.
@@ -106,9 +102,6 @@ goto unregister
 
     ECHO.Register the application with Windows Media Center
     %windir%\ehome\RegisterMCEApp.exe /allusers "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%RegistrationName%.xml"
-    ECHO.
-    
-    REGEDIT /S "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%ModifyStartMenuItems%"
+    ECHO %windir%\ehome\RegisterMCEApp.exe /allusers "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%RegistrationName%.xml"
 	
-
 :exit
