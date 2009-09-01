@@ -38,10 +38,8 @@ namespace Configurator
     /// </summary>
     public partial class MainWindow : Window
     {
-        ConfigData config;
-        StartMenuRegistryEditor startMenuRegistryEditor = new StartMenuRegistryEditor();
-        CheckedListBox lbEntryPoints = new CheckedListBox();
 
+        ConfigData config;
 
         public MainWindow()
         {
@@ -57,15 +55,7 @@ namespace Configurator
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
             
             InitializeComponent();
-            LoadComboBoxes();            
-            
-            tabControl1.SelectionChanged += new SelectionChangedEventHandler(tabControl1_SelectionChanged);
-            this.lbEntryPoints.CheckBoxCheckedChanged += new CheckedListBox.CheckBoxChangedHandler(lbEntryPoints_CheckBoxCheckedChanged);
-            this.lbEntryPoints.SelectionChanged += new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-
-            dpEntryPoints.Children.Add(this.lbEntryPoints);
-            this.lbEntryPoints.Width = dpEntryPoints.Width;
-            this.lbEntryPoints.Height = dpEntryPoints.Height;            
+            LoadComboBoxes();
 
             config = Kernel.Instance.ConfigData;
 
@@ -105,28 +95,11 @@ namespace Configurator
             RefreshExtenderFormats();
             RefreshDisplaySettings();
             podcastDetails(false);
-            
             SaveConfig();
 
-            PluginManager.Init();            
+            PluginManager.Init();
         }
 
-        void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.Source is TabControl)
-            {
-                if (((TabItem)e.AddedItems[0]).Header == this.multipleEntryTab.Header)
-                {
-                    this.lbEntryPoints.SelectionChanged -= new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-                    this.RefreshMultipleEntriesTab();                   
-                    this.lbEntryPoints.UnselectAll();
-                    this.lbEntryPoints.Refresh();
-                    this.canvasEntryPointDetails.Visibility = Visibility.Hidden;
-                    this.lbEntryPoints.SelectionChanged += new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-                }
-            }
-        }
-        
         private void RefreshPodcasts() {
             var podcasts = Kernel.Instance.GetItem<Folder>(config.PodcastHome);
             podcastList.Items.Clear();
@@ -273,64 +246,6 @@ namespace Configurator
             lstExternalPlayers.Items.Clear();
             foreach (ConfigData.ExternalPlayer item in config.ExternalPlayers)
                 lstExternalPlayers.Items.Add(item);
-        }        
-
-        private void RefreshMultipleEntriesTab()
-        {
-            StartMenuRegistryEditor startMenuRegistryEditor = new StartMenuRegistryEditor();
-            if (!startMenuRegistryEditor.TestRegistryAccess())
-            {
-                MessageBox.Show("You do not have the proper permissions to read/write to the registry. Multiple Entry cannot be modified using this account.");
-                return;
-            }
-
-            MCEntryPointItem MainEntryPoint = startMenuRegistryEditor.FetchEntryPoint(Constants.MB_MAIN_ENTRYPOINT_GUID);
-            List<MediaCenterStartMenuItem> StartMenuItems = startMenuRegistryEditor.GetStartMenuItems();
-
-            try
-            {
-                this.RefreshlbEntryPoints();
-
-                if (MainEntryPoint != null && MainEntryPoint.EntryPointUID.ToLower() == Constants.MB_MAIN_ENTRYPOINT_GUID.ToLower())
-                {
-                    if (startMenuRegistryEditor.MultipleEntryPointsEnabled)
-                    {
-                        this.rbDisableMultipleEntry.IsChecked = true;
-                        this.canvasMultipleEntryMain.Visibility = Visibility.Hidden;
-                    }
-                    else
-                    {
-                        this.rbEnableMultipleEntry.IsChecked = true;
-                        this.canvasMultipleEntryMain.Visibility = Visibility.Visible;
-                    }
-                }
-                else
-                {
-                    throw new Exception(Constants.MB_MAIN_ENTRYPOINT_GUID + " doesn't exist or is corrupt");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error detecting if Multiple entries is enabled/disabled. The \"Enabled\" setting in " + MainEntryPoint.EntryPointUID + " might be corrupt. " + ex.Message);
-                this.rbDisableMultipleEntry.IsChecked = true;
-                this.canvasMultipleEntryMain.Visibility = Visibility.Hidden;
-                this.rbDisableMultipleEntry.Checked += new RoutedEventHandler(rbDisableMultipleEntry_Checked);
-                this.rbEnableMultipleEntry.Checked += new RoutedEventHandler(rbEnableMultipleEntry_Checked);
-                return;
-            }            
-           
-            if (StartMenuItems != null && StartMenuItems.Count > 0)
-            {
-                this.cbStartMenuItems.Items.Clear();
-                this.cbStartMenuItems.Items.Add(new MediaCenterStartMenuItem());
-                foreach(MediaCenterStartMenuItem item in StartMenuItems)
-                {
-                    this.cbStartMenuItems.Items.Add(item);
-                }
-            }
-
-            this.rbDisableMultipleEntry.Checked += new RoutedEventHandler(rbDisableMultipleEntry_Checked);
-            this.rbEnableMultipleEntry.Checked += new RoutedEventHandler(rbEnableMultipleEntry_Checked);
         }
 
         #region Media Collection methods
@@ -408,7 +323,6 @@ folder: {0}
                 WriteVirtualFolder(dlg.SelectedFolder);
                 RefreshItems();
             }
-            this.RefreshlbEntryPoints();
         }
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
@@ -436,7 +350,6 @@ folder: {0}
                     }
                 }
             }
-            this.RefreshlbEntryPoints();
         }
 
         private void btnRemoveFolder_Click(object sender, RoutedEventArgs e)
@@ -454,8 +367,7 @@ folder: {0}
                     folderList.Items.Remove(virtualFolder);
                     infoPanel.Visibility = Visibility.Hidden;
                 }
-            }
-            this.RefreshlbEntryPoints();
+            }            
         }
 
         private void btnChangeImage_Click(object sender, RoutedEventArgs e)
@@ -532,10 +444,8 @@ folder: {0}
                 }
 
                 infoPanel.Visibility = Visibility.Visible;
-            }                        
+            }
         }
-
-       
 
         private void addExtenderFormat_Click(object sender, RoutedEventArgs e)
         {
@@ -835,7 +745,7 @@ folder: {0}
         private void hdrAdvanced_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrAdvanced);
-            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = multipleEntryTab.Visibility = Visibility.Visible;
+            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = Visibility.Visible;
         }
 
         private void ClearHeaders()
@@ -926,7 +836,6 @@ folder: {0}
                   MessageBox.Show(message, "Remove plugin", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes) {
                 PluginManager.Instance.RemovePlugin(plugin);
             }
-            this.RefreshlbEntryPoints();
         }
 
         private void addPlugin_Click(object sender, RoutedEventArgs e) {
@@ -934,7 +843,6 @@ folder: {0}
             window.Owner = this;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowDialog();
-            this.RefreshlbEntryPoints();
         }
 
         private void podcastDetails(bool display)
@@ -959,651 +867,11 @@ folder: {0}
             e.Handled = true;
         }
 
-
-        #region Multiple Entry Points        
-
-        private void RefreshlbEntryPoints()
-        {
-
-            if (!startMenuRegistryEditor.MultipleEntryPointsEnabled) { return; }
-
-            Kernel.Init(KernelLoadDirective.ShadowPlugins);
-            Kernel.Instance.RootFolder.ValidateChildren();
-
-            StartMenuRegistryEditor smre = new StartMenuRegistryEditor();
-
-            List<MCEntryPointItem> EntryPoints = smre.FetchMediaBrowserEntryPoints();
-
-            List<MediaCenterStartMenuItem> StartMenuItems = smre.GetStartMenuItems();
-
-            int SelectedIndex = this.lbEntryPoints.SelectedIndex;
-
-            this.lbEntryPoints.Clear();
-
-            foreach (var Child in Kernel.Instance.RootFolder.Children)
-            {
-                BaseItem Item = (BaseItem)Child;
-                bool EntryPointFound = false;
-
-                foreach (var ep in EntryPoints)
-                {
-                    try
-                    {
-                        if (Item.Id.ToString().ToLower() == ep.Values.Context.Value.ToLower().Trim().TrimStart('{').TrimEnd('}') || (Item.Path.ToLower() == ep.Values.Context.Value.ToLower() && Item.Path.Length > 1))
-                        {
-                            this.lbEntryPoints.Add(ep);
-
-                            bool onStartMenu = false;
-                            foreach (var startMenu in StartMenuItems)
-                            {
-                                if (startMenu.Guid.ToLower() == ep.StartMenuCategoryAppId.ToLower() && startMenu.StartMenuCategory.ToLower() == ep.StartMenuCategory.ToLower())
-                                {
-                                    onStartMenu = true;
-                                    break;
-                                }
-                            }
-
-                            if (Convert.ToBoolean(ep.Values.Enabled.Value))
-                            {
-                                if (onStartMenu)
-                                {
-                                    this.lbEntryPoints.CheckItem(ep);
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        ep.Values.Enabled.Value = "false";
-                                        smre.SaveEntryPoint(ep);
-                                    }
-                                    catch (Exception)
-                                    { }
-                                }
-                            }
-
-                            EntryPointFound = true;
-                            break;
-                        }
-                    }
-                    catch (Exception)
-                    { }
-                }
-                if (!EntryPointFound)
-                {
-                    String Context = "{" + Item.Id.ToString() + "}";
-                    if (Item.Path.Length > 1)
-                    {
-                        Context = Item.Path;
-                    }
-                    MCEntryPointItem ep = smre.CreateNewEntryPoint(Item.Name, Context);
-                    this.lbEntryPoints.Add(ep);
-                }
-            }
-
-
-            //remove unused entrypoints
-            try
-            {
-                foreach (var ep in EntryPoints)
-                {
-                    bool match = false;
-                    foreach (var item in this.lbEntryPoints.Items)
-                    {
-                        if (ep.EntryPointUID == ((MCEntryPointItem)item).EntryPointUID)
-                        {
-                            match = true;
-                            break;
-                        }
-                    }
-                    if (!match)
-                    {
-                        smre.DeleteEntryPointKey(ep.EntryPointUID);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error deleting entry point.");
-            }
-
-            //this.lbEntryPoints.Sort();
-
-            if (SelectedIndex >= 0)
-            {
-                this.lbEntryPoints.SelectedIndex = SelectedIndex;
-                this.lbEntryPoints.Refresh();
-            }
-        }
-
-        private void SaveEntryPointDetails()
-        {
-            StartMenuRegistryEditor smre = new StartMenuRegistryEditor();
-
-            MCEntryPointItem EntryPoint = (MCEntryPointItem)this.lbEntryPoints.SelectedValue;
-
-            if (EntryPoint == null)
-            {
-                MessageBox.Show("Cannot save " + EntryPoint.EntryPointUID + " as it doesn't exist in the registry or it is corrupt");
-            }
-            else
-            {
-                if (this.lbEntryPoints.isChecked(EntryPoint))
-                {
-                    if (cbStartMenuItems.SelectedValue == null || cbStartMenuItems.SelectedValue.ToString() == String.Empty)
-                    {
-                        MessageBox.Show("Must select a Start Menu Strip before enabling");
-                        return;
-                    }
-                    EntryPoint.Values.Description.Value = this.tbEntryPointDescription.Text;
-
-                    try
-                    {
-                        FileInfo file = new FileInfo(new Uri(this.imEntryPointActive.Source.ToString()).LocalPath);
-                        if (file.Exists)
-                        {
-                            EntryPoint.Values.ImageUrl.Value = file.FullName;
-                        }
-                        else
-                        {
-                            throw new Exception(String.Empty);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Active Image is not a valid file. Please select a valid file before enabling.");
-                        return;
-                    }
-
-                    try
-                    {
-                        FileInfo file = new FileInfo(new Uri(this.imEntryPointInActive.Source.ToString()).LocalPath);
-                        if (file.Exists)
-                        {
-                            EntryPoint.Values.InactiveImageUrl.Value = file.FullName;
-                        }
-                        else
-                        {
-                            throw new Exception(String.Empty);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Inactive Image is not a valid file. Please select a valid file before enabling.");
-                        return;
-                    }
-
-                    EntryPoint.StartMenuCategory = ((MediaCenterStartMenuItem)cbStartMenuItems.SelectedItem).StartMenuCategory;
-                    EntryPoint.StartMenuCategoryAppId = ((MediaCenterStartMenuItem)cbStartMenuItems.SelectedItem).Guid;
-
-                    int count = 0;
-                    try
-                    {
-                        String EntryPointsInSameMenuStrip = String.Empty;
-
-                        foreach (MCEntryPointItem item in this.lbEntryPoints.Items)
-                        {
-                            if (item.StartMenuCategoryAppId == EntryPoint.StartMenuCategoryAppId && item.Values.Enabled.Value.ToLower() == true.ToString().ToLower())
-                            {
-                                count++;
-                                EntryPointsInSameMenuStrip += item.Values.Title.Value + ",";
-                            }
-                        }
-                        EntryPointsInSameMenuStrip = EntryPointsInSameMenuStrip.TrimEnd(',');
-
-                        int maxNumItemsInMenuStrip = -1;
-                        if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)// Win 7
-                        {
-                            maxNumItemsInMenuStrip = Constants.MAX_ITEMS_IN_MENU_STRIP_WIN7;
-                        }
-                        else
-                        {
-                            maxNumItemsInMenuStrip = Constants.MAX_ITEMS_IN_MENU_STRIP_VISTA;
-                        }
-
-                        if (count >= maxNumItemsInMenuStrip)
-                        {
-                            MessageBox.Show("You can only have a maximum of " + maxNumItemsInMenuStrip.ToString() + " items in a Start Menu strip."
-                                + " The following items are currently in the Menu strip " + EntryPoint.StartMenuCategory + ": " + EntryPointsInSameMenuStrip);
-
-                            this.lbEntryPoints.UnCheckItem(EntryPoint);
-                            //this.SaveEntryPointDetails();
-                            EntryPoint.Values.Enabled.Value = false.ToString();
-                            smre.SaveEntryPoint(EntryPoint);
-                            this.RefreshlbEntryPoints();
-
-                            return;
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                    EntryPoint.Values.Enabled.Value = "true";
-                    smre.SaveEntryPoint(EntryPoint);
-                }
-                else // Don't validate because entrypoint isn't enabled
-                {
-                    try
-                    {
-                        EntryPoint.Values.Title.Value = this.tbEntryPointTitle.Content.ToString();
-                        EntryPoint.Values.Description.Value = this.tbEntryPointDescription.Text;
-                        EntryPoint.Values.Enabled.Value = this.lbEntryPoints.isChecked(EntryPoint).ToString();
-
-                        if (this.imEntryPointActive.Source != null)
-                        {
-                            EntryPoint.Values.ImageUrl.Value = this.imEntryPointActive.Source.ToString();
-                        }
-                        else
-                        {
-                            EntryPoint.Values.ImageUrl.Value = String.Empty;
-                        }
-                        if (this.imEntryPointInActive.Source != null)
-                        {
-                            EntryPoint.Values.InactiveImageUrl.Value = new Uri(this.imEntryPointInActive.Source.ToString()).LocalPath;
-                        }
-                        else
-                        {
-                            EntryPoint.Values.InactiveImageUrl.Value = String.Empty;
-                        }
-                        EntryPoint.StartMenuCategory = ((MediaCenterStartMenuItem)cbStartMenuItems.SelectedItem).StartMenuCategory;
-                        EntryPoint.StartMenuCategoryAppId = ((MediaCenterStartMenuItem)cbStartMenuItems.SelectedItem).Guid;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error saving entrypoint. Please check input parameters for errors. Error: " + ex.Message);
-                        return;
-                    }
-                    smre.SaveEntryPoint(EntryPoint);
-                }
-
-                if (cbStartMenuItems.SelectedValue.ToString().ToUpper() == "TV + Movies".ToUpper() &&
-                    Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 0)// Tv + Movies Only for Vista
-                {
-                    MessageBox.Show("Warning, Only 1 entrypoint for Media Browser can show up in the \"TV + Movies\" Menu Strip. You must create another Menu strip to add multiple entry points.");
-                    this.RefreshlbEntryPoints();
-                }
-
-            }
-        }        
-        
-        private bool areEntryPointValuesUpdated(String GUID)
-        {
-            try
-            {
-                StartMenuRegistryEditor smre = new StartMenuRegistryEditor();
-                MCEntryPointItem EntryPoint = smre.FetchEntryPoint(GUID);
-
-                if ( EntryPoint.Values.Description.Value.ToLower() != this.tbEntryPointDescription.Text.ToLower()
-                    || EntryPoint.Values.Title.Value.ToLower() != this.tbEntryPointTitle.Content.ToString().ToLower()                    
-                    || (new FileInfo(new Uri(EntryPoint.Values.ImageUrl.Value).LocalPath)).FullName.ToLower() != this.getImageSourceFilePath(this.imEntryPointActive).ToLower()
-                    || (new FileInfo(new Uri(EntryPoint.Values.InactiveImageUrl.Value).LocalPath)).FullName.ToLower() != this.getImageSourceFilePath(this.imEntryPointInActive).ToLower())
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private void UpdateEntryPointDetails(MCEntryPointItem entryPoint)
-        {
-            canvasEntryPointDetails.Visibility = Visibility.Visible;
-
-            try
-            {
-                if (entryPoint != null && entryPoint.Values != null)
-                {
-                   
-                    this.tbEntryPointTitle.Content = entryPoint.Values.Title.Value;
-                    this.tbEntryPointDescription.Text = entryPoint.Values.Description.Value;                    
-
-                    try
-                    {
-                        String ActivePath = (new FileInfo(new Uri(entryPoint.Values.ImageUrl.Value).LocalPath)).FullName;
-                        BitmapImage imageActive = new BitmapImage(new Uri(ActivePath, UriKind.Absolute));
-                        this.imEntryPointActive.Source = imageActive;
-                        imEntryPointActive.ToolTip = imageActive.UriSource.LocalPath;
-                    }
-                    catch (Exception)
-                    {
-                        BitmapImage imageActive = new BitmapImage();
-                        this.imEntryPointActive.Source = imageActive;
-                        imEntryPointActive.ToolTip = "No image selected";
-                    }
-
-                    try
-                    {
-                        String InActivePath = (new FileInfo(new Uri(entryPoint.Values.InactiveImageUrl.Value).LocalPath)).FullName;
-                        BitmapImage imageInActive = new BitmapImage(new Uri(InActivePath, UriKind.Absolute));
-                        this.imEntryPointInActive.Source = imageInActive;
-                        imEntryPointInActive.ToolTip = imageInActive.UriSource.LocalPath;
-                    }
-                    catch (Exception)
-                    {
-                        BitmapImage imageInActive = new BitmapImage();
-                        this.imEntryPointInActive.Source = imageInActive;
-                        imEntryPointInActive.ToolTip = "No image selected";
-                    }
-                    try
-                    {
-                        for (int i=0; i < cbStartMenuItems.Items.Count; i++)
-                        {
-                            if (entryPoint.StartMenuCategory.ToUpper() == ((MediaCenterStartMenuItem)cbStartMenuItems.Items[i]).StartMenuCategory.ToUpper())
-                            {
-                                cbStartMenuItems.SelectedIndex = i;
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("There is an issue with determining where entrypoint " + entryPoint.EntryPointUID + " is located in the Media center start menu. " + ex.Message);
-                    }                    
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error formating data for " + entryPoint.EntryPointUID);
-                canvasEntryPointDetails.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private String getImageSourceFilePath(Image image)
-        {
-            try
-            {
-                FileInfo file = new FileInfo(new Uri(image.Source.ToString()).LocalPath);
-                return file.FullName;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
-
-        private BitmapImage SelectImagePrompt()
-        {
-            try
-            {
-                OpenFileDialog ofd = new OpenFileDialog();
-                ofd.Filter = "Image files (*.png, *.jpg)|*.png;*.jpg|All files (*.*)|*.*";
                 
-                if (ofd.ShowDialog() == true)
-                {
-                    return new BitmapImage(new Uri(ofd.FileName, UriKind.Absolute));
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
 
-        private void canvasMultipleEntryMain_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (canvasMultipleEntryMain.Visibility == Visibility.Hidden)
-            {
-                this.canvasEntryPointDetails.Visibility = Visibility.Hidden;
-            }
-        }
 
-        private void btSaveEntryPointDetails_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {                
-                MCEntryPointItem entryPoint = ((MCEntryPointItem)this.lbEntryPoints.SelectedValue);
-                
-                if (!this.lbEntryPoints.isChecked(entryPoint))
-                {
-                    if (MessageBox.Show("Would you like to enable " + entryPoint.Values.Title.Value + "?", "Enable " + entryPoint.Values.Title.Value, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        entryPoint.Values.Enabled.Value = true.ToString();
-                        this.lbEntryPoints.CheckItem(entryPoint);
-                        this.lbEntryPoints_CheckBoxCheckedChanged(this.lbEntryPoints.SelectedValue, null);
-                    }
-                    else
-                    {
-                        this.SaveEntryPointDetails();                        
-                    }
-                }
-                else
-                {
-                    this.SaveEntryPointDetails();                    
-                }
 
-                this.RefreshlbEntryPoints();                                             
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An unhandled exception occured when trying to save entryPoint. Error:" + ex.Message);
-            }
-        }       
-
-        private void rbDisableMultipleEntry_Checked(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Are you sure you would like to disable Multiple Entry access to Media Browser?", "Disable Multiple Entry", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                if (!(new StartMenuRegistryEditor()).TestRegistryAccess())
-                {
-                    MessageBox.Show("You do not have the proper permissions to read/write to the registry.");
-                    rbEnableMultipleEntry.Checked -= new RoutedEventHandler(rbEnableMultipleEntry_Checked);
-                    rbEnableMultipleEntry.IsChecked = true;
-                    rbEnableMultipleEntry.Checked += new RoutedEventHandler(rbEnableMultipleEntry_Checked);
-                }
-                else
-                {
-                    try
-                    {
-                        (new StartMenuRegistryEditor()).DisableMultipleEntry();
-                        this.canvasMultipleEntryMain.Visibility = Visibility.Hidden;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error disabling multiple entries. " + ex.Message);
-                        this.canvasMultipleEntryMain.Visibility = Visibility.Visible;
-                    }
-                }                
-            }
-            else
-            {
-                rbEnableMultipleEntry.Checked -= new RoutedEventHandler(rbEnableMultipleEntry_Checked);
-                rbEnableMultipleEntry.IsChecked = true;
-                rbEnableMultipleEntry.Checked += new RoutedEventHandler(rbEnableMultipleEntry_Checked);
-            }
-        }
-
-        private void rbEnableMultipleEntry_Checked(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Are you sure you would like to enable Multiple Entry access to Media Browser?", "Enable Multiple Entry", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                if (!(new StartMenuRegistryEditor()).TestRegistryAccess())
-                {
-                    MessageBox.Show("You do not have the proper permissions to read/write to the registry.");
-                    rbDisableMultipleEntry.Checked -= new RoutedEventHandler(rbDisableMultipleEntry_Checked);
-                    rbDisableMultipleEntry.IsChecked = true;
-                    rbDisableMultipleEntry.Checked += new RoutedEventHandler(rbDisableMultipleEntry_Checked);
-                }
-                else
-                {
-                    try
-                    {
-                        (new StartMenuRegistryEditor()).EnableMultipleEntry();
-                        this.canvasMultipleEntryMain.Visibility = Visibility.Visible;
-                        this.lbEntryPoints.UnselectAll();                        
-                        this.lbEntryPoints.Refresh();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error enabling multiple entries. " + ex.Message);
-                        this.canvasMultipleEntryMain.Visibility = Visibility.Hidden;
-                    }
-                }
-            }
-            else
-            {
-                rbDisableMultipleEntry.Checked -= new RoutedEventHandler(rbDisableMultipleEntry_Checked);
-                rbDisableMultipleEntry.IsChecked = true;
-                rbDisableMultipleEntry.Checked += new RoutedEventHandler(rbDisableMultipleEntry_Checked);
-            }
-        }      
-
-        private void lbEntryPoints_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {            
-            if (e.RemovedItems.Count > 0)
-            {
-                if (this.areEntryPointValuesUpdated(((MCEntryPointItem)e.RemovedItems[0]).EntryPointUID))
-                {
-                    if (MessageBox.Show("You have not saved your changes. Do you want to DISCARD your changes?", "Not saved", MessageBoxButton.YesNo) == MessageBoxResult.No)
-                    {
-                        ((CheckedListBox)sender).SelectionChanged -= new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-                        ((CheckedListBox)sender).SelectedValue = e.RemovedItems[0];
-
-                        int SelectedIndex = this.lbEntryPoints.SelectedIndex;
-                        this.RefreshlbEntryPoints();
-                        this.lbEntryPoints.SelectedIndex = SelectedIndex;
-                        //this.lbEntryPoints.Refresh();
-                        ((CheckedListBox)sender).SelectionChanged += new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-                        return;
-                    }
-                    else
-                    {
-                        ((CheckedListBox)sender).SelectionChanged -= new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-                        this.RefreshlbEntryPoints();
-                        ((CheckedListBox)sender).SelectedValue = e.AddedItems[0];
-                        ((CheckedListBox)sender).SelectionChanged += new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-                    }
-                }
-            }
-
-            if(e.AddedItems.Count > 0)
-            {
-                Type t = e.AddedItems[0].GetType();
-                
-                if (e.AddedItems[0].GetType() != typeof(MCEntryPointItem))
-                {
-                    MessageBox.Show("Item in list box is not of type MCEntryPointItem.");
-                    return;
-                }
-
-                MCEntryPointItem entryPoint = (MCEntryPointItem)e.AddedItems[0];
-
-                if (entryPoint != null)
-                {
-                    UpdateEntryPointDetails(entryPoint);
-                }
-            }           
-        }                
-        
-        private void bdActiveImage_MouseDown(object sender, MouseButtonEventArgs e)
-        {            
-            BitmapImage image = this.SelectImagePrompt();
-
-            if (image != null)
-            {
-                imEntryPointActive.Source = image;
-                imEntryPointActive.ToolTip = image.UriSource.LocalPath;
-            }
-        }    
-                
-        private void bdInActiveImage_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            BitmapImage image = this.SelectImagePrompt();
-
-            if (image != null)
-            {
-                imEntryPointInActive.Source = image;
-                imEntryPointInActive.ToolTip = image.UriSource.LocalPath;
-            }
-        }
-
-        private void btEntryPointPriorityUp_Click(object sender, RoutedEventArgs e)
-        {
-            this.lbEntryPoints.SelectionChanged -= new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-            try
-            {               
-                int CurrentSelectedIndex = this.lbEntryPoints.SelectedIndex;
-                if (CurrentSelectedIndex > 0)
-                {
-                    object CurrentSelectedValue = this.lbEntryPoints.SelectedValue;
-                    this.lbEntryPoints.UnselectAll();
-
-                    StartMenuRegistryEditor smre = new StartMenuRegistryEditor();
-                    MCEntryPointItem ep1 = smre.FetchEntryPoint(((MCEntryPointItem)this.lbEntryPoints.Items[CurrentSelectedIndex]).EntryPointUID);
-                    MCEntryPointItem ep2 = smre.FetchEntryPoint(((MCEntryPointItem)this.lbEntryPoints.Items[CurrentSelectedIndex - 1]).EntryPointUID);
-                    smre.SwapTimeStamp(ep1, ep2);
-                    smre.SaveEntryPoint(ep1);
-                    smre.SaveEntryPoint(ep2);
-
-                    this.RefreshlbEntryPoints();
-                    this.lbEntryPoints.SelectedIndex = CurrentSelectedIndex-1;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error moving item up. " + ex.Message);
-            }
-            this.lbEntryPoints.SelectionChanged += new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-        }
-
-        private void btEntryPointPriorityDn_Click(object sender, RoutedEventArgs e)
-        {
-            this.lbEntryPoints.SelectionChanged -= new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-            try
-            {
-                int CurrentSelectedIndex = this.lbEntryPoints.SelectedIndex;
-                
-                if (CurrentSelectedIndex >=0 && CurrentSelectedIndex < this.lbEntryPoints.Items.Count - 1)
-                {
-                    this.lbEntryPoints.UnselectAll();
-
-                    StartMenuRegistryEditor smre = new StartMenuRegistryEditor();
-                    MCEntryPointItem ep1 = smre.FetchEntryPoint(((MCEntryPointItem)this.lbEntryPoints.Items[CurrentSelectedIndex]).EntryPointUID);
-                    MCEntryPointItem ep2 = smre.FetchEntryPoint(((MCEntryPointItem)this.lbEntryPoints.Items[CurrentSelectedIndex + 1]).EntryPointUID);
-                    smre.SwapTimeStamp(ep1, ep2);
-                    smre.SaveEntryPoint(ep1);
-                    smre.SaveEntryPoint(ep2);
-
-                    this.RefreshlbEntryPoints();
-                    this.lbEntryPoints.SelectedIndex = CurrentSelectedIndex + 1;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error moving item down. " + ex.Message);
-            }
-            this.lbEntryPoints.SelectionChanged += new SelectionChangedEventHandler(lbEntryPoints_SelectionChanged);
-        }
-  
-        private void lbEntryPoints_CheckBoxCheckedChanged(object sender, RoutedEventArgs e)
-        {
-            StartMenuRegistryEditor smre = new StartMenuRegistryEditor();
-            MCEntryPointItem EntryPoint = (MCEntryPointItem)sender;
-
-            if (this.lbEntryPoints.isChecked((MCEntryPointItem)sender))
-            {
-                this.SaveEntryPointDetails();                                
-            }
-            else
-            {
-                EntryPoint.Values.Enabled.Value = "false";
-                smre.SaveEntryPoint(EntryPoint);
-            }
-        }
-
-        #endregion
-        
     }
-
     #region FormatParser Class
     class FormatParser
     {
@@ -1646,5 +914,4 @@ folder: {0}
 
     }
     #endregion
-
 }

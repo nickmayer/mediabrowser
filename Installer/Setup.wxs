@@ -95,9 +95,6 @@
       <Component Id="ApplicationInactive.png" Guid="B555C4A3-415F-47a7-8565-C994A03F49C6" DiskId="1">
         <File Id="ApplicationInactive.png" Name="ApplicationInactive.png" Source="..\MediaBrowser\Images\ApplicationInactive.png" Checksum="no" />
       </Component>
-      <Component Id="ModifyStartMenuItems.reg" Guid="B681E2D8-70C5-11DE-9316-8F6256D89593" DiskId="1">
-        <File Id="ModifyStartMenuItems.reg" Name="ModifyStartMenuItems.reg" Source="..\MediaBrowser\ModifyStartMenuItems.reg" Checksum="no" />
-      </Component>
 		</DirectoryRef>
 
 		<!-- This is a list of features that are installed as a part of this product. In this case, there is -->
@@ -109,9 +106,8 @@
 			<ComponentRef Id="Application.png" />
       <ComponentRef Id="ApplicationInactive.png" />
       <ComponentRef Id="ApplicationShortcut" />
-      <ComponentRef Id="Registration.xml" />      
+      <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Registration7.xml" />
-      <ComponentRef Id="ModifyStartMenuItems.reg" />
     </Feature>
 
 		<!-- The media table defines the location that the MSI will look to find source files during         -->
@@ -133,23 +129,19 @@
 		<CustomAction Id="CA_RegisterMceApp_Unregister_Uninstall_Cmd" Property="CA_RegisterMceApp_Unregister_Uninstall" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration.xml]&quot;"/>
 		<CustomAction Id="CA_RegisterMceApp_Register_Cmd" Property="CA_RegisterMceApp_Register" Value="&quot;[REGISTERMCEAPP]&quot; /allusers &quot;[#Registration.xml]&quot;"/>
 		<CustomAction Id="CA_RegisterMceApp_Rollback_Cmd" Property="CA_RegisterMceApp_Rollback" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration.xml]&quot;"/>
-    
-    <CustomAction Id="CA_Add_ModifyStartMenuItems_Cmd" Property="CA_Add_ModifyStartMenuItems" Value="&quot;regedit.exe&quot; /s &quot;[#ModifyStartMenuItems.reg]&quot;"/>
-    
+
     <!-- Windows 7 -->
     <CustomAction Id="CA_RegisterMceApp_Unregister_Install_Cmd7" Property="CA_RegisterMceApp_Unregister_Install" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration7.xml]&quot;"/>
     <CustomAction Id="CA_RegisterMceApp_Unregister_Uninstall_Cmd7" Property="CA_RegisterMceApp_Unregister_Uninstall" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration7.xml]&quot;"/>
     <CustomAction Id="CA_RegisterMceApp_Register_Cmd7" Property="CA_RegisterMceApp_Register" Value="&quot;[REGISTERMCEAPP]&quot; /allusers &quot;[#Registration7.xml]&quot;"/>
     <CustomAction Id="CA_RegisterMceApp_Rollback_Cmd7" Property="CA_RegisterMceApp_Rollback" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration7.xml]&quot;"/>
-    <CustomAction Id="CA_Add_ModifyStartMenuItems_Cmd7" Property="CA_Add_ModifyStartMenuItems" Value="&quot;regedit.exe&quot; /s &quot;[#ModifyStartMenuItems.reg]&quot;"/>
+
 
     <CustomAction Id="CA_RegisterMceApp_Unregister_Install" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 		<CustomAction Id="CA_RegisterMceApp_Unregister_Uninstall" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 		<CustomAction Id="CA_RegisterMceApp_Register" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
 		<CustomAction Id="CA_RegisterMceApp_Rollback" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="rollback" Return="ignore" Impersonate="no"/>
 
-    <CustomAction Id="CA_Add_ModifyStartMenuItems" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
-    
     <CustomAction Id="CA_CheckDotNetFramework" BinaryKey="WixCA" ExeCommand="" />
     
 		<!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
@@ -179,11 +171,7 @@
 			<Custom Action="CA_RegisterMceApp_Rollback_Cmd" After="CA_RegisterMceApp_Register_Cmd">
 				<![CDATA[NOT REMOVE AND (VersionNT = 600)]]>
 			</Custom>
-      <Custom Action="CA_Add_ModifyStartMenuItems_Cmd" After="CA_RegisterMceApp_Register_Cmd">
-        <![CDATA[NOT REMOVE AND (VersionNT = 600)]]>
-      </Custom>
-      
-      
+
       <!-- Win 7 -->
       <Custom Action="CA_RegisterMceApp_Unregister_Install_Cmd7" After="CostFinalize">
         <![CDATA[(NOT REMOVE) AND (VersionNT = 601)]]>
@@ -195,10 +183,6 @@
         <![CDATA[NOT REMOVE AND (VersionNT = 601)]]>
       </Custom>
       <Custom Action="CA_RegisterMceApp_Rollback_Cmd7" After="CA_RegisterMceApp_Register_Cmd7">
-        <![CDATA[NOT REMOVE AND (VersionNT = 601)]]>
-      </Custom>
-
-      <Custom Action="CA_Add_ModifyStartMenuItems_Cmd7" After="CA_RegisterMceApp_Register_Cmd7">
         <![CDATA[NOT REMOVE AND (VersionNT = 601)]]>
       </Custom>
 
@@ -222,9 +206,6 @@
 			<Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
-      <Custom Action="CA_Add_ModifyStartMenuItems" After="CA_RegisterMceApp_Register">
-        <![CDATA[NOT REMOVE]]>
-      </Custom>
 		</InstallExecuteSequence>
 
 		<!-- The InstallUISequence table describes the order that actions will be executed when the user     -->
