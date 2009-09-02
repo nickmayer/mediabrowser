@@ -93,7 +93,7 @@
   <Image Name="DiamondOverlayDarkAll" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_overlay_all_dark" />
   <Image Name="DiamondOverlayDarkTop" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_overlay_top_dark" />
 
-  <Image Name="DiamondListBg" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_list_bg" NineGrid="15,15,15,15" />
+  <Image Name="DiamondListBg" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_list_bg" NineGrid="20,20,20,20" />
   <Image Name="DiamondListFocus" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_list_focus" NineGrid="5,5,0,5" />
   <!--PC images-->
   <Image Name="Lock" Source="resx://MediaBrowser/MediaBrowser.Resources/Lock"/>
