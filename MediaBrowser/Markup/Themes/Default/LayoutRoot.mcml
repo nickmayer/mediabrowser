@@ -99,8 +99,6 @@
           <BooleanTransformer Inverse="true"/>
         </Transformer>
       </Binding>
-      <Binding Source="[Folder.BackdropImage]" Target="[MainBG.Content]" >
-      </Binding>
       <Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <!-- Commands -->
@@ -504,12 +502,7 @@
               </Clip>
 
               <!-- Main Background -->
-              <Graphic Name="MainBG" Content="resx://MediaBrowser/MediaBrowser.Resources/Background"
-                   Margins="-50,-20,-50,-20" >
-                <LayoutInput>
-                  <AnchorLayoutInput Top="Parent,0" Bottom="Parent,1" Left="Parent,0" Right="Parent,1" />
-                </LayoutInput>
-              </Graphic>
+              <bd:Backdrop4 Name="MainBG" Visible="true" Image="[Folder.BackdropImage]" Item="[Folder]"/>
 
             </Children>
           </Clip>
@@ -657,7 +650,7 @@
       <!-- Binding for Newest Items-->
       <Binding Source="[Folder.NewestItems]" Target="[Repeater.Source]"/>
       <!-- Pagination Rules-->
-      <Changed Source="[ScrollingData.TotalPages]">
+      <Changed Source="[Folder.NewestItems]">
         <Actions>
           <Invoke Target="[ScrollingData.Home]" InvokePolicy="Synchronous" />
           <Set Target="[NavInto.Value]" Value="true" />
