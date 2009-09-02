@@ -24,7 +24,7 @@ namespace MediaBrowser
         public Vector3 OverScanScaling = new Vector3() {X=1, Y=1, Z=1};
         public Inset OverScanPadding = new Inset();
         public bool EnableTraceLogging = false;
-        public Size DefaultPosterSize = new Size() {Width=220, Height=220};
+        public Size DefaultPosterSize = new Size() {Width=220, Height=330};
         public Size GridSpacing = new Size();
         public float MaximumAspectRatioDistortion = 0.2F;
         public bool EnableTranscode360 = true;
