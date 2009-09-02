@@ -34,13 +34,17 @@
 		<Rules>
       <Binding Source="[SelectedItem]" Target="[TitleUI.Item]"/>
       <Binding Source="[SelectedItem]" Target="[DiamondInfoBox.Item]" />
-      <Binding Source="[SelectedItem.BackdropImage]" Target="[BG_Art.BG]" />
+      <!--<Binding Source="[SelectedItem.BackdropImage]" Target="[BG_Art.BG]" />-->
+      <!-- Backdrop-->
+      <Binding Target="[Backdrop.Image]" Source="[PreSelectedItem.BackdropImage]" />
+      <Binding Target="[Backdrop.Item]" Source="[PreSelectedItem]" />
       
 			<Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
 				<Conditions>
 					<Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
 				</Conditions>
 				<Actions>
+          <Set Target="[FullDetailsTimer.Enabled]" Value="true" />
 					<Invoke Target="[FullDetailsTimer.Stop]" />
 					<Invoke Target="[FullDetailsTimer.Start]" />
 					<Set Target="[SelectedItem]"  Value="[BlankItem]" />
@@ -111,7 +115,7 @@
 
           <Graphic Content="image://i:DiamondListBg">
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0.2"  Bottom="Parent, 0.9" Left="MyItems,1,120" Right="Parent,1,-30"/>
+              <AnchorLayoutInput Top="Parent,0.2"  Bottom="Parent, 0.9" Left="MyItems,1,120" Right="Parent,1,-25"/>
             </LayoutInput>
           </Graphic>
 
@@ -130,13 +134,10 @@
 					</Panel>-->
 
           <!-- List Counter -->
-          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" >
-            <LayoutInput>
-              <AnchorLayoutInput Left="Parent,.9" Bottom="Parent,1,-15"  />
-            </LayoutInput>
+          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
             <Children>
-              <Text Name="List_Counter" Content="0" Color="Black" Font="font://f:CV_CounterFont" />
-              <Text Name="List_Total" Content="0" Color="DarkSlateGray" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Total" Content="0" Color="White" Font="font://f:CV_CounterFont" />
             </Children>
           </Panel>
 
@@ -156,12 +157,9 @@
           <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
 
           <!-- Backdrop -->
-          <dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />
-					<!--<bd:Backdrop2 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Folder.BackdropImage]">
-						<LayoutInput>
-							<FormLayoutInput Top="Parent,0,-20" Bottom="Parent,1,10" Right="Parent,1,50"/>
-						</LayoutInput>
-					</bd:Backdrop2>-->
+          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[PreSelectedItem.BackdropImage]" Item="[PreSelectedItem]"/>
+          <!--<dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />-->
+                    
 
 				</Children>
 

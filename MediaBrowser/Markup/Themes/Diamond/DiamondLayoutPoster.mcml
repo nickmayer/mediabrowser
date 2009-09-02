@@ -31,7 +31,7 @@
 		<Rules>
       <!-- Title and Year -->
       <Binding Source="[Folder.SelectedChild]" Target="[TitleUI.Item]"/>
-      <Binding Source="[Folder.SelectedChild.BackdropImage]" Target="[BG_Art.BG]" />
+      <!--<Binding Source="[Folder.SelectedChild.BackdropImage]" Target="[BG_Art.BG]" />-->
 			<!-- Counter Bindings -->
 			<Binding Source="[Folder.SelectedChildIndex!cor:String]" Transformer="[Add1]" Target="[List_Counter.Content]" />
 			<Binding Source="[Folder.Children.Count]" Target="[List_Total.Content]" >
@@ -46,32 +46,32 @@
 				<Children>
           <!-- Title Details -->
           <dtb:DiamondTitleUI Name="TitleUI" Item="[Folder.SelectedChild]" LayoutInput="global://dtb:LI_Title" />
-          
-					<ps:PosterScroller Name="ItemPanel" Application="[Application]" Folder="[Folder]"
-                             TopLabelFont="font://f:PV_PosterTopLabelFont"
-                             LabelFont="font://f:PV_PosterLabelFont"
-                             UnwatchedCountFont="font://f:PV_UnwatchedCountFont">
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,.0" Top="Parent,0,80" Bottom="Parent,1,-80" Right="Parent,1"/>
-						</LayoutInput>
-					</ps:PosterScroller>
-
+                    
 					<!-- List Counter -->
-          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" >
-            <LayoutInput>
-              <AnchorLayoutInput Left="Parent,.9" Bottom="Parent,1,-15"  />
-            </LayoutInput>
+          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
             <Children>
-              <Text Name="List_Counter" Content="0" Color="Black" Font="font://f:CV_CounterFont" />
-              <Text Name="List_Total" Content="0" Color="DarkSlateGray" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Total" Content="0" Color="White" Font="font://f:CV_CounterFont" />
             </Children>
           </Panel>
 
+          <!-- Top Clip -->
+          <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
+          
+          <!-- Posert Scroller -->
+          <ps:PosterScroller Name="ItemPanel" Application="[Application]" Folder="[Folder]"
+                             TopLabelFont="font://f:PV_PosterTopLabelFont"
+                             LabelFont="font://f:PV_PosterLabelFont"
+                             UnwatchedCountFont="font://f:PV_UnwatchedCountFont">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,.0" Top="Parent,0,20" Bottom="Parent,1,-20" Right="Parent,1"/>
+            </LayoutInput>
+          </ps:PosterScroller>
+          
           <!-- Bottom Clip -->
           <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
 
-          <!-- Top Clip -->
-          <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
+          
           
 					<!-- Backdrop -->
           <dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />

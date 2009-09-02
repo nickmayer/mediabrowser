@@ -44,10 +44,10 @@
         </Options>
       </Choice>
       <Color Name="FilterColor" Color="color://s:FilterColor" />
-      <Color Name="AttributeColor" Color="Gray" />
-      <Color Name="ValueColor" Color="190,190,190" />
-      <FormLayoutInput Name="FullBG" Left="Parent,0,20" Right="Parent,1,-20" Top="Parent,0.2,-15" Bottom="Parent,1,-75"/>
-      <FormLayoutInput Name="SmallBG" Left="Parent,0,20" Right="Parent,0,250" Top="Parent,0.2,-15" Bottom="Parent,0.2,350"/>
+      <Color Name="AttributeColor" Color="190,190,190" />
+      <Color Name="ValueColor" Color="White" />
+      <FormLayoutInput Name="FullBG" Left="Parent,0,5" Right="Parent,1,-5" Top="Parent,0.15,-15" Bottom="Parent,1,-75"/>
+      <FormLayoutInput Name="SmallBG" Left="Parent,0,5" Right="Parent,0,250" Top="Parent,0.15,-15" Bottom="Parent,0.15,350"/>
 
     </Locals>
 
@@ -124,6 +124,15 @@
           <Set Target="[CmdButtons.Navigation]" Value="ContainAll" />
         </Actions>
       </Changed>
+
+      <!-- Hide focus frame image -->
+      <Condition Source="[Application.Config.HideFocusFrame]" ConditionOp="Equals" SourceValue="true">
+        <Actions>
+          <Set Target="[CoverOutline.Content]" Value="image://i:BlankImage" />
+          <Set Target="[Preview.Margins]" Value="0,0,0,0" />
+        </Actions>
+      </Condition>
+      
     </Rules>
 
     <Content>
@@ -158,7 +167,7 @@
               <me:CommandButtons Application="[Application]" Item="[Item]" FilterColor="[FilterColor]"
                                  Name="CmdButtons" DisplayMax="[DisplayMax]" Alpha="global://s:FilterAlpha" FocusOrder="0">
                 <LayoutInput>
-                  <AnchorLayoutInput Left="Parent,0,20" Top="Parent,0.2,25" />
+                  <AnchorLayoutInput Left="Parent,0,20" Top="Parent,0.15" />
                 </LayoutInput>
               </me:CommandButtons>
 
@@ -205,7 +214,7 @@
               <!-- Column 2 (IMDB, Director, Rating, Runtime)-->
               <Panel Name="CommonInfoPanel" Layout="VerticalFlow" Margins="0,0,0,0" >
                 <LayoutInput>
-                  <AnchorLayoutInput Left="Parent,0.48" Right="Parent,1,-30" Top="Parent,0.2"/>
+                  <AnchorLayoutInput Left="Parent,0.48" Right="Parent,1,-30" Top="Parent,0.15"/>
                 </LayoutInput>
                 <Children>
 
@@ -307,7 +316,7 @@
               <!-- Thumbnail Poster -->
               <Graphic Name="PosterPanel" SizingPolicy="SizeToChildren" Layout="Anchor">
                 <LayoutInput>
-                  <AnchorLayoutInput Top="Parent,0.19" Left="Parent,0.2,15" />
+                  <AnchorLayoutInput Top="Parent,0.15" Left="Parent,0.17" Right="Parent, 0.47" />
                 </LayoutInput>
                 <Children>
                   <Graphic Name="CoverOutline" Content="image://i:PosterFrame">
@@ -315,19 +324,27 @@
                       <AnchorLayoutInput Top="Preview,0" Bottom="Preview,1" Left="Preview,0" Right="Preview,1"/>
                     </LayoutInput>
                   </Graphic>
-                  <Graphic Name="Preview" MaintainAspectRatio="true" MaximumSize="280,500" Margins="25,25,25,30" />
+                  <Graphic Name="Preview" MaintainAspectRatio="true" Margins="25,25,25,30" />
                 </Children>
               </Graphic>
-              
 
+              <!--<ColorFill Name="DiamondBG" Content="Black" Alpha="0.7">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0,-25" Right="Parent,1,25" Top="Parent,0.15,-15" Bottom="Parent,1,-75"/>
+                </LayoutInput>
+              </ColorFill>-->
+              
               <Graphic Name="DiamondBG" Content="image://i:DiamondListBg">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,20" Right="Parent,1,-20" Top="Parent,0.2,-15" Bottom="Parent,1,-75"/>
+                  <FormLayoutInput Left="Parent,0,5" Right="Parent,1,-5" Top="Parent,0.15,-15" Bottom="Parent,1,-75"/>
                 </LayoutInput>
               </Graphic>
 
               <!-- Top Clip -->
               <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
+
+              <!-- Bottom Clip -->
+              <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
 
               <!-- Movie Backdrop -->
               <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]">
@@ -448,7 +465,7 @@
             </LayoutInput>
             <Children>
               <ColorFill Content="Transparent" Layout="VerticalFlow"
-                         Padding="0,10,100,10" Margins="20,0,0,0" Navigation="RememberFocus" >
+                         Padding="0,10,100,10" Navigation="RememberFocus" >
                 <Children>
                   <dtb:DiamondImageButton Name="ResumeMovieButton" Text="RESUME" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
                   <dtb:DiamondImageButton Name="PlayMovieButton" Text="PLAY" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />

@@ -33,12 +33,16 @@
       <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
       <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
-      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.4" Bottom="Parent, .95" />
+      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.25" Bottom="Parent, .95" />
       <AnchorLayoutInput Name="AnchorCustom" Horizontal="Fill" Top="Parent, 0,-50" Bottom="Parent, 1, 250" />
     </Locals>
 
     <Rules>
-      <Binding Source="[PreSelectedItem.BackdropImage]" Target="[BG_Art.BG]" />
+      <!--<Binding Source="[PreSelectedItem.BackdropImage]" Target="[BG_Art.BG]" />-->
+      <!-- Backdrop-->
+      <Binding Target="[Backdrop.Image]" Source="[PreSelectedItem.BackdropImage]" />
+      <Binding Target="[Backdrop.Item]" Source="[PreSelectedItem]" />
+      
       <Binding Source="[PreSelectedItem]" Target="[TitleUI.Item]"/>
       
       <Condition Source="[UseCustomAnchor]" ConditionOp="Equals" SourceValue="false"
@@ -51,6 +55,7 @@
           <Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
         </Conditions>
         <Actions>
+          <Set Target="[FullDetailsTimer.Enabled]" Value="true"/>
           <Invoke Target="[FullDetailsTimer.Stop]" />
           <Invoke Target="[FullDetailsTimer.Start]" />
           <Set Target="[SelectedItem]"  Value="[BlankItem]" />
@@ -99,20 +104,17 @@
           <dtb:DiamondTitleUI Name="TitleUI" Item="[SelectedItem]" LayoutInput="global://dtb:LI_Title" />
 
           <!-- List Counter -->
-          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" >
-            <LayoutInput>
-              <AnchorLayoutInput Left="Parent,.9" Bottom="Parent,1,-15"  />
-            </LayoutInput>
+          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
             <Children>
-              <Text Name="List_Counter" Content="0" Color="Black" Font="font://f:CV_CounterFont" />
-              <Text Name="List_Total" Content="0" Color="DarkSlateGray" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Total" Content="0" Color="White" Font="font://f:CV_CounterFont" />
             </Children>
           </Panel>
 
           <!-- Coverflow Scroller -->
           <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">            
             <LayoutInput>
-              <AnchorLayoutInput Horizontal="Fill" Top="Parent, .75" Bottom="Parent, 1, 125" />
+              <AnchorLayoutInput Horizontal="Fill" Top="Parent, .55" Bottom="Parent, 1, 125" />
             </LayoutInput>
           </me:CoverflowScroller>
           
@@ -123,7 +125,8 @@
           <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
           
           <!-- Backdrop -->
-          <dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />
+          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[PreSelectedItem.BackdropImage]" Item="[PreSelectedItem]"/>
+          <!--<dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />-->
 
         </Children>
       </Panel>
@@ -142,7 +145,7 @@
       <ScrollingData Name="SD" LockedAlignment="0.5" LockedPosition="0.5"/>
       <IntRangedValue Name="SelectRepeaterIndex"/>
       <GridLayout Name="MyLayout" Orientation="Horizontal" AllowWrap="true" 
-                  Spacing="-60,0" Repeat="WhenTooBig" RepeatGap="-60" Rows="1" MinorAlignment="Center" />
+                  Spacing="-30,0" Repeat="WhenTooBig" RepeatGap="-60" Rows="1" MinorAlignment="Center" />
 
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
@@ -274,11 +277,23 @@
           <Equality Source="[Folder.ActualThumbSize.Value.Width]" ConditionOp="LessThan" Value="145"/>
         </Conditions>
         <Actions>
+          <Set Target="[MyLayout.Spacing.Width]" Value="[Folder.ActualThumbSize.Value.Width]">
+            <Transformer>
+              <MathTransformer Multiply="0.5"/>
+            </Transformer>
+          </Set>
+          <Set Target="[MyLayout.RepeatGap]" Value="[Folder.ActualThumbSize.Value.Width]">
+            <Transformer>
+              <MathTransformer Multiply="0.5"/>
+            </Transformer>
+          </Set>
+        </Actions>
+        <!--<Actions>
           <Set Target="[MyLayout.Spacing]" Value="0,0" />
         </Actions>
         <Actions>
           <Set Target="[MyLayout.RepeatGap]" Value="0" />
-        </Actions>
+        </Actions>-->
       </Rule>
 
 
@@ -414,7 +429,7 @@
       <!-- Selected state, true if item last had focus -->
       <Condition Source="[ParentItem.SelectedChildIndex]" ConditionOp="Equals" SourceValue="[ItemIndex.SourceValue]">
         <Actions>
-          <Set Target="[Main.Scale]" Value="1.2,1.2,1"/>
+          <Set Target="[Main.Scale]" Value="1.4,1.4,1"/>
           <Set Target="[Main.Rotation]" Value="0deg;0,1,0" />
           <Set Target="[CoverOutline.Content]" Value="[FocusImage]" />
           <Set Target="[ConstraintPanel1.ColorFilter]" Value="White" />
@@ -452,7 +467,27 @@
         </Actions>
       </Changed>
 
-
+      <!-- Cover width below 145px -->
+      <!--<Rule>
+        <Conditions>
+          <Equality Source="[ParentItem.ActualThumbSize.Value.Width]" ConditionOp="GreaterThan" Value="145"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Main.Margins.Left]" Value="0" />
+          <Set Target="[Main.Margins.Right]" Value="0" />
+        </Actions>
+      </Rule>
+      --><!-- Cover width below 145px --><!--
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentItem.ActualThumbSize.Value.Width]" ConditionOp="LessThan" Value="145"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Main.Margins.Left]" Value="60" />
+          <Set Target="[Main.Margins.Right]" Value="60" />
+        </Actions>
+      </Rule>-->
+      
       <!-- Focus and non-focused states. -->
       <!--
 			<Condition Source="[Input.KeyFocus]" ConditionOp="Equals" SourceValue="true">
