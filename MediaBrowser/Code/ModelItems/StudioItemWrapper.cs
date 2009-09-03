@@ -11,6 +11,7 @@ namespace MediaBrowser.Library
     {
         public Studio Studio { get; private set; }
         private FolderModel parent;
+        Item item = null;
 
         public StudioItemWrapper(Studio studio, FolderModel parent)
         {
@@ -22,7 +23,11 @@ namespace MediaBrowser.Library
         {
             get
             {
-                return null;
+                if (item != null) return item;
+
+                item = ItemFactory.Instance.Create(Studio);
+                item.PhysicalParent = parent;
+                return item;
             }
         }
     }

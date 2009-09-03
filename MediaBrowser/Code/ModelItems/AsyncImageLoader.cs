@@ -25,6 +25,7 @@ namespace MediaBrowser.Code.ModelItems {
         Image image = null;
         Image defaultImage = null;
         Microsoft.MediaCenter.UI.Size size;
+        bool doneProcessing = false;
         object sync = new object();
 
         public Microsoft.MediaCenter.UI.Size Size {
@@ -73,8 +74,11 @@ namespace MediaBrowser.Code.ModelItems {
                         return image;
                     }
                     else {
-                        // fall back
-                        return defaultImage;
+                        if (doneProcessing) {
+                            return defaultImage;
+                        } else {
+                            return null;
+                        }
                     }
                 }
             }
@@ -102,8 +106,6 @@ namespace MediaBrowser.Code.ModelItems {
 
         private void LoadImageImpl(Loader loader) {
 
-           
-
             var localImage = source();
 
             // if the image is invalid it may be null.
@@ -118,8 +120,10 @@ namespace MediaBrowser.Code.ModelItems {
                 } else {
 
                     FetchImage(localImage);
+                    doneProcessing = true;
                 }
-
+            } else {
+                doneProcessing = true;
             }
         }
 
@@ -135,7 +139,6 @@ namespace MediaBrowser.Code.ModelItems {
             imageStream.Position = 0;
             
             Image newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
-
 
             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
             {

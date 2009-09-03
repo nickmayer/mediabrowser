@@ -11,7 +11,6 @@ set AssemblyName=MediaBrowser
 set RegistrationName=Registration
 set ProgramImage=Application.png
 set ProgramInActiveImage=ApplicationInactive.png
-set ModifyStartMenuItems=ModifyStartMenuItems.reg
 
 ver | find "6.1." > nul
 	if %ERRORLEVEL% == 0 set RegistrationName=Registration7
@@ -91,7 +90,6 @@ goto unregister
     ECHO.Copy the program image to program files
     copy /y ".\Images\%ProgramImage%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
     ECHO.
-    
     ECHO.Copy the program image to program files
     copy /y ".\Images\%ProgramInActiveImage%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
     ECHO.

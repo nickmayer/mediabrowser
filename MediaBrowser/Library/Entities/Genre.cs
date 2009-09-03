@@ -7,22 +7,23 @@ using MediaBrowser.Library.Entities.Attributes;
 using MediaBrowser.Library.Extensions;
 
 namespace MediaBrowser.Library.Entities {
-    public class Studio : BaseItem {
-          public static Guid GetStudioId(string name) {
-            return ("studio" + name.Trim()).GetMD5();
+    public class Genre : BaseItem {
+
+        public static Guid GetGenreId(string name) {
+            return ("genre" + name.Trim()).GetMD5();
         }
 
-        public static Studio GetStudio(string name) {
-            Guid id = GetStudioId(name);
-            var studio = Kernel.Instance.ItemRepository.RetrieveItem(id) as Studio;
-            if (studio == null || studio.Name == null) {
-                studio = new Studio(id, name.Trim());
-                Kernel.Instance.ItemRepository.SaveItem(studio);
+        public static Genre GetGenre(string name) {
+            Guid id = GetGenreId(name);
+            var genre = Kernel.Instance.ItemRepository.RetrieveItem(id) as Genre;
+            if (genre == null || genre.Name == null) {
+                genre = new Genre(id, name.Trim());
+                Kernel.Instance.ItemRepository.SaveItem(genre);
             }
-            return studio;
+            return genre;
         }
 
-        public Studio() {
+        public Genre() {
         }
 
         [Persist]
@@ -38,7 +39,7 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        public Studio(Guid id, string name) {
+        public Genre(Guid id, string name) {
             this.name = name;
             this.Id = id;
         }

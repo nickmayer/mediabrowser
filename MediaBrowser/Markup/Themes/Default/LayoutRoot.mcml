@@ -82,7 +82,7 @@
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
 
       <!-- Bindings -->
-      <Binding Source="[Application.IsEntryPointMode]" Target="[ConfigBtn.Visible]"/>
+      <Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>
       <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
       <Binding Source="[SelectedItem.PreferredImage]" Target="[CurrentPoster.Content]"/>
       <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />

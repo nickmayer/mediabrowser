@@ -29,11 +29,11 @@ namespace MediaBrowser.Library.Entities {
         #region Images
 
         [Persist]
-        public string PrimaryImagePath { get; set; }
+        public virtual string PrimaryImagePath { get; set; }
         [Persist]
-        public string SecondaryImagePath { get; set; }
+        public virtual string SecondaryImagePath { get; set; }
         [Persist]
-        public string BannerImagePath { get; set; }
+        public virtual string BannerImagePath { get; set; }
 
         public string BackdropImagePath {
             get {
@@ -55,7 +55,7 @@ namespace MediaBrowser.Library.Entities {
         }
 
         [Persist]
-        public List<string> BackdropImagePaths { get; set; }
+        public virtual List<string> BackdropImagePaths { get; set; }
 
 
         public LibraryImage PrimaryImage {
@@ -154,7 +154,7 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         string sortName;
 
-        public string SortName { 
+        public virtual string SortName { 
             get {
                 return sortName ?? GuessedSortName;
             }

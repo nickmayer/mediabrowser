@@ -264,27 +264,6 @@ namespace MediaBrowser
         // Entry point for the app
         public void GoToMenu()
         {
-            String entryPointPath = String.Empty;
-            try
-            {
-                if (Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.EntryPointInfo.ContainsKey("context"))
-                {
-                    entryPointPath = Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.EntryPointInfo["context"].ToString().Trim().ToLower();
-                    
-                    entryPointPath = entryPointPath.Replace("{", String.Empty);
-                    entryPointPath = entryPointPath.Replace("}", String.Empty);
-                    entryPointPath = entryPointPath.Trim();
-                }
-                else
-                {
-                    entryPointPath = String.Empty;
-                }
-            }
-            catch (Exception ex)
-            {
-                entryPointPath = String.Empty;
-            }
-
             try
             {
                 if (Config.IsFirstRun)
@@ -318,60 +297,8 @@ namespace MediaBrowser
                             }
                         }
                     });
-                    
-                    BaseItem EntryPoint = this.RootFolder;
-                    
-                    try
-                    {
-                        if (entryPointPath.Length > 0 && entryPointPath.ToLower() != "configMB".ToLower())
-                        {
-                            BaseItem FoundChild = null;
-                            // Find entry point path in root folder                            
-                            foreach (var item in this.RootFolder.Children)
-                            {
-                                try
-                                {                                    
-                                    String itemGUID = item.Id.ToString();
-                                    
-                                    if (entryPointPath.ToLower() == item.Path.ToLower() || entryPointPath.ToLower() == itemGUID.ToLower())
-                                    {
-                                        FoundChild = item;
-                                        break;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    FoundChild = null;
-                                }
-                            }
 
-                            if (FoundChild != null)
-                            {
-                                EntryPoint = FoundChild;
-                            }
-                            else
-                            {
-                                throw new Exception("Couldn't find folder in RootFolder.Children");
-                            }
-                        }                        
-                    }
-                    catch (Exception ex)
-                    {
-                        String msg = "Error opening GUID: " + entryPointPath;
-                        Logger.ReportException(msg,ex);
-                        EntryPoint = this.RootFolder;
-                        Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(msg, "Entry Point error", DialogButtons.Ok, 60, true);
-                    }
-
-                    if (entryPointPath.ToLower() == "configMB".ToLower())
-                    {                        
-                        OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
-                        OpenConfiguration(true);
-                    }
-                    else
-                    {                        
-                        OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPoint));
-                    }                
+                    OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
                 }
             }
             catch (Exception e)
@@ -741,13 +668,6 @@ namespace MediaBrowser
             get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
         }
 
-        public bool IsEntryPointMode
-        {
-            get
-            {
-                return true;
-            }
-        }
 
         private Information _information = new Information();
         public Information Information

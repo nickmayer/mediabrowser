@@ -519,7 +519,8 @@
     <None Include="Images\ButtonSelection2.png" />
     <Content Include="Images\folder.png" />
     <None Include="Images\lines.png" />
-    <Content Include="ModifyStartMenuItems.reg" />
+    <Compile Include="Library\Entities\Genre.cs" />
+    <Compile Include="Library\Entities\Year.cs" />
     <Compile Include="Library\Factories\BaseItemFactoryGeneric.cs">
       <DependentUpon>BaseItemFactory.cs</DependentUpon>
     </Compile>

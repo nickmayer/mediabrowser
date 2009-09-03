@@ -11,16 +11,68 @@ using System.Text;
 namespace MediaBrowser.Library.Entities {
     public class Index : Folder {
 
-        // if we are not newable the serializer can not serialize us
-        public Index() {
+        BaseItem shadowItem;
+
+        public override string Name {
+            get {
+                return shadowItem.Name;
+            }
+            set {
+                shadowItem.Name = value;
+            }
+        }
+
+        public override List<string> BackdropImagePaths {
+            get {
+                return shadowItem.BackdropImagePaths;
+            }
+            set {
+                shadowItem.BackdropImagePaths = value;
+            }
+        }
+
+        public override string BannerImagePath {
+            get {
+                return shadowItem.BannerImagePath;
+            }
+            set {
+                shadowItem.BannerImagePath = value;
+            }
+        }
+
+        public override string PrimaryImagePath {
+            get {
+                return shadowItem.PrimaryImagePath;
+            }
+            set {
+                shadowItem.PrimaryImagePath = value;
+            }
+        }
+
+        public override string SecondaryImagePath {
+            get {
+                return shadowItem.SecondaryImagePath;
+            }
+            set {
+                shadowItem.SecondaryImagePath = value;
+            }
+        }
+
+        public override string SortName {
+            get {
+                return shadowItem.SortName;
+            }
+            set {
+                shadowItem.SortName = value;
+            }
         }
 
         List<BaseItem> children;
 
-        public Index(string name, List<BaseItem> children) {
+        public Index(BaseItem item, List<BaseItem> children) {
             this.children = children;
-            this.Name = name;
             this.Id = Guid.NewGuid();
+            this.shadowItem = item;
         }
 
         protected override List<BaseItem> ActualChildren { get { return children; } }
@@ -31,6 +83,10 @@ namespace MediaBrowser.Library.Entities {
 
         public override void EnsureChildrenLoaded() {
             // do nothing
+        }
+
+        public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options) {
+            return shadowItem.RefreshMetadata(options);
         }
 
     }

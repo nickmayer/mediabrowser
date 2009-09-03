@@ -17,18 +17,13 @@ namespace MediaBrowser.Library.Entities {
 
         public Person Person {
             get {
-                var person = Kernel.Instance.ItemRepository.RetrieveItem(PersonId) as Person;
-                if (person == null || person.Name == null) {
-                    person = new Person(PersonId, Name.Trim());
-                    Kernel.Instance.ItemRepository.SaveItem(person);
-                }
-                return person;
+                return Person.GetPerson(Name);
             }
         }
 
         public Guid PersonId {
             get {
-                return ("person" + Name.Trim()).GetMD5();
+                return Person.GetPersonId(Name);
             }
         }
 

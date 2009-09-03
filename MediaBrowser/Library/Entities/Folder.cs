@@ -23,7 +23,8 @@ namespace MediaBrowser.Library.Entities {
         SortOrder sortOrder = SortOrder.Name;
         object validateChildrenLock = new object();
 
-        public Folder() : base() {
+        public Folder()
+            : base() {
             children = new Lazy<List<BaseItem>>(() => GetChildren(true), () => OnChildrenChanged(null));
         }
 
@@ -56,8 +57,7 @@ namespace MediaBrowser.Library.Entities {
         public IList<BaseItem> Children {
             get {
                 // return a clone
-                lock (ActualChildren)
-                {
+                lock (ActualChildren) {
                     return ActualChildren.ToList();
                 }
             }
@@ -124,58 +124,85 @@ namespace MediaBrowser.Library.Entities {
                     items.Add(item);
                 }
             }
-            return new Index(name, items);
+            return new Index(this, items);
+        }
+
+        class BaseItemIndexComparer : IEqualityComparer<BaseItem> {
+
+            public bool Equals(BaseItem x, BaseItem y) {
+                return x.Name.Equals(y.Name);
+            }
+
+            public int GetHashCode(BaseItem item) {
+                return item.Name.GetHashCode();
+            }
+        }
+
+        private IEnumerable<BaseItem> MapStringsToBaseItems(IEnumerable<string> strings, Func<string, BaseItem> func) {
+            if (strings == null) return null;
+
+            return strings
+                .Where(s => !string.IsNullOrEmpty(s))
+                .Distinct()
+                .Select(s => func(s));
         }
 
         public IList<Index> IndexBy(IndexType indexType) {
 
             if (indexType == IndexType.None) throw new ArgumentException("Index type should not be none!");
-
-            Func<Show, IEnumerable<string>> indexingFunction = null;
+            Func<Show, IEnumerable<BaseItem>> indexingFunction = null;
 
             switch (indexType) {
                 case IndexType.Actor:
                     indexingFunction = show =>
-                        show.Actors == null ? null : show.Actors.Select(a => a.Name);
+                        show.Actors == null ? null : show.Actors.Select(a => (BaseItem)a.Person);
                     break;
-                case IndexType.Genre:
-                    indexingFunction = show => show.Genres;
-                    break;
+
                 case IndexType.Director:
-                    indexingFunction = show => show.Directors;
+                    indexingFunction = show => MapStringsToBaseItems(show.Directors, d => Person.GetPerson(d));
                     break;
+
+
+                case IndexType.Genre:
+                    indexingFunction = show => MapStringsToBaseItems(show.Genres, g => Genre.GetGenre(g));
+                    break;
+
                 case IndexType.Year:
                     indexingFunction = show =>
-                        show.ProductionYear == null ? null : new string[] { show.ProductionYear.ToString() };
+                        show.ProductionYear == null ? null : new BaseItem[] { Year.GetYear(show.ProductionYear.ToString()) };
                     break;
                 case IndexType.Studio:
-                    indexingFunction = show => show.Studios;
+                    indexingFunction = show => MapStringsToBaseItems(show.Studios, s => Studio.GetStudio(s));
                     break;
+
                 default:
                     break;
             }
 
-            var index = new Dictionary<string, List<BaseItem>>();
+            BaseItem unknown = new BaseItem();
+            unknown.Name = "<Unknown>";
+            unknown.Id = new Guid("{DA12CDDE-7F0B-4376-9E37-D2CAB4B84BF6}");
+
+            var index = new Dictionary<BaseItem, List<BaseItem>>(new BaseItemIndexComparer());
             foreach (var item in RecursiveChildren) {
                 Show show = item as Show;
-                IEnumerable<string> subIndex = null;
+                IEnumerable<BaseItem> subIndex = null;
                 if (show != null) {
                     subIndex = indexingFunction(show);
                 }
                 bool added = false;
 
                 if (subIndex != null) {
-                    foreach (var str in subIndex) {
-                        var cleanString = str.Trim();
-                        if (cleanString.Length > 0) {
-                            added = true;
-                            AddItemToIndex(index, item, cleanString);
-                        }
+                    foreach (BaseItem innerItem in subIndex) {
+                        AddItemToIndex(index, innerItem, item);
+                        added = true;
                     }
                 }
-                if (!added) {
-                    AddItemToIndex(index, item, "<Unknown>");
+
+                if (!added && item is Show) {
+                    AddItemToIndex(index, unknown, item);
                 }
+
             }
 
             List<Index> sortedIndex = new List<Index>();
@@ -206,10 +233,9 @@ namespace MediaBrowser.Library.Entities {
                     yield return item;
                     var folder = item as Folder;
                     if (folder != null) {
-                    //leave out protected folders (except the ones we have entered)
+                        //leave out protected folders (except the ones we have entered)
                         if (folder.ParentalAllowed || Config.Instance.ProtectedFolderAllowed(folder)) {
-                            foreach (var subitem in folder.RecursiveChildren)
-                            {
+                            foreach (var subitem in folder.RecursiveChildren) {
                                 yield return subitem;
                             }
                         }
@@ -286,15 +312,13 @@ namespace MediaBrowser.Library.Entities {
             }
 
             // this is a rare concurrency bug workaround - which I already fixed (it protects against regressions)
-            if (!changed && childrenCopy.Count != validChildren.Count)
-            {
+            if (!changed && childrenCopy.Count != validChildren.Count) {
                 //Debug.Assert(false,"For some reason we have duplicate items in our folder, fixing this up!");
                 childrenCopy = childrenCopy
                     .Distinct(i => i.Id)
                     .ToList();
 
-                lock (ActualChildren)
-                {
+                lock (ActualChildren) {
                     ActualChildren.Clear();
                     ActualChildren.AddRange(childrenCopy);
                 }
@@ -353,13 +377,13 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        void AddItemToIndex(Dictionary<string, List<BaseItem>> index, BaseItem item, string name) {
+        void AddItemToIndex(Dictionary<BaseItem, List<BaseItem>> index, BaseItem item, BaseItem child) {
             List<BaseItem> subItems;
-            if (!index.TryGetValue(name, out subItems)) {
+            if (!index.TryGetValue(item, out subItems)) {
                 subItems = new List<BaseItem>();
-                index[name] = subItems;
+                index[item] = subItems;
             }
-            subItems.Add(item);
+            subItems.Add(child);
         }
 
         void Sort(SortOrder sortOrder, bool notifyChange) {
@@ -386,14 +410,12 @@ namespace MediaBrowser.Library.Entities {
             return items;
         }
 
-        public bool HasVideoChildren
-        {
-            get
-            {
+        public bool HasVideoChildren {
+            get {
                 return this.RecursiveChildren.Select(i => i as Video).Where(v => v != null).Count() > 0;
             }
         }
-      
-        
+
+
     }
 }
