@@ -1048,4 +1048,67 @@
   <data name="Rated_Unrated" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\ratings\rated-unrated.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DiamondMediaInfoPanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\diamond\controls\diamondmediainfopanel.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="d_aspect_169" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_aspect_169.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_aspect_1851" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_aspect_1851.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_aspect_2391" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_aspect_2391.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_aspect_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_aspect_32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_aspect_43" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_aspect_43.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_aac" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_aac.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_ac3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_ac3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_divx" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_divx.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_dts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_dts.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_h264" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_h264.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_mpegaudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_mpegaudio.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_vc1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_vc1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_wma" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_wma.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_wmv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_wmv.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_codec_xvid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_codec_xvid.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_hdtype_1080" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_hdtype_1080.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_hdtype_720" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_hdtype_720.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_media_bluray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_media_bluray.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_media_dvd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_media_dvd.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="d_media_hddvd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\diamond\d_media_hddvd.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

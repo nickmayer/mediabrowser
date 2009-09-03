@@ -9,6 +9,7 @@
 	  xmlns:lw="resx://MediaBrowser/MediaBrowser.Resources/LastWatched"
 	  xmlns:sy="resx://MediaBrowser/MediaBrowser.Resources/Summary"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+      xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/DiamondMediaInfoPanel"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
 	  xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
@@ -44,7 +45,8 @@
       <Binding Target="[Backdrop.Item]" Source="[PreSelectedItem]" />
       
       <Binding Source="[PreSelectedItem]" Target="[TitleUI.Item]"/>
-      
+      <Binding Source="[PreSelectedItem]" Target="[MediaInfoPanel.Item]"/>
+
       <Condition Source="[UseCustomAnchor]" ConditionOp="Equals" SourceValue="false"
                  Target="[CFScroller.LayoutInput]" Value="[AnchorNormal]" />
       <Condition Source="[UseCustomAnchor]" ConditionOp="Equals" SourceValue="true"
@@ -117,6 +119,13 @@
               <AnchorLayoutInput Horizontal="Fill" Top="Parent, .55" Bottom="Parent, 1, 125" />
             </LayoutInput>
           </me:CoverflowScroller>
+
+          <!-- Media Information Panel -->
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[PreSelectedItem]" >
+            <LayoutInput>
+              <AnchorLayoutInput Bottom="Parent, 1, -10" Right="Parent, 1, -20"/>
+            </LayoutInput>
+          </mip:MediaInfoPanel>
           
           <!-- Bottom Clip -->
           <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />

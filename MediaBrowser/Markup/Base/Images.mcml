@@ -87,6 +87,31 @@
 
   <Image Name="HDType_1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_1080" />
   <Image Name="HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_720" />
+  <!-- Diamond Media Info Images-->
+  <Image Name="d_Xvid" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_xvid" />
+  <Image Name="d_Divx" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_divx" />
+  <Image Name="d_Ac3" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_ac3" />
+  <Image Name="d_Aac" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_aac" />
+  <Image Name="d_MpegAudio" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_mpegaudio" />
+  <Image Name="d_Dts" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_dts" />
+  <Image Name="d_H264" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_h264" />
+  <Image Name="d_Vc1" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_vc1" />
+  <Image Name="d_Wmv" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_wmv" />
+  <Image Name="d_Wma" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_wma" />
+
+  <Image Name="d_Aspect_43" Source="resx://MediaBrowser/MediaBrowser.Resources/d_aspect_43" />
+  <Image Name="d_Aspect_32" Source="resx://MediaBrowser/MediaBrowser.Resources/d_aspect_32" />
+  <Image Name="d_Aspect_169" Source="resx://MediaBrowser/MediaBrowser.Resources/d_aspect_169" />
+  <Image Name="d_Aspect_1851" Source="resx://MediaBrowser/MediaBrowser.Resources/d_aspect_1851" />
+  <Image Name="d_Aspect_2391" Source="resx://MediaBrowser/MediaBrowser.Resources/d_aspect_2391" />
+
+  <Image Name="d_Media_Bluray" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_bluray" />
+  <Image Name="d_Media_Hddvd" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_hddvd" />
+  <Image Name="d_Media_Dvd" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_dvd" />
+
+  <Image Name="d_HDType_1080" Source="resx://MediaBrowser/MediaBrowser.Resources/d_hdtype_1080" />
+  <Image Name="d_HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/d_hdtype_720" />
+  
   <!-- Diamond Images -->
   <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/poster_frame" NineGrid="10,10,10,10" />
   <Image Name="DiamondOverlayWhiteAll" Source="resx://MediaBrowser/MediaBrowser.Resources/dia_overlay_all" />
@@ -100,5 +125,7 @@
   <Image Name="BlockedCover" Source="resx://MediaBrowser/MediaBrowser.Resources/BlockedCover"/>
   <Image Name="RatedCustom" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_Custom" />
   <Image Name="PlainBorder" Source="resx://MediaBrowser/MediaBrowser.Resources/plainborder" />
+  
+  
 
 </Mcml>
