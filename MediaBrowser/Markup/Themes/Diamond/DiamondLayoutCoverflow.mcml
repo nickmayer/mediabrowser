@@ -34,7 +34,7 @@
       <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
       <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
-      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.25" Bottom="Parent, .95" />
+      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.45" Bottom="Parent, 1, -80" />
       <AnchorLayoutInput Name="AnchorCustom" Horizontal="Fill" Top="Parent, 0,-50" Bottom="Parent, 1, 250" />
     </Locals>
 
@@ -113,19 +113,19 @@
             </Children>
           </Panel>
 
-          <!-- Coverflow Scroller -->
-          <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">            
-            <LayoutInput>
-              <AnchorLayoutInput Horizontal="Fill" Top="Parent, .55" Bottom="Parent, 1, 125" />
-            </LayoutInput>
-          </me:CoverflowScroller>
-
           <!-- Media Information Panel -->
           <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[PreSelectedItem]" >
             <LayoutInput>
               <AnchorLayoutInput Bottom="Parent, 1, -10" Right="Parent, 1, -20"/>
             </LayoutInput>
           </mip:MediaInfoPanel>
+          
+          <!-- Coverflow Scroller -->
+          <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">            
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Fill" Top="Parent, .55" Bottom="Parent, 1, 125" />
+            </LayoutInput>
+          </me:CoverflowScroller>         
           
           <!-- Bottom Clip -->
           <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
@@ -405,13 +405,6 @@
     </Locals>
 
     <Rules>
-      <!-- Hide focus frame image -->
-      <Condition Source="[Application.Config.HideFocusFrame]" ConditionOp="Equals" SourceValue="true">
-        <Actions>
-          <Set Target="[FocusImage]" Value="image://i:BlankImage" />
-          <Set Target="[FocusBg.Padding]" Value="0,0,0,0" />
-        </Actions>
-      </Condition>
      
       
       <!-- Set the UI to be mouse and keyboard interactive. -->
@@ -431,8 +424,8 @@
       <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel1.MaximumSize]" />
       <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel1.MinimumSize]" />
       <!--<Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MaximumSize]" />
-      <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MinimumSize]" />
-      <Binding Source="[ImageSize.Value]" Target="[BelowLabelPanel.MaximumSize]" />  -->    
+      <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MinimumSize]" />-->
+      <Binding Source="[ImageSize.Value]" Target="[BelowLabelPanel.MaximumSize]" />      
       <Binding Source="[ParentItem.DisplayPrefs.UseBanner.Value]" Target="[Item.PreferBanner]" />
       
       <!-- Selected state, true if item last had focus -->
@@ -440,7 +433,6 @@
         <Actions>
           <Set Target="[Main.Scale]" Value="1.4,1.4,1"/>
           <Set Target="[Main.Rotation]" Value="0deg;0,1,0" />
-          <Set Target="[CoverOutline.Content]" Value="[FocusImage]" />
           <Set Target="[ConstraintPanel1.ColorFilter]" Value="White" />
           <Set Target="[ConstraintPanel1.Alpha]" Value="1" />
           <Set Target="[g1.Content]" Value="[Item.PreferredImage]" />
@@ -551,20 +543,20 @@
         </Actions>
       </Changed>
 
-      <!--<Binding Target="[g1.MaintainAspectRatio]" Source="[Item.SmallImageIsDistorted]">
+      <Binding Target="[g1.MaintainAspectRatio]" Source="[Item.SmallImageIsDistorted]">
         <Transformer>
           <BooleanTransformer Inverse="true"/>
         </Transformer>
-      </Binding>-->
+      </Binding>
 
-      <!--<Binding Source="[ShowLabels.Value]" Target="[BelowLabelPanel.Visible]" />
-      <Binding Source="[Item.Name]" Target="[BelowLabelPanel.Content]" />-->
+      <Binding Source="[ShowLabels.Value]" Target="[BelowLabelPanel.Visible]" />
+      <Binding Source="[Item.Name]" Target="[BelowLabelPanel.Content]" />
       <!--<Binding Target="[Mirror.NearOffset]" Source="[ImageSize.Value.Height]">
         <Transformer>
           <MathTransformer DivideInt="2"/>
         </Transformer>
-      </Binding>-->
-      <!--<Binding Target="[Mirror.FadeSize]" Source="[ImageSize.Value.Height]">
+      </Binding>
+      <Binding Target="[Mirror.FadeSize]" Source="[ImageSize.Value.Height]">
         <Transformer>
           <MathTransformer DivideInt="4"/>
         </Transformer>
@@ -579,21 +571,22 @@
 
     <Content>
 
-      <Graphic Name="Main" Content="[BlankImage]" CenterPointPercent="0.5,0.5,0.5" Rotation="0deg;0,1,0" Margins="0,0,0,-100">
+      <Graphic Name="Main" Content="[BlankImage]" CenterPointPercent="0.5,0.5,0.5"  Rotation="0deg;0,1,0" Margins="0,0,0,-100">
         <Layout>
           <AnchorLayout SizeToVerticalChildren="true"/>
           <!--<FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="0,-5"/>-->
         </Layout>
         <Children>          
           <!-- Focus Outline-->
-          <Graphic Name="FocusBg" Content="[BlankImage]" Padding="25,25,25,25" SizingPolicy="SizeToChildren" Layout="VerticalFlow">
+          <Graphic Name="FocusBg" Content="[BlankImage]" Padding="5,5,5,5" SizingPolicy="SizeToChildren" Layout="VerticalFlow">
             <Children>
-              <Panel Name="ConstraintPanel1" Layout="Fill" CenterPointPercent="0.5,0.5,0.5" Padding="0,0,0,0" MaximumSize="[ImageSize.Value]" MinimumSize="[ImageSize.Value]" ColorFilter="150,150,150" >
+
+              <Text Name="BelowLabelPanel" Margins="0,5,0,-3" Alpha="1" Color="color://s:FontColorLight"  Font="[TopLabelFont]" Content="[Item.Name]" WordWrap="false" HorizontalAlignment="Near"></Text>
+              <Panel Name="ConstraintPanel1" CenterPointPercent="0.5,0.5,0.5" Padding="0,0,0,0" MaximumSize="[ImageSize.Value]" MinimumSize="[ImageSize.Value]" ColorFilter="150,150,150" >
                 <Layout>
                   <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
                 </Layout>
                 <Children>
-                  <Graphic Name="CoverOutline" Content="[BlankImage]"  Layout="Fill" Margins="-25,-25,-25,-25" />
                   <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha="0.8" Name="TickIndicatorPanel" Visible="[Item.HaveWatched]" MaximumSize="32,32" Margins="5,5,0,0">
                     <LayoutInput>
                       <AnchorLayoutInput Horizontal="Near" Vertical="Near" />
@@ -629,6 +622,7 @@
                       </Graphic>
                     </Children>
                   </Panel>
+                  <!--Lock indicator-->
                   <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Anchor" Visible="false" Name="PCLock">
                     <LayoutInput>
                       <AnchorLayoutInput Horizontal="Far" Vertical="Near"/>
@@ -641,7 +635,7 @@
                       </Graphic>
                     </Children>
                   </Panel>
-                  <Graphic Name="g1"  Layout="Fill">
+                  <Graphic Name="g1" SizingPolicy="SizeToConstraint" MaintainAspectRatio="true">
                     <Children>
                       <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Center">
                         <LayoutInput>
@@ -655,14 +649,13 @@
                       </Panel>
                     </Children>
                   </Graphic>
-                  
                 </Children>
               </Panel>
             </Children>
           </Graphic>
 
-          <!-- Mirror Effect
-          <Clip Name="Mirror" FadeAmount="1" FadeSize="50" NearOffset="0" Padding="5,5,5,5" Orientation="Vertical" ShowFar="false" Margins="0,-10,0,0">
+          <!-- Mirror Effect-->
+          <!--<Clip Name="Mirror" FadeAmount="1" FadeSize="50" NearOffset="0" Padding="5,5,5,5" Orientation="Vertical" ShowFar="false" Margins="0,-10,0,0">
             <Layout>
               <FlowLayout Orientation="Vertical" ItemAlignment="Center" />
             </Layout>
@@ -670,7 +663,7 @@
               <AnchorLayoutInput Top="FocusBg, 1, -5" />
             </LayoutInput>
             <Children>
-              <Panel Name="ConstraintPanel2" ColorFilter="color://s:MirrorFilter" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
+              <Panel Name="ConstraintPanel2" ColorFilter="150,150,150" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
                 <Layout>
                   <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
                 </Layout>

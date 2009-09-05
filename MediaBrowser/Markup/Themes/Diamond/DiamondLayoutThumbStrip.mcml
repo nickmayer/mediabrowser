@@ -35,7 +35,7 @@
 			<BooleanChoice Name="Vertical" Value="false" />
 			<FormLayoutInput Name="MyLayout" Left="Parent,0" Top="Parent,1,-300" Bottom="Parent,1" Right="Parent,1"/>
 
-			<AnchorLayoutInput Name="BaseLayout" Bottom="Parent,1" Top="Parent, 0.5" Horizontal="Fill" />
+			<AnchorLayoutInput Name="BaseLayout" Bottom="Parent,.55" Top="Parent, 0, 120" Horizontal="Fill" />
 		</Locals>
 
 
@@ -50,6 +50,7 @@
 					<Equality ConditionOp="NotEquals" Source="[Item.SelectedChildIndex]" Value="-1"></Equality>
 				</Conditions>
 				<Actions>
+          <Set Target="[FullDetailsTimer.Enabled]" Value="true"/>
 					<Invoke Target="[FullDetailsTimer.Stop]" />
 					<Invoke Target="[FullDetailsTimer.Start]" />
 					<Set Target="[SelectedItem]"  Value="[BlankItem]" />
@@ -131,25 +132,22 @@
           <!-- Details information -->
           <dtb:DiamondInfoBox Name="DiamondInfoBox" Item="[Item.SelectedChild]" Application="[Application]">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0,35" Right="Parent,0.5,-10" Top="Parent,0,90" Bottom="Parent, 0.55,-10" />
+              <FormLayoutInput Left="Parent,0.35" Right="Parent,1,-20" Top="Parent,0.57" Bottom="Parent, 1,-20" />
             </LayoutInput>
           </dtb:DiamondInfoBox>         
 					
 
           <Graphic Content="image://i:DiamondListBg">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0,25" Right="Parent,0.5" Top="Parent,0,80" Bottom="Parent, 0.55"/>
+              <FormLayoutInput Left="Parent,0.35,-5" Right="Parent,1,-15" Top="Parent,0.57" Bottom="Parent, 1,-15" />
             </LayoutInput>
           </Graphic>
 
           <!-- List Counter -->
-          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" >
-            <LayoutInput>
-              <AnchorLayoutInput Left="Parent,.9" Bottom="Parent,1,-15"  />
-            </LayoutInput>
+          <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
             <Children>
-              <Text Name="List_Counter" Content="0" Color="Black" Font="font://f:CV_CounterFont" />
-              <Text Name="List_Total" Content="0" Color="DarkSlateGray" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Total" Content="0" Color="White" Font="font://f:CV_CounterFont" />
             </Children>
           </Panel>
 
