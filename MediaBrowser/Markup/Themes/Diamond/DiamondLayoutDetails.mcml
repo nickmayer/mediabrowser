@@ -10,7 +10,7 @@
 	    
 	    xmlns:ps="resx://MediaBrowser/MediaBrowser.Resources/PosterScroller"
 	    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
-      
+    xmlns:as="resx://MediaBrowser/MediaBrowser.Resources/AutoScroller"      
       xmlns:link="resx://MediaBrowser/MediaBrowser.Resources/LinkItem"
       xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"
 	    xmlns:me="Me">
@@ -77,7 +77,7 @@
       <!-- Title and Year -->
       <Binding Source="[SelectedItem]" Target="[TitleUI.Item]"/>
       <Binding Source="[SelectedItem]" Target="[DiamondTopInfoBox.Item]" />
-      <Binding Source="[SelectedItem]" Target="[DiamondSummary.Item]" />
+      <Binding Source="[SelectedItem.Overview]" Target="[DiamondSummary.Text]" />
       <!-- Backdrop-->
       <Binding Target="[Backdrop.Image]" Source="[SelectedItem.BackdropImage]" />
       <Binding Target="[Backdrop.Item]" Source="[SelectedItem]" />
@@ -131,11 +131,18 @@
             </LayoutInput>
           </dtb:DiamondDetailInfoBox>
 
-          <dtb:SummaryNonScrolling Name="DiamondSummary" Item="[Item.SelectedChild]" Font="font://f:DV_SummaryFont" Color="White" FocusColor="White">
+          <as:AutoScroller Name="DiamondSummary" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"
+                                   Color="190,190,190" FocusColor="White">
             <LayoutInput>
               <AnchorLayoutInput Top="DiamondTopInfoBox,1,10"  Bottom="Parent, 0.9,-40" Left="Parent,.3,10" Right="Parent, .58"/>
             </LayoutInput>
-          </dtb:SummaryNonScrolling>
+          </as:AutoScroller>
+          
+          <!--<dtb:SummaryNonScrolling Name="DiamondSummary" Item="[Item.SelectedChild]" Font="font://f:DV_SummaryFont" Color="White" FocusColor="White">
+            <LayoutInput>
+              <AnchorLayoutInput Top="DiamondTopInfoBox,1,10"  Bottom="Parent, 0.9,-40" Left="Parent,.3,10" Right="Parent, .58"/>
+            </LayoutInput>
+          </dtb:SummaryNonScrolling>-->
 
           <!-- List Counter -->
           <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
