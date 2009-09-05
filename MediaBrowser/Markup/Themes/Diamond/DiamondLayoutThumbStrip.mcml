@@ -128,7 +128,6 @@
               </lcf:CoverflowScroller>
               <ps:PosterScroller Name="PosterItems" Application="[Application]" RowLimit="1" Visible="false" Folder="[Item]" CenterFocus="true"
 											   TopLabelFont="font://f:SV_PosterTopLabelFont" LabelFont="font://f:SV_PosterLabelFont" UnwatchedCountFont="font://f:SV_UnwatchedCountFont">
-
               </ps:PosterScroller>
             </Children>
           </Panel>
@@ -138,12 +137,12 @@
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.35" Right="Parent,1,-20" Top="Parent,0.57" Bottom="Parent, 1,-20" />
             </LayoutInput>
-          </dtb:DiamondInfoBox>         
-					
+          </dtb:DiamondInfoBox>
 
+          <!-- Details information Dark Underlay-->
           <Graphic Content="image://i:DiamondListBg">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.35,-5" Right="Parent,1,-15" Top="Parent,0.57" Bottom="Parent, 1,-15" />
+              <FormLayoutInput Left="Parent,0.35,-5" Right="Parent,1,-15" Top="Parent,0.57,-5" Bottom="Parent, 1,-15" />
             </LayoutInput>
           </Graphic>
 

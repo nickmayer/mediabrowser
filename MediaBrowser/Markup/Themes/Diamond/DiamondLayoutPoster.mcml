@@ -27,6 +27,8 @@
 		<Locals>
 			<FormLayoutInput Name="TitleLayout" Top="ItemPanel,1"  Left="Parent,0.2" Right="Parent,.89"/>
 			<MathTransformer Name="Add1" AddInt="1"/>
+      <FormLayoutInput Name="Posters_Many" Left="Parent,.0" Top="Parent,0,40" Bottom="Parent,1,-20" Right="Parent,1"/>
+      <FormLayoutInput Name="Posters_Few" Left="Parent,.0" Top="Parent,0,80" Bottom="Parent,1,-20" Right="Parent,1"/>
 		</Locals>
 		<Rules>
       <!-- Title and Year -->
@@ -39,6 +41,15 @@
 					<FormatTransformer Format=" | {0}" />
 				</Transformer>
 			</Binding>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="10" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ItemPanel.LayoutInput]" Value="[Posters_Many]" />
+        </Actions>
+      </Rule>
 
 		</Rules>
 		<Content>
@@ -62,16 +73,12 @@
           <ps:PosterScroller Name="ItemPanel" Application="[Application]" Folder="[Folder]"
                              TopLabelFont="font://f:PV_PosterTopLabelFont"
                              LabelFont="font://f:PV_PosterLabelFont"
-                             UnwatchedCountFont="font://f:PV_UnwatchedCountFont">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,.0" Top="Parent,0,20" Bottom="Parent,1,-20" Right="Parent,1"/>
-            </LayoutInput>
+                             UnwatchedCountFont="font://f:PV_UnwatchedCountFont"
+                             LayoutInput="[Posters_Few]">
           </ps:PosterScroller>
           
           <!-- Bottom Clip -->
           <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
-
-          
           
 					<!-- Backdrop -->
           <dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />
