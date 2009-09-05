@@ -157,7 +157,7 @@
           <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
 
           <!-- Backdrop -->
-          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[PreSelectedItem.BackdropImage]" Item="[PreSelectedItem]"/>
+          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[PreSelectedItem.BackdropImage]" Item="[PreSelectedItem]"  LayoutInput="global://dtb:LI_Bg"/>
           <!--<dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />-->
                     
 

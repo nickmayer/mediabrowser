@@ -35,13 +35,17 @@
 			<BooleanChoice Name="Vertical" Value="false" />
 			<FormLayoutInput Name="MyLayout" Left="Parent,0" Top="Parent,1,-300" Bottom="Parent,1" Right="Parent,1"/>
 
-			<AnchorLayoutInput Name="BaseLayout" Bottom="Parent,.55" Top="Parent, 0, 120" Horizontal="Fill" />
+			<AnchorLayoutInput Name="BaseLayout" Bottom="Parent,.55" Top="Parent, 0, 90" Horizontal="Fill" />
 		</Locals>
 
 
 		<Rules>
 
-      <Binding Source="[PreSelectedItem.BackdropImage]" Target="[BG_Art.BG]" />
+      <!--<Binding Source="[PreSelectedItem.BackdropImage]" Target="[BG_Art.BG]" />-->
+      <!-- Backdrop-->
+      <Binding Target="[Backdrop.Image]" Source="[PreSelectedItem.BackdropImage]" />
+      <Binding Target="[Backdrop.Item]" Source="[PreSelectedItem]" />
+      
       <Binding Source="[PreSelectedItem]" Target="[TitleUI.Item]"/>
       <Binding Source="[PreSelectedItem]" Target="[DiamondInfoBox.Item]" />
       
@@ -159,7 +163,8 @@
           <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
 
           <!-- Backdrop -->
-          <dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />
+          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[PreSelectedItem.BackdropImage]" Item="[PreSelectedItem]"  LayoutInput="global://dtb:LI_Bg"/>
+          <!--<dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />-->
 					
 				</Children>
 			</Panel>
