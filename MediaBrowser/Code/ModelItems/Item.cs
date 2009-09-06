@@ -179,7 +179,7 @@ namespace MediaBrowser.Library
 
         private void Play(bool resume, bool queue)
         {
-            if (this.IsPlayable)
+            if (this.IsPlayable || this.IsFolder)
             {
                 if (Config.Instance.ParentalControlEnabled && !this.ParentalAllowed)
                 {
