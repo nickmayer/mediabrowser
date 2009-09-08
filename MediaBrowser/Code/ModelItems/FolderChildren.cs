@@ -159,6 +159,14 @@ namespace MediaBrowser.Code.ModelItems {
             get {
                 BaseItem baseItem;
                 lock (this) {
+
+                    if (currentChildren.Count <= index) { 
+                        // compensate for defer load
+                        if (!folderIsIndexed) {
+                            currentChildren = folder.Children;
+                        }
+                    }
+
                     baseItem = currentChildren[index];
                 }
                 return GetItem(baseItem);
