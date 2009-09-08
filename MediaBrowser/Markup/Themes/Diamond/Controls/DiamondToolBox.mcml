@@ -85,7 +85,7 @@
       <Binding Target="[TxtSubtitle.Content]" Source="[Item.SubTitle]"/>
       <Binding Target="[LastWatched.Content]" Source="[Item.LastPlayedString]"/>
       <Binding Target="[LastWatched.Visible]" Source="[Item.HaveWatched]"/>
-      <Binding Target="[MediaInfo.Item]" Source="[Item]" />
+      <!--<Binding Target="[MediaInfo.Item]" Source="[Item]" />-->
       <Binding Target="[MediaInfoText.Content]" Source="[Item.MediaInfo.CombinedInfo]" />
     </Rules>
     <Content>
@@ -120,7 +120,7 @@
 													/>
             </Content>
           </Repeater>
-          <mip:MediaInfoPanel Name="MediaInfo" Item="[Item]" />
+          <!--<mip:MediaInfoPanel Name="MediaInfo" Item="[Item]" />-->
           <Text Name="MediaInfoText" Font="Arial, 12" Color="White" WordWrap="true" />
           <Text Name="LastWatched" Color="LightGray" Font="font://f:DV_LastWatchedFont"/>          
         </Children>
@@ -141,7 +141,7 @@
       <Binding Target="[Summary.Item]" Source="[Item]"/>
       <Binding Target="[LastWatched.Content]" Source="[Item.LastPlayedString]"/>
       <Binding Target="[LastWatched.Visible]" Source="[Item.HaveWatched]"/>
-      <Binding Target="[MediaInfo.Item]" Source="[Item]" />
+      <!--<Binding Target="[MediaInfo.Item]" Source="[Item]" />-->
 
     </Rules>
     <Content>
@@ -175,7 +175,7 @@
 													/>
             </Content>
           </Repeater>
-          <mip:MediaInfoPanel Name="MediaInfo" Item="[Item]" />
+          <!--<mip:MediaInfoPanel Name="MediaInfo" Item="[Item]" />-->
           <Text Name="LastWatched" Color="LightGray" Font="font://f:DV_LastWatchedFont"/>
           <me:SummaryNonScrolling Name="Summary" Item="[Item]" Font="font://f:DV_SummaryFont" Color="White" FocusColor="White"/>
 

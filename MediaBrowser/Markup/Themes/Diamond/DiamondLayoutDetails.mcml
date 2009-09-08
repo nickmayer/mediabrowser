@@ -13,6 +13,7 @@
     xmlns:as="resx://MediaBrowser/MediaBrowser.Resources/AutoScroller"      
       xmlns:link="resx://MediaBrowser/MediaBrowser.Resources/LinkItem"
       xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"
+      xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/DiamondMediaInfoPanel"
 	    xmlns:me="Me">
 
   <UI Name="DiamondLayoutDetails">
@@ -78,6 +79,7 @@
       <Binding Source="[SelectedItem]" Target="[TitleUI.Item]"/>
       <Binding Source="[SelectedItem]" Target="[DiamondTopInfoBox.Item]" />
       <Binding Source="[SelectedItem.Overview]" Target="[DiamondSummary.Text]" />
+      <Binding Source="[SelectedItem]" Target="[MediaInfoPanel.Item]"/>
       <!-- Backdrop-->
       <Binding Target="[Backdrop.Image]" Source="[SelectedItem.BackdropImage]" />
       <Binding Target="[Backdrop.Item]" Source="[SelectedItem]" />
@@ -122,7 +124,14 @@
               <lv:DiamondListView Visible="true" Application="[Application]" Folder="[Item]" Name="MyItems">
               </lv:DiamondListView>
             </Children>
-          </Graphic>        
+          </Graphic>
+
+          <!-- Media Info -->
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[SelectedItem]" >
+            <LayoutInput>
+              <AnchorLayoutInput Bottom="Parent, 1, -10" Right="Parent, 1, -20"/>
+            </LayoutInput>
+          </mip:MediaInfoPanel>
           
           <!-- Details information -->
           <dtb:DiamondDetailInfoBox Name="DiamondTopInfoBox" Item="[Item.SelectedChild]" Application="[Application]">

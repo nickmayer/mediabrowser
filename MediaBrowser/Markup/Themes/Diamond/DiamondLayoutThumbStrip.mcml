@@ -13,7 +13,8 @@
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
 	  xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
 	  xmlns:lcf="resx://MediaBrowser/MediaBrowser.Resources/DiamondLayoutCoverflow"
-	  xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"
+	  xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"      
+    xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/DiamondMediaInfoPanel"
       >
 
   
@@ -35,19 +36,22 @@
 			<BooleanChoice Name="Vertical" Value="false" />
 			<FormLayoutInput Name="MyLayout" Left="Parent,0" Top="Parent,1,-300" Bottom="Parent,1" Right="Parent,1"/>
 
-			<AnchorLayoutInput Name="BaseLayout" Bottom="Parent,.55" Top="Parent, 0, 90" Horizontal="Fill" />
+			<AnchorLayoutInput Name="BaseLayout" Top="Parent,0.53" Bottom="Parent, 1,-50"  Horizontal="Fill" />
+      <!-- Info Panel Layout -->
+      <AnchorLayoutInput Name="LayoutInfoPanel" Left="Parent,0.5,-400" Right="Parent,0.5,400" Bottom="Parent,.55" Top="Parent, 0, 95" />
+      <AnchorLayoutInput Name="LayoutInfoPanelBg" Left="Parent,0.5,-405" Right="Parent,0.5,405" Top="Parent,0,90" Bottom="Parent, .53,5" />      
 		</Locals>
 
 
 		<Rules>
 
-      <!--<Binding Source="[PreSelectedItem.BackdropImage]" Target="[BG_Art.BG]" />-->
       <!-- Backdrop-->
       <Binding Target="[Backdrop.Image]" Source="[PreSelectedItem.BackdropImage]" />
       <Binding Target="[Backdrop.Item]" Source="[PreSelectedItem]" />
       
       <Binding Source="[PreSelectedItem]" Target="[TitleUI.Item]"/>
       <Binding Source="[PreSelectedItem]" Target="[DiamondInfoBox.Item]" />
+      <Binding Source="[PreSelectedItem]" Target="[MediaInfoPanel.Item]"/>      
       
 			<Changed Source="[Item.SelectedChildIndex]" InitialEvaluate="true">
 				<Conditions>
@@ -131,20 +135,20 @@
               </ps:PosterScroller>
             </Children>
           </Panel>
+
+          <!-- Media Info -->
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[PreSelectedItem]" >
+            <LayoutInput>
+              <AnchorLayoutInput Bottom="Parent, 1, -10" Right="Parent, 1, -20"/>
+            </LayoutInput>
+          </mip:MediaInfoPanel>
           
           <!-- Details information -->
-          <dtb:DiamondInfoBox Name="DiamondInfoBox" Item="[Item.SelectedChild]" Application="[Application]">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.35" Right="Parent,1,-20" Top="Parent,0.57" Bottom="Parent, 1,-20" />
-            </LayoutInput>
-          </dtb:DiamondInfoBox>
+          <dtb:DiamondInfoBox Name="DiamondInfoBox" Item="[Item.SelectedChild]" Application="[Application]" 
+                              LayoutInput="[LayoutInfoPanel]" />
 
           <!-- Details information Dark Underlay-->
-          <Graphic Content="image://i:DiamondListBg">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.35,-5" Right="Parent,1,-15" Top="Parent,0.57,-5" Bottom="Parent, 1,-15" />
-            </LayoutInput>
-          </Graphic>
+          <Graphic Content="image://i:DiamondListBg" LayoutInput="[LayoutInfoPanelBg]" />
 
           <!-- List Counter -->
           <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >

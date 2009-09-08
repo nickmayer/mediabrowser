@@ -13,6 +13,7 @@
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
 	  xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
       xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"
+      xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/DiamondMediaInfoPanel"
 	  >
 
 	<UI Name="DiamondLayoutThumb">
@@ -34,6 +35,7 @@
 		<Rules>
       <Binding Source="[SelectedItem]" Target="[TitleUI.Item]"/>
       <Binding Source="[SelectedItem]" Target="[DiamondInfoBox.Item]" />
+      <Binding Source="[SelectedItem]" Target="[MediaInfoPanel.Item]"/>
       <!--<Binding Source="[SelectedItem.BackdropImage]" Target="[BG_Art.BG]" />-->
       <!-- Backdrop-->
       <Binding Target="[Backdrop.Image]" Source="[PreSelectedItem.BackdropImage]" />
@@ -118,6 +120,13 @@
               <AnchorLayoutInput Top="Parent,0.2"  Bottom="Parent, 0.9" Left="MyItems,1,120" Right="Parent,1,-25"/>
             </LayoutInput>
           </Graphic>
+
+          <!-- Media Info -->
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[SelectedItem]" >
+            <LayoutInput>
+              <AnchorLayoutInput Bottom="Parent, 1, -10" Right="Parent, 1, -20"/>
+            </LayoutInput>
+          </mip:MediaInfoPanel>
 
 					<!--<Panel Name="DetailsSection" MouseInteractive="true" Padding="5,5,0,0" >
 						<LayoutInput>
