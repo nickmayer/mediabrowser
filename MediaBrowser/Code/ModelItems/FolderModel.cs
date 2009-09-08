@@ -362,6 +362,10 @@ namespace MediaBrowser.Library {
                     ShowLabels_PropertyChanged(null, null);
                     if (this.actualThumbSize.Value.Height != 1)
                         ThumbConstraint_PropertyChanged(null, null);
+
+                    if (displayPrefs.IndexBy != IndexType.None) {
+                        IndexByChoice_ChosenChanged(this, null);
+                    }
                 }
                 FirePropertyChanged("DisplayPrefs");
             }
