@@ -204,6 +204,7 @@
 			<Binding Target="[FocusRect.Scaling]" Source="[Folder.PosterZoom]" />
 			<Binding Target="[MyRepeater.Source]" Source="[Folder.Children]" />
       <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Rule>
         <Conditions>
@@ -220,7 +221,7 @@
           <Set Target="[Application.DisplayPopupPlay]" Value="false" />
           <PlaySound Sound="sound://sounds:Miniselect" />
           <Set Target="[PopupPlay.Visible]" Value="false"/>
-          <Invoke Target="[Scroller.NavigateInto]" />          
+          <!--<Invoke Target="[Scroller.NavigateInto]" />-->          
         </Actions>
       </Changed>
 

@@ -50,6 +50,15 @@ namespace MediaBrowser.Library.Entities {
             this.location = location as IFolderMediaLocation;
         }
 
+        //added by ebr
+        private List<BaseItem> parentalAllowedChildren
+        {
+            get
+            {
+                // return only the children not protected
+                return Kernel.Instance.ParentalControls.RemoveDisallowed(ActualChildren);
+            }
+        }
 
         /// <summary>
         /// Returns a safe clone of the children
@@ -58,7 +67,10 @@ namespace MediaBrowser.Library.Entities {
             get {
                 // return a clone
                 lock (ActualChildren) {
-                    return ActualChildren.ToList();
+                    if (Config.Instance.ParentalControlEnabled && Config.Instance.HideParentalDisAllowed)
+                        return parentalAllowedChildren;
+                    else
+                        return ActualChildren.ToList();
                 }
             }
         }
@@ -230,11 +242,12 @@ namespace MediaBrowser.Library.Entities {
         public IEnumerable<BaseItem> RecursiveChildren {
             get {
                 foreach (var item in Children) {
-                    yield return item;
+                    if (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed)
+                        yield return item;
                     var folder = item as Folder;
                     if (folder != null) {
                         //leave out protected folders (except the ones we have entered)
-                        if (folder.ParentalAllowed || Config.Instance.ProtectedFolderAllowed(folder)) {
+                        if (folder.ParentalAllowed || Kernel.Instance.ProtectedFolderAllowed(folder)) {
                             foreach (var subitem in folder.RecursiveChildren) {
                                 yield return subitem;
                             }
@@ -277,7 +290,8 @@ namespace MediaBrowser.Library.Entities {
         void ValidateChildrenImpl() {
             location = null;
             // cache a copy of the children
-            var childrenCopy = Children;
+
+            var childrenCopy = ActualChildren.ToList(); //changed this to reference actual children so it wouldn't keep mucking up hidden ones -ebr
 
             var validChildren = GetChildren(false);
             var currentChildren = new Dictionary<Guid, BaseItem>();

@@ -14,6 +14,7 @@
     xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
     xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
     xmlns:dp="resx://MediaBrowser/MediaBrowser.Resources/DiamondPagination"
+    xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
       
 	  xmlns:wea="resx://MediaBrowser/MediaBrowser.Resources/Weather"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
@@ -86,6 +87,7 @@
       <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
       <Binding Source="[SelectedItem.PreferredImage]" Target="[CurrentPoster.Content]"/>
       <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Binding Source="[Clock.Time]" Target="[TimeDate.Content]">
         <Conditions>
@@ -402,6 +404,7 @@
                                 Visible="[Application.Config.ShowClock]" />
                       <Text Font="font://f:P_ClockFont"  Color="Gray" Content="  " />
                       <vm:CfgButton Name="ConfigBtn" Command="[Configure]" />
+                      <pci:PCIndicatorButton Size="19,19" Application="[Application]" />
                     </Children>
                   </Panel>
                   <ColorFill Layout="Fill" Content="Black" Alpha="0.15" />

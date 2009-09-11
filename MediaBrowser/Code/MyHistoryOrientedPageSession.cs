@@ -60,7 +60,7 @@ namespace MediaBrowser
                 {
                     if (((FolderModel)uiProperties["Folder"]).IsRoot) {
                         //we're backing into the root folder - clear the protected folder list
-                        Config.Instance.ClearProtectedAllowedList();
+                        Kernel.Instance.ClearProtectedAllowedList();
                     }
                 }
             }

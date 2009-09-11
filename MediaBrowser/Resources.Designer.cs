@@ -1686,6 +1686,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static byte[] PCIndicatorButton {
+            get {
+                object obj = ResourceManager.GetObject("PCIndicatorButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] PersonButton {
             get {
                 object obj = ResourceManager.GetObject("PersonButton", resourceCulture);
@@ -2172,6 +2179,13 @@ namespace MediaBrowser {
         internal static System.Drawing.Bitmap Underline {
             get {
                 object obj = ResourceManager.GetObject("Underline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap UnLock1 {
+            get {
+                object obj = ResourceManager.GetObject("UnLock1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

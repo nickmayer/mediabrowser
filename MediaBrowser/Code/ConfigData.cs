@@ -89,7 +89,7 @@ namespace MediaBrowser
         public int MetadataCheckForUpdateAge = 14;
 
         public int ParentalUnlockPeriod = 3;
-        public bool HideParentalDisAllowed = true; //for future enhancement - not currently exposed
+        public bool HideParentalDisAllowed = true; 
         public bool ParentalBlockUnrated = false;
         public bool ParentalControlEnabled = false;
         public string ParentalPIN = "0000";

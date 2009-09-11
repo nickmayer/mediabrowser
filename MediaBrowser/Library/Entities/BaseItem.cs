@@ -184,7 +184,7 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public string CustomPIN { get; set; }
 
-        public bool ParentalAllowed { get { return Config.Instance.ParentalControls.Allowed(this); } }
+        public bool ParentalAllowed { get { return Kernel.Instance.ParentalControls.Allowed(this); } }
         public string ParentalRating
         {
             get

@@ -7,6 +7,7 @@
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
 		xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu"
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
+    xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
 	  
 	  xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailAreaDiamond"
     xmlns:me="Me"
@@ -447,6 +448,7 @@
               <vm:ImgButton Name="SortOrdersBtn" Enabled="true" Command="[ShowSortConfiguration]" Image="image://i:SortImg"
                             Font="font://f:P_ConfigButtons" />
               <vm:ImgButton Name="IndexesBtn" Command="[ShowIndexConfiguration]" Image="image://i:IndexImg" Font="font://f:P_ConfigButtons" />
+              <pci:PCIndicatorButton Application="[Application]" />
             </Children>
           </Panel>
 

@@ -274,6 +274,7 @@
       <Condition Source="[Item.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="400,220" />
 
       <Binding Target="[PopupPlay.Item]" Source="[Item.SelectedChild]" />
+      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Rule>
         <Conditions>

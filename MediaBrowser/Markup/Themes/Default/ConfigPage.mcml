@@ -40,6 +40,7 @@
       <Command Name="PINEntered"/>
       <BooleanChoice Name="BlockUnrated" Value="[Application.Config.ParentalBlockUnrated]" />
       <BooleanChoice Name="Enabled" Value="[Application.Config.ParentalControlEnabled]" />
+      <BooleanChoice Name="HideProtected" Value="[Application.Config.HideParentalDisAllowed]" />
       <IntRangedValue Name="UnlockPeriod" Value="[Application.Config.ParentalUnlockPeriod]" MaxValue="100" MinValue="1" Step="1"/>
       <cor:String Name="InitialRating" String="[Application.Config.ParentalMaxAllowedString]" />
       <EditableText Name="PIN" Value="" />
@@ -216,7 +217,7 @@
  
       <Changed Source="[EnterPIN.Invoked]">
         <Actions>
-          <Invoke Target="[Application.Config.EnterNewParentalPIN]" />
+          <Invoke Target="[Application.EnterNewParentalPIN]" />
         </Actions>
       </Changed>
       <Changed Source="[PINEntered.Invoked]">
@@ -247,12 +248,12 @@
       </Changed>
       <Changed Source="[UnlockPC.Invoked]">
         <Actions>
-          <Invoke Target="[Application.Config.UnlockPC]" />
+          <Invoke Target="[Application.UnlockPC]" />
         </Actions>
       </Changed>
       <Changed Source="[RelockPC.Invoked]">
         <Actions>
-          <Invoke Target="[Application.Config.RelockPC]" />
+          <Invoke Target="[Application.RelockPC]" />
           <!--need to refresh enabled so interface will update - has to be true if we got here-->
           <Set Target="[Enabled.Value]" Value="true"/>
           <Set Target="[ParentalUnlockedPanel.Visible]" Value="false" />
@@ -267,6 +268,7 @@
       </Changed>
       <Binding Source="[UnlockPeriod.Value]" Target="[Config.ParentalUnlockPeriod]" />
       <Binding Source="[Enabled.Value]" Target="[Config.ParentalControlEnabled]" />
+      <Binding Source="[HideProtected.Value]" Target="[Config.HideParentalDisAllowed]" />
       <Binding Source="[BlockUnrated.Value]" Target="[Config.ParentalBlockUnrated]" />
       <Binding Source="[RatingsValues.Chosen!cor:Int32]" Target="[Config.MaxParentalLevel]" />
 
@@ -562,6 +564,7 @@
                       <st:SpinnerText Name="Ratings" Model="[RatingsStrings]" Label="Max Allowed Rating " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[InitialRating]" />
                       <Text Name="RatingsDesc" Content="" MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
                       <cb:CheckBox Label="Block Unrated Content" Checked="[BlockUnrated]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Hide Blocked Content" Checked="[HideProtected]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <me:TextLine Text=" "/>
                       <vm:IntSpin Label="Unlock Period (Hours)" Int="[UnlockPeriod]" Margins="[CMargin]"  />
                       <me:TextLine Text=" "/>

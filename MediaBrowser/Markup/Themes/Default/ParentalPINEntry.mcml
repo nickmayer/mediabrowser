@@ -20,17 +20,17 @@
       <Default Target="[PIN.Value]" Value="" />
       <Default Target="[MyText.Content]" Value="[PromptString]"/>
       <!--if not called by us (user used "back" to get to us) exit immediately-->
-      <Condition Source="[Application.Config.RequestingPIN]" SourceValue="false">
+      <Condition Source="[Application.RequestingPIN]" SourceValue="false">
         <Actions>
           <Invoke Target="[Application.Back]"/>
         </Actions>
       </Condition>
       <Changed Source="[PINEntered.Invoked]" >
         <Actions>
-          <Invoke Target="[Application.Config.ParentalPINEntered]" />
+          <Invoke Target="[Application.ParentalPINEntered]" />
         </Actions>
       </Changed>
-      <Binding Source="[PIN.Value]" Target="[Application.Config.CustomPINEntry]">
+      <Binding Source="[PIN.Value]" Target="[Application.CustomPINEntry]">
       </Binding>
       
     </Rules>

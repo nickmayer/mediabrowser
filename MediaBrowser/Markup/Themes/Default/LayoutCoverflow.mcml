@@ -299,6 +299,7 @@
 
 
       <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Rule>
         <Conditions>

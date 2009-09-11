@@ -168,7 +168,7 @@ namespace MediaBrowser.Library
             }
         }
 
-        public bool ParentalAllowed { get { return Config.Instance.ParentalControls.Allowed(this); } }
+        public bool ParentalAllowed { get { return Kernel.Instance.ParentalControls.Allowed(this); } }
         public string ParentalRating
         {
             get
@@ -183,7 +183,8 @@ namespace MediaBrowser.Library
             {
                 if (Config.Instance.ParentalControlEnabled && !this.ParentalAllowed)
                 {
-                    Config.Instance.ParentalControls.PlayProtected(this, resume, queue);
+                    Application.CurrentInstance.DisplayPopupPlay = false; //PIN screen mucks with turning this off
+                    Kernel.Instance.ParentalControls.PlayProtected(this, resume, queue);
                 }
                 else PlaySecure(resume, queue);
             }

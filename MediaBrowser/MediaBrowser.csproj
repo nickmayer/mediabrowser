@@ -430,6 +430,7 @@
     <Content Include="Images\Star\Star_Full.png" />
     <Content Include="Images\Star\Star_Empty.png" />
     <Content Include="Images\Star\Star_Half.png" />
+    <Content Include="Images\UnLock1.png" />
     <Content Include="Images\Unwatched\Tick.png" />
     <Content Include="Images\Unwatched\TickPoster.png" />
     <Content Include="Images\Unwatched\TickPosterBase.png" />
@@ -555,6 +556,7 @@
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Images.mcml" />
     <Content Include="Markup\Controls\Backdrop.mcml" />
+    <Content Include="Markup\Controls\Buttons\PCIndicatorButton.mcml" />
     <Content Include="Markup\Controls\Buttons\DirectorButton.mcml" />
     <Content Include="Markup\Controls\Buttons\GenreButton.mcml" />
     <Content Include="Markup\Controls\Buttons\ImageButton.mcml" />

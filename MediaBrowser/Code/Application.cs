@@ -568,7 +568,7 @@ namespace MediaBrowser
         public void NavigateSecure(FolderModel folder)
         {
             //just call method on parentalControls - it will callback if secure
-            Config.Instance.ParentalControls.NavigateProtected(folder);
+            Kernel.Instance.ParentalControls.NavigateProtected(folder);
         }
 
         public void OpenSecure(FolderModel folder)
@@ -582,7 +582,7 @@ namespace MediaBrowser
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["PromptString"] = prompt;
-            Config.Instance.RequestingPIN = true; //tell page we are calling it (not a back action)
+            this.RequestingPIN = true; //tell page we are calling it (not a back action)
             session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/ParentalPINEntry", properties);
         }
         
@@ -591,28 +591,68 @@ namespace MediaBrowser
             Folder folder = item.BaseItem as Folder;
             if (folder != null)
             {
-                Random rnd = new Random();
-                PlayableItem playable;
-                
-                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null).OrderBy(i => rnd.Next());
-                playable = new PlayableMediaCollection<Media>(item.Name, playableChildren);
-            
-                playable.QueueItem = false;        
-                playable.Play(null, false);
+                if (folder.ParentalAllowed)
+                {
+                    ShuffleSecure(item);
+                }
+                else // need to prompt for a PIN - this routine will call back if pin is correct
+                {
+                    this.DisplayPopupPlay = false; //PIN screen mucks with turning this off
+                    Kernel.Instance.ParentalControls.ShuffleProtected(item);
+                }
             }
         }
+
+        public void ShuffleSecure(Item item)
+        {
+            Folder folder = item.BaseItem as Folder;
+            if (folder != null)
+            {
+                Random rnd = new Random();
+                PlayableItem playable;
+
+                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null && v.ParentalAllowed).OrderBy(i => rnd.Next());
+                if (playableChildren.Count() > 0) //be sure we found something to play
+                {
+                    playable = new PlayableMediaCollection<Media>(item.Name, playableChildren);
+                    playable.QueueItem = false;
+                    playable.Play(null, false);
+                }
+
+            }
+        }
+
         public void Unwatched(Item item)
         {
             Folder folder = item.BaseItem as Folder;
-            
+            if (folder != null)
+            {
+                if (folder.ParentalAllowed)
+                {
+                    PlayUnwatchedSecure(item);
+                }
+                else // need to prompt for a PIN - this routine will call back if pin is correct
+                {
+                    this.DisplayPopupPlay = false; //PIN screen mucks with turning this off
+                    Kernel.Instance.ParentalControls.PlayUnwatchedProtected(item);
+                }
+            }
+        }
+
+        public void PlayUnwatchedSecure(Item item)
+        {
+            Folder folder = item.BaseItem as Folder;
+
             if (folder != null)
             {
                 PlayableItem playable;
-               
-                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null && !v.PlaybackStatus.WasPlayed).OrderBy(v => v.Path);
-                playable = new PlayableMediaCollection<Media>(item.Name, playableChildren);
-            
-                playable.Play(null, false);
+
+                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null && v.ParentalAllowed && !v.PlaybackStatus.WasPlayed).OrderBy(v => v.Path);
+                if (playableChildren.Count() > 0) //be sure we have something to play
+                {
+                    playable = new PlayableMediaCollection<Media>(item.Name, playableChildren);
+                    playable.Play(null, false);
+                }
             }
         }
 
@@ -644,6 +684,34 @@ namespace MediaBrowser
             {
                 item.Resume();
             }
+        }
+
+        public void UnlockPC()
+        {
+            Kernel.Instance.ParentalControls.Unlock();
+        }
+        public void RelockPC()
+        {
+            Kernel.Instance.ParentalControls.Relock();
+        }
+
+        public bool RequestingPIN { get; set; } //used to signal the app that we are asking for PIN entry
+
+        public void EnterNewParentalPIN()
+        {
+            Kernel.Instance.ParentalControls.EnterNewPIN();
+        }
+        public string CustomPINEntry { get; set; } //holds the entry for a custom pin (entered by user to compare to pin)
+
+        public void ParentalPINEntered()
+        {
+            RequestingPIN = false;
+            Kernel.Instance.ParentalControls.CustomPINEntered(CustomPINEntry);
+        }
+        public void BackToRoot()
+        {
+            //back up the app to the root page - used when library re-locks itself
+            while (session.BackPage()) { };
         }
 
         public static void DisplayDialog(string message, string caption)

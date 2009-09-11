@@ -22,79 +22,43 @@ namespace MediaBrowser
     {
         private ConfigData data;
 
-        private ParentalControl parentalControls;
-        public ParentalControl ParentalControls
-        {
-            get
-            {
-                if (this.parentalControls == null)
-                    this.parentalControls = new ParentalControl();
-                return this.parentalControls;
-            }
-
-        }
-        public string CustomPINEntry { get; set; } //holds the entry for a custom pin (entered by user to compare to pin)
-
-        public bool RequestingPIN { get; set; }
-
-        public void ParentalPINEntered()
-        {
-            this.RequestingPIN = false;
-            this.parentalControls.CustomPINEntered(CustomPINEntry);
-        }
-
-        public void UnlockPC()
-        {
-            this.parentalControls.Unlock();
-        }
-        public void RelockPC()
-        {
-            this.parentalControls.Relock();
-            FirePropertyChanged("ParentalControlEnabled");
-        }
-        public string ParentalMaxAllowedString
-        {
-            get { return this.ParentalControls.MaxAllowedString; }
-        }
-        public bool ParentalAllowed(Item item)
-        {
-            return this.ParentalControls.Allowed(item);
-        }
         public int ParentalUnlockPeriod
         {
             get { return this.data.ParentalUnlockPeriod; }
             set { if (this.data.ParentalUnlockPeriod != value) { this.data.ParentalUnlockPeriod = value; Save(); FirePropertyChanged("ParentalUnlockPeriod"); } }
         }
-        public bool ParentalControlUnlocked
-        {
-            get { return this.ParentalControls.Unlocked; }
-        }
+ 
         public bool ParentalControlEnabled
         {
             get
             {
-                if (this.ParentalControlUnlocked)
+                if (ParentalControlUnlocked)
                 {
                     return false;
                 }
                 else return this.data.ParentalControlEnabled;
             }
             //we don't set this value if we are temp unlocked because it will get saved to config file as permanent - interface must force re-lock before manipulating this value
-            set { if (!this.ParentalControlUnlocked) { this.data.ParentalControlEnabled = value; Save(); FirePropertyChanged("ParentalControlEnabled"); } }
+            set { if (!ParentalControlUnlocked) { this.data.ParentalControlEnabled = value; Save(); FirePropertyChanged("ParentalControlEnabled"); } }
+        }
+        public bool ParentalControlUnlocked
+        {
+            get { return Kernel.Instance.ParentalControls.Unlocked; }
+            set { Kernel.Instance.ParentalControls.Unlocked = value; FirePropertyChanged("ParentalControlEnabled"); }
         }
         public string ParentalPIN
         {
             get { return this.data.ParentalPIN; }
             set { if (this.data.ParentalPIN != value) { this.data.ParentalPIN = value; Save(); FirePropertyChanged("ParentalPIN"); } }
         }
-        public void EnterNewParentalPIN()
-        {
-            this.parentalControls.EnterNewPIN();
-        }
         public int MaxParentalLevel
         {
             get { return this.data.MaxParentalLevel; }
             set { if (this.data.MaxParentalLevel != value) { this.data.MaxParentalLevel = value; Save(); FirePropertyChanged("MaxParentalLevel"); } }
+        }
+        public string ParentalMaxAllowedString
+        {
+            get { return Kernel.Instance.ParentalControls.MaxAllowedString; }
         }
         public bool HideParentalDisAllowed
         {
@@ -119,23 +83,11 @@ namespace MediaBrowser
                 {
                     this.data.ParentalBlockUnrated = value;
                     Save();
-                    this.parentalControls.SwitchUnrated(value);
+                    Kernel.Instance.ParentalControls.SwitchUnrated(value);
                     FirePropertyChanged("ParentalBlockUnrated");
                 }
             }
         }
-
-        public bool ProtectedFolderAllowed(Folder folder)
-        {
-            return parentalControls.ProtectedFolderEntered(folder);
-        }
-
-        public void ClearProtectedAllowedList()
-        {
-
-            parentalControls.ClearEnteredList();
-        }
-
 
         public bool EnableRootPage
         {

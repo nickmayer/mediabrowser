@@ -235,8 +235,35 @@ namespace MediaBrowser.Library {
         public ConfigData ConfigData { get; set; }
         public IItemRepository ItemRepository { get; set; }
         public IMediaLocationFactory MediaLocationFactory { get; set; }
+        private ParentalControl parentalControls;
+        public ParentalControl ParentalControls
+        {
+            get
+            {
+                if (this.parentalControls == null)
+                    this.parentalControls = new ParentalControl();
+                return this.parentalControls;
+            }
 
-        public T GetItem<T>(string path) where T : BaseItem {
+        }
+
+        public bool ParentalAllowed(Item item)
+        {
+            return this.ParentalControls.Allowed(item);
+        }
+        public bool ProtectedFolderAllowed(Folder folder)
+        {
+            return this.ParentalControls.ProtectedFolderEntered(folder);
+        }
+
+        public void ClearProtectedAllowedList()
+        {
+
+            this.ParentalControls.ClearEnteredList();
+        }
+
+        public T GetItem<T>(string path) where T : BaseItem
+        {
             return GetItem<T>(GetLocation<IMediaLocation>(path));
         }
 
