@@ -2,7 +2,11 @@
 	  xmlns:cor="assembly://MSCorLib/System"
 	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
-    xmlns:pe="resx://MediaBrowser/MediaBrowser.Resources/PINEdit">
+    xmlns:pe="resx://MediaBrowser/MediaBrowser.Resources/PINEdit"
+    xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"
+    xmlns:s="file://Styles_DoNotEdit.mcml"
+    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+      >
 
   <UI Name="ParentalPINEntry">
 
@@ -32,6 +36,17 @@
       </Changed>
       <Binding Source="[PIN.Value]" Target="[Application.CustomPINEntry]">
       </Binding>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.Config.ViewTheme]" ConditionOp="Equals" Value="Diamond" />
+        </Conditions>
+        <Actions>
+          <Set Target="[dbottom.Visible]" Value="true" />
+          <Set Target="[dtop.Visible]" Value="true" />
+          <Set Target="[dbg.Visible]" Value="true" />
+        </Actions>
+      </Rule>
       
     </Rules>
 
@@ -48,8 +63,25 @@
               <FormLayoutInput Top="Parent,.50" Horizontal="Center"/>
             </LayoutInput>
           </pe:PINEdit>
+        
+        
+          <!-- Diamond Bottom Clip -->
+          <dtb:DiamondClipBottom Name="dbottom" LayoutInput="global://dtb:LI_ClipBottom" Visible="false" />
+
+          <!-- Diamond Top Clip -->
+          <dtb:DiamondClipTop Name="dtop" LayoutInput="global://dtb:LI_ClipTop" Visible="false" />
+
+          <!-- Diamond Background -->
+          <Graphic Name="dbg" Content="image://i:DiamondOverlayDarkAll">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,-50" Top="Parent,0,-20" Bottom="Parent,1,10" Right="Parent,1,50"/>
+            </LayoutInput>
+          </Graphic>
+        
         </Children>
       </Panel>
+
+      
     </Content>
 
   </UI>
