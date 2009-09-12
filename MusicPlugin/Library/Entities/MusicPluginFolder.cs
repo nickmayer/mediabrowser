@@ -14,15 +14,16 @@ namespace MusicPlugin.Library.Entities
         {
             get
             {
-                List<BaseItem> items =  base.ActualChildren;
-                if (Settings.ShowPlaylistAsFolder)
-                {                    
+                List<BaseItem> items = base.ActualChildren;
+                if (Settings.Instance.ShowPlaylistAsFolder)
+                {
                     if ((items != null) && !items.Contains(MusicHelper.GetPlaylistFolder()))
                         items.Add(MusicHelper.GetPlaylistFolder());
                 }
 
-                return items;                
+                return items;
             }
         }
+        
     }
 }

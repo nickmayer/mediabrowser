@@ -14,8 +14,8 @@ namespace MusicPlugin.Library.Entities
         public Song()
             : base()
         {
-            if (!string.IsNullOrEmpty(Settings.SongImage))
-                this.PrimaryImagePath = Settings.SongImage;
+            if (!string.IsNullOrEmpty(Settings.Instance.SongImage))
+                this.PrimaryImagePath = Settings.Instance.SongImage;
         }
 
         public override string LongName

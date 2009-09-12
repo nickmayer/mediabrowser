@@ -34,7 +34,7 @@ namespace MusicPlugin.Library.Helpers
 
         public static iTunesMusicLibrary GetDetailsFromXml(iTunesMusicLibrary existingLibrary)
         {
-            string path = Settings.iTunesLibraryXMLPath;
+            string path = Settings.Instance.iTunesLibraryXMLPath;
 
             if (!File.Exists(path))
             {                
@@ -130,8 +130,8 @@ namespace MusicPlugin.Library.Helpers
                 nav.MoveToParent();
                 success = nav.MoveToNext("dict", "");
             }
-            
-            if (Settings.ShowPlaylistAsFolder)
+
+            if (Settings.Instance.ShowPlaylistAsFolder)
                 AddSpecialMusicFolder(folder);
 
             return folder;

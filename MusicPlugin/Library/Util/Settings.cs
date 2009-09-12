@@ -7,165 +7,129 @@ using System.Xml;
 using System.Configuration;
 using System.Reflection;
 using MediaBrowser.Library;
+using System.Xml.Serialization;
 
 namespace MusicPlugin.Util
 {
-    static class Settings
+    public class TheSettings
     {
-        static string settingPath;
-
         //settings to save
-        public static bool ShowGenreIniTunesLibrary
+        public bool FirstLoad
         { get; set; }
-        public static bool ShowArtistIniTunesLibrary
+        public bool ShowGenreIniTunesLibrary
         { get; set; }
-        public static bool LoadiTunesLibrary
+        public bool ShowArtistIniTunesLibrary
         { get; set; }
-        public static string iTunesLibraryXMLPath
+        public bool LoadiTunesLibrary
         { get; set; }
-        public static bool RefreshiTunesLibrary
+        public string iTunesLibraryXMLPath
         { get; set; }
-        public static string iTunesVirtualFolderName
+        public bool ForceRefreshiTunesLibrary
         { get; set; }
-        public static bool LoadNormalMusicLibrary
+        public string iTunesLibraryVirtualFolderName
         { get; set; }
-        public static string MusicMBFolderName
+        public bool LoadNormalLibrary
         { get; set; }
-        public static string MusicPath
+        public string NormalLibraryVirtualFolderName
         { get; set; }
-        public static string InitialPath
+        public string InitialPath
         { get; set; }
-        public static string SongImage
+        public string SongImage
         { get; set; }
-        public static bool ShowPlaylistAsFolder
+        public bool ShowPlaylistAsFolder
         { get; set; }
-        public static string PlayListFolderName
+        public string PlayListFolderName
         { get; set; }
-
-        //static string _info;
-        //public static string Info
+        public string iTunesLibraryIcon
+        { get; set; }
+        public string NormalLibraryIcon
+        { get; set; }
+        public string NormalLibraryPath
+        { get; set; }
+        //private List<string> _normalLibraryPaths;
+        //public List<string> NormalLibraryPaths
         //{
         //    get
         //    {
-        //        return _info;
-        //    }
-
-        //    set
-        //    {
-        //        _info = string.Concat(_info,value);
-        //        saveSettingsFile();
+        //        if (_normalLibraryPaths == null)
+        //            _normalLibraryPaths = new List<string>();
+        //        return _normalLibraryPaths;
         //    }
         //}
-
-        public static void initSettings(string path)
+    }
+    static class Settings
+    {
+        static string settingPath;
+        private static TheSettings _instance;
+        public static TheSettings Instance 
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new TheSettings();
+                return _instance;
+            }
+            set
+            {
+                _instance = value;
+            }
+        }
+        
+                
+        public static string initSettings(string path)
         {
             settingPath = path + "\\..\\plugins\\MusicPlugin.xml";
             if (File.Exists(settingPath))
             {
-                loadSettings();
+                LoadSettings();
                 //incase new settings have been added.
-                InitialPath = path+"\\..\\ImageCache";
-                saveSettingsFile();
+                Instance.InitialPath = path + "\\..\\ImageCache";
+                SaveSettingsFile();                
             }
             else
             {
-                ShowGenreIniTunesLibrary = true;
-                ShowArtistIniTunesLibrary = true;
-                LoadiTunesLibrary = false;
-                iTunesLibraryXMLPath = @"usually something like c:\Users\ _UserName_ \Music\iTunes\iTunes Music Library.xml";
-                RefreshiTunesLibrary = false;
-                iTunesVirtualFolderName = "iTunes Library";
-                InitialPath = path+"\\..\\ImageCache";
-                SongImage = "";
-                LoadNormalMusicLibrary = false;
-                MusicMBFolderName = "Music Library";
-                MusicPath = @"C:\music";
-                PlayListFolderName = "_Playlists";
-                ShowPlaylistAsFolder = true;
-                saveSettingsFile();
+                Instance.FirstLoad = true;
+                Instance.ShowGenreIniTunesLibrary = true;
+                Instance.ShowArtistIniTunesLibrary = true;
+                Instance.LoadiTunesLibrary = false;
+                Instance.iTunesLibraryXMLPath = @"c:\iTunes Music Library.xml";
+#if DEBUG
+                Instance.iTunesLibraryXMLPath = @"c:\Users\_UserName_\Music\iTunes\iTunes Music Library.xml";
+#endif
+                Instance.ForceRefreshiTunesLibrary = false;
+                Instance.iTunesLibraryVirtualFolderName = "iTunes Library";
+                Instance.InitialPath = path + "\\..\\ImageCache";
+                Instance.SongImage = "";
+                Instance.LoadNormalLibrary = false;
+                Instance.NormalLibraryVirtualFolderName = "Music Library";
+                Instance.NormalLibraryPath = @"C:\music";
+                Instance.PlayListFolderName = "_Playlists";
+                Instance.ShowPlaylistAsFolder = true;
+                Instance.iTunesLibraryIcon = "";
+                Instance.NormalLibraryIcon = "";
+                SaveSettingsFile();
             }
+
+            return settingPath;
         }
 
-        private static void loadSettings()
+        private static void LoadSettings()
         {
-            XmlTextReader textReader = new XmlTextReader(settingPath);
-            while (textReader.Read())
-            {
-                if (textReader.Name == "Setting")
-                {
-                    textReader.MoveToFirstAttribute();
-                    string name = textReader.Name;
-                    string value = textReader.Value;
+            XmlSerializer ser = new XmlSerializer(typeof(TheSettings));
 
-                    PropertyInfo[] propertyInfos = typeof(Settings).GetProperties(BindingFlags.Public | BindingFlags.Static);
-                    foreach (PropertyInfo pi in propertyInfos)
-                    {
-                        if (pi.Name == name)
-                        {
-                            if (pi.PropertyType == typeof(bool))
-                            {
-                                pi.SetValue(null, bool.Parse(value), null);
-                            }
-                            else if (pi.PropertyType == typeof(int))
-                            {
-                                pi.SetValue(null, int.Parse(value), null);
-                            }
-                            else if (pi.PropertyType == typeof(string))
-                            {
-                                pi.SetValue(null, value, null);
-                            }
-                        }
-                    }
-                }
-            }
-            textReader.Close();
+            TextReader reader = new StreamReader(settingPath);
+            Instance = (TheSettings) ser.Deserialize(reader);
+            reader.Close();
         }
 
-        public static void saveSettingsFile()
+        public static void SaveSettingsFile()
         {
+            XmlSerializer ser = new XmlSerializer(typeof(TheSettings));
 
-            PropertyInfo[] propertyInfos = typeof(Settings).GetProperties(BindingFlags.Public | BindingFlags.Static);
+            TextWriter writer = new StreamWriter(settingPath);
+            ser.Serialize(writer, Settings.Instance);
+            writer.Close();
 
-            using (XmlTextWriter textWriter = new XmlTextWriter(settingPath,null))
-            {
-                textWriter.Formatting = Formatting.Indented;
-                textWriter.WriteStartDocument();
-                textWriter.WriteStartElement("Settings");
-                foreach (PropertyInfo pi in propertyInfos)
-                {
-                    string name = pi.Name;
-
-                    var temp = pi.GetValue(null, null);
-
-                    string value;
-                    if (temp is int)
-                    {
-                        value = ((int)temp).ToString();
-                    }
-                    else if (temp is string)
-                    {
-                        value = (temp as string);
-                    }
-                    else if (temp is bool)
-                    {
-                        value = ((bool)temp).ToString();
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    textWriter.WriteStartElement("Setting");
-
-                    textWriter.WriteAttributeString(name, value as string);
-
-                    textWriter.WriteEndElement();
-
-                }
-                textWriter.WriteEndElement();
-                textWriter.WriteEndDocument();
-                textWriter.Close();
-            }
         }
        
     }

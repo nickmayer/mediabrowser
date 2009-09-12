@@ -93,7 +93,7 @@ namespace MusicPlugin.LibraryManagement
             if (_playlistFolder == null)
             {
                 _playlistFolder = new Folder();
-                _playlistFolder.Name = Settings.PlayListFolderName;
+                _playlistFolder.Name = Settings.Instance.PlayListFolderName;
                 _playlistFolder.Path = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.MyMusic), "Playlists");
             }
             return _playlistFolder;

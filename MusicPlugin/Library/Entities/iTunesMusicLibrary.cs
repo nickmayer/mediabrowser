@@ -50,7 +50,7 @@ namespace MusicPlugin.Library.Entities
         {
             get
             {
-                return Settings.iTunesVirtualFolderName;
+                return Settings.Instance.iTunesLibraryVirtualFolderName;
             }
             set
             {
@@ -63,9 +63,9 @@ namespace MusicPlugin.Library.Entities
         {
             get
             {
-                if (Settings.ShowGenreIniTunesLibrary)
+                if (Settings.Instance.ShowGenreIniTunesLibrary)
                     return Genres;
-                else if (Settings.ShowArtistIniTunesLibrary)
+                else if (Settings.Instance.ShowArtistIniTunesLibrary)
                     return Artists;
                 else
                     return Albums;

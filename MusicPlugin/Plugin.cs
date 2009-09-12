@@ -12,6 +12,7 @@ using System.Reflection;
 using MusicPlugin.Library.Helpers;
 using MusicPlugin.Util;
 using Microsoft.MediaCenter;
+using System.IO;
 
 namespace MusicPlugin
 {
@@ -25,9 +26,25 @@ namespace MusicPlugin
         {            
             //AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             
-            Settings.initSettings(kernel.ConfigData.InitialFolder);
+            string settingsFile = Path.GetFullPath(Settings.initSettings(kernel.ConfigData.InitialFolder));
 
-            if (Settings.LoadiTunesLibrary)
+            if (!File.Exists(settingsFile))
+            {
+                string message = "The MusicPlugin could not create a config file. It will not be loaded.";
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, "MusicPlugin", DialogButtons.Ok, 60, true);
+                return;
+            }
+
+            if (Settings.Instance.FirstLoad)
+            {                
+                string message = "The MusicPlugin has created its own configuration file, please close MediaBrowser and configure " + settingsFile;
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, "MusicPlugin", DialogButtons.Ok, 60, true);
+                Settings.Instance.FirstLoad = false;
+                Settings.SaveSettingsFile();
+                return;
+            }
+
+            if (Settings.Instance.LoadiTunesLibrary)
             {
                 try
                 {
@@ -35,19 +52,19 @@ namespace MusicPlugin
                     string message = "RefreshiTunesLibrary in the MusicPlugin.xml is set to true, this will force a rebuild of the iTunes Library, continue?";
                     string heading = "Rebuild iTunes Library Cache";
 
-                    if (Settings.RefreshiTunesLibrary && Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
+                    if (Settings.Instance.ForceRefreshiTunesLibrary && Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
                     {
                         
                         itunes = iTunesLibrary.GetDetailsFromXml(kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) as iTunesMusicLibrary);
-                        Settings.RefreshiTunesLibrary = false;
-                        Settings.saveSettingsFile();
+                        Settings.Instance.ForceRefreshiTunesLibrary = false;
+                        Settings.SaveSettingsFile();
                         
                     }
                     else
                     {
                         itunes = kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) ?? new iTunesLibrary().Library;
                     }
-                    if ((itunes as iTunesMusicLibrary).LastUpdate != DateTime.MinValue && (itunes as iTunesMusicLibrary).LastUpdate < new System.IO.FileInfo(Settings.iTunesLibraryXMLPath).LastWriteTime)
+                    if ((itunes as iTunesMusicLibrary).LastUpdate != DateTime.MinValue && (itunes as iTunesMusicLibrary).LastUpdate < new System.IO.FileInfo(Settings.Instance.iTunesLibraryXMLPath).LastWriteTime)
                     {
                         message = "Your iTunes Library might have changed, do you want to rebuild it?";
                         if (Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
@@ -57,7 +74,10 @@ namespace MusicPlugin
 
                     itunes.Path = "";
                     itunes.Id = MusiciTunesGuid;
-                    itunes.Name = Settings.iTunesVirtualFolderName;
+                    itunes.Name = Settings.Instance.iTunesLibraryVirtualFolderName;
+                    if (!string.IsNullOrEmpty(Settings.Instance.iTunesLibraryIcon))
+                        itunes.PrimaryImagePath = Settings.Instance.iTunesLibraryIcon;
+
                     kernel.RootFolder.AddVirtualChild(itunes);
                     kernel.ItemRepository.SaveItem(itunes);
                 }
@@ -67,15 +87,16 @@ namespace MusicPlugin
                 }
             }
 
-            if (Settings.LoadNormalMusicLibrary)
+            if (Settings.Instance.LoadNormalLibrary)
             {
                 BaseItem music;
 
                 music = kernel.ItemRepository.RetrieveItem(MusicNormalGuid)??new MusicPluginFolder();
                 music.Id = MusicNormalGuid;
-                music.Path = Settings.MusicPath;
-                music.Name = Settings.MusicMBFolderName;
-                
+                music.Path = Settings.Instance.NormalLibraryPath;
+                music.Name = Settings.Instance.NormalLibraryVirtualFolderName;
+                if (!string.IsNullOrEmpty(Settings.Instance.NormalLibraryIcon))
+                    music.PrimaryImagePath = Settings.Instance.NormalLibraryIcon;
                 kernel.RootFolder.AddVirtualChild(music);
                 //kernel.ItemRepository.SaveItem(music);                
             }
@@ -94,7 +115,7 @@ namespace MusicPlugin
                 MediaBrowser.Library.ItemFactory.Instance.AddFactory(MusicFolderModel.IsOne, typeof(MusicFolderModel));
             //}
             //else
-            if (!Settings.LoadNormalMusicLibrary && !Settings.LoadiTunesLibrary)
+            if (!Settings.Instance.LoadNormalLibrary && !Settings.Instance.LoadiTunesLibrary)
                 Logger.ReportInfo("Music plugin, iTunes nor Normal Music enabled, probably using folder specification via configurator.");
                         
         }
@@ -114,7 +135,7 @@ namespace MusicPlugin
 
         public override string Description
         {
-            get { return "Music and iTunes library plugin for MediaBrowser. by Nephelyn"; }
+            get { return "Music and iTunes library plugin for MediaBrowser by Nephelyn."; }
         }
 
     }
