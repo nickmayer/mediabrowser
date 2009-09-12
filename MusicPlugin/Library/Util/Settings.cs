@@ -59,7 +59,7 @@ namespace MusicPlugin.Util
     }
     static class Settings
     {
-        static string settingPath;
+        public static string SettingPath;
         private static TheSettings _instance;
         public static TheSettings Instance 
         {
@@ -76,10 +76,10 @@ namespace MusicPlugin.Util
         }
         
                 
-        public static string initSettings(string path)
+        public static void InitSettings(string path)
         {
-            settingPath = path + "\\..\\plugins\\MusicPlugin.xml";
-            if (File.Exists(settingPath))
+            SettingPath = Path.GetFullPath(path + "\\..\\plugins\\MusicPlugin.xml");
+            if (File.Exists(SettingPath))
             {
                 LoadSettings();
                 //incase new settings have been added.
@@ -109,15 +109,13 @@ namespace MusicPlugin.Util
                 Instance.NormalLibraryIcon = "";
                 SaveSettingsFile();
             }
-
-            return settingPath;
         }
 
         private static void LoadSettings()
         {
             XmlSerializer ser = new XmlSerializer(typeof(TheSettings));
 
-            TextReader reader = new StreamReader(settingPath);
+            TextReader reader = new StreamReader(SettingPath);
             Instance = (TheSettings) ser.Deserialize(reader);
             reader.Close();
         }
@@ -126,7 +124,7 @@ namespace MusicPlugin.Util
         {
             XmlSerializer ser = new XmlSerializer(typeof(TheSettings));
 
-            TextWriter writer = new StreamWriter(settingPath);
+            TextWriter writer = new StreamWriter(SettingPath);
             ser.Serialize(writer, Settings.Instance);
             writer.Close();
 
