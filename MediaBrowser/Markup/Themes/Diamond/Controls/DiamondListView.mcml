@@ -158,6 +158,7 @@
 
     <Locals>
       <Image Name="Tick" Image="image://i:Tick"/>
+      <Image Name="PCLock" Image="image://i:Lock"/>
       <Size Name="MinSize" Size="300,48" />
       <Size Name="Size" Size="625,48" />
       <Image Name="ImageFocus" Image="image://me:ButtonLeftFocus" />
@@ -195,6 +196,13 @@
           
         </Actions>
       </Rule>-->
+      
+      <!-- PC Lock Indicator -->
+      <Binding Source="[Item.ParentalAllowed]" Target="[PCIndicator.Visible]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
 
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
@@ -221,7 +229,17 @@
         <Children>
           <Panel Layout="Dock">
             <Children>
-              <Panel Layout="Center" MaximumSize="20,20" MinimumSize="20,20" >
+              <Panel Layout="Center" MaximumSize="30,20" MinimumSize="20,20" >
+                <LayoutInput>
+                  <DockLayoutInput Alignment="Center" Position="Left" />
+                </LayoutInput>
+                <Children>
+                  <Graphic Name="PCIndicator" Visible="false" Content="[PCLock]" Margins="0,0,5,0">
+                  </Graphic>
+                </Children>
+              </Panel>
+              
+              <Panel Layout="Center" MaximumSize="20,20" MinimumSize="20,20" Visible="[Application.Config.EnableListViewTicks]" >
                 <LayoutInput>
                   <DockLayoutInput Alignment="Center" Position="Right" />
                 </LayoutInput>
