@@ -95,10 +95,25 @@ namespace MusicPlugin.Library.Helpers
                 if (!data.ContainsKey("Genre"))
                     data.Add("Genre", "");
 
+                string uncPath = GetUncFileName(data["Location"]);
+                
                 if (string.IsNullOrEmpty(data["Artist"]) || string.IsNullOrEmpty(data["Album"]))
                 {
-                    nav.MoveToParent();
-                    success = nav.MoveToNext("dict", "");
+                    success = NewElement(nav, success);
+                    continue;
+                }
+#if !DEBUG
+                else if (!File.Exists(uncPath))
+                {
+                    Logger.ReportError(string.Format("MusicPlugin, file {0} does not exist, not added to iTunes Library", uncPath));
+                    success = NewElement(nav, success);
+                    continue;
+                }
+#endif
+                else if (!MusicHelper.IsMusic(uncPath))
+                {
+                    Logger.ReportError(string.Format("MusicPlugin, file {0} is not supported, not added to iTunes Library", uncPath));
+                    success = NewElement(nav, success);
                     continue;
                 }
 
@@ -126,15 +141,21 @@ namespace MusicPlugin.Library.Helpers
                 childUniqueAlbumFolder.Songs.Add(newSong);
                 childUniqueAlbumFolder.PrimaryImagePath = childAlbumFolder.PrimaryImagePath;
                 childUniqueAlbumFolder.BackdropImagePath = childAlbumFolder.BackdropImagePath;
-                
-                nav.MoveToParent();
-                success = nav.MoveToNext("dict", "");
+
+                success = NewElement(nav, success);
             }
 
             if (Settings.Instance.ShowPlaylistAsFolder)
                 AddSpecialMusicFolder(folder);
 
             return folder;
+        }
+
+        private static bool NewElement(XPathNavigator nav, bool success)
+        {
+            nav.MoveToParent();
+            success = nav.MoveToNext("dict", "");
+            return success;
         }
 
         private static void AddSpecialMusicFolder(iTunesMusicLibrary folder)
@@ -150,9 +171,6 @@ namespace MusicPlugin.Library.Helpers
             if (folder.Genres != null)
                 folder.Genres.Add(musicFolder);
         }
-
-        
-        
 
         private static void ClearCache(iTunesMusicLibrary folder)
         {
@@ -235,8 +253,7 @@ namespace MusicPlugin.Library.Helpers
             if (folder.HasImage)
                 return;
 
-            string uncFilePath = new Uri(song.Path).LocalPath;
-            uncFilePath = uncFilePath.Replace("\\\\localhost\\", " ").Trim();
+            string uncFilePath = GetUncFileName(song.Path);
 
             if (!System.IO.File.Exists(uncFilePath))
                 return;
@@ -269,6 +286,13 @@ namespace MusicPlugin.Library.Helpers
             }
 
 
+        }
+
+        private static string GetUncFileName(string song)
+        {
+            string uncFilePath = new Uri(song).LocalPath;
+            uncFilePath = uncFilePath.Replace("\\\\localhost\\", " ").Trim();
+            return uncFilePath;
         }
 
     }
