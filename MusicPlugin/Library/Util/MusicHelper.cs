@@ -113,7 +113,7 @@ namespace MusicPlugin.LibraryManagement
                     }
                     catch (Exception e)
                     {
-                        Logger.ReportError("MusicPlugin Error, failed to create playlists folder, " + playListPath);
+                        Logger.ReportException("MusicPlugin Error, failed to create playlists folder, " + playListPath,e);
                         return null;
                     }                    
                 }

@@ -26,6 +26,7 @@ namespace MusicPlugin
         {            
             //AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 
+            Logger.ReportInfo(string.Format("Tyring to load {0} v{1}",Name,LatestVersion.ToString()));
 
             if (ValidateSettings(kernel.ConfigData.InitialFolder))
             {
@@ -119,7 +120,17 @@ namespace MusicPlugin
         {
             get { return "Music and iTunes library plugin for MediaBrowser by Nephelyn."; }
         }
-
+        public override System.Version LatestVersion
+        {
+            get
+            {
+                return new System.Version(0,5,0,1);
+            }
+            set
+            {
+                //base.LatestVersion = value;
+            }
+        }
         private bool ValidateSettings(string initialFolder)
         {
             string heading = "MusicPlugin";
