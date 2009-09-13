@@ -25,8 +25,9 @@ namespace MusicPlugin
         public override void Init(Kernel kernel)
         {            
             //AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-
-            Logger.ReportInfo(string.Format("Tyring to load {0} v{1}",Name,LatestVersion.ToString()));
+            Logger.ReportInfo(string.Format("Tyring to load {0} v{1} loaded by {2}.", Name, LatestVersion.ToString(), AppDomain.CurrentDomain.FriendlyName));
+            if (AppDomain.CurrentDomain.FriendlyName.Contains("Configurator"))
+                return;
 
             if (ValidateSettings(kernel.ConfigData.InitialFolder))
             {
@@ -124,11 +125,19 @@ namespace MusicPlugin
         {
             get
             {
-                return new System.Version(0,5,0,1);
+                return new System.Version(0,5,0,2);
             }
             set
             {
                 //base.LatestVersion = value;
+            }
+        }
+
+        public override System.Version Version
+        {
+            get
+            {
+                return LatestVersion;
             }
         }
         private bool ValidateSettings(string initialFolder)

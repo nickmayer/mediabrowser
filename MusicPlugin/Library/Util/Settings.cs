@@ -16,35 +16,39 @@ namespace MusicPlugin.Util
         //settings to save
         public bool FirstLoad
         { get; set; }
+        public string InitialPath
+        { get; set; }
+        
+        public bool LoadiTunesLibrary
+        { get; set; }
+        public string iTunesLibraryVirtualFolderName
+        { get; set; }
         public bool ShowGenreIniTunesLibrary
         { get; set; }
         public bool ShowArtistIniTunesLibrary
         { get; set; }
-        public bool LoadiTunesLibrary
-        { get; set; }
         public string iTunesLibraryXMLPath
+        { get; set; }
+        public string iTunesLibraryIcon
         { get; set; }
         public bool ForceRefreshiTunesLibrary
         { get; set; }
-        public string iTunesLibraryVirtualFolderName
-        { get; set; }
+        
         public bool LoadNormalLibrary
         { get; set; }
         public string NormalLibraryVirtualFolderName
         { get; set; }
-        public string InitialPath
-        { get; set; }
-        public string SongImage
-        { get; set; }
-        public bool ShowPlaylistAsFolder
-        { get; set; }
-        public string PlayListFolderName
-        { get; set; }
-        public string iTunesLibraryIcon
+        public string NormalLibraryPath
         { get; set; }
         public string NormalLibraryIcon
         { get; set; }
-        public string NormalLibraryPath
+
+        public bool ShowPlaylistAsFolder
+        { get; set; }
+        public string PlayListFolderName
+        { get; set; }     
+        
+        public string SongImage
         { get; set; }
         //private List<string> _normalLibraryPaths;
         //public List<string> NormalLibraryPaths
