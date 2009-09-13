@@ -174,13 +174,6 @@ namespace MusicPlugin
                 return false;
             }
 
-            if (Settings.Instance.LoadNormalLibrary && Settings.Instance.LoadiTunesLibrary && Settings.Instance.NormalLibraryVirtualFolderName == Settings.Instance.iTunesLibraryVirtualFolderName)
-            {
-                message = "Your Normal and iTunes Libraries are enabled, but your virtual folders names are the same.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
-                return false;
-            }
-
             if (!string.IsNullOrEmpty(Settings.Instance.iTunesLibraryIcon) && !File.Exists(Settings.Instance.iTunesLibraryIcon))
             {
                 message = "Your iTunes Library is enabled, but the specified icon path is invalid.";
