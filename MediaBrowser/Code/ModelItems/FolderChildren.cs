@@ -123,7 +123,7 @@ namespace MediaBrowser.Code.ModelItems {
                 clone.folderModel = folderModel;
                 clone.folder = folder;
                 clone.items = items;
-                clone.currentChildren = currentChildren;
+                clone.currentChildren = folder.Children; //force it to re-get these
                 clone.onChildrenChanged = onChildrenChanged;
                 clone.folderIsIndexed = folderIsIndexed;
                 clone.childImageAspect = childImageAspect;

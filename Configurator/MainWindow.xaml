@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Configurator.MainWindow"
-    Title="Media Browser Configuration Tool" Height="550" Width="700" MinWidth="700" MinHeight="550" Icon="/Configurator;component/Images/config.ico" 
+    Title="Media Browser Configuration Tool" Height="578" Width="700" MinWidth="700" MinHeight="550" Icon="/Configurator;component/Images/config.ico" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d" 
@@ -122,21 +122,21 @@
 
                     <GroupBox Header="General Display Settings" HorizontalAlignment="Left" Margin="9,14,0,198" Name="groupBox1" Width="287">
                         <Grid>
-                            <CheckBox Height="32" Margin="25,10,100,0" Name="cbxOptionClock" ToolTip="Display time clock within Media Browser" VerticalAlignment="Top" Click="cbxOptionClock_Click">Display Clock</CheckBox>
-                            <CheckBox Margin="25,34,36,54.38" Name="cbxOptionTransparent" ToolTip="Enable transparent background" Click="cbxOptionTransparent_Click">Transparent Background</CheckBox>
-                            <CheckBox Margin="25,58,45,30.38" Name="cbxOptionDimPoster" ToolTip="Dim unselected items" Click="cbxOptionDimPoster_Click">Dim Unselected Posters</CheckBox>
-                            <CheckBox Margin="25,82,25,0" Name="cbxOptionIndexing" ToolTip="Remember indexed filter settings for each folder" Height="19.76" VerticalAlignment="Top" Click="cbxOptionIndexing_Click">Remember Folder Indexing</CheckBox>
-                            <CheckBox Margin="25,106,25,0" Name="cbxOptionAspectRatio" ToolTip="Stretch folder image to fill display area" Height="24.38" VerticalAlignment="Top" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
-                            <CheckBox Height="24.38" Margin="25,130.38,25,0" Name="cbxOptionHideFrame" ToolTip="Hide focus frame around posters." VerticalAlignment="Top" Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
+                            <CheckBox Height="18" Margin="25,10,0,0" Name="cbxOptionClock" ToolTip="Display time clock within Media Browser" VerticalAlignment="Top" Click="cbxOptionClock_Click" HorizontalAlignment="Left" Width="103">Display Clock</CheckBox>
+                            <CheckBox Margin="25,34,76,0" Name="cbxOptionTransparent" ToolTip="Enable transparent background" Click="cbxOptionTransparent_Click" Height="18" VerticalAlignment="Top">Transparent Background</CheckBox>
+                            <CheckBox Margin="25,58,76,0" Name="cbxOptionDimPoster" ToolTip="Dim unselected items" Click="cbxOptionDimPoster_Click" Height="18" VerticalAlignment="Top">Dim Unselected Posters</CheckBox>
+                            <CheckBox Margin="25,82,62,66" Name="cbxOptionIndexing" ToolTip="Remember indexed filter settings for each folder" Click="cbxOptionIndexing_Click">Remember Folder Indexing</CheckBox>
+                            <CheckBox Margin="25,0,51,41" Name="cbxOptionAspectRatio" ToolTip="Stretch folder image to fill display area" Height="19" VerticalAlignment="Bottom" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
+                            <CheckBox Height="21" Margin="25,0,116,14" Name="cbxOptionHideFrame" ToolTip="Hide focus frame around posters." VerticalAlignment="Bottom" Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Media Tracking" HorizontalAlignment="Right" Margin="0,14,20,0" Name="groupBox2" Width="287" Height="157.38" VerticalAlignment="Top">
                         <Grid>
-                            <CheckBox Margin="25,10,0,0" Name="cbxOptionUnwatchedCount" HorizontalAlignment="Left" Width="224" Content="Show Unwatched Counter" Height="32" VerticalAlignment="Top" Click="cbxOptionUnwatchedCount_Click" ToolTip="Show unwatched counter on top of poster art" />
-                            <CheckBox Margin="25,34,0,0" Name="cbxOptionUnwatchedOnFolder" HorizontalAlignment="Left" Width="224" Content="Watched Indicator on Folders" Height="32" VerticalAlignment="Top" Click="cbxOptionUnwatchedOnFolder_Click" ToolTip="Display indicator for previously viewed folders" />
-                            <CheckBox Margin="25,58,0,0" Name="cbxOptionUnwatchedOnVideo" HorizontalAlignment="Left" Width="195" Content="Watched Indicator on Items" Height="32" VerticalAlignment="Top" Click="cbxOptionUnwatchedOnVideo_Click" ToolTip="Display indicator for previously viewed items" />
-                            <CheckBox Margin="25,82,0,0" Name="cbxOptionUnwatchedDetailView" HorizontalAlignment="Left" Width="243" Content="Watched Indicator in Detail View" Height="32" VerticalAlignment="Top" Click="cbxOptionUnwatchedDetailView_Click" ToolTip="Display indicator in detail view for previously viewed items" />
-                            <CheckBox Margin="25,106,0,0" Name="cbxOptionDefaultToUnwatched" HorizontalAlignment="Left" Width="234" Content="Default to First Unwatched Item" Click="cbxOptionDefaultToUnwatched_Click" Height="32" VerticalAlignment="Top" ToolTip="Automatically highlight the first unwatched item" />
+                            <CheckBox Margin="25,10,26,0" Name="cbxOptionUnwatchedCount" Content="Show Unwatched Counter" Height="18" VerticalAlignment="Top" Click="cbxOptionUnwatchedCount_Click" ToolTip="Show unwatched counter on top of poster art" />
+                            <CheckBox Margin="25,34,26,0" Name="cbxOptionUnwatchedOnFolder" Content="Watched Indicator on Folders" Height="18" VerticalAlignment="Top" Click="cbxOptionUnwatchedOnFolder_Click" ToolTip="Display indicator for previously viewed folders" />
+                            <CheckBox Margin="25,58,55,56" Name="cbxOptionUnwatchedOnVideo" Content="Watched Indicator on Items" Click="cbxOptionUnwatchedOnVideo_Click" ToolTip="Display indicator for previously viewed items" />
+                            <CheckBox Margin="25,0,26,31" Name="cbxOptionUnwatchedDetailView" Content="Watched Indicator in Detail View" Height="19" VerticalAlignment="Bottom" Click="cbxOptionUnwatchedDetailView_Click" ToolTip="Display indicator in detail view for previously viewed items" />
+                            <CheckBox Margin="25,0,35,6" Name="cbxOptionDefaultToUnwatched" Content="Default to First Unwatched Item" Click="cbxOptionDefaultToUnwatched_Click" Height="19.76" VerticalAlignment="Bottom" ToolTip="Automatically highlight the first unwatched item" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Theme Settings" HorizontalAlignment="Left" Margin="10,0,0,13" Name="groupBox3" Width="287" Height="157.38" VerticalAlignment="Bottom" Foreground="#FF323232" BorderBrush="Transparent">
@@ -152,7 +152,7 @@
                     </GroupBox>
                     <GroupBox Header="Enhanced Home Screen" HorizontalAlignment="Right" Margin="0,0,20,12" Name="groupBox4" Width="287" Height="177" VerticalAlignment="Bottom">
                         <Grid>
-                            <CheckBox Height="32" HorizontalAlignment="Left" Margin="25,10,0,0" Name="cbxRootPage" ToolTip="Enable the enhanced home screen" VerticalAlignment="Top" Width="234" Click="cbxRootPage_Click">Enable Enhanced Home Screen</CheckBox>
+                            <CheckBox Height="17" Margin="25,10,35,0" Name="cbxRootPage" ToolTip="Enable the enhanced home screen" VerticalAlignment="Top" Click="cbxRootPage_Click">Enable Enhanced Home Screen</CheckBox>
                             <Label Margin="25,0,130,12" ToolTip="Weather temperature unit" Height="55.38" VerticalAlignment="Bottom">Weather Unit</Label>
                             <Label Margin="25,58,130,58" ToolTip="Yahoo! Weather location ID (e.g. UKXX0055)">Weather ID</Label>
                             <TextBox Margin="120,61,35,67" Name="tbxWeatherID" />
@@ -183,6 +183,40 @@
                     </Canvas>
                     <Label Height="34" HorizontalAlignment="Left" Margin="20,6,0,0" x:Name="lblPlayerStep1" VerticalAlignment="Top" Width="34" Foreground="#FFA8A8A8" Opacity="1" Content="❶" FontSize="14" />
                     <Label Height="34" HorizontalAlignment="Left" Margin="52,6,0,0" x:Name="lblPlayerStep1b" VerticalAlignment="Top" Width="237" Foreground="#FF030303" Content="Add media type for external player" Grid.ColumnSpan="2" FontSize="14" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="parental control" Name="parentalControlTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed">
+                <Grid>
+                    <GroupBox Header="General" HorizontalAlignment="Left" Margin="34,67,0,104" Name="gbPCGeneral" Width="268" IsEnabled="False">
+                        <Grid>
+                            <CheckBox Margin="22,26,66,0" Click="cbxOptionBlockUnrated_Click" Name="cbxOptionBlockUnrated" Height="23" VerticalAlignment="Top" IsEnabled="True">Block Unrated Content</CheckBox>
+                            <CheckBox Height="22" Margin="22,46,73,0" Name="cbxOptionHideProtected" Click="cbxOptionHideProtected_Click" VerticalAlignment="Top">Hide Blocked Content</CheckBox>
+                            <ComboBox Margin="24,101,66,78" Name="ddlOptionMaxAllowedRating" SelectionChanged="ddlOptionMaxAllowedRating_SelectionChanged" />
+                            <Label Margin="22,73.64,93,0" Name="label2" Height="28.14" VerticalAlignment="Top">Max Allowed Rating</Label>
+                            <Label Height="28" Margin="22,0,81,44" Name="label7" VerticalAlignment="Bottom">Unlock Period (hours)</Label>
+                            <Slider Height="22" Margin="22,0,0,16" Name="slUnlockPeriod" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" Minimum="1" Maximum="24" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Value ="1" ValueChanged="slUnlockPeriod_ValueChanged" />
+                            <TextBlock Height="32" Margin="0,0,66,6" Name="txtOptionUnlockPeriod" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="47" Text="{Binding ElementName=slUnlockPeriod,Path=Value}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="PIN" HorizontalAlignment="Right" Margin="0,67,20,104" Name="gbPCPIN" Width="298" IsEnabled="False">
+                        <Grid Height="186" Width="286">
+                            <PasswordBox Margin="40,63.07,0,0" Name="txtPCPIN" MaxLength="4" HorizontalAlignment="Left" Width="78" Height="28" VerticalAlignment="Top" />
+                            <Label Height="37" Margin="17,10.93,23,0" Name="label3" VerticalAlignment="Top">Enter EXACTLY 4 digits (numbers only)</Label>
+                            <Button HorizontalAlignment="Right" Margin="0,63.07,51,0" Name="btnPINSave" Click="savePCPIN" Width="72" Height="28" VerticalAlignment="Top">Save</Button>
+                        </Grid>
+                    </GroupBox>
+                    <CheckBox Height="23" Margin="34,24,0,0" Name="cbxEnableParentalControl" VerticalAlignment="Top" HorizontalAlignment="Left" Width="181" Click="cbxEnableParentalControl_Click">Enable Parental Control</CheckBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="folder security" Name="folderSecurityTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed">
+                <Grid>
+                    <TreeView Margin="35,56,321,52" Name="tvwLibraryFolders" SelectedValuePath="MPAARating" SelectedItemChanged="tvwLibraryFolders_SelectedItemChanged"/>
+                    <Label Height="28" HorizontalAlignment="Left" Margin="35,22,0,0" Name="label4" VerticalAlignment="Top" Width="120">Library Folders</Label>
+                    <Button Height="32" HorizontalAlignment="Left" Margin="35,0,0,14" Click="btnFolderTree_Click" Name="btnFolderTree" VerticalAlignment="Bottom" Width="102">Load Folders</Button>
+                    <ComboBox Height="25" HorizontalAlignment="Right" Margin="0,138,119,0" IsEnabled="False" SelectionChanged="ddlFolderRating_SelectionChanged" Name="ddlFolderRating" VerticalAlignment="Top" Width="113" />
+                    <Label Height="28" HorizontalAlignment="Right" Margin="0,104,112,0" Name="label5" VerticalAlignment="Top" Width="120">Folder Rating</Label>
+                    <TextBox Height="79" HorizontalAlignment="Left" Text="Please Load Library Folders" Margin="87,117,0,0" Name="txtLibFolderLoad" VerticalAlignment="Top" Width="185" IsReadOnly="True" BorderThickness="0" Foreground="Gray" />
+                    <TextBlock HorizontalAlignment="Right" Margin="0,199,24,52" Text="To set up folders to respond to Parental Controls, select a folder in the list and give it a valid rating.  A Rating of 'CS' will always require a PIN if Parental Control is enabled." Name="textBlock1" Width="268" TextWrapping="WrapWithOverflow" />
                 </Grid>
             </TabItem>
         </TabControl>

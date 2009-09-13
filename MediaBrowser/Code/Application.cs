@@ -450,11 +450,17 @@ namespace MediaBrowser
             }
         }
 
+        public FolderModel CurrentFolder; //used to keep track of the current folder so we can update the UI if needed
+        public FolderModel RootFolderModel; //used to keep track of root folder as foldermodel for same reason
+
         private void OpenFolderPage(FolderModel folder)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["Folder"] = folder;
+            CurrentFolder = folder; //store our current folder
+            if (folder.IsRoot)
+                RootFolderModel = folder; //store the root as well
 
             if (session != null)
             {

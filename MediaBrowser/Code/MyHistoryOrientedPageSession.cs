@@ -58,6 +58,7 @@ namespace MediaBrowser
                 //clear out the protected folder list each time we go back to the root
                 if ((uiProperties != null) && (uiProperties.ContainsKey("Folder")))
                 {
+                    Application.CurrentInstance.CurrentFolder = uiProperties["Folder"] as FolderModel; //keep track of current folder on back
                     if (((FolderModel)uiProperties["Folder"]).IsRoot) {
                         //we're backing into the root folder - clear the protected folder list
                         Kernel.Instance.ClearProtectedAllowedList();

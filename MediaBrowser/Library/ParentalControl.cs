@@ -22,8 +22,7 @@ namespace MediaBrowser.Library
         }
 
         private bool gettingNewPIN = false; // used to signal that we should replace PIN instead of validate
-        private Dictionary<string, int> ratings = new Dictionary<string, int>();
-        private Dictionary<int, string> ratingsStrings = new Dictionary<int, string>();
+        private Ratings ratings;
         private Timer _relockTimer;
         private DateTime unlockedTime { get; set; }  // time library was unlocked
         private int unlockPeriod { get; set; } //private storage for unlock period
@@ -48,38 +47,8 @@ namespace MediaBrowser.Library
 
             // init list of folders we've gained access to
             enteredProtectedFolders = new List<Folder>();
-            // construct ratings dict
-            if (Config.Instance.ParentalBlockUnrated)
-            {
-                ratings.Add("", 5); 
-            }
-            else
-            {
-                ratings.Add("", 0);
-            }
-            ratings.Add("G", 1);
-            ratings.Add("TV-G", 1);
-            ratings.Add("TV-Y", 1);
-            ratings.Add("TV-Y7", 1);
-            ratings.Add("PG", 2);
-            ratings.Add("TV-PG", 2);
-            ratings.Add("PG-13", 3);
-            ratings.Add("TV-14", 3);
-            ratings.Add("R", 4);
-            ratings.Add("TV-MA", 4);
-            ratings.Add("NC-17", 5);
-            ratings.Add("UR", 5);
-            ratings.Add("NR", 5);
-            ratings.Add("X", 10);
-            ratings.Add("XXX", 100);
-            ratings.Add("CS", 1000);
-            //and rating reverse lookup dictionary (don't need the unrated or redundant ones)
-            ratingsStrings.Add(1,"G");
-            ratingsStrings.Add(2,"PG" );
-            ratingsStrings.Add(3,"PG-13");
-            ratingsStrings.Add(4,"R");
-            ratingsStrings.Add(5, "NC-17");
-            ratingsStrings.Add(999, "CS"); //this is different because we want Custom to be protected, not allowed
+            // construct ratings object
+            ratings = new Ratings(Config.Instance.ParentalBlockUnrated);
 
             Logger.ReportInfo("Parental Control Initialized");
             return;
@@ -123,9 +92,7 @@ namespace MediaBrowser.Library
         {
             get
             {
-                if (ratingsStrings.ContainsKey(MaxAllowed))
-                    return ratingsStrings[MaxAllowed];
-                else return "G"; //return something valid
+                return ratings.ToString(MaxAllowed) ?? "G"; //return something valid if not there
             }
         }
 
@@ -149,9 +116,7 @@ namespace MediaBrowser.Library
             if (this.Enabled && item != null)
             {
                 //Logger.ReportInfo("Checking parental status on " + item.Name + " "+item.ParentalRating+" "+this.MaxAllowed.ToString());
-                if (ratings.ContainsKey(item.ParentalRating))
-                    return (ratings[item.ParentalRating] <= this.MaxAllowed);
-                else return true;
+                return (ratings.Level(item.ParentalRating) <= this.MaxAllowed);
             }
             else return true;
         }
@@ -161,9 +126,7 @@ namespace MediaBrowser.Library
             if (this.Enabled && item != null)
             {
                 //Logger.ReportInfo("Checking parental status on " + item.Name + " " + item.ParentalRating + " " + this.MaxAllowed.ToString());
-                if (ratings.ContainsKey(item.ParentalRating))
-                    return (ratings[item.ParentalRating] <= this.MaxAllowed);
-                else return true;
+                return (ratings.Level(item.ParentalRating) <= this.MaxAllowed);
             }
             else return true;
         }
@@ -195,15 +158,7 @@ namespace MediaBrowser.Library
         }
 
         public void SwitchUnrated(bool block) {
-                ratings.Remove("");
-                if (block)
-                {
-                    ratings.Add("", 5);
-                }
-                else
-                {
-                    ratings.Add("", 0);
-                }
+            ratings.SwitchUnrated(block);
         }
 
 
@@ -375,6 +330,11 @@ namespace MediaBrowser.Library
                 _relockTimer.Start(); //start our re-lock timer
                 env.Dialog("Library Temporarily Unlocked.  Will Re-Lock in "+this.unlockPeriod.ToString()+" Hour(s) or on Application Re-Start", "Unlock", DialogButtons.Ok, 60, true);
                 Application.CurrentInstance.Back(); //clear PIN screen
+                if (Config.Instance.HideParentalDisAllowed)
+                {
+                    Application.CurrentInstance.CurrentFolder.RefreshUI();
+                    Application.CurrentInstance.RootFolderModel.RefreshUI();
+                }
             }
             else
             {
@@ -429,7 +389,11 @@ namespace MediaBrowser.Library
             Logger.ReportInfo("Library Re-Locked");
             _relockTimer.Stop(); //stop our re-lock timer
             Config.Instance.ParentalControlUnlocked = false;
-            Application.CurrentInstance.BackToRoot(); //back up to home screen
+            if (Config.Instance.HideParentalDisAllowed)
+            {
+                Application.CurrentInstance.BackToRoot(); //back up to home screen
+                Application.CurrentInstance.CurrentFolder.RefreshUI();
+            }
             Application.CurrentInstance.Information.AddInformationString("Library Re-Locked"); //and display a message
             //env.Dialog("Library Has Been Re-Locked for Parental Control.", "Unlock Time Expired", DialogButtons.Ok, 60, true);
         }

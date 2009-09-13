@@ -176,7 +176,20 @@ namespace MediaBrowser.Library {
                 
             }
         }
-     
+
+        public void RefreshUI()
+        {
+            if (this.IsRoot)
+            {
+                //if this is the root page - force an update of the newest items
+                foreach (FolderModel folder in this.Children)
+                {
+                    folder.newestItems = null; //force it to go get the real items
+                    folder.GetNewestItems(20);
+                }
+            }
+            FireChildrenChangedEvents(); //force UI to update
+        }
 
         protected void FireChildrenChangedEvents() {
             if (!Microsoft.MediaCenter.UI.Application.IsApplicationThread) {

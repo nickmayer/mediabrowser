@@ -552,6 +552,7 @@
     <Compile Include="Library\Playables\PlayableMediaCollection.cs" />
     <Compile Include="Library\Plugins\BasePlugin.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
+    <Compile Include="Library\Ratings.cs" />
     <Compile Include="Library\Util\BreadCrumbs.cs" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Images.mcml" />

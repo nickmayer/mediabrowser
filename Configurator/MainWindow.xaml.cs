@@ -29,6 +29,7 @@ using MediaBrowser.Library.Plugins;
 using System.Diagnostics;
 using MediaBrowser.Library.Threading;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace Configurator
 {
@@ -40,6 +41,7 @@ namespace Configurator
     {
 
         ConfigData config;
+        Ratings ratings = new Ratings();
 
         public MainWindow()
         {
@@ -98,7 +100,57 @@ namespace Configurator
             SaveConfig();
 
             PluginManager.Init();
+
         }
+
+        public void InitFolderTree()
+        {
+
+            txtLibFolderLoad.Text = "Loading...";
+            txtLibFolderLoad.Visibility = Visibility.Visible;
+            tvwLibraryFolders.BeginInit();
+            tvwLibraryFolders.Items.Clear();
+            tabControl1.Cursor = Cursors.Wait;
+            string[] vfs = Directory.GetFiles(ApplicationPaths.AppInitialDirPath,"*.vf");
+            foreach (string vfName in vfs)
+            {
+                TreeViewItem aNode = new TreeViewItem();
+                LibraryFolder aFolder = new LibraryFolder(vfName);
+                aNode.Header = aFolder;
+                tvwLibraryFolders.Items.Add(aNode);
+                VirtualFolder vf = new VirtualFolder(vfName);
+                foreach (string folder in vf.Folders)
+                {
+                    getLibrarySubDirectories(folder, aNode);
+                }
+
+            }
+            tvwLibraryFolders.EndInit();
+            txtLibFolderLoad.Visibility = Visibility.Hidden;
+            tabControl1.Cursor = Cursors.Arrow;
+
+
+        }
+
+        private void getLibrarySubDirectories(string dir, TreeViewItem parent)
+        {
+            string[] dirs = Directory.GetDirectories(dir);
+            foreach (string subdir in dirs)
+            {
+                //only want directories that don't directly contain movies in our tree...
+                if (!File.Exists(subdir + "\\*.iso") && !File.Exists(subdir + "\\VIDEO_TS.IFO") && !File.Exists(subdir + "\\*.VOB") && !Directory.Exists(subdir + "\\VIDEO_TS") && !Directory.Exists(subdir + "\\BDMV") && !Directory.Exists(subdir + "\\HVDVD_TS") && !File.Exists(subdir + "\\*.mkv") && !File.Exists(subdir + "\\*.avi") && !File.Exists(subdir + "\\*.mov") && !File.Exists(subdir + "\\*.mp4") && !File.Exists(subdir + "\\*.mp3") && !File.Exists(subdir + "\\*.m4v") && !File.Exists(subdir + "\\series.xml"))
+                {
+                    TreeViewItem aNode = new TreeViewItem();
+                    LibraryFolder aFolder = new LibraryFolder(subdir);
+                    aNode.Header = aFolder;
+                    parent.Items.Add(aNode);
+                    getLibrarySubDirectories(subdir, aNode);
+                }
+            }
+        }
+
+
+
 
         private void RefreshPodcasts() {
             var podcasts = Kernel.Instance.GetItem<Folder>(config.PodcastHome);
@@ -168,6 +220,16 @@ namespace Configurator
                 ddlWeatherUnits.SelectedItem = "Farenheit";
             else
                 ddlWeatherUnits.SelectedItem = "Celsius";
+
+            //Parental Control
+            cbxEnableParentalControl.IsChecked = config.ParentalControlEnabled;
+            cbxOptionBlockUnrated.IsChecked = config.ParentalBlockUnrated;
+            cbxOptionHideProtected.IsChecked = config.HideParentalDisAllowed;
+            gbPCGeneral.IsEnabled = gbPCPIN.IsEnabled = config.ParentalControlEnabled;
+            ddlOptionMaxAllowedRating.SelectedItem = ratings.ToString(config.MaxParentalLevel);
+            slUnlockPeriod.Value = config.ParentalUnlockPeriod;
+            txtPCPIN.Password = config.ParentalPIN;
+
         }
 
         private void SaveConfig()
@@ -193,6 +255,22 @@ namespace Configurator
             // Weather Units
             ddlWeatherUnits.Items.Add("Celsius");
             ddlWeatherUnits.Items.Add("Farenheit");
+            // Parental Ratings
+            ddlOptionMaxAllowedRating.ItemsSource = ratings.ToString();
+            ddlFolderRating.ItemsSource = ratings.ToString();
+            //ddlOptionMaxAllowedRating.Items.Add("G");
+            //ddlOptionMaxAllowedRating.Items.Add("PG");
+            //ddlOptionMaxAllowedRating.Items.Add("PG-13");
+            //ddlOptionMaxAllowedRating.Items.Add("R");
+            //ddlOptionMaxAllowedRating.Items.Add("NC-17");
+            //ddlOptionMaxAllowedRating.Items.Add("CS");
+            //ddlFolderRating.Items.Add("G");
+            //ddlFolderRating.Items.Add("PG");
+            //ddlFolderRating.Items.Add("PG-13");
+            //ddlFolderRating.Items.Add("R");
+            //ddlFolderRating.Items.Add("NC-17");
+            //ddlFolderRating.Items.Add("CS");
+
         }
         #endregion
 
@@ -324,6 +402,12 @@ folder: {0}
                 RefreshItems();
             }
         }
+
+        private void btnFolderTree_Click(object sender, RoutedEventArgs e)
+        {
+            InitFolderTree();
+        }
+
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
         {
@@ -704,6 +788,27 @@ folder: {0}
             config.EnableRootPage = (bool)cbxRootPage.IsChecked;
             SaveConfig();
         }
+        private void cbxOptionBlockUnrated_Click(object sender, RoutedEventArgs e)
+        {
+            config.ParentalBlockUnrated = (bool)cbxOptionBlockUnrated.IsChecked;
+            SaveConfig();
+        }
+        private void cbxEnableParentalControl_Click(object sender, RoutedEventArgs e)
+        {
+            //enable/disable other controls on screen
+            gbPCGeneral.IsEnabled = gbPCPIN.IsEnabled = (bool)cbxEnableParentalControl.IsChecked;
+
+            config.ParentalControlEnabled = (bool)cbxEnableParentalControl.IsChecked;
+            SaveConfig();
+
+        }
+
+        private void cbxOptionHideProtected_Click(object sender, RoutedEventArgs e)
+        {
+            config.HideParentalDisAllowed = (bool)cbxOptionHideProtected.IsChecked;
+            SaveConfig();
+        }
+
         #endregion
 
         #region ComboBox Events
@@ -733,19 +838,62 @@ folder: {0}
             }
             SaveConfig();
         }
+        private void ddlOptionMaxAllowedRating_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch ((string)ddlOptionMaxAllowedRating.SelectedItem) {
+                case "G": 
+                    config.MaxParentalLevel = 1;
+                    break;
+                
+                case "PG":
+                    config.MaxParentalLevel = 2;
+                    break;
+                case "PG-13":
+                    config.MaxParentalLevel = 3;
+                    break;
+                case "R":
+                    config.MaxParentalLevel = 4;
+                    break;
+                case "NC-17":
+                    config.MaxParentalLevel = 5;
+                    break;
+                case "CS":
+                    config.MaxParentalLevel = 999;
+                    break;
+                default:
+                    config.MaxParentalLevel = 1000; //default to everything
+                    break;
+            }
+            SaveConfig();
+        }
+
+        private void slUnlockPeriod_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //for some reason null check won't work on this slider value... -ebr
+            try
+            {
+
+                if (slUnlockPeriod.Value != null)
+                {
+                    config.ParentalUnlockPeriod = (int)slUnlockPeriod.Value;
+                }
+                SaveConfig();
+            }
+            catch { }
+        }
         #endregion
 
         #region Header Selection Methods
         private void hdrBasic_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrBasic);
-            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = Visibility.Collapsed;
+            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = folderSecurityTab.Visibility = parentalControlTab.Visibility = Visibility.Collapsed;
         }
 
         private void hdrAdvanced_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrAdvanced);
-            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = Visibility.Visible;
+            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = folderSecurityTab.Visibility = parentalControlTab.Visibility = Visibility.Visible;
         }
 
         private void ClearHeaders()
@@ -871,6 +1019,59 @@ folder: {0}
 
 
 
+        private void savePCPIN(object sender, RoutedEventArgs e)
+        {
+            //first be sure its valid
+            if (txtPCPIN.Password.Length != 4)
+            {
+                MessageBox.Show("PIN Must be EXACTLY FOUR digits.", "Invalid PIN");
+                return;
+            }
+            else try
+                {
+                    //try and convert to a number - it should convert to an integer
+                    int test = Convert.ToInt16(txtPCPIN.Password);
+                }
+                catch
+                {
+                    MessageBox.Show("PIN Must be four DIGITS (that can be typed on a remote)", "Invalid PIN");
+                    return;
+                }
+            //appears to be valid - save it
+            config.ParentalPIN = txtPCPIN.Password;
+            SaveConfig();
+        }
+
+        private void tvwLibraryFolders_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            TreeViewItem curItem = (TreeViewItem)tvwLibraryFolders.SelectedItem;
+            LibraryFolder curFolder = (LibraryFolder)curItem.Header;
+            if (curFolder != null)
+            {
+                ddlFolderRating.IsEnabled = true;
+                ddlFolderRating.SelectedItem = curFolder.CustomRating;
+            }
+        }
+
+        private void ddlFolderRating_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!tvwLibraryFolders.Items.IsEmpty && ddlFolderRating.SelectedItem != null)
+            {
+                TreeViewItem curItem = (TreeViewItem)tvwLibraryFolders.SelectedItem;
+                if (curItem != null)
+                {
+                    LibraryFolder curFolder = (LibraryFolder)curItem.Header;
+                    if (curFolder != null && ddlFolderRating.SelectedValue != null)
+                    {
+                        curFolder.CustomRating = ddlFolderRating.SelectedValue.ToString();
+                        if (curFolder.CustomRating != null)
+                            curFolder.SaveXML();
+                    }
+                }
+            }
+        }
+
+        
     }
     #region FormatParser Class
     class FormatParser
