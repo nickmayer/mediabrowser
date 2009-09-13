@@ -5,6 +5,7 @@ using System.Text;
 using MediaBrowser.Library.Entities;
 using MusicPlugin.Util;
 using MusicPlugin.LibraryManagement;
+using MediaBrowser.Library.Logging;
 
 namespace MusicPlugin.Library.Entities
 {
@@ -17,8 +18,15 @@ namespace MusicPlugin.Library.Entities
                 List<BaseItem> items = base.ActualChildren;
                 if (Settings.Instance.ShowPlaylistAsFolder)
                 {
-                    if ((items != null) && !items.Contains(MusicHelper.GetPlaylistFolder()))
-                        items.Add(MusicHelper.GetPlaylistFolder());
+                    if (items != null) 
+                    {
+                        Folder folder = MusicHelper.GetPlaylistFolder();
+                        if (folder != null)
+                        {
+                            if (!items.Contains(folder))
+                                items.Add(folder);
+                        }
+                    }
                 }
 
                 return items;

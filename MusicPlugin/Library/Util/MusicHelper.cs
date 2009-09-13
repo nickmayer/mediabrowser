@@ -4,6 +4,9 @@ using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Entities;
 using MusicPlugin.Util;
 using System;
+using MediaBrowser.Library.Extensions;
+using MediaBrowser.Library.Logging;
+
 namespace MusicPlugin.LibraryManagement
 {
     public static class MusicHelper
@@ -92,9 +95,33 @@ namespace MusicPlugin.LibraryManagement
         {
             if (_playlistFolder == null)
             {
+                string playListPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+
+                if (!Directory.Exists(playListPath))
+                {
+                    Logger.ReportError("MusicPlugin Error, failed to find special music folder, " + playListPath);
+                    return null;
+                }
+
+                playListPath = Path.Combine(playListPath, "PlayLists");
+
+                if (!Directory.Exists(playListPath))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(playListPath);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportError("MusicPlugin Error, failed to create playlists folder, " + playListPath);
+                        return null;
+                    }                    
+                }
+
                 _playlistFolder = new Folder();
                 _playlistFolder.Name = Settings.Instance.PlayListFolderName;
-                _playlistFolder.Path = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.MyMusic), "Playlists");
+                _playlistFolder.Path = playListPath;
+                _playlistFolder.Id = playListPath.GetMD5();
             }
             return _playlistFolder;
         }
