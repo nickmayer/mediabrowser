@@ -126,7 +126,7 @@
   <Image Name="BlockedCover" Source="resx://MediaBrowser/MediaBrowser.Resources/BlockedCover"/>
   <Image Name="RatedCustom" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_Custom" />
   <Image Name="PlainBorder" Source="resx://MediaBrowser/MediaBrowser.Resources/plainborder" />
-  
-  
+
+
 
 </Mcml>

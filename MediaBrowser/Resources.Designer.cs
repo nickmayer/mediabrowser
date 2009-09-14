@@ -1630,6 +1630,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static byte[] NumberPad {
+            get {
+                object obj = ResourceManager.GetObject("NumberPad", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] Page {
             get {
                 object obj = ResourceManager.GetObject("Page", resourceCulture);

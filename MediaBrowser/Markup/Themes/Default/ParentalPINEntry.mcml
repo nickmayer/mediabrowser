@@ -6,6 +6,9 @@
     xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"
     xmlns:s="file://Styles_DoNotEdit.mcml"
     xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+    xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
+      xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
+      xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NumberPad"
       >
 
   <UI Name="ParentalPINEntry">
@@ -18,6 +21,7 @@
     <Locals>
       <EditableText Name="PIN" Value=""/>
       <Command Name="PINEntered" />
+      <Command Name="ShowNumPad" />
     </Locals>
 
     <Rules>
@@ -36,6 +40,13 @@
       </Changed>
       <Binding Source="[PIN.Value]" Target="[Application.CustomPINEntry]">
       </Binding>
+      <Changed Source="[ShowNumPad.Invoked]" >
+        <Actions>
+          <Set Target="[NumberPad.Visible]" Value="true"/>
+          <Set Target="[ShowPadBtn.Visible]" Value="false"/>
+          <Invoke Target="[NumberPad.NavigateInto]" />
+        </Actions>
+      </Changed>
 
       <Rule>
         <Conditions>
@@ -58,11 +69,25 @@
               <FormLayoutInput Top="Parent,.40" Horizontal="Center"/>
             </LayoutInput>  
           </Text>
-          <pe:PINEdit Label="Security PIN" EditableText="[PIN]" EndCommand="[PINEntered]" Font="Segoe MediaCenter, 22">
+          <Panel Name="PINPanel" >
+            <Layout>
+              <FlowLayout Orientation="Horizontal" />
+            </Layout>
             <LayoutInput>
               <FormLayoutInput Top="Parent,.50" Horizontal="Center"/>
             </LayoutInput>
-          </pe:PINEdit>
+            <Children>
+              <pe:PINEdit Name="PINBox" Label="Security PIN" EditableText="[PIN]" EndCommand="[PINEntered]" Font="Segoe MediaCenter, 22">
+              </pe:PINEdit>
+              <sb:SimpleButton Name="ShowPadBtn" Text="1,2,3" Size="50,50" Font="Segoe Media Center, 8" Command="[ShowNumPad]" />
+            </Children>
+            
+          </Panel>
+          <np:NumberPad  Name="NumberPad" EditBox="[PIN]" Visible="false" >
+            <LayoutInput>
+              <FormLayoutInput Top="PINPanel,1,30"/>
+            </LayoutInput>
+          </np:NumberPad>
         
         
           <!-- Diamond Bottom Clip -->
