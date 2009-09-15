@@ -432,7 +432,7 @@
               <!--Security Indicator-->
               <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Anchor" Visible="false" Name="PCLock">
                 <LayoutInput>
-                  <AnchorLayoutInput Right="PanelPoster,1,-15" Bottom="PanelPoster,1,-15"/>
+                  <AnchorLayoutInput Left="PanelPoster,0,15" Bottom="PanelPoster,1,-15"/>
                 </LayoutInput>
                 <Children>
                   <Graphic Name="PCLockImage" Content="image://i:Lock" Margins="0,0,5,5" MaximumSize="35,35" MaintainAspectRatio="true">
