@@ -145,7 +145,7 @@ namespace MediaBrowser.Library
                     //Logger.ReportVerbose("Removed Disallowed Item: " + i.Name + ". Rating '" + i.ParentalRating + "' Exceeds Limit of " + this.MaxAllowed.ToString() + ".");
                 }
             }
-            Logger.ReportInfo("Finished Removing PC Items");
+            //Logger.ReportVerbose("Finished Removing PC Items");
             return allowedItems;
         }
 

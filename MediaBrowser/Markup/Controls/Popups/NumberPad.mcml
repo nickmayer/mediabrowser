@@ -18,6 +18,7 @@
 	<UI Name="NumberPad">
       <Properties>        
         <EditableText Name="EditBox" EditableText="$Required" />
+        <cor:String Name="Theme" String=""/>
       </Properties>
     
       <Locals>
@@ -147,6 +148,7 @@
             <PlaySound Sound="sound://sounds:Miniselect" />
           </Actions>
         </Changed>
+        <Condition Source="[Theme]" SourceValue="Black" Target="[Main.Content]" Value="resx://MediaBrowser/MediaBrowser.Resources/BackgroundBlack"/>
 
       </Rules>
     

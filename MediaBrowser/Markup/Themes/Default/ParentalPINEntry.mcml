@@ -83,7 +83,7 @@
             </Children>
             
           </Panel>
-          <np:NumberPad  Name="NumberPad" EditBox="[PIN]" Visible="false" >
+          <np:NumberPad  Name="NumberPad" Theme="[Application.Config.Theme]" EditBox="[PIN]" Visible="false" >
             <LayoutInput>
               <FormLayoutInput Top="PINPanel,1,30"/>
             </LayoutInput>
