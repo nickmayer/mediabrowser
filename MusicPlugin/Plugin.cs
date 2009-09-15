@@ -18,7 +18,7 @@ namespace MusicPlugin
 {
     public class Plugin : BasePlugin
     {
-
+        const string DIALOGHEADING = "MusicPlugin";
         static readonly Guid MusiciTunesGuid = new Guid("{97581452-7374-11DE-B53C-716855D89593}");
         static readonly Guid MusicNormalGuid = new Guid("{D0DAD4BA-90B8-11DE-9AC9-06AC55D89593}");
         
@@ -31,7 +31,7 @@ namespace MusicPlugin
 
             if (ValidateSettings(kernel.ConfigData.InitialFolder))
             {
-                if (Settings.Instance.LoadiTunesLibrary)
+                if (ValidateiTunesLibrary())
                 {
                     try
                     {
@@ -74,7 +74,7 @@ namespace MusicPlugin
                     }
                 }
 
-                if (Settings.Instance.LoadNormalLibrary)
+                if (ValidateNormalLibrary())
                 {
                     BaseItem music;
 
@@ -125,7 +125,7 @@ namespace MusicPlugin
         {
             get
             {
-                return new System.Version(0,5,0,3);
+                return new System.Version(0,5,0,4);
             }
             set
             {
@@ -141,8 +141,7 @@ namespace MusicPlugin
             }
         }
         private bool ValidateSettings(string initialFolder)
-        {
-            string heading = "MusicPlugin";
+        {            
             string message;
 
             try
@@ -153,72 +152,86 @@ namespace MusicPlugin
             {
                 Logger.ReportException("MusicPlugin", e);
                 message = "The MusicPlugin could not be loaded. Please enable logging in MediaBrowser and check the log.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 return false;
             }
 
             if (!File.Exists(Settings.SettingPath))
             {
                 message = "The MusicPlugin could not create a config file. It will not be loaded.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 return false;
             }
 
             if (Settings.Instance.FirstLoad)
             {
                 message = "The MusicPlugin has created its own configuration file, please close MediaBrowser and configure " + Settings.SettingPath+".";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 Settings.Instance.FirstLoad = false;
                 Settings.SaveSettingsFile();
                 return false;
-            }
-
-            if (Settings.Instance.LoadiTunesLibrary && (string.IsNullOrEmpty(Settings.Instance.iTunesLibraryXMLPath) || !File.Exists(Settings.Instance.iTunesLibraryXMLPath)))
-            {
-                message = "Your iTunes Library is enabled, but the specified xml path is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);                
-                return false;
-            }
-
-            if (Settings.Instance.LoadNormalLibrary && (string.IsNullOrEmpty(Settings.Instance.NormalLibraryPath) || !Directory.Exists(Settings.Instance.NormalLibraryPath)))
-            {
-                message = "Your Normal Library is enabled, but the specified directory is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
-                return false;
-            }
+            }   
 
             if (Settings.Instance.LoadNormalLibrary && Settings.Instance.LoadiTunesLibrary && Settings.Instance.NormalLibraryVirtualFolderName == Settings.Instance.iTunesLibraryVirtualFolderName)
             {
                 message = "Your Normal and iTunes Libraries are enabled, but your virtual folders names are the same.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 return false;
             }
 
             if (!string.IsNullOrEmpty(Settings.Instance.iTunesLibraryIcon) && !File.Exists(Settings.Instance.iTunesLibraryIcon))
             {
                 message = "Your iTunes Library is enabled, but the specified icon path is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 return false;
             }
 
             if (!string.IsNullOrEmpty(Settings.Instance.NormalLibraryIcon) && !File.Exists(Settings.Instance.NormalLibraryIcon))
             {
                 message = "Your Normal Library is enabled, but the specified icon path is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 return false;
             }
 
             if (Settings.Instance.ShowPlaylistAsFolder && string.IsNullOrEmpty(Settings.Instance.PlayListFolderName))
             {
                 message = "Your playlist folder is enabled, but the specified name is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 return false;
             }
 
             if (!string.IsNullOrEmpty(Settings.Instance.SongImage) && !File.Exists(Settings.Instance.SongImage))
             {
                 message = "The specified song image is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateiTunesLibrary()
+        {
+            string message;
+            
+            if (Settings.Instance.LoadiTunesLibrary && (string.IsNullOrEmpty(Settings.Instance.iTunesLibraryXMLPath) || !File.Exists(Settings.Instance.iTunesLibraryXMLPath)))
+            {
+                message = "Your iTunes Library is enabled, but the specified xml path is invalid. It will not be loaded.";
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateNormalLibrary()
+        {
+            string message;
+
+            if (Settings.Instance.LoadNormalLibrary && (string.IsNullOrEmpty(Settings.Instance.NormalLibraryPath) || !Directory.Exists(Settings.Instance.NormalLibraryPath)))
+            {
+                message = "Your Normal Library is enabled, but the specified directory is invalid. It will not be loaded.";
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
                 return false;
             }
 
