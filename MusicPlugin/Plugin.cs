@@ -104,13 +104,13 @@ namespace MusicPlugin
                         
         }
 
-        System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            if (args.Name.Contains("taglib"))
-                return Assembly.LoadFrom(@"c:\ProgramData\MediaBrowser\Plugins\taglib\taglib-sharp.dll");
+        //System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        //{
+        //    if (args.Name.Contains("taglib"))
+        //        return Assembly.LoadFrom(@"c:\ProgramData\MediaBrowser\Plugins\taglib\taglib-sharp.dll");
             
-            return Assembly.LoadFrom("");
-        }
+        //    return Assembly.LoadFrom("");
+        //}
 
         public override string Name
         {
@@ -125,7 +125,7 @@ namespace MusicPlugin
         {
             get
             {
-                return new System.Version(0,5,0,5);
+                return new System.Version(0,5,0,6);
             }
             set
             {
@@ -213,6 +213,9 @@ namespace MusicPlugin
         private bool ValidateiTunesLibrary()
         {
             string message;
+
+            if (!Settings.Instance.LoadiTunesLibrary)
+                return false;
             
             if (Settings.Instance.LoadiTunesLibrary && (string.IsNullOrEmpty(Settings.Instance.iTunesLibraryXMLPath) || !File.Exists(Settings.Instance.iTunesLibraryXMLPath)))
             {
@@ -227,6 +230,9 @@ namespace MusicPlugin
         private bool ValidateNormalLibrary()
         {
             string message;
+
+            if (!Settings.Instance.LoadNormalLibrary)
+                return false;
 
             if (Settings.Instance.LoadNormalLibrary && (string.IsNullOrEmpty(Settings.Instance.NormalLibraryPath) || !Directory.Exists(Settings.Instance.NormalLibraryPath)))
             {
