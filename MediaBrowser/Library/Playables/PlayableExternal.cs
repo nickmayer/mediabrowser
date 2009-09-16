@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using MediaBrowser.Library.Entities;
+using System.Linq;
 
 namespace MediaBrowser.Library.Playables
 {
@@ -14,31 +15,26 @@ namespace MediaBrowser.Library.Playables
         private string path;
         public PlayableExternal(Media media)
         {
-            this.path = (media as Video).Path;
+            this.path = (media as Video).VideoFiles.ToArray()[0];
         }
 
-        public PlayableExternal(string path)
-        {
+        public PlayableExternal(string path) {
             this.path = path;
         }
 
-        public override void Prepare(bool resume)
-        {
-            
-        }
+        public override void Prepare(bool resume) { }
 
         public override string Filename
         {
             get { return path; }
         }
 
-        protected override void PlayInternal( bool resume)
+        protected override void PlayInternal(bool resume)
         {
             if (PlaybackController.IsPlaying) {
                 PlaybackController.Pause();
             }
-           
-            
+              
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);
@@ -48,9 +44,16 @@ namespace MediaBrowser.Library.Playables
 
         public static bool CanPlay(Media media)
         {
-            if (!(media is Video))
-                return false;
-            return CanPlay((media as Video).Path);
+            bool canPlay = false;
+            var video = media as Video;
+
+            if (video != null) {
+                var files = video.VideoFiles.ToArray();
+                if (files.Length == 1) {
+                    canPlay = CanPlay(files[0]);
+                }
+            }
+            return canPlay;
         }
 
         public static bool CanPlay(string path)

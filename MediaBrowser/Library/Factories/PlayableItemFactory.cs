@@ -39,21 +39,6 @@ namespace MediaBrowser.Library.Factories {
                     break;
                 }
 
-            //if (PlayableExternal.CanPlay(media))
-            //    playable = new PlayableExternal(media);
-            //else if (PlayableVideoFile.CanPlay(media))
-            //    playable = new PlayableVideoFile(media);
-            //else if (PlayableIso.CanPlay(media))
-            //    playable = new PlayableIso(media);
-            //else if (PlayableMultiFileVideo.CanPlay(media))
-            //    playable = new PlayableMultiFileVideo(media);
-            //else if (PlayableDvd.CanPlay(media))
-            //    playable = new PlayableDvd(media);
-            //else if (PlayableMusicFile.CanPlay(media))
-            //    playable = new PlayableMusicFile(media);
-            //else if (PlayableMultiFileMusic.CanPlay(media))
-            //    playable = new PlayableMultiFileMusic(media);
-
             
             foreach (var controller in Kernel.Instance.PlaybackControllers) {
                 if (controller.CanPlay(playable.Filename)) {
