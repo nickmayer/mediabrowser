@@ -16,6 +16,19 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public string FirstAired { get; set; }
 
+        public override string SortName {
+            get {
+                if (EpisodeNumber != null && EpisodeNumber.Length < 3) {
+                    return (EpisodeNumber.PadLeft(3, '0') + " - " + Name.ToLower());
+                } else {
+                    return base.SortName;
+                }
+            }
+            set {
+                base.SortName = value;
+            }
+        }
+
         public Season Season {
             get {
                 return Parent as Season;

@@ -90,6 +90,7 @@
     <Compile Include="TestTheMovieDB.cs" />
     <Compile Include="TestTVDBMetadata.cs" />
     <Compile Include="TestVodCast.cs" />
+    <Compile Include="Unit\TestSorting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SampleMedia\TV\South Park\Season 1\02.mkv" />
@@ -105,9 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MediaBrowser.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Unit\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
