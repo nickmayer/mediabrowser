@@ -28,7 +28,7 @@
 
     <Locals>
       <Size Name="LabelSize1" Size="250,0" />
-      <Size Name="PanelSize" Size="500,475" />
+      <Size Name="PanelSize" Size="800,475" />
       <a:Config Name="Config" Config="[Application.Config]"/>
       <Command Name="Close" />
       <Command Name="Back" />
@@ -94,9 +94,12 @@
       <BooleanChoice Name="InheritDefaultView" Value="[Application.Config.InheritDefaultView]" />
       <BooleanChoice Name="ShowClock" Value="[Application.Config.ShowClock]" />
       <cor:String Name="ThemeInitial" String="[Application.Config.Theme]" />
-			<BooleanChoice Name="EnableAdvancedCmds" Value="[Application.Config.EnableAdvancedCmds]" />
+      <BooleanChoice Name="EnableAdvancedCmds" Value="[Application.Config.EnableAdvancedCmds]" />
       <BooleanChoice Name="ShowBackdrop" Value="[Application.Config.ShowBackdrop]" />
       <BooleanChoice Name="HideFocusFrame" Value="[Application.Config.HideFocusFrame]" />
+      <BooleanChoice Name="StartDiamondMovieMinimal" Value="[Application.Config.StartDiamondMovieMinimal]" />
+
+      
 
       <BooleanChoice Name="DefaultToFirstUnwatched" Value="[Application.Config.DefaultToFirstUnwatched]" />
       <BooleanChoice Name="AutoEnterSingleDirs" Value="[Application.Config.AutoEnterSingleDirs]" />
@@ -124,11 +127,8 @@
       <Choice Name="Model">
         <Options>
           <cor:String String="General" />
-          <cor:String String="Display" />
+          <cor:String String="More Options" />
           <cor:String String="Themes" />
-          <cor:String String="Behavior" />
-          <cor:String String="Media Tracking" />
-          <cor:String String="Vanilla Options" />
           <cor:String String="Parental Control" />
           <!--<cor:String String="Other" />        
           <cor:String String="Test" />-->
@@ -166,7 +166,7 @@
           <cor:String String="Classic" />
           <cor:String String="Default" />
           <cor:String String="Diamond" />
-          <cor:String String="Vanilla" />          
+          <cor:String String="Vanilla" />
         </Options>
       </Choice>
       <BooleanChoice Name="ThemeLoaded" Value="false" />
@@ -188,11 +188,11 @@
       <Condition Source="[Model.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Panel2.Visible]" Value="true" />
       <Condition Source="[Model.ChosenIndex]" SourceValue="2" ConditionOp="Equals" Target="[Panel3.Visible]" Value="true" />
       <Condition Source="[Model.ChosenIndex]" SourceValue="3" ConditionOp="Equals" Target="[Panel4.Visible]" Value="true" />
-      <Condition Source="[Model.ChosenIndex]" SourceValue="4" ConditionOp="Equals" Target="[Panel5.Visible]" Value="true" />
-      <Condition Source="[Model.ChosenIndex]" SourceValue="5" ConditionOp="Equals" Target="[Panel6.Visible]" Value="true" />
+      <!--<Condition Source="[Model.ChosenIndex]" SourceValue="4" ConditionOp="Equals" Target="[Panel5.Visible]" Value="true" />
+      <Condition Source="[Model.ChosenIndex]" SourceValue="5" ConditionOp="Equals" Target="[Panel6.Visible]" Value="true" />-->
       <!--<Condition Source="[Model.ChosenIndex]" SourceValue="6" ConditionOp="Equals" Target="[Panel7.Visible]" Value="true" />-->
       <!--<Condition Source="[Model.ChosenIndex]" SourceValue="7" ConditionOp="Equals" Target="[Panel8.Visible]" Value="true" />-->
-      <Condition Source="[Model.ChosenIndex]" SourceValue="6" ConditionOp="Equals" Target="[Panel9.Visible]" Value="true" />
+      <!--<Condition Source="[Model.ChosenIndex]" SourceValue="6" ConditionOp="Equals" Target="[Panel9.Visible]" Value="true" />-->
 
       <Changed Source="[Close.Invoked]">
         <Actions>
@@ -214,7 +214,7 @@
           <Invoke Target="[Application.ResetConfig]" />
         </Actions>
       </Changed>
- 
+
       <Changed Source="[EnterPIN.Invoked]">
         <Actions>
           <Invoke Target="[Application.EnterNewParentalPIN]" />
@@ -312,6 +312,10 @@
       <Binding Source="[EnableAdvancedCmds.Value]" Target="[Config.EnableAdvancedCmds]" />
       <Binding Source="[ShowBackdrop.Value]" Target="[Config.ShowBackdrop]" />
       <Binding Source="[HideFocusFrame.Value]" Target="[Config.HideFocusFrame]" />
+      
+      <Binding Source="[StartDiamondMovieMinimal.Value]" Target="[Config.StartDiamondMovieMinimal]" />
+
+
       <Binding Source="[ThemeModel.Chosen!cor:String]" Target="[Config.Theme]" >
         <Conditions>
           <Equality Source="[ThemeLoaded.Value]" ConditionOp="Equals" Value="true" />
@@ -396,7 +400,7 @@
 
                     <Children>
                       <me:TextHeader Text="General" />
-                      
+
                       <me:TextHeader Text="Tracking" />
                       <me:AssumeWatchedEdit Label="Assume Watched If Older Than" Config="[Application.Config]" Margins="[CMargin]" />
 
@@ -429,7 +433,7 @@
                   <sb:SimpleButton Name="ResetConfigBtn" Text="Reset Defaults" Command="[ResetConfig]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton Name="ClearCacheBtn" Text="Clear Cache" Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton Name="UnlockPCBtn" Text="Unlock" Command="[UnlockPC]" Size="200,50" Font="font://f:CP_ButtonFont" Visible="[Application.Config.ParentalControlEnabled]"/>
-                  
+
                 </Children>
               </Panel>
 
@@ -437,7 +441,7 @@
           </Clip>
 
           <!-- Configuration Options selector -->
-          <pv:Pivot Model="[Model]" Name="FullConfigNav">
+          <pv:Pivot Model="[Model]" Name="FullConfigNav" Navigation="RememberFocus">
             <LayoutInput>
               <FormLayoutInput Horizontal="Near" Top="Parent,0.15" />
             </LayoutInput>
@@ -445,95 +449,143 @@
 
           <Panel Name="FullConfig" Layout="Anchor">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.1" Top="Parent,0.15,75" />
+              <FormLayoutInput Left="Parent,0, 25" Top="Parent,0.15,75" />
             </LayoutInput>
             <Children>
 
-              <Graphic Name="Panel1" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
+              <Graphic Name="Panel1" Visible="false" Content="image://me:50AlphaBg" Layout="HorizontalFlow"
+                       MinimumSize="[PanelSize]" Padding="[SMargin]" Navigation="Group">
                 <Children>
-                  <me:TextHeader Text=" " />                  
-                  <cb:CheckBox Label="Logging" Checked="[EnableTraceLogging]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-									<!--
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="General" />
+                      <cb:CheckBox Label="Logging" Checked="[EnableTraceLogging]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <!--
                   <te:TextEdit LabelSize="[LabelSize1]" Label="Initial Location" EditableText="[InitialFolder]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
 									-->
-                  <me:TextHeader Text="Metadata" />
-                  <cb:CheckBox Label="Allow Internet Based Providers" Checked="[AllowInternetMetadataProviders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <me:TextHeader Text="Updates" />
-                  <cb:CheckBox Label="Automatic Updates" Checked="[EnableUpdates]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Beta Updates" Checked="[EnableBetas]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Text="Metadata" />
+                      <cb:CheckBox Label="Allow Internet Based Providers" Checked="[AllowInternetMetadataProviders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Text="Updates" />
+                      <cb:CheckBox Label="Automatic Updates" Checked="[EnableUpdates]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Beta Updates" Checked="[EnableBetas]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                    </Children>
+                  </Panel>
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="Global" />
+                      <cb:CheckBox Label="Enable Enhanced Home Screen" Checked="[EnableRootPage]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Transparent Background" Checked="[TransparentBackground]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Text="Views" />
+                      <ss:SimpleSpinner  Label="Poster Grid Spacing" Model="[GridSpacing]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <ss:SimpleSpinner  Label="Thumb Width Split" Model="[ThumbStripPosterWidth]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <cb:CheckBox Label="Show Backdrop on Supported Views" Checked="[ShowBackdrop]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Enable Advanced Commands" Checked="[EnableAdvancedCmds]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
+
+                    </Children>
+                  </Panel>
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="Behaivor" />
+                      <cb:CheckBox Label="Allow Nested Movie Folders" Checked="[EnableNestedMovieFolders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Movie Playlists" Checked="[EnableMoviePlaylists]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Auto Enter Single Folder Items" Checked="[AutoEnterSingleDirs]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <ss:SimpleSpinner  Label="Playlist Size Limit" Model="[PlaylistLimit]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <ss:SimpleSpinner  Label="Breadcrumb Count" Model="[BreadcrumbCount]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                    </Children>
+                  </Panel>
                 </Children>
               </Graphic>
 
-              <Graphic Name="Panel4" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
+
+              <Graphic Name="Panel2" Visible="false" Content="image://me:50AlphaBg" Layout="HorizontalFlow"
+                       MinimumSize="[PanelSize]" Padding="[SMargin]" Navigation="Group">
                 <Children>
-                  <me:TextHeader Text=" " />
-                  <cb:CheckBox Label="Allow Nested Movie Folders" Checked="[EnableNestedMovieFolders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Movie Playlists" Checked="[EnableMoviePlaylists]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Auto Enter Single Folder Items" Checked="[AutoEnterSingleDirs]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <ss:SimpleSpinner  Label="Playlist Size Limit" Model="[PlaylistLimit]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                  <ss:SimpleSpinner  Label="Breadcrumb Count" Model="[BreadcrumbCount]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="Media Tracking" />
+                      <cb:CheckBox Label="Remember Index-By State" Checked="[RememberIndexing]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Show Unwatched Count" Checked="[ShowUnwatchedCount]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Watched Indicator on Folders" Checked="[ShowWatchedTickOnFolders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Watched Indicator on Videos" Checked="[ShowWatchTickInPosterView]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Watched Indicator in Detail View" Checked="[EnableListViewTicks]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Default To First Unwatched Item" Checked="[DefaultToFirstUnwatched]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                    </Children>
+                  </Panel>
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="Extenders" />
+                      <cb:CheckBox Label="Transcode360" Checked="[EnableTranscode360]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <te:TextEdit LabelSize="[LabelSize1]" Label="Extender Native Types" EditableText="[ExtenderNativeTypes]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Text="ISO Playback, Daemon Tools" />
+                      <te:TextEdit LabelSize="[LabelSize1]" Label="Location" EditableText="[DaemonToolsLocation]" EditSize="150,0" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <te:TextEdit LabelSize="[LabelSize1]" Label="Drive" EditableText="[DaemonToolsDrive]" MaxChars="1" EditSize="50,0" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Use Autoplay" Checked="[UseAutoPlayForIso]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                    </Children>
+                  </Panel>
                 </Children>
               </Graphic>
 
-              <Graphic Name="Panel2" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
+              <Graphic Name="Panel3" Visible="false" Content="image://me:50AlphaBg" Layout="HorizontalFlow"
+                       MinimumSize="[PanelSize]" Padding="[SMargin]" Navigation="Group">
                 <Children>
-                  <me:TextHeader Text="Global" />                  
-                  <cb:CheckBox Label="Enable Enhanced Home Screen" Checked="[EnableRootPage]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>                  
-                  <cb:CheckBox Label="Transparent Background" Checked="[TransparentBackground]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                  <me:TextHeader Text="Views" />
-                  <ss:SimpleSpinner  Label="Poster Grid Spacing" Model="[GridSpacing]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                  <ss:SimpleSpinner  Label="Thumb Width Split" Model="[ThumbStripPosterWidth]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                  <cb:CheckBox Label="Show Backdrop on Supported Views" Checked="[ShowBackdrop]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>                  
-                  <cb:CheckBox Label="Enable Advanced Commands" Checked="[EnableAdvancedCmds]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
-
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="Media Browser Theme" />
+                      <st:SpinnerText Name="ViewThemeSpinner" Model="[ViewThemeModel]" Label="Visual Theme" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[Config.ViewTheme]" />
+                      <st:SpinnerText Name="Spinner" Model="[ThemeModel]" Label="Color Scheme * " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[ThemeInitial]" />
+                      <st:SpinnerText Name="FontThemeSpinner" Model="[FontThemeModel]" Label="Font Size * " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[FontThemeModel.Chosen!cor:String]" />
+                      <me:TextLine Text="* Requires a restart to take effect." />
+                    </Children>
+                  </Panel>
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="Vanilla Theme Settings" />
+                      <cb:CheckBox   Label="Show Config Button" Margins="[CMargin]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
+                      <ss:SimpleSpinner    Label="Alpha Blending" Model="[AlphaBlending]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />
+                      <me:TextHeader Text="Diamond Theme Settings" />
+                      <cb:CheckBox   Label="Start Movie View in Minimal Mode" Margins="[CMargin]"   Checked="[StartDiamondMovieMinimal]"  Font="font://f:CP_ConfigItemFont"/>
+                    </Children>
+                  </Panel>
                 </Children>
               </Graphic>
 
-              <Graphic Name="Panel5" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
+
+
+              <Graphic Name="Panel4" Visible="false" Content="image://me:50AlphaBg" Layout="HorizontalFlow"
+                       MinimumSize="[PanelSize]" Padding="[SMargin]" Navigation="Group">
                 <Children>
-                  <me:TextHeader Text=" " />
-                  <cb:CheckBox Label="Remember Index-By State" Checked="[RememberIndexing]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Show Unwatched Count" Checked="[ShowUnwatchedCount]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Watched Indicator on Folders" Checked="[ShowWatchedTickOnFolders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Watched Indicator on Videos" Checked="[ShowWatchTickInPosterView]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Watched Indicator in Detail View" Checked="[EnableListViewTicks]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Default To First Unwatched Item" Checked="[DefaultToFirstUnwatched]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <!--<me:TextHeader Text="Parental Control" />-->
+                      <pe:PINEdit Label="Security PIN" EditableText="[PIN]" Border="image://i:PlainBorder" EndCommand="[PINEntered]" Margins="0,20,0,20" Font="font://f:CP_ConfigHeaderFont"/>
+                      <Panel Name="ParentalUnlockedPanel" Visible="false" Layout="VerticalFlow" >
+                        <Children>
+                          <Text Name="PCUnlockedTxt" Content="Parental Controls are Temporarily Unlocked.  You cannot change values unless you re-lock." MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
+                          <!--<me:TextLine Text=" "/>-->
+                          <sb:SimpleButton Name="RelockBtn" Text="Re-Lock" Command="[RelockPC]" Size="175,40" Margins="[CMargin]" Visible="true" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont"/>
+                        </Children>
+                      </Panel>
+                      <Panel Name="ParentalPanel" Visible="false" Layout="VerticalFlow" >
+                        <Children>
+                          <cb:CheckBox Name="EnabledBtn" Label="Enable Parental Blocks" Checked="[Enabled]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                          <st:SpinnerText Name="Ratings" Model="[RatingsStrings]" Label="Max Allowed Rating " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[InitialRating]" />
+                          <Text Name="RatingsDesc" Content="" MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
+                          <cb:CheckBox Label="Block Unrated Content" Checked="[BlockUnrated]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                          <cb:CheckBox Label="Hide Blocked Content" Checked="[HideProtected]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                          <me:TextLine Text=" "/>
+                          <vm:IntSpin Label="Unlock Period (Hours)" Int="[UnlockPeriod]" Margins="[CMargin]"  />
+                          <me:TextLine Text=" "/>
+                          <sb:SimpleButton Name="PINBtn" Text="Enter New PIN" Command="[EnterPIN]" Size="175,40" Margins="[CMargin]" Visible="true" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont"/>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>
                 </Children>
               </Graphic>
 
-              <Graphic Name="Panel3" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
-                <Children>
-                  <me:TextHeader Text="Media Browser Theme" />
-                  <st:SpinnerText Name="ViewThemeSpinner" Model="[ViewThemeModel]" Label="Visual Theme" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[Config.ViewTheme]" />
-                  <st:SpinnerText Name="Spinner" Model="[ThemeModel]" Label="Color Scheme * " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[ThemeInitial]" />
-                  <st:SpinnerText Name="FontThemeSpinner" Model="[FontThemeModel]" Label="Font Size * " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[FontThemeModel.Chosen!cor:String]" />                  
-                  <me:TextLine Text="* Requires a restart to take effect." />
-                </Children>
-              </Graphic>
-
-              <Graphic Name="Panel7" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
-                <Children>
-                  <me:TextHeader Text="Extenders" />
-                  <cb:CheckBox Label="Transcode360" Checked="[EnableTranscode360]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                  <te:TextEdit LabelSize="[LabelSize1]" Label="Extender Native Types" EditableText="[ExtenderNativeTypes]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                  <me:TextHeader Text="ISO Playback, Daemon Tools" />
-                  <te:TextEdit LabelSize="[LabelSize1]" Label="Location" EditableText="[DaemonToolsLocation]" EditSize="150,0" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                  <te:TextEdit LabelSize="[LabelSize1]" Label="Drive" EditableText="[DaemonToolsDrive]" MaxChars="1" EditSize="50,0" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                  <cb:CheckBox Label="Use Autoplay" Checked="[UseAutoPlayForIso]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                </Children>
-              </Graphic>
-
-              <Graphic Name="Panel6" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
-                <Children>
-                  <me:TextHeader Text="View Settings" />
-                  <cb:CheckBox   Label="Show Config Button" Margins="[CMargin]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
-                  <ss:SimpleSpinner    Label="Alpha Blending" Model="[AlphaBlending]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />
-                </Children>
-              </Graphic>
-            
               <Graphic Name="Panel8" Visible="false" Content="image://me:50AlphaBg" Layout="Center" MinimumSize="500,200" MaximumSize="500,200" Padding="[SMargin]" Navigation="Column">
                 <Children>
                   <Panel Layout="VerticalFlow" MinimumSize="400,200" MaximumSize="400,200">
@@ -546,33 +598,6 @@
                 </Children>
               </Graphic>
 
-              <!--PC Panel-->
-              <Graphic Name="Panel9" Visible="false" Content="image://me:50AlphaBg" Layout="VerticalFlow" MinimumSize="[PanelSize]" MaximumSize="500,0" Padding="[SMargin]" Navigation="Column">
-                <Children>
-                  <!--<me:TextHeader Text="Parental Control" />-->
-                  <pe:PINEdit Label="Security PIN" EditableText="[PIN]" Border="image://i:PlainBorder" EndCommand="[PINEntered]" Margins="0,20,0,20" Font="font://f:CP_ConfigHeaderFont"/>
-                  <Panel Name="ParentalUnlockedPanel" Visible="false" Layout="VerticalFlow" >
-                    <Children>
-                      <Text Name="PCUnlockedTxt" Content="Parental Controls are Temporarily Unlocked.  You cannot change values unless you re-lock." MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
-                      <!--<me:TextLine Text=" "/>-->
-                      <sb:SimpleButton Name="RelockBtn" Text="Re-Lock" Command="[RelockPC]" Size="175,40" Margins="[CMargin]" Visible="true" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont"/>
-                    </Children>
-                  </Panel>
-                  <Panel Name="ParentalPanel" Visible="false" Layout="VerticalFlow" >
-                    <Children>
-                      <cb:CheckBox Name="EnabledBtn" Label="Enable Parental Blocks" Checked="[Enabled]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                      <st:SpinnerText Name="Ratings" Model="[RatingsStrings]" Label="Max Allowed Rating " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[InitialRating]" />
-                      <Text Name="RatingsDesc" Content="" MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
-                      <cb:CheckBox Label="Block Unrated Content" Checked="[BlockUnrated]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Hide Blocked Content" Checked="[HideProtected]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <me:TextLine Text=" "/>
-                      <vm:IntSpin Label="Unlock Period (Hours)" Int="[UnlockPeriod]" Margins="[CMargin]"  />
-                      <me:TextLine Text=" "/>
-                      <sb:SimpleButton Name="PINBtn" Text="Enter New PIN" Command="[EnterPIN]" Size="175,40" Margins="[CMargin]" Visible="true" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont"/>
-                    </Children>
-                  </Panel>
-                </Children>
-              </Graphic>
 
             </Children>
           </Panel>

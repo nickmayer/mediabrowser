@@ -110,7 +110,7 @@
               <FlowLayout Orientation="Horizontal" AllowWrap="false" Spacing="15,0"/>
             </Layout>
             <Divider>
-              <Text Content="/" Font="font://f:MM_GenreFont" Color="Gray" Alpha="0.6"  />
+              <Text Content="●" Font="font://f:MM_GenreFont" Color="Gray" Alpha="0.6"  />
             </Divider>
             <Content>
               <gb:GenreButton Text="[RepeatedItem!cor:String]"
@@ -145,10 +145,13 @@
 
     </Rules>
     <Content>
-      <Panel Name="InfoPanel" >
+      <Panel Name="InfoPanel"  >
         <Layout>
-          <FlowLayout Orientation="Vertical" ItemAlignment="Far" Spacing="2,2"/>
+          <FlowLayout Orientation="Vertical" ItemAlignment="Near" Spacing="2,2"/>
         </Layout>
+        <LayoutInput>
+          <AnchorLayoutInput Horizontal="Fill"  />
+        </LayoutInput>
         <Children>
           <Panel Name="StarMPAA">
             <Layout>
@@ -165,7 +168,7 @@
               <FlowLayout Orientation="Horizontal" AllowWrap="false" Spacing="15,0"/>
             </Layout>
             <Divider>
-              <Text Content="/" Font="font://f:MM_GenreFont" Color="Gray" Alpha="0.6"  />
+              <Text Content="●" Font="font://f:MM_GenreFont" Color="Gray" Alpha="0.6"  />
             </Divider>
             <Content>
               <gb:GenreButton Text="[RepeatedItem!cor:String]"
@@ -390,5 +393,31 @@
       </Panel>
     </Content>
   </UI>
- 
+
+
+
+  <UI Name="DiamondStudio">
+
+    <Properties>
+      <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
+      <cor:Boolean Name="LeftAlign" Boolean="true" />
+      <cor:String Name="StudioItem" String="$Required" />
+      <!--<lib:StudioItemWrapper Name="StudioItem" StudioItemWrapper="$Required" />-->
+    </Properties>
+
+    <Rules>
+      <Binding Source="[StudioItem]" Target="[SText.Content]" />
+      <!--<Binding Source="[StudioItem.Item.Name]" Target="[SText.Content]" />
+      <Binding Source="[StudioItem.Item.PrimaryImageSmall]" Target="[SImage.Content]" />-->
+    </Rules>
+
+    <Content>
+      <Panel>
+        <Children>
+          <Text Name="SText" Color="White" Font="font://f:MM_GenreFont" />
+          <!--<Graphic Name="SImage" MaximumSize="120,40" MaintainAspectRatio="true"/>-->
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
 </Mcml>

@@ -52,7 +52,14 @@
     </Locals>
 
     <Rules>
-      <Default Target="[DisplayMax.Value]" Value="true" />
+      <!--<Default Target="[DisplayMax.Value]" Value="true" />-->
+      <Default Target="[DisplayMax.Value]"   Value="[Application.Config.StartDiamondMovieMinimal]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Default>
+      
+
       <Binding Source="[Item]" Target="[TitleUI.Item]"/>
       <Binding Source="[Item.PreferredImage]" Target="[Preview.Content]" />
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
@@ -287,6 +294,30 @@
 
                     </Children>
                   </Panel>
+
+                  <!--<Panel Name="StudioPanel">
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal"/>
+                    </Layout>
+                    <Children>
+                      <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="STUDIO"  MinimumSize="200,0"/>
+                      <Repeater Name="StudioRepeater" Source="[Item.Studios]" Margins="0,0,0,0" MaximumSize="0,100" >
+                        <Layout>
+                          <FlowLayout Orientation="Horizontal" AllowWrap="true"  Spacing="25,0"  />
+                        </Layout>
+                        <Divider>
+                          <Text Content="●" Font="font://f:MM_GenreFont" Color="190,190,190" Alpha="0.6"  />
+                        </Divider>
+                        <Content>
+                          <dtb:DiamondStudio StudioItem="[RepeatedItem!cor:String]" Name="StudioLogo"/>
+                          --><!--<gb:GenreButton Text="[RepeatedItem!cor:String]"
+                                  Application="[Application]" Item="[Item]"
+                                  GenreCategory="[RepeatedItem!cor:String]"
+                                  Font="font://f:MM_GenreFont" Color="190,190,190"/>--><!--
+                        </Content>
+                      </Repeater>
+                    </Children>
+                  </Panel>-->
 
                   <Panel  Name="MediaInfoPane" Visible="false" >                    
                     <Layout>
