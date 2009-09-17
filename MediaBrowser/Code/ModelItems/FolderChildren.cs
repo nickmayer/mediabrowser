@@ -133,6 +133,11 @@ namespace MediaBrowser.Code.ModelItems {
             
         }
 
+        public void RefreshChildren()
+        {
+            this.folder_ChildrenChanged(this, null);
+        }
+
         void folder_ChildrenChanged(object sender, ChildrenChangedEventArgs e) {
             if (!folderIsIndexed) {
                 lock (this) {

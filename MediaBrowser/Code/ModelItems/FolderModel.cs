@@ -181,7 +181,9 @@ namespace MediaBrowser.Library {
         {
             if (this.IsRoot)
             {
-                //if this is the root page - force an update of the newest items
+                //if this is the root page - force an update of the children
+                this.folderChildren.RefreshChildren();
+                //and then newest items
                 foreach (FolderModel folder in this.Children)
                 {
                     folder.newestItems = null; //force it to go get the real items
