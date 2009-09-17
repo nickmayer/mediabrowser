@@ -138,7 +138,7 @@ namespace Configurator
             foreach (string subdir in dirs)
             {
                 //only want directories that don't directly contain movies in our tree...
-                if (!File.Exists(subdir + "\\*.iso") && !File.Exists(subdir + "\\VIDEO_TS.IFO") && !File.Exists(subdir + "\\*.VOB") && !Directory.Exists(subdir + "\\VIDEO_TS") && !Directory.Exists(subdir + "\\BDMV") && !Directory.Exists(subdir + "\\HVDVD_TS") && !File.Exists(subdir + "\\*.mkv") && !File.Exists(subdir + "\\*.avi") && !File.Exists(subdir + "\\*.mov") && !File.Exists(subdir + "\\*.mp4") && !File.Exists(subdir + "\\*.mp3") && !File.Exists(subdir + "\\*.m4v") && !File.Exists(subdir + "\\series.xml"))
+                if (!containsMedia(subdir))
                 {
                     TreeViewItem aNode = new TreeViewItem();
                     LibraryFolder aFolder = new LibraryFolder(subdir);
@@ -149,6 +149,24 @@ namespace Configurator
             }
         }
 
+        private bool containsMedia(string path)
+        {
+            if (Directory.GetFiles(path, "*.iso").Length == 0
+                && Directory.GetFiles(path, "*.IFO").Length == 0
+                && Directory.GetFiles(path, "*.VOB").Length == 0
+                && Directory.GetFiles(path, "*.avi").Length == 0
+                && Directory.GetFiles(path, "*.mp3").Length == 0
+                && Directory.GetFiles(path, "*.mp4").Length == 0
+                && Directory.GetFiles(path, "*.mkv").Length == 0
+                && Directory.GetFiles(path, "*.m4v").Length == 0
+                && Directory.GetFiles(path, "*.mov").Length == 0
+                && !File.Exists(path + "\\series.xml")
+                && !Directory.Exists(path + "\\VIDEO_TS")
+                && !Directory.Exists(path + "\\BDMV")
+                && !Directory.Exists(path + "\\HVDVD_TS"))
+                return false;
+            else return true;
+        }
 
 
 
