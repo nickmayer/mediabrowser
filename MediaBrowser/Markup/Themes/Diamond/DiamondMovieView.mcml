@@ -295,29 +295,25 @@
                     </Children>
                   </Panel>
 
-                  <!--<Panel Name="StudioPanel">
+                  <Panel Name="StudioPanel">
                     <Layout>
                       <FlowLayout Orientation="Horizontal"/>
                     </Layout>
                     <Children>
                       <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="STUDIO"  MinimumSize="200,0"/>
-                      <Repeater Name="StudioRepeater" Source="[Item.Studios]" Margins="0,0,0,0" MaximumSize="0,100" >
+                      <Repeater Name="StudioRepeater" Source="[Item.StudioItems]" Margins="0,0,0,0" MaximumSize="0,0" >
                         <Layout>
-                          <FlowLayout Orientation="Horizontal" AllowWrap="true"  Spacing="25,0"  />
+                          <FlowLayout Orientation="Horizontal" AllowWrap="false"  Spacing="25,0"  />
                         </Layout>
                         <Divider>
                           <Text Content="●" Font="font://f:MM_GenreFont" Color="190,190,190" Alpha="0.6"  />
                         </Divider>
                         <Content>
-                          <dtb:DiamondStudio StudioItem="[RepeatedItem!cor:String]" Name="StudioLogo"/>
-                          --><!--<gb:GenreButton Text="[RepeatedItem!cor:String]"
-                                  Application="[Application]" Item="[Item]"
-                                  GenreCategory="[RepeatedItem!cor:String]"
-                                  Font="font://f:MM_GenreFont" Color="190,190,190"/>--><!--
+                          <dtb:DiamondStudio StudioItem="[RepeatedItem!lib:StudioItemWrapper]" Name="StudioLogo"/>
                         </Content>
                       </Repeater>
                     </Children>
-                  </Panel>-->
+                  </Panel>
 
                   <Panel  Name="MediaInfoPane" Visible="false" >                    
                     <Layout>

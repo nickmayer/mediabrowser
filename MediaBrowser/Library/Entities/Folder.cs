@@ -184,7 +184,7 @@ namespace MediaBrowser.Library.Entities {
                         show.ProductionYear == null ? null : new BaseItem[] { Year.GetYear(show.ProductionYear.ToString()) };
                     break;
                 case IndexType.Studio:
-                    indexingFunction = show => MapStringsToBaseItems(show.Studios, s => Studio.GetStudio(s));
+                   // indexingFunction = show => MapStringsToBaseItems(show.Studios, s => Studio.GetStudio(s));
                     break;
 
                 default:

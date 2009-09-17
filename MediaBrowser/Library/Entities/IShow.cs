@@ -8,6 +8,6 @@ namespace MediaBrowser.Library.Entities {
         float? ImdbRating { get; set; }
         string MpaaRating { get; set; }
         int? RunningTime { get; set; }
-        List<string> Studios { get; set; }
+        List<Studio> Studios { get; set; }
     }
 }

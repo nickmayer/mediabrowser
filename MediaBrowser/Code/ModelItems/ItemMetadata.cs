@@ -226,15 +226,40 @@ namespace MediaBrowser.Library {
             }
         }
 
+        public List<Studio> Studios
+        {
+            get
+            {
+                List<Studio> studios = new List<Studio>();
+                var show = baseItem as Show;
+                if (show != null && show.Studios != null)
+                {
+                    foreach (Studio studio in show.Studios)
+                    {
+                        studios.Add(studio);
+                    }
+
+                    Async.Queue(() =>
+                    {
+                        foreach (Studio studio in studios)
+                        {
+                            studio.RefreshMetadata();
+                        }
+                    });
+                }
+                return studios;
+
+            }
+            
+        }
+
         public List<StudioItemWrapper> StudioItems {
             get {
-                return null;
-                /*
                 var items = this.Studios
                     .Select(s => new StudioItemWrapper(s, this.PhysicalParent))
                     .OrderBy(x => x.Studio.Name);
                 return new List<StudioItemWrapper>(items);
-                 * */
+                /* * */
 
             }
         }
