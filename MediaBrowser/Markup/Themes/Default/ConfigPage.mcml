@@ -24,6 +24,7 @@
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <cor:Boolean Name="ShowFull" Boolean="true" />
+      
     </Properties>
 
     <Locals>
@@ -127,7 +128,7 @@
       <Choice Name="Model">
         <Options>
           <cor:String String="General" />
-          <cor:String String="More Options" />
+          <cor:String String="Media Options" />
           <cor:String String="Themes" />
           <cor:String String="Parental Control" />
           <!--<cor:String String="Other" />        
@@ -173,6 +174,8 @@
 
       <BooleanChoice Name="ShowConfigButton" Value="[Application.Config.ShowConfigButton]" />
       <IntRangedValue Name="AlphaBlending" Value="[Application.Config.AlphaBlending]" MaxValue="100" MinValue="0" Step="2"/>
+
+      <Timer Name="NavTimer" AutoRepeat="false" Enabled="true" Interval="400"  />
     </Locals>
 
     <Rules>
@@ -183,6 +186,15 @@
           <Set Target="[ThemeLoaded.Value]" Value="true" />
         </Actions>
       </Default>
+
+      <Changed Source="[NavTimer.Tick]">
+        <Conditions>
+          <Equality Source="[ShowFull]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[FullConfigNav.NavigateInto]" />
+        </Actions>
+      </Changed>
 
       <Condition Source="[Model.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Panel1.Visible]" Value="true" />
       <Condition Source="[Model.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Panel2.Visible]" Value="true" />
@@ -478,22 +490,18 @@
                       <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
                       <me:TextHeader Text="Views" />
                       <ss:SimpleSpinner  Label="Poster Grid Spacing" Model="[GridSpacing]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                       <ss:SimpleSpinner  Label="Thumb Width Split" Model="[ThumbStripPosterWidth]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                       <cb:CheckBox Label="Show Backdrop on Supported Views" Checked="[ShowBackdrop]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Enable Advanced Commands" Checked="[EnableAdvancedCmds]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
 
-                    </Children>
-                  </Panel>
-                  <Panel Layout="VerticalFlow" >
-                    <Children>
-                      <me:TextHeader Text="Behaivor" />
-                      <cb:CheckBox Label="Allow Nested Movie Folders" Checked="[EnableNestedMovieFolders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Movie Playlists" Checked="[EnableMoviePlaylists]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Auto Enter Single Folder Items" Checked="[AutoEnterSingleDirs]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <ss:SimpleSpinner  Label="Playlist Size Limit" Model="[PlaylistLimit]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                      <ss:SimpleSpinner  Label="Breadcrumb Count" Model="[BreadcrumbCount]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                     </Children>
                   </Panel>
                 </Children>
@@ -512,6 +520,16 @@
                       <cb:CheckBox Label="Watched Indicator on Videos" Checked="[ShowWatchTickInPosterView]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Watched Indicator in Detail View" Checked="[EnableListViewTicks]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Default To First Unwatched Item" Checked="[DefaultToFirstUnwatched]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                    </Children>
+                  </Panel>
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                      <me:TextHeader Text="Behavior" />
+                      <cb:CheckBox Label="Allow Nested Movie Folders" Checked="[EnableNestedMovieFolders]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Movie Playlists" Checked="[EnableMoviePlaylists]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Auto Enter Single Folder Items" Checked="[AutoEnterSingleDirs]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <ss:SimpleSpinner  Label="Playlist Size Limit" Model="[PlaylistLimit]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <ss:SimpleSpinner  Label="Breadcrumb Count" Model="[BreadcrumbCount]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" Visible="false" >
