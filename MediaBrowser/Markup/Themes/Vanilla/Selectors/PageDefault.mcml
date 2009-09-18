@@ -17,6 +17,7 @@
       xmlns:vmb="resx://MediaBrowser/MediaBrowser.Resources/VanillaMenuButton"
       xmlns:vnpv="resx://MediaBrowser/MediaBrowser.Resources/VanillaNPV"
       xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+      xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
       xmlns:me="Me"
 	  >
 
@@ -374,6 +375,15 @@
                 </LayoutInput>
                 <Children>
                   <vsb:SimpleButton Name="ConfigMenuButton" Application="[Application]" ImageNoFocus="image://i:ConfigImg" Command="[ConfigOptions]"/>
+                </Children>
+              </Panel>
+              <!-- PC Indicator Button -->
+              <Panel Name="PCBtn" Visible="true">
+                <LayoutInput>
+                  <FormLayoutInput Bottom="Parent,1,-42" Right="Parent,1,2"/>
+                </LayoutInput>
+                <Children>
+                  <pci:PCIndicatorButton Application="[Application]" Size="22,22"/>
                 </Children>
               </Panel>
 
