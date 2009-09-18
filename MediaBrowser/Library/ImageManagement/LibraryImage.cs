@@ -8,6 +8,7 @@ using MediaBrowser.Library.Extensions;
 using System.IO;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.Configuration;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library.ImageManagement {
     public abstract class LibraryImage {
@@ -20,6 +21,8 @@ namespace MediaBrowser.Library.ImageManagement {
         /// The raw path of this image including http:// or grab:// 
         /// </summary>
         public string Path { get; set; }
+
+        public bool Corrupt { private set; get; } 
 
         protected int width = -1;
         protected int height = -1;
@@ -105,10 +108,16 @@ namespace MediaBrowser.Library.ImageManagement {
         }
 
         public virtual void EnsureImageSizeInitialized() {
-            if (width < 0 || height < 0) {
-                using (var image = System.Drawing.Bitmap.FromFile(GetLocalImagePath())) {
-                    width = image.Width;
-                    height = image.Height;
+            if ( (width < 0 || height < 0) && !Corrupt) {
+                try {
+                    using (var image = System.Drawing.Bitmap.FromFile(GetLocalImagePath())) {
+                        width = image.Width;
+                        height = image.Height;
+                    }
+                } catch (OutOfMemoryException) { 
+                    // we have a corrupt image. Memory should be fine
+                    Corrupt = true;
+                    Logger.ReportWarning("You have a corrupt image in your collection, clean that up sir. " + Path);
                 }
             }
         }

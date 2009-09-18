@@ -134,6 +134,10 @@ namespace MediaBrowser.Code.ModelItems {
                 localPath = localImage.GetLocalImagePath(Size.Width, Size.Height);
             }
 
+            if (localImage.Corrupt) {
+                return;
+            }
+
             var bytes = File.ReadAllBytes(localPath);
             MemoryStream imageStream = new MemoryStream(bytes);
             imageStream.Position = 0;
