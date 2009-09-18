@@ -261,7 +261,7 @@ namespace Configurator
         private void LoadComboBoxes()
         {
             // Themes
-            ddlOptionViewTheme.Items.Add("Classic"); 
+            //ddlOptionViewTheme.Items.Add("Classic"); 
             ddlOptionViewTheme.Items.Add("Default");            
             ddlOptionViewTheme.Items.Add("Diamond");
             ddlOptionViewTheme.Items.Add("Vanilla");
