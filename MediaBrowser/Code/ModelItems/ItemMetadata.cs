@@ -238,21 +238,21 @@ namespace MediaBrowser.Library {
                     {
                         studios.Add(studio);
                     }
-
-                    Async.Queue(() =>
-                    {
-                        foreach (Studio studio in studios)
-                        {
-                            studio.RefreshMetadata();
-                            if (studio.PrimaryImage == null)
-                            {
-                                studio.PrimaryImage = new AsyncImageLoader(
-                                    () => baseItem.PrimaryImage,
-                                    null,
-                                    () => this.FirePropertyChanged("PrimaryImage"));
-                            }
-                        }
-                    });
+                    // JAS - This is not working for me, can someone fix this please.
+                    //Async.Queue(() =>
+                    //{
+                    //    foreach (Studio studio in studios)
+                    //    {
+                    //        studio.RefreshMetadata();
+                    //        if (studio.PrimaryImage == null)
+                    //        {
+                    //            var image = new MediaBrowser.Code.ModelItems.AsyncImageLoader(
+                    //                () => studio.PrimaryImage,
+                    //                null,
+                    //                () => this.FirePropertyChanged("PrimaryImage"));
+                    //        }
+                    //    }
+                    //});
                 }
                 return studios;
 
