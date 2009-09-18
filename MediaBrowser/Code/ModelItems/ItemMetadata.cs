@@ -244,6 +244,13 @@ namespace MediaBrowser.Library {
                         foreach (Studio studio in studios)
                         {
                             studio.RefreshMetadata();
+                            if (studio.PrimaryImage == null)
+                            {
+                                studio.PrimaryImage = new AsyncImageLoader(
+                                    () => baseItem.PrimaryImage,
+                                    null,
+                                    () => this.FirePropertyChanged("PrimaryImage"));
+                            }
                         }
                     });
                 }
