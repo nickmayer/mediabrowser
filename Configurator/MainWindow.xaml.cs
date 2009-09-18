@@ -151,7 +151,12 @@ namespace Configurator
 
         private bool containsMedia(string path)
         {
-            if (Directory.GetFiles(path, "*.iso").Length == 0
+            if (!File.Exists(path + "\\series.xml")
+                && !File.Exists(path + "\\mymovies.xml")
+                && !Directory.Exists(path + "\\VIDEO_TS")
+                && !Directory.Exists(path + "\\BDMV")
+                && !Directory.Exists(path + "\\HVDVD_TS")
+                && Directory.GetFiles(path, "*.iso").Length == 0
                 && Directory.GetFiles(path, "*.IFO").Length == 0
                 && Directory.GetFiles(path, "*.VOB").Length == 0
                 && Directory.GetFiles(path, "*.avi").Length == 0
@@ -160,10 +165,8 @@ namespace Configurator
                 && Directory.GetFiles(path, "*.mkv").Length == 0
                 && Directory.GetFiles(path, "*.m4v").Length == 0
                 && Directory.GetFiles(path, "*.mov").Length == 0
-                && !File.Exists(path + "\\series.xml")
-                && !Directory.Exists(path + "\\VIDEO_TS")
-                && !Directory.Exists(path + "\\BDMV")
-                && !Directory.Exists(path + "\\HVDVD_TS"))
+                && Directory.GetFiles(path, "*.m2ts").Length == 0
+                && Directory.GetFiles(path, "*.wmv").Length == 0 )
                 return false;
             else return true;
         }
