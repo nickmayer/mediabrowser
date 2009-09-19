@@ -31,11 +31,11 @@
       <lib:Item Name="Item" Item="$Required"/>
       <Image Name="UpButton" Image="resx://MediaBrowser/MediaBrowser.Resources/Up"/>
       <Image Name="DownButton" Image="resx://MediaBrowser/MediaBrowser.Resources/Down"/>
-      <BooleanChoice Name="DisplayMax" Value="true" />
+      
     </Properties>
 
     <Locals>
-
+<BooleanChoice Name="DisplayMax" Value="true" />
       <a:Clock Name="Clock"/>
       <Choice Name="Model">
         <Options>
@@ -49,16 +49,27 @@
       <FormLayoutInput Name="FullBG" Left="Parent,0,5" Right="Parent,1,-5" Top="Parent,0.15,-15" Bottom="Parent,1,-75"/>
       <FormLayoutInput Name="SmallBG" Left="Parent,0,5" Right="Parent,0,250" Top="Parent,0.15,-15" Bottom="Parent,0.15,350"/>
 
+      <Timer Name="NavTimer" AutoRepeat="false" Enabled="true" Interval="500"  />
     </Locals>
 
     <Rules>
-      <!--<Default Target="[DisplayMax.Value]" Value="true" />-->
-      <Default Target="[DisplayMax.Value]"   Value="[Application.Config.StartDiamondMovieMinimal]" >
+      <Default Target="[CmdButtons.DisplayMax.Value]" Value="true" />
+      <!--<Default Target="[DisplayMax.Value]"  Value="[Application.Config.StartDiamondMovieMinimal]" >
         <Transformer>
           <BooleanTransformer Inverse="true"/>
         </Transformer>
-      </Default>
-      
+      </Default>-->
+
+      <Changed Source="[NavTimer.Tick]">
+        <Conditions>
+          <Equality Source="[Application.Config.StartDiamondMovieMinimal]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[CmdButtons.DisplayMax.Value]" Value="false" />
+          <Set Target="[DisplayMax.Value]" Value="false" />
+          <!--<Invoke Target="[FullConfigNav.NavigateInto]" />-->
+        </Actions>
+      </Changed>
 
       <Binding Source="[Item]" Target="[TitleUI.Item]"/>
       <Binding Source="[Item.PreferredImage]" Target="[Preview.Content]" />
