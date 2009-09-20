@@ -215,49 +215,55 @@ namespace MediaBrowser
             // Present dialog
             DialogResult dr = mce.Dialog(msg, caption, DialogButtons.No | DialogButtons.Yes, 0, true);
 
-            if (dr == DialogResult.Yes)
+            if (dr == DialogResult.Yes && this.Config.Advanced_EnableDelete == true 
+                && this.Config.EnableAdvancedCmds == true)
             {
-                // Perform itemtype and configuration checks
-                if (Item.ItemType == ItemType.Movie &&
-                    (this.Config.Advanced_EnableDelete == true && this.Config.EnableAdvancedCmds == true)
-                   )
-                {
-                    Item Parent = Item.PhysicalParent;
-                    string path = Item.Path;
-                    try
-                    {
-                        if (Directory.Exists(path))
-                        {
-                            Directory.Delete(path, true);
-                        }
-                        else if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                    }
-                    catch (IOException)
-                    {
-                        mce.Dialog("The selected media item cannot be deleted due to an invalid path. Or you may not have sufficient access rights to perform this command.", "Delete Failed", DialogButtons.Ok, 0, true);
-                    }
-                    catch (Exception)
-                    {
-                        mce.Dialog("The selected media item cannot be deleted due to an unknown error.", "Delete Failed", DialogButtons.Ok, 0, true);
-                    }
-                    Back(); // Back to the Parent Item; This parent still contains old data.
+                Item parent = Item.PhysicalParent;
+                string path = Item.Path;
+                string name = Item.Name;
 
-                    // These tricks are required in order to load the parent item with "fresh" data.
-                    if (session.BackPage()) // Double Back to the GrandParent because history still has old parent.
+                try
+                {
+                    if (Directory.Exists(path))
                     {
-                        Navigate(Parent);  // Navigate forward to Parent 
+                        Directory.Delete(path, true);                        
                     }
-                    else // No GrandParent to go back to.
+                    else if (File.Exists(path))
                     {
-                        Navigate(Parent); // Navigate to the parent again - this will refresh the objects
-                        session.BackPage(); // Now safe to go back to previous parent, and keep session history valid
-                    }
+                        File.Delete(path);
+                    }                    
                 }
-                else
-                    mce.Dialog("The selected media item cannot be deleted due to its Item-Type or you have not enabled this feature in the configuration file.", "Delete Failed", DialogButtons.Ok, 0, true);
+                catch (IOException)
+                {
+                    mce.Dialog("The selected media item cannot be deleted due to an invalid path. Or you may not have sufficient access rights to perform this command.", "Delete Failed", DialogButtons.Ok, 0, true);
+                }
+                catch (Exception)
+                {
+                    mce.Dialog("The selected media item cannot be deleted due to an unknown error.", "Delete Failed", DialogButtons.Ok, 0, true);
+                }
+                DeleteNavigationHelper(parent);
+                this.Information.AddInformation(new InfomationItem("Deleted media item: " + name, 2));
+                this.Information.AddInformation(new InfomationItem("Deleted path: " + path, 2));
+            }
+            else
+                mce.Dialog("The selected media item cannot be deleted due to its Item-Type or you have not enabled this feature in the configuration file.", "Delete Failed", DialogButtons.Ok, 0, true);
+        }
+
+
+
+        private void DeleteNavigationHelper(Item Parent)
+        {
+            Back(); // Back to the Parent Item; This parent still contains old data.
+
+            // These tricks are required in order to load the parent item with "fresh" data.
+            if (session.BackPage()) // Double Back to the GrandParent because history still has old parent.
+            {
+                Navigate(Parent);  // Navigate forward to Parent 
+            }
+            else // No GrandParent to go back to.
+            {
+                Navigate(Parent); // Navigate to the parent again - this will refresh the objects
+                session.BackPage(); // Now safe to go back to previous parent, and keep session history valid
             }
         }
 
@@ -335,7 +341,8 @@ namespace MediaBrowser
         void RunActionRecursively(Folder folder, Action<BaseItem> action)
         {
             action(folder);
-            foreach (var item in folder.RecursiveChildren.OrderByDescending( i => i.DateModified)) {
+            foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateModified))
+            {
                 action(item);
             }
         }
@@ -546,16 +553,32 @@ namespace MediaBrowser
                 }
             }
 
+            // JAS *TEMP CODE* For Diamond Episode testing
+            if (item.BaseItem is Episode && Config.ViewTheme.ToLowerInvariant() == "diamond"
+                && Config.EnableDiamondEpisodeView == true)
+            {
+                // go to details screen 
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+                properties["Application"] = this;
+                properties["Item"] = item;
+                session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/MovieDetailsPage", properties);
+                return;
+            }
+
             MediaBrowser.Library.FolderModel folder = item as MediaBrowser.Library.FolderModel;
             if (folder != null)
             {
-                if (!Config.Instance.RememberIndexing) {
+                if (!Config.Instance.RememberIndexing)
+                {
                     folder.DisplayPrefs.IndexBy = IndexType.None;
                 }
-                if (Config.Instance.AutoEnterSingleDirs && (folder.Folder.Children.Count == 1)) {
+                if (Config.Instance.AutoEnterSingleDirs && (folder.Folder.Children.Count == 1))
+                {
                     session.AddBreadcrumb(folder.Name);
                     Navigate(folder.Children[0]);
-                } else {
+                }
+                else
+                {
                     //call secured method if folder is protected
                     if (!folder.ParentalAllowed)
                         NavigateSecure(folder);
@@ -564,9 +587,9 @@ namespace MediaBrowser
                 }
             }
             else
-            {   
-                currentPlaybackController = item.PlaybackController;             
-                item.Resume();                
+            {
+                currentPlaybackController = item.PlaybackController;
+                item.Resume();
             }
         }
 
@@ -591,7 +614,7 @@ namespace MediaBrowser
             this.RequestingPIN = true; //tell page we are calling it (not a back action)
             session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/ParentalPINEntry", properties);
         }
-        
+
         public void Shuffle(Item item)
         {
             Folder folder = item.BaseItem as Folder;
@@ -667,7 +690,7 @@ namespace MediaBrowser
             Play(item, true);
         }
         public void Play(Item item)
-        {            
+        {
             Play(item, false);
         }
 

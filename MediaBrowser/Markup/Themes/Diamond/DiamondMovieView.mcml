@@ -151,6 +151,13 @@
         </Actions>
       </Condition>
 
+      <!-- Show and hide common panels -->
+      <Condition Source="[Item.RunningTimeString]" ConditionOp="Equals"      SourceValue=""  Target="[RuntimePanel.Visible]"      Value="false"/>
+      <Condition Source="[Item.RunningTimeString]" ConditionOp="NotEquals"   SourceValue=""  Target="[RuntimePanel.Visible]"      Value="true"/>
+      <Condition Source="[Item.Genres.Count]" ConditionOp="LessThanOrEquals"  SourceValue="0"  Target="[GenrePanel.Visible]"      Value="false"/>
+      <Condition Source="[Item.Genres.Count]" ConditionOp="NotEquals"         SourceValue="0"  Target="[GenrePanel.Visible]"      Value="true"/>
+      <Condition Source="[Item.StudioItems.Count]" ConditionOp="LessThanOrEquals"  SourceValue="0"  Target="[StudioPanel.Visible]"      Value="false"/>
+      <Condition Source="[Item.StudioItems.Count]" ConditionOp="NotEquals"         SourceValue="0"  Target="[StudioPanel.Visible]"      Value="true"/>
     </Rules>
 
     <Content>
@@ -216,7 +223,6 @@
                 <Children>
                   <as:AutoScroller Name="Overview" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"
                                    Color="[ValueColor]" FocusColor="White"/>
-
                 </Children>
               </Panel>
 

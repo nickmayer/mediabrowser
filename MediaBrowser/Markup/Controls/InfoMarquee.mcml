@@ -9,14 +9,15 @@
   <UI Name="InfoMarquee">
     <Properties>
       <a:Application Name="Application" Application="$Required" />
+      <Color Name="Color" Color="White"/>
     </Properties>
 
     <Rules>
-      <Binding Source="[Application.Information.DisplayText]" Target="[InfoPanelDisplay.Content]"  />
+      <Binding Source="[Application.Information.DisplayText]" Target="[InfoPanelDisplay.Content]"  />      
     </Rules>
 
     <Content>
-      <Text Name="InfoPanelDisplay" Font="font://f:P_ClockFont"  Color="White">
+      <Text Name="InfoPanelDisplay" Font="font://f:P_ClockFont"  Color="[Color]">
         <Animations>
           <Animation Type="ContentChangeShow">
             <Keyframes>

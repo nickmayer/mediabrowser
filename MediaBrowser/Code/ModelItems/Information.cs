@@ -30,7 +30,7 @@ namespace MediaBrowser
         #region fields
 
         string _displayText = string.Empty;
-        ArrayListDataSet _item = new ArrayListDataSet();
+        List<InfomationItem> _item = new List<InfomationItem>();
 
         public string DisplayText
         {
@@ -77,9 +77,11 @@ namespace MediaBrowser
         private void DisplayItem()
         {
             InfomationItem ipi = (InfomationItem)_item[counter];
+            ipi.RecurrXTimes--;
+            _item[counter] = ipi;
             DisplayText = ipi.Description;
             // Check the Recurring flag, and remove this message once displayed
-            if (!ipi.RecurrMessage)
+            if (!ipi.RecurrMessage || ipi.RecurrXTimes <= 0)
                 RemoveItem(counter);
         }
 
@@ -97,16 +99,25 @@ namespace MediaBrowser
     {
         public string Description;
         public bool RecurrMessage;
+        public int RecurrXTimes;
 
         public InfomationItem(string description)
         {
             this.Description = description;
             this.RecurrMessage = false;
+            this.RecurrXTimes = 0;
         }
         public InfomationItem(string description, bool recurrMessage)
         {
             this.Description = description;
             this.RecurrMessage = recurrMessage;
+            this.RecurrXTimes = 0;
+        }
+        public InfomationItem(string description, int recurrInterval)
+        {
+            this.Description = description;
+            this.RecurrXTimes = recurrInterval;
+            this.RecurrMessage = true;
         }
     }
     #endregion

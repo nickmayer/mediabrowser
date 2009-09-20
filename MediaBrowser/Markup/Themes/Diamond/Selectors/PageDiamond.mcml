@@ -8,7 +8,7 @@
 		xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu"
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
     xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
-	  
+	  xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
 	  xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailAreaDiamond"
     xmlns:me="Me"
       >
@@ -118,6 +118,7 @@
           <Set Target="[TheTopBar.Visible]" Value="false" />
           <Set Target="[NowPlaying.Visible]" Value="false"/>
           <Set Target="[Breadcrumbs.Visible]" Value="false"/>
+          <Set Target="[BottomCenterInfoPanel.Visible]" Value="false"/>
         </Actions>
       </Rule>
 
@@ -241,6 +242,16 @@
                             Font="Segoe Media Center, 18" Color="White" />
                     </Children>
                   </Panel>
+                </Children>
+              </Panel>
+
+              <!--Information Panel Top Leftt-->
+              <Panel Name="BottomCenterInfoPanel">
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent, 1,-5" Left="Parent, 0.5,-300" Right="Parent,.5,300"  Horizontal="Center"/>
+                </LayoutInput>
+                <Children>
+                  <in:InfoMarquee Application="[Application]" Color="55,55,55" />
                 </Children>
               </Panel>
 

@@ -82,6 +82,7 @@ namespace MediaBrowser
         public string YahooWeatherFeed = "UKXX0085";
         public string YahooWeatherUnit = "c";
         public bool StartDiamondMovieMinimal = false;
+        public bool EnableDiamondEpisodeView = false;
 
         public string PodcastHome = ApplicationPaths.DefaultPodcastPath;
         public bool HideFocusFrame = false;
