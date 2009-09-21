@@ -220,6 +220,9 @@ namespace MediaBrowser.Library.Providers
                 if (movie.CustomPIN == null)
                     movie.CustomPIN = doc.SafeGetString("Title/CustomPIN");
 
+                if (movie.AspectRatio == null)
+                    movie.AspectRatio = doc.SafeGetString("Title/AspectRatio");
+
             }
         }
 

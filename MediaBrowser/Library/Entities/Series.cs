@@ -33,5 +33,8 @@ namespace MediaBrowser.Library.Entities {
 
         [Persist]
         public string TVDBSeriesId { get; set; }
+
+        [Persist]
+        public string AspectRatio { get; set; }
     }
 }

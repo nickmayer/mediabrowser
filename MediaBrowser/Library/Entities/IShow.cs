@@ -9,5 +9,6 @@ namespace MediaBrowser.Library.Entities {
         string MpaaRating { get; set; }
         int? RunningTime { get; set; }
         List<Studio> Studios { get; set; }
+        string AspectRatio { get; set; }
     }
 }

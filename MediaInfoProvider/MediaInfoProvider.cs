@@ -85,6 +85,8 @@ namespace MediaInfoProvider
                 Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
                 int audioBitRate;
                 Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "BitRate"), out audioBitRate);
+                int runTime;
+                Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
                 mediaInfoData = new MediaInfoData
                 {
                     VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "CodecID/Hint"),
@@ -94,7 +96,8 @@ namespace MediaInfoProvider
                     Width = width,
                     //MI.Get(StreamKind.Video, 0, "Duration/String3")),
                     AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
-                    AudioBitRate = audioBitRate
+                    AudioBitRate = audioBitRate,
+                    RunTime = (runTime/60000)
                 };
             }
             else

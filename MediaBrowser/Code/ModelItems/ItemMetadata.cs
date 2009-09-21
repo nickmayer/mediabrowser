@@ -124,7 +124,7 @@ namespace MediaBrowser.Library {
                 string runtime = "";
                 var show = baseItem as IShow;
                 if (show != null) {
-                    runtime = show.RunningTime==null ? "" : show.RunningTime.ToString() + " mins";
+                    runtime = show.RunningTime==null ? this.MediaInfo.RuntimeString : show.RunningTime.ToString() + " mins";
                 }
                 return runtime;
             }
@@ -167,7 +167,31 @@ namespace MediaBrowser.Library {
             }
         }
 
-        public List<ActorItemWrapper> Actors {
+        public string AspectRatioString
+        {
+            get
+            {
+                IShow show = baseItem as IShow;
+                if (show != null)
+                {
+                    if (show.AspectRatio != null && show.AspectRatio != "")
+                    {
+                        return show.AspectRatio;
+                    }
+                    else
+                    {
+                        return this.MediaInfo.AspectRatioString;
+                    }
+                }
+                else
+                {
+                    return this.MediaInfo.AspectRatioString;
+                }
+            }
+        }
+
+        public List<ActorItemWrapper> Actors
+        {
             get {
                 List<ActorItemWrapper> actors = new List<ActorItemWrapper>();
                 var show = baseItem as Show;

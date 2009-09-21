@@ -20,6 +20,8 @@ namespace MediaBrowser.Library.Entities {
         public int VideoBitRate;
         [Persist]
         public int AudioBitRate;
+        [Persist]
+        public int RunTime = 0;
 
         public string CombinedInfo {
             get {
@@ -69,6 +71,18 @@ namespace MediaBrowser.Library.Entities {
                     return string.Format("{0}", this.VideoCodec);
                 else
                     return "";
+            }
+        }
+
+        public string RuntimeString
+        {
+            get
+            {
+                if (RunTime != 0)
+                {
+                    return RunTime.ToString() + " mins";
+                }
+                else return "";
             }
         }
     }

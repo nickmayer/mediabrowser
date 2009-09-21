@@ -31,5 +31,7 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public int? ProductionYear { get; set; }
 
+        [Persist]
+        public string AspectRatio { get; set; }
     }
 }

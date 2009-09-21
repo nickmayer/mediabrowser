@@ -16,7 +16,7 @@
         <Actions>
           <Set Target="[VideoCodec.Value]" Value="[Item.MediaInfo.VideoCodecString]"/>
           <Set Target="[AudioCodec.Value]" Value="[Item.MediaInfo.AudioCodecString]"/>
-          <Set Target="[AspectRatio.Value]" Value="[Item.MediaInfo.AspectRatioString]"/>
+          <Set Target="[AspectRatio.Value]" Value="[Item.AspectRatioString]"/>
           <Set Target="[HDResolution.Value]" Value="[Item.HDType]"/>
           <Set Target="[MediaFormat.Value]" Value="[Item.MediaTypeString]"/>
         </Actions>
@@ -149,6 +149,8 @@
       <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_32" />
       <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_169" />
       <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_1851" />
+      <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_2391" />
+      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_2391" />
       <Condition Source="[AspectRatio]" SourceValue="2.39:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_2391" />
 
     </Rules>
