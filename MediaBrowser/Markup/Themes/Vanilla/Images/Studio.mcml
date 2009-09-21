@@ -12,7 +12,7 @@
     </Properties>
 
     <Rules>
-      <Binding Source="[StudioItem.Item.PrimaryImageSmall]" Target="[SImage.Content]" />
+      <Binding Source="[StudioItem.Item.PrimaryImage]" Target="[SImage.Content]" />
     </Rules>
 
     <Content>
