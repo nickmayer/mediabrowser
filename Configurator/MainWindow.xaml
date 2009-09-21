@@ -189,8 +189,9 @@
                 <Grid>
                     <GroupBox Header="General" HorizontalAlignment="Left" Margin="34,67,0,104" Name="gbPCGeneral" Width="268" IsEnabled="False">
                         <Grid>
-                            <CheckBox Margin="22,26,66,0" Click="cbxOptionBlockUnrated_Click" Name="cbxOptionBlockUnrated" Height="23" VerticalAlignment="Top" IsEnabled="True">Block Unrated Content</CheckBox>
-                            <CheckBox Height="22" Margin="22,46,73,0" Name="cbxOptionHideProtected" Click="cbxOptionHideProtected_Click" VerticalAlignment="Top">Hide Blocked Content</CheckBox>
+                            <CheckBox Margin="22,11,66,0" Click="cbxOptionBlockUnrated_Click" Name="cbxOptionBlockUnrated" Height="23" VerticalAlignment="Top" IsEnabled="True">Block Unrated Content</CheckBox>
+                            <CheckBox Height="22" Margin="22,31,73,0" Name="cbxOptionHideProtected" Click="cbxOptionHideProtected_Click" VerticalAlignment="Top">Hide Blocked Content</CheckBox>
+                            <CheckBox Height="22" Margin="22,51,79,0" Name="cbxOptionAutoUnlock" Click="cbxOptionAutoUnlock_Click" VerticalAlignment="Top">Unlock On PIN Entry</CheckBox>
                             <ComboBox Margin="24,101,66,78" Name="ddlOptionMaxAllowedRating" SelectionChanged="ddlOptionMaxAllowedRating_SelectionChanged" />
                             <Label Margin="22,73.64,93,0" Name="label2" Height="28.14" VerticalAlignment="Top">Max Allowed Rating</Label>
                             <Label Height="28" Margin="22,0,81,44" Name="label7" VerticalAlignment="Bottom">Unlock Period (hours)</Label>

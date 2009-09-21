@@ -246,6 +246,7 @@ namespace Configurator
             cbxEnableParentalControl.IsChecked = config.ParentalControlEnabled;
             cbxOptionBlockUnrated.IsChecked = config.ParentalBlockUnrated;
             cbxOptionHideProtected.IsChecked = config.HideParentalDisAllowed;
+            cbxOptionAutoUnlock.IsChecked = config.UnlockOnPinEntry;
             gbPCGeneral.IsEnabled = gbPCPIN.IsEnabled = config.ParentalControlEnabled;
             ddlOptionMaxAllowedRating.SelectedItem = ratings.ToString(config.MaxParentalLevel);
             slUnlockPeriod.Value = config.ParentalUnlockPeriod;
@@ -827,6 +828,11 @@ folder: {0}
         private void cbxOptionHideProtected_Click(object sender, RoutedEventArgs e)
         {
             config.HideParentalDisAllowed = (bool)cbxOptionHideProtected.IsChecked;
+            SaveConfig();
+        }
+        private void cbxOptionAutoUnlock_Click(object sender, RoutedEventArgs e)
+        {
+            config.UnlockOnPinEntry = (bool)cbxOptionAutoUnlock.IsChecked;
             SaveConfig();
         }
 
