@@ -167,9 +167,9 @@ namespace MediaBrowser.Library.Providers
                     try
                     {
                         if (movie.Studios == null)
-                            movie.Studios = new List<Studio>();
-                        //movie.Studios.Add(node.InnerText);
-                        movie.Studios.Add(new Studio { Name = node.InnerText });                        
+                            movie.Studios = new List<string>();
+                        movie.Studios.Add(node.InnerText);
+                        //movie.Studios.Add(new Studio { Name = node.InnerText });                        
                     }
                     catch
                     {

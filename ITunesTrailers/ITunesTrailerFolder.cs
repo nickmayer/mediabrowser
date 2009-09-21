@@ -103,9 +103,9 @@ namespace ITunesTrailers {
                                 case "studio":
                                     if (trailer.Studios == null)
                                         {
-                                            trailer.Studios = new List<Studio>();
+                                            trailer.Studios = new List<string>();
                                         }
-                                        trailer.Studios.Add(new Studio() { Name = ReadToValue(reader) });                                     
+                                        trailer.Studios.Add(Name = ReadToValue(reader));                                     
                                     break;
 
                                 case "postdate":

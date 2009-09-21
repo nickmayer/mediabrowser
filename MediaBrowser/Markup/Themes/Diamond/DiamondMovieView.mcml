@@ -34,8 +34,8 @@
       
     </Properties>
 
-    <Locals>
-<BooleanChoice Name="DisplayMax" Value="true" />
+    <Locals>    
+      <BooleanChoice Name="DisplayMax" Value="true" />
       <a:Clock Name="Clock"/>
       <Choice Name="Model">
         <Options>
@@ -196,6 +196,26 @@
                 </LayoutInput>
               </me:CommandButtons>
 
+              <Panel Name="StudioPanel">
+                <Layout>
+                  <FlowLayout Orientation="Horizontal"/>
+                </Layout>
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,20" Top="CmdButtons,1,5" Right="Parent,0.17"  Bottom="Parent, 1, -80" />
+                </LayoutInput>
+                <Children>
+                  <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="STUDIO"  MinimumSize="200,0"/>
+                  <Repeater Name="StudioRepeater" Source="[Item.StudioItems]" Margins="0,0,0,0" MaximumSize="0,0" >
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal" AllowWrap="false"  Spacing="25,0"  />
+                    </Layout>
+                    <Content>
+                      <dtb:DiamondStudio StudioItem="[RepeatedItem!lib:StudioItemWrapper]" Name="StudioLogo"/>
+                    </Content>
+                  </Repeater>
+                </Children>
+              </Panel>
+
               <!-- Selector buttons-->
               <Panel Name="SelectorPanel">
                 <Layout>
@@ -312,25 +332,7 @@
                     </Children>
                   </Panel>
 
-                  <Panel Name="StudioPanel">
-                    <Layout>
-                      <FlowLayout Orientation="Horizontal"/>
-                    </Layout>
-                    <Children>
-                      <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="STUDIO"  MinimumSize="200,0"/>
-                      <Repeater Name="StudioRepeater" Source="[Item.StudioItems]" Margins="0,0,0,0" MaximumSize="0,0" >
-                        <Layout>
-                          <FlowLayout Orientation="Horizontal" AllowWrap="false"  Spacing="25,0"  />
-                        </Layout>
-                        <Divider>
-                          <Text Content="●" Font="font://f:MM_GenreFont" Color="190,190,190" Alpha="0.6"  />
-                        </Divider>
-                        <Content>
-                          <dtb:DiamondStudio StudioItem="[RepeatedItem!lib:StudioItemWrapper]" Name="StudioLogo"/>
-                        </Content>
-                      </Repeater>
-                    </Children>
-                  </Panel>
+                  
 
                   <Panel  Name="MediaInfoPane" Visible="false" >                    
                     <Layout>
@@ -358,7 +360,7 @@
               <!-- Thumbnail Poster -->
               <Graphic Name="PosterPanel" SizingPolicy="SizeToChildren" Layout="Anchor">
                 <LayoutInput>
-                  <AnchorLayoutInput Top="Parent,0.15" Left="Parent,0.17" Right="Parent, 0.47" />
+                  <AnchorLayoutInput Top="Parent,0.15" Left="Parent,0.17" Right="Parent, 0.47" Bottom="Parent, 1, -80" />
                 </LayoutInput>
                 <Children>
                   <Graphic Name="CoverOutline" Content="image://i:PosterFrame">
@@ -419,6 +421,7 @@
       <Color Name="FilterColor" Color="Black"/>
       <cor:Single Name="Alpha" Single="1" />
       <BooleanChoice Name="DisplayMax" BooleanChoice="$Required" />
+      <Size Name="Size" Size="225,50"/>
     </Properties>
 
     <Locals>
@@ -515,13 +518,13 @@
               <ColorFill Content="Transparent" Layout="VerticalFlow"
                          Padding="0,10,100,10" Navigation="RememberFocus" >
                 <Children>
-                  <dtb:DiamondImageButton Name="ResumeMovieButton" Text="RESUME" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
-                  <dtb:DiamondImageButton Name="PlayMovieButton" Text="PLAY" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <dtb:DiamondImageButton Name="TrailerButton" Text="TRAILER" Command="[LocalTrailerCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
-                  <dtb:DiamondImageButton Name="ToggleViewButton" Text="DISPLAY" Command="[ToggleViewCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconFloral" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <dtb:DiamondImageButton Name="CacheMovieButton" Text="CACHE 2 XML" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
-                  <dtb:DiamondImageButton Name="DeleteMovieButton" Text="DELETE" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
+                  <dtb:DiamondImageButton Name="ResumeMovieButton" Text="RESUME" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="[Size]" Font="font://f:MM_ButtonFont"/>
+                  <dtb:DiamondImageButton Name="PlayMovieButton" Text="PLAY" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="[Size]" Font="font://f:MM_ButtonFont" />
+                  <dtb:DiamondImageButton Name="TrailerButton" Text="TRAILER" Command="[LocalTrailerCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer" Size="[Size]" Font="font://f:MM_ButtonFont" Visible="false" />
+                  <dtb:DiamondImageButton Name="ToggleViewButton" Text="DISPLAY" Command="[ToggleViewCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconFloral" Size="[Size]" Font="font://f:MM_ButtonFont" />
+                  <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="[Size]" Font="font://f:MM_ButtonFont" />
+                  <dtb:DiamondImageButton Name="CacheMovieButton" Text="CACHE 2 XML" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="[Size]" Font="font://f:MM_ButtonFont" Visible="false" />
+                  <dtb:DiamondImageButton Name="DeleteMovieButton" Text="DELETE" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="[Size]" Font="font://f:MM_ButtonFont" Visible="false" />
                 </Children>
               </ColorFill>
             </Children>

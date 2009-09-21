@@ -401,21 +401,19 @@
     <Properties>
       <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
       <cor:Boolean Name="LeftAlign" Boolean="true" />
-      <!--<cor:String Name="StudioItem" String="$Required" />-->
       <lib:StudioItemWrapper Name="StudioItem" StudioItemWrapper="$Required" />
     </Properties>
 
     <Rules>
-      <!--<Binding Source="[StudioItem]" Target="[SText.Content]" />-->
-      <Binding Source="[StudioItem.Item.Name]" Target="[SText.Content]" />
-      <Binding Source="[StudioItem.Item.PrimaryImageSmall]" Target="[SImage.Content]" />
+      <!-- <Binding Source="[StudioItem.Item.Name]" Target="[SText.Content]" />-->
+      <Binding Source="[StudioItem.Item.PrimaryImage]" Target="[SImage.Content]" />
     </Rules>
 
     <Content>
       <Panel>
         <Children>
-          <Text Name="SText" Color="White" Font="font://f:MM_GenreFont" />
-          <Graphic Name="SImage" MaximumSize="120,40" MaintainAspectRatio="true"/><!---->
+          <!--<Text Name="SText" Color="White" Font="font://f:MM_GenreFont" />-->
+          <Graphic Name="SImage" MaximumSize="75,75" MaintainAspectRatio="true"/><!---->
         </Children>
       </Panel>
     </Content>

@@ -117,12 +117,12 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
             string studios = seriesNode.SafeGetString("Network");
             if (studios != null) {
-                //series.Studios = new List<string>(studios.Split('|'));
-                series.Studios = new List<Studio>();
-                foreach (string n in studios.Split('|'))
-                {
-                    series.Studios.Add(new Studio { Name = n });
-                }
+                series.Studios = new List<string>(studios.Split('|'));
+                //series.Studios = new List<Studio>();
+                //foreach (string n in studios.Split('|'))
+                //{
+                //    series.Studios.Add(new Studio { Name = n });
+                //}
             }
 
 

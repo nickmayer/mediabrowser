@@ -339,8 +339,10 @@ namespace MediaBrowser.Library
                 if (value != HaveWatched) {
                     if (value && PlayState.PlayCount == 0) {
                         PlayState.PlayCount = 1;
+                        Application.CurrentInstance.Information.AddInformationString("Set Watched " + this.Name);
                     } else {
                         PlayState.PlayCount = 0;
+                        Application.CurrentInstance.Information.AddInformationString("Clear Watched " + this.Name);
                     }
                     PlayState.Save();
                     lock (watchLock)
@@ -357,6 +359,7 @@ namespace MediaBrowser.Library
 
         public void RefreshMetadata()
         {
+            Application.CurrentInstance.Information.AddInformationString("Refresh " + this.Name);
             Async.Queue(() => { 
                 baseItem.RefreshMetadata(MetadataRefreshOptions.Force); 
                 // force images to reload

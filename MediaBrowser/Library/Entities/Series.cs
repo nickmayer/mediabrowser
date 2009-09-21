@@ -23,7 +23,7 @@ namespace MediaBrowser.Library.Entities {
         public List<string> Genres { get; set; }
 
         [Persist]
-        public List<Studio> Studios { get; set; }
+        public List<string> Studios { get; set; }
 
         [Persist]
         public int? RunningTime { get; set; }

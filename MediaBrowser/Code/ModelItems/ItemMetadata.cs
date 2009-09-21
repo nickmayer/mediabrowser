@@ -250,48 +250,48 @@ namespace MediaBrowser.Library {
             }
         }
 
-        public List<Studio> Studios
+        public List<string> Studios
         {
             get
             {
-                List<Studio> studios = new List<Studio>();
+                List<string> studios = null;
                 var show = baseItem as Show;
                 if (show != null && show.Studios != null)
                 {
-                    foreach (Studio studio in show.Studios)
-                    {
-                        studios.Add(studio);
-                    }
-                    // JAS - This is not working for me, can someone fix this please.
-                    //Async.Queue(() =>
-                    //{
-                    //    foreach (Studio studio in studios)
-                    //    {
-                    //        studio.RefreshMetadata();
-                    //        if (studio.PrimaryImage == null)
-                    //        {
-                    //            var image = new MediaBrowser.Code.ModelItems.AsyncImageLoader(
-                    //                () => studio.PrimaryImage,
-                    //                null,
-                    //                () => this.FirePropertyChanged("PrimaryImage"));
-                    //        }
-                    //    }
-                    //});
+                    studios = show.Studios;
                 }
-                return studios;
-
+                return studios ?? new List<string>();
             }
-            
         }
 
-        public List<StudioItemWrapper> StudioItems {
-            get {
-                var items = this.Studios
+        public List<StudioItemWrapper> StudioItems
+        {
+            get
+            {
+                var studioStrs = this.Studios;
+                List<Studio> items = new List<Studio>();
+
+                foreach (string q in studioStrs)
+                    items.Add(Studio.GetStudio(q));
+
+                Async.Queue(() =>
+                {
+                    foreach (Studio studio in items)
+                    {
+                        if (studio.PrimaryImage == null)
+                        {
+                            var image = new MediaBrowser.Code.ModelItems.AsyncImageLoader(
+                                () => studio.PrimaryImage,
+                                DefaultImage,
+                                () => this.FirePropertyChanged("PrimaryImage"));
+                        }
+                    }
+                });
+
+                var siw = items
                     .Select(s => new StudioItemWrapper(s, this.PhysicalParent))
                     .OrderBy(x => x.Studio.Name);
-                return new List<StudioItemWrapper>(items);
-                /* * */
-
+                return new List<StudioItemWrapper>(siw);
             }
         }
 
