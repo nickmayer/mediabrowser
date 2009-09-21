@@ -93,6 +93,7 @@ namespace MediaBrowser
         public int ParentalUnlockPeriod = 3;
         public bool HideParentalDisAllowed = true; 
         public bool ParentalBlockUnrated = false;
+        public bool UnlockOnPinEntry = true;
         public bool ParentalControlEnabled = false;
         public string ParentalPIN = "0000";
         public int MaxParentalLevel = 3;

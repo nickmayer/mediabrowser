@@ -324,10 +324,7 @@ namespace MediaBrowser.Library
             MediaCenterEnvironment env = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
             if (pinCorrect)
             {
-                Config.Instance.ParentalControlUnlocked = true;
-                this.unlockedTime = DateTime.UtcNow;
-                this.unlockPeriod = Config.Instance.ParentalUnlockPeriod;
-                _relockTimer.Start(); //start our re-lock timer
+                unlockLibrary();
                 env.Dialog("Library Temporarily Unlocked.  Will Re-Lock in "+this.unlockPeriod.ToString()+" Hour(s) or on Application Re-Start", "Unlock", DialogButtons.Ok, 60, true);
                 Application.CurrentInstance.Back(); //clear PIN screen
                 if (Config.Instance.HideParentalDisAllowed)
@@ -351,6 +348,14 @@ namespace MediaBrowser.Library
             customPIN = Config.Instance.ParentalPIN; // use global pin
             Logger.ReportInfo("Request to unlock PC");
             PromptForPin(pinCallback,"Please Enter PIN to Unlock Library");
+        }
+
+        private void unlockLibrary()
+        {
+            Config.Instance.ParentalControlUnlocked = true;
+            this.unlockedTime = DateTime.UtcNow;
+            this.unlockPeriod = Config.Instance.ParentalUnlockPeriod;
+            _relockTimer.Start(); //start our re-lock timer
         }
 
         private void PromptForPin(ParentalPromptCompletedCallback pe)
@@ -380,7 +385,16 @@ namespace MediaBrowser.Library
                 Application.CurrentInstance.Back(); //clear PIN entry screen
             }
             else
+            {
                 pinCallback(aPIN == customPIN);
+                if (pinCallback != UnlockPinEntered && aPIN == Config.Instance.ParentalPIN && Config.Instance.UnlockOnPinEntry)
+                {
+                    //also unlock the library
+                    unlockLibrary();
+                    Application.CurrentInstance.Information.AddInformationString("Library Temporarily UnLocked. Will Re-Lock in "+this.unlockPeriod.ToString()+" Hour(s)"); //and display a message
+                }
+            }
+
         }
 
         public void Relock()

@@ -51,6 +51,11 @@ namespace MediaBrowser
             get { return this.data.ParentalPIN; }
             set { if (this.data.ParentalPIN != value) { this.data.ParentalPIN = value; Save(); FirePropertyChanged("ParentalPIN"); } }
         }
+        public bool UnlockOnPinEntry
+        {
+            get { return this.data.UnlockOnPinEntry; }
+            set { if (this.data.UnlockOnPinEntry != value) { this.data.UnlockOnPinEntry = value; Save(); FirePropertyChanged("UnlockOnPINEntry"); } }
+        }
         public int MaxParentalLevel
         {
             get { return this.data.MaxParentalLevel; }

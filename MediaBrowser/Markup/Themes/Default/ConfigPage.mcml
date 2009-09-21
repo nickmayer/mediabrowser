@@ -42,6 +42,7 @@
       <BooleanChoice Name="BlockUnrated" Value="[Application.Config.ParentalBlockUnrated]" />
       <BooleanChoice Name="Enabled" Value="[Application.Config.ParentalControlEnabled]" />
       <BooleanChoice Name="HideProtected" Value="[Application.Config.HideParentalDisAllowed]" />
+      <BooleanChoice Name="AutoUnlock" Value="[Application.Config.UnlockOnPinEntry]" />
       <IntRangedValue Name="UnlockPeriod" Value="[Application.Config.ParentalUnlockPeriod]" MaxValue="100" MinValue="1" Step="1"/>
       <cor:String Name="InitialRating" String="[Application.Config.ParentalMaxAllowedString]" />
       <EditableText Name="PIN" Value="" />
@@ -283,6 +284,7 @@
       <Binding Source="[Enabled.Value]" Target="[Config.ParentalControlEnabled]" />
       <Binding Source="[HideProtected.Value]" Target="[Config.HideParentalDisAllowed]" />
       <Binding Source="[BlockUnrated.Value]" Target="[Config.ParentalBlockUnrated]" />
+      <Binding Source="[AutoUnlock.Value]" Target="[Config.UnlockOnPinEntry]" />
       <Binding Source="[RatingsValues.Chosen!cor:Int32]" Target="[Config.MaxParentalLevel]" />
 
       <Changed Source="[RatingsStrings.Chosen]">
@@ -598,9 +600,10 @@
                           <Text Name="RatingsDesc" Content="" MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
                           <cb:CheckBox Label="Block Unrated Content" Checked="[BlockUnrated]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                           <cb:CheckBox Label="Hide Blocked Content" Checked="[HideProtected]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                          <cb:CheckBox Label="Unlock on PIN Entry" Checked="[AutoUnlock]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                           <me:TextLine Text=" "/>
                           <vm:IntSpin Label="Unlock Period (Hours)" Int="[UnlockPeriod]" Margins="[CMargin]"  />
-                          <me:TextLine Text=" "/>
+                          <!--<me:TextLine Text=" "/>-->
                           <sb:SimpleButton Name="PINBtn" Text="Enter New PIN" Command="[EnterPIN]" Size="175,40" Margins="[CMargin]" Visible="true" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont"/>
                         </Children>
                       </Panel>
