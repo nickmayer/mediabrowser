@@ -204,7 +204,6 @@
                   <AnchorLayoutInput Left="Parent,0,20" Top="CmdButtons,1,5" Right="Parent,0.17"  Bottom="Parent, 1, -80" />
                 </LayoutInput>
                 <Children>
-                  <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="STUDIO"  MinimumSize="200,0"/>
                   <Repeater Name="StudioRepeater" Source="[Item.StudioItems]" Margins="0,0,0,0" MaximumSize="0,0" >
                     <Layout>
                       <FlowLayout Orientation="Horizontal" AllowWrap="false"  Spacing="25,0"  />
