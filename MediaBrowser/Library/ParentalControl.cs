@@ -387,7 +387,7 @@ namespace MediaBrowser.Library
             else
             {
                 pinCallback(aPIN == customPIN);
-                if (pinCallback != UnlockPinEntered && aPIN == Config.Instance.ParentalPIN && Config.Instance.UnlockOnPinEntry)
+                if (pinCallback != UnlockPinEntered && aPIN == customPIN && aPIN == Config.Instance.ParentalPIN && Config.Instance.UnlockOnPinEntry)
                 {
                     //also unlock the library
                     unlockLibrary();
