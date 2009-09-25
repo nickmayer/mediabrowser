@@ -34,7 +34,7 @@
       <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
       <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
       <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0" Bottom="Parent, 1, 125" />
-      <AnchorLayoutInput Name="AnchorCustom" Horizontal="Fill" Top="Parent, 0,-50" Bottom="Parent, 1, 250" />
+      <AnchorLayoutInput Name="AnchorCustom" Horizontal="Fill" Top="Parent, 0" Bottom="Parent, 1, 225" />
     </Locals>
 
     <Rules>
