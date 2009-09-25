@@ -367,15 +367,22 @@ namespace MediaBrowser.Library.Entities {
         }
 
         protected virtual List<BaseItem> GetNonCachedChildren() {
+
             List<BaseItem> items = new List<BaseItem>();
 
-            foreach (var location in this.FolderMediaLocation.Children) {
-                var item = Kernel.Instance.GetItem(location);
-                if (item != null) {
-                    items.Add(item);
+            // don't bomb out on invalid folders - its correct to say we have no children
+            if (this.FolderMediaLocation != null) {
+                foreach (var location in this.FolderMediaLocation.Children) {
+                    if (location != null) {
+                        var item = Kernel.Instance.GetItem(location);
+                        if (item != null) {
+                            items.Add(item);
+                        }
+                    }
                 }
             }
             return items;
+           
         }
 
         void SaveChildren(IList<BaseItem> items) {

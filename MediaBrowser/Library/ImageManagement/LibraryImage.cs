@@ -86,9 +86,19 @@ namespace MediaBrowser.Library.ImageManagement {
             }
         } 
 
-        public int Width { get { EnsureImageSizeInitialized(); return width; } }
+        public int Width { 
+            get { 
+                EnsureImageSizeInitialized(); 
+                return width; 
+            } 
+        }
        
-        public int Height { get { EnsureImageSizeInitialized(); return height; } }
+        public int Height { 
+            get { 
+                EnsureImageSizeInitialized(); 
+                return height; 
+            } 
+        }
 
         public float Aspect {
             get {
