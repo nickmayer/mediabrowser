@@ -126,13 +126,14 @@
                   <Animation Type="ContentChangeHide">
                     <Keyframes>
                       <AlphaKeyframe RelativeTo="Current" Time="0.0" Value="1"/>
-                      <AlphaKeyframe RelativeTo="Current" Time="1.0" Value="0"/>
+                      <AlphaKeyframe RelativeTo="Current" Time="0.5" Value="1"/>
+                      <AlphaKeyframe RelativeTo="Current" Time="1.5" Value="0"/>
                     </Keyframes>
                   </Animation>
                   <Animation Type="ContentChangeShow">
                     <Keyframes>
                       <AlphaKeyframe RelativeTo="Current" Time="0.0" Value="0"/>
-                      <AlphaKeyframe RelativeTo="Final" Time="1.0" Value="1"/>
+                      <AlphaKeyframe RelativeTo="Final" Time="1.5" Value="1"/>
                     </Keyframes>
                   </Animation>
                 </Animations>
