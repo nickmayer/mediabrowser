@@ -85,5 +85,15 @@ namespace MediaBrowser.Library.Plugins {
         public void Delete() {
             File.Delete(filename);
         }
+                
+        public virtual bool IsConfigurable
+        {
+            get { return pluginInterface.IsConfigurable; }
+        }
+
+        public virtual void Configure()
+        {
+            pluginInterface.Configure();
+        }
     }
 }

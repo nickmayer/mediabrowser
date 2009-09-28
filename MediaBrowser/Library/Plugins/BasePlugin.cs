@@ -47,6 +47,18 @@ namespace MediaBrowser.Library.Plugins {
             set;
         }
 
+        public virtual bool IsConfigurable
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public virtual void Configure()
+        {
+        }
+
         #endregion
     }
 }

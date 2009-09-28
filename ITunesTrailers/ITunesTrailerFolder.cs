@@ -28,12 +28,13 @@ namespace ITunesTrailers {
         [NotSourcedFromProvider]
         DateTime lastUpdated = DateTime.MinValue;
 
+        private string _name;
         public override string Name {
             get {
-                return "Trailers";
+                return Plugin.PluginOptions.Instance.MenuName;
             }
             set {
-                // name should never be set for this item 
+                
             }
         }
 

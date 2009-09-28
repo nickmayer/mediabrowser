@@ -35,6 +35,18 @@ namespace Configurator.Code {
             get { return "bob.dll"; }
         }
 
+        public virtual bool IsConfigurable
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public virtual void Configure()
+        {
+        }
+
     }
 
     public class PluginCollection : ObservableCollection<IPlugin> {

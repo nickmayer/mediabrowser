@@ -54,6 +54,7 @@ namespace MusicPlugin.LibraryManagement
             switch (extension)
             {
                 case ".mp3":
+                case ".m3u":
                 case ".wma":
                 case ".acc":
                 case ".flac":

@@ -13,79 +13,87 @@ using MusicPlugin.Library.Helpers;
 using MusicPlugin.Util;
 using Microsoft.MediaCenter;
 using System.IO;
+using MusicPlugin.Views;
 
 namespace MusicPlugin
 {
     public class Plugin : BasePlugin
-    {
-        const string DIALOGHEADING = "MusicPlugin";
+    {        
         static readonly Guid MusiciTunesGuid = new Guid("{97581452-7374-11DE-B53C-716855D89593}");
         static readonly Guid MusicNormalGuid = new Guid("{D0DAD4BA-90B8-11DE-9AC9-06AC55D89593}");
+        Kernel _kernel;
         
         public override void Init(Kernel kernel)
-        {            
+        {
+            _kernel = kernel;
             //AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             Logger.ReportInfo(string.Format("Tyring to load {0} v{1} loaded by {2}.", Name, LatestVersion.ToString(), AppDomain.CurrentDomain.FriendlyName));
             if (AppDomain.CurrentDomain.FriendlyName.Contains("Configurator"))
                 return;
 
-            if (ValidateSettings(kernel.ConfigData.InitialFolder))
+            if (Settings.ValidateSettings(kernel.ConfigData.InitialFolder, true))
             {
-                if (ValidateiTunesLibrary())
+                if (Settings.Instance.LoadiTunesLibrary)
                 {
-                    try
+                    if (Settings.ValidateiTunesLibrary(true))
                     {
-                        BaseItem itunes;
-                        string message = "RefreshiTunesLibrary in the MusicPlugin.xml is set to true, this will force a rebuild of the iTunes Library, continue?";
-                        string heading = "Rebuild iTunes Library Cache";
-
-                        if (Settings.Instance.ForceRefreshiTunesLibrary && Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
+                        try
                         {
+                            BaseItem itunes;
+                            string message = "Refresh iTunes Library is set to true, this will force a rebuild of the iTunes Library, continue?";
+                            string heading = "Rebuild iTunes Library Cache";
 
-                            itunes = iTunesLibrary.GetDetailsFromXml(kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) as iTunesMusicLibrary);
-                            Settings.Instance.ForceRefreshiTunesLibrary = false;
-                            Settings.SaveSettingsFile();
+                            if (Settings.Instance.ForceRefreshiTunesLibrary && Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
+                            {
 
-                        }
-                        else
-                        {
-                            itunes = kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) ?? new iTunesLibrary().Library;
-                        }
-                        if ((itunes as iTunesMusicLibrary).LastUpdate != DateTime.MinValue && (itunes as iTunesMusicLibrary).LastUpdate < new System.IO.FileInfo(Settings.Instance.iTunesLibraryXMLPath).LastWriteTime)
-                        {
-                            message = "Your iTunes Library might have changed, do you want to rebuild it?";
-                            if (Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
                                 itunes = iTunesLibrary.GetDetailsFromXml(kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) as iTunesMusicLibrary);
+                                Settings.Instance.ForceRefreshiTunesLibrary = false;
+                                Settings.SaveSettingsFile();
 
+                            }
+                            else
+                            {
+                                itunes = kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) ?? new iTunesLibrary().Library;
+                            }
+                            if (((iTunesMusicLibrary) itunes).LastUpdate != DateTime.MinValue && (itunes as iTunesMusicLibrary).LastUpdate < new System.IO.FileInfo(Settings.Instance.iTunesLibraryXMLPath).LastWriteTime)
+                            {
+                                message = "Your iTunes Library might have changed, do you want to rebuild it?";
+                                if (Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
+                                    itunes = iTunesLibrary.GetDetailsFromXml(kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) as iTunesMusicLibrary);
+
+                            }
+
+                            itunes.Path = "";
+                            itunes.Id = MusiciTunesGuid;
+                            itunes.Name = Settings.Instance.iTunesLibraryVirtualFolderName;
+                            if (!string.IsNullOrEmpty(Settings.Instance.iTunesLibraryIcon))
+                                itunes.PrimaryImagePath = Settings.Instance.iTunesLibraryIcon;
+
+                            kernel.RootFolder.AddVirtualChild(itunes);
+                            kernel.ItemRepository.SaveItem(itunes);
                         }
-
-                        itunes.Path = "";
-                        itunes.Id = MusiciTunesGuid;
-                        itunes.Name = Settings.Instance.iTunesLibraryVirtualFolderName;
-                        if (!string.IsNullOrEmpty(Settings.Instance.iTunesLibraryIcon))
-                            itunes.PrimaryImagePath = Settings.Instance.iTunesLibraryIcon;
-
-                        kernel.RootFolder.AddVirtualChild(itunes);
-                        kernel.ItemRepository.SaveItem(itunes);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.ReportException("Cannot load iTunes Music Library", ex);
+                        catch (Exception ex)
+                        {
+                            Logger.ReportException("Cannot load iTunes Music Library", ex);
+                        }
                     }
                 }
 
-                if (ValidateNormalLibrary())
+                if (Settings.Instance.LoadNormalLibrary)                                    
                 {
-                    BaseItem music;
+                    if (Settings.ValidateNormalLibrary(true))
+                    {
+                        BaseItem music;
 
-                    music = kernel.ItemRepository.RetrieveItem(MusicNormalGuid) ?? new MusicPluginFolder();
-                    music.Id = MusicNormalGuid;
-                    music.Path = Settings.Instance.NormalLibraryPath;
-                    music.Name = Settings.Instance.NormalLibraryVirtualFolderName;
-                    if (!string.IsNullOrEmpty(Settings.Instance.NormalLibraryIcon))
-                        music.PrimaryImagePath = Settings.Instance.NormalLibraryIcon;
-                    kernel.RootFolder.AddVirtualChild(music);
-                    //kernel.ItemRepository.SaveItem(music);                
+                        music = kernel.ItemRepository.RetrieveItem(MusicNormalGuid) ?? new MusicPluginFolder();
+                        music.Id = MusicNormalGuid;
+                        music.Path = Settings.Instance.NormalLibraryPath;
+                        music.Name = Settings.Instance.NormalLibraryVirtualFolderName;
+                        if (!string.IsNullOrEmpty(Settings.Instance.NormalLibraryIcon))
+                            music.PrimaryImagePath = Settings.Instance.NormalLibraryIcon;
+                        kernel.RootFolder.AddVirtualChild(music);
+                        kernel.ItemRepository.SaveItem(music);
+                    }
                 }
             }
             
@@ -103,14 +111,6 @@ namespace MusicPlugin
                 Logger.ReportInfo("Music plugin, iTunes nor Normal Music enabled, probably using folder specification (vf files) via configurator.");
                         
         }
-
-        //System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        //{
-        //    if (args.Name.Contains("taglib"))
-        //        return Assembly.LoadFrom(@"c:\ProgramData\MediaBrowser\Plugins\taglib\taglib-sharp.dll");
-            
-        //    return Assembly.LoadFrom("");
-        //}
 
         public override string Name
         {
@@ -140,108 +140,23 @@ namespace MusicPlugin
                 return LatestVersion;
             }
         }
-        private bool ValidateSettings(string initialFolder)
-        {            
-            string message;
 
-            try
-            {
-                Settings.InitSettings(initialFolder);
-            }
-            catch (Exception e)
-            {
-                Logger.ReportException("MusicPlugin", e);
-                message = "The MusicPlugin could not be loaded. Please enable logging in MediaBrowser and check the log.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
-            }
 
-            if (!File.Exists(Settings.SettingPath))
+        public override bool IsConfigurable
+        {
+            get
             {
-                message = "The MusicPlugin could not create a config file. It will not be loaded.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
+                return true;
             }
+        }
 
-            if (Settings.Instance.FirstLoad)
+        public override void Configure()
+        {
+            Settings.InitSettings(_kernel.ConfigData.InitialFolder);
+            if (ConfigureView.BuildUI(Settings.Instance) == System.Windows.Forms.DialogResult.OK)
             {
-                message = "The MusicPlugin has created its own configuration file, please close MediaBrowser and configure " + Settings.SettingPath+".";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                Settings.Instance.FirstLoad = false;
                 Settings.SaveSettingsFile();
-                return false;
-            }   
-
-            if (Settings.Instance.LoadNormalLibrary && Settings.Instance.LoadiTunesLibrary && Settings.Instance.NormalLibraryVirtualFolderName == Settings.Instance.iTunesLibraryVirtualFolderName)
-            {
-                message = "Your Normal and iTunes Libraries are enabled, but your virtual folders names are the same.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
             }
-
-            if (!string.IsNullOrEmpty(Settings.Instance.iTunesLibraryIcon) && !File.Exists(Settings.Instance.iTunesLibraryIcon))
-            {
-                message = "Your iTunes Library is enabled, but the specified icon path is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
-            }
-
-            if (!string.IsNullOrEmpty(Settings.Instance.NormalLibraryIcon) && !File.Exists(Settings.Instance.NormalLibraryIcon))
-            {
-                message = "Your Normal Library is enabled, but the specified icon path is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
-            }
-
-            if (Settings.Instance.ShowPlaylistAsFolder && string.IsNullOrEmpty(Settings.Instance.PlayListFolderName))
-            {
-                message = "Your playlist folder is enabled, but the specified name is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
-            }
-
-            if (!string.IsNullOrEmpty(Settings.Instance.SongImage) && !File.Exists(Settings.Instance.SongImage))
-            {
-                message = "The specified song image is invalid.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool ValidateiTunesLibrary()
-        {
-            string message;
-
-            if (!Settings.Instance.LoadiTunesLibrary)
-                return false;
-            
-            if (Settings.Instance.LoadiTunesLibrary && (string.IsNullOrEmpty(Settings.Instance.iTunesLibraryXMLPath) || !File.Exists(Settings.Instance.iTunesLibraryXMLPath)))
-            {
-                message = "Your iTunes Library is enabled, but the specified xml path is invalid. It will not be loaded.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool ValidateNormalLibrary()
-        {
-            string message;
-
-            if (!Settings.Instance.LoadNormalLibrary)
-                return false;
-
-            if (Settings.Instance.LoadNormalLibrary && (string.IsNullOrEmpty(Settings.Instance.NormalLibraryPath) || !Directory.Exists(Settings.Instance.NormalLibraryPath)))
-            {
-                message = "Your Normal Library is enabled, but the specified directory is invalid. It will not be loaded.";
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
-                return false;
-            }
-
-            return true;
         }
 
     }

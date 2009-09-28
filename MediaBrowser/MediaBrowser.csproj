@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -48,6 +48,12 @@
   <ItemGroup>
     <Reference Include="Microsoft.MediaCenter" />
     <Reference Include="Microsoft.MediaCenter.UI" />
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -60,6 +66,9 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Attributes\CommentAttribute.cs" />
@@ -540,6 +549,7 @@
     <None Include="Images\ButtonSelection2.png" />
     <Content Include="Images\folder.png" />
     <None Include="Images\lines.png" />
+    <Compile Include="Code\Attributes\PluginAttribute.cs" />
     <Compile Include="Library\Entities\Genre.cs" />
     <Compile Include="Library\Entities\Year.cs" />
     <Compile Include="Library\Factories\BaseItemFactoryGeneric.cs">
@@ -551,6 +561,7 @@
     <Compile Include="Library\ParentalControl.cs" />
     <Compile Include="Library\Playables\PlayableMediaCollection.cs" />
     <Compile Include="Library\Plugins\BasePlugin.cs" />
+    <Compile Include="Library\Plugins\PluginConfigurationOptions.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
     <Compile Include="Library\Ratings.cs" />
     <Compile Include="Library\Util\BreadCrumbs.cs" />

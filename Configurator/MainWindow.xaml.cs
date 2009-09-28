@@ -1020,6 +1020,11 @@ folder: {0}
             window.ShowDialog();
         }
 
+        private void configurePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            ((Plugin)pluginList.SelectedItem).Configure();
+        }
+
         private void podcastDetails(bool display)
         {
             if (display)

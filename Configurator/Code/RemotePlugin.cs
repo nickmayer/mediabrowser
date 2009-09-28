@@ -33,6 +33,18 @@ namespace Configurator.Code {
         public string BaseUrl {
             get;
             set;
-        } 
+        }
+
+        public virtual bool IsConfigurable
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public virtual void Configure()
+        {
+        }
     }
 }

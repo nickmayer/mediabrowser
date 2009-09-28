@@ -38,6 +38,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -48,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Attributes\ControlAttribute.cs" />
     <Compile Include="Code\ModelItems\MusicFolderModel.cs" />
     <Compile Include="Code\ModelItems\PlaybackControllerMusic.cs" />
     <Compile Include="Library\Entities\Album.cs" />
@@ -73,12 +75,46 @@
     <Compile Include="Library\Util\Settings.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\ConfigureView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ConfigureView.Designer.cs">
+      <DependentUpon>ConfigureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FileTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FileTextBox.Designer.cs">
+      <DependentUpon>FileTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FolderTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FolderTextBox.Designer.cs">
+      <DependentUpon>FolderTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TextBoxCustom.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\TextBoxCustom.Designer.cs">
+      <DependentUpon>TextBoxCustom.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
       <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
       <Name>MediaBrowser</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\ConfigureView.resx">
+      <DependentUpon>ConfigureView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TextBoxCustom.resx">
+      <DependentUpon>TextBoxCustom.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Library\ImageManagement\" />
