@@ -189,11 +189,30 @@ namespace MediaBrowser.Library.Entities {
         {
             get
             {
-                if (this.CustomRating == null || this.CustomRating == "") {
+                if (string.IsNullOrEmpty(this.CustomRating)) {
                     var aShow = this as IShow;
                     if (aShow != null)
-                        return aShow.MpaaRating ?? "";
-                    else 
+                        if (string.IsNullOrEmpty(aShow.MpaaRating))
+                        {
+                            //see if we are an episode or a season of a TV series and inherit their ratings
+                            if (this is Season)
+                            {
+                                var aSeries = this.Parent as Series;
+                                return aSeries.ParentalRating;
+                            }
+                            else
+                                if (this is Episode)
+                                {
+                                    var anEpisode = this as Episode;
+                                    return anEpisode.Series.ParentalRating;
+                                }
+                                else
+                                {
+                                    return "";
+                                }
+                        }
+                        else return aShow.MpaaRating;
+                    else
                         return "G"; //if not a show and no custom rating return something valid that will always be allowed
                 }           
                 else
