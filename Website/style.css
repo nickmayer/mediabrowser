@@ -8,9 +8,9 @@ a:hover {text-decoration: underline; }
 
 /* TOP PANEL*/
 #topPanel{width:762px; height:373px; position:relative; margin:0 auto; padding:0;}
-#topPanel img{width:230px; height:80px; z-index:1; padding:0; position:absolute; margin:0 0 0 21px;}
+#topPanel img{width:230px; height:80px; z-index:1; padding:0; position:absolute; margin:0 0 0 5px;}
 /* MENU PANEL*/
-#topPanel ul{display:block; width:732px; height:36px; position:absolute; top:0; right:0; margin:11px 0 0; padding:0 29px 0 0; border-bottom:1px solid #AEAEAE;}
+#topPanel ul{display:block; width:762px; height:36px; position:absolute; top:0; right:0; margin:11px 0 0; padding:0 0px 0 0; border-bottom:1px solid #AEAEAE;}
 #topPanel ul li{float:right; font:12px/36px "Trebuchet MS",Arial, Helvetica, sans-serif; font-weight:bold;}
 #topPanel ul li a{width:74px; height:36px; display:block; padding:0; color:#555; background:#fff; text-decoration:none; text-align:center; margin:0 1px 0 0; top:0px; left:0px;}
 #topPanel ul li a:hover{width:74px; height:36px; text-decoration:none; background:url(images/button.gif) no-repeat 0 0 #AEAEAE; color:#fff;}
@@ -102,7 +102,7 @@ a:hover {text-decoration: underline; }
 /* FOOTER PANEL*/
 #footerPanel{width:100%;  background:#DCDCDC; color:#4C4C4C; font-size:12px;}
 #footerbodyPanel{width:762px;height:133px; position:relative; margin:0 auto; padding:0;}
-#footerPanel ul{width:360px; display:block; position:absolute; right:10px; top:33px; }
+#footerPanel ul{width:400px; display:block; position:absolute; right:10px; top:33px; }
 #footerPanel li{float:left; font:12px/15px Arial, Helvetica, sans-serif; font-weight:normal;}
 #footerPanel ul li a.padl{padding:0 0 0 6px;}
 
