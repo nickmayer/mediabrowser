@@ -34,7 +34,7 @@
       <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
       <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
-      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.45" Bottom="Parent, 1, -80" />
+      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.45" Bottom="Parent, 1, 150" />
       <AnchorLayoutInput Name="AnchorCustom" Horizontal="Fill" Top="Parent, 0,-50" Bottom="Parent, 1, 250" />
     </Locals>
 
@@ -120,16 +120,16 @@
             </LayoutInput>
           </mip:MediaInfoPanel>
           
+          <!-- Bottom Clip -->
+          <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
+          
           <!-- Coverflow Scroller -->
           <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">            
             <LayoutInput>
               <AnchorLayoutInput Horizontal="Fill" Top="Parent, .55" Bottom="Parent, 1, 125" />
             </LayoutInput>
           </me:CoverflowScroller>         
-          
-          <!-- Bottom Clip -->
-          <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
-          
+                   
           <!-- Top Clip -->
           <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
           
@@ -383,7 +383,7 @@
   <UI Name="CoverflowItem" BaseUI="ib:ItemButton">
     <Properties>
       <lib:SizeRef Name="ImageSize" SizeRef="$Required"/>
-      <Image Name="FocusImage" Image="image://me:PosterFrame"/>
+      <Image Name="FocusImage" Image="image://i:ZoomPane"/>
       <Image Name="FolderImage" Image="image://i:Folder"/>
       <Image Name="BlankImage" Image="null"/>
       <BooleanChoice Name="ShowLabels" BooleanChoice="$Required" />
@@ -402,12 +402,11 @@
 
     <Locals>
       <Timer Name="AnimTimer" Interval="[AnimDelay]" Enabled="false" AutoRepeat="false"/>
-      <BooleanChoice Name="InFocus" Value="false" />    
+      <BooleanChoice Name="InFocus" Value="false" />
     </Locals>
 
     <Rules>
-     
-      
+
       <!-- Set the UI to be mouse and keyboard interactive. -->
       <Default Target="[Input.KeyInteractive]" Value="true"/>
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
@@ -419,24 +418,24 @@
       </Default>
 
       <Binding Source="[Item.PreferredImageSmall]" Target="[g1.Content]" />
-      <!--<Binding Source="[Item.PreferredImageSmall]" Target="[g2.Content]" />-->
+      <Binding Source="[Item.PreferredImageSmall]" Target="[g2.Content]" />
       <Binding Source="[ImageSize.Value]" Target="[Item.PreferredImageSmallSize]" />
 
       <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel1.MaximumSize]" />
       <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel1.MinimumSize]" />
-      <!--<Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MaximumSize]" />
-      <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MinimumSize]" />-->
-      <Binding Source="[ImageSize.Value]" Target="[BelowLabelPanel.MaximumSize]" />      
+      <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MaximumSize]" />
+      <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MinimumSize]" />
+      <Binding Source="[ImageSize.Value]" Target="[BelowLabelPanel.MaximumSize]" />
       <Binding Source="[ParentItem.DisplayPrefs.UseBanner.Value]" Target="[Item.PreferBanner]" />
-      
+
       <!-- Selected state, true if item last had focus -->
       <Condition Source="[ParentItem.SelectedChildIndex]" ConditionOp="Equals" SourceValue="[ItemIndex.SourceValue]">
         <Actions>
-          <Set Target="[Main.Scale]" Value="1.4,1.4,1"/>
+          <Set Target="[Main.Scale]" Value="1.2,1.2,1"/>
           <Set Target="[Main.Rotation]" Value="0deg;0,1,0" />
+          <!--<Set Target="[FocusBg.Content]" Value="[FocusImage]" />-->
           <Set Target="[ConstraintPanel1.ColorFilter]" Value="White" />
           <Set Target="[ConstraintPanel1.Alpha]" Value="1" />
-          <Set Target="[g1.Content]" Value="[Item.PreferredImage]" />
         </Actions>
       </Condition>
 
@@ -469,27 +468,7 @@
         </Actions>
       </Changed>
 
-      <!-- Cover width below 145px -->
-      <!--<Rule>
-        <Conditions>
-          <Equality Source="[ParentItem.ActualThumbSize.Value.Width]" ConditionOp="GreaterThan" Value="145"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[Main.Margins.Left]" Value="0" />
-          <Set Target="[Main.Margins.Right]" Value="0" />
-        </Actions>
-      </Rule>
-      --><!-- Cover width below 145px --><!--
-      <Rule>
-        <Conditions>
-          <Equality Source="[ParentItem.ActualThumbSize.Value.Width]" ConditionOp="LessThan" Value="145"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[Main.Margins.Left]" Value="60" />
-          <Set Target="[Main.Margins.Right]" Value="60" />
-        </Actions>
-      </Rule>-->
-      
+
       <!-- Focus and non-focused states. -->
       <!--
 			<Condition Source="[Input.KeyFocus]" ConditionOp="Equals" SourceValue="true">
@@ -552,7 +531,7 @@
 
       <Binding Source="[ShowLabels.Value]" Target="[BelowLabelPanel.Visible]" />
       <Binding Source="[Item.Name]" Target="[BelowLabelPanel.Content]" />
-      <!--<Binding Target="[Mirror.NearOffset]" Source="[ImageSize.Value.Height]">
+      <Binding Target="[Mirror.NearOffset]" Source="[ImageSize.Value.Height]">
         <Transformer>
           <MathTransformer DivideInt="2"/>
         </Transformer>
@@ -561,7 +540,7 @@
         <Transformer>
           <MathTransformer DivideInt="4"/>
         </Transformer>
-      </Binding>-->
+      </Binding>
       <Binding Target="[Main.Margins.Bottom]" Source="[ImageSize.Value.Height]">
         <Transformer>
           <MathTransformer DivideInt="-2"/>
@@ -577,7 +556,7 @@
           <AnchorLayout SizeToVerticalChildren="true"/>
           <!--<FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="0,-5"/>-->
         </Layout>
-        <Children>          
+        <Children>
           <!-- Focus Outline-->
           <Graphic Name="FocusBg" Content="[BlankImage]" Padding="5,5,5,5" SizingPolicy="SizeToChildren" Layout="VerticalFlow">
             <Children>
@@ -656,7 +635,7 @@
           </Graphic>
 
           <!-- Mirror Effect-->
-          <!--<Clip Name="Mirror" FadeAmount="1" FadeSize="50" NearOffset="0" Padding="5,5,5,5" Orientation="Vertical" ShowFar="false" Margins="0,-10,0,0">
+          <Clip Name="Mirror" FadeAmount="1" FadeSize="50" NearOffset="0" Padding="5,5,5,5" Orientation="Vertical" ShowFar="false" Margins="0,-10,0,0">
             <Layout>
               <FlowLayout Orientation="Vertical" ItemAlignment="Center" />
             </Layout>
@@ -664,7 +643,7 @@
               <AnchorLayoutInput Top="FocusBg, 1, -5" />
             </LayoutInput>
             <Children>
-              <Panel Name="ConstraintPanel2" ColorFilter="150,150,150" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
+              <Panel Name="ConstraintPanel2" ColorFilter="Gray" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
                 <Layout>
                   <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
                 </Layout>
@@ -674,7 +653,7 @@
                 </Children>
               </Panel>
             </Children>
-          </Clip>-->
+          </Clip>
         </Children>
 
         <Animations>
