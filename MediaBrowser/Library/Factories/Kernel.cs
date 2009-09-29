@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.ImageManagement;
 using MediaBrowser.Library.Entities;
@@ -169,8 +168,8 @@ namespace MediaBrowser.Library {
             };
 
             kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
-
             kernel.PlaybackControllers.Add(new PlaybackController());
+       
 
             // set up assembly resolution hooks, so earlier versions of the plugins resolve properly 
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(OnAssemblyResolve);

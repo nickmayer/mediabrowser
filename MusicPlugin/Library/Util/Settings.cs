@@ -19,109 +19,109 @@ namespace MusicPlugin.Util
     public class TheSettings
     {
         //settings to save
-        [ControlAttribute(typeof(CheckBox))]
+        [Control(typeof(CheckBox))]
         [Description("First Load")]
-        [HiddenAttribute(true)]
-        [GroupAttribute("General")]
+        [Hidden(true)]
+        [Group("General")]
         public bool FirstLoad
         { get; set; }
         [Description("For office use")]
-        [ControlAttribute(typeof(TextBox))]
-        [HiddenAttribute(true)]
-        [GroupAttribute("General")]
+        [Control(typeof(TextBox))]
+        [Hidden(true)]
+        [Group("General")]
         public string InitialPath
         { get; set; }
 
         [Description("Enabled:")]
-        [ControlAttribute(typeof(CheckBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("iTunes Library (*changes require a re-cache)")]
+        [Control(typeof(CheckBox))]
+        [Hidden(false)]
+        [Group("iTunes Library (*changes require a re-cache)")]
         public bool LoadiTunesLibrary
         { get; set; }
         [Description("Name:")]
-        [ControlAttribute(typeof(TextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("iTunes Library (*changes require a re-cache)")]
+        [Control(typeof(TextBox))]
+        [Hidden(false)]
+        [Group("iTunes Library (*changes require a re-cache)")]
         public string iTunesLibraryVirtualFolderName
         { get; set; }
         [Description("Show Genre:")]
-        [ControlAttribute(typeof(CheckBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("iTunes Library (*changes require a re-cache)")]
+        [Control(typeof(CheckBox))]
+        [Hidden(false)]
+        [Group("iTunes Library (*changes require a re-cache)")]
         public bool ShowGenreIniTunesLibrary
         { get; set; }
         [Description("Show Artist:")]
-        [ControlAttribute(typeof(CheckBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("iTunes Library (*changes require a re-cache)")]
+        [Control(typeof(CheckBox))]
+        [Hidden(false)]
+        [Group("iTunes Library (*changes require a re-cache)")]
         public bool ShowArtistIniTunesLibrary
         { get; set; }
 
         [Description("iTunes XML Path*:")]
-        [ControlAttribute(typeof(FileTextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("iTunes Library (*changes require a re-cache)")]
-        [ExtAttribute("XML Files (*.xml)|*.xml")]
+        [Control(typeof(FileTextBox))]
+        [Hidden(false)]
+        [Group("iTunes Library (*changes require a re-cache)")]
+        [Ext("XML Files (*.xml)|*.xml")]
         public string iTunesLibraryXMLPath
         { get; set; }
         [Description("Image used for Library:")]
-        [ControlAttribute(typeof(FileTextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("iTunes Library (*changes require a re-cache)")]
-        [ExtAttribute("Image Files (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*")]
+        [Control(typeof(FileTextBox))]
+        [Hidden(false)]
+        [Group("iTunes Library (*changes require a re-cache)")]
+        [Ext("Image Files (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*")]
         public string iTunesLibraryIcon
         { get; set; }
         [Description("Re-cache iTunes Library:")]
-        [ControlAttribute(typeof(CheckBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("iTunes Library (*changes require a re-cache)")]
+        [Control(typeof(CheckBox))]
+        [Hidden(false)]
+        [Group("iTunes Library (*changes require a re-cache)")]
         public bool ForceRefreshiTunesLibrary
         { get; set; }
 
         [Description("Enabled:")]
-        [ControlAttribute(typeof(CheckBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("Normal Library")]
+        [Control(typeof(CheckBox))]
+        [Hidden(false)]
+        [Group("Normal Library")]
         public bool LoadNormalLibrary
         { get; set; }
         [Description("Name:")]
-        [ControlAttribute(typeof(TextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("Normal Library")]
+        [Control(typeof(TextBox))]
+        [Hidden(false)]
+        [Group("Normal Library")]
         public string NormalLibraryVirtualFolderName
         { get; set; }
         [Description("Music Path:")]
-        [ControlAttribute(typeof(FolderTextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("Normal Library")]
+        [Control(typeof(FolderTextBox))]
+        [Hidden(false)]
+        [Group("Normal Library")]
         public string NormalLibraryPath
         { get; set; }
         [Description("Image used for Library:")]
-        [ControlAttribute(typeof(FileTextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("Normal Library")]
-        [ExtAttribute("Image Files (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*")]
+        [Control(typeof(FileTextBox))]
+        [Hidden(false)]
+        [Group("Normal Library")]
+        [Ext("Image Files (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*")]
         public string NormalLibraryIcon
         { get; set; }
 
         [Description("Enabled:")]
-        [ControlAttribute(typeof(CheckBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("Playlist")]
+        [Control(typeof(CheckBox))]
+        [Hidden(false)]
+        [Group("Playlist")]
         public bool ShowPlaylistAsFolder
         { get; set; }
         [Description("Playlist Folder Name:")]
-        [ControlAttribute(typeof(TextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("Playlist")]
+        [Control(typeof(TextBox))]
+        [Hidden(false)]
+        [Group("Playlist")]
         public string PlayListFolderName
         { get; set; }
 
         [Description("Image used for Songs*:")]
-        [ControlAttribute(typeof(FileTextBox))]
-        [HiddenAttribute(false)]
-        [GroupAttribute("General (*changes require re-cache of iTunes library)")]
-        [ExtAttribute("Image Files (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*")]
+        [Control(typeof(FileTextBox))]
+        [Hidden(false)]
+        [Group("General (*changes require re-cache of iTunes library)")]
+        [Ext("Image Files (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*")]
         public string SongImage
         { get; set; }
     }

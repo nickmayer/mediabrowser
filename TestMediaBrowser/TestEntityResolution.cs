@@ -14,6 +14,21 @@ namespace TestMediaBrowser {
     public class TestEntityResolution {
 
         [Test]
+        public void TestNothingIsTruncatedWithDots() {
+            var resolver = CreateResolver();
+            var movieLocation =  new MockMediaLocation("c:\\Jackass 2.5.avi"); 
+
+            BaseItemFactory factory;
+            IEnumerable<InitializationParameter> setup;
+            resolver.ResolveEntity(movieLocation, out factory, out setup);
+
+            Movie movie = (Movie)factory.CreateInstance(movieLocation, setup);
+
+            Assert.AreEqual(movie.Name, "Jackass 2.5");
+
+        } 
+
+        [Test]
         public void TestRecusiveMovieResolution()
         {
             var resolver = CreateResolver();

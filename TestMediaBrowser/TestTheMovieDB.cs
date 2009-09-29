@@ -94,16 +94,16 @@ namespace TestMediaBrowser
             string match;
             string[] possibles;
             MovieDbProvider.FindId(name, out match, out possibles);
-            if (match == null)
-            {
-                Debug.WriteLine(name + " not matched");
-                if (possibles != null)
-                    Debug.WriteLine("\t" + string.Join("\n\t", possibles));
-                else
-                    Debug.WriteLine("\tNo possible matches");
-            }
-            else
-                Debug.WriteLine(name + " matched with " + match);
+            Assert.IsNotNull(match);
+        }
+
+        [Test]
+        public void TestIgnoreBracketsForMovieMatch() {
+            string name = "Rocky [The awesome movie]";
+            string match;
+            string[] possibles;
+            MovieDbProvider.FindId(name, out match, out possibles);
+            Assert.IsNotNull(match);
         }
     }
 }

@@ -55,9 +55,23 @@ namespace MediaBrowser.Library.Plugins {
             }
         }
 
-        public virtual void Configure()
-        {
+
+        public virtual IPluginConfiguration PluginConfiguration {
+            get {
+                return null;
+            }
         }
+
+
+        public virtual void Configure() {
+            if (PluginConfiguration != null) {
+                if (PluginConfiguration.BuildUI() == true)
+                    PluginConfiguration.Save();
+                else
+                    PluginConfiguration.Load();
+            }
+        }
+
 
         #endregion
     }

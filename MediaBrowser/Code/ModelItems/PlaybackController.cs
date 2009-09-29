@@ -17,7 +17,7 @@ namespace MediaBrowser {
 
     public class PlaybackController : BaseModelItem, IPlaybackController {
 
-        EventHandler<PlaybackStateEventArgs> progressHandler;
+        volatile EventHandler<PlaybackStateEventArgs> progressHandler;
         Thread governatorThread;
         object sync = new object();
         bool terminate = false;
@@ -315,6 +315,9 @@ namespace MediaBrowser {
 
 
         protected override void Dispose(bool isDisposing) {
+
+            Logger.ReportInfo("Playback controller is being disposed");
+
             if (isDisposing) {
                 lock (sync) {
                     terminate = true;

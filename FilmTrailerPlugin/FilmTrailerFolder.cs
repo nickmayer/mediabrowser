@@ -42,7 +42,7 @@ namespace FilmTrailerPlugin
 
         public override string Name {
             get {
-                return "Trailers"; 
+                return Plugin.PluginOptions.Instance.MenuName; 
             }
             set {
                 // no control for this yet

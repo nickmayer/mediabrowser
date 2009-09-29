@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Reflection;
 using System.Windows.Media;
+using MediaBrowser.Library.Plugins.Configuration;
 
 namespace MediaBrowser.Library.Plugins
 {
@@ -31,7 +32,7 @@ namespace MediaBrowser.Library.Plugins
     }
     
     // the new base configuration class 
-    public class PluginConfiguration<T> where T : PluginConfigurationOptions
+    public class PluginConfiguration<T> : IPluginConfiguration where T : PluginConfigurationOptions
     {
         private string initialPath;
         private string pluginID;
@@ -50,10 +51,11 @@ namespace MediaBrowser.Library.Plugins
             }
         }
         
-        public PluginConfiguration(Kernel kernel,Guid pluginID)
+        public PluginConfiguration(Kernel kernel, Assembly assembly)
         {
+
             this.initialPath = Path.Combine(kernel.ConfigData.InitialFolder, @"..\Plugins\Configurations");
-            this.pluginID = pluginID.ToString();
+            this.pluginID = assembly.GetName().Name;
             //this.parentName = parent.Name;
             this.configFile = Path.Combine(initialPath, string.Format("{0}.xml", pluginID));
             
@@ -210,33 +212,29 @@ namespace MediaBrowser.Library.Plugins
                 return;
 
             LabelAttribute labelAttribute = attributes.Select(x => x as LabelAttribute).Where(i => i != null).First();
-            ControlAttribute controlAttribute = attributes.Select(x => x as ControlAttribute).Where(i => i != null).First();
 
-            if (controlAttribute != null)
-            {
-                if (controlAttribute.Control.Equals(typeof(CheckBox)))
-                {
-                    control = new CheckBox() { VerticalAlignment = VerticalAlignment.Center, IsChecked = (bool)property.GetValue(pluginConfigurationOptions, null), Name = property.Name };
-                    (control as CheckBox).Checked += new RoutedEventHandler(PluginConfigureView_Checked);
-                    (control as CheckBox).Unchecked += new RoutedEventHandler(PluginConfigureView_Checked);
-                }
-                else if (controlAttribute.Control.Equals(typeof(TextBox)))
-                {
-                    control = new TextBox() { Margin = new Thickness(0, 2, 0, 2), Text = (string)property.GetValue(pluginConfigurationOptions, null), Name = property.Name, Width = 200 };
-                    (control as TextBox).TextChanged += new TextChangedEventHandler(PluginConfigureView_TextChanged);
-                }
-                else if (controlAttribute.Control.Equals(typeof(ComboBox)))
-                {
-                    control = new ComboBox() { Margin = new Thickness(0, 2, 0, 2), Name = property.Name, Width = 200 };
-                    (control as ComboBox).SelectionChanged += new SelectionChangedEventHandler(PluginConfigureView_SelectionChanged);
-                    ItemsAttribute itemsAttribute = attributes.Select(x => x as ItemsAttribute).Where(i => i != null).First();
-                    foreach (var item in itemsAttribute.Items.Split(','))
-                        (control as ComboBox).Items.Add(item);
-                    (control as ComboBox).Text = (string)property.GetValue(pluginConfigurationOptions, null);
-                }
-            }
-            else
+            bool isBool = property.PropertyType == typeof(bool);
+            bool isString = property.PropertyType == typeof(string);
+            bool isChoice = attributes.FirstOrDefault(x => x is ItemsAttribute) != null;
+
+            if (isBool) {
+                control = new CheckBox() { VerticalAlignment = VerticalAlignment.Center, IsChecked = (bool)property.GetValue(pluginConfigurationOptions, null), Name = property.Name };
+                (control as CheckBox).Checked += new RoutedEventHandler(PluginConfigureView_Checked);
+                (control as CheckBox).Unchecked += new RoutedEventHandler(PluginConfigureView_Checked);
+            } else if (isChoice) {
+                control = new ComboBox() { Margin = new Thickness(0, 2, 0, 2), Name = property.Name, Width = 200 };
+                (control as ComboBox).SelectionChanged += new SelectionChangedEventHandler(PluginConfigureView_SelectionChanged);
+                ItemsAttribute itemsAttribute = attributes.Select(x => x as ItemsAttribute).Where(i => i != null).First();
+                foreach (var item in itemsAttribute.Items.Split(','))
+                    (control as ComboBox).Items.Add(item);
+                (control as ComboBox).Text = (string)property.GetValue(pluginConfigurationOptions, null);
+            } 
+            else if (isString) {
+                control = new TextBox() { Margin = new Thickness(0, 2, 0, 2), Text = (string)property.GetValue(pluginConfigurationOptions, null), Name = property.Name, Width = 200 };
+                (control as TextBox).TextChanged += new TextChangedEventHandler(PluginConfigureView_TextChanged);
+            } else {
                 return;
+            }
 
             grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
             Label label = new Label() { Margin = new Thickness(0, 0, 10, 0), HorizontalAlignment = HorizontalAlignment.Right, Content = labelAttribute.Label };

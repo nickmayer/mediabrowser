@@ -13,13 +13,19 @@ namespace ITunesTrailers {
         public static PluginConfiguration<PluginOptions>  PluginOptions {get;set;}
         
         public override void Init(Kernel kernel) {
-            PluginOptions = new PluginConfiguration<PluginOptions>(kernel, TrailersGuid);
+            PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
             PluginOptions.Load();
             
             var trailers = kernel.ItemRepository.RetrieveItem(TrailersGuid) ?? new ITunesTrailerFolder();
             trailers.Path = "";
             trailers.Id = TrailersGuid;            
             kernel.RootFolder.AddVirtualChild(trailers);            
+        }
+
+        public override IPluginConfiguration PluginConfiguration {
+            get {
+                return PluginOptions;
+            }
         }
 
         public override string Name {
@@ -38,12 +44,5 @@ namespace ITunesTrailers {
             }
         }
 
-        public override void Configure()
-        {
-            if (PluginOptions.BuildUI() == true)
-                PluginOptions.Save();
-            else
-                PluginOptions.Load();            
-        }
     }
 }

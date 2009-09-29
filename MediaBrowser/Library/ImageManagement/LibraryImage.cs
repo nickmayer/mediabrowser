@@ -124,10 +124,13 @@ namespace MediaBrowser.Library.ImageManagement {
                         width = image.Width;
                         height = image.Height;
                     }
-                } catch (OutOfMemoryException) { 
+                } catch (OutOfMemoryException) {
                     // we have a corrupt image. Memory should be fine
                     Corrupt = true;
                     Logger.ReportWarning("You have a corrupt image in your collection, clean that up sir. " + Path);
+                } catch (Exception e) {
+                    Logger.ReportWarning("Something weird is happening ensuring image is loaded!" + e.StackTrace + Path);
+                    throw;
                 }
             }
         }

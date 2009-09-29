@@ -2,6 +2,7 @@
 
 
 namespace MediaBrowser.Attributes {
+
     [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     sealed class CommentAttribute : Attribute {
 

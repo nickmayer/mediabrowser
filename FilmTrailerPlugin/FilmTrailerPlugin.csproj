@@ -48,6 +48,7 @@
     <Compile Include="FilmTrailer.cs" />
     <Compile Include="FilmTrailerFolder.cs" />
     <Compile Include="Plugin.cs" />
+    <Compile Include="PluginOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

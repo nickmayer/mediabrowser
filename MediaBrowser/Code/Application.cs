@@ -48,7 +48,6 @@ namespace MediaBrowser
         private MyHistoryOrientedPageSession session;
         private static object syncObj = new object();
         private bool navigatingForward;
-        private IPlaybackController playbackController = new PlaybackController();
         private IPlaybackController currentPlaybackController = null;
 
         public bool NavigatingForward
@@ -171,16 +170,7 @@ namespace MediaBrowser
             {
                 if (currentPlaybackController != null)
                     return currentPlaybackController;
-                return playbackController;
-            }
-        }
-
-        public bool UsingDefaultPlaybackController
-        {
-            get
-            {
-
-                return this.playbackController == currentPlaybackController;
+                return Kernel.Instance.PlaybackControllers[0];
             }
         }
 
