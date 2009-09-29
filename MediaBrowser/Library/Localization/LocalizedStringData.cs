@@ -87,8 +87,15 @@ namespace MediaBrowser.Library.Localization
                 usAsXML = new XmlDocument();
                 usAsXML.Load(FileName);
             }
-
-            return usAsXML.SafeGetString("LocalizedStringData/"+key) ?? "";
+            try
+            {
+                return usAsXML.SafeGetString("LocalizedStringData/" + key) ?? "";
+            }
+            catch
+            {
+                //not there - just return emptystring
+                return "";
+            }
         }
 
         public static LocalizedStringData FromFile(string file)

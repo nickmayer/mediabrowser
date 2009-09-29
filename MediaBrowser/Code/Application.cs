@@ -739,6 +739,7 @@ namespace MediaBrowser
             //but first clean it up
             name = name.Replace(" ", "");
             name = name.Replace("-", "");
+            name = name.Replace("*", "");
             return Kernel.Instance.StringData.GetString(name + "Desc");
         }
 
