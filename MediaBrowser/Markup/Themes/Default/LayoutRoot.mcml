@@ -761,13 +761,18 @@
     <Content>
       <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3" MinimumSize="[MinSize]" MaximumSize="[MinSize]">
         <Children>
+          <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >
+            <LayoutInput>
+              <FormLayoutInput Left="DescPanel,0" Bottom="DescPanel,1,-10" />
+            </LayoutInput>
+          </Graphic>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
                    MaintainAspectRatio="true" MaximumSize="120,65" >
             <LayoutInput>
               <AnchorLayoutInput Left="Parent,0" Top="Parent, 0"/>
             </LayoutInput>
           </Graphic>
-          <Panel>
+          <Panel Name="DescPanel">
             <Layout>
               <FlowLayout Orientation="Vertical" Spacing="-3,-3" />
             </Layout>
@@ -779,11 +784,6 @@
               <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 16" Margins="50,0,0,0" />
             </Children>
           </Panel>
-          <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >
-            <LayoutInput>
-              <FormLayoutInput Left="ItemPoster,1,20" Top="ItemPoster,0" />
-            </LayoutInput>
-          </Graphic>
         </Children>
       </Graphic>
     </Content>
