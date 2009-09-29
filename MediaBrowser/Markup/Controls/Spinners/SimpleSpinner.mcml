@@ -17,6 +17,7 @@
 		  <Font Name="ValueFont" Font="$Required"/>
       <Color Name="Color" Color="color://s:FontColorLight"/>
       <cor:String Name="Label" String="" />
+      <EditableText Name="FocusItem" />
     </Properties>
 
     <Locals>
@@ -39,6 +40,12 @@
       <Condition Source="[Model.HasNextValue]" ConditionOp="Equals" SourceValue="false">
         <Actions>
           <Invoke Target="[btnPrevious.NavigateInto]" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusItem.Value]" Value="[Label]" />
         </Actions>
       </Condition>
 

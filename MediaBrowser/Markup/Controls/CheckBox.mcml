@@ -21,6 +21,7 @@
 			<BooleanChoice Name="Checked" BooleanChoice="$Required" />
 			<cor:String Name="Label" String="$Required" />
 			<Font Name="Font" Font="$Required"/>
+      <EditableText Name="FocusItem" />
 		</Properties>
 
 		<Locals>
@@ -69,6 +70,12 @@
 					<Set Target="[BoxImage.Content]" Value="image://i:CheckBoxUncheckedFocus" />
 				</Actions>
 			</Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusItem.Value]" Value="[Label]" />
+        </Actions>
+      </Condition>
 
 			<Condition Source="[Input.KeyFocus]" SourceValue="true">
 				<Conditions>

@@ -557,6 +557,7 @@
     </Compile>
     <Compile Include="Library\Factories\BaseItemFactory.cs" />
     <Compile Include="Library\ImageManagement\ProxyCachedRemoteImage.cs" />
+    <Compile Include="Library\Localization\LocalizedStringData.cs" />
     <Compile Include="Library\Logging\Logger.cs" />
     <Compile Include="Library\ParentalControl.cs" />
     <Compile Include="Library\Playables\PlayableMediaCollection.cs" />

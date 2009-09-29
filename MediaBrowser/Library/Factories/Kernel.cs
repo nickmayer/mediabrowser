@@ -16,6 +16,7 @@ using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Extensions;
+using MediaBrowser.Library.Localization;
 using System.IO;
 using System.Diagnostics;
 using System.Net;
@@ -161,10 +162,13 @@ namespace MediaBrowser.Library {
                 PlaybackControllers = new List<IPlaybackController>(),
                 MetadataProviderFactories = MetadataProviderHelper.DefaultProviders(),
                 ConfigData = config,
+                StringData = LocalizedStringData.FromFile(LocalizedStringData.GetFileName()),
                 ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),                
                 ItemRepository = new SafeItemRepository(new ItemRepository()),
                 MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory()
             };
+
+            kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
 
             kernel.PlaybackControllers.Add(new PlaybackController());
 
@@ -230,6 +234,7 @@ namespace MediaBrowser.Library {
         public List<ImageResolver> ImageResolvers { get; set; }
         public ChainedEntityResolver EntityResolver { get; set; }
         public ConfigData ConfigData { get; set; }
+        public LocalizedStringData StringData { get; set; }
         public IItemRepository ItemRepository { get; set; }
         public IMediaLocationFactory MediaLocationFactory { get; set; }
         private ParentalControl parentalControls;

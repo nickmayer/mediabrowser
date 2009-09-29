@@ -22,6 +22,7 @@
       <Image Name="ImageFocus" Image="image://me:ButtonLeftFocus" />
       <Image Name="ImageNoFocus" Image="image://me:ButtonNoFocus" />
       <Image Name="ImageDormant" Image="image://me:ButtonDormant" />
+      <EditableText Name="FocusItem" />
 
     </Properties>
 
@@ -71,6 +72,12 @@
           <PlaySound Sound="sound://sd:Miniselect" />
         </Actions>
       </Rule>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusItem.Value]" Value="[Text]" />
+        </Actions>
+      </Condition>
 
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Conditions>

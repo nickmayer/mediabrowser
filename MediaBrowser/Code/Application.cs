@@ -6,6 +6,7 @@ using MediaBrowser.Util;
 using System;
 using System.Reflection;
 using System.IO;
+using System.Resources;
 using Microsoft.MediaCenter.AddIn;
 using MediaBrowser.Library;
 using MediaBrowser.LibraryManagement;
@@ -741,6 +742,14 @@ namespace MediaBrowser
         {
             //back up the app to the root page - used when library re-locks itself
             while (session.BackPage()) { };
+        }
+        public string DescString(string name)
+        {
+            //get the description string for "name" out of our string data object
+            //but first clean it up
+            name = name.Replace(" ", "");
+            name = name.Replace("-", "");
+            return Kernel.Instance.StringData.GetString(name + "Desc");
         }
 
         public static void DisplayDialog(string message, string caption)
