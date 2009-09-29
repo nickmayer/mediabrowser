@@ -11,6 +11,7 @@
     <Properties>
 
       <Choice Name="Model" Choice="$Required"/>
+      <EditableText Name="FocusItem" />
 
     </Properties>
 
@@ -25,6 +26,12 @@
 
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[ButtonRepeater]" />
+
+      <Changed Source="[Model.Chosen]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[FocusItem.Value]" Value="[Model.Chosen!cor:String]" />
+        </Actions>
+      </Changed>
 
       <Rule ConditionLogicalOp="And">
         <Conditions>
@@ -47,6 +54,7 @@
         <Actions>
           <Set Target="[Model.Description]" Value="Active"/>
           <PlayAnimation Animation="animation://anim:PivotItemFocusOn" Target="[Scroller]" />
+          <Set Target="[FocusItem.Value]" Value="[Model.Chosen!cor:String]" />
         </Actions>
       </Rule>
 

@@ -209,12 +209,6 @@
       <!--<Condition Source="[Model.ChosenIndex]" SourceValue="7" ConditionOp="Equals" Target="[Panel8.Visible]" Value="true" />-->
       <!--<Condition Source="[Model.ChosenIndex]" SourceValue="6" ConditionOp="Equals" Target="[Panel9.Visible]" Value="true" />-->
 
-      <Changed Source="[Model.Chosen]" InitialEvaluate="true">
-        <Actions>
-          <Set Target="[FocusItem.Value]" Value="[Model.Chosen!cor:String]" />
-        </Actions>
-      </Changed>
-
       <Changed Source="[Close.Invoked]">
         <Actions>
           <Invoke Target="[Application.FinishInitialConfig]" />
@@ -480,7 +474,7 @@
           </Clip>
 
           <!-- Configuration Options selector -->
-          <pv:Pivot Model="[Model]" Name="FullConfigNav" Navigation="RememberFocus">
+          <pv:Pivot Model="[Model]" Name="FullConfigNav" FocusItem="[FocusItem]"  Navigation="RememberFocus">
             <LayoutInput>
               <FormLayoutInput Horizontal="Near" Top="Parent,0.15" />
             </LayoutInput>
@@ -498,7 +492,8 @@
                   <Panel Layout="VerticalFlow" >
                     <Children>
                       <me:TextHeader Text="General" />
-                      <cb:CheckBox Label="Logging" Checked="[EnableTraceLogging]" FocusItem="[FocusItem]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <!--leave the spaces in the following label - it allows focus to land on us first-->
+                      <cb:CheckBox Label="Logging                   " Checked="[EnableTraceLogging]" FocusItem="[FocusItem]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <!--
                   <te:TextEdit LabelSize="[LabelSize1]" Label="Initial Location" EditableText="[InitialFolder]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
 									-->
