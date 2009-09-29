@@ -24,12 +24,12 @@
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <cor:Boolean Name="ShowFull" Boolean="true" />
-      
+
     </Properties>
 
     <Locals>
       <Size Name="LabelSize1" Size="250,0" />
-      <Size Name="PanelSize" Size="800,425" />
+      <Size Name="PanelSize" Size="800,400" />
       <a:Config Name="Config" Config="[Application.Config]"/>
       <Command Name="Close" />
       <Command Name="Back" />
@@ -102,7 +102,7 @@
       <BooleanChoice Name="StartDiamondMovieMinimal" Value="[Application.Config.StartDiamondMovieMinimal]" />
       <BooleanChoice Name="EnableDiamondEpisodeView" Value="[Application.Config.EnableDiamondEpisodeView]" />
 
-      
+
 
       <BooleanChoice Name="DefaultToFirstUnwatched" Value="[Application.Config.DefaultToFirstUnwatched]" />
       <BooleanChoice Name="AutoEnterSingleDirs" Value="[Application.Config.AutoEnterSingleDirs]" />
@@ -328,10 +328,10 @@
       <Binding Source="[EnableAdvancedCmds.Value]" Target="[Config.EnableAdvancedCmds]" />
       <Binding Source="[ShowBackdrop.Value]" Target="[Config.ShowBackdrop]" />
       <Binding Source="[HideFocusFrame.Value]" Target="[Config.HideFocusFrame]" />
-      
+
       <Binding Source="[StartDiamondMovieMinimal.Value]" Target="[Config.StartDiamondMovieMinimal]" />
       <Binding Source="[EnableDiamondEpisodeView.Value]" Target="[Config.EnableDiamondEpisodeView]" />
-      
+
 
 
       <Binding Source="[ThemeModel.Chosen!cor:String]" Target="[Config.Theme]" >
@@ -415,6 +415,7 @@
                   <Text Content="[Application.AppVersion]" Font="font://f:CP_VersionFont" Color="color://s:FontColorDark"/>
                 </Children>
               </Panel>
+
               <Panel Name="MainPanel" Layout="Center">
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0.05" Right="Parent,0.95" Top="Parent,0,80" Bottom="Parent,1,-100"  />
@@ -461,28 +462,32 @@
 
                 </Children>
               </Panel>
-              <Panel Layout="HorizontalFlow">
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,20" Bottom="Parent,1,-95"  />
-                </LayoutInput>
-                <Children>
-                  <Text Name="Description" Content="" MaximumSize="1300,50" Font="font://f:CP_ConfigHeaderFont" Color="color://s:FontColorLight"/>
-                </Children>
-              </Panel>
 
             </Children>
           </Clip>
 
+          <!-- Description Panel-->
+          <Panel Layout="HorizontalFlow">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,20" Right="Parent,1,-20" Top="FullConfig,1,20"  />
+            </LayoutInput>
+            <Children>
+              <Text Name="Description" Content="" Font="font://f:CP_ConfigHeaderFont"
+                    Color="color://s:FontColorLight" MaximumLines="2" WordWrap="true"/>
+            </Children>
+          </Panel>
+
           <!-- Configuration Options selector -->
           <pv:Pivot Model="[Model]" Name="FullConfigNav" FocusItem="[FocusItem]"  Navigation="RememberFocus">
             <LayoutInput>
-              <FormLayoutInput Horizontal="Near" Top="Parent,0.15" />
+              <FormLayoutInput Horizontal="Near" Top="Parent,0,100" />
             </LayoutInput>
           </pv:Pivot>
 
+          <!-- Full Configuration Options-->
           <Panel Name="FullConfig" Layout="Anchor">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0, 25" Top="Parent,0.15,75" />
+              <FormLayoutInput Left="Parent,0, 25" Top="Parent,0,175" />
             </LayoutInput>
             <Children>
 
@@ -512,7 +517,7 @@
                       <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  FocusItem="[FocusItem]" Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      
+
                     </Children>
                   </Panel>
 
@@ -588,7 +593,7 @@
                       <me:TextHeader Text=" " />
                       <me:TextHeader Text="Diamond Theme Settings" />
                       <cb:CheckBox   Label="Start Movie View in Minimal Mode" FocusItem="[FocusItem]" Margins="[CMargin]"   Checked="[StartDiamondMovieMinimal]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox   Label="Enable Episode View" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableDiamondEpisodeView]"  Font="font://f:CP_ConfigItemFont"/>                      
+                      <cb:CheckBox   Label="Enable Episode View" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableDiamondEpisodeView]"  Font="font://f:CP_ConfigItemFont"/>
                     </Children>
                   </Panel>
                 </Children>
