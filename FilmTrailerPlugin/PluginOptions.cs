@@ -8,7 +8,7 @@ using MediaBrowser.Library.Plugins;
 namespace FilmTrailerPlugin {
     public class PluginOptions : PluginConfigurationOptions {
         [Label("Menu Name:")]
-        [Default("Trailers")]
+        [Default("Film Trailers")]
         public string MenuName { get; set; }
     }
 }

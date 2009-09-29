@@ -11,7 +11,7 @@ namespace ITunesTrailers
     public class PluginOptions : PluginConfigurationOptions
     {
         [Label("Menu Name:")]
-        [Default("Trailers")]
+        [Default("Apple Trailers")]
         public string MenuName
         { get; set; }
     }
