@@ -84,9 +84,6 @@ namespace MediaBrowser.Library {
                 Logger.LoggerInstance = GetDefaultLogger(config);
                 
                 var kernel = GetDefaultKernel(config, directives);
-                if (kernel != null) {
-                    DisposeKernel(kernel);
-                }
                 Kernel.Instance = kernel;
 
                 // add the podcast home
