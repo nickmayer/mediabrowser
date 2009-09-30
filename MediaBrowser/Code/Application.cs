@@ -702,6 +702,7 @@ namespace MediaBrowser
         {
             if (item.IsPlayable)
             {
+                currentPlaybackController = item.PlaybackController;
                 item.Resume();
             }
         }
