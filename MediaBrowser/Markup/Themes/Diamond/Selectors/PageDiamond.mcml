@@ -43,6 +43,7 @@
       <AnchorLayoutInput Name="LayoutTopBarHide" Left="Parent,0" Top="Parent,0,-100" Right="Parent,1" Horizontal="Center" />
       <!-- Navigate Timer to bypass view triggering -->
       <Timer Name="NavTimer" Interval="2000" AutoRepeat="false" Enabled="true"/>
+      <Timer Name="RefocusTimer" Interval="200" AutoRepeat="false" Enabled="false"/>
     </Locals>
 
     <Rules>
@@ -91,6 +92,13 @@
         </Actions>
       </Changed>
 
+      <Changed Source="[RefocusTimer.Tick]">
+        <Actions>
+          <Set Target="[RefocusTimer.Enabled]" Value="false" />
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+        </Actions>
+      </Changed>
+
       <Rule>
         <Conditions>
           <Equality Source="[TopBarHasFocus.Value]" ConditionOp="Equals" Value="true" />
@@ -134,7 +142,7 @@
         </Conditions>
         <Actions>
           <Invoke Target="[Folder.DisplayPrefs.ToggleViewTypes]" />
-          <!--<Set Target="[NavTimer.Enabled]" Value="true" />-->
+          <Set Target="[RefocusTimer.Enabled]" Value="true" />
         </Actions>
       </Rule>
 

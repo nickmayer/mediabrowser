@@ -35,7 +35,7 @@
     <Rules>
       <Changed Source="[PlayMovieCommand.Invoked]">
         <Actions>
-          <Invoke Target="[Item.Play]"/>
+          <Invoke Target="[Application.Play]" item="[Item]"/>
         </Actions>
       </Changed>
 
@@ -46,7 +46,7 @@
 
       <Changed Source="[ResumeMovieCommand.Invoked]">
         <Actions>
-          <Invoke Target="[Item.Resume]"/>
+          <Invoke Target="[Application.Resume]" item="[Item]"/>
         </Actions>
       </Changed>
       <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">

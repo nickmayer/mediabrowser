@@ -78,7 +78,7 @@
         </Conditions>
         <Actions>
           <Set Target="[ShowPopup.Value]" Value="false" />
-          <Invoke Target="[Item.Play]"/>
+          <Invoke Target="[Application.Play]" item="[Item]"/>
         </Actions>
       </Changed>
       

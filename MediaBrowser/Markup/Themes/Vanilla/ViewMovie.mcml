@@ -72,7 +72,7 @@
           <Set Target="[GenreInfo.Visible]"        Value="true"/>
           <Set Target="[ActorScroller.Visible]"    Value="false"/>
           <Set Target="[NowPlaying.Visible]"       Value="true"/>
-          <Invoke Target="[Item.Play]"/>
+          <Invoke Target="[Application.Play]" item="[Item]"/>
         </Actions>
       </Changed>
 
@@ -142,7 +142,7 @@
 
       <Changed Source="[ResumeMovieCommand.Invoked]">
         <Actions>
-          <Invoke Target="[Item.Resume]"/>
+          <Invoke Target="[Application.Resume]" item="[Item]"/>
         </Actions>
       </Changed>
 
