@@ -39,6 +39,11 @@
           <FormatTransformer Format="({0})" />
         </Transformer>
       </Binding>
+      <Binding Source="[Item.ProductionYearString]" Target="[IYear.Content]" >
+        <Conditions>
+          <Equality Source="[Item.ProductionYearString]" ConditionOp="Equals" Value="" />
+        </Conditions>
+      </Binding>
       <Binding Source="[Item.Name]" Target="[ITitle.Content]" >
         <Transformer>
           <FormatTransformer ToUpper="true"/>
