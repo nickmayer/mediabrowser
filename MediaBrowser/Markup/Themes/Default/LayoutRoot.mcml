@@ -763,7 +763,7 @@
         <Children>
           <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >
             <LayoutInput>
-              <FormLayoutInput Left="DescPanel,0" Bottom="DescPanel,1,-10" />
+              <FormLayoutInput Left="DescPanel,0" Bottom="DescPanel,1,-5" />
             </LayoutInput>
           </Graphic>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
