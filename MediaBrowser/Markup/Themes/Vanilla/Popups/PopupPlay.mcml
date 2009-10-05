@@ -67,7 +67,7 @@
           </Layout>
           <Children>
             <vmb:MenuButton Command="[CmdPlayAll]" Image="image://vi:MenuOptionPlayAll"/>
-            <vmb:MenuButton Command="[CmdAddToQueue]" Image="image://vi:MenuOptionPlayAll" Visible ="[Item.IsNotVideo]"/>
+            <vmb:MenuButton Command="[CmdAddToQueue]" Image="image://vi:MenuOptionQueueAll" Visible ="[Item.IsNotVideo]"/>
             <vmb:MenuButton Command="[CmdPlayRandom]" Image="image://vi:MenuOptionPlayRandom"/>
             <vmb:MenuButton Command="[CmdPlayUnwatched]" Image="image://vi:MenuOptionPlayUnwatched"/>
             <vmb:MenuButton Command="[Close]" Image="image://vi:MenuOptionClose" Red="true"/>
