@@ -89,7 +89,7 @@ namespace MediaInfoProvider
                 Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
                 mediaInfoData = new MediaInfoData
                 {
-                    VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "CodecID/Hint"),
+                    VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "Codec/String"),
                     VideoBitRate = videoBitRate,
                     //MI.Get(StreamKind.Video, 0, "DisplayAspectRatio")),
                     Height = height,
