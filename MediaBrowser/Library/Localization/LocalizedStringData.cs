@@ -29,7 +29,7 @@ namespace MediaBrowser.Library.Localization
         public string EnableEnhancedHomeScreenDesc = "Enable the Enhanced View for Top-Level Items.";
         public string TransparentBackgroundDesc = "Let the Media Center Background Show Through MediaBrowser";
         public string ShowClockDesc = "Show the Current Time in MediaBrowser Screens.";
-        public string DimUnselectedPostersDesc = "Dim the Main Selection Area When not in Focus (e.g. When on a Menu)";
+        public string DimUnselectedPostersDesc = "Make Posters That are not Selected Slightly Darker.";
         public string HideFocusFrameDesc = "Don't Show a Border Around Selected Posters in Poster Views.";
         public string PosterGridSpacingDesc = "Number of Pixels to Put Between Each Item in a Grid of Posters.";
         public string ThumbWidthSplitDesc = "Number of Pixels to Use as the Width of the Poster Area in Thumb View";
@@ -68,6 +68,7 @@ namespace MediaBrowser.Library.Localization
         public string ResetDefaultsDesc = "Reset Configuration Items to Their Default Values.  USE WITH CAUTION - Setings Will Be Overwritten.";
         public string ClearCacheDesc = "Delete the Internal Data Files MediaBrowser Uses and Cause Them to be Re-built.";
         public string UnlockDesc = "Temporarily Dis-able Parental Control for the Entire Library.  Will Re-Lock Automatically.";
+        public string AssumeWatchedIfOlderThanDesc = "Mark All Items Older Than This as Watched.";
 
 
 

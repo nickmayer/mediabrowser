@@ -421,19 +421,19 @@
                   <FormLayoutInput Left="Parent,0.05" Right="Parent,0.95" Top="Parent,0,80" Bottom="Parent,1,-100"  />
                 </LayoutInput>
                 <Children>
-                  <Graphic Name="InitialConfig" Content="image://me:50AlphaBg" Navigation="Column" Layout="VerticalFlow" MinimumSize="500,500" MaximumSize="500,0" Padding="[SMargin]">
+                  <Graphic Name="InitialConfig" Content="image://me:50AlphaBg" Navigation="Column" Layout="VerticalFlow" MinimumSize="500,400" MaximumSize="500,0" Padding="[SMargin]">
 
                     <Children>
                       <me:TextHeader Text="General" />
 
                       <me:TextHeader Text="Tracking" />
-                      <me:AssumeWatchedEdit Label="Assume Watched If Older Than" Config="[Application.Config]" Margins="[CMargin]" />
+                      <me:AssumeWatchedEdit Label="Assume Watched If Older Than" Config="[Application.Config]" FocusItem="[FocusItem]" Margins="[CMargin]" />
 
                       <me:TextHeader Text="Metadata" />
-                      <cb:CheckBox Label="Allow Internet Based Providers" Checked="[AllowInternetMetadataProviders]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Allow Internet Based Providers" Checked="[AllowInternetMetadataProviders]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
 
                       <me:TextHeader Text="Updates" />
-                      <cb:CheckBox Label="Automatic Updates" Checked="[EnableUpdates]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Automatic Updates" Checked="[EnableUpdates]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
 
                     </Children>
                   </Graphic>
@@ -469,7 +469,7 @@
           <!-- Description Panel-->
           <Panel Layout="HorizontalFlow">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0,20" Right="Parent,1,-20" Top="FullConfig,1,20"  />
+              <FormLayoutInput Left="Parent,0,20" Right="Parent,1,-20" Top="Parent,1,-175"  />
             </LayoutInput>
             <Children>
               <Text Name="Description" Content="" Font="font://f:CP_ConfigHeaderFont"
@@ -673,12 +673,18 @@
     <Properties>
       <cor:String Name="Label" String=""/>
       <a:Config Name="Config" Config="$Required"/>
+      <EditableText Name="FocusItem" />
     </Properties>
     <Locals>
       <Command Name="Increase" />
       <Command Name="Decrease"/>
     </Locals>
     <Rules>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusItem.Value]" Value="[Label]" />
+        </Actions>
+      </Condition>
       <Binding Target="[DateLbl.Content]" Source="[Config.AssumeWatchedBeforeStr]" />
       <Binding Source="[Label]" Target="[Lbl.Content]" />
       <Changed Source="[Increase.Invoked]">
