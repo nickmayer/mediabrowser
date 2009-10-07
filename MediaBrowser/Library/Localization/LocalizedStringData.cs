@@ -16,7 +16,11 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class LocalizedStringData
     {
+
+        private string version = "1.00"; //this is used to see if we have changed and need to re-save
+
         public string FileName; //this is public so it will serialize and we know where to save ourselves
+        public string Version = ""; //this will get saved so we can check it against us for changes
 
         //we store us as an xml doc so we can get the strings out by property
         private XmlDocument usAsXML;
@@ -101,18 +105,35 @@ namespace MediaBrowser.Library.Localization
 
         public static LocalizedStringData FromFile(string file)
         {
-            
+            LocalizedStringData s;
+
             if (!File.Exists(file))
             {
-                LocalizedStringData s = new LocalizedStringData(file);
+                s = new LocalizedStringData(file);
                 s.Save();
             }
             Logger.ReportInfo("Using String Data from " + file);
             XmlSerializer xs = new XmlSerializer(typeof(LocalizedStringData));
             using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                return (LocalizedStringData)xs.Deserialize(fs);
+                try
+                {
+                    s = (LocalizedStringData)xs.Deserialize(fs);
+                }
+                catch
+                {
+                    //file is mucked up - just re-create it
+                    s = new LocalizedStringData(file);
+                }
             }
+            if (s.Version != s.version)
+            {
+                //new version - save over old file
+                s = new LocalizedStringData(file);
+                s.Version = s.version;
+                s.Save();
+            }
+            return s;
         }
 
         public static string GetFileName()
