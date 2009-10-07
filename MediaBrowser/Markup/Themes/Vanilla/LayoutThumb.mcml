@@ -142,7 +142,7 @@
 
       <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="Equals" SourceValue="Series">
         <Actions>
-          <Set Target="[Seasons.Content]" Value="[PreSelectedItem!lib:FolderModel.Children.Count]">
+          <Set Target="[Seasons.Content]" Value="[PreSelectedItem!lib:FolderModel.Folder.Children.Count]">
             <Transformer>
               <FormatTransformer Format="{0}"/>
             </Transformer>
