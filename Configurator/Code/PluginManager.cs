@@ -32,7 +32,7 @@ namespace Configurator.Code {
         PluginCollection installedPlugins = new PluginCollection();
         PluginCollection availablePlugins = new PluginCollection();
 
-        Dictionary<IPlugin, System.Version> latestVersions = new Dictionary<IPlugin, System.Version>();
+        Dictionary<string, System.Version> latestVersions = new Dictionary<string, System.Version>();
 
         public PluginManager() {
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
@@ -49,6 +49,7 @@ namespace Configurator.Code {
             var source = PluginSourceCollection.Instance;
             foreach (var plugin in source.AvailablePlugins) {
                 availablePlugins.Add(plugin);
+                latestVersions.Add(plugin.Name, plugin.Version);
             } 
         } 
 
@@ -89,7 +90,7 @@ namespace Configurator.Code {
 
         public System.Version GetLatestVersion(IPlugin plugin) {
             System.Version version;
-            latestVersions.TryGetValue(plugin, out version);
+            latestVersions.TryGetValue(plugin.Name, out version);
             return version;
         } 
 

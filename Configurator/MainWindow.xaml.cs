@@ -553,6 +553,33 @@ folder: {0}
             }
         }
 
+        private void pluginList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (pluginList.SelectedItem != null)
+            {
+                IPlugin plugin = pluginList.SelectedItem as IPlugin;
+                System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
+                if (v != null)
+                {
+                    if (v > plugin.Version)
+                    {
+                        upgradePlugin.IsEnabled = true;
+                    }
+                    else
+                    {
+                        upgradePlugin.IsEnabled = false;
+                    }
+                    latestPluginVersion.Content = v.ToString();
+                }
+                else
+                {
+                    latestPluginVersion.Content = "Unknown";
+                    upgradePlugin.IsEnabled = false;
+                }
+            }
+        }
+
+
         private void addExtenderFormat_Click(object sender, RoutedEventArgs e)
         {
             var form = new AddExtenderFormat();
