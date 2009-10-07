@@ -632,7 +632,7 @@
 
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Season">
         <Actions>
-          <Set Target="[Episodes.Content]" Value="[Item!lib:FolderModel.Children.Count]">
+          <Set Target="[Episodes.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
             <Transformer>
               <FormatTransformer Format="{0}"/>
             </Transformer>
