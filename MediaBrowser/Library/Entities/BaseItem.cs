@@ -140,7 +140,6 @@ namespace MediaBrowser.Library.Entities {
             }
             set {
                 name = value;
-                guessedSortName = null;
             }
         }
 
@@ -156,22 +155,13 @@ namespace MediaBrowser.Library.Entities {
 
         public virtual string SortName { 
             get {
-                return sortName ?? GuessedSortName;
+                return SortHelper.GetSortableName(sortName ?? Name);
             }
             set {
                 sortName = value;
             }
         }
 
-        private string guessedSortName;
-        private string GuessedSortName {
-            get {
-                if (guessedSortName == null) {
-                    guessedSortName = SortHelper.GetSortableName(Name);
-                }
-                return guessedSortName;
-            }
-        }
 
         [Persist]
         public string Overview { get; set; }
