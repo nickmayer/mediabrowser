@@ -48,7 +48,7 @@ namespace Configurator
             try {        
                 Initialize();
             } catch (Exception ex) {
-                MessageBox.Show("Failed to start up, please post this contents on mediabrowser.tv/forums " + ex.ToString());
+                MessageBox.Show("Failed to start up, please post this contents on http://community.mediabrowser.tv " + ex.ToString());
             }
 
         }

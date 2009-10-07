@@ -58,7 +58,9 @@ namespace MediaBrowser.Library.Metadata {
             if (force) {
                 ClearItem(item); 
             }
-            var providers = GetSupportedProviders(item);
+
+            bool neverSavedProviderInfo;
+            var providers = GetSupportedProviders(item, out neverSavedProviderInfo);
 
             var itemClone = (BaseItem)Serializer.Clone(item);
             // Parent is not serialized so its not cloned
@@ -84,7 +86,11 @@ namespace MediaBrowser.Library.Metadata {
                 Logger.ReportInfo("Metadata changed for the following item {0} (first pass : {1} forced via UI : {2})", item.Name, fastOnly, force);
                 changed = UpdateMetadata(item, true, fastOnly, providers);
             }
-      
+
+            if (!changed && neverSavedProviderInfo) {
+                Kernel.Instance.ItemRepository.SaveProviders(item.Id, providers);
+            }
+
             return changed;
         }
 
@@ -114,15 +120,21 @@ namespace MediaBrowser.Library.Metadata {
             return false;
         }
 
-        static IList<IMetadataProvider> GetSupportedProviders(BaseItem item) {
+        static IList<IMetadataProvider> GetSupportedProviders(BaseItem item, out bool neverSavedProviderInfo) {
 
-            var cachedProviders = (Kernel.Instance.ItemRepository.RetrieveProviders(item.Id) ?? new List<IMetadataProvider>())
-                .ToDictionary(provider => provider.GetType());
+       
+            var cachedProviders = Kernel.Instance.ItemRepository.RetrieveProviders(item.Id);
+            neverSavedProviderInfo = (cachedProviders == null);
+            if (cachedProviders == null) {
+                cachedProviders = new List<IMetadataProvider>();
+            }
+
+            var lookup = cachedProviders.ToDictionary(provider => provider.GetType());
 
             return Kernel.Instance.MetadataProviderFactories
                 .Where(provider => provider.Supports(item))
                 .Where(provider => !provider.RequiresInternet || Config.Instance.AllowInternetMetadataProviders)
-                .Select(provider => cachedProviders.GetValueOrDefault(provider.Type, provider.Construct()))
+                .Select(provider => lookup.GetValueOrDefault(provider.Type, provider.Construct()))
                 .ToList();
         }
 
