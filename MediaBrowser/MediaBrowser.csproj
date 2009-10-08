@@ -550,6 +550,7 @@
     <None Include="Images\ButtonSelection2.png" />
     <Content Include="Images\folder.png" />
     <None Include="Images\lines.png" />
+    <Compile Include="Code\Exceptions\ConnectionIsDownException.cs" />
     <Compile Include="Library\Plugins\Configuration\DefaultAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\ExtAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\GroupAttribute.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MediaBrowser.Code.Exceptions;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Interfaces;
@@ -64,7 +65,7 @@ namespace MediaBrowser.Library.Metadata {
 
             var itemClone = (BaseItem)Serializer.Clone(item);
             // Parent is not serialized so its not cloned
-            itemClone.Parent = item.Parent; 
+            itemClone.Parent = item.Parent;
 
             foreach (var provider in providers) {
                 provider.Item = itemClone;
@@ -74,7 +75,7 @@ namespace MediaBrowser.Library.Metadata {
 
                 // something changed clear the item before pulling metadata 
                 if (!force) {
-                    ClearItem(item);
+                    //ClearItem(item);
                     ClearItem(itemClone);
                 }
 
@@ -84,7 +85,14 @@ namespace MediaBrowser.Library.Metadata {
                 }
 
                 Logger.ReportInfo("Metadata changed for the following item {0} (first pass : {1} forced via UI : {2})", item.Name, fastOnly, force);
-                changed = UpdateMetadata(item, true, fastOnly, providers);
+                try
+                {
+                    changed = UpdateMetadata(item, force, fastOnly, providers);
+                }
+                catch (ConnectionIsDownException)
+                {
+                    changed = false;
+                }
             }
 
             if (!changed && neverSavedProviderInfo) {
@@ -153,17 +161,27 @@ namespace MediaBrowser.Library.Metadata {
                 if ((provider.IsSlow || provider.RequiresInternet) && fastOnly) continue;
 
                 try {
-                    if (provider.NeedsRefresh() | force) {
+                    if (provider.NeedsRefresh()) {
                         provider.Fetch();
-                        Serializer.Merge(provider.Item, item);
                         changed = true;
                     }
-                } catch (Exception e) {
+                }
+                catch (ConnectionIsDownException cide)
+                {
+                    Logger.ReportException("Provider failed: " + provider.GetType().ToString(), cide);
+                    changed = false;
+                    throw;
+                }
+                catch (Exception e) {
                     Debug.Assert(false, "Meta data provider should not be leaking exceptions");
                     Logger.ReportException("Provider failed: " + provider.GetType().ToString(), e);
                 }
             }
             if (changed) {
+                if (force)
+                    ClearItem(item);
+                foreach (var provider in providers)
+                    Serializer.Merge(provider.Item, item);
                 Kernel.Instance.ItemRepository.SaveItem(item);
                 Kernel.Instance.ItemRepository.SaveProviders(item.Id, providers);
             }
