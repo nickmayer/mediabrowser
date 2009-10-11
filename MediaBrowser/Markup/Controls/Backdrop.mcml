@@ -145,4 +145,21 @@
     </Content>
   </UI>
 
+  <UI Name="InitialFolderBackground">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+    </Properties>
+
+    <Locals>
+      <cor:String Name="img" String="[Application.MainBackdrop]" />
+    </Locals>
+
+    <Rules>
+      <Binding Source="[img!Image]" Target="[bg.Content]" />
+    </Rules>
+
+    <Content>
+      <Graphic Name="bg" Content="null" />
+    </Content>
+  </UI>
 </Mcml>

@@ -18,11 +18,7 @@
     </Properties>
 
     <Rules>
-      <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
-        <Transformer>
-          <BooleanTransformer Inverse="true"/>
-        </Transformer>
-      </Binding>
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
 
 
       <!-- Configuration Checks & Display Setup -->

@@ -215,7 +215,7 @@ namespace Configurator
             useAutoPlay.IsChecked = config.UseAutoPlayForIso;
 
             cbxOptionClock.IsChecked = config.ShowClock;            
-            cbxOptionTransparent.IsChecked = config.TransparentBackground;
+            cbxOptionTransparent.IsChecked = config.ShowThemeBackground;
             cbxOptionIndexing.IsChecked = config.RememberIndexing;
             cbxOptionDimPoster.IsChecked = config.DimUnselectedPosters;
             cbxOptionHideFrame.IsChecked = config.HideFocusFrame;
@@ -767,7 +767,7 @@ folder: {0}
 
         private void cbxOptionTransparent_Click(object sender, RoutedEventArgs e)
         {
-            config.TransparentBackground = (bool)cbxOptionTransparent.IsChecked;
+            config.ShowThemeBackground = (bool)cbxOptionTransparent.IsChecked;
             SaveConfig();
         }
 

@@ -286,7 +286,7 @@
     <None Include="Images\Icons\IconShuffle.png" />
     <None Include="Images\Root\roottopw.png" />
     <None Include="Images\Root\rootscrollhilite.png" />
-    <Content Include="Images\Diamond\diabg1.png" />
+    <Content Include="Images\Diamond\dia_bg.png" />
     <Content Include="Images\Diamond\dia_list_bg.png" />
     <Content Include="Images\Diamond\dia_list_focus.png" />
     <Content Include="Images\Diamond\Overlay\dia_overlay_all.png" />
@@ -301,6 +301,7 @@
     <Content Include="Images\MediaInfo\Diamond\d_aspect_43.png" />
     <Content Include="Images\MediaInfo\Diamond\d_codec_aac.png" />
     <Content Include="Images\MediaInfo\Diamond\d_codec_ac3.png" />
+    <Content Include="Images\MediaInfo\Diamond\d_codec_asf.png" />
     <Content Include="Images\MediaInfo\Diamond\d_codec_divx.png" />
     <Content Include="Images\MediaInfo\Diamond\d_codec_dts.png" />
     <Content Include="Images\MediaInfo\Diamond\d_codec_h264.png" />
@@ -311,9 +312,11 @@
     <Content Include="Images\MediaInfo\Diamond\d_codec_xvid.png" />
     <Content Include="Images\MediaInfo\Diamond\d_hdtype_1080.png" />
     <Content Include="Images\MediaInfo\Diamond\d_hdtype_720.png" />
+    <Content Include="Images\MediaInfo\Diamond\d_media_avi.png" />
     <Content Include="Images\MediaInfo\Diamond\d_media_bluray.png" />
     <Content Include="Images\MediaInfo\Diamond\d_media_dvd.png" />
     <Content Include="Images\MediaInfo\Diamond\d_media_hddvd.png" />
+    <Content Include="Images\MediaInfo\Diamond\d_media_mkv.png" />
     <Content Include="Images\plainborder.png" />
     <Content Include="Images\Ratings\Rated-Custom.png" />
     <Content Include="Images\Ratings\Rated-Unrated.png" />
@@ -550,6 +553,7 @@
     <None Include="Images\ButtonSelection2.png" />
     <Content Include="Images\folder.png" />
     <None Include="Images\lines.png" />
+    <Compile Include="Code\ModelItems\FancyText.cs" />
     <Compile Include="Code\Exceptions\ConnectionIsDownException.cs" />
     <Compile Include="Library\Plugins\Configuration\DefaultAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\ExtAttribute.cs" />
@@ -588,6 +592,7 @@
     <Content Include="Markup\Controls\Buttons\SimpleButton.mcml" />
     <Content Include="Markup\Controls\CheckBox.mcml" />
     <Content Include="Markup\Controls\Popups\NumberPad.mcml" />
+    <Content Include="Markup\Controls\Scrollers\FancyText.mcml" />
     <Content Include="Markup\Themes\Diamond\Controls\DiamondPagination.mcml" />
     <Content Include="Markup\Controls\InfoMarquee.mcml" />
     <Content Include="Markup\Controls\Directors.mcml" />

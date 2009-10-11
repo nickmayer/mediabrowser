@@ -739,6 +739,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap d_codec_asf {
+            get {
+                object obj = ResourceManager.GetObject("d_codec_asf", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap d_codec_divx {
             get {
                 object obj = ResourceManager.GetObject("d_codec_divx", resourceCulture);
@@ -809,6 +816,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap d_media_avi {
+            get {
+                object obj = ResourceManager.GetObject("d_media_avi", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap d_media_bluray {
             get {
                 object obj = ResourceManager.GetObject("d_media_bluray", resourceCulture);
@@ -826,6 +840,13 @@ namespace MediaBrowser {
         internal static System.Drawing.Bitmap d_media_hddvd {
             get {
                 object obj = ResourceManager.GetObject("d_media_hddvd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap d_media_mkv {
+            get {
+                object obj = ResourceManager.GetObject("d_media_mkv", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -996,6 +1017,13 @@ namespace MediaBrowser {
         internal static byte[] ExternalPlayback {
             get {
                 object obj = ResourceManager.GetObject("ExternalPlayback", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] FancyText {
+            get {
+                object obj = ResourceManager.GetObject("FancyText", resourceCulture);
                 return ((byte[])(obj));
             }
         }

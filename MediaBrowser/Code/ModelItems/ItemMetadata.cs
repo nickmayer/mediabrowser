@@ -330,6 +330,17 @@ namespace MediaBrowser.Library {
             get { return baseItem.SubTitle; }
         }
 
+        public string NameDateString
+        {
+            get 
+            { 
+                string pys = string.Empty;
+                if (ProductionYear > 1900)
+                    pys = string.Format(" ({0})", ProductionYear.ToString());
+                return baseItem.Name + pys;
+            }
+        }
+
 
         private void MetadataChanged(object sender, MetadataChangedEventArgs args) {
             if (!Microsoft.MediaCenter.UI.Application.IsApplicationThread) {

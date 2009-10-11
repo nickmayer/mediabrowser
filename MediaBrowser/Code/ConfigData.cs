@@ -30,7 +30,7 @@ namespace MediaBrowser
         public float MaximumAspectRatioDistortion = 0.2F;
         public bool EnableTranscode360 = true;
         public string ExtenderNativeTypes = ".dvr-ms,.wmv";
-        public bool TransparentBackground = false;
+        public bool ShowThemeBackground = false;
         public bool DimUnselectedPosters = true;
         public bool EnableNestedMovieFolders = true;
         public bool EnableMoviePlaylists = true;
@@ -84,6 +84,7 @@ namespace MediaBrowser
         public string YahooWeatherUnit = "c";
         public bool StartDiamondMovieMinimal = false;
         public bool EnableDiamondEpisodeView = false;
+        public bool ShowRootBackground = true;
 
         public string PodcastHome = ApplicationPaths.DefaultPodcastPath;
         public bool HideFocusFrame = false;

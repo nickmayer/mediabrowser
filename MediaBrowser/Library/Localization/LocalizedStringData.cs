@@ -30,14 +30,12 @@ namespace MediaBrowser.Library.Localization
         public string AllowInternetBasedProvidersDesc = "Search the Internet for Cover Art, Backdrops and Metadata.";
         public string AutomaticUpdatesDesc = "Automatically Download and Install Updates to MediaBrowser.";
         public string BetaUpdatesDesc = "Include Beta Versions in Automatic Updates";
-        public string EnableEnhancedHomeScreenDesc = "Enable the Enhanced View for Top-Level Items.";
-        public string TransparentBackgroundDesc = "Let the Media Center Background Show Through MediaBrowser";
+        public string EnableEnhancedHomeScreenDesc = "Enable the Enhanced View for Top-Level Items.";        
         public string ShowClockDesc = "Show the Current Time in MediaBrowser Screens.";
         public string DimUnselectedPostersDesc = "Make Posters That are not Selected Slightly Darker.";
         public string HideFocusFrameDesc = "Don't Show a Border Around Selected Posters in Poster Views.";
         public string PosterGridSpacingDesc = "Number of Pixels to Put Between Each Item in a Grid of Posters.";
         public string ThumbWidthSplitDesc = "Number of Pixels to Use as the Width of the Poster Area in Thumb View";
-        public string ShowBackdroponSupportedViewsDesc = "Show Fan Art as a Background in Views with this Capability.";
         public string GeneralDesc = "General Configuration Items.";
         public string MediaOptionsDesc = "Media Related Configuration Items.";
         public string ThemesDesc = "Select the Visual Presentation Style of MediaBrowser.";
@@ -71,9 +69,11 @@ namespace MediaBrowser.Library.Localization
         public string ContinueDesc = "Return to the Previous Screen.  (All Changes Are Saved Automatically)";
         public string ResetDefaultsDesc = "Reset Configuration Items to Their Default Values.  USE WITH CAUTION - Setings Will Be Overwritten.";
         public string ClearCacheDesc = "Delete the Internal Data Files MediaBrowser Uses and Cause Them to be Re-built.";
-        public string UnlockDesc = "Temporarily Dis-able Parental Control for the Entire Library.  Will Re-Lock Automatically.";
+        public string UnlockDesc = "Temporarily Disable Parental Control for the Entire Library.  Will Re-Lock Automatically.";
         public string AssumeWatchedIfOlderThanDesc = "Mark All Items Older Than This as Watched.";
-
+        public string ShowThemeBackgroundDesc = "Display Theme background. [TIER 3] Highest tier background effect takes precedence.";
+        public string ShowInitialFolderBackgroundDesc = "Display initial backdrop in all views. (backdrop.png or backdrop.jpg sourced from your initial folder) [TIER 2] Highest tier background effect takes precedence.";
+        public string ShowBackdroponSupportedViewsDesc = "Display Fan Art as a Background in Views with this Capability. [TIER 1] Highest tier background effect takes precedence.";
 
 
         LocalizedStringData(string file)

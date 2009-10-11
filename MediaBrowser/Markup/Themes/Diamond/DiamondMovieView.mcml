@@ -21,6 +21,7 @@
     xmlns:pb="resx://MediaBrowser/MediaBrowser.Resources/PersonButton"
     xmlns:db="resx://MediaBrowser/MediaBrowser.Resources/DirectorButton"
       xmlns:dtb="resx://MediaBrowser/MediaBrowser.Resources/DiamondToolBox"
+      xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
     xmlns:me="Me"
     >
 
@@ -78,11 +79,7 @@
       <Binding Source="[CmdButtons.DisplayMax]" Target="[DisplayMax]" />
       <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
-      <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
-        <Transformer>
-          <BooleanTransformer Inverse="true"/>
-        </Transformer>
-      </Binding>
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
 
       <Binding Source="[Clock.Time]" Target="[TimeDate.Content]">
         <Conditions>
@@ -185,6 +182,17 @@
                             Visible="[Application.Config.ShowClock]" />
                     </Children>
                   </Panel>
+                </Children>
+              </Panel>
+              
+              <!-- Information Panel -->
+              <!--Information Panel Top Leftt-->
+              <Panel Name="BottomCenterInfoPanel">
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent, 1,-5" Left="Parent, 0.5,-300" Right="Parent,.5,300"  Horizontal="Center"/>
+                </LayoutInput>
+                <Children>
+                  <in:InfoMarquee Application="[Application]" Color="55,55,55" />
                 </Children>
               </Panel>
 
@@ -402,6 +410,9 @@
                 </LayoutInput>
               </bd:Backdrop4>
 
+              <!-- Initial Folder Backdrop -->
+              <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]" Visible="[Application.Config.ShowRootBackground]" LayoutInput="global://dtb:LI_Bg" />
+
               <!-- Main Background -->
               <Graphic Name="MainBG" Content="image://i:Background" Margins="-50,-20,-50,-20" Layout="Fill"/>
             </Children>
@@ -420,7 +431,7 @@
       <Color Name="FilterColor" Color="Black"/>
       <cor:Single Name="Alpha" Single="1" />
       <BooleanChoice Name="DisplayMax" BooleanChoice="$Required" />
-      <Size Name="Size" Size="225,50"/>
+      <Size Name="Size" Size="175,50"/>
     </Properties>
 
     <Locals>

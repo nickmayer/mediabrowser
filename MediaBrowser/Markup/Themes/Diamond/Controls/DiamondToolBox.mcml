@@ -13,6 +13,7 @@
       xmlns:gb="resx://MediaBrowser/MediaBrowser.Resources/GenreButton"
       xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
       xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
+      xmlns:ft="resx://MediaBrowser/MediaBrowser.Resources/FancyText"
     xmlns:me="Me">
 
   <!-- LAYOUT INPUTS -->
@@ -31,7 +32,7 @@
 
     <Rules>
       <!-- Title and Year -->
-      <Binding Source="[Item.ProductionYearString]" Target="[IYear.Content]" >
+      <!--<Binding Source="[Item.ProductionYearString]" Target="[IYear.Content]" >
         <Conditions>
           <Equality Source="[Item.ProductionYear]" ConditionOp="GreaterThan" Value="1900" />
         </Conditions>
@@ -48,6 +49,12 @@
         <Transformer>
           <FormatTransformer ToUpper="true"/>
         </Transformer>
+      </Binding>-->
+      
+      <Binding Source="[Item.NameDateString]" Target="[Label.Content]" >
+        <!--<Transformer>
+          <FormatTransformer ToUpper="true"/>
+        </Transformer>-->
       </Binding>
     </Rules>
     <Content>
@@ -57,7 +64,7 @@
           <FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="0,0" />
         </Layout>
         <Children>
-          <Panel Layout="Scale" MinimumSize="0,40"  >
+          <!--<Panel Layout="Scale" MinimumSize="0,40"  >
             <Children>
               <Panel Layout="HorizontalFlow">
                 <Children>
@@ -66,16 +73,31 @@
                 </Children>
               </Panel>
             </Children>
-          </Panel>
+          </Panel>-->
+          
+          <Graphic SizingPolicy="SizeToChildren">
+            <LayoutInput>
+              <AnchorLayoutInput Vertical="Center" Horizontal="Near"/>
+            </LayoutInput>
+            <Children>
+              <ft:FancyText AvailableSpaceInt="800" HasFocus="true"
+                            AllowMarquee="true" Name="Label"
+                            Font="Segoe Media Center, 24"
+                                Color="color://s:FontColorLight"
+                            />
+            </Children>
+          </Graphic>
           <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
             <Children>
               <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,2" />
             </Children>
-          </Clip>
+          </Clip>        
+          
         </Children>
       </Panel>
     </Content>
   </UI>
+
 
   <UI Name="DiamondDetailInfoBox">
     <Properties>
@@ -410,17 +432,18 @@
     </Properties>
 
     <Rules>
-      <!-- <Binding Source="[StudioItem.Item.Name]" Target="[SText.Content]" />-->
       <Binding Source="[StudioItem.Item.PrimaryImage]" Target="[SImage.Content]" />
     </Rules>
 
     <Content>
       <Panel>
         <Children>
-          <!--<Text Name="SText" Color="White" Font="font://f:MM_GenreFont" />-->
-          <Graphic Name="SImage" MaximumSize="75,75" MaintainAspectRatio="true"/><!---->
+          <Graphic Name="SImage" MaximumSize="75,75" MaintainAspectRatio="true"/>
         </Children>
       </Panel>
     </Content>
   </UI>
+
+
+    
 </Mcml>

@@ -95,12 +95,11 @@
         </Conditions>
       </Binding>
 
-
-      <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
-        <Transformer>
-          <BooleanTransformer Inverse="true"/>
-        </Transformer>
-      </Binding>
+      <!-- Backdrop Visbile Bindings -->
+      <Binding Source="[Application.Config.ShowRootBackground]" Target="[BG_InitialFolder.Visible]" />
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
+      
+      
       <Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <!-- Commands -->
@@ -511,6 +510,14 @@
                 </LayoutInput>
               </bd:Backdrop4>
 
+              <!-- Initial Folder Backdrop -->
+              <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]"
+                                          Visible="[Application.Config.ShowRootBackground]">
+                <LayoutInput>
+                  <FormLayoutInput Name="LI_Bg" Left="Parent,0,-50" Top="Parent,0,-20" Bottom="Parent,1,20" Right="Parent,1,50"/>
+                </LayoutInput>
+              </bd:InitialFolderBackground>
+
             </Children>
           </Clip>
         </Children>
@@ -647,7 +654,7 @@
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" />
       <ScrollingData Name="ScrollingData" LockedAlignment="0.0" LockedPosition="0.01"  />
 
-      <GridLayout Name="MyLayout" Orientation="Vertical" AllowWrap="true" Spacing="4,0" Repeat="Never"
+      <GridLayout Name="MyLayout" Orientation="Vertical" AllowWrap="true" Spacing="10,0" Repeat="Never"
                   RepeatGap="0" Rows="4" />
     </Locals>
     <Rules>
@@ -759,7 +766,8 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3" MinimumSize="[MinSize]" MaximumSize="[MinSize]">
+      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3" 
+               MinimumSize="[MinSize]" MaximumSize="[MinSize]" Margins="0,0,0,0">
         <Children>
           <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >
             <LayoutInput>

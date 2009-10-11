@@ -37,7 +37,7 @@
           
           <me:AudioCodec    Name="AudioCodec"   MaximumSize="[MaxIconSize]" />
           
-          <!--<Text Name="ItemType" Content="who knows?" Color="White" />-->
+         <!-- <Text Name="ItemType" Content="who knows?" Color="Yellow" />-->
         </Children>
       </Panel>
     </Content>
@@ -60,9 +60,11 @@
       </Binding>
 
       <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
-			
+
+      <Condition Source="[VideoCodec]" SourceValue="asf" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Asf" />
 			<Condition Source="[VideoCodec]" SourceValue="xvid" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Xvid" />
 			<Condition Source="[VideoCodec]" SourceValue="divx 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Divx" />
+      <Condition Source="[VideoCodec]" SourceValue="divx 4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Divx" />
       <Condition Source="[VideoCodec]" SourceValue="divx 3 low" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Divx" />
       <Condition Source="[VideoCodec]" SourceValue="h264" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_H264" />
       <Condition Source="[VideoCodec]" SourceValue="vc-1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Vc1" />
@@ -156,7 +158,7 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
+      <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />      
     </Content>
   </UI>
 
@@ -179,9 +181,9 @@
       <Condition Source="[MediaFormat]" SourceValue="bluray" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Media_Bluray" />
       <Condition Source="[MediaFormat]" SourceValue="hddvd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Media_Hddvd" />
       <Condition Source="[MediaFormat]" SourceValue="dvd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Media_Dvd" />
-      <!--<Condition Source="[MediaFormat]" SourceValue="mkv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_1851" />
-      <Condition Source="[MediaFormat]" SourceValue="avi" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_2391" />
-      <Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_2391" />-->
+      <Condition Source="[MediaFormat]" SourceValue="mkv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Media_Mkv" />
+      <Condition Source="[MediaFormat]" SourceValue="avi" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Media_Avi" />
+      <!--<Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:d_Aspect_2391" />-->
 
     </Rules>
 

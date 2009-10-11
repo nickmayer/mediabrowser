@@ -49,11 +49,7 @@
           <Invoke Target="[Application.Resume]" item="[Item]"/>
         </Actions>
       </Changed>
-      <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
-        <Transformer>
-          <BooleanTransformer Inverse="true"/>
-        </Transformer>
-      </Binding>
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
       <Condition Source="[Item.CanResume]" ConditionOp="Equals" SourceValue="false" Target="[ResumeMovieButton.Visible]" Value="false"/>
       <Binding Source="[Item.Overview]" Target="[Overview.Text]" />
       <Binding Source="[Item.Name]" Target="[TitleName.Content]" />

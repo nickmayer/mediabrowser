@@ -88,6 +88,7 @@
   <Image Name="HDType_1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_1080" />
   <Image Name="HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_720" />
   <!-- Diamond Media Info Images-->
+  <Image Name="d_Asf" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_asf" />
   <Image Name="d_Xvid" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_xvid" />
   <Image Name="d_Divx" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_divx" />
   <Image Name="d_Ac3" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_ac3" />
@@ -108,6 +109,8 @@
   <Image Name="d_Media_Bluray" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_bluray" />
   <Image Name="d_Media_Hddvd" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_hddvd" />
   <Image Name="d_Media_Dvd" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_dvd" />
+  <Image Name="d_Media_Avi" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_avi" />
+  <Image Name="d_Media_Mkv" Source="resx://MediaBrowser/MediaBrowser.Resources/d_media_mkv" />
 
   <Image Name="d_HDType_1080" Source="resx://MediaBrowser/MediaBrowser.Resources/d_hdtype_1080" />
   <Image Name="d_HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/d_hdtype_720" />

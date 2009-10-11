@@ -781,5 +781,26 @@ namespace MediaBrowser
                 _information = value;
             }
         }
+
+        public string MainBackdrop
+        {
+            get
+            {
+                string pngImage = this.Config.InitialFolder + "\\backdrop.png";
+                string jpgImage = this.Config.InitialFolder + "\\backdrop.jpg";
+
+                if (File.Exists(pngImage))
+                    return "file://"+ pngImage;
+                    //return new Image(pngImage);
+                else if (File.Exists(jpgImage))
+                {
+                   // Image x = new Image(jpgImage);
+                    return "file://" + jpgImage;
+                    //return new Image(jpgImage);
+                }
+                else
+                    return null;
+            }
+        }
     }
 }

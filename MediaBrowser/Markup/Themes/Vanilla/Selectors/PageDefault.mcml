@@ -100,7 +100,7 @@
       <Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Config.Theme]" ConditionOp="Equals" Value="Black"/>
-          <Equality Source="[Application.Config.TransparentBackground]" Value="false"/>
+          <Equality Source="[Application.Config.ShowThemeBackground]" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[MainBG.Content]" Value="image://vi:BackgroundBlack"/>
@@ -110,7 +110,7 @@
       <Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Config.Theme]" ConditionOp="Equals" Value="Default"/>
-          <Equality Source="[Application.Config.TransparentBackground]" Value="false"/>
+          <Equality Source="[Application.Config.ShowThemeBackground]" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[MainBG.Content]" Value="image://vi:BackgroundDefault"/>

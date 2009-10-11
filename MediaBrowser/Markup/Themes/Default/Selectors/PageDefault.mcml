@@ -222,11 +222,8 @@
 					<Set Target="[TypingHandler.EditableText.Value]" Value="" />
 				</Actions>
 			</Changed>
-			<Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
-				<Transformer>
-					<BooleanTransformer Inverse="true"/>
-				</Transformer>
-			</Binding>
+			<Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
+      
 			<Binding Source="[Application.ShowNowPlaying]" Target="[NowPlaying.Visible]" />
 			<Condition Source="[Folder.DisplayPrefs.IndexByChoice.Chosen!cor:String]" ConditionOp="Equals" SourceValue="none" Target="[SortOrdersBtn.Enabled]" Value="true"/>
 			<Condition Source="[Folder.DisplayPrefs.IndexByChoice.Chosen!cor:String]" ConditionOp="NotEquals" SourceValue="none" Target="[SortOrdersBtn.Enabled]" Value="false"/>

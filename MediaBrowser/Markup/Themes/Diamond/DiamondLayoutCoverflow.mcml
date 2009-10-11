@@ -34,7 +34,7 @@
       <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
       <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
-      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.3" Bottom="Parent, 1.15" />
+      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent, 0.15" Bottom="Parent, 1.45" />
       <AnchorLayoutInput Name="AnchorCustom" Horizontal="Fill" Top="Parent, 0,-50" Bottom="Parent, 1, 250" />
     </Locals>
 
@@ -118,24 +118,29 @@
             <LayoutInput>
               <AnchorLayoutInput Bottom="Parent, 1, -10" Right="Parent, 1, -20"/>
             </LayoutInput>
-          </mip:MediaInfoPanel>
-          
+          </mip:MediaInfoPanel>                 
+
           <!-- Bottom Clip -->
-          <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
+          <dtb:DiamondClipBottom >
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0,-50" Top="Parent,.8" Bottom="Parent,1,20" Right="Parent,1,50"/>
+            </LayoutInput>
+          </dtb:DiamondClipBottom>
           
           <!-- Coverflow Scroller -->
           <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">            
             <LayoutInput>
               <AnchorLayoutInput Horizontal="Fill" Top="Parent, .55" Bottom="Parent, 1, 125" />
             </LayoutInput>
-          </me:CoverflowScroller>         
-                   
+          </me:CoverflowScroller>
+
+          
+          
           <!-- Top Clip -->
           <dtb:DiamondClipTop LayoutInput="global://dtb:LI_ClipTop" />
           
           <!-- Backdrop -->
           <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[PreSelectedItem.BackdropImage]" Item="[PreSelectedItem]" LayoutInput="global://dtb:LI_Bg"/>
-          <!--<dtb:DiamondBG Name="BG_Art" Visible="[Application.Config.ShowBackdrop]" LayoutInput="global://dtb:LI_Bg" />-->
 
         </Children>
       </Panel>
@@ -159,10 +164,10 @@
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <IntRangedValue Name="NavCount" Value="0" />
-      <cor:Int32 Name="NormalKeyRepeat" Int32="100"/>
+      <cor:Int32 Name="NormalKeyRepeat" Int32="90"/>
       <!-- This must be less than anim delay -->
       <cor:Int32 Name="FastKeyRepeat" Int32="50"/>
-      <cor:Int32 Name="AnimDelay" Int32="150" />
+      <cor:Int32 Name="AnimDelay" Int32="100" />
       <!-- This must be greater than NormalKeyRepeat-->
       <cor:Int32 Name="SpeedUpDelay" Int32="2"/>
       <Command Name="ClosePopupPlay"/>
@@ -643,7 +648,7 @@
               <AnchorLayoutInput Top="FocusBg, 1, -5" />
             </LayoutInput>
             <Children>
-              <Panel Name="ConstraintPanel2" ColorFilter="Gray" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
+              <Panel Name="ConstraintPanel2" ColorFilter="75,75,75" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
                 <Layout>
                   <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
                 </Layout>

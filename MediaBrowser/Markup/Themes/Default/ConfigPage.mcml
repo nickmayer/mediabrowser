@@ -11,11 +11,12 @@
 	  xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
     xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/SpinnerText"
     xmlns:cs="resx://MediaBrowser/MediaBrowser.Resources/ColorSpinner"
-      xmlns:ss="resx://MediaBrowser/MediaBrowser.Resources/SimpleSpinner"
+    xmlns:ss="resx://MediaBrowser/MediaBrowser.Resources/SimpleSpinner"
     xmlns:rg="resx://MediaBrowser/MediaBrowser.Resources/RadioGroup"
 	  xmlns:anim="resx://MediaBrowser/MediaBrowser.Resources/Animations"
     xmlns:pv="resx://MediaBrowser/MediaBrowser.Resources/Pivot"
     xmlns:pe="resx://MediaBrowser/MediaBrowser.Resources/PINEdit"
+    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
 	  xmlns:me="Me"
 	  >
 
@@ -79,7 +80,7 @@
       <BooleanChoice Name="EnableRootPage" Value="[Application.Config.EnableRootPage]" />
       <BooleanChoice Name="EnableTraceLogging" Value="[Application.Config.EnableTraceLogging]" />
       <BooleanChoice Name="EnableTranscode360" Value="[Application.Config.EnableTranscode360]" />
-      <BooleanChoice Name="TransparentBackground" Value="[Application.Config.TransparentBackground]" />
+      <BooleanChoice Name="ShowThemeBackground" Value="[Application.Config.ShowThemeBackground]" />
       <BooleanChoice Name="EnableNestedMovieFolders" Value="[Application.Config.EnableNestedMovieFolders]" />
       <BooleanChoice Name="EnableMoviePlaylists" Value="[Application.Config.EnableMoviePlaylists]" />
       <BooleanChoice Name="EnableUpdates" Value="[Application.Config.EnableUpdates]" />
@@ -101,8 +102,8 @@
       <BooleanChoice Name="HideFocusFrame" Value="[Application.Config.HideFocusFrame]" />
       <BooleanChoice Name="StartDiamondMovieMinimal" Value="[Application.Config.StartDiamondMovieMinimal]" />
       <BooleanChoice Name="EnableDiamondEpisodeView" Value="[Application.Config.EnableDiamondEpisodeView]" />
-
-
+      <BooleanChoice Name="ShowRootBackground" Value="[Application.Config.ShowRootBackground]" />
+      
 
       <BooleanChoice Name="DefaultToFirstUnwatched" Value="[Application.Config.DefaultToFirstUnwatched]" />
       <BooleanChoice Name="AutoEnterSingleDirs" Value="[Application.Config.AutoEnterSingleDirs]" />
@@ -308,7 +309,7 @@
       <Binding Source="[EnableRootPage.Value]" Target="[Config.EnableRootPage]" />
       <Binding Source="[EnableTraceLogging.Value]" Target="[Config.EnableTraceLogging]" />
       <Binding Source="[EnableTranscode360.Value]" Target="[Config.EnableTranscode360]" />
-      <Binding Source="[TransparentBackground.Value]" Target="[Config.TransparentBackground]" />
+      <Binding Source="[ShowThemeBackground.Value]" Target="[Config.ShowThemeBackground]" />
       <Binding Source="[EnableNestedMovieFolders.Value]" Target="[Config.EnableNestedMovieFolders]" />
       <Binding Source="[EnableMoviePlaylists.Value]" Target="[Config.EnableMoviePlaylists]" />
       <Binding Source="[EnableUpdates.Value]" Target="[Config.EnableUpdates]" />
@@ -331,8 +332,8 @@
 
       <Binding Source="[StartDiamondMovieMinimal.Value]" Target="[Config.StartDiamondMovieMinimal]" />
       <Binding Source="[EnableDiamondEpisodeView.Value]" Target="[Config.EnableDiamondEpisodeView]" />
-
-
+      <Binding Source="[ShowRootBackground.Value]" Target="[Config.ShowRootBackground]" />
+      
 
       <Binding Source="[ThemeModel.Chosen!cor:String]" Target="[Config.Theme]" >
         <Conditions>
@@ -381,11 +382,10 @@
           <Set Target="[FullConfigNav.Visible]" Value="false" />
         </Actions>
       </Condition>
-      <Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
-        <Transformer>
-          <BooleanTransformer Inverse="true"/>
-        </Transformer>
-      </Binding>
+
+      <!-- Backdrop Visbile Bindings -->      
+      <Binding Source="[Application.Config.ShowRootBackground]" Target="[BG_InitialFolder.Visible]" />
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
 
       <Binding Source="[ViewThemeModel.Chosen!cor:String]" Target="[Config.ViewTheme]" />
       <Binding Source="[ShowConfigButton.Value]" Target="[Config.ShowConfigButton]" />
@@ -512,8 +512,7 @@
                   <Panel Layout="VerticalFlow" >
                     <Children>
                       <me:TextHeader Text="Global" />
-                      <cb:CheckBox Label="Enable Enhanced Home Screen" Checked="[EnableRootPage]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Transparent Background" Checked="[TransparentBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Enable Enhanced Home Screen" Checked="[EnableRootPage]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>                      
                       <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  FocusItem="[FocusItem]" Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
@@ -527,6 +526,9 @@
                       <ss:SimpleSpinner  Label="Poster Grid Spacing" Model="[GridSpacing]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                       <ss:SimpleSpinner  Label="Thumb Width Split" Model="[ThumbStripPosterWidth]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                       <cb:CheckBox Label="Show Backdrop on Supported Views" Checked="[ShowBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Show Initial Folder Background" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowRootBackground]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Show Theme Background" Checked="[ShowThemeBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      
                       <cb:CheckBox Label="Enable Advanced Commands" Checked="[EnableAdvancedCmds]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
 
                     </Children>
@@ -594,6 +596,8 @@
                       <me:TextHeader Text="Diamond Theme Settings" />
                       <cb:CheckBox   Label="Start Movie View in Minimal Mode" FocusItem="[FocusItem]" Margins="[CMargin]"   Checked="[StartDiamondMovieMinimal]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox   Label="Enable Episode View" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableDiamondEpisodeView]"  Font="font://f:CP_ConfigItemFont"/>
+                      
+                      
                     </Children>
                   </Panel>
                 </Children>
@@ -649,6 +653,16 @@
 
             </Children>
           </Panel>
+
+          <!-- Initial Folder Backdrop -->
+          <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]"
+                                      Visible="[Application.Config.ShowRootBackground]"
+                                      >
+            <LayoutInput>
+              <FormLayoutInput Name="LI_Bg" Left="Parent,0,-50" Top="Parent,0,-20" Bottom="Parent,1,20" Right="Parent,1,50"/>
+            </LayoutInput>
+          </bd:InitialFolderBackground>
+
 
           <Panel Name="MainBG" Layout="Fill" Margins="-50,-20,-150,-20" >
             <Children>

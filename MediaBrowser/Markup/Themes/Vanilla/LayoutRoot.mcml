@@ -90,12 +90,12 @@
         </Conditions>
       </Binding>
 
-      <!--<Binding Source="[Application.Config.TransparentBackground]" Target="[MainBG.Visible]">
+      <!--<Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]">
         <Transformer>
           <BooleanTransformer Inverse="true"/>
         </Transformer>
       </Binding>-->
-      <!--<Binding Source="[Application.Config.TransparentBackground]" Target="[MainBGFill.Visible]">
+      <!--<Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBGFill.Visible]">
         <Transformer>
           <BooleanTransformer Inverse="true"/>
         </Transformer>

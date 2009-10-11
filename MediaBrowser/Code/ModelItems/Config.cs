@@ -248,11 +248,11 @@ namespace MediaBrowser
             get { return this.data.ExtenderNativeTypes; }
             set { if (this.data.ExtenderNativeTypes != value) { this.data.ExtenderNativeTypes = value; Save(); FirePropertyChanged("ExtenderNativeTypes"); } }
         }
-        [Comment("TransparentBackground [Default Value - False]\n\tTrue: Enables transparent background.\n\tFalse: Use default Video Browser background.")]
-        public bool TransparentBackground
+        [Comment("ShowThemeBackground [Default Value - False]\n\tTrue: Enables transparent background.\n\tFalse: Use default Video Browser background.")]
+        public bool ShowThemeBackground
         {
-            get { return this.data.TransparentBackground; }
-            set { if (this.data.TransparentBackground != value) { this.data.TransparentBackground = value; Save(); FirePropertyChanged("TransparentBackground"); } }
+            get { return this.data.ShowThemeBackground; }
+            set { if (this.data.ShowThemeBackground != value) { this.data.ShowThemeBackground = value; Save(); FirePropertyChanged("ShowThemeBackground"); } }
         }
         [Comment("Example. If set to true the following will be treated as a movie and an automatic playlist will be created.\n\tIndiana Jones / Disc 1 / a.avi\n\tIndiana Jones / Disc 2 / b.avi")]
         public bool EnableNestedMovieFolders
@@ -591,7 +591,11 @@ namespace MediaBrowser
             get { return this.data.EnableDiamondEpisodeView; }
             set { if (this.data.EnableDiamondEpisodeView != value) { this.data.EnableDiamondEpisodeView = value; Save(); FirePropertyChanged("EnableDiamondEpisodeView"); } }
         }
-
+        public bool ShowRootBackground
+        {
+            get { return this.data.ShowRootBackground; }
+            set { if (this.data.ShowRootBackground != value) { this.data.ShowRootBackground = value; Save(); FirePropertyChanged("ShowRootBackground"); } }
+        }
         
         /* End of app specific settings*/
 

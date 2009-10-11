@@ -7,7 +7,8 @@
 	  xmlns:lde="resx://MediaBrowser/MediaBrowser.Resources/LayoutDetails"
 	  xmlns:lcf="resx://MediaBrowser/MediaBrowser.Resources/LayoutCoverflow"
 	  xmlns:lr="resx://MediaBrowser/MediaBrowser.Resources/LayoutRoot"
-	  xmlns:lts="resx://MediaBrowser/MediaBrowser.Resources/LayoutThumbStrip">
+	  xmlns:lts="resx://MediaBrowser/MediaBrowser.Resources/LayoutThumbStrip"
+    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop">
 
 	<UI Name="PageDetailArea">
 		<Properties>
@@ -107,6 +108,13 @@
 							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
 						</LayoutInput>
 					</lts:LayoutThumbStrip>
+
+          <!-- Initial Folder Backdrop -->
+          <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]" Visible="[Application.Config.ShowRootBackground]" >
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,-50" Top="Parent,0,-20" Bottom="Parent,1,10" Right="Parent,1,50"/>
+            </LayoutInput>
+          </bd:InitialFolderBackground>
 					
 				</Children>
 			</Panel>

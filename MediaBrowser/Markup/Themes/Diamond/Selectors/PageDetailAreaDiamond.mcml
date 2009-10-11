@@ -7,7 +7,8 @@
 	  xmlns:lde="resx://MediaBrowser/MediaBrowser.Resources/DiamondLayoutDetails"
 	  xmlns:lcf="resx://MediaBrowser/MediaBrowser.Resources/DiamondLayoutCoverflow"
 	  xmlns:lr="resx://MediaBrowser/MediaBrowser.Resources/LayoutRoot"
-	  xmlns:lts="resx://MediaBrowser/MediaBrowser.Resources/DiamondLayoutThumbStrip">
+	  xmlns:lts="resx://MediaBrowser/MediaBrowser.Resources/DiamondLayoutThumbStrip"
+    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop">
 
 	<UI Name="PageDetailAreaDiamond">
 		<Properties>
@@ -107,8 +108,15 @@
 							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
 						</LayoutInput>
 					</lts:DiamondLayoutThumbStrip>
-					
-				</Children>
+
+          <!-- Initial Folder Backdrop -->
+          <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]" Visible="[Application.Config.ShowRootBackground]" >
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,-50" Top="Parent,0,-20" Bottom="Parent,1,10" Right="Parent,1,50"/>
+            </LayoutInput>
+          </bd:InitialFolderBackground>
+          
+        </Children>
 			</Panel>
 		</Content>
 	</UI>

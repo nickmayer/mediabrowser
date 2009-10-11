@@ -63,6 +63,7 @@
 			
 			<Condition Source="[VideoCodec]" SourceValue="xvid" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Xvid" />
 			<Condition Source="[VideoCodec]" SourceValue="divx 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx" />
+      <Condition Source="[VideoCodec]" SourceValue="divx 4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx" />
       <Condition Source="[VideoCodec]" SourceValue="divx 3 low" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx" />
       <Condition Source="[VideoCodec]" SourceValue="h264" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H264" />
       <Condition Source="[VideoCodec]" SourceValue="vc-1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vc1" />

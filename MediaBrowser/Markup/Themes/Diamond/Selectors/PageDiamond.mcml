@@ -10,6 +10,7 @@
     xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
 	  xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
 	  xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailAreaDiamond"
+      
     xmlns:me="Me"
       >
 
@@ -23,6 +24,7 @@
     </Properties>
 
     <Locals>
+      
       <TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap" >
         <EditableText>
           <EditableText Value="" />
@@ -200,11 +202,7 @@
       </Changed>
 
       <Binding Source="[Application.ShowNowPlaying]" Target="[NowPlaying.Visible]" />
-      <Binding Source="[Application.Config.TransparentBackground]" Target="[Overlay.Visible]">
-        <Transformer>
-          <BooleanTransformer Inverse="true"/>
-        </Transformer>
-      </Binding>
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[Overlay.Visible]" />
 
     </Rules>
 
@@ -299,7 +297,8 @@
                   <FormLayoutInput Left="Parent,0,10" Bottom="Parent,1,20" />
                 </LayoutInput>
               </np:NowPlayingViewport>
-
+              
+              
               <Graphic Name="Overlay" Content="image://i:DiamondOverlayDarkAll">
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0,-50" Top="Parent,0,-20" Bottom="Parent,1,10" Right="Parent,1,50"/>
@@ -487,5 +486,7 @@
       </Graphic>
     </Content>
   </UI>
+
+  
 
 </Mcml>
