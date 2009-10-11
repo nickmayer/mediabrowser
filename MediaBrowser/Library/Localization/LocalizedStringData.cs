@@ -17,7 +17,7 @@ namespace MediaBrowser.Library.Localization
     public class LocalizedStringData
     {
 
-        private string version = "1.00"; //this is used to see if we have changed and need to re-save
+        private string version = "1.0001"; //this is used to see if we have changed and need to re-save
 
         public string FileName; //this is public so it will serialize and we know where to save ourselves
         public string Version = ""; //this will get saved so we can check it against us for changes

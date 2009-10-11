@@ -305,6 +305,7 @@
 
       <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
       <cor:Boolean Name="LeftAlign" Boolean="true" />
+      <cor:Boolean Name="MiniMode" Boolean="false" />
       <cor:String Name="Text" String="$Required" />
       <Size Name="Size" Size="0,0" />
       <Size Name="MinSize" Size="50,50" />
@@ -328,8 +329,20 @@
       <Binding Source="[Command.Available]" Target="[Input.KeyInteractive]" />
       <Binding Source="[Font]" Target="[Label.Font]" />
       <Binding Source="[Text]" Target="[Label.Content]" />
+      <Binding Source="[MiniMode]" Target="[Label.Visible]" />
 
       <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <!--<Rule>
+        <Conditions>
+          <Modified Source="[MiniMode]"/>
+          <Equality Source="[MiniMode]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="sound://sounds:Miniselect" />
+          <PlayAnimation Animation="animation://an:RotateRound" Target="[graphicBullet]"  />
+        </Actions>
+      </Rule>-->
 
       <Rule>
         <Conditions>
@@ -369,7 +382,7 @@
         </Conditions>
         <Actions>
           <Set Target="[imgButton.Content]" Value="[ImageFocus]"/>
-          <Set Target="[imgButton.MinimumSize]" Value="[Size]"/>
+          <!--<Set Target="[imgButton.MinimumSize]" Value="[Size]"/>-->
           <Set Target="[imgButton.MaximumSize]" Value="[Size]"/>
           <Set Target="[Label.Color]" Value="[FocusColor]" />
           <PlaySound Sound="sound://sounds:Focus" />
@@ -401,7 +414,7 @@
       <Panel>
         <Children>
 
-          <Graphic Name="imgButton" Content="[ImageNoFocus]" MinimumSize="[Size]"
+          <Graphic Name="imgButton" Content="[ImageNoFocus]" MinimumSize="[MinSize]"
                    MaximumSize="[Size]">
             <Layout>
               <FlowLayout Orientation="Horizontal" ItemAlignment="Near" />
