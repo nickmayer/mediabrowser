@@ -11,6 +11,7 @@ using MediaBrowser.Code.ModelItems;
 using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Util;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Threading;
 
 
 namespace MediaBrowser {
@@ -75,15 +76,31 @@ namespace MediaBrowser {
             lastWasDVD = true;
         }
 
-        public void PlayVideo(string path) {
-            if (lastWasDVD) mediaTransport = null;
-            PlayPath(path);
-            lastWasDVD = false;
-        }
 
         public virtual void PlayMedia(string path)
         {
+            if (lastWasDVD) mediaTransport = null;
             PlayPath(path, MediaType.Video, false);
+            lastWasDVD = false;
+
+            // vista bug - stop play stop required so we automate it ...
+            var version = System.Environment.OSVersion.Version;
+            if (version.Major == 6 && version.Minor == 0 && MediaBrowser.Library.Kernel.Instance.ConfigData.EnableVistaStopPlayStopHack) {
+                var mce = AddInHost.Current.MediaCenterEnvironment;
+                WaitForStream(mce);
+                //pause
+
+                Async.Queue(() => {
+                    Thread.Sleep(1000);
+                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
+                        mce.MediaExperience.Transport.PlayRate = 1;
+                        mce.MediaExperience.Transport.PlayRate = 2;
+                    
+                    });
+                });
+
+                
+            }
         }
 
         public virtual void QueueMedia(IEnumerable<string> paths)
@@ -107,12 +124,16 @@ namespace MediaBrowser {
         {
             var mce = AddInHost.Current.MediaCenterEnvironment;
             Logger.ReportInfo("Trying to seek position :" + new TimeSpan(position).ToString());
+            WaitForStream(mce);
+            mce.MediaExperience.Transport.Position = new TimeSpan(position);
+        }
+
+        private static void WaitForStream(MediaCenterEnvironment mce) {
             int i = 0;
             while ((i++ < 15) && (mce.MediaExperience.Transport.PlayState != Microsoft.MediaCenter.PlayState.Playing)) {
                 // settng the position only works once it is playing and on fast multicore machines we can get here too quick!
                 Thread.Sleep(100);
             }
-            mce.MediaExperience.Transport.Position = new TimeSpan(position);
         }
 
 

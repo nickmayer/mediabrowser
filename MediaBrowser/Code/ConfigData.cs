@@ -18,6 +18,7 @@ namespace MediaBrowser
     [Serializable]
     public class ConfigData
     {
+        public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;
         public bool IsFirstRun = true;
         public string ImageByNameLocation = "";
