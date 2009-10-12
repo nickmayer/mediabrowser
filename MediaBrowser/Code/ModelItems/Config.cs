@@ -591,11 +591,6 @@ namespace MediaBrowser
             get { return this.data.StartDiamondMovieMinimal; }
             set { if (this.data.StartDiamondMovieMinimal != value) { this.data.StartDiamondMovieMinimal = value; Save(); FirePropertyChanged("StartDiamondMovieMinimal"); } }
         }
-        public bool EnableDiamondEpisodeView
-        {
-            get { return this.data.EnableDiamondEpisodeView; }
-            set { if (this.data.EnableDiamondEpisodeView != value) { this.data.EnableDiamondEpisodeView = value; Save(); FirePropertyChanged("EnableDiamondEpisodeView"); } }
-        }
         public bool ShowRootBackground
         {
             get { return this.data.ShowRootBackground; }

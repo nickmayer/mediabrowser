@@ -56,7 +56,7 @@ namespace MediaBrowser.Library.Localization
         public string FontSizeDesc = "The Size of the Fonts to Use in MediaBrowser.  Won't Take Effect Until MediaBrowser is Restarted.";
         public string ShowConfigButtonDesc = "Show the Config Button on All Vanilla Screens.";
         public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable. (Vanilla Only)";
-        public string StartMovieViewinMinimalModeDesc = "Use the Minimized Display for Movie Detail Screens by Default.  (Diamond Only)";
+        public string AlwaysShowDetailsPageDesc = "Always display details page for media.";
         public string EnableEpisodeViewDesc = "Present a Detailed View for TV Episodes Instead of Directly Playing Them - Allows Delete. (Diamond Only)";
         public string SecurityPINDesc = "The 4-Digit Code For Access to Parental Controlled Items.";
         public string EnableParentalBlocksDesc = "Enable Parental Control.  Items Over The Designated Rating Will Be Hidden or Require PIN.";

@@ -101,7 +101,7 @@
       <BooleanChoice Name="ShowBackdrop" Value="[Application.Config.ShowBackdrop]" />
       <BooleanChoice Name="HideFocusFrame" Value="[Application.Config.HideFocusFrame]" />
       <BooleanChoice Name="StartDiamondMovieMinimal" Value="[Application.Config.StartDiamondMovieMinimal]" />
-      <BooleanChoice Name="EnableDiamondEpisodeView" Value="[Application.Config.EnableDiamondEpisodeView]" />
+      <BooleanChoice Name="AlwaysShowDetailsPage" Value="[Application.Config.AlwaysShowDetailsPage]" />
       <BooleanChoice Name="ShowRootBackground" Value="[Application.Config.ShowRootBackground]" />
       
 
@@ -331,7 +331,7 @@
       <Binding Source="[HideFocusFrame.Value]" Target="[Config.HideFocusFrame]" />
 
       <Binding Source="[StartDiamondMovieMinimal.Value]" Target="[Config.StartDiamondMovieMinimal]" />
-      <Binding Source="[EnableDiamondEpisodeView.Value]" Target="[Config.EnableDiamondEpisodeView]" />
+      <Binding Source="[AlwaysShowDetailsPage.Value]" Target="[Config.AlwaysShowDetailsPage]" />
       <Binding Source="[ShowRootBackground.Value]" Target="[Config.ShowRootBackground]" />
       
 
@@ -516,7 +516,7 @@
                       <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  FocusItem="[FocusItem]" Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-
+                      <cb:CheckBox   Label="Always Show Details Page" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[AlwaysShowDetailsPage]"  Font="font://f:CP_ConfigItemFont"/>
                     </Children>
                   </Panel>
 
@@ -594,8 +594,7 @@
                       <ss:SimpleSpinner    Label="Alpha Blending" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />
                       <me:TextHeader Text=" " />
                       <me:TextHeader Text="Diamond Theme Settings" />
-                      <cb:CheckBox   Label="Start Movie View in Minimal Mode" FocusItem="[FocusItem]" Margins="[CMargin]"   Checked="[StartDiamondMovieMinimal]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox   Label="Enable Episode View" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableDiamondEpisodeView]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox   Label="Start Movie View in Minimal Mode" FocusItem="[FocusItem]" Margins="[CMargin]"   Checked="[StartDiamondMovieMinimal]"  Font="font://f:CP_ConfigItemFont"/>                     
                       
                       
                     </Children>

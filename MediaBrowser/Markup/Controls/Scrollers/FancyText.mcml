@@ -144,7 +144,7 @@
                       <!-- Take our unit-vector (0 to 1) position animation -->
                       <!-- and magnify it by the width of our text content. -->
                       <TransformByAttributeAnimation Attribute="Width"
-                                                     Magnitude="1.1"
+                                                     Magnitude="1"
                                                      Filter="Position">
                         <ValueTransformer>
                           <MathTransformer Subtract="[AvailableSpace]"/>
