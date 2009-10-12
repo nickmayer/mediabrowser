@@ -62,5 +62,10 @@ namespace Configurator.Code {
 
             } 
         }
+
+        public IPlugin Find(IPlugin plugin)
+        {
+            return this.Items.ToList().Find(p => p.Filename == plugin.Filename);
+        }
     }
 }

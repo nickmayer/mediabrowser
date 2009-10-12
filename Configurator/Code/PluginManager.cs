@@ -49,7 +49,7 @@ namespace Configurator.Code {
             var source = PluginSourceCollection.Instance;
             foreach (var plugin in source.AvailablePlugins) {
                 availablePlugins.Add(plugin);
-                latestVersions.Add(plugin.Name, plugin.Version);
+                latestVersions.Add(plugin.Filename, plugin.Version);
             } 
         } 
 
@@ -90,7 +90,7 @@ namespace Configurator.Code {
 
         public System.Version GetLatestVersion(IPlugin plugin) {
             System.Version version;
-            latestVersions.TryGetValue(plugin.Name, out version);
+            latestVersions.TryGetValue(plugin.Filename, out version);
             return version;
         } 
 

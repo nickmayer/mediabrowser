@@ -579,6 +579,26 @@ folder: {0}
             }
         }
 
+        private void upgradePlugin_Click(object sender, RoutedEventArgs e) {
+            IPlugin plugin = pluginList.SelectedItem as IPlugin;
+            //get our original source so we can upgrade...
+            IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin);
+            if (newPlugin != null) {
+                PluginInstaller p = new PluginInstaller();
+                callBack done = new callBack(UpgradeFinished);
+                this.IsEnabled = false;
+                p.InstallPlugin(newPlugin, progress, this, done);
+            }
+        }
+
+        private delegate void callBack();
+
+        public void UpgradeFinished()
+        {
+            //called when the upgrade process finishes - we just hide progress bar and re-enable
+            this.IsEnabled = true;
+            progress.Visibility = Visibility.Hidden;
+        }
 
         private void addExtenderFormat_Click(object sender, RoutedEventArgs e)
         {
@@ -1049,7 +1069,8 @@ folder: {0}
 
         private void configurePlugin_Click(object sender, RoutedEventArgs e)
         {
-            ((Plugin)pluginList.SelectedItem).Configure();
+            if (pluginList.SelectedItem != null)
+                ((Plugin)pluginList.SelectedItem).Configure();
         }
 
         private void podcastDetails(bool display)

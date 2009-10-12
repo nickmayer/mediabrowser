@@ -54,7 +54,7 @@
   <ItemGroup>
     <Reference Include="MediaBrowser, Version=2.1.1.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MB Theme\MediaBrowser\bin\Release\MediaBrowser.dll</HintPath>
+      <HintPath>..\MediaBrowser\bin\Release\MediaBrowser.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Windows.Design, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore">
@@ -147,6 +147,7 @@
       <DependentUpon>AddPodcastForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Code\BrowseForFolder.cs" />
+    <Compile Include="Code\PluginInstaller.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\FolderBrowser.cs">
       <SubType>Component</SubType>

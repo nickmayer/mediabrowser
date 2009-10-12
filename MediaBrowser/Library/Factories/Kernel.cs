@@ -323,6 +323,8 @@ namespace MediaBrowser.Library {
 
             var plugin = Plugin.FromFile(target, true);
             plugin.Init(this);
+            IPlugin pi = Plugins.Find(p => p.Name == plugin.Name);
+            if (pi != null) Plugins.Remove(pi); //we were updating
             Plugins.Add(plugin);
         }
     }

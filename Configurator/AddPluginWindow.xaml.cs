@@ -36,36 +36,19 @@ namespace Configurator {
         private void InstallClick(object sender, RoutedEventArgs e) {
             InstallButton.IsEnabled = false;
             this.progress.Visibility = Visibility.Visible;
-            FakeProgress();
-            IPlugin plugin = pluginList.SelectedItem as IPlugin;
-            Async.Queue( () => {
-                PluginManager.Instance.InstallPlugin(plugin); 
-            },
-            () => {
-                StopFakeProgress();
-                Dispatcher.Invoke(DispatcherPriority.Background,(MethodInvoker)this.Close); 
-            });
+            PluginInstaller p = new PluginInstaller();
+            callBack done = new callBack(InstallFinished);
+            p.InstallPlugin(pluginList.SelectedItem as IPlugin, progress, this, done);
 
         }
 
-        ManualResetEvent done = new ManualResetEvent(false);
-        ManualResetEvent exited = new ManualResetEvent(false);
+        private delegate void callBack();
 
-        private void StopFakeProgress() {
-            done.Set();
-            while (!exited.WaitOne()) ; 
+        public void InstallFinished()
+        {
+            //called when the install is finished - we want to close
+            this.Close();
         }
 
-        private void FakeProgress() {
-            Async.Queue(() => {
-                int i = 0;
-                while (!done.WaitOne(100,false)) {
-                    i += 10;
-                    i = i % 100;
-                    Dispatcher.Invoke(DispatcherPriority.Background, (MethodInvoker)(() => { progress.Value = i; }));
-                }
-                exited.Set();
-            });
-        }
     }
 }
