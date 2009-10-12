@@ -178,7 +178,7 @@ namespace MediaBrowser.Library.Metadata {
                 }
             }
             if (changed) {
-                if (force)
+                if (!force)
                     ClearItem(item);
                 foreach (var provider in providers)
                     Serializer.Merge(provider.Item, item);
