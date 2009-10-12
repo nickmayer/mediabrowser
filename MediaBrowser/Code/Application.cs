@@ -49,6 +49,7 @@ namespace MediaBrowser
         private static object syncObj = new object();
         private bool navigatingForward;
         private IPlaybackController currentPlaybackController = null;
+        private static string _background;
 
         public bool NavigatingForward
         {
@@ -829,6 +830,7 @@ namespace MediaBrowser
             }
         }
 
+        
         public string MainBackdrop
         {
             get
@@ -836,17 +838,25 @@ namespace MediaBrowser
                 string pngImage = this.Config.InitialFolder + "\\backdrop.png";
                 string jpgImage = this.Config.InitialFolder + "\\backdrop.jpg";
 
-                if (File.Exists(pngImage))
-                    return "file://"+ pngImage;
-                    //return new Image(pngImage);
-                else if (File.Exists(jpgImage))
+                if (!string.IsNullOrEmpty(_background))
                 {
-                   // Image x = new Image(jpgImage);
-                    return "file://" + jpgImage;
-                    //return new Image(jpgImage);
+                    return _background;
                 }
                 else
-                    return null;
+                {
+                    if (File.Exists(pngImage))
+                    {
+                        _background = "file://" + pngImage;
+                        return _background;
+                    }
+                    else if (File.Exists(jpgImage))
+                    {
+                        _background = "file://" + jpgImage;
+                        return _background;
+                    }
+                    else
+                        return null;
+                }
             }
         }
     }

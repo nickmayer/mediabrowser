@@ -118,7 +118,7 @@
     <Content>
       <Panel Name="InfoPanel" >
         <Layout>
-          <FlowLayout Orientation="Vertical" ItemAlignment="Far" Spacing="2,2"/>
+          <FlowLayout Orientation="Vertical" ItemAlignment="Near" Spacing="2,2"/>
         </Layout>
         <Children>
           <Text Name="TxtSubtitle" Color="LightGray" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>

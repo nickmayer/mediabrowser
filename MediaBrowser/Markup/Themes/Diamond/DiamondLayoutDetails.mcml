@@ -136,7 +136,7 @@
           <!-- Details information -->
           <dtb:DiamondDetailInfoBox Name="DiamondTopInfoBox" Item="[Item.SelectedChild]" Application="[Application]">
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0.2"  Bottom="Parent, 0.5,-10" Left="Parent,.3,10" Right="Parent, .58"/>
+              <AnchorLayoutInput Top="Parent,0.2" Left="Parent,.3,15" Right="Parent, .58"/>
             </LayoutInput>
           </dtb:DiamondDetailInfoBox>
 

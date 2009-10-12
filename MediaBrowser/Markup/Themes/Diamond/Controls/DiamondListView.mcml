@@ -175,7 +175,11 @@
           <FormatTransformer ToUpper="true"/>
         </Transformer>
       </Binding>
-      <Binding Source="[Item.HaveWatched]" Target="[TickIndicator.Visible]" />
+      <Binding Source="[Item.HaveWatched]" Target="[TickIndicator.Visible]" >
+        <Conditions>
+          <Equality Source="[Application.Config.EnableListViewTicks]" Value="true" />
+        </Conditions>
+      </Binding>
 
       <!--<Changed Source="[Item.HaveWatched]">
         <Conditions>

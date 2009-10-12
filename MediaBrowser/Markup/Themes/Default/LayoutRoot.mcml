@@ -720,6 +720,7 @@
     </Properties>
 
     <Locals>
+      <Image Name="Tick" Image="image://i:Tick"/>
       <ClickHandler Name="Clicker"/>
       <cor:Int32 Name="DisplayCount" Int32="20" />
     </Locals>
@@ -731,6 +732,12 @@
       <Binding Source="[Item.PreferredImage]" Target="[ItemPoster.Content]" />
       <Binding Source="[Item.LongName]" Target="[Txt1.Content]" />
       <Binding Source="[Item.CreatedDateString]" Target="[Txt2.Content]" />
+      <Binding Source="[Item.HaveWatched]" Target="[TickIndicator.Visible]" >
+        <Conditions>
+          <Equality Source="[Application.Config.ShowWatchTickInPosterView]" Value="true" />
+        </Conditions>
+      </Binding>
+      
       <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <Condition Source="[Index.Value]" ConditionOp="GreaterThan" SourceValue="[DisplayCount]" Target="[Bg.Alpha]" Value="0" />
@@ -743,6 +750,7 @@
           <Set Target="[Bg.Content]" Value="image://i:BlankImage" />
           <Set Target="[Txt1.Color]" Value="color://s:FontColorDark" />
           <Set Target="[Txt2.Color]" Value="color://s:FontColorDark" />
+          <Set Target="[TickIndicator.ColorFilter]" Value="color://s:FontColorDark" />
         </Actions>
       </Changed>
 
@@ -754,6 +762,7 @@
           <Set Target="[Bg.Content]" Value="image://me:HiliteBtn" />
           <Set Target="[Txt1.Color]" Value="color://s:FontColorLight" />
           <Set Target="[Txt2.Color]" Value="color://s:FontColorMedium" />
+          <Set Target="[TickIndicator.ColorFilter]" Value="color://s:FontColorMedium" />
         </Actions>
       </Changed>
 
@@ -789,7 +798,12 @@
             </LayoutInput>
             <Children>
               <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="Segoe Media Center, 20" />
-              <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 16" Margins="50,0,0,0" />
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 16" Margins="50,0,0,0" />
+                  <Graphic Name="TickIndicator" ColorFilter="color://s:FontColorDark" Visible="false" Content="[Tick]" Margins="20,0,0,0" />
+                </Children>
+              </Panel>
             </Children>
           </Panel>
         </Children>
