@@ -370,7 +370,7 @@ namespace MediaBrowser
         private bool showNowPlaying = true;
         public bool ShowNowPlaying
         {
-            get { return this.showNowPlaying; }
+            get { return this.showNowPlaying && (MediaCenterEnvironment.MediaExperience != null); }
             set { }
         }
 
@@ -380,26 +380,44 @@ namespace MediaBrowser
                 string showName = "";
                 try {
 
-                    var name  = MediaCenterEnvironment.MediaExperience.MediaMetadata["Name"] as string;
-                    if (name != null && name.Contains(".wpl")) {
-                        int start = name.LastIndexOf('/') + 1;
-                        if (start < 0) start = 0;
-                        int finish = name.LastIndexOf(".wpl");
-                        name = name.Substring(start, finish - start);
-                    } else {
-                        if (name.StartsWith("dvd")) {
+                    string name = null;
+
+                    // the API works in win7 and is borked on Vista.
+                    if (MediaCenterEnvironment.MediaExperience.MediaMetadata.ContainsKey("Name"))
+                    {
+                        name = MediaCenterEnvironment.MediaExperience.MediaMetadata["Name"] as string;
+                        if (name != null && name.Contains(".wpl"))
+                        {
                             int start = name.LastIndexOf('/') + 1;
                             if (start < 0) start = 0;
-                            name = name.Substring(start);
-                        } else {
-                            name = null;
+                            int finish = name.LastIndexOf(".wpl");
+                            name = name.Substring(start, finish - start);
+                        }
+                        else
+                        {
+                            if (name.StartsWith("dvd"))
+                            {
+                                int start = name.LastIndexOf('/') + 1;
+                                if (start < 0) start = 0;
+                                name = name.Substring(start);
+                            }
+                            else
+                            {
+                                name = null;
+                            }
                         }
                     }
 
                     showName = name ?? MediaCenterEnvironment.MediaExperience.MediaMetadata["Title"] as string;
 
-                } catch(Exception e) {
+                    // playlist fix {filename without extension)({playlist name})
+                    int lastParan = showName.LastIndexOf('(');
+                    if (lastParan > 0) {
+                        showName = showName.Substring(lastParan+1, showName.Length - (lastParan + 2)).Trim();
+                    }
 
+                } catch(Exception e) {
+                    showName = "Unknown";
                     Logger.ReportException("Something strange happend while getting media name, please report to community.mediabrowser.tv", e);
                     // never crash here
 

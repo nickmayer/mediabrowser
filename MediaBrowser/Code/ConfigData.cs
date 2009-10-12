@@ -19,7 +19,6 @@ namespace MediaBrowser
     public class ConfigData
     {
         // this makes sure the now playing window has a decent title always
-        public bool AlwaysCreatePlayList = true;
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;

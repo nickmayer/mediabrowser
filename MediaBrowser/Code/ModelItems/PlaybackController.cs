@@ -84,14 +84,6 @@ namespace MediaBrowser {
             PlayPath(path, MediaType.Video, false);
             lastWasDVD = false;
 
-            /*
-            WaitForStream(AddInHost.Current.MediaCenterEnvironment);
-            foreach (var item in AddInHost.Current.MediaCenterEnvironment.MediaExperience.MediaMetadata) {
-                Debug.WriteLine(item.Key);
-                Debug.WriteLine(item.Value);
-            }
-             */
-
             // vista bug - stop play stop required so we automate it ...
             var version = System.Environment.OSVersion.Version;
             if (version.Major == 6 && version.Minor == 0 && MediaBrowser.Library.Kernel.Instance.ConfigData.EnableVistaStopPlayStopHack) {
@@ -100,7 +92,7 @@ namespace MediaBrowser {
                 //pause
 
                 Async.Queue(() => {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
                         mce.MediaExperience.Transport.PlayRate = 1;
                         mce.MediaExperience.Transport.PlayRate = 2;

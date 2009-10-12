@@ -98,7 +98,7 @@ namespace MediaBrowser.Library.Playables
 
             return video != null 
                 && !video.ContainsRippedMedia 
-                && ( video.VideoFiles.Count() > 1 || Kernel.Instance.ConfigData.AlwaysCreatePlayList );
+                && video.VideoFiles.Count() > 1;
         }
 
         protected override void PlayInternal(bool resume)

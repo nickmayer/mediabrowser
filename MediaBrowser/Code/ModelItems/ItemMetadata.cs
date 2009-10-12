@@ -7,6 +7,7 @@ using Microsoft.MediaCenter.UI;
 using System.Threading;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Metadata;
+using MediaBrowser.Library.Extensions;
 
 namespace MediaBrowser.Library {
     partial class Item {
@@ -219,7 +220,8 @@ namespace MediaBrowser.Library {
                     }
 
                     actors = actors.
-                        Distinct().
+                        Where(actor => actor != null && actor.Name != null).
+                        Distinct(actor => actor.Name.ToLower().Trim()).
                         Where(actor => actor.Name != null && actor.Name.Trim().Length > 0)
                         .ToList();
 
