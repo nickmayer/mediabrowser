@@ -591,7 +591,7 @@ namespace MediaBrowser
             if (item.BaseItem is Show)
             {
                 if ((item.HasDataForDetailPage && item.BaseItem is Movie) || 
-                    Kernel.Instance.ConfigData.AlwaysShowDetailsPage)
+                    this.Config.AlwaysShowDetailsPage)
                 {
                     // go to details screen 
                     Dictionary<string, object> properties = new Dictionary<string, object>();

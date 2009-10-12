@@ -50,7 +50,7 @@
       <FormLayoutInput Name="FullBG" Left="Parent,0,5" Right="Parent,1,-5" Top="Parent,0.15,-15" Bottom="Parent,1,-75"/>
       <FormLayoutInput Name="SmallBG" Left="Parent,0,5" Right="Parent,0,85" Top="Parent,0.15,-15" Bottom="Parent,0.15,325"/>
 
-      <Timer Name="NavTimer" AutoRepeat="false" Enabled="true" Interval="500"  />
+      <Timer Name="NavTimer" AutoRepeat="false" Enabled="true" Interval="250"  />
     </Locals>
 
     <Rules>
