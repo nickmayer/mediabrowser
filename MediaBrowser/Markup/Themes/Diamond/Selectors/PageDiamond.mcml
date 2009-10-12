@@ -292,7 +292,7 @@
               </pda:PageDetailAreaDiamond>
 
               <!-- Now Playing View -->
-              <np:NowPlayingViewport Name="NowPlaying">
+              <np:NowPlayingViewport Name="NowPlaying" Application="[Application]">
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0,10" Bottom="Parent,1,20" />
                 </LayoutInput>

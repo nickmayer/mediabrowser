@@ -375,6 +375,40 @@ namespace MediaBrowser
         }
 
 
+        public string NowPlayingText {
+            get {
+                string showName = "";
+                try {
+
+                    var name  = MediaCenterEnvironment.MediaExperience.MediaMetadata["Name"] as string;
+                    if (name != null && name.Contains(".wpl")) {
+                        int start = name.LastIndexOf('/') + 1;
+                        if (start < 0) start = 0;
+                        int finish = name.LastIndexOf(".wpl");
+                        name = name.Substring(start, finish - start);
+                    } else {
+                        if (name.StartsWith("dvd")) {
+                            int start = name.LastIndexOf('/') + 1;
+                            if (start < 0) start = 0;
+                            name = name.Substring(start);
+                        } else {
+                            name = null;
+                        }
+                    }
+
+                    showName = name ?? MediaCenterEnvironment.MediaExperience.MediaMetadata["Title"] as string;
+
+                } catch(Exception e) {
+
+                    Logger.ReportException("Something strange happend while getting media name, please report to community.mediabrowser.tv", e);
+                    // never crash here
+
+                }
+                return showName;
+            }
+        }
+
+
         public string BreadCrumbs
         {
             get
@@ -487,6 +521,8 @@ namespace MediaBrowser
                     show.Actors.Exists(a => a.Name == person.Name)),
                     person.Name);
 
+            index.Name = item.Name;
+
             Navigate(ItemFactory.Instance.Create(index));
         }
 
@@ -498,6 +534,8 @@ namespace MediaBrowser
             var index = searchStart.Search(
                 ShowFinder(show => show.Genres == null ? false : show.Genres.Contains(genre)),
                 genre);
+
+            index.Name = genre;
 
             Navigate(ItemFactory.Instance.Create(index));
         }
@@ -511,6 +549,8 @@ namespace MediaBrowser
             var index = searchStart.Search(
                 ShowFinder(show => show.Directors == null ? false : show.Directors.Contains(director)),
                 director);
+
+            index.Name = director;
 
             Navigate(ItemFactory.Instance.Create(index));
         }
@@ -530,10 +570,9 @@ namespace MediaBrowser
                 return;
             }
 
-            if (item.BaseItem is Movie)
+            if (item.BaseItem is Show)
             {
-
-                if (item.HasDataForDetailPage)
+                if (item.HasDataForDetailPage || Kernel.Instance.ConfigData.AlwaysShowDetailsPage)
                 {
                     // go to details screen 
                     Dictionary<string, object> properties = new Dictionary<string, object>();
@@ -544,18 +583,7 @@ namespace MediaBrowser
                 }
             }
 
-            // JAS *TEMP CODE* For Diamond Episode testing
-            if (item.BaseItem is Episode && Config.ViewTheme.ToLowerInvariant() == "diamond"
-                && Config.EnableDiamondEpisodeView == true)
-            {
-                // go to details screen 
-                Dictionary<string, object> properties = new Dictionary<string, object>();
-                properties["Application"] = this;
-                properties["Item"] = item;
-                session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/MovieDetailsPage", properties);
-                return;
-            }
-
+       
             MediaBrowser.Library.FolderModel folder = item as MediaBrowser.Library.FolderModel;
             if (folder != null)
             {

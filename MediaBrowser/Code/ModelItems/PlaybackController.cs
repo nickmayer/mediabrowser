@@ -70,6 +70,7 @@ namespace MediaBrowser {
             governatorThread.Start();
         }
 
+
         bool lastWasDVD = true;
         public virtual void PlayDVD(string path) {
             PlayPath(path);
@@ -82,6 +83,14 @@ namespace MediaBrowser {
             if (lastWasDVD) mediaTransport = null;
             PlayPath(path, MediaType.Video, false);
             lastWasDVD = false;
+
+            /*
+            WaitForStream(AddInHost.Current.MediaCenterEnvironment);
+            foreach (var item in AddInHost.Current.MediaCenterEnvironment.MediaExperience.MediaMetadata) {
+                Debug.WriteLine(item.Key);
+                Debug.WriteLine(item.Value);
+            }
+             */
 
             // vista bug - stop play stop required so we automate it ...
             var version = System.Environment.OSVersion.Version;

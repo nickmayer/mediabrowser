@@ -21,9 +21,9 @@ namespace MediaBrowser.Library.Factories {
         {
             playableItems = new Dictionary<CanPlay, Type>();
             PlayableItems.Add(PlayableExternal.CanPlay, typeof(PlayableExternal));
+            PlayableItems.Add(PlayableMultiFileVideo.CanPlay, typeof(PlayableMultiFileVideo));
             PlayableItems.Add(PlayableVideoFile.CanPlay, typeof(PlayableVideoFile));
             PlayableItems.Add(PlayableIso.CanPlay, typeof(PlayableIso));
-            PlayableItems.Add(PlayableMultiFileVideo.CanPlay, typeof(PlayableMultiFileVideo));
             PlayableItems.Add(PlayableDvd.CanPlay, typeof(PlayableDvd));
         }
 

@@ -22,6 +22,11 @@ namespace MediaBrowser
     {
         private ConfigData data;
 
+        public bool AlwaysShowDetailsPage {
+            get { return this.data.AlwaysShowDetailsPage; }
+            set { if (this.data.AlwaysShowDetailsPage != value) { this.data.AlwaysShowDetailsPage = value; Save(); FirePropertyChanged("AlwaysShowDetailsPage"); } }
+        }
+
         public int ParentalUnlockPeriod
         {
             get { return this.data.ParentalUnlockPeriod; }

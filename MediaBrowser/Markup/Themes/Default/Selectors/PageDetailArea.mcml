@@ -56,7 +56,6 @@
 			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="CoverFlow" Target="[CoverFlow.Visible]" Value="true" />
 			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="CoverFlow" Target="[CoverFlow.Visible]" Value="false" />
 
-
 		</Rules>
 
 		<Content>
@@ -84,7 +83,7 @@
 						</LayoutInput>
 					</lde:LayoutDetails>
 
-					<lpo:LayoutPoster Name="PosterView" Visible="false" Application="[Application]" Folder="[Folder]"  >
+					<lpo:LayoutPoster Name="PosterView" Visible="false" Application="[Application]" Folder="[Folder]">
 						<LayoutInput>
 							<FormLayoutInput Horizontal="Fill" Top="Parent,0,130" Bottom="Parent,1" />
 						</LayoutInput>

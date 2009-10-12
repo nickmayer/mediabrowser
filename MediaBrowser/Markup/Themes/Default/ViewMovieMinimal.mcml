@@ -38,21 +38,30 @@
       <Choice Name="Model">
         <Options>
           <cor:String String="General" />
+        </Options>
+      </Choice>
+      <Choice Name="ModelWithActors">
+        <Options>
+          <cor:String String="General" />
           <cor:String String="Actors" />
         </Options>
       </Choice>
+      
       <Color Name="FilterColor" Color="color://s:FilterColor" />
     </Locals>
 
     <Rules>
-      <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true">
+      <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true" ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Item.HasBackdropImage]" Value="true"/>
+          <Equality Source="[Item.ItemTypeString]" Value="Movie"/>
         </Conditions>
         <Actions>
           <Set Value="false" Target="[Preview.Visible]"/>
+          <Set Target="[BackdropPanel.Alpha]" Value="1"/>
         </Actions>
       </Changed>
+
       
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" /> 
       <Binding Source="[Item.Name]" Target="[TitleName.Content]" />
@@ -84,6 +93,8 @@
       </Rule>      
 
       <Condition Source="[Item.Actors.Count]" ConditionOp="LessThan" SourceValue="1" Target="[ActorScroller.Visible]" Value="false" />
+      <Condition Source="[Item.Actors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[Model]" Value="[ModelWithActors]" />
+      <Condition Source="[Item.Actors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[FullConfigNav.Model]" Value="[ModelWithActors]" />
 
 
       <!-- Show and hide Selectors -->
@@ -101,7 +112,7 @@
           <Clip Name="TitleText" FadeSize="40" Orientation="Vertical" FadeAmount="0.7" NearOffset="-25"
                 CenterPointPercent="-100,-100,0">
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0,25" Left="Parent, 0.2"  Right="Parent,1"
+              <AnchorLayoutInput Top="Parent,0,25" Left="Parent, 0.2"  Right="Parent,0.98"
                                  Horizontal="Far"/>
             </LayoutInput>
             <Children>
@@ -207,22 +218,26 @@
             </LayoutInput>
           </ColorFill>
 
-          <!-- Movie Backdrop -->
-          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]">
-            <LayoutInput>
-              <FormLayoutInput Top="Parent,0,-20" Left="Parent,0,-50" Bottom="Parent,1,10" Right="Parent,1,50" />
-            </LayoutInput>
-          </bd:Backdrop4>
-
           <!-- Poster (large movie pick) -->
-          <ColorFill Visible="true" Name="PosterPanel" Layout="VerticalFlow" MaximumSize="317,444" Content="Black" Padding="1,1,1,1">
+          <ColorFill Visible="true" Name="PosterPanel" Layout="VerticalFlow" MaximumSize="1000,350" Content="Transparent" Padding="1,1,1,1">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,.97,-245" Right="Parent,.97" Bottom="ScreenBox, 0, -10" />
+              <FormLayoutInput Right="Parent,.97" Bottom="ScreenBox, 0, -10" />
             </LayoutInput>
             <Children>
               <Graphic Name="Preview" MaintainAspectRatio="true" Content="[Item.PrimaryImage]"
 									 SizingPolicy="SizeToConstraint" >
               </Graphic>
+            </Children>
+          </ColorFill>
+
+          <!-- Movie Backdrop -->
+
+          <ColorFill Visible="true" Name="BackdropPanel" Content="Transparent" Alpha="0.2">
+            <LayoutInput>
+              <FormLayoutInput Top="Parent,0,-20" Left="Parent,0,-50" Bottom="Parent,1,10" Right="Parent,1,50" />
+            </LayoutInput>
+            <Children>
+                <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]"/>
             </Children>
           </ColorFill>
 

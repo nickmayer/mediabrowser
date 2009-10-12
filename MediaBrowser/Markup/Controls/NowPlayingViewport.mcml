@@ -2,11 +2,67 @@
       xmlns:a="assembly://MediaBrowser/MediaBrowser"
       xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
       xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+      xmlns:s="file://Styles_DoNotEdit.mcml"
+      xmlns:f="file://Fonts_DoNotEdit.mcml"
+       xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
       >
 
   <UI Name="NowPlayingViewport">
+    <Properties>
+      <a:Application Name="Application" Application="$Required" />
+      <BooleanChoice Name="TextMode" Value="false"/>
+    </Properties>
+    <Locals>
+      <Command Name="FullScreenCmd"/>
+    </Locals>
+    <Rules>
+
+      <Binding Target="[ShowName.Text]" Source="[Application.NowPlayingText]"/>
+
+      
+      <Changed InitialEvaluate="true" Source="[TextMode.Value]">
+        <Conditions>
+          <Equality Source="[TextMode.Value]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[StandardNPV.Visible]" Value="false"/>
+          <Set Target="[TextNPV.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed InitialEvaluate="true" Source="[TextMode.Value]">
+        <Conditions>
+          <Equality Source="[TextMode.Value]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[StandardNPV.Visible]" Value="true"/>
+          <Set Target="[TextNPV.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+      
+      
+      <Rule>
+        <Conditions>
+          <Modified Source="[FullScreenCmd.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="sound://sd:Select" />
+          <Invoke Target="[Application.PlaybackController.GoToFullScreen]"/>
+        </Actions>
+      </Rule>
+    </Rules>
     <Content>
-      <NowPlaying ShowFullMetadata="OnFocus"  SnapToDefaultPosition="false"/>
+      <Panel>
+        <Children>
+          <NowPlaying Name="StandardNPV" ShowFullMetadata="OnFocus"  SnapToDefaultPosition="false"/>
+          <Panel Layout="HorizontalFlow" Margins="40,0,0,40" Visible="false" Name="TextNPV">
+            <Children>
+              <Text  Margins="0,5,0,0" Content="now playing: " Font="font://f:CP_ButtonFont"  Color="color://s:FontColorDark"/>
+              <sb:SimpleButton LeftAlign="true" Name="ShowName" Text="This is the show" Color="color://s:FontColorMedium" Command="[FullScreenCmd]"  Size="800,50" Font="font://f:CP_ButtonFont"/>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
     </Content>
   </UI>
 

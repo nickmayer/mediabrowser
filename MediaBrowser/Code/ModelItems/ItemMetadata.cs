@@ -193,29 +193,59 @@ namespace MediaBrowser.Library {
         public List<ActorItemWrapper> Actors
         {
             get {
-                List<ActorItemWrapper> actors = new List<ActorItemWrapper>();
+
+                List<Actor> actors = new List<Actor>();
+
                 var show = baseItem as Show;
-                if (show != null && show.Actors != null) {
-                    foreach (var actor in show.Actors) {
-                        actors.Add(new ActorItemWrapper(actor, this.PhysicalParent));
-                    }
-                    Async.Queue(() =>
-                    {
-                        foreach (var actor in show.Actors) {
-                            if (actor.Person.RefreshMetadata(MetadataRefreshOptions.FastOnly)) {
-                                Kernel.Instance.ItemRepository.SaveItem(actor.Person);
-                            }
+                if (show != null) {
+
+                    var episode = show as Episode;
+                    if (episode != null) {
+
+                        var series = episode.Series;
+                        var season = episode.Season;
+
+                        if (series != null && series.Actors != null) {
+                            actors.AddRange(series.Actors);
                         }
 
-                        foreach (var actor in show.Actors) {
-                            if (actor.Person.RefreshMetadata()) {
-                                Kernel.Instance.ItemRepository.SaveItem(actor.Person);
-                            }
+                        if (season != null && season.Actors != null) {
+                            actors.AddRange(season.Actors);
                         }
-                    });
+                    }
+
+                    if (show.Actors != null) {
+                        actors.AddRange(show.Actors);
+                    }
+
+                    actors = actors.
+                        Distinct().
+                        Where(actor => actor.Name != null && actor.Name.Trim().Length > 0)
+                        .ToList();
+
+                    if (actors.Count > 0) {
+
+                        Async.Queue(() =>
+                        {
+                            foreach (var actor in actors.Distinct()) {
+                                if (actor.Person.RefreshMetadata(MetadataRefreshOptions.FastOnly)) {
+                                    Kernel.Instance.ItemRepository.SaveItem(actor.Person);
+                                }
+                            }
+
+                            foreach (var actor in actors.Distinct()) {
+                                if (actor.Person.RefreshMetadata()) {
+                                    Kernel.Instance.ItemRepository.SaveItem(actor.Person);
+                                }
+                            }
+                        });
+                    }
    
                 }
-                return actors;
+
+                return actors
+                    .Select(actor => new ActorItemWrapper(actor, this.PhysicalParent))
+                    .ToList();
             }
         }
 

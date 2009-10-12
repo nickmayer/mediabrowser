@@ -23,6 +23,9 @@
 		</Properties>
 
 		<Locals>
+
+      <BooleanChoice Name="NowPlayingIsText" Value="false"/>
+      
 			<TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap" >
 				<EditableText>
 					<EditableText Value="" />
@@ -228,7 +231,10 @@
 			<Condition Source="[Folder.DisplayPrefs.IndexByChoice.Chosen!cor:String]" ConditionOp="Equals" SourceValue="none" Target="[SortOrdersBtn.Enabled]" Value="true"/>
 			<Condition Source="[Folder.DisplayPrefs.IndexByChoice.Chosen!cor:String]" ConditionOp="NotEquals" SourceValue="none" Target="[SortOrdersBtn.Enabled]" Value="false"/>
       <Condition Source="[Folder.IsRoot]" ConditionOp="Equals" SourceValue="true" Target="[PCIBtn.Visible]" Value="false" />
-      
+
+      <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Detail" Target="[NowPlayingIsText.Value]" Value="true" />
+      <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Detail" Target="[NowPlayingIsText.Value]" Value="false" />
+     
     </Rules>
 
 		<Content>
@@ -353,7 +359,7 @@
 							</pda:PageDetailArea>
 
 							<!-- Now Playing View -->
-							<np:NowPlayingViewport Name="NowPlaying">
+							<np:NowPlayingViewport Name="NowPlaying" Application="[Application]" TextMode="[NowPlayingIsText]">
 								<LayoutInput>
 									<FormLayoutInput Left="Parent,0,-10" Bottom="Parent,1,20" />
 								</LayoutInput>

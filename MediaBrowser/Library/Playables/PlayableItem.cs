@@ -80,9 +80,8 @@ namespace MediaBrowser.Library
 
                 if (resume) {
                     PlaybackController.Seek(PlayState.PositionTicks);
-                }
+                } 
                  
-
             }
             catch (Exception ex)
             {
