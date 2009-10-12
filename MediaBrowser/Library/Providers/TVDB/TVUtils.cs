@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
-using MediaBrowser.Code.Exceptions;
 using MediaBrowser.LibraryManagement;
 using System.Net;
 using System.Xml;
@@ -187,7 +186,6 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     }
                 } catch (WebException ex) {
                     Trace.TraceWarning("Error requesting: " + url + "\n" + ex.ToString());
-                    throw new ConnectionIsDownException("There is a problem with your connection.", ex);
                 } catch (IOException ex) {
                     Trace.TraceWarning("Error requesting: " + url + "\n" + ex.ToString());
                 }

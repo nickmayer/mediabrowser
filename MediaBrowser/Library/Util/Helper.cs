@@ -20,7 +20,6 @@ namespace MediaBrowser.LibraryManagement
     using System.Net;
     using System.Xml;
     using MediaBrowser.Library.Logging;
-    using MediaBrowser.Code.Exceptions;
 
     public static class Helper
     {
@@ -347,17 +346,11 @@ namespace MediaBrowser.LibraryManagement
                             }
                     } catch (WebException ex) {
                         Logger.ReportWarning("Error requesting: " + url + "\n" + ex.ToString());
-                        throw new ConnectionIsDownException("There is a problem with your connection.", ex);
                     } catch (IOException ex) {
                         Logger.ReportWarning("Error requesting: " + url + "\n" + ex.ToString());
                     }
                 }
-            }
-            catch (ConnectionIsDownException ex)
-            {
-                throw;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Logger.ReportWarning("Failed to fetch url: " + url + "\n" + ex.ToString());
             }
 
