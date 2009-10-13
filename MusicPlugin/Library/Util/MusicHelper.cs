@@ -58,6 +58,7 @@ namespace MusicPlugin.LibraryManagement
                 case ".wma":
                 case ".acc":
                 case ".flac":
+                case ".m4a":
                 case ".wpl":
                     return true;
 

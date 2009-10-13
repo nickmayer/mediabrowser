@@ -125,7 +125,7 @@ namespace MusicPlugin
         {
             get
             {
-                return new System.Version(0,5,0,6);
+                return new System.Version(0,5,0,7);
             }
             set
             {
