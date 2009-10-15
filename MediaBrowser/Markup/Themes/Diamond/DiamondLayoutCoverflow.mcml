@@ -121,11 +121,7 @@
           </mip:MediaInfoPanel>                 
 
           <!-- Bottom Clip -->
-          <dtb:DiamondClipBottom >
-            <LayoutInput>
-              <AnchorLayoutInput Left="Parent,0,-50" Top="Parent,.8" Bottom="Parent,1,20" Right="Parent,1,50"/>
-            </LayoutInput>
-          </dtb:DiamondClipBottom>
+          <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />
           
           <!-- Coverflow Scroller -->
           <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">            
@@ -648,7 +644,7 @@
               <AnchorLayoutInput Top="FocusBg, 1, -5" />
             </LayoutInput>
             <Children>
-              <Panel Name="ConstraintPanel2" ColorFilter="75,75,75" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
+              <Panel Name="ConstraintPanel2" ColorFilter="175,175,175" Alpha="global://s:MirrorAlpha" CenterPointPercent="0.5,0.5,0.5" Rotation="180deg;1,0,0">
                 <Layout>
                   <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
                 </Layout>

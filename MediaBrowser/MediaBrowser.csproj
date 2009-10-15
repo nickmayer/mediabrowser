@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -71,16 +71,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Attributes\CommentAttribute.cs" />
-    <Compile Include="Code\ItemType.cs" />
-    <Compile Include="Code\ModelItems\AsyncImageLoader.cs" />
-    <Compile Include="Code\ModelItems\BaseModelItem.cs" />
-    <Compile Include="Code\ModelItems\Clock.cs" />
-    <Compile Include="Code\ConfigData.cs" />
-    <Compile Include="Code\ModelItems\MultiBackdrop.cs" />
-    <Compile Include="Code\ModelItems\Information.cs" />
-    <Compile Include="Code\ModelItems\FolderModel.cs" />
-    <Compile Include="Code\ModelItems\FolderChildren.cs" />
     <Compile Include="Library\Configuration\ApplicationPaths.cs" />
     <Compile Include="Library\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Library\Factories\Kernel.cs" />
@@ -101,14 +91,6 @@
     <Compile Include="Library\Persistance\FileBasedDictionary.cs" />
     <Compile Include="Library\Persistance\IPersistableChangeNotifiable.cs" />
     <Compile Include="Library\RemoteControl\IPlaybackController.cs" />
-    <Compile Include="Code\ModelItems\ItemImages.cs">
-      <DependentUpon>Item.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Code\ModelItems\ItemMetadata.cs">
-      <DependentUpon>Item.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Code\ModelItems\PlaybackController.cs" />
-    <Compile Include="Code\ModelItems\YahooWeather.cs" />
     <Compile Include="Library\Entities\Actor.cs" />
     <Compile Include="Library\Entities\Attributes\NotSourcedFromProvider.cs" />
     <Compile Include="Library\Entities\IFolder.cs" />
@@ -116,11 +98,6 @@
     <Compile Include="Library\Entities\IShow.cs" />
     <Compile Include="Library\Entities\MediaInfoData.cs" />
     <Compile Include="Library\Entities\PlaybackStatus.cs" />
-    <Compile Include="Code\ModelItems\Scroller.cs" />
-    <Compile Include="Code\ShadowTypes\Colors.cs" />
-    <Compile Include="Code\ShadowTypes\Inset.cs" />
-    <Compile Include="Code\ShadowTypes\Size.cs" />
-    <Compile Include="Code\ShadowTypes\Vector3.cs" />
     <Compile Include="Library\Entities\BaseItem.cs" />
     <Compile Include="Library\Entities\Episode.cs" />
     <Compile Include="Library\Entities\Folder.cs" />
@@ -175,7 +152,6 @@
     <Compile Include="Library\Interop\FindFileApis.cs" />
     <Compile Include="Library\Interop\ShellNativeMethods.cs" />
     <Compile Include="Library\Interop\ShortcutNativeMethods.cs" />
-    <Compile Include="Code\ModelItems\ActorItemWrapper.cs" />
     <Compile Include="Library\Metadata\MetadataProviderFactory.cs" />
     <Compile Include="Library\Metadata\MetadataRefreshOptions.cs" />
     <Compile Include="Library\Plugins\IPlugin.cs" />
@@ -185,10 +161,6 @@
     <Compile Include="Library\Sorting\SortHelper.cs" />
     <Compile Include="Library\Threading\Async.cs" />
     <Compile Include="Library\Threading\BackgroundProcessor.cs" />
-    <Compile Include="Code\Application.cs" />
-    <Compile Include="Code\ModelItems\Config.cs" />
-    <Compile Include="Code\Launch.cs" />
-    <Compile Include="Code\MyHistoryOrientedPageSession.cs" />
     <Compile Include="Library\Playables\PlayableCollection.cs" />
     <Compile Include="Library\Providers\Attributes\SupportedTypeAttribute.cs" />
     <Compile Include="Library\Providers\TVDB\RemoteEpisodeProvider.cs" />
@@ -226,13 +198,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Library\Extensions\BinaryWriterExtensions.cs" />
-    <Compile Include="Code\ModelItems\StudioItemWrapper.cs" />
-    <Compile Include="Code\ModelItems\DirectorItemWrapper.cs" />
     <Compile Include="Library\ImageSource.cs" />
     <Compile Include="Library\Factories\ItemFactory.cs" />
     <Compile Include="Library\Persistance\ItemRepository.cs" />
-    <Compile Include="Code\ModelItems\DisplayPreferences.cs" />
-    <Compile Include="Code\ModelItems\Item.cs" />
     <Compile Include="Library\Interfaces\IItemRepository.cs" />
     <Compile Include="Library\Playables\PlayableItem.cs" />
     <Compile Include="Library\Playables\PlayableDvd.cs" />
@@ -246,8 +214,6 @@
     <Compile Include="Library\Providers\MovieDbProvider.cs" />
     <Compile Include="Library\Providers\MovieProviderFromXml.cs" />
     <Compile Include="Library\Providers\VirtualFolderProvider.cs" />
-    <Compile Include="Code\ModelItems\SizeRef.cs" />
-    <Compile Include="Code\ModelItems\StringRef.cs" />
     <Compile Include="Library\ThreadPoolSizes.cs" />
     <Compile Include="Library\Transcode.cs" />
     <Compile Include="Library\Extensions\XmlExtensions.cs" />
@@ -260,7 +226,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Library\Util\Profiler.cs" />
-    <Compile Include="Code\Updater.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
@@ -553,8 +518,107 @@
     <None Include="Images\ButtonSelection2.png" />
     <Content Include="Images\folder.png" />
     <None Include="Images\lines.png" />
-    <Compile Include="Code\ModelItems\FancyText.cs" />
-    <Compile Include="Code\Exceptions\ConnectionIsDownException.cs" />
+    <Compile Include="Code\Application.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\Attributes\CommentAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ConfigData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\Exceptions\ConnectionIsDownException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ItemType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\Launch.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\ActorItemWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\AsyncImageLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\BaseModelItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\Clock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\Config.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\DirectorItemWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\DisplayPreferences.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\FancyText.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\FolderChildren.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\FolderModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\Information.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\Item.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\ItemImages.cs">
+      <DependentUpon>Item.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\ItemMetadata.cs">
+      <DependentUpon>Item.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\MultiBackdrop.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\PlaybackController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\Scroller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\SizeRef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\StringRef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\StudioItemWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ModelItems\YahooWeather.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\MyHistoryOrientedPageSession.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ShadowTypes\Colors.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ShadowTypes\Inset.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ShadowTypes\Size.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\ShadowTypes\Vector3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\Updater.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Library\Plugins\Configuration\DefaultAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\ExtAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\GroupAttribute.cs" />

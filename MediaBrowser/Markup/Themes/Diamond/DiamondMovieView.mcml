@@ -74,6 +74,7 @@
 
       <Binding Source="[Item]" Target="[TitleUI.Item]"/>
       <Binding Source="[Item.PreferredImage]" Target="[Preview.Content]" />
+      <Binding Source="[Item.PreferredImage]" Target="[MiniPoster.Content]" />      
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
       <Binding Source="[Item.Overview]" Target="[Overview.Text]" />
       <Binding Source="[CmdButtons.DisplayMax]" Target="[DisplayMax]" />
@@ -261,7 +262,7 @@
                   <FlowLayout Orientation="Horizontal" Spacing="20,5" FillStrip="true"/>
                 </Layout>
                 <LayoutInput>
-                  <AnchorLayoutInput Bottom="Parent,1, -75" Top="Parent, 1, -275" Left="Parent, 0.1" Right="Parent,.9" Horizontal="Near" />
+                  <AnchorLayoutInput Bottom="Parent,1, -75" Top="Parent, 1, -275" Left="Parent, 0, 20" Right="Parent,1,-20" Horizontal="Near" />
                 </LayoutInput>
                 <Children>
                   <Panel MaximumSize="475,0">
@@ -271,7 +272,9 @@
                     </Children>
                   </Panel>
 
-                  <me:CommonInformationPanel Name="CommonInfoPanelMini" Application="[Application]" Item="[Item]" />
+                  <me:CommonInformationPanel Name="CommonInfoPanelMini" Application="[Application]" Item="[Item]" MaximumSize="475,0" />
+
+                  <Graphic MaintainAspectRatio="true" Name="MiniPoster" />
                 </Children>
               </Graphic>
 
