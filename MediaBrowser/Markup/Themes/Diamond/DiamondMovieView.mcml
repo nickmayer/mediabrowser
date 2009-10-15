@@ -234,7 +234,7 @@
                   <AnchorLayoutInput Left="CommonInfoPanel,0" Right="CommonInfoPanel,1" Top="SelectorPanel,1,10" Bottom="SelectorPanel,1,210"/>
                 </LayoutInput>
                 <Children>
-                  <as:AutoScroller Name="Overview" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"
+                  <as:AutoScroller Name="Overview" Text="[Item.Overview]" Font="font://f:Diamond_Overview"
                                    Color="[ValueColor]" FocusColor="White"/>
                 </Children>
               </Panel>
@@ -267,7 +267,7 @@
                 <Children>
                   <Panel MaximumSize="475,0">
                     <Children>
-                      <as:AutoScroller Name="OverviewMini" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"
+                      <as:AutoScroller Name="OverviewMini" Text="[Item.Overview]" Font="font://f:Diamond_OverviewMini"
                                    Color="[ValueColor]" FocusColor="White" />
                     </Children>
                   </Panel>
@@ -360,6 +360,7 @@
       
       <Size Name="Size" Size="175,50"/>
       <Size Name="MinSize" Size="50,50"/>
+      <Font Name="Font" Font="font://f:Diamond_Large"/>
     </Properties>
 
     <Locals>
@@ -472,13 +473,13 @@
               <ColorFill Content="Transparent" Layout="VerticalFlow"
                          Padding="0,10,100,10" Navigation="RememberFocus" >
                 <Children>
-                  <dtb:DiamondImageButton Name="ResumeMovieButton"  Text="RESUME"       Command="[ResumeMovieCommand]"  Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume"  Size="[Size]"   MinSize="[MinSize]" Font="font://f:MM_ButtonFont" MiniMode="[DisplayMini]"/>
-                  <dtb:DiamondImageButton Name="PlayMovieButton"    Text="PLAY"         Command="[PlayMovieCommand]"    Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="font://f:MM_ButtonFont"  MiniMode="[DisplayMini]"/>
-                  <dtb:DiamondImageButton Name="TrailerButton"      Text="TRAILER"      Command="[LocalTrailerCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer" Size="[Size]"   MinSize="[MinSize]" Font="font://f:MM_ButtonFont" Visible="false" MiniMode="[DisplayMini]" />
-                  <dtb:DiamondImageButton Name="ToggleViewButton"   Text="DISPLAY"      Command="[ToggleViewCommand]"   Icon="resx://MediaBrowser/MediaBrowser.Resources/IconFloral"  Size="[Size]"   MinSize="[MinSize]" Font="font://f:MM_ButtonFont" MiniMode="[DisplayMini]" />
-                  <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH"      Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="[Size]"   MinSize="[MinSize]" Font="font://f:MM_ButtonFont" MiniMode="[DisplayMini]" />
-                  <dtb:DiamondImageButton Name="CacheMovieButton"   Text="CACHE 2 XML"  Command="[NullCommand]"         Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines"       Size="[Size]"   MinSize="[MinSize]" Font="font://f:MM_ButtonFont" Visible="false" MiniMode="[DisplayMini]" />
-                  <dtb:DiamondImageButton Name="DeleteMovieButton"  Text="DELETE"       Command="[DeleteMovieCommand]"  Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete"  Size="[Size]"   MinSize="[MinSize]" Font="font://f:MM_ButtonFont" Visible="false" MiniMode="[DisplayMini]" />
+                  <dtb:DiamondImageButton Name="ResumeMovieButton"  Text="RESUME"       Command="[ResumeMovieCommand]"  Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MiniMode="[DisplayMini]"/>
+                  <dtb:DiamondImageButton Name="PlayMovieButton"    Text="PLAY"         Command="[PlayMovieCommand]"    Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MiniMode="[DisplayMini]"/>
+                  <dtb:DiamondImageButton Name="TrailerButton"      Text="TRAILER"      Command="[LocalTrailerCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer" Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MiniMode="[DisplayMini]" />
+                  <dtb:DiamondImageButton Name="ToggleViewButton"   Text="DISPLAY"      Command="[ToggleViewCommand]"   Icon="resx://MediaBrowser/MediaBrowser.Resources/IconFloral"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MiniMode="[DisplayMini]" />
+                  <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH"      Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MiniMode="[DisplayMini]" />
+                  <dtb:DiamondImageButton Name="CacheMovieButton"   Text="CACHE 2 XML"  Command="[NullCommand]"         Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines"       Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MiniMode="[DisplayMini]" />
+                  <dtb:DiamondImageButton Name="DeleteMovieButton"  Text="DELETE"       Command="[DeleteMovieCommand]"  Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MiniMode="[DisplayMini]" />
                 </Children>
               </ColorFill>
             </Children>
@@ -497,6 +498,8 @@
       <a:Application Name="Application" Application="$Required"/>
       <Color Name="AttributeColor" Color="190,190,190" />
       <Color Name="ValueColor" Color="White" />
+      <Font Name="TitleFont" Font="font://f:Diamond_Small"/>
+      <Font Name="ValueFont" Font="font://f:Diamond_Small_SemiBold"/>
       
     </Properties>
     <Locals>
@@ -537,9 +540,9 @@
               <FlowLayout Orientation="Horizontal" Spacing="5,5"/>
             </Layout>
             <Children>
-              <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="IMDB RATING"  MinimumSize="[MinSize]"/>
-              <Text Name="IMDBRating" Content="" Color="[ValueColor]" Font="font://f:MM_ItemFont"/>
-              <Text Font="font://f:MM_ItemFont" Color="[ValueColor]" Content="/ 10"/>
+              <Text Font="[TitleFont]" Color="[AttributeColor]" Content="IMDB RATING"  MinimumSize="[MinSize]"/>
+              <Text Name="IMDBRating" Content="" Color="[ValueColor]" Font="[ValueFont]"/>
+              <Text Font="[ValueFont]" Color="[ValueColor]" Content="/ 10"/>
               <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" />
               <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="5,0,0,0" MaximumSize="0,30"/>
             </Children>
@@ -550,9 +553,9 @@
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
             <Children>
-              <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="RUNTIME" MinimumSize="[MinSize]"/>
+              <Text Font="[TitleFont]" Color="[AttributeColor]" Content="RUNTIME" MinimumSize="[MinSize]"/>
               <Text Name="Runtime" Content="[Item.RunningTimeString]"
-                  Font="font://f:MM_ItemFont" Color="[ValueColor]" />
+                  Font="[ValueFont]" Color="[ValueColor]" />
               <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
             </Children>
           </Panel>
@@ -562,7 +565,7 @@
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
             <Children>
-              <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="GENRE"  MinimumSize="[MinSize]"/>
+              <Text Font="[TitleFont]" Color="[AttributeColor]" Content="GENRE"  MinimumSize="[MinSize]"/>
               <Repeater Name="GenreRepeater" Source="[Item.Genres]" Margins="0,0,0,0" MaximumSize="0,100" >
                 <Layout>
                   <FlowLayout Orientation="Horizontal" AllowWrap="true"  Spacing="25,0"  />
@@ -582,20 +585,20 @@
 
           <Panel Name="DirectedByPanel" Layout="HorizontalFlow" Visible="false">
             <Children>
-              <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="DIRECTOR" MinimumSize="[MinSize]"/>
+              <Text Font="[TitleFont]" Color="[AttributeColor]" Content="DIRECTOR" MinimumSize="[MinSize]"/>
               <!--<Text Name="Director" Font="font://f:MM_ItemFont" WordWrap="true" MaximumLines="3" Color="[ValueColor]" Content="[Item.DirectorString]"/>-->
               <Repeater Name="DirectorRepeater" Source="[Item.Directors]" Margins="0,0,0,0" MaximumSize="0,150" >
                 <Layout>
                   <FlowLayout Orientation="Horizontal" AllowWrap="true"  Spacing="25,0"  />
                 </Layout>
                 <Divider>
-                  <Text Content="●" Font="font://f:MM_GenreFont" Color="Gray" />
+                  <Text Content="●" Font="[TitleFont]" Color="Gray" />
                 </Divider>
                 <Content>
                   <db:DirectorButton Text="[RepeatedItem!cor:String]"
                           Application="[Application]" Item="[Item]"
                           DirectorName="[RepeatedItem!cor:String]"
-                          Font="font://f:MM_ItemFont" Color="[ValueColor]"/>
+                          Font="[TitleFont]" Color="[ValueColor]"/>
                 </Content>
               </Repeater>
 
@@ -607,7 +610,7 @@
               <FlowLayout Orientation="Horizontal" AllowWrap="true" ItemAlignment="Near" StripAlignment="Near"/>
             </Layout>
             <Children>
-              <Text Font="font://f:MM_ItemTitleFont" Color="[AttributeColor]" Content="MEDIA INFO" MinimumSize="[MinSize]"/>
+              <Text Font="[TitleFont]" Color="[AttributeColor]" Content="MEDIA INFO" MinimumSize="[MinSize]"/>
               <Text Name="MediaInfo" Font="Arial, 14" Color="[ValueColor]" Margins="0,0,0,0" MaximumSize="0,100" />
             </Children>
           </Panel>

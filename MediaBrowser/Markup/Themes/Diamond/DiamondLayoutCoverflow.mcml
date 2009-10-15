@@ -108,8 +108,8 @@
           <!-- List Counter -->
           <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
             <Children>
-              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:CV_CounterFont" />
-              <Text Name="List_Total" Content="0" Color="White" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:Diamond_Medium" />
+              <Text Name="List_Total" Content="0" Color="White" Font="font://f:Diamond_Medium" />
             </Children>
           </Panel>
 

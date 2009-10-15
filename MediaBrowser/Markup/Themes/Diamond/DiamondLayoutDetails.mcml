@@ -140,7 +140,7 @@
             </LayoutInput>
           </dtb:DiamondDetailInfoBox>
 
-          <as:AutoScroller Name="DiamondSummary" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"
+          <as:AutoScroller Name="DiamondSummary" Text="[Item.Overview]" Font="font://f:Diamond_Overview"
                                    Color="190,190,190" FocusColor="White">
             <LayoutInput>
               <AnchorLayoutInput Top="DiamondTopInfoBox,1,10"  Bottom="Parent, 0.9,-40" Left="Parent,.3,10" Right="Parent, .58"/>
@@ -156,8 +156,8 @@
           <!-- List Counter -->
           <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
             <Children>
-              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:CV_CounterFont" />
-              <Text Name="List_Total" Content="0" Color="White" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:Diamond_Medium" />
+              <Text Name="List_Total" Content="0" Color="White" Font="font://f:Diamond_Medium" />
             </Children>
           </Panel>
 
@@ -230,7 +230,7 @@
               <FlowLayout Orientation="Vertical"  ItemAlignment="Near"/>
             </Layout>
             <Content>
-              <link:LinkItem Application="[Application]" Item="[RepeatedItem!lib:Item]" Font="font://f:DV_SummaryFont" Color="color://s:FontColorMedium"/>
+              <link:LinkItem Application="[Application]" Item="[RepeatedItem!lib:Item]" Font="font://f:Diamond_Small" Color="color://s:FontColorMedium"/>
             </Content>
           </Repeater>
         </Children>

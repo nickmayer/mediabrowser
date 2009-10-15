@@ -101,4 +101,16 @@
 	<Font Name="CV_CounterFont" Font="Segoe Media Center, 18"/>
 	<Font Name="CV_UnwatchedCountFont" Font="Segoe Media Center, 14, Bold"/>
 	<Font Name="CV_PosterTopLabelFont" Font="Segoe Media Center Semibold, 16"/>
+
+  <!-- Diamond Fonts -->
+  <Font Name="Diamond_Title" Font="Segoe Media Center, 24"/>
+  <Font Name="Diamond_Smallest" Font="Segoe Media Center,12"/>
+  <Font Name="Diamond_Smaller" Font="Segoe Media Center,14"/>
+  <Font Name="Diamond_Small" Font="Segoe Media Center,16"/>
+  <Font Name="Diamond_Medium" Font="Segoe Media Center,18"/>
+  <Font Name="Diamond_Large" Font="Segoe Media Center,20"/>
+  <Font Name="Diamond_Small_SemiBold" Font="Segoe Media Center Semibold,16"/>
+
+  <Font Name="Diamond_OverviewMini" Font="Segoe Media Center,16"/>  
+  <Font Name="Diamond_Overview" Font="Segoe Media Center,18"/>
 </Mcml>

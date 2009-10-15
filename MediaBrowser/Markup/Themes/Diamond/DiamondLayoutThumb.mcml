@@ -128,36 +128,13 @@
             </LayoutInput>
           </mip:MediaInfoPanel>
 
-					<!--<Panel Name="DetailsSection" MouseInteractive="true" Padding="5,5,0,0" >
-						<LayoutInput>
-							<FormLayoutInput Left="MyItems,1,120" Right="Parent,1,-30" Top="Parent,0.04" />
-						</LayoutInput>
-						<Layout>
-							<FlowLayout Orientation="Vertical" Spacing="0,0"/>
-						</Layout>
-						<Children>
-							<ts:TitleSet Name="TitleSet" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" Font="font://f:PD_TitleFont" SubFont="font://f:PD_SubTitleFont"/>
-							<mi:MovieInfo Name="MovieInfo" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" />
-							<lw:LastWatched Name="LastWatched" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" Font="font://f:PD_LastWatchedFont"/>
-						</Children>
-					</Panel>-->
-
           <!-- List Counter -->
           <Panel Name="ListCounterPosition" Layout="HorizontalFlow" LayoutInput="global://dtb:LI_ListCounter" >
             <Children>
-              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:CV_CounterFont" />
-              <Text Name="List_Total" Content="0" Color="White" Font="font://f:CV_CounterFont" />
+              <Text Name="List_Counter" Content="0" Color="White" Font="font://f:Diamond_Medium" />
+              <Text Name="List_Total" Content="0" Color="White" Font="font://f:Diamond_Medium" />
             </Children>
           </Panel>
-
-					<!--<sy:SummaryNonScrolling Name="Summary" Model="[SelectedItem]"  ModelFast="[PreSelectedItem]" Color="color://s:FontColorLight" Font="font://f:PD_SummaryFont">
-            <Layout>
-              <FlowLayout Orientation="Vertical" StripAlignment="Far" Spacing="0,0"/>
-            </Layout>
-            <LayoutInput>
-              <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Parent,1,-80" />
-						</LayoutInput>
-					</sy:SummaryNonScrolling>-->
 
           <!-- Bottom Clip -->
           <dtb:DiamondClipBottom LayoutInput="global://dtb:LI_ClipBottom" />

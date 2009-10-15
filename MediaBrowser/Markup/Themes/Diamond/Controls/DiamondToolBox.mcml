@@ -82,8 +82,8 @@
             <Children>
               <ft:FancyText AvailableSpaceInt="800" HasFocus="true"
                             AllowMarquee="true" Name="Label"
-                            Font="Segoe Media Center, 24"
-                                Color="color://s:FontColorLight"
+                            Font="font://f:Diamond_Title"
+                            Color="color://s:FontColorLight"
                             />
             </Children>
           </Graphic>
@@ -121,7 +121,7 @@
           <FlowLayout Orientation="Vertical" ItemAlignment="Near" Spacing="2,2"/>
         </Layout>
         <Children>
-          <Text Name="TxtSubtitle" Color="LightGray" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>
+          <Text Name="TxtSubtitle" Color="LightGray" WordWrap="true" Font="font://f:Diamond_Smaller" Margins="0,0,0,0"/>
           <Panel Name="StarMPAA">
             <Layout>
               <FlowLayout Orientation="Horizontal" Spacing="10,0"/>
@@ -131,25 +131,25 @@
               <mp:MPAARating Name="MPAARating" Margins="10,0,0,0" MaximumSize="0,30"/>
             </Children>
           </Panel>
-          <Text Name="TxtRuntime" Color="LightGray" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>
+          <Text Name="TxtRuntime" Color="LightGray" WordWrap="true" Font="font://f:Diamond_Smaller" Margins="0,0,0,0"/>
           <Repeater Name="GenreRepeater" Source="[Item.Genres]" >
             <Layout>
               <FlowLayout Orientation="Horizontal" AllowWrap="false" Spacing="15,0"/>
             </Layout>
             <Divider>
-              <Text Content="●" Font="font://f:MM_GenreFont" Color="Gray" Alpha="0.6"  />
+              <Text Content="●" Font="font://f:Diamond_Small" Color="Gray" Alpha="0.6"  />
             </Divider>
             <Content>
               <gb:GenreButton Text="[RepeatedItem!cor:String]"
                       Application="[Application]" Item="[Item]"
                       GenreCategory="[RepeatedItem!cor:String]"
-                      Font="font://f:MM_GenreFont" Color="LightGray"
+                      Font="font://f:Diamond_Small" Color="LightGray"
 													/>
             </Content>
           </Repeater>
           <!--<mip:MediaInfoPanel Name="MediaInfo" Item="[Item]" />-->
-          <Text Name="MediaInfoText" Font="Arial, 12" Color="White" WordWrap="true" />
-          <Text Name="LastWatched" Color="LightGray" Font="font://f:DV_LastWatchedFont"/>          
+          <Text Name="MediaInfoText" Font="font://f:Diamond_Smallest" Color="White" WordWrap="true" />
+          <Text Name="LastWatched" Color="LightGray" Font="font://f:Diamond_Smaller"/>          
         </Children>
       </Panel>
     </Content>
@@ -189,25 +189,25 @@
               <mp:MPAARating Name="MPAARating" Margins="10,0,0,0" MaximumSize="0,30"/>
             </Children>
           </Panel>
-          <Text Name="TxtRuntime" Color="LightGray" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>
+          <Text Name="TxtRuntime" Color="LightGray" WordWrap="true" Font="font://f:Diamond_Smaller" Margins="0,0,0,0"/>
           <Repeater Name="GenreRepeater" Source="[Item.Genres]" >
             <Layout>
               <FlowLayout Orientation="Horizontal" AllowWrap="false" Spacing="15,0"/>
             </Layout>
             <Divider>
-              <Text Content="●" Font="font://f:MM_GenreFont" Color="Gray" Alpha="0.6"  />
+              <Text Content="●" Font="font://f:Diamond_Small" Color="Gray" Alpha="0.6"  />
             </Divider>
             <Content>
               <gb:GenreButton Text="[RepeatedItem!cor:String]"
                       Application="[Application]" Item="[Item]"
                       GenreCategory="[RepeatedItem!cor:String]"
-                      Font="font://f:MM_GenreFont" Color="LightGray"
+                      Font="font://f:Diamond_Small" Color="LightGray"
 													/>
             </Content>
           </Repeater>
           <!--<mip:MediaInfoPanel Name="MediaInfo" Item="[Item]" />-->
-          <Text Name="LastWatched" Color="LightGray" Font="font://f:DV_LastWatchedFont"/>
-          <me:SummaryNonScrolling Name="Summary" Item="[Item]" Font="font://f:DV_SummaryFont" Color="White" FocusColor="White"/>
+          <Text Name="LastWatched" Color="LightGray" Font="font://f:Diamond_Smaller"/>
+          <me:SummaryNonScrolling Name="Summary" Item="[Item]" Font="font://f:Diamond_Overview" Color="White" FocusColor="White"/>
 
         </Children>
       </Panel>
@@ -294,7 +294,7 @@
     <Content>
       <Clip  FadeSize="75" Orientation="Vertical" ShowFar="false" FadeAmount="1" FarOffset="25" >
         <Children>
-          <ColorFill Content="Black" Alpha="global://s:FilterAlpha">
+          <ColorFill Content="Black" Alpha=".85">
           </ColorFill>
         </Children>
       </Clip>
