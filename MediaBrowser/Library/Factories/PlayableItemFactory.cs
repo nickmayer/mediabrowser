@@ -39,6 +39,8 @@ namespace MediaBrowser.Library.Factories {
                     break;
                 }
 
+            if (playable == null)
+                playable = new PlayableVideoFile(media);
             
             foreach (var controller in Kernel.Instance.PlaybackControllers) {
                 if (controller.CanPlay(playable.Filename)) {
