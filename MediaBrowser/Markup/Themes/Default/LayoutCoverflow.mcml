@@ -176,6 +176,27 @@
 
     <Rules>
 
+      <!--These rules allow the user to move over the posters with the mouse without them scrolling away under them-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SD.LockedPosition]" Value="-1" />
+          <Set Target="[SD.LockedAlignment]" Value="-1" />
+          <Set Target="[SD.BeginPadding]" Value="30" />
+          <Set Target="[SD.EndPadding]" Value="30" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SD.LockedPosition]" Value=".5" />
+          <Set Target="[SD.LockedAlignment]" Value=".5" />
+        </Actions>
+      </Rule>
 
       <Rule>
         <Conditions>

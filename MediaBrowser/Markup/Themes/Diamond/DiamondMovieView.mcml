@@ -629,7 +629,7 @@
       <lib:Item Name="Item" Item="$Required"/>
     </Properties>
     <Locals>
-      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandlePageKeys="true" HandlePageCommands="true"/>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandleMouseWheel="true" HandleHomeEndKeys="true" HandlePageKeys="true" HandlePageCommands="true"/>
       <ScrollingData Name="ScrollingData" BeginPadding="5" />
       <Command Name="ScrollUpCommand" />
       <Command Name="ScrollDownCommand" />

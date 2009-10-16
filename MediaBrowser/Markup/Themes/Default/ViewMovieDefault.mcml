@@ -200,7 +200,7 @@
 
     </Properties>
     <Locals>
-      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true" HandlePageKeys="true" HandlePageCommands="true"/>
       <ScrollingData Name="ScrollingData" />
       <Command Name="ScrollUpCommand" />
       <Command Name="ScrollDownCommand" />

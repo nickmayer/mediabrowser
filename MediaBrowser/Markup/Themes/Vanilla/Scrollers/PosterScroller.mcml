@@ -56,7 +56,42 @@
 
 
 		<Rules>
-			<Binding Source="[Folder.ReferenceSize]" Target="[MyLayout.ReferenceSize]"/>
+      <!--These rules allow the user to move over the posters with the mouse without them scrolling away under them-->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="true"/>
+          <Equality Source="[NoEndPadding]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ScrollingData.LockedPosition]" Value="-1" />
+          <Set Target="[ScrollingData.LockedAlignment]" Value="-1" />
+          <Set Target="[ScrollingData.BeginPadding]" Value="30" />
+          <Set Target="[ScrollingData.EndPadding]" Value="30" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
+          <Equality Source="[CenterFocus]" Value="false" />
+          <Equality Source="[NoEndPadding]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ScrollingData.BeginPadding]" Value="100" />
+          <Set Target="[ScrollingData.EndPadding]" Value="400" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
+          <Equality Source="[CenterFocus]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ScrollingData.LockedAlignment]" Value=".5" />
+          <Set Target="[ScrollingData.LockedPosition]" Value=".5" />
+        </Actions>
+      </Rule>
+      
+      <Binding Source="[Folder.ReferenceSize]" Target="[MyLayout.ReferenceSize]"/>
 			<Condition Source="[NoEndPadding]" ConditionOp="Equals" SourceValue="true">
 				<Actions>
 					<Set Target="[HScrollingData.EndPadding]" Value="30" />

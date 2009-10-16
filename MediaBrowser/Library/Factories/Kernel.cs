@@ -16,6 +16,7 @@ using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Localization;
+using MediaBrowser.Library.Input;
 using System.IO;
 using System.Diagnostics;
 using System.Net;
@@ -183,6 +184,9 @@ namespace MediaBrowser.Library {
             // our root folder needs metadata
             kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
                 kernel.RootFolder;
+            // create a mouseActiveHooker for us to know if the mouse is active on our window (used to handle mouse scrolling control)
+            // we will wire it to an event on application
+            kernel.MouseActiveHooker = new IsMouseActiveHooker();
 
             kernel.Plugins = DefaultPlugins((loadDirective & KernelLoadDirective.ShadowPlugins) == KernelLoadDirective.ShadowPlugins);
 
@@ -236,6 +240,7 @@ namespace MediaBrowser.Library {
         public LocalizedStringData StringData { get; set; }
         public IItemRepository ItemRepository { get; set; }
         public IMediaLocationFactory MediaLocationFactory { get; set; }
+        public IsMouseActiveHooker MouseActiveHooker;
         private ParentalControl parentalControls;
         public ParentalControl ParentalControls
         {

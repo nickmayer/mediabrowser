@@ -30,7 +30,8 @@
 			<lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
 			<Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
 			<FormLayoutInput Name="Split" Left="Parent,0,10" Top="Parent,0,80" Right="Parent,0,400" Bottom="Parent,1,-80"></FormLayoutInput>
-		</Locals>
+      <FormLayoutInput Name="Split2" Left="Parent,0,400" Top="Parent,0.04" Right="Parent,1" Bottom="Parent,1,-80"></FormLayoutInput>
+    </Locals>
 
 		<Rules>
       <Binding Source="[SelectedItem]" Target="[TitleUI.Item]"/>
@@ -82,6 +83,7 @@
 			<Binding Source="[PreSelectedItem]" Target="[LastWatched.ModelFast]"/>-->
 
 			<Binding Target="[Split.Right.Offset]" Source="[Application.Config.ThumbStripPosterWidth]" />
+      <Binding Target="[Split2.Left.Offset]" Source="[Application.Config.ThumbStripPosterWidth]" />
 
       <!-- Counter Bindings -->
       <Binding Source="[Folder.SelectedChildIndex!cor:String]" Target="[List_Counter.Content]">
@@ -102,8 +104,10 @@
 
           <!-- Title Details -->
           <dtb:DiamondTitleUI Name="TitleUI" Item="[SelectedItem]" LayoutInput="global://dtb:LI_Title" />
-          
-					<ps:PosterScroller Name="MyItems" Application="[Application]"
+
+          <!-- This ColorFill on the right side of the scroller distracts the mouse so it won't scroll the posters when you go across screen -->
+          <ColorFill MouseInteractive="true" Content="Transparent" LayoutInput="[Split2]" />
+          <ps:PosterScroller Name="MyItems" Application="[Application]"
 									   Folder="[Folder]" NoEndPadding="true" LayoutInput="[Split]"
 									   TopLabelFont="font://f:PD_PosterTopLabelFont" LabelFont="font://f:PD_PosterLabelFont" UnwatchedCountFont="font://f:PD_UnwatchedCountFont">
 						

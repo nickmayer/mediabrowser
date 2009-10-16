@@ -619,6 +619,7 @@
     <Compile Include="Code\Updater.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
     <Compile Include="Library\Plugins\Configuration\DefaultAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\ExtAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\GroupAttribute.cs" />

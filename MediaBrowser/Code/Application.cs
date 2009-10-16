@@ -23,6 +23,7 @@ using MediaBrowser.Library.EntityDiscovery;
 using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Configuration;
+using MediaBrowser.Library.Input;
 
 
 namespace MediaBrowser
@@ -50,7 +51,7 @@ namespace MediaBrowser
         private bool navigatingForward;
         private IPlaybackController currentPlaybackController = null;
         private static string _background;
-
+        private IsMouseActiveHooker mouseActiveHooker;
         public bool NavigatingForward
         {
             get { return navigatingForward; }
@@ -77,6 +78,9 @@ namespace MediaBrowser
                 this.session.Application = this;
             }
             singleApplicationInstance = this;
+            //wire up our mouseActiveHooker so we can know if the mouse is active over us
+            Kernel.Instance.MouseActiveHooker.MouseActive += new IsMouseActiveHooker.MouseActiveHandler(mouseActiveHooker_MouseActive);
+
         }
 
         /// <summary>
@@ -427,7 +431,25 @@ namespace MediaBrowser
             }
         }
 
+        private Boolean isMouseActive = false;
+        public Boolean IsMouseActive
+        {
+            get { return isMouseActive; }
+            set
+            {
+                if (isMouseActive != value)
+                {
+                    isMouseActive = value;
+                    FirePropertyChanged("IsMouseActive");
+                }
+            }
+        }
 
+        void mouseActiveHooker_MouseActive(IsMouseActiveHooker m, MouseActiveEventArgs e)
+        {
+            this.IsMouseActive = e.MouseActive;
+        } 
+ 
         public string BreadCrumbs
         {
             get
