@@ -125,6 +125,17 @@
       <Panel Name="MainPanel" Layout="Form" Navigation="Group">
         <Children>
 
+          <!-- These two ColorFills on either side of the scroller distract the mouse so it won't scroll when you go across screen -->
+          <ColorFill MouseInteractive="true" Content="Transparent">
+            <LayoutInput>
+              <AnchorLayoutInput Left="MyItems,0" Top="Parent,0" Right="MyItems,1" Bottom="MyItems,0"/>
+            </LayoutInput>
+          </ColorFill>
+          <ColorFill MouseInteractive="true" Content="Transparent">
+            <LayoutInput>
+              <AnchorLayoutInput Left="MyItems,0" Top="MyItems,.9" Right="MyItems,1" Bottom="Parent,1"/>
+            </LayoutInput>
+          </ColorFill>
           <!-- Details List -->
           <lv:ListView Visible="true" Application="[Application]" Folder="[Item]" Name="MyItems" Font="font://f:DV_ListButtonFont">
             <LayoutInput>

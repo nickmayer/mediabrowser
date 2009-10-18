@@ -115,8 +115,19 @@
           <!-- Title Details -->
           <dtb:DiamondTitleUI Name="TitleUI" Item="[SelectedItem]" LayoutInput="global://dtb:LI_Title" />
 
+          <!-- These two ColorFills on either side of the scroller distract the mouse so it won't scroll when you go across screen -->
+          <ColorFill MouseInteractive="true" Content="Transparent">
+            <LayoutInput>
+              <AnchorLayoutInput Left="ListPane,0" Top="Parent,0" Right="ListPane,1" Bottom="ListPane,0"/>
+            </LayoutInput>
+          </ColorFill>
+          <ColorFill MouseInteractive="true" Content="Transparent">
+            <LayoutInput>
+              <AnchorLayoutInput Left="ListPane,0" Top="ListPane,1" Right="ListPane,1" Bottom="Parent,1"/>
+            </LayoutInput>
+          </ColorFill>
           <!-- Details List -->
-          <Graphic Content="image://i:BlankImage" Layout="VerticalFlow" Padding="25,25,25,25">
+          <Graphic Name="ListPane" Content="image://i:BlankImage" Layout="VerticalFlow" Padding="25,25,25,25">
             <LayoutInput>
               <AnchorLayoutInput Left="Parent,0.58" Top="Parent,0.15" Right="Parent,1,-5" Bottom="Parent,.9" ></AnchorLayoutInput>
             </LayoutInput>
