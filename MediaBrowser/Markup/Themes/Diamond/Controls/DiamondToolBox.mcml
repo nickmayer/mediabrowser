@@ -292,9 +292,10 @@
   
   <UI Name="DiamondClipBottom">
     <Content>
-      <Clip  FadeSize="75" Orientation="Vertical" ShowFar="false" FadeAmount="1" FarOffset="25" >
+      <Clip  FadeSize="100" Orientation="Vertical" ShowNear="true" ShowFar="false" FadeAmount="1" 
+             FarOffset="25" >
         <Children>
-          <ColorFill Content="Black" Alpha=".85">
+          <ColorFill Content="Black" Alpha="global://s:FilterAlpha">
           </ColorFill>
         </Children>
       </Clip>

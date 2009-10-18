@@ -27,10 +27,10 @@ namespace MediaBrowser.Library.Localization
 
         //these are our strings keyed by property name
         public string LoggingDesc = "Write messages to a log file at run time.";
-        public string AllowInternetBasedProvidersDesc = "Search the Internet for Cover Art, Backdrops and Metadata.";
+        public string EnableInternetProvidersDesc = "Search the Internet for Cover Art, Backdrops and Metadata.";
         public string AutomaticUpdatesDesc = "Automatically Download and Install Updates to MediaBrowser.";
         public string BetaUpdatesDesc = "Include Beta Versions in Automatic Updates";
-        public string EnableEnhancedHomeScreenDesc = "Enable the Enhanced View for Top-Level Items.";        
+        public string EnableEHSDesc = "Enable the Enhanced Home Screen for Top-Level Items.";        
         public string ShowClockDesc = "Show the Current Time in MediaBrowser Screens.";
         public string DimUnselectedPostersDesc = "Make Posters That are not Selected Slightly Darker.";
         public string HideFocusFrameDesc = "Don't Show a Border Around Selected Posters in Poster Views.";
@@ -56,7 +56,7 @@ namespace MediaBrowser.Library.Localization
         public string FontSizeDesc = "The Size of the Fonts to Use in MediaBrowser.  Won't Take Effect Until MediaBrowser is Restarted.";
         public string ShowConfigButtonDesc = "Show the config button on all screens. [VANILLA ONLY]";
         public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable. [VANILLA ONLY]";
-        public string AlwaysShowDetailsPageDesc = "Always display details page for media.";
+        public string AlwaysShowDetailsDesc = "Always display the details page for media.";
         public string StartDetailsPageinMiniModeDesc = "Default Media Details Page to Mini-Mode. [DIAMOND ONLY]";
         public string SecurityPINDesc = "The 4-Digit Code For Access to Parental Controlled Items.";
         public string EnableParentalBlocksDesc = "Enable Parental Control.  Items Over The Designated Rating Will Be Hidden or Require PIN.";
@@ -73,7 +73,7 @@ namespace MediaBrowser.Library.Localization
         public string AssumeWatchedIfOlderThanDesc = "Mark All Items Older Than This as Watched.";
         public string ShowThemeBackgroundDesc = "Display Theme background. [TIER 3] Highest tier background effect takes precedence.";
         public string ShowInitialFolderBackgroundDesc = "Display initial backdrop in all views. (backdrop.png or backdrop.jpg sourced from your initial folder) [TIER 2] Highest tier background effect takes precedence.";
-        public string ShowBackdroponSupportedViewsDesc = "Display Fan Art as a Background in Views with this Capability. [TIER 1] Highest tier background effect takes precedence.";
+        public string ShowFanArtonViewsDesc = "Display fan art as a Background in views that support this capability. [TIER 1] Highest tier background effect takes precedence.";
 
 
         LocalizedStringData(string file)
