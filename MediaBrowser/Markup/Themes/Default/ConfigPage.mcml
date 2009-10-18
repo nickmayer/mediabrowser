@@ -589,13 +589,10 @@
                   </Panel>
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="Vanilla Theme Settings" />
+                      <me:TextHeader Text="Theme Specific Settings" />
                       <cb:CheckBox   Label="Show Config Button" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
-                      <ss:SimpleSpinner    Label="Alpha Blending" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />
-                      <me:TextHeader Text=" " />
-                      <me:TextHeader Text="Diamond Theme Settings" />
-                      <cb:CheckBox   Label="Start Movie View in Minimal Mode" FocusItem="[FocusItem]" Margins="[CMargin]"   Checked="[StartDiamondMovieMinimal]"  Font="font://f:CP_ConfigItemFont"/>                     
-                      
+                      <ss:SimpleSpinner    Label="Alpha Blending" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />                      
+                      <cb:CheckBox   Label="Start Details Page in Mini-Mode" FocusItem="[FocusItem]" Margins="[CMargin]"   Checked="[StartDiamondMovieMinimal]"  Font="font://f:CP_ConfigItemFont"/>                       
                       
                     </Children>
                   </Panel>

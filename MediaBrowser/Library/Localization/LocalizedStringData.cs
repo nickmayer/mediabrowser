@@ -17,7 +17,7 @@ namespace MediaBrowser.Library.Localization
     public class LocalizedStringData
     {
 
-        private string version = "1.0001"; //this is used to see if we have changed and need to re-save
+        private string version = "1.0002"; //this is used to see if we have changed and need to re-save
 
         public string FileName; //this is public so it will serialize and we know where to save ourselves
         public string Version = ""; //this will get saved so we can check it against us for changes
@@ -54,10 +54,10 @@ namespace MediaBrowser.Library.Localization
         public string VisualThemeDesc = "The Basic Presentation Style for MediaBrowser Screens.";
         public string ColorSchemeDesc = "The Style of Colors for Backgrounds, etc.  Won't Take Effect Until MediaBrowser is Restarted.";
         public string FontSizeDesc = "The Size of the Fonts to Use in MediaBrowser.  Won't Take Effect Until MediaBrowser is Restarted.";
-        public string ShowConfigButtonDesc = "Show the Config Button on All Vanilla Screens.";
-        public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable. (Vanilla Only)";
+        public string ShowConfigButtonDesc = "Show the config button on all screens. [VANILLA ONLY]";
+        public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable. [VANILLA ONLY]";
         public string AlwaysShowDetailsPageDesc = "Always display details page for media.";
-        public string EnableEpisodeViewDesc = "Present a Detailed View for TV Episodes Instead of Directly Playing Them - Allows Delete. (Diamond Only)";
+        public string StartDetailsPageinMiniModeDesc = "Default Media Details Page to Mini-Mode. [DIAMOND ONLY]";
         public string SecurityPINDesc = "The 4-Digit Code For Access to Parental Controlled Items.";
         public string EnableParentalBlocksDesc = "Enable Parental Control.  Items Over The Designated Rating Will Be Hidden or Require PIN.";
         public string BlockUnratedContentDesc = "Treat Items With NO RATING INFO as Over the Limit.  Items Actually Rated 'Unrated' Will Behave Like NC-17.";
