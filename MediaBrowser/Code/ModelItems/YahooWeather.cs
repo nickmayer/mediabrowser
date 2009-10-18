@@ -96,31 +96,38 @@ namespace MediaBrowser
         public void GetWeatherInfo()
         {
             WebClient client = new WebClient();
-            XmlDocument xDoc = new XmlDocument(); 
-            try
+            XmlDocument xDoc = new XmlDocument();
+            if (string.IsNullOrEmpty(Application.CurrentInstance.Config.YahooWeatherFeed))
             {
-                if (IsRefreshRequired())
+                ProvideNullData();
+            }
+            else
+            {
+                try
                 {
-                    client.DownloadFile(Feed, DownloadToFilePath);
-                    Stream strm = client.OpenRead(Feed);                    
-                    StreamReader sr = new StreamReader(strm);
-                    string strXml = sr.ReadToEnd();
-                    xDoc.LoadXml(strXml); 
+                    if (IsRefreshRequired())
+                    {
+                        client.DownloadFile(Feed, DownloadToFilePath);
+                        Stream strm = client.OpenRead(Feed);
+                        StreamReader sr = new StreamReader(strm);
+                        string strXml = sr.ReadToEnd();
+                        xDoc.LoadXml(strXml);
+                    }
+                    else
+                    {
+                        xDoc.Load(DownloadToFilePath);
+                    }
+
+                    ParseYahooWeatherDoc(xDoc);
                 }
-                else
+                catch (Exception e)
                 {
-                    xDoc.Load(DownloadToFilePath); 
-                }                             
-                               
-                ParseYahooWeatherDoc(xDoc);
-            }
-            catch (Exception e)
-            {
-                Logger.ReportException("Yahoo weather refresh failed" , e);
-            }
-            finally
-            {
-                client.Dispose();
+                    Logger.ReportException("Yahoo weather refresh failed", e);
+                }
+                finally
+                {
+                    client.Dispose();
+                }
             }
         }
 
@@ -136,6 +143,11 @@ namespace MediaBrowser
             }
             // If we get to this stage that means the file does not exists, and we should force a refresh
             return true;
+        }
+
+        private void ProvideNullData()
+        {
+            this.Temp = "nulldata";
         }
 
         private void ParseYahooWeatherDoc(XmlDocument xDoc)

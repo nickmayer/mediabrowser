@@ -17,6 +17,15 @@
     </Locals>
 
     <Rules>
+      <Changed Source="[YahooWeather.Temp]">
+        <Conditions>
+          <Equality Source="[YahooWeather.Temp]" ConditionOp="Equals" Value="nulldata" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Base.Visible]" Value="false" />
+        </Actions>
+      </Changed>
+      
       <Binding Source="[YahooWeather.Temp]" Target="[Temp.Content]"/>
       <Binding Source="[YahooWeather.Unit]" Target="[Unit.Content]" />
       <Binding Source="[YahooWeather.Location]" Target="[Location.Content]" />
@@ -39,7 +48,7 @@
     </Rules>
 
     <Content>
-      <Graphic Content="image://i:BlankImage"  SizingPolicy="SizeToChildren">
+      <Graphic Name="Base" Content="image://i:BlankImage"  SizingPolicy="SizeToChildren">
         <Children>
           <Text Content="Yahoo! Weather" Color="White" Font="[Font]" >
             <Animations>
@@ -94,6 +103,15 @@
     </Locals>
 
     <Rules>
+      <Changed Source="[YahooWeather.Temp]">
+        <Conditions>
+          <Equality Source="[YahooWeather.Temp]" ConditionOp="NotEquals" Value="nulldata" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Bg.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+      
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
       <Binding Source="[YahooWeather.LongTemp]" Target="[Temp.Content]"/>
@@ -140,7 +158,8 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" Content="image://i:BlankImage" SizingPolicy="SizeToChildren" Padding="0,0,5,0">
+      <Graphic Name="Bg" Content="image://i:BlankImage" SizingPolicy="SizeToChildren" Padding="0,0,5,0"
+               Visible="false">
         <Layout>
           <FlowLayout Orientation="Horizontal" />
         </Layout>
