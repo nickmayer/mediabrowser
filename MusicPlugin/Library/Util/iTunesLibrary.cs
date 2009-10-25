@@ -241,7 +241,7 @@ namespace MusicPlugin.Library.Helpers
             iTunesSong newSong = new iTunesSong();
             newSong.SongName = data["Name"];
             newSong.Name = data["Name"];
-            newSong.Path = data["Location"];
+            newSong.Path = GetUncFileName(data["Location"]);
             newSong.Id = newSong.Path.GetMD5();
             childAlbumFolder.Songs.Add(newSong);
             childAlbumFolder.Parent = childArtistFolder;
