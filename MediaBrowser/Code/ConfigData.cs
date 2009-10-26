@@ -101,6 +101,8 @@ namespace MediaBrowser
         public string ParentalPIN = "0000";
         public int MaxParentalLevel = 3;
 
+        public bool EnableMouseHook = false;
+
         public class ExternalPlayer
         {
             public MediaType MediaType { get; set; }

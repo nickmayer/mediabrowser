@@ -78,8 +78,11 @@ namespace MediaBrowser
                 this.session.Application = this;
             }
             singleApplicationInstance = this;
-            //wire up our mouseActiveHooker so we can know if the mouse is active over us
-            Kernel.Instance.MouseActiveHooker.MouseActive += new IsMouseActiveHooker.MouseActiveHandler(mouseActiveHooker_MouseActive);
+            //wire up our mouseActiveHooker if enabled so we can know if the mouse is active over us
+            if (Config.Instance.EnableMouseHook)
+            {
+                Kernel.Instance.MouseActiveHooker.MouseActive += new IsMouseActiveHooker.MouseActiveHandler(mouseActiveHooker_MouseActive);
+            }
 
         }
 

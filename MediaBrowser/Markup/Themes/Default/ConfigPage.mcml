@@ -103,7 +103,7 @@
       <BooleanChoice Name="StartDiamondMovieMinimal" Value="[Application.Config.StartDiamondMovieMinimal]" />
       <BooleanChoice Name="AlwaysShowDetailsPage" Value="[Application.Config.AlwaysShowDetailsPage]" />
       <BooleanChoice Name="ShowRootBackground" Value="[Application.Config.ShowRootBackground]" />
-      
+      <BooleanChoice Name="EnableMouseHook" Value="[Application.Config.EnableMouseHook]" />
 
       <BooleanChoice Name="DefaultToFirstUnwatched" Value="[Application.Config.DefaultToFirstUnwatched]" />
       <BooleanChoice Name="AutoEnterSingleDirs" Value="[Application.Config.AutoEnterSingleDirs]" />
@@ -333,7 +333,8 @@
       <Binding Source="[StartDiamondMovieMinimal.Value]" Target="[Config.StartDiamondMovieMinimal]" />
       <Binding Source="[AlwaysShowDetailsPage.Value]" Target="[Config.AlwaysShowDetailsPage]" />
       <Binding Source="[ShowRootBackground.Value]" Target="[Config.ShowRootBackground]" />
-      
+      <Binding Source="[EnableMouseHook.Value]" Target="[Config.EnableMouseHook]" />
+
 
       <Binding Source="[ThemeModel.Chosen!cor:String]" Target="[Config.Theme]" >
         <Conditions>
@@ -517,6 +518,7 @@
                       <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Always Show Details" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[AlwaysShowDetailsPage]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Enhanced Mouse Support" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableMouseHook]"  Font="font://f:CP_ConfigItemFont"/>
                     </Children>
                   </Panel>
 

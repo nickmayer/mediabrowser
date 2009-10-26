@@ -17,7 +17,7 @@ namespace MediaBrowser.Library.Localization
     public class LocalizedStringData
     {
 
-        private string version = "1.0002"; //this is used to see if we have changed and need to re-save
+        private string version = "1.0003"; //this is used to see if we have changed and need to re-save
 
         public string FileName; //this is public so it will serialize and we know where to save ourselves
         public string Version = ""; //this will get saved so we can check it against us for changes
@@ -74,6 +74,7 @@ namespace MediaBrowser.Library.Localization
         public string ShowThemeBackgroundDesc = "Display Theme background. [TIER 3] Highest tier background effect takes precedence.";
         public string ShowInitialFolderBackgroundDesc = "Display initial backdrop in all views. (backdrop.png or backdrop.jpg sourced from your initial folder) [TIER 2] Highest tier background effect takes precedence.";
         public string ShowFanArtonViewsDesc = "Display fan art as a Background in views that support this capability. [TIER 1] Highest tier background effect takes precedence.";
+        public string EnhancedMouseSupportDesc = "Enable Better Scrolling Support with the Mouse.  Leave OFF if You Don't Use a Mouse. Won't Take Effect Until MediaBrowser is Restarted.";
 
 
         LocalizedStringData(string file)

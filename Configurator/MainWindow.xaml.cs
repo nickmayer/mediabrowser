@@ -590,14 +590,18 @@ folder: {0}
         }
 
         private void upgradePlugin_Click(object sender, RoutedEventArgs e) {
-            IPlugin plugin = pluginList.SelectedItem as IPlugin;
-            //get our original source so we can upgrade...
-            IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin);
-            if (newPlugin != null) {
-                PluginInstaller p = new PluginInstaller();
-                callBack done = new callBack(UpgradeFinished);
-                this.IsEnabled = false;
-                p.InstallPlugin(newPlugin, progress, this, done);
+            if (pluginList.SelectedItem != null)
+            {
+                IPlugin plugin = pluginList.SelectedItem as IPlugin;
+                //get our original source so we can upgrade...
+                IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin);
+                if (newPlugin != null)
+                {
+                    PluginInstaller p = new PluginInstaller();
+                    callBack done = new callBack(UpgradeFinished);
+                    this.IsEnabled = false;
+                    p.InstallPlugin(newPlugin, progress, this, done);
+                }
             }
         }
 

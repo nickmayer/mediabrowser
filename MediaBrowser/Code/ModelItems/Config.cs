@@ -596,7 +596,13 @@ namespace MediaBrowser
             get { return this.data.ShowRootBackground; }
             set { if (this.data.ShowRootBackground != value) { this.data.ShowRootBackground = value; Save(); FirePropertyChanged("ShowRootBackground"); } }
         }
-        
+
+        public bool EnableMouseHook
+        {
+            get { return this.data.EnableMouseHook; }
+            set { if (this.data.EnableMouseHook != value) { this.data.EnableMouseHook = value; Save(); FirePropertyChanged("EnableMouseHook"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;
