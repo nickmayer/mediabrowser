@@ -134,7 +134,17 @@ namespace Configurator
 
         private void getLibrarySubDirectories(string dir, TreeViewItem parent)
         {
-            string[] dirs = Directory.GetDirectories(dir);
+            string[] dirs;
+            try
+            {
+                dirs = Directory.GetDirectories(dir);
+            }
+            catch (Exception ex)
+            {
+                //something wrong - can't access the directory try to move on
+                Logger.ReportException("Couldn't access directory " + dir, ex);
+                return;
+            }
             foreach (string subdir in dirs)
             {
                 //only want directories that don't directly contain movies in our tree...
