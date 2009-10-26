@@ -255,37 +255,54 @@ namespace MusicPlugin.Library.Helpers
 
             string uncFilePath = GetUncFileName(song.Path);
 
-            if (!System.IO.File.Exists(uncFilePath))
-                return;
 
-            string folderPath = Path.Combine(Path.GetDirectoryName(uncFilePath),"folder.jpg");
-
+            string folderPath = ResolveImage(uncFilePath, "folder", false);
             if (System.IO.File.Exists(folderPath))
                 folder.PrimaryImagePath = folderPath;
-            
-            string backPath = Path.Combine(Path.GetDirectoryName(uncFilePath), "Backdrop.jpg");
+
+            string backPath = ResolveImage(uncFilePath, "backdrop", true);
 
             if (System.IO.File.Exists(backPath))
                 folder.BackdropImagePath = backPath;
-            else
-            {
-                backPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(uncFilePath)).FullName,"Backdrop.jpg");
-                if (System.IO.File.Exists(backPath))
-                {
-                    folder.BackdropImagePath = backPath;
-                    if (folder.Parent != null)
-                        folder.Parent.BackdropImagePath = backPath;
-                }
-            }
 
-            backPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(uncFilePath)).FullName, "Backdrop.jpg");
+            backPath = ResolveImage(Directory.GetParent(Path.GetDirectoryName(uncFilePath)).FullName, "backdrop", false);
             if (System.IO.File.Exists(backPath))
             {
                 if (folder.Parent != null)
                     folder.Parent.BackdropImagePath = backPath;
             }
+        }
 
+        private static string ResolveImage(string path, string filenameWithoutExt, bool checkParent)
+        {
+            string result = GetImagePath(path, filenameWithoutExt + ".png", checkParent);
+            if (string.IsNullOrEmpty(result))
+                result = GetImagePath(path, filenameWithoutExt + ".jpg", checkParent);
 
+            return result;
+        }
+
+        private static string GetImagePath(string path, string filename, bool checkParent)
+        {
+            string result = Path.Combine(Path.GetDirectoryName(path), filename);
+
+            if (System.IO.File.Exists(result))
+                return result;
+
+            if (checkParent)
+            {
+                if (Directory.GetParent(Path.GetDirectoryName(path)) == null)
+                    return string.Empty;
+                else
+                {
+                    result = Path.Combine(Directory.GetParent(Path.GetDirectoryName(path)).FullName, filename);
+                    if (System.IO.File.Exists(result))
+                    {
+                        return result;
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         private static string GetUncFileName(string song)
