@@ -31,7 +31,7 @@ namespace MusicPlugin.Library.Entities
         public override void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id)
         {
             base.Assign(location, parameters, id);
-
+            Name = location.Name;
             if (parameters != null)
             {
                 foreach (var parameter in parameters)
@@ -105,7 +105,6 @@ namespace MusicPlugin.Library.Entities
             {
                 if (location == null)
                 {
-
                     location = Kernel.Instance.GetLocation<IMediaLocation>(Path);
                 }
                 return location;
