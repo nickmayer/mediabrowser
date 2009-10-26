@@ -74,7 +74,7 @@ namespace MediaBrowser.Library.Localization
         public string ShowThemeBackgroundDesc = "Display Theme background. [TIER 3] Highest tier background effect takes precedence.";
         public string ShowInitialFolderBackgroundDesc = "Display initial backdrop in all views. (backdrop.png or backdrop.jpg sourced from your initial folder) [TIER 2] Highest tier background effect takes precedence.";
         public string ShowFanArtonViewsDesc = "Display fan art as a Background in views that support this capability. [TIER 1] Highest tier background effect takes precedence.";
-        public string EnhancedMouseSupportDesc = "Enable Better Scrolling Support with the Mouse.  Leave OFF if You Don't Use a Mouse. Won't Take Effect Until MediaBrowser is Restarted.";
+        public string EnhancedMouseSupportDesc = "Enable Better Scrolling Support with the Mouse.  Leave OFF if You Don't Use a Mouse.  Won't Take Effect Until MediaBrowser is Restarted.";
 
 
         LocalizedStringData(string file)

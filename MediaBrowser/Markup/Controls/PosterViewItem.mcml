@@ -110,11 +110,11 @@
 					<Set Target="[BoxArt.Content]" Value="[Item.PreferredImage]"/>
 					<Set Target="[ConstraintPanel.ColorFilter]" Value="White" />
 					<Set Target="[ConstraintPanel.Alpha]" Value="1" />
-          <Set Target="[BoxArt.MaintainAspectRatio]" Value="[Item.SmallImageIsDistorted]">
+          <!--<Set Target="[BoxArt.MaintainAspectRatio]" Value="[Item.SmallImageIsDistorted]">
             <Transformer>
               <BooleanTransformer Inverse="true"/>
             </Transformer>
-          </Set>
+          </Set>-->
 				</Actions>
 			</Condition>
 
@@ -123,16 +123,21 @@
           <Equality  Source="[InFocus.Value]" Value="true"/>
         </Conditions>
         <Actions>
-          <Set Target="[BoxArt.MaintainAspectRatio]" Value="[Item.SmallImageIsDistorted]">
+          <!--<Set Target="[BoxArt.MaintainAspectRatio]" Value="[Item.SmallImageIsDistorted]">
             <Transformer>
               <BooleanTransformer Inverse="true"/>
             </Transformer>
-          </Set>
+          </Set>-->
           <Set Target="[BoxArt.Content]" Value="[Item.PreferredImage]"/>
         </Actions>
 
       </Changed>
-			<Condition Source="[InFocus.Value]" SourceValue="false">
+      <Binding Target="[BoxArt.MaintainAspectRatio]" Source="[Item.SmallImageIsDistorted]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Condition Source="[InFocus.Value]" SourceValue="false">
 				<Actions>
 					<Set Target="[BoxArt.Content]" Value="[Item.PreferredImageSmall]"/>
 				</Actions>
@@ -284,8 +289,8 @@
 
                           <Graphic  Name="BoxArt"  Scale="1,1,1" Padding="0,0,0,0" SizingPolicy="SizeToConstraint"  MaintainAspectRatio="true" >
 												<LayoutInput>
-													<!--<AnchorLayoutInput Horizontal="Center"/>-->
-                           <AnchorLayoutInput Horizontal="Fill" Vertical="Fill"/> 
+													<AnchorLayoutInput Horizontal="Center"/>
+                           <!--<AnchorLayoutInput Horizontal="Fill" Vertical="Fill"/>--> 
 												</LayoutInput>
 											</Graphic>
 										</Children>
