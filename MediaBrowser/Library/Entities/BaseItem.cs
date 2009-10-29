@@ -188,13 +188,21 @@ namespace MediaBrowser.Library.Entities {
                             if (this is Season)
                             {
                                 var aSeries = this.Parent as Series;
-                                return aSeries.ParentalRating;
+                                if (aSeries != null)
+                                {
+                                    return aSeries.ParentalRating;
+                                }
+                                else return "";
                             }
                             else
                                 if (this is Episode)
                                 {
                                     var anEpisode = this as Episode;
-                                    return anEpisode.Series.ParentalRating;
+                                    if (anEpisode.Series != null)
+                                    {
+                                        return anEpisode.Series.ParentalRating;
+                                    }
+                                    else return "";
                                 }
                                 else
                                 {
