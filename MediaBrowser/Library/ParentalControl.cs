@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.MediaCenter.UI;
 using System.Xml;
+using System.IO;
 using MediaBrowser.Library;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Configuration;
 using MediaBrowser.Code;
 using System.Diagnostics;
 using System.Collections;
@@ -51,6 +53,19 @@ namespace MediaBrowser.Library
             ratings = new Ratings(Config.Instance.ParentalBlockUnrated);
 
             Logger.ReportInfo("Parental Control Initialized");
+
+            //check to see if this is run with clean or recently created cache
+            string itemCache = Path.Combine(ApplicationPaths.AppCachePath, "items");
+            DateTime recentTime = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddMinutes(-1)));  //if cache dir created less than a minute ago we must've just done it
+            if (!Directory.Exists(itemCache) || DateTime.Compare(Directory.GetCreationTime(itemCache), recentTime) > 0) 
+            {
+                if (Config.Instance.ParentalBlockUnrated)
+                {
+                    //blocking unrated content - unlock the library temporarily to allow items to populate their metadata
+                    Logger.ReportInfo("Unlocking Library to allow initial cache population.");
+                    this.Unlocked = true; //can't invoke the timer yet - it may not even be initialized
+                }
+            }
             return;
         }
 
