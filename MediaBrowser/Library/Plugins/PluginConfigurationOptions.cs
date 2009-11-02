@@ -105,15 +105,23 @@ namespace MediaBrowser.Library.Plugins
 
             XmlSerializer ser = new XmlSerializer(typeof(T));
 
-            TextReader reader = new StreamReader(configFile);
-            _instance = (T)ser.Deserialize(reader);
-            reader.Close();
-        }        
+            using (TextReader reader = new StreamReader(configFile)) {
+                _instance = (T)ser.Deserialize(reader);
+            }
+        }
 
-        //public List<ConfigurationOption> Options { get; set; }
 
-        Window _pluginConfigureView = null;
-        Dictionary<Control, PropertyInfo> _controlBindings = new Dictionary<Control, PropertyInfo>();
+        // hackyness to stop WPF from loading in ehexthost, cause that screws up fonts, needs a refactor. 
+        object oControlBindings = null;
+ 
+        Dictionary<Control, PropertyInfo> _controlBindings {
+            get {
+                if (oControlBindings == null) {
+                   oControlBindings =  new Dictionary<Control, PropertyInfo>();
+                }
+                return oControlBindings as Dictionary<Control, PropertyInfo>; 
+            }
+        } 
                 
         public bool? BuildUI()
         {            
@@ -121,15 +129,15 @@ namespace MediaBrowser.Library.Plugins
 
             Grid grid = BuildGrid();
 
-            BuildWindow();
-            _pluginConfigureView.Content = (grid);
+            Window window  = BuildWindow();
+            window.Content = (grid);
 
             foreach (var property in type.GetProperties())
                 BuildControl(grid, property, Instance);
 
             PopulateControls(Instance);
 
-            StackPanel panel = BuildButtonPanel();
+            StackPanel panel = BuildButtonPanel(window);
 
             grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(40) });
             Grid.SetRow(panel, grid.RowDefinitions.Count - 1);
@@ -139,10 +147,10 @@ namespace MediaBrowser.Library.Plugins
 
             grid.Height = grid.RowDefinitions.Sum(o => o.Height.Value);
             grid.Width = grid.ColumnDefinitions.Sum(o => o.Width.Value);
-            _pluginConfigureView.Height = grid.Height + 60;
-            _pluginConfigureView.Width = grid.Width + 40;
+            window.Height = grid.Height + 60;
+            window.Width = grid.Width + 40;
 
-            return _pluginConfigureView.ShowDialog();
+            return window.ShowDialog();
         }
 
         void PopulateControls(PluginConfigurationOptions pluginConfigurationOptions)
@@ -164,19 +172,18 @@ namespace MediaBrowser.Library.Plugins
 
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(150) });
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(200) });
-            //grid.ShowGridLines = true;
             return grid;
         }
 
-        void BuildWindow()
+        Window BuildWindow()
         {
-            _pluginConfigureView = new Window();
-            _pluginConfigureView.WindowStyle = WindowStyle.ToolWindow;
-            _pluginConfigureView.Title = "Plugin Options";
-            _pluginConfigureView.ShowInTaskbar = false;
-            _pluginConfigureView.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            _pluginConfigureView.ResizeMode = ResizeMode.NoResize;
-            _pluginConfigureView.Icon = null;
+            Window window = new Window();
+            window.WindowStyle = WindowStyle.ToolWindow;
+            window.Title = "Plugin Options";
+            window.ShowInTaskbar = false;
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.ResizeMode = ResizeMode.NoResize;
+            window.Icon = null;
 
             LinearGradientBrush linear = new LinearGradientBrush();
             linear.StartPoint = new Point(0.5, 0);
@@ -184,18 +191,23 @@ namespace MediaBrowser.Library.Plugins
             linear.GradientStops.Add(new GradientStop(Color.FromArgb(255, 255, 255, 255), 0.853));
             linear.GradientStops.Add(new GradientStop(Color.FromArgb(255, 202, 192, 192), 1));
 
-            _pluginConfigureView.Background = linear;
+            window.Background = linear;
+
+            return window;
 
         }
 
-        StackPanel BuildButtonPanel()
+        StackPanel BuildButtonPanel(Window window)
         {
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Height = 40 };
             Button ok = new Button() { HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(5, 10, 5, 0), Content = "OK", Height = 25, Width = 60 };
             Button reset = new Button() { HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(5, 10, 5, 0), Content = "Reset", Height = 25, Width = 60 };
             Button cancel = new Button() { IsCancel = true, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(5, 10, 0, 0), Content = "Cancel", Height = 25, Width = 60 };
-            ok.Click += new RoutedEventHandler(ok_Click);
-            cancel.Click += new RoutedEventHandler(cancel_Click);
+            
+            // capture
+            var w = window; 
+            ok.Click += new RoutedEventHandler((x, y) => { w.DialogResult = true; });
+            cancel.Click += new RoutedEventHandler((x, y) => { w.DialogResult = false; });
             reset.Click += new RoutedEventHandler(reset_Click);
             panel.Children.Add(ok);
             panel.Children.Add(reset);
@@ -268,16 +280,6 @@ namespace MediaBrowser.Library.Plugins
         void PluginConfigureView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ValueChanged(sender);
-        }
-
-        void cancel_Click(object sender, RoutedEventArgs e)
-        {
-            _pluginConfigureView.DialogResult = false;
-        }
-
-        void ok_Click(object sender, RoutedEventArgs e)
-        {
-            _pluginConfigureView.DialogResult = true;
         }
 
         void ValueChanged(object sender)
