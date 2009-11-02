@@ -247,7 +247,8 @@ namespace MediaBrowser.Library
                         string watchTimeStr = "";
                         if (this.PlayState.PositionTicks > 0)
                         {
-                            watchTimeStr = " "+this.PlayState.PositionTicks.ToString()+" " + RunningTimeString;
+                            TimeSpan watchTime = new TimeSpan(this.PlayState.PositionTicks);
+                            watchTimeStr = " "+watchTime.Minutes.ToString()+" ";
                             if (!String.IsNullOrEmpty(this.RunningTimeString))
                             {
                                 runTimeStr = " of " + RunningTimeString;
