@@ -51,7 +51,9 @@ namespace MediaBrowser
         private bool navigatingForward;
         private IPlaybackController currentPlaybackController = null;
         private static string _background;
-        private IsMouseActiveHooker mouseActiveHooker;
+        //tracks whether to show recently added or watched items
+        public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; } }
+
         public bool NavigatingForward
         {
             get { return navigatingForward; }

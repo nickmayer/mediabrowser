@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Code.ModelItems;
+using MediaBrowser.Code;
 using System.Threading;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Threading;
@@ -86,17 +87,35 @@ namespace MediaBrowser.Library {
             }
         }
 
+        public List<Item> RecentItems
+        {
+            get
+            {
+                //only want items from non-protected folders
+                if (folder != null && folder.ParentalAllowed)
+                {
+                    switch (Application.CurrentInstance.RecentItemOption)
+                    {
+                        case "added":
+                            return GetNewestItems(Config.Instance.RecentItemCount);
+                        case "watched":
+                            return GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                        default:
+                            return GetNewestItems(Config.Instance.RecentItemCount); //default to recently added
+                    }
+                } else {
+                    return new List<Item>(); //return empty list if folder is protected
+                }
+
+            }
+        }
+
         //TODO: This Call MUST BE optimized - It takes a significant amount of processing and time to retreive.
         // to make mcml biniding easier
         public List<Item> NewestItems {
             get {
-                //only want items from non-protected folders
-                if (folder != null && folder.ParentalAllowed)
-                {
-                    return GetNewestItems(20);
-                } else {
-                    return new List<Item>(); //return empty list if folder is protected
-                }
+                //backward compat
+                return RecentItems;
             }
         }
         
@@ -112,12 +131,59 @@ namespace MediaBrowser.Library {
                         newestItems = items.Values.Select(i => ItemFactory.Instance.Create(i)).Reverse().ToList();
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
-                            FirePropertyChanged("NewestItems");
+                            FirePropertyChanged("RecentItems");
                         });
                     });
                 }
             }
             return newestItems;
+        }
+
+        List<Item> recentWatchedItems = null;
+        public List<Item> GetRecentWatchedItems(int count)
+        {
+            if (recentWatchedItems == null)
+            {
+                recentWatchedItems = new List<Item>();
+                if (folder != null)
+                {
+                    Async.Queue(() =>
+                    {
+                        var items = new SortedList<DateTime, BaseItem>();
+                        FindRecentWatchedChildren(folder, items, count);
+                        recentWatchedItems = items.Values.Select(i => ItemFactory.Instance.Create(i)).Reverse().ToList();
+                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                        {
+                            FirePropertyChanged("RecentItems");
+                        });
+                    });
+                }
+            }
+            return recentWatchedItems;
+        }
+
+        public void AddNewlyWatched(Item item)
+        {
+            //called when we watch something so add to top of list (this way we don't have to re-build whole thing)
+            if (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed)
+            {
+                if (recentWatchedItems != null) //already have a list
+                {
+                    //first we need to remove ourselves if we're already in the list (can't search with item cuz we were cloned)
+                    Item us = recentWatchedItems.Find(i => i.Id == item.Id);
+                    if (us != null)
+                    {
+                        recentWatchedItems.Remove(us);
+                    }
+                    //then add at the top and tell the UI to update
+                    recentWatchedItems.Insert(0, item);
+                }
+                else
+                { //need to build a list - we will get added automatically
+                    GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                }
+                FirePropertyChanged("RecentItems");
+            }
         }
 
         string folderOverviewCache = null;
@@ -154,6 +220,7 @@ namespace MediaBrowser.Library {
         }
 
         static void FindNewestChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize) {
+            DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
             foreach (var item in folder.Children) {
                 // skip folders
                 if (item is Folder) {
@@ -164,16 +231,62 @@ namespace MediaBrowser.Library {
                     }
                 } else {
                     DateTime creationTime = item.DateCreated;
-                    while (foundNames.ContainsKey(creationTime)) {
-                        // break ties 
-                        creationTime = creationTime.AddMilliseconds(1);
-                    }
-                    foundNames.Add(creationTime, item);
-                    if (foundNames.Count > maxSize) {
-                        foundNames.RemoveAt(0);
+                    if (DateTime.Compare(creationTime, daysAgo) > 0)
+                    {
+                        //only if added less than 60 days ago (should be configurable)
+                        while (foundNames.ContainsKey(creationTime))
+                        {
+                            // break ties 
+                            creationTime = creationTime.AddMilliseconds(1);
+                        }
+                        foundNames.Add(creationTime, item);
+                        if (foundNames.Count > maxSize)
+                        {
+                            foundNames.RemoveAt(0);
+                        }
                     }
                 }
                 
+            }
+        }
+
+        static void FindRecentWatchedChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize)
+        {
+            DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+            foreach (var item in folder.Children)
+            {
+                // skip folders
+                if (item is Folder)
+                {
+                    //don't return items inside protected folders
+                    if (item.ParentalAllowed)
+                    {
+                        FindRecentWatchedChildren(item as Folder, foundNames, maxSize);
+                    }
+                }
+                else
+                {
+                    if (item is Video) {
+                        Video i = item as Video;
+                        DateTime watchedTime = i.PlaybackStatus.LastPlayed;
+                        if (DateTime.Compare(watchedTime, daysAgo) > 0)
+                        {
+                            //only get ones watched within last 60 days
+                            while (foundNames.ContainsKey(watchedTime))
+                            {
+                                // break ties 
+                                watchedTime = watchedTime.AddMilliseconds(1);
+                            }
+                            foundNames.Add(watchedTime, item);
+                            if (foundNames.Count > maxSize)
+                            {
+                                foundNames.RemoveAt(0);
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
 

@@ -103,6 +103,10 @@ namespace MediaBrowser
 
         public bool EnableMouseHook = false;
 
+        public int RecentItemCount = 20;
+        public int RecentItemDays = 60;
+        public string RecentItemOption = "added";
+
         public class ExternalPlayer
         {
             public MediaType MediaType { get; set; }

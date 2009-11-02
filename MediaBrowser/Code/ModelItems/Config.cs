@@ -603,6 +603,23 @@ namespace MediaBrowser
             set { if (this.data.EnableMouseHook != value) { this.data.EnableMouseHook = value; Save(); FirePropertyChanged("EnableMouseHook"); } }
         }
 
+        public int RecentItemCount
+        {
+            get { return this.data.RecentItemCount; }
+            set { if (this.data.RecentItemCount != value) { this.data.RecentItemCount = value; Save(); FirePropertyChanged("RecentItemCount"); } }
+        }
+
+        public int RecentItemDays
+        {
+            get { return this.data.RecentItemDays; }
+            set { if (this.data.RecentItemDays != value) { this.data.RecentItemDays = value; Save(); FirePropertyChanged("RecentItemDays"); } }
+        }
+
+        public string RecentItemOption
+        {
+            get { return this.data.RecentItemOption; }
+            set { if (this.data.RecentItemOption != value) { this.data.RecentItemOption = value; Save(); FirePropertyChanged("RecentItemOption"); } }
+        }
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;

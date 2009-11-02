@@ -15,6 +15,7 @@
     xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
     xmlns:dp="resx://MediaBrowser/MediaBrowser.Resources/DiamondPagination"
     xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
+    xmlns:pv="resx://MediaBrowser/MediaBrowser.Resources/Pivot"
       
 	  xmlns:wea="resx://MediaBrowser/MediaBrowser.Resources/Weather"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
@@ -60,6 +61,7 @@
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="150" Enabled="true" />
       <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
+      <Timer Name="InitialFocusTimer" AutoRepeat="false" Interval="2500" Enabled="true" />
 
       <a:Clock Name="Clock"/>
 
@@ -75,12 +77,36 @@
       <cor:Int32 Name="SpeedUpDelay" Int32="2"/>
 
       <Command Name="ClosePopupPlay"/>
+
+      <Choice Name="RecentItems">
+        <Options>
+          <cor:String String="recently added" />
+          <cor:String String="recently watched" />
+        </Options>
+      </Choice>
+      
     </Locals>
 
     <Rules>
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
+      <Changed Source="[Application]" InitialEvaluate="true" >
+        <Conditions>
+          <Equality Source="[Application.RecentItemOption]" Value="watched"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[RecentItems.ChosenIndex]" Value="1" />
+        </Actions>
+      </Changed>
+
+      <!--Make sure initial focus is in the right place-->
+      <Changed Source="[InitialFocusTimer.Tick]" >
+        <Actions>
+          <Set Target="[InitialFocusTimer.Enabled]" Value="false" />
+          <Invoke Target="[ItemMenuPanel.NavigateInto]" />
+        </Actions>
+      </Changed>
 
       <!-- Bindings -->
       <Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>
@@ -124,6 +150,15 @@
         </Actions>
       </Rule>
       <!-- Commands -->
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="added" />
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="watched" />
+
+      <Changed Source="[RecentItems.ChosenIndex]" >
+        <Actions>
+          <Invoke Target="[SelectedItem.RecentItemsChanged]" />
+        </Actions>
+      </Changed>
+
       <Changed Source="[Configure.Invoked]">
         <Actions>
           <Invoke Target="[Application.OpenConfiguration]" showFullOptions="true" />
@@ -166,6 +201,7 @@
         <Actions>
           <Set Target="[RefocusViewTimer.Enabled]" Value="true" />
           <Set Target="[RecentItemsPanel.Visible]" Value="true"/>
+          <Set Target="[NavInto.Value]" Value="true" />
         </Actions>
       </Changed>
       <Changed Source="[SelectedItem]" >
@@ -207,7 +243,7 @@
         </Conditions>
         <Actions>
           <Set Target="[RefocusViewTimer.Enabled]" Value="false" />          
-          <Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]"/>
+          <Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]" />
           <Invoke Target="[ItemMenuPanel.NavigateInto]" />
         </Actions>
       </Rule>
@@ -231,6 +267,7 @@
           <Invoke Target="[ItemMenuPanel.NavigateInto]" />
         </Actions>
       </Changed>
+      
 
       <!-- Typing Handler / Jump List -->
       <Changed Source="[Application]" InitialEvaluate="true">
@@ -477,7 +514,14 @@
                 </Children>
               </Panel>
 
-              <Panel Name="recentlyAdded">
+              <!-- Recent Items selector -->
+              <pv:Pivot Model="[RecentItems]" Name="RecentItemPivot" Navigation="RememberFocus">
+                <LayoutInput>
+                  <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.17"  />
+                </LayoutInput>
+              </pv:Pivot>
+ 
+              <!--<Panel Name="recentlyAdded">
                 <LayoutInput>
                   <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.17" />
                 </LayoutInput>
@@ -498,7 +542,7 @@
                     </Children>
                   </ColorFill>
                 </Children>
-              </Panel>
+              </Panel>-->
               <!-- These two ColorFills on either side of the scroller distract the mouse so it won't scroll when you go across screen -->
               <ColorFill MouseInteractive="true" Content="Transparent">
                 <LayoutInput>
@@ -513,7 +557,7 @@
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.35,10" Top="recentlyAdded,1,10" Right="Parent,.35,664"
+                  <FormLayoutInput Left="Parent,0.35,10" Top="RecentItemPivot,1,10" Right="Parent,.35,664"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Layout>
@@ -527,7 +571,7 @@
               <!-- Recent Panel Background Fade-->
               <Clip Name="NPClipP" FadeSize="5" Orientation="Horizontal" FadeAmount="1" >
                 <LayoutInput>
-                  <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="Parent,0,-10" Right="Parent,1,10" />
+                  <AnchorLayoutInput Top="RecentItemPivot,1,5" Bottom="Parent,0.7,25" Left="Parent,0,-10" Right="Parent,1,10" />
                 </LayoutInput>
                 <Children>
                   <ColorFill Content="color://s:FillColor" Alpha="0.7" Layout="Fill">
@@ -693,13 +737,13 @@
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
+      <Condition Source="[Folder.RecentItems.Count]" SourceValue="0" Target="[EmptyList.Visible]" Value="true" />
       <!-- Binding for Newest Items-->
-      <Binding Source="[Folder.NewestItems]" Target="[Repeater.Source]"/>
+      <Binding Source="[Folder.RecentItems]" Target="[Repeater.Source]"/>
       <!-- Pagination Rules-->
-      <Changed Source="[Folder.NewestItems]">
+      <Changed Source="[Folder.RecentItems]">
         <Actions>
           <Invoke Target="[ScrollingData.Home]" InvokePolicy="Synchronous" />
-          <Set Target="[NavInto.Value]" Value="true" />
         </Actions>
       </Changed>
       <Binding Source="[ScrollingData.CurrentPage]" Target="[Pagination.Value]" />
@@ -735,7 +779,11 @@
               </Scroller>
             </Children>
           </Clip>
-          
+          <Text Name="EmptyList" Content="No Items To Show" Font="Segoe Media Center, 24" Color="color://s:FontColorDark" Visible="false" >
+            <LayoutInput>
+              <AnchorLayoutInput Bottom="Parent,1,-5"/>
+            </LayoutInput>
+          </Text>
 
 
         </Children>
@@ -763,7 +811,7 @@
 
       <Binding Source="[Item.PreferredImage]" Target="[ItemPoster.Content]" />
       <Binding Source="[Item.LongName]" Target="[Txt1.Content]" />
-      <Binding Source="[Item.CreatedDateString]" Target="[Txt2.Content]" />
+      <Binding Source="[Item.RecentDateString]" Target="[Txt2.Content]" />
       <Binding Source="[Item.HaveWatched]" Target="[TickIndicator.Visible]" >
         <Conditions>
           <Equality Source="[Application.Config.ShowWatchTickInPosterView]" Value="true" />

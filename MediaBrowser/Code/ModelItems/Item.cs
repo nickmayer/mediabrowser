@@ -202,6 +202,7 @@ namespace MediaBrowser.Library
                     }
                     this.PlayableItem.QueueItem = queue;                    
                     this.PlayableItem.Play(this.PlayState, resume);
+                    if (!this.IsFolder) this.PhysicalParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
                 }
             }
             catch (Exception)
@@ -234,6 +235,38 @@ namespace MediaBrowser.Library
             get {
                 return PlayState==null?false:PlayState.CanResume;
             } 
+        }
+        public string RecentDateString
+        {
+            get
+            {
+                switch (Application.CurrentInstance.RecentItemOption)
+                {
+                    case "watched":
+                        string runTimeStr = "";
+                        string watchTimeStr = "";
+                        if (this.PlayState.PositionTicks > 0)
+                        {
+                            watchTimeStr = " "+this.PlayState.PositionTicks.ToString()+" " + RunningTimeString;
+                            if (!String.IsNullOrEmpty(this.RunningTimeString))
+                            {
+                                runTimeStr = " of " + RunningTimeString;
+                            }
+                        }
+                        return "Watched" + watchTimeStr + runTimeStr + " on " + LastPlayedString;
+                    default:
+                        return "Added on "+CreatedDateString;
+                }
+            }
+        }
+        public void RecentItemsChanged()
+        {
+            FirePropertyChanged("RecentItems");
+            //if (this is FolderModel)
+            //{
+            //    FolderModel f = this as FolderModel;
+            //    f.RefreshUI();
+            //}
         }
         public string LastPlayedString {
             get {

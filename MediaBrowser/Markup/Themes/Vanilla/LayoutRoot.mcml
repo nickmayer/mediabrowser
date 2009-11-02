@@ -247,6 +247,17 @@
         </Actions>
       </Rule>
 
+      <!--Just indicate which we are showing - need to add full recent watched capability-->
+      <Changed Source="[Application.Config.RecentItemOption]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Application.Config.RecentItemOption]" Value="watched" />
+        </Conditions>
+        <Actions>
+          <Set Target="[NPVTitle.Content]" Value="recently watched" />
+          <Set Target="[NPVTitleShadow.Content]" Value="recently watched" />
+        </Actions>
+      </Changed>
+
     </Rules>
 
     <Content>
@@ -411,7 +422,7 @@
                     <Children>
                       <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
                             Font="Segoe Media Center, 24" Margins="50,0,0,0" />
-                      <Text Content="recently added" Color="Black"
+                      <Text Name="NPVTitleShadow" Content="recently added" Color="Black"
                             Font="Segoe Media Center, 24" Margins="50,0,0,0">
                         <LayoutInput>
                           <AnchorLayoutInput Top="NPVTitle, 0, 2" Left="NPVTitle, 0, 2"/>
