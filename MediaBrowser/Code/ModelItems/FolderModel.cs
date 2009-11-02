@@ -296,11 +296,14 @@ namespace MediaBrowser.Library {
             {
                 //if this is the root page - force an update of the children
                 this.folderChildren.RefreshChildren();
+                this.folderChildren.Sort();
                 //and then newest items
                 foreach (FolderModel folder in this.Children)
                 {
                     folder.newestItems = null; //force it to go get the real items
-                    folder.GetNewestItems(20);
+                    folder.GetNewestItems(Config.Instance.RecentItemCount);
+                    folder.recentWatchedItems = null;
+                    folder.GetRecentWatchedItems(Config.Instance.RecentItemCount);
                 }
             }
             FireChildrenChangedEvents(); //force UI to update

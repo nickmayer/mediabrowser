@@ -38,6 +38,7 @@ namespace MediaBrowser.Library.Providers
             var virtualFolder = VirtualFolder;
             if (virtualFolder != null) {
                 Item.PrimaryImagePath = imagePath = virtualFolder.ImagePath;
+                Item.SortName = virtualFolder.SortName;
             }
         }
 

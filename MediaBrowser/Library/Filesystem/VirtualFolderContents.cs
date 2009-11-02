@@ -9,6 +9,7 @@ namespace MediaBrowser.Library.Filesystem {
 
         const string Image = "image";
         const string Folder = "folder";
+        const string SortOrder = "sortorder";
 
         List<string> folders = new List<string>();
 
@@ -16,6 +17,8 @@ namespace MediaBrowser.Library.Filesystem {
 
             var parsed = new AttributedContents(contents);
             ImagePath = parsed.GetSingleAttribute(Image);
+
+            SortName = parsed.GetSingleAttribute(SortOrder);
 
             var foundFolders = parsed.GetMultiAttribute(Folder);
             if (foundFolders != null) {
@@ -41,6 +44,8 @@ namespace MediaBrowser.Library.Filesystem {
         } 
 
         public string ImagePath { get; set; }
+
+        public string SortName { get; set; }
 
         public string Contents {
             get {

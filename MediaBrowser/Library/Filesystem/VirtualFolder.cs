@@ -49,7 +49,14 @@ namespace Configurator {
             }
         }
 
-        public override string ToString() {
+        public string SortName
+        {
+            get { return contents.SortName; }
+            set { contents.SortName = value; Save(); }
+        }
+
+        public override string ToString()
+        {
             return Name;
         }
     }
