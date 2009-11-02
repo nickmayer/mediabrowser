@@ -72,6 +72,33 @@ namespace TestMediaBrowser {
             Assert.AreEqual("movie3", rootFolder.Children.ElementAt(1).Name);
         }
 
+
+        [Test]
+        public void TestIsoEpisodesDetected() { 
+            
+                var rootLocation = MockFolderMediaLocation.CreateMockLocation(
+            @"
+|Root
+ |TV
+  |Simpsons
+   |Season 1
+    1.iso
+    2.iso
+    3.iso
+");
+            var rootFolder = Kernel.Instance.GetItem<MediaBrowser.Library.Entities.Folder>(rootLocation);
+
+            Assert.IsNotNull(rootFolder);
+
+            var tv = rootFolder.Children[0] as IFolder;
+            var simpsons = tv.Children[0] as IFolder;
+            var season1 = simpsons.Children[0] as IFolder;
+
+            foreach (var item in season1.Children) {
+                Assert.AreEqual(typeof(Episode), item.GetType());
+            }
+        } 
+
         [Ignore("Only used for performance testing!")]
         [Test]
         public void TestScanPerformance() {

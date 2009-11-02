@@ -21,7 +21,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
             if (!(location is IFolderMediaLocation) && 
                 !location.IsHidden() &&
-                Helper.IsVideo(location.Path) && 
+                (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path)) && 
                 TVUtils.IsEpisode(location.Path)) {
                 
                 factory = BaseItemFactory<Episode>.Instance; 
