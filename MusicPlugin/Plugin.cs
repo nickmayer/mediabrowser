@@ -29,7 +29,19 @@ namespace MusicPlugin
             //AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             Logger.ReportInfo(string.Format("Tyring to load {0} v{1} loaded by {2}.", Name, LatestVersion.ToString(), AppDomain.CurrentDomain.FriendlyName));
             if (AppDomain.CurrentDomain.FriendlyName.Contains("Configurator"))
+            {
+                Logger.ReportInfo("Loading mock items for configurator.");
+                BaseItem musicMock = kernel.ItemRepository.RetrieveItem(MusicNormalGuid);
+                BaseItem iTunesMock = kernel.ItemRepository.RetrieveItem(MusiciTunesGuid);
+                
+                if (musicMock != null && Settings.Instance.LoadNormalLibrary)
+                    kernel.RootFolder.AddVirtualChild(musicMock);
+                if (iTunesMock != null && Settings.Instance.LoadiTunesLibrary)
+                    kernel.RootFolder.AddVirtualChild(iTunesMock);
+
                 return;
+            }
+
 
             if (Settings.ValidateSettings(kernel.ConfigData.InitialFolder, true))
             {
@@ -111,7 +123,7 @@ namespace MusicPlugin
                 Logger.ReportInfo("Music plugin, iTunes nor Normal Music enabled, probably using folder specification (vf files) via configurator.");
                         
         }
-
+        
         public override string Name
         {
             get { return "Music and iTunes library."; }
@@ -125,7 +137,7 @@ namespace MusicPlugin
         {
             get
             {
-                return new System.Version(0,5,0,7);
+                return new System.Version(0,5,0,8);
             }
             set
             {
