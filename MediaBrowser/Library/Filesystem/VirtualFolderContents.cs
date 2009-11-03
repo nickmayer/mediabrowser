@@ -59,6 +59,11 @@ namespace MediaBrowser.Library.Filesystem {
                     generator.SetMultiAttribute(Folder, folders);
                 }
 
+                if (!string.IsNullOrEmpty(SortName))
+                {
+                    generator.SetSingleAttribute(SortOrder, SortName);
+                }
+
                 return generator.Contents;
             }
         }

@@ -329,13 +329,27 @@ namespace Configurator
 
             folderList.Items.Clear();
 
+            SortedList<string, VirtualFolder> vfs = new SortedList<string, VirtualFolder>();
+            int i = 0; //use this to fill in sortorder if not there
+
             foreach (var filename in Directory.GetFiles(config.InitialFolder))
             {
                 try
                 {
                     if (filename.ToLowerInvariant().EndsWith(".vf") ||
                         filename.ToLowerInvariant().EndsWith(".lnk"))
-                        folderList.Items.Add(new VirtualFolder(filename));
+                    {
+                        //add to our sorted list
+                        VirtualFolder vf = new VirtualFolder(filename);
+                        if (vf.SortName == null)
+                        {
+                            //give it a sortorder if its not there
+                            vf.SortName = i.ToString("D3");
+                            vf.Save();
+                        }
+                        vfs.Add(vf.SortName, vf);
+                        i++;
+                    }
                     //else
                     //    throw new ArgumentException("Invalid virtual folder file extension: " + filename);
                 }
@@ -349,6 +363,9 @@ namespace Configurator
                     // TODO : alert about dodgy VFs and delete them
                 }
             }
+            //now add our items in sorted order
+            foreach (VirtualFolder v in vfs.Values)
+                folderList.Items.Add(v);
         }
 
         private void RefreshPlayers()
@@ -387,14 +404,18 @@ namespace Configurator
             }
         }
 
-        private static void WriteVirtualFolder(string dir)
+        private void WriteVirtualFolder(string dir)
         {
+            int sortorder = 0;
+            if (folderList.Items != null)
+                sortorder = folderList.Items.Count;
             var imagePath = FindImage(dir);
             string vf = string.Format(
 @"
 folder: {0}
+sortorder: {2}
 {1}
-", dir, imagePath);
+", dir, imagePath,sortorder.ToString("D3"));
 
             string name = System.IO.Path.GetFileName(dir);
             // workaround for adding c:\
@@ -408,6 +429,20 @@ folder: {0}
 
             File.WriteAllText(destination,
                 vf.Trim());
+        }
+
+        private void updateFolderSort(int start)
+        {
+            if (folderList.Items != null && folderList.Items.Count > start)
+            {
+                //update the sortorder in the list starting with the specified index (we just removed or moved something)
+                for (int i = start; i < folderList.Items.Count; i++)
+                {
+                    VirtualFolder vf = (VirtualFolder)folderList.Items[i];
+                    vf.SortName = i.ToString("D3");
+                    vf.Save();
+                }
+            }
         }
 
         private static string FindImage(string dir)
@@ -473,6 +508,7 @@ folder: {0}
             var virtualFolder = folderList.SelectedItem as VirtualFolder;
             if (virtualFolder != null)
             {
+                int current = folderList.SelectedIndex;
 
                 var message = "About to remove the folder \"" + virtualFolder.Name + "\" from the menu.\nAre you sure?";
                 if (
@@ -481,6 +517,7 @@ folder: {0}
 
                     File.Delete(virtualFolder.Path);
                     folderList.Items.Remove(virtualFolder);
+                    updateFolderSort(current);
                     infoPanel.Visibility = Visibility.Hidden;
                 }
             }            
@@ -603,6 +640,43 @@ folder: {0}
                     p.InstallPlugin(newPlugin, progress, this, done);
                 }
             }
+        }
+
+        private void btnUp_Click(object sender, RoutedEventArgs e)
+        {
+            //move the current item up in the list
+            VirtualFolder vf = (VirtualFolder)folderList.SelectedItem;
+            int current = folderList.SelectedIndex;
+            if (vf != null && current > 0)
+            {
+                //remove from current location
+                folderList.Items.RemoveAt(current);
+                //add back above item above us
+                folderList.Items.Insert(current - 1, vf);
+                //and re-index the items below us
+                updateFolderSort(current - 1);
+                //finally, re-select this item
+                folderList.SelectedItem = vf;
+            }
+        }
+
+        private void btnDn_Click(object sender, RoutedEventArgs e)
+        {
+            //move the current item down in the list
+            VirtualFolder vf = (VirtualFolder)folderList.SelectedItem;
+            int current = folderList.SelectedIndex;
+            if (vf != null && current < folderList.Items.Count-1)
+            {
+                //remove from current location
+                folderList.Items.RemoveAt(current);
+                //add back below item below us
+                folderList.Items.Insert(current + 1, vf);
+                //and re-index the items below us
+                updateFolderSort(current);
+                //finally, re-select this item
+                folderList.SelectedItem = vf;
+            }
+
         }
 
         private delegate void callBack();

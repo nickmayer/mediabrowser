@@ -298,12 +298,19 @@ namespace MediaBrowser.Library {
                 this.folderChildren.RefreshChildren();
                 this.folderChildren.Sort();
                 //and then newest items
-                foreach (FolderModel folder in this.Children)
+                try
                 {
-                    folder.newestItems = null; //force it to go get the real items
-                    folder.GetNewestItems(Config.Instance.RecentItemCount);
-                    folder.recentWatchedItems = null;
-                    folder.GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                    foreach (FolderModel folder in this.Children)
+                    {
+                        folder.newestItems = null; //force it to go get the real items
+                        folder.GetNewestItems(Config.Instance.RecentItemCount);
+                        folder.recentWatchedItems = null;
+                        folder.GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Invalid root folder type", ex);
                 }
             }
             FireChildrenChangedEvents(); //force UI to update
