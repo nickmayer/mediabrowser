@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Filesystem;
 
 namespace Configurator {
@@ -43,9 +44,31 @@ namespace Configurator {
         public string Name {
             get { return System.IO.Path.GetFileNameWithoutExtension(path); }
             set {
-                string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), value + ".vf");
-                File.Move(path, newPath);
-                path = newPath;
+                //first change name of xml if its there
+                try
+                {
+                    string xmlPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), System.IO.Path.GetFileNameWithoutExtension(path) + ".folder.xml");
+                    if (File.Exists(xmlPath))
+                    {
+                        File.Move(xmlPath, System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), value + ".folder.xml"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error attempting to rename folder.xml file", ex);
+                }
+                //now actual file
+                try
+                {
+                    string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), value + ".vf");
+                    File.Move(path, newPath);
+                    path = newPath;
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error attempting to rename virtual folder", ex);
+                }
+
             }
         }
 
