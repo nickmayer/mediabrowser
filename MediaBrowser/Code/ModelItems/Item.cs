@@ -248,10 +248,10 @@ namespace MediaBrowser.Library
                         if (this.PlayState.PositionTicks > 0)
                         {
                             TimeSpan watchTime = new TimeSpan(this.PlayState.PositionTicks);
-                            watchTimeStr = " "+watchTime.Minutes.ToString()+" ";
+                            watchTimeStr = " "+watchTime.TotalMinutes.ToString("F0")+" ";
                             if (!String.IsNullOrEmpty(this.RunningTimeString))
                             {
-                                runTimeStr = " of " + RunningTimeString;
+                                runTimeStr = "of " + RunningTimeString;
                             }
                         }
                         return "Watched" + watchTimeStr + runTimeStr + " on " + LastPlayedString;
