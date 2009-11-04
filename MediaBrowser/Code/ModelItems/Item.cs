@@ -202,7 +202,7 @@ namespace MediaBrowser.Library
                     }
                     this.PlayableItem.QueueItem = queue;                    
                     this.PlayableItem.Play(this.PlayState, resume);
-                    if (!this.IsFolder) this.PhysicalParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
+                    if (!this.IsFolder && this.PhysicalParent != null) this.PhysicalParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
                 }
             }
             catch (Exception)
