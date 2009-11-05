@@ -253,6 +253,10 @@ namespace MediaBrowser.Library
                             {
                                 runTimeStr = "of " + RunningTimeString;
                             }
+                            else
+                            {
+                                runTimeStr = "mins"; //have watched time but not running time so tack on 'mins'
+                            }
                         }
                         return "Watched" + watchTimeStr + runTimeStr + " on " + LastPlayedString;
                     default:
