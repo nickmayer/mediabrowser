@@ -129,6 +129,10 @@ namespace MediaBrowser.Library {
                         var items = new SortedList<DateTime, BaseItem>();
                         FindNewestChildren(folder, items, count);
                         newestItems = items.Values.Select(i => ItemFactory.Instance.Create(i)).Reverse().ToList();
+                        foreach (Item i in newestItems)
+                        {
+                            i.PhysicalParent = this;  //give us a parent so we can update ourselves
+                        }
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
                             FirePropertyChanged("RecentItems");
@@ -152,6 +156,10 @@ namespace MediaBrowser.Library {
                         var items = new SortedList<DateTime, BaseItem>();
                         FindRecentWatchedChildren(folder, items, count);
                         recentWatchedItems = items.Values.Select(i => ItemFactory.Instance.Create(i)).Reverse().ToList();
+                        foreach (Item i in recentWatchedItems)
+                        {
+                            i.PhysicalParent = this;  //give us a parent so we can update ourselves
+                        }
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
                             FirePropertyChanged("RecentItems");

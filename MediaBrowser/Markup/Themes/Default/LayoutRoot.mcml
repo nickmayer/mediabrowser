@@ -557,7 +557,7 @@
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.35,10" Top="RecentItemPivot,1,10" Right="Parent,.35,664"
+                  <FormLayoutInput Left="Parent,0.35,10" Top="RecentItemPivot,1,10" Right="Parent,.35,670"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Layout>
