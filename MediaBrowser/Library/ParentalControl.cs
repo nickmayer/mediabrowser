@@ -59,7 +59,7 @@ namespace MediaBrowser.Library
             DateTime recentTime = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddMinutes(-1)));  //if cache dir created less than a minute ago we must've just done it
             if (!Directory.Exists(itemCache) || DateTime.Compare(Directory.GetCreationTime(itemCache), recentTime) > 0) 
             {
-                if (Config.Instance.ParentalControlEnabled && Config.Instance.ParentalBlockUnrated)
+                if (Config.Instance.ParentalBlockUnrated)
                 {
                     //blocking unrated content - unlock the library temporarily to allow items to populate their metadata
                     Logger.ReportInfo("Unlocking Library to allow initial cache population.");
