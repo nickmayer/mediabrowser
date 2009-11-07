@@ -28,20 +28,7 @@ namespace MusicPlugin
             _kernel = kernel;
             //AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             Logger.ReportInfo(string.Format("Tyring to load {0} v{1} loaded by {2}.", Name, LatestVersion.ToString(), AppDomain.CurrentDomain.FriendlyName));
-            if (AppDomain.CurrentDomain.FriendlyName.Contains("Configurator"))
-            {
-                Logger.ReportInfo("Loading mock items for configurator.");
-                BaseItem musicMock = kernel.ItemRepository.RetrieveItem(MusicNormalGuid);
-                BaseItem iTunesMock = kernel.ItemRepository.RetrieveItem(MusiciTunesGuid);
-                
-                if (musicMock != null && Settings.Instance.LoadNormalLibrary)
-                    kernel.RootFolder.AddVirtualChild(musicMock);
-                if (iTunesMock != null && Settings.Instance.LoadiTunesLibrary)
-                    kernel.RootFolder.AddVirtualChild(iTunesMock);
-
-                return;
-            }
-
+            bool isConfigurator = AppDomain.CurrentDomain.FriendlyName.Contains("Configurator");
 
             if (Settings.ValidateSettings(kernel.ConfigData.InitialFolder, true))
             {
@@ -55,7 +42,7 @@ namespace MusicPlugin
                             string message = "Refresh iTunes Library is set to true, this will force a rebuild of the iTunes Library, continue?";
                             string heading = "Rebuild iTunes Library Cache";
 
-                            if (Settings.Instance.ForceRefreshiTunesLibrary && Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
+                            if (Settings.Instance.ForceRefreshiTunesLibrary && (isConfigurator || Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes))
                             {
 
                                 itunes = iTunesLibrary.GetDetailsFromXml(kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) as iTunesMusicLibrary);
@@ -70,14 +57,16 @@ namespace MusicPlugin
                             if (((iTunesMusicLibrary) itunes).LastUpdate != DateTime.MinValue && (itunes as iTunesMusicLibrary).LastUpdate < new System.IO.FileInfo(Settings.Instance.iTunesLibraryXMLPath).LastWriteTime)
                             {
                                 message = "Your iTunes Library might have changed, do you want to rebuild it?";
-                                if (Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
+                                if (isConfigurator || Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, heading, DialogButtons.Yes | DialogButtons.No, 60, true) == DialogResult.Yes)
                                     itunes = iTunesLibrary.GetDetailsFromXml(kernel.ItemRepository.RetrieveItem(MusiciTunesGuid) as iTunesMusicLibrary);
 
                             }
 
                             itunes.Path = "";
                             itunes.Id = MusiciTunesGuid;
+                            Logger.ReportInfo("Music iTunes id - " + itunes.Id);
                             itunes.Name = Settings.Instance.iTunesLibraryVirtualFolderName;
+                            Logger.ReportInfo("Music iTunes vf name - " + itunes.Name);
                             if (!string.IsNullOrEmpty(Settings.Instance.iTunesLibraryIcon))
                                 itunes.PrimaryImagePath = Settings.Instance.iTunesLibraryIcon;
 
@@ -99,8 +88,11 @@ namespace MusicPlugin
 
                         music = kernel.ItemRepository.RetrieveItem(MusicNormalGuid) ?? new MusicPluginFolder();
                         music.Id = MusicNormalGuid;
+                        Logger.ReportInfo("Music normal id - " + music.Id);
                         music.Path = Settings.Instance.NormalLibraryPath;
+                        Logger.ReportInfo("Music normal path - " + music.Path);
                         music.Name = Settings.Instance.NormalLibraryVirtualFolderName;
+                        Logger.ReportInfo("Music normal name - " + music.Name);
                         if (!string.IsNullOrEmpty(Settings.Instance.NormalLibraryIcon))
                             music.PrimaryImagePath = Settings.Instance.NormalLibraryIcon;
                         kernel.RootFolder.AddVirtualChild(music);
@@ -120,7 +112,7 @@ namespace MusicPlugin
             MediaBrowser.Library.ItemFactory.Instance.AddFactory(MusicFolderModel.IsOne, typeof(MusicFolderModel));
 
             if (!Settings.Instance.LoadNormalLibrary && !Settings.Instance.LoadiTunesLibrary)
-                Logger.ReportInfo("Music plugin, iTunes nor Normal Music enabled, probably using folder specification (vf files) via configurator.");
+                Logger.ReportInfo("Music plugin, iTunes nor Normal Music enabled, probably using folder specification (vf files) via configurator, PLEASE DO NOT USE VFs USE PLUGIN CONFIGURATOR.");
                         
         }
         
@@ -137,7 +129,7 @@ namespace MusicPlugin
         {
             get
             {
-                return new System.Version(0,5,0,8);
+                return Assembly.GetExecutingAssembly().GetName().Version;
             }
             set
             {

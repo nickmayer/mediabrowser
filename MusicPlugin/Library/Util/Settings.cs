@@ -273,7 +273,8 @@ namespace MusicPlugin.Util
         private static void ShowWarning(bool mceValidation, string message)
         {
             if (mceValidation)
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
+                Logger.ReportInfo(message);
+                //Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(message, DIALOGHEADING, DialogButtons.Ok, 60, true);
             else
                 MessageBox.Show(message, DIALOGHEADING, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
