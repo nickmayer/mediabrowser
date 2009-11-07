@@ -5,11 +5,53 @@ using System.IO;
 using System.Diagnostics;
 using MediaBrowser.Library.Entities;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Microsoft.Win32;
 
 namespace MediaBrowser.Library.Playables
 {
     public class PlayableExternal : PlayableItem
     {
+        //alesbal: begin
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        static extern bool SetWindowPlacement(IntPtr hWnd,
+                           ref WINDOWPLACEMENT lpwndpl);
+        private struct POINTAPI
+        {
+            public int x;
+            public int y;
+        }
+
+        private struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
+
+        private struct WINDOWPLACEMENT
+        {
+            public int length;
+            public int flags;
+            public int showCmd;
+            public POINTAPI ptMinPosition;
+            public POINTAPI ptMaxPosition;
+            public RECT rcNormalPosition;
+        }
+        //alesbal: end
+        
         private static object lck = new object();
         private static Dictionary<MediaType, ConfigData.ExternalPlayer> configuredPlayers = null;
         private string path;
@@ -29,6 +71,7 @@ namespace MediaBrowser.Library.Playables
             get { return path; }
         }
 
+
         protected override void PlayInternal(bool resume)
         {
             if (PlaybackController.IsPlaying) {
@@ -38,8 +81,38 @@ namespace MediaBrowser.Library.Playables
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);
-            Process.Start(p.Command, args);
+            Process player = Process.Start(p.Command, args);
             MarkWatched();
+            //alesbal: begin
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MinimizeMCE), player);
+        }
+
+        private void MinimizeMCE(object player)
+        {
+            Debug.WriteLine("minimizeMCE for external player");
+            //wait for external player to load and get foreground
+            int maxWait = 10000; //max wait time for ext player to load in ms
+            int waitCount = 0;
+            IntPtr mceWnd = FindWindow(null, "Windows Media Center");
+
+            while (GetForegroundWindow() == mceWnd)
+            {
+                Thread.Sleep(1000);
+                if ((waitCount+= 1000) >= maxWait)
+                {
+                    break;
+                }
+            }
+            
+            //now ext player is full screen, minimize MCE
+            WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
+            GetWindowPlacement(mceWnd, ref wp);
+            wp.showCmd = 2; // 1- Normal; 2 - Minimize; 3 - Maximize;
+            SetWindowPlacement(mceWnd, ref wp);
+            ((Process)player).WaitForExit();
+            wp.showCmd = 1; // 1- Normal; 2 - Minimize; 3 - Maximize;
+            SetWindowPlacement(mceWnd, ref wp);
+
         }
 
         public static bool CanPlay(Media media)
@@ -75,10 +148,8 @@ namespace MediaBrowser.Library.Playables
         {
  	        configuredPlayers = new Dictionary<MediaType,ConfigData.ExternalPlayer>();
             if (Config.Instance.ExternalPlayers!=null)
-                foreach(var x in Config.Instance.ExternalPlayers)
+                foreach (var x in Config.Instance.ExternalPlayers)
                     configuredPlayers[x.MediaType] = x;
         }
-
-        
     }
 }
