@@ -23,5 +23,15 @@ namespace MediaBrowser.Library.Logging {
             }
         }
 
+        public override void Dispose() {
+
+            foreach (var logger in Loggers) {
+                logger.Dispose();
+            }
+
+            base.Dispose();
+
+        }
+
     }
 }
