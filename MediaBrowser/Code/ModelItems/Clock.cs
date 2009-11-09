@@ -31,12 +31,9 @@ namespace MediaBrowser {
 
         // Try to update the time.
         private void RefreshTime() {
-
-            // test time with 12:59 PM before changing any time related mcml 
-            //Time = "12:59 PM"; 
-
-            Time = DateTime.Now.ToShortTimeString();
-
+            // todo (decide if we want to localize) 
+            // this forces the format, and I tested every possibility for a hang. 
+            Time = DateTime.Now.ToString("h:mm tt");
         }
     }
 
