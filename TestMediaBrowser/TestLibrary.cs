@@ -73,6 +73,38 @@ namespace TestMediaBrowser {
         }
 
 
+
+        [Test]
+        public void TestDvdEpisodesDetected() {
+
+            var rootLocation = MockFolderMediaLocation.CreateMockLocation(
+        @"
+|Root
+ |TV
+  |Simpsons
+   |Season 1
+    |1
+     |video_ts
+      a.vob
+    |2
+     a.vob
+    |3
+     a.vob
+");
+            var rootFolder = Kernel.Instance.GetItem<MediaBrowser.Library.Entities.Folder>(rootLocation);
+
+            Assert.IsNotNull(rootFolder);
+
+            var tv = rootFolder.Children[0] as IFolder;
+            var simpsons = tv.Children[0] as IFolder;
+            var season1 = simpsons.Children[0] as IFolder;
+
+            foreach (var item in season1.Children) {
+                Assert.AreEqual(typeof(Episode), item.GetType());
+            }
+        } 
+
+
         [Test]
         public void TestIsoEpisodesDetected() { 
             

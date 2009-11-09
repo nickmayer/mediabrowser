@@ -19,13 +19,33 @@ namespace MediaBrowser.Library.EntityDiscovery {
             factory = null;
             setup = null;
 
-            if (!(location is IFolderMediaLocation) && 
-                !location.IsHidden() &&
-                (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path)) && 
-                TVUtils.IsEpisode(location.Path)) {
-                
-                factory = BaseItemFactory<Episode>.Instance; 
+            if (!location.IsHidden()) {
+
+                bool isDvd = IsDvd(location); 
+                bool isVideo = !(location is IFolderMediaLocation) &&
+                    (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path));
+
+                if ( (isDvd || isVideo ) &&
+                    TVUtils.IsEpisode(location.Path)) {
+
+                    factory = BaseItemFactory<Episode>.Instance;
+                }
             }
+        }
+
+        private bool IsDvd(IMediaLocation location) {
+            bool isDvd = false;
+
+            var folder = location as IFolderMediaLocation;
+            if (folder != null && folder.Children != null) {
+                foreach (var item in folder.Children) {
+                    isDvd |= Helper.IsDvd(item.Path);
+                    isDvd |= item.Path.ToUpper().EndsWith("VIDEO_TS");
+                    if (isDvd) break;
+                } 
+            }
+            
+            return isDvd;
         }
     }
 }
