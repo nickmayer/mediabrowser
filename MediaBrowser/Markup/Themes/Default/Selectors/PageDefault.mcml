@@ -248,10 +248,13 @@
                   <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
                 </Layout>
                 <LayoutInput>
-                  <AnchorLayoutInput Left="Parent,0,50" Bottom="ViewsBtn,1" Right="Parent,0,125" Horizontal="Center"/>
+                  <AnchorLayoutInput Left="Parent,0,50" Bottom="ViewsBtn,1" Right="Parent,0,124" Horizontal="Center"/>
                 </LayoutInput>
                 <Children>
-                  <Panel Layout="Scale">
+                  <Panel>
+                    <Layout>
+                      <ScaleLayout AllowScaleUp="true" MaintainAspectRatio="true" AllowScaleDown="true"/>
+                    </Layout>
                     <Children>
                       <Text Name="TimeDate" Font="font://f:P_ClockFont"  Color="White"
                             Visible="[Application.Config.ShowClock]" />

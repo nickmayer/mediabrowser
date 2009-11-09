@@ -31,7 +31,12 @@ namespace MediaBrowser {
 
         // Try to update the time.
         private void RefreshTime() {
+
+            // test time with 12:59 PM before changing any time related mcml 
+            //Time = "12:59 PM"; 
+
             Time = DateTime.Now.ToShortTimeString();
+
         }
     }
 
