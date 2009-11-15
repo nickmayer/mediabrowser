@@ -25,7 +25,8 @@
     xmlns:pp="resx://MediaBrowser/MediaBrowser.Resources/PopupPlay"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
     xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
-    xmlns:me="Me"
+     xmlns:hb="resx://MediaBrowser/MediaBrowser.Resources/HeaderButton" 
+      xmlns:me="Me"
 	  >
 
 
@@ -57,6 +58,11 @@
       <!--<Timer Name="BGTimer" Interval="100" Enabled="false"/>-->
       <Command Name="Configure" />
       <Command Name="CmdRecentItems" />
+      
+      <!-- Item Panel Commands-->
+      <Command Name="CmdRecentlyAdded" />
+      <Command Name="CmdRecentlyWatched" />
+      
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="150" Enabled="true" />
@@ -91,12 +97,15 @@
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
+            
       <Changed Source="[Application]" InitialEvaluate="true" >
         <Conditions>
           <Equality Source="[Application.RecentItemOption]" Value="watched"/>
         </Conditions>
         <Actions>
-          <Set Target="[RecentItems.ChosenIndex]" Value="1" />
+          <!--<Set Target="[RecentItems.ChosenIndex]" Value="1" />-->
+          <Set Target="[NPVTitle.Content]" Value="recently watched" />
+          <Set Target="[NPVTitle2.Content]" Value="recently watched" />
         </Actions>
       </Changed>
 
@@ -150,8 +159,28 @@
         </Actions>
       </Rule>
       <!-- Commands -->
-      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="added" />
-      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="watched" />
+      <!--<Condition Source="[RecentItems.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="added" />
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="watched" />-->
+
+      <Changed Source="[CmdRecentlyAdded.Invoked]">
+        <Actions>
+          <Invoke Target="[SelectedItem.RecentItemsChanged]" />
+          <Set Target="[Application.RecentItemOption]" Value="added" />
+          
+          <Set Target="[NPVTitle.Content]" Value="recently added" />
+          <Set Target="[NPVTitle2.Content]" Value="recently added" />
+        </Actions>
+      </Changed>
+      <Changed Source="[CmdRecentlyWatched.Invoked]">
+        <Actions>
+          <Set Target="[Application.RecentItemOption]" Value="watched" />
+          <Invoke Target="[SelectedItem.RecentItemsChanged]" />
+          <Set Target="[NPVTitle.Content]" Value="recently watched" />
+          <Set Target="[NPVTitle2.Content]" Value="recently watched" />
+        </Actions>
+      </Changed>
+      
+      
 
       <Changed Source="[RecentItems.ChosenIndex]" >
         <Actions>
@@ -515,13 +544,33 @@
               </Panel>
 
               <!-- Recent Items selector -->
-              <pv:Pivot Model="[RecentItems]" Name="RecentItemPivot" Navigation="RememberFocus">
+              <!--<pv:Pivot Model="[RecentItems]" Name="RecentItemPivot" Navigation="RememberFocus">
                 <LayoutInput>
                   <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.17"  />
                 </LayoutInput>
-              </pv:Pivot>
+              </pv:Pivot>-->
+
+              <Panel>
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0.45" Top="Parent,0.17"  />
+                </LayoutInput>
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" Spacing="10,0" />
+                </Layout>
+                <Children>
+                  <hb:HeaderButton Label="Added"
+                              Command="[CmdRecentlyAdded]"
+                              BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
+                                  />
+                  <hb:HeaderButton Label="Watched"
+                                   Command="[CmdRecentlyWatched]"
+                                   BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
+                                  />
+
+                </Children>
+              </Panel>
  
-              <!--<Panel Name="recentlyAdded">
+              <Panel Name="recentlyAdded">
                 <LayoutInput>
                   <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.17" />
                 </LayoutInput>
@@ -533,7 +582,7 @@
                     <Children>
                       <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
                             Font="Segoe Media Center, 24" Margins="50,0,0,0" />
-                      <Text Content="recently added" Color="Black"
+                      <Text Name="NPVTitle2" Content="recently added" Color="Black"
                             Font="Segoe Media Center, 24" Margins="50,0,0,0">
                         <LayoutInput>
                           <AnchorLayoutInput Top="NPVTitle, 0, 2" Left="NPVTitle, 0, 2"/>
@@ -542,7 +591,8 @@
                     </Children>
                   </ColorFill>
                 </Children>
-              </Panel>-->
+              </Panel>
+              
               <!-- These two ColorFills on either side of the scroller distract the mouse so it won't scroll when you go across screen -->
               <ColorFill MouseInteractive="true" Content="Transparent">
                 <LayoutInput>
@@ -557,7 +607,7 @@
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.35,10" Top="RecentItemPivot,1,10" Right="Parent,.35,670"
+                  <FormLayoutInput Left="Parent,0.35,10" Top="recentlyAdded,1,10" Right="Parent,.35,670"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Layout>
@@ -571,7 +621,7 @@
               <!-- Recent Panel Background Fade-->
               <Clip Name="NPClipP" FadeSize="5" Orientation="Horizontal" FadeAmount="1" >
                 <LayoutInput>
-                  <AnchorLayoutInput Top="RecentItemPivot,1,5" Bottom="Parent,0.7,25" Left="Parent,0,-10" Right="Parent,1,10" />
+                  <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="Parent,0,-10" Right="Parent,1,10" />
                 </LayoutInput>
                 <Children>
                   <ColorFill Content="color://s:FillColor" Alpha="0.7" Layout="Fill">
