@@ -15,6 +15,7 @@ using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Extensions;
+using MediaBrowser.Library.UI;
 using MediaBrowser.Library.Localization;
 using MediaBrowser.Library.Input;
 using System.IO;
@@ -150,7 +151,36 @@ namespace MediaBrowser.Library {
                         Debug.Assert(false, "Failed to load plugin: " + ex.ToString());
                         Logger.ReportException("Failed to load plugin", ex);
                     }
-                }
+                } else
+                    //look for pointer plugin files - load these from ehome or GAC
+                    if (file.ToLower().EndsWith(".pgn"))
+                    {
+                        try
+                        {
+                            plugins.Add(new Plugin(Path.ChangeExtension(Path.GetFileName(file), ".dll"), forceShadow));
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            //couldn't find it in our home directory or GAC (may be called from another process)
+                            //try windows ehome directory
+                            try
+                            {
+                                plugins.Add(new Plugin(Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("windir"), "ehome"), Path.ChangeExtension(Path.GetFileName(file), ".dll")), forceShadow));
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.Assert(false, "Failed to load plugin: " + ex.ToString());
+                                Logger.ReportException("Failed to load plugin", ex);
+                            }
+                        }
+
+                        catch (Exception ex)
+                        {
+                            Debug.Assert(false, "Failed to load plugin: " + ex.ToString());
+                            Logger.ReportException("Failed to load plugin", ex);
+                        }
+                    }
+
             }
             return plugins;
         }
@@ -162,7 +192,7 @@ namespace MediaBrowser.Library {
                 PlaybackControllers = new List<IPlaybackController>(),
                 MetadataProviderFactories = MetadataProviderHelper.DefaultProviders(),
                 ConfigData = config,
-                StringData = LocalizedStringData.FromFile(LocalizedStringData.GetFileName()),
+                StringData = new LocalizedStrings(),
                 ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),                
                 ItemRepository = new SafeItemRepository(new ItemRepository()),
                 MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory()
@@ -237,7 +267,7 @@ namespace MediaBrowser.Library {
         public List<ImageResolver> ImageResolvers { get; set; }
         public ChainedEntityResolver EntityResolver { get; set; }
         public ConfigData ConfigData { get; set; }
-        public LocalizedStringData StringData { get; set; }
+        public LocalizedStrings StringData { get; set; }
         public IItemRepository ItemRepository { get; set; }
         public IMediaLocationFactory MediaLocationFactory { get; set; }
         public IsMouseActiveHooker MouseActiveHooker;
@@ -266,6 +296,28 @@ namespace MediaBrowser.Library {
         {
 
             this.ParentalControls.ClearEnteredList();
+        }
+        public Dictionary<string, string> ConfigPanels = new Dictionary<string, string>() {
+            {"General",""},{"Media Options",""},{"Themes",""},{"ParentalControl",""} }; //defaults are embedded in configpage others will be added to end
+
+        //method for external entities (plug-ins) to add a new config panels
+        //panel should be a resx reference to a UI that fits within the config panel area and takes Application and FocusItem as parms
+        public void AddConfigPanel(string name, string panel)
+        {
+            ConfigPanels.Add(name, panel);
+        }
+
+        public Dictionary<string, ViewTheme> AvailableThemes = new Dictionary<string, ViewTheme>()
+            {
+                {"Default", new ViewTheme()},
+                {"Diamond", new ViewTheme("Diamond", "resx://MediaBrowser/MediaBrowser.Resources/PageDiamond#PageDiamond", "resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView#DiamondMovieView")},
+                {"Vanilla", new ViewTheme("Vanilla", "resx://MediaBrowser/MediaBrowser.Resources/PageVanilla#Page", "resx://MediaBrowser/MediaBrowser.Resources/ViewMovieVanilla#ViewMovieVanilla")},
+            };
+
+        //method for external entities (plug-ins) to add a new theme - only support replacing detail areas for now...
+        public void AddTheme(string name, string pageArea, string detailArea)
+        {
+            AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea));
         }
 
         public T GetItem<T>(string path) where T : BaseItem
@@ -312,8 +364,25 @@ namespace MediaBrowser.Library {
             Plugins.Remove(plugin);
         }
 
-        public void InstallPlugin(string path) {
-            string target = Path.Combine(ApplicationPaths.AppPluginPath, Path.GetFileName(path));
+        public void InstallPlugin(string path)
+        {
+            //in case anyone is calling us with old interface
+            InstallPlugin(path, false);
+        }
+
+        public void InstallPlugin(string path, bool globalTarget) {
+            string target;
+            if (globalTarget)
+            {
+                //install to ehome for now - can change this to GAC if figure out how...
+                target = Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", Path.GetFileName(path)));
+                //and put our pointer file in "plugins"
+                File.Create(Path.Combine(ApplicationPaths.AppPluginPath, Path.ChangeExtension(Path.GetFileName(path),".pgn")));
+            }
+            else
+            {
+                target = Path.Combine(ApplicationPaths.AppPluginPath, Path.GetFileName(path));
+            }
 
             if (path.ToLower().StartsWith("http")) {
                 WebRequest request = WebRequest.Create(path);
@@ -328,7 +397,7 @@ namespace MediaBrowser.Library {
 
             var plugin = Plugin.FromFile(target, true);
             plugin.Init(this);
-            IPlugin pi = Plugins.Find(p => p.Name == plugin.Name);
+            IPlugin pi = Plugins.Find(p => p.Filename == plugin.Filename);
             if (pi != null) Plugins.Remove(pi); //we were updating
             Plugins.Add(plugin);
         }

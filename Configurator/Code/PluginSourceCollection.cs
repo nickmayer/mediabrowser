@@ -69,13 +69,15 @@ namespace Configurator.Code {
             XmlDocument doc = Helper.Fetch(source);
             if (doc != null) {
                 foreach (XmlNode pluginRoot in doc.SelectNodes(@"Plugins//Plugin")) {
+                    string installGlobally = pluginRoot.SafeGetString("InstallGlobally") ?? "false"; //get this safely in case its not there
                     list.Add(new RemotePlugin()
                     {
                         Description = pluginRoot.SafeGetString("Description"),
                         Filename = pluginRoot.SafeGetString("Filename"),
                         Version = new System.Version(pluginRoot.SafeGetString("Version")),
                         Name = pluginRoot.SafeGetString("Name"),
-                        BaseUrl = GetPath(source)
+                        BaseUrl = GetPath(source),
+                        InstallGlobally = XmlConvert.ToBoolean(installGlobally)
                     });
                 }
             } else {

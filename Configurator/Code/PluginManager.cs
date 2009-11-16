@@ -55,11 +55,25 @@ namespace Configurator.Code {
 
         public void InstallPlugin(IPlugin plugin) {
             if (plugin is RemotePlugin) {
-                Kernel.Instance.InstallPlugin((plugin as RemotePlugin).BaseUrl + "\\" + plugin.Filename);
+                try
+                {
+                    Kernel.Instance.InstallPlugin((plugin as RemotePlugin).BaseUrl + "\\" + plugin.Filename, plugin.InstallGlobally);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message,"Install Error");
+                }
             } else {
                 var local = plugin as Plugin;
                 Debug.Assert(plugin != null);
-                Kernel.Instance.InstallPlugin(local.Filename);
+                try
+                {
+                    Kernel.Instance.InstallPlugin(local.Filename, plugin.InstallGlobally);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message, "Install Error");
+                }
             }
 
             RefreshInstalledPlugins(); 
@@ -83,7 +97,7 @@ namespace Configurator.Code {
                 Kernel.Instance.DeletePlugin(plugin);
                 installedPlugins.Remove(plugin);
             } catch (Exception e) {
-                MessageBox.Show("Failed to delete the plugin, ensure no one has a lock on the plugin file!");
+                MessageBox.Show("Failed to delete the plugin.  If MediaBrowser is running, Please close it and try again.");
                 Logger.ReportException("Failed to delete plugin", e);
             }
         }

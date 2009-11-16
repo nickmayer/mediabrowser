@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection;
 using MediaBrowser.Library.Interfaces;
 using MediaBrowser.Library.Entities;
+using MediaBrowser.Library.Configuration;
 using System.Drawing;
 using System.Diagnostics;
 using MediaBrowser.Library.Factories;
@@ -84,11 +85,21 @@ namespace MediaBrowser.Library.Plugins {
 
         public void Delete() {
             File.Delete(filename);
+            if (this.InstallGlobally)
+            {
+                //also delete our pointer file
+                File.Delete(Path.Combine(ApplicationPaths.AppPluginPath, Path.ChangeExtension(Path.GetFileName(filename),".pgn")));
+            }
         }
-                
+
         public virtual bool IsConfigurable
         {
             get { return pluginInterface.IsConfigurable; }
+        }
+
+        public virtual bool InstallGlobally
+        {
+            get { return pluginInterface.InstallGlobally; }
         }
 
         public virtual void Configure()

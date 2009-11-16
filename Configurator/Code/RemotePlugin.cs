@@ -46,5 +46,11 @@ namespace Configurator.Code {
         public virtual void Configure()
         {
         }
+
+        public virtual bool InstallGlobally
+        {
+            get;
+            set;
+        }
     }
 }

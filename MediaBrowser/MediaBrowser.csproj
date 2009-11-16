@@ -622,6 +622,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
+    <Compile Include="Library\Localization\BaseStrings.cs" />
+    <Compile Include="Library\Localization\LocalizedStrings.cs" />
     <Compile Include="Library\Plugins\Configuration\DefaultAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\ExtAttribute.cs" />
     <Compile Include="Library\Plugins\Configuration\GroupAttribute.cs" />
@@ -644,6 +646,7 @@
     <Compile Include="Library\Plugins\PluginConfigurationOptions.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
     <Compile Include="Library\Ratings.cs" />
+    <Compile Include="Library\UI\ViewTheme.cs" />
     <Compile Include="Library\Util\BreadCrumbs.cs" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Images.mcml" />

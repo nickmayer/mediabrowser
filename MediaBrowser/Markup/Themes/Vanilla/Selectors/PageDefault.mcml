@@ -24,7 +24,7 @@
   <UI Name="Page">
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
-      <lib:FolderModel Name="Item" FolderModel="$Required"/>
+      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
       <IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
       <FormLayoutInput Name="FullScreen" Bottom="Parent,1" Left="Parent,0" Right="Parent,1" Top="Parent,0"/>
       <AnchorLayoutInput Name="NPVCenter" Top="Parent,0"/>
@@ -34,10 +34,10 @@
     <Locals>
       <a:Config Name="Config" Config="[Application.Config]"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="100" />
-      <lib:Item Name="SelectedItem" Item="[Item.SelectedChild]" />
-      <lib:Item Name="PreSelectedItem" Item="[Item.SelectedChild]" />
-      <lib:Item Name="PreviousSelectedItem" Item="[Item.SelectedChild]" />
-      <lib:Item Name="BlankItem"  Item="[Item.BlankItem]"/>
+      <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
+      <lib:Item Name="PreSelectedItem" Item="[Folder.SelectedChild]" />
+      <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
+      <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
       <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
 
       <cor:Boolean Name="CanPlay" Boolean="false" />
@@ -80,7 +80,7 @@
 
       <Binding Source="[FindAsYouType.Content]" Target="[ShadowLabel.Content]" />
       <Binding Source="[TypingHandler.DisplayValue]" Target="[FindAsYouType.Content]" />
-      <Binding Source="[TypingHandler.DisplayValue]" Target="[Item.TripleTapSelect]" />
+      <Binding Source="[TypingHandler.DisplayValue]" Target="[Folder.TripleTapSelect]" />
 
       <Changed Source="[TypingHandler.DisplayValue]" >
         <Conditions>
@@ -144,7 +144,7 @@
           <Invoke Target="[ConfigurationMenu.NavigateInto]" />
         </Actions>
       </Changed>
-      <Changed Source="[Item.DisplayPrefs.ViewType.Chosen]" >
+      <Changed Source="[Folder.DisplayPrefs.ViewType.Chosen]" >
         <Conditions>
           <Equality Source="[ViewConfig.Visible]" Value="true" />
         </Conditions>
@@ -168,7 +168,7 @@
           <Invoke Target="[ConfigurationMenu.NavigateInto]" />
         </Actions>
       </Changed>
-      <Changed Source="[Item.DisplayPrefs.SortOrders.Chosen]" >
+      <Changed Source="[Folder.DisplayPrefs.SortOrders.Chosen]" >
         <Actions>
           <Set Target="[SortConfig.Visible]" Value="false"/>
           <Invoke Target="[ConfigurationMenu.NavigateInto]" />
@@ -190,7 +190,7 @@
           <Invoke Target="[ConfigurationMenu.NavigateInto]" />
         </Actions>
       </Changed>
-      <Changed Source="[Item.DisplayPrefs.IndexByChoice.Chosen]" >
+      <Changed Source="[Folder.DisplayPrefs.IndexByChoice.Chosen]" >
         <Actions>
           <Set Target="[IndexConfig.Visible]" Value="false"/>
           <Invoke Target="[ViewPanel.NavigateInto]" />
@@ -206,7 +206,7 @@
           <Modified Source="[ViewKey.Invoked]" />
         </Conditions>
         <Actions>
-          <Invoke Target="[Item.DisplayPrefs.ToggleViewTypes]" />
+          <Invoke Target="[Folder.DisplayPrefs.ToggleViewTypes]" />
         </Actions>
       </Rule>
 
@@ -233,7 +233,7 @@
       </Rule>
 
       <!-- Show Configuration Button -->
-      <Condition Source="[Item.IsRoot]" SourceValue="true" Target="[ConfigurationKey.Visible]" Value="true"/>
+      <Condition Source="[Folder.IsRoot]" SourceValue="true" Target="[ConfigurationKey.Visible]" Value="true"/>
       <Condition Source="[Application.Config.ShowConfigButton]" SourceValue="true" Target="[ConfigurationKey.Visible]" Value="true"/>
 
       <Changed Source="[NowPlayingPanel.Invoked]">
@@ -271,10 +271,10 @@
         </Actions>
       </Rule>
 
-      <Condition Source="[Item.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="200,110" />
-      <Condition Source="[Item.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="400,220" />
+      <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="200,110" />
+      <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="400,220" />
 
-      <Binding Target="[PopupPlay.Item]" Source="[Item.SelectedChild]" />
+      <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
       <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Rule>
@@ -308,7 +308,7 @@
             </Animations>
             <Children>
 
-              <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Item]" Close="[ClosePopupPlay]" Application="[Application]" />
+              <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder]" Close="[ClosePopupPlay]" Application="[Application]" />
 
               <!-- Now Playing View Port -->
               <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false" >
@@ -317,9 +317,9 @@
                 </Children>
               </Panel>
 
-              <pvm:PopupViewMenu  Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Item.DisplayPrefs]"/>
-              <prm:PopupRadioMenu Name="SortConfig"  Visible="false"  Close="[CloseSortConfiguration]"  Choice="[Item.DisplayPrefs.SortOrders]"/>
-              <prm:PopupRadioMenu Name="IndexConfig" Visible="false"  Close="[CloseIndexConfiguration]" Choice="[Item.DisplayPrefs.IndexByChoice]"/>
+              <pvm:PopupViewMenu  Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Folder.DisplayPrefs]"/>
+              <prm:PopupRadioMenu Name="SortConfig"  Visible="false"  Close="[CloseSortConfiguration]"  Choice="[Folder.DisplayPrefs.SortOrders]"/>
+              <prm:PopupRadioMenu Name="IndexConfig" Visible="false"  Close="[CloseIndexConfiguration]" Choice="[Folder.DisplayPrefs.IndexByChoice]"/>
 
               <!-- Configuration -->
               <Panel Name="ConfigurationMenu" Visible="false" Navigation="ContainAll,RememberFocus">
@@ -387,7 +387,7 @@
                 </Children>
               </Panel>
 
-              <pda:PageDetailArea Name="ViewPanel" Folder="[Item]" Application="[Application]"  LayoutInput="[FullScreen]"/>
+              <pda:PageDetailArea Name="ViewPanel" Folder="[Folder]" Application="[Application]"  LayoutInput="[FullScreen]"/>
 
               <Graphic Name="MainBG" Content="image://vi:BlankGraphic" Layout="Fill"/>
             </Children>

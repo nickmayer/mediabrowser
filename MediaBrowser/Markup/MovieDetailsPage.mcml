@@ -23,10 +23,7 @@
 
       <!-- Configuration Checks & Display Setup -->
 
-      <Condition Source="[Application.Config.ViewTheme]" SourceValue="Classic" Target="[ViewClassic.Visible]" Value="true"/>
-      <Condition Source="[Application.Config.ViewTheme]" SourceValue="Default" Target="[ViewDefault.Visible]" Value="true"/>
-      <Condition Source="[Application.Config.ViewTheme]" SourceValue="Diamond" Target="[ViewDiamond.Visible]" Value="true"/>
-      <Condition Source="[Application.Config.ViewTheme]" SourceValue="Vanilla" Target="[ViewVanilla.Visible]" Value="true"/>
+      <Default Target="[ViewClassic.Source]" Value="[Application.CurrentTheme.DetailArea]" />
 
       <!-- END Configuration Checks & Display Setup -->
     </Rules>
@@ -36,29 +33,11 @@
         <Children>
 
           <!--  View Details-->
-          <vd:ViewMovieDefault Name="ViewClassic" Item="[Item]" Application="[Application]" Visible="false"  >
+          <vd:ViewMovieDefault Name="ViewClassic" Item="[Item]" Application="[Application]" Visible="true"  >
             <LayoutInput>
               <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
             </LayoutInput>
           </vd:ViewMovieDefault>
-
-          <vm:ViewMovieMinimal Name="ViewDefault" Item="[Item]" Application="[Application]" Visible="false" >
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-            </LayoutInput>
-          </vm:ViewMovieMinimal>
-
-          <vv:ViewMovieVanilla Name="ViewVanilla" Item="[Item]" Application="[Application]" Visible="false" >
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-            </LayoutInput>
-          </vv:ViewMovieVanilla>
-
-          <dm:DiamondMovieView Name="ViewDiamond" Item="[Item]" Application="[Application]" Visible="false" >
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-            </LayoutInput>
-          </dm:DiamondMovieView>
 
           <!-- Background brightening (creates the darker strips on top/bottom -->
           <ColorFill Content="White" Alpha="0.1">

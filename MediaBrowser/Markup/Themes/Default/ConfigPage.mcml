@@ -129,15 +129,15 @@
       <ScrollingData Name="SD" BeginPadding="150" EndPadding="150"/>
       <Inset Name="SMargin" Inset="10,0,0,0" />
       <Inset Name="CMargin" Inset="25,0,0,0" />
-      <Choice Name="Model">
-        <Options>
+      <Choice Name="Model" Options="[Application.ConfigPanelNames]">
+        <!--<Options>
           <cor:String String="General" />
           <cor:String String="Media Options" />
           <cor:String String="Themes" />
           <cor:String String="Parental Control" />
-          <!--<cor:String String="Other" />        
-          <cor:String String="Test" />-->
-        </Options>
+          --><!--<cor:String String="Other" />        
+          <cor:String String="Test" />--><!--
+        </Options>-->
       </Choice>
 
       <Choice Name="ColorModel">
@@ -166,13 +166,13 @@
           <cor:String String="Small" />
         </Options>
       </Choice>
-      <Choice Name="ViewThemeModel">
-        <Options>
-          <!--<cor:String String="Classic" />-->
-          <cor:String String="Default" />
+      <Choice Name="ViewThemeModel" Options="[Application.AvailableThemeNames]">
+        <!--<Options Source="">
+          --><!--<cor:String String="Classic" />--><!--
+          --><!--<cor:String String="Default" />
           <cor:String String="Diamond" />
-          <cor:String String="Vanilla" />
-        </Options>
+          <cor:String String="Vanilla" />--><!--
+        </Options>-->
       </Choice>
       <BooleanChoice Name="ThemeLoaded" Value="false" />
 
@@ -200,10 +200,16 @@
         </Actions>
       </Changed>
 
-      <Condition Source="[Model.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Panel1.Visible]" Value="true" />
-      <Condition Source="[Model.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Panel2.Visible]" Value="true" />
-      <Condition Source="[Model.ChosenIndex]" SourceValue="2" ConditionOp="Equals" Target="[Panel3.Visible]" Value="true" />
-      <Condition Source="[Model.ChosenIndex]" SourceValue="3" ConditionOp="Equals" Target="[Panel4.Visible]" Value="true" />
+      <Condition Source="[Application.ConfigModel.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Panel1.Visible]" Value="true" />
+      <Condition Source="[Application.ConfigModel.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Panel2.Visible]" Value="true" />
+      <Condition Source="[Application.ConfigModel.ChosenIndex]" SourceValue="2" ConditionOp="Equals" Target="[Panel3.Visible]" Value="true" />
+      <Condition Source="[Application.ConfigModel.ChosenIndex]" SourceValue="3" ConditionOp="Equals" Target="[Panel4.Visible]" Value="true" />
+      <Condition Source="[Application.ConfigModel.ChosenIndex]" SourceValue="3" ConditionOp="GreaterThan">
+        <Actions>
+          <Set Target="[AddinPanel.Source]" Value="[Application.CurrentConfigPanel]" />
+          <Set Target="[Panel99.Visible]" Value="true" />
+        </Actions>
+      </Condition>
       <!--<Condition Source="[Model.ChosenIndex]" SourceValue="4" ConditionOp="Equals" Target="[Panel5.Visible]" Value="true" />
       <Condition Source="[Model.ChosenIndex]" SourceValue="5" ConditionOp="Equals" Target="[Panel6.Visible]" Value="true" />-->
       <!--<Condition Source="[Model.ChosenIndex]" SourceValue="6" ConditionOp="Equals" Target="[Panel7.Visible]" Value="true" />-->
@@ -479,7 +485,7 @@
           </Panel>
 
           <!-- Configuration Options selector -->
-          <pv:Pivot Model="[Model]" Name="FullConfigNav" FocusItem="[FocusItem]"  Navigation="RememberFocus">
+          <pv:Pivot Model="[Application.ConfigModel]" Name="FullConfigNav" FocusItem="[FocusItem]"  Navigation="RememberFocus">
             <LayoutInput>
               <FormLayoutInput Horizontal="Near" Top="Parent,0,100" />
             </LayoutInput>
@@ -648,6 +654,12 @@
                 </Children>
               </Graphic>
 
+              <Graphic Name="Panel99" Visible="false" Content="image://me:50AlphaBg" Layout="HorizontalFlow" MinimumSize="[PanelSize]" Padding="[SMargin]">
+                <Children>
+                  <me:AddinPanel Name="AddinPanel" Application="[Application]" FocusItem="[FocusItem]" />
+                </Children>
+              </Graphic>
+
 
             </Children>
           </Panel>
@@ -765,5 +777,12 @@
     </Content>
   </UI>
 
+  <UI Name="AddinPanel">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <EditableText Name="FocusItem" />
+    </Properties>
+  </UI>
+  
   <Image Name="50AlphaBg" Source="resx://MediaBrowser/MediaBrowser.Resources/BlackBtnAlpha50" NineGrid="10,10,10,10" />
 </Mcml>

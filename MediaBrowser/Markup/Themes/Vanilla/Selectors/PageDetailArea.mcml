@@ -55,7 +55,7 @@
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="CoverFlow" Target="[LayoutCoverflow.Visible]" Value="true" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="CoverFlow" Target="[LayoutCoverflow.Visible]" Value="false" />
 
-		</Rules>
+    </Rules>
 
 		<Content>
 			<Panel Name="MainPanel" Layout="Form">

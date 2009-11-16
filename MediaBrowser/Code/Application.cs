@@ -23,6 +23,7 @@ using MediaBrowser.Library.EntityDiscovery;
 using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Configuration;
+using MediaBrowser.Library.UI;
 using MediaBrowser.Library.Input;
 
 
@@ -53,6 +54,61 @@ namespace MediaBrowser
         private static string _background;
         //tracks whether to show recently added or watched items
         public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; } }
+
+        public List<string> ConfigPanelNames
+        {
+            get
+            {
+                return Kernel.Instance.ConfigPanels.Keys.ToList();
+            }
+        }
+
+        public string ConfigPanel(string name)
+        {
+            if (Kernel.Instance.ConfigPanels.ContainsKey(name))
+            {
+                return Kernel.Instance.ConfigPanels[name];
+            }
+            else
+            {
+                return "me:AddinPanel"; //return the embedded empty UI if not found
+            }
+        }
+
+        public Choice ConfigModel {get; set;}
+
+        public string CurrentConfigPanel
+        {
+            get
+            {
+                return Kernel.Instance.ConfigPanels[ConfigModel.Chosen.ToString()];
+            }
+        }
+
+
+        public Dictionary<string, ViewTheme> AvailableThemes { get { return Kernel.Instance.AvailableThemes; } }
+
+        public List<string> AvailableThemeNames
+        {
+            get
+            {
+                return AvailableThemes.Keys.ToList();
+            }
+        }
+
+        public ViewTheme CurrentTheme
+        {
+            get
+            {
+                if (AvailableThemes.ContainsKey(Config.Instance.ViewTheme)) {
+                    return AvailableThemes[Config.Instance.ViewTheme];
+                } else { //old or bogus theme - return default so we don't crash
+                    //and set the config so config page doesn't crash
+                    Config.Instance.ViewTheme = "Default";
+                    return AvailableThemes["Default"];
+                }
+            }
+        }
 
         public bool NavigatingForward
         {
@@ -85,6 +141,9 @@ namespace MediaBrowser
             {
                 Kernel.Instance.MouseActiveHooker.MouseActive += new IsMouseActiveHooker.MouseActiveHandler(mouseActiveHooker_MouseActive);
             }
+            //populate the config model choice
+            ConfigModel = new Choice();
+            ConfigModel.Options = ConfigPanelNames;
 
         }
 
@@ -543,7 +602,7 @@ namespace MediaBrowser
             if (session != null)
             {
                 folder.NavigatingInto();
-                session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/Page", properties);
+                session.GoToPage(CurrentTheme.FolderPage, properties);
             }
             else
             {
@@ -625,7 +684,7 @@ namespace MediaBrowser
                     Dictionary<string, object> properties = new Dictionary<string, object>();
                     properties["Application"] = this;
                     properties["Item"] = item;
-                    session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/MovieDetailsPage", properties);
+                    session.GoToPage(CurrentTheme.DetailPage, properties);
                     return;
                 }
             }

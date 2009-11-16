@@ -55,6 +55,13 @@ namespace MediaBrowser.Library.Plugins {
             }
         }
 
+        public virtual bool InstallGlobally
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public virtual IPluginConfiguration PluginConfiguration {
             get {

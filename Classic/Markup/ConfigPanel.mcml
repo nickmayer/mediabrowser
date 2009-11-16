@@ -1,0 +1,36 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+    xmlns:a="assembly://MediaBrowser/MediaBrowser"
+	  xmlns:cb="resx://MediaBrowser/MediaBrowser.Resources/CheckBox"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+>
+  <!--*****************************************************************************************************************
+
+    This is an example of a config panel for your theme.  Modify this to include any theme-specific options you require.
+    You must also handle the saving/loading of any of these options somewhere in your assembly.
+
+  *********************************************************************************************************************-->
+
+  <UI Name="ConfigPanel">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <EditableText Name="FocusItem" />
+    </Properties>
+    <Locals>
+      <BooleanChoice Name="TestOption" Value="false" />
+      <Inset Name="CMargin" Inset="25,0,0,0" />
+    </Locals>
+		<Content>
+      <Panel Layout="Center" MaximumSize="800,400">
+        <Children>
+          <!--<Text Content="This is a test" />-->
+          <cb:CheckBox Label="Classic Test Option" Checked="[TestOption]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+        </Children>
+      </Panel>
+    </Content>
+
+	</UI>
+
+</Mcml>

@@ -47,6 +47,10 @@ namespace Configurator.Code {
         {
         }
 
+        public virtual bool InstallGlobally
+        {
+            get { return false; }
+        }
     }
 
     public class PluginCollection : ObservableCollection<IPlugin> {

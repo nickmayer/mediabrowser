@@ -25,10 +25,12 @@ namespace Configurator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>http://www.mediabrowser.tv/plugins/plugin_info.xml</string>\r\n</ArrayOfStri" +
-            "ng>")]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>http://www.mediabrowser.tv/plugins/plugin_info.xml</string>
+  <string>http://www.reedsplace.com/MBTest/plugin_info.xml</string>
+  <string>http://www.reedsplace.com/MBTest/crystal_info.xml</string>
+</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection Repositories {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["Repositories"]));
