@@ -30,12 +30,18 @@ namespace MediaBrowser
         #region fields
 
         string _displayText = string.Empty;
-        List<InfomationItem> _item = new List<InfomationItem>();
+        List<InfomationItem> informationItems = new List<InfomationItem>();
 
         public string DisplayText
         {
-            get { return _displayText; }
-            set { _displayText = value; FirePropertyChanged("DisplayText"); }
+            get { 
+                return _displayText; 
+            }
+            set { 
+                _displayText = value; 
+                // Im a little worried about this line, if we somehow execue off the UI thread then its messed
+                FirePropertyChanged("DisplayText"); 
+            }
         }
 
         #endregion
@@ -43,17 +49,23 @@ namespace MediaBrowser
         #region methods
         public void AddInformation(InfomationItem info)
         {
-            _item.Add(info);
+            lock (informationItems) {
+                informationItems.Add(info);
+            }
         }
         public void AddInformationString(string info)
         {
-            _item.Add(new InfomationItem(info));
+            lock (informationItems) {
+                informationItems.Add(new InfomationItem(info));
+            }
         }
 
         private void Begin()
         {
-            if (_item.Count > 0)
-                DisplayItem();
+            lock (informationItems) {
+                if (informationItems.Count > 0)
+                    DisplayItem();
+            }
 
             cycle = new Timer(this);
             cycle.Interval = CycleInterval;
@@ -63,22 +75,23 @@ namespace MediaBrowser
 
         private void OnRefresh()
         {
-            if (_item.Count > 0)
-            {
-                counter++;
-                if (counter > (_item.Count - 1))
-                    counter = 0;
-                DisplayItem();
+            lock (informationItems) {
+                if (informationItems.Count > 0) {
+                    counter++;
+                    if (counter > (informationItems.Count - 1))
+                        counter = 0;
+                    DisplayItem();
+                } else {
+                    DisplayText = string.Empty;
+                }
             }
-            else
-                DisplayText = string.Empty;
         }
 
         private void DisplayItem()
         {
-            InfomationItem ipi = (InfomationItem)_item[counter];
+            InfomationItem ipi = (InfomationItem)informationItems[counter];
             ipi.RecurrXTimes--;
-            _item[counter] = ipi;
+            informationItems[counter] = ipi;
             DisplayText = ipi.Description;
             // Check the Recurring flag, and remove this message once displayed
             if (!ipi.RecurrMessage || ipi.RecurrXTimes <= 0)
@@ -87,7 +100,7 @@ namespace MediaBrowser
 
         private void RemoveItem(int index)
         {
-            _item.RemoveAt(index);
+            informationItems.RemoveAt(index);
             counter--;
         }
 

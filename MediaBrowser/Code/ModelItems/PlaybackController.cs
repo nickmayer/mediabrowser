@@ -161,15 +161,14 @@ namespace MediaBrowser {
 
         public virtual void GoToFullScreen()
         {
-            try {
-                using (new Profiler("Time to go to Full Screen"))
-                {
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-                }
-            } catch (Exception e) {
-                // dont crash the UI thread
-                Logger.ReportException("Failed to go to full screen", e);
-                AddInHost.Current.MediaCenterEnvironment.Dialog("We can not maximize the window for some reason! " + e.Message, "", Microsoft.MediaCenter.DialogButtons.Ok, 0, true);
+            var mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience; 
+            if (mce != null) {
+                mce.GoToFullScreen();
+            } 
+            else 
+            {
+                Logger.ReportError("AddInHost.Current.MediaCenterEnvironment.MediaExperience is null, we have no way to go full screen!");
+                AddInHost.Current.MediaCenterEnvironment.Dialog("We can not maximize the window! This is a known bug with Windows 7 and TV Pack, you will have to restart Media Browser!", "", Microsoft.MediaCenter.DialogButtons.Ok, 0, true);
             }
         }
 
@@ -245,11 +244,9 @@ namespace MediaBrowser {
                 if (mediaTransport != null) return mediaTransport;
                 try {
                     MediaExperience experience;
-                    using (new Profiler("Retrieving media experience!"))
-                    {
-                    	experience = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
-                    }
-                     
+                    
+                    experience = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
+
                     if (experience != null) {
                         mediaTransport = experience.Transport;
                     }

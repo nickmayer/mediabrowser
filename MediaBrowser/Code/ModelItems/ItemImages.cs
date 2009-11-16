@@ -212,8 +212,8 @@ namespace MediaBrowser.Library
 
                     if (primaryImage.IsLoaded &&
                         preferredImageSmallSize != null &&
-                        preferredImageSmallSize.Width > 0 &&
-                        preferredImageSmallSize.Height > 0) {
+                        (preferredImageSmallSize.Width > 0 ||
+                        preferredImageSmallSize.Height > 0)) {
                         
                         if (primaryImageSmall == null) {
                             LoadSmallPrimaryImage();
@@ -227,14 +227,22 @@ namespace MediaBrowser.Library
 
         private void LoadSmallPrimaryImage() {
             float aspect = primaryImage.Size.Height / (float)primaryImage.Size.Width;
-            float constraintAspect = preferredImageSmallSize.Height / (float)preferredImageSmallSize.Width;
+            float constraintAspect = aspect;
+
+            if (preferredImageSmallSize.Height > 0 && preferredImageSmallSize.Width > 0) {
+                constraintAspect = preferredImageSmallSize.Height / (float)preferredImageSmallSize.Width;
+            }
 
             primaryImageSmall = new AsyncImageLoader(
                 () => baseItem.PrimaryImage,
                 DefaultImage,
                 PrimaryImageChanged);
 
-            smallImageIsDistorted = Math.Abs(aspect - constraintAspect) < Config.Instance.MaximumAspectRatioDistortion;
+            if (aspect == constraintAspect) {
+                smallImageIsDistorted = false;
+            } else {
+                smallImageIsDistorted = Math.Abs(aspect - constraintAspect) < Config.Instance.MaximumAspectRatioDistortion;
+            }
 
             if (smallImageIsDistorted) {
                 primaryImageSmall.Size = preferredImageSmallSize;
@@ -243,7 +251,7 @@ namespace MediaBrowser.Library
                 int width = preferredImageSmallSize.Width;
                 int height = preferredImageSmallSize.Height;
 
-                if (aspect > constraintAspect) {
+                if (aspect > constraintAspect || width <= 0) {
                     width = (int)((float)height / aspect);
                 } else {
                     height = (int)((float)width * aspect);
@@ -372,6 +380,12 @@ namespace MediaBrowser.Library
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
 
+        public void SetPrimarySmallToTiny() {
+            var windowSize = GetWindowSize(new Size(1280, 720));
+            this.preferredImageSmallSize = new Size(-1, windowSize.Height / 15);
+        }
+
+
         // I can not figure out any way to pass the size of an element to the code
         // so I cheat 
         public void SetPreferredImageSmallToEstimatedScreenSize()
@@ -380,40 +394,40 @@ namespace MediaBrowser.Library
             var folder = this as FolderModel;
             if (folder == null) return;
 
-            Size size = new Size(200, 200);
+            Size size = GetWindowSize(new Size(1280, 720));
 
-            try
-            {
-
-                // find ehshell 
-                var ehshell = Process.GetProcessesByName("ehshell").First().MainWindowHandle;
-
-                if (ehshell != IntPtr.Zero)
-                {
-
-                    RECT windowSize;
-                    GetWindowRect(ehshell, out windowSize);
-
-                    // why 3, well the large images are in general a 3rd the size of the screen. 
-                    size = new Size(
-                        (windowSize.Right - windowSize.Left) / 3,
-                        (windowSize.Bottom - windowSize.Top) / 3
-                        );
-
-
-
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.ReportException("Failed to gather size information, made a guess ", e);
-            }
+            size.Width = -1;
+            size.Height = size.Height / 4;
 
             foreach (var item in folder.Children)
             {
                 item.PreferredImageSmallSize = size;
             }
 
+        }
+
+        private static Size GetWindowSize(Size size) {
+
+            try {
+
+                // find ehshell 
+                var ehshell = Process.GetProcessesByName("ehshell").First().MainWindowHandle;
+
+                if (ehshell != IntPtr.Zero) {
+
+                    RECT windowSize;
+                    GetWindowRect(ehshell, out windowSize);
+
+                    size = new Size(
+                        (windowSize.Right - windowSize.Left) ,
+                        (windowSize.Bottom - windowSize.Top)
+                        );
+
+                }
+            } catch (Exception e) {
+                Logger.ReportException("Failed to gather size information, made a guess ", e);
+            }
+            return size;
         }
 
 

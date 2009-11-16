@@ -87,6 +87,16 @@ namespace MediaBrowser.Library {
             }
         }
 
+        public List<Item> NewestOrRecentItems {
+            get {
+                if (Application.CurrentInstance.RecentItemOption == "watched") {
+                    return RecentItems;
+                } else {
+                    return NewestItems;
+                }
+            } 
+        }
+
         public List<Item> RecentItems
         {
             get
@@ -94,15 +104,7 @@ namespace MediaBrowser.Library {
                 //only want items from non-protected folders
                 if (folder != null && folder.ParentalAllowed)
                 {
-                    switch (Application.CurrentInstance.RecentItemOption)
-                    {
-                        case "added":
-                            return GetNewestItems(Config.Instance.RecentItemCount);
-                        case "watched":
-                            return GetRecentWatchedItems(Config.Instance.RecentItemCount);
-                        default:
-                            return GetNewestItems(Config.Instance.RecentItemCount); //default to recently added
-                    }
+                    return GetRecentWatchedItems(Config.Instance.RecentItemCount);
                 } else {
                     return new List<Item>(); //return empty list if folder is protected
                 }
@@ -110,12 +112,13 @@ namespace MediaBrowser.Library {
             }
         }
 
-        //TODO: This Call MUST BE optimized - It takes a significant amount of processing and time to retreive.
-        // to make mcml biniding easier
         public List<Item> NewestItems {
             get {
-                //backward compat
-                return RecentItems;
+                if (folder != null && folder.ParentalAllowed) {
+                    return GetNewestItems(Config.Instance.RecentItemCount);
+                } else {
+                    return new List<Item>(); //return empty list if folder is protected
+                }
             }
         }
         
@@ -135,7 +138,8 @@ namespace MediaBrowser.Library {
                         }
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
-                            FirePropertyChanged("RecentItems");
+                            FirePropertyChanged("NewestItems");
+                            FirePropertyChanged("NewestOrRecentItems");
                         });
                     });
                 }
@@ -163,6 +167,7 @@ namespace MediaBrowser.Library {
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
                             FirePropertyChanged("RecentItems");
+                            FirePropertyChanged("NewestOrRecentItems");
                         });
                     });
                 }

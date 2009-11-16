@@ -266,12 +266,7 @@ namespace MediaBrowser.Library
         }
         public void RecentItemsChanged()
         {
-            FirePropertyChanged("RecentItems");
-            //if (this is FolderModel)
-            //{
-            //    FolderModel f = this as FolderModel;
-            //    f.RefreshUI();
-            //}
+            FirePropertyChanged("NewestOrRecentItems");
         }
         public string LastPlayedString {
             get {
