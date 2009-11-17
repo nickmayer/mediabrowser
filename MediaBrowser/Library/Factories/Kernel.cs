@@ -173,6 +173,21 @@ namespace MediaBrowser.Library {
                                 Logger.ReportException("Failed to load plugin", ex);
                             }
                         }
+                        catch (ArgumentException)
+                        {
+                            //couldn't find it in our home directory or GAC (may be called from another process)
+                            //try windows ehome directory
+                            try
+                            {
+                                plugins.Add(new Plugin(Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("windir"), "ehome"), Path.ChangeExtension(Path.GetFileName(file), ".dll")), forceShadow));
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.Assert(false, "Failed to load plugin: " + ex.ToString());
+                                Logger.ReportException("Failed to load plugin", ex);
+                            }
+                        }
+
 
                         catch (Exception ex)
                         {
