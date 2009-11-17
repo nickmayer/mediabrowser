@@ -382,7 +382,7 @@ namespace MediaBrowser.Library
 
         public void SetPrimarySmallToTiny() {
             var windowSize = GetWindowSize(new Size(1280, 720));
-            this.preferredImageSmallSize = new Size(-1, windowSize.Height / 15);
+            this.preferredImageSmallSize = new Size(-1, windowSize.Height / 8);
         }
 
 
