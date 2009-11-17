@@ -325,6 +325,7 @@ namespace MediaBrowser.Library {
                 {
                     Logger.ReportException("Invalid root folder type", ex);
                 }
+                this.SelectedChildChanged(); //make sure recent list changes
             }
             FireChildrenChangedEvents(); //force UI to update
         }

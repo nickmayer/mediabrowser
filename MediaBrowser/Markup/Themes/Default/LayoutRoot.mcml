@@ -123,6 +123,7 @@
       <Binding Source="[SelectedItem.PreferredImage]" Target="[CurrentPoster.Content]"/>
       <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
       <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
+      <Binding Target="[Repeater.Source]" Source="[Folder.Children]"/>
 
       <Binding Source="[Clock.Time]" Target="[TimeDate.Content]">
         <Conditions>
