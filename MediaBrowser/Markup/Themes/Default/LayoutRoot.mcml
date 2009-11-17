@@ -920,7 +920,7 @@
             </LayoutInput>
           </Graphic>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
-                   MaintainAspectRatio="true" MaximumSize="120,65"  SizingPolicy="SizeToConstraint">
+                   MaintainAspectRatio="true"   SizingPolicy="SizeToConstraint">
             <LayoutInput>
               <AnchorLayoutInput Left="Parent,0" Top="Parent, 0"/>
             </LayoutInput>
