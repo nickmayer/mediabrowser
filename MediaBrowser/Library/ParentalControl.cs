@@ -421,7 +421,7 @@ namespace MediaBrowser.Library
             if (Config.Instance.HideParentalDisAllowed)
             {
                 Application.CurrentInstance.BackToRoot(); //back up to home screen
-                Application.CurrentInstance.CurrentFolder.RefreshUI();
+                Application.CurrentInstance.RootFolderModel.RefreshUI();
             }
             Application.CurrentInstance.Information.AddInformationString("Library Re-Locked"); //and display a message
             //env.Dialog("Library Has Been Re-Locked for Parental Control.", "Unlock Time Expired", DialogButtons.Ok, 60, true);
