@@ -12,7 +12,7 @@ namespace MediaBrowser.Library.UI
         protected string detailPage = "resx://MediaBrowser/MediaBrowser.Resources/MovieDetailsPage";
         protected string folderPage = "resx://MediaBrowser/MediaBrowser.Resources/Page";
         protected string pageArea = "resx://MediaBrowser/MediaBrowser.Resources/PageDefault#Page";
-        protected string detailArea = "resx://MediaBrowser/MediaBrowser.Resources/ViewMovieDefault#ViewMovieDefault";
+        protected string detailArea = "resx://MediaBrowser/MediaBrowser.Resources/ViewMovieMinimal#ViewMovieMinimal";
         protected string rootLayout = "resx://MediaBrowser/MediaBrowser.Resources/LayoutRoot#LayoutRoot";
 
         public ViewTheme()
