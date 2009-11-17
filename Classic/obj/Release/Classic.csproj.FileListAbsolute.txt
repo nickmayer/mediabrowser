@@ -5,3 +5,10 @@ C:\Users\Eric\Documents\MB Theme\Classic\obj\Release\Classic.Resources.resources
 C:\Users\Eric\Documents\MB Theme\Classic\obj\Release\Classic.csproj.GenerateResource.Cache
 C:\Users\Eric\Documents\MB Theme\Classic\obj\Release\Classic.dll
 C:\Users\Eric\Documents\MB Theme\Classic\obj\Release\Classic.pdb
+C:\Users\Eric\Documents\MB Trunk\Classic\bin\Release\Classic.dll
+C:\Users\Eric\Documents\MB Trunk\Classic\bin\Release\Classic.pdb
+C:\Users\Eric\Documents\MB Trunk\Classic\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Eric\Documents\MB Trunk\Classic\obj\Release\Classic.Resources.resources
+C:\Users\Eric\Documents\MB Trunk\Classic\obj\Release\Classic.csproj.GenerateResource.Cache
+C:\Users\Eric\Documents\MB Trunk\Classic\obj\Release\Classic.dll
+C:\Users\Eric\Documents\MB Trunk\Classic\obj\Release\Classic.pdb

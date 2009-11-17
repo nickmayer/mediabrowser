@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Markup\ConfigPanel.mcml" />
+    <Content Include="Markup\Controls\PersonButton.mcml" />
     <Content Include="Markup\Selectors\Page.mcml" />
     <Content Include="Markup\DetailMovieView.mcml" />
   </ItemGroup>
@@ -130,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
-    <Folder Include="Markup\Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

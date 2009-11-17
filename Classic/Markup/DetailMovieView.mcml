@@ -14,6 +14,7 @@
 	  xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
 	  xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
     xmlns:gb="resx://MediaBrowser/MediaBrowser.Resources/GenreButton"
+    xmlns:pb="resx://Classic/Classic.Resources/PersonButton"
     xmlns:me="Me"
     >
 
@@ -136,7 +137,7 @@
               </ColorFill>
 
 
-              <me:ActorList Name="ActorScroller" Item="[Item]"  >
+              <me:ActorList Name="ActorScroller" Application="[Application]" Item="[Item]"  >
                 <LayoutInput>
                   <AnchorLayoutInput Top="TopBlock,1,5" Left="Parent,0.74" Right="Parent,0.97" Bottom="Parent,1,-83" />
                 </LayoutInput>
@@ -196,6 +197,7 @@
   <!-- ActorList-->
   <UI Name="ActorList">
     <Properties>
+      <a:Application Name="Application" Application="$Required"/>
       <lib:Item Name="Item" Item="$Required"/>
 
     </Properties>
@@ -243,7 +245,7 @@
 
       <!-- Hides the page info display if there is only 1 page.  We may what to remove this from the
            Scoll area and actor list since the selectable areas line up a little nicer if we leave them -->
-      <Rule>
+      <!--<Rule>
         <Conditions>
           <Equality Source="[ScrollingData.TotalPages]" ConditionOp="LessThanOrEquals" Value="1" />
         </Conditions>
@@ -262,9 +264,9 @@
           <Set Target="[Input.KeyInteractive]" Value="true" />
           <Set Target ="[ImagePanel.MouseInteractive]" Value="true" />
         </Actions>
-      </Rule>
+      </Rule>-->
 
-      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[ImagePanel.Content]" Value="image://me:ButtonLeftFocus"/>
+      <!--<Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[ImagePanel.Content]" Value="image://me:ButtonLeftFocus"/>-->
     </Rules>
     <Content>
       <!-- Cast (Actors) -->
@@ -285,7 +287,7 @@
                       <FlowLayout Orientation="Vertical"  />
                     </Layout>
                     <Content>
-                      <me:Actor wrapper="[RepeatedItem!lib:ActorItemWrapper]" Font="font://f:MD_ActorFont"/>
+                      <me:Actor Application="[Application]" wrapper="[RepeatedItem!lib:ActorItemWrapper]" Font="font://f:MD_ActorFont"/>
                     </Content>
                   </Repeater>
                 </Children>
@@ -337,25 +339,36 @@
   <!--Actor-->
   <UI Name="Actor">
     <Properties>
+      <a:Application Name="Application" Application="$Required"/>
       <lib:ActorItemWrapper Name="wrapper" ActorItemWrapper="$Required" />
       <Font Name="Font" Font="$Required"/>
     </Properties>
+    <Locals>
+      <Command Name="NavigateToActorsCommand"/>
+    </Locals>
+
     <Rules>
-      <Rule>
+      <Changed Source="[NavigateToActorsCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.Navigate]"  item="[wrapper.Item]"/>
+        </Actions>
+      </Changed>
+      <!--<Rule>
         <Conditions>
           <Equality Source="[wrapper.Actor.HasRole]" ConditionOp="Equals" Value="False" />
         </Conditions>
         <Actions>
           <Set Target="[ActorRole.Visible]" Value="false" />
         </Actions>
-      </Rule>
+      </Rule>-->
     </Rules>
     <Content>
 
       <Panel Layout="VerticalFlow" Margins="0,5,0,0">
         <Children>
-          <Text Font="[Font]" Color="color://s:FontColorLight" Content="[wrapper.Actor.DisplayName]"/>
-          <Text Name="ActorRole" Font="[Font]" Color="color://s:FontColorMedium" Content="[wrapper.Actor.DisplayRole]" Margins="10,-5,0,0"/>
+          <pb:PersonButton PersonItem="[wrapper]" Color="color://s:FontColorMedium" Size="290,75" Command="[NavigateToActorsCommand]" />
+          <!--<Text Font="[Font]" Color="color://s:FontColorLight" Content="[wrapper.Actor.DisplayName]"/>
+          <Text Name="ActorRole" Font="[Font]" Color="color://s:FontColorMedium" Content="[wrapper.Actor.DisplayRole]" Margins="10,-5,0,0"/>-->
         </Children>
       </Panel>
 
