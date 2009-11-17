@@ -788,11 +788,11 @@
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
-      <Condition Source="[Folder.NewestOrRecentItems.Count]" SourceValue="0" Target="[EmptyList.Visible]" Value="true" />
+      <Condition Source="[Folder.QuickListItems.Count]" SourceValue="0" Target="[EmptyList.Visible]" Value="true" />
       <!-- Binding for Newest Items-->
-      <Binding Source="[Folder.NewestOrRecentItems]" Target="[Repeater.Source]"/>
+      <Binding Source="[Folder.QuickListItems]" Target="[Repeater.Source]"/>
       <!-- Pagination Rules-->
-      <Changed Source="[Folder.NewestOrRecentItems]">
+      <Changed Source="[Folder.QuickListItems]">
         <Actions>
           <Invoke Target="[ScrollingData.Home]" InvokePolicy="Synchronous" />
         </Actions>

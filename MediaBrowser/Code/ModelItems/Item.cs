@@ -266,7 +266,7 @@ namespace MediaBrowser.Library
         }
         public void RecentItemsChanged()
         {
-            FirePropertyChanged("NewestOrRecentItems");
+            FirePropertyChanged("QuickListItems");
         }
         public string LastPlayedString {
             get {

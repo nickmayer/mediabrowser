@@ -87,7 +87,7 @@ namespace MediaBrowser.Library {
             }
         }
 
-        public List<Item> NewestOrRecentItems {
+        public List<Item> QuickListItems {
             get {
                 if (Application.CurrentInstance.RecentItemOption == "watched") {
                     return RecentItems;
@@ -139,7 +139,7 @@ namespace MediaBrowser.Library {
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
                             FirePropertyChanged("NewestItems");
-                            FirePropertyChanged("NewestOrRecentItems");
+                            FirePropertyChanged("QuickListItems");
                         });
                     });
                 }
@@ -167,7 +167,7 @@ namespace MediaBrowser.Library {
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
                             FirePropertyChanged("RecentItems");
-                            FirePropertyChanged("NewestOrRecentItems");
+                            FirePropertyChanged("QuickListItems");
                         });
                     });
                 }
