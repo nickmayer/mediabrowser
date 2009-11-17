@@ -152,6 +152,7 @@ namespace MediaBrowser.Library {
                 var show = baseItem as IShow;
                 if (show != null) {
                     rating = show.ImdbRating ?? -1;
+                    if (rating < 0.1) rating = -1;
                 }
                 return rating;
             }
