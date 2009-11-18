@@ -190,10 +190,7 @@ namespace MediaBrowser.Library.Entities {
                 default:
                     break;
             }
-
-            BaseItem unknown = new BaseItem();
-            unknown.Name = "<Unknown>";
-            unknown.Id = new Guid("{DA12CDDE-7F0B-4376-9E37-D2CAB4B84BF6}");
+            BaseItem unknown = UnknownItem();
 
             var index = new Dictionary<BaseItem, List<BaseItem>>(new BaseItemIndexComparer());
             foreach (var item in RecursiveChildren) {
@@ -233,6 +230,11 @@ namespace MediaBrowser.Library.Entities {
             });
 
             return sortedIndex;
+        }
+
+        private static BaseItem UnknownItem() {
+            // there is a bit of work we need to do to ensure Name is not source from providers 
+            return Genre.GetGenre("<Unknown>");
         }
 
         /// <summary>
