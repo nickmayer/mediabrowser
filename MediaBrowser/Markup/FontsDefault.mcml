@@ -113,4 +113,5 @@
 
   <Font Name="Diamond_OverviewMini" Font="Segoe Media Center,16"/>  
   <Font Name="Diamond_Overview" Font="Segoe Media Center,18"/>
+  <Font Name="Diamond_MediaInfo" Font="Arial, 14"/>
 </Mcml>

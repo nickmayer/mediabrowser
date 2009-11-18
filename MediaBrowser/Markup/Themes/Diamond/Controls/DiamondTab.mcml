@@ -3,12 +3,13 @@
     xmlns:lb="resx://MediaBrowser/MediaBrowser.Resources/ListButton"
     xmlns:a="assembly://MediaBrowser/MediaBrowser"
     xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+    xmlns:f="file://Fonts_DoNotEdit.mcml"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
     xmlns:pp="resx://MediaBrowser/MediaBrowser.Resources/PopupPlay"
     xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
-	    xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
-      xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
-      xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
+    xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
+    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
     xmlns:me="Me">
 
   <UI Name="DiamondTab">
@@ -136,7 +137,7 @@
         </Layout>
         <Children>
           <!-- The label to display. -->
-          <Text Name="Name" Font="Segoe Media Center, 18" Color="[Color]" Margins="5,5,5,-5" >
+          <Text Name="Name" Font="font://f:Diamond_Medium" Color="[Color]" Margins="5,5,5,-5" >
           </Text>
         </Children>
       </Panel>

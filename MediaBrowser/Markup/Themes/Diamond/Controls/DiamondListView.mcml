@@ -3,6 +3,7 @@
     xmlns:lb="resx://MediaBrowser/MediaBrowser.Resources/ListButton"
     xmlns:a="assembly://MediaBrowser/MediaBrowser"
     xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+      xmlns:f="file://Fonts_DoNotEdit.mcml"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
     xmlns:pp="resx://MediaBrowser/MediaBrowser.Resources/PopupPlay"
     xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
@@ -16,7 +17,7 @@
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
-      <Font Name="Font" Font="Segoe Media Center, 16" />
+      <Font Name="Font" Font="font://f:Diamond_Small" />
     </Properties>
 
     <Locals>

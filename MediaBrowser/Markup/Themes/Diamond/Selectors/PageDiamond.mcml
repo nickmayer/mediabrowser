@@ -245,7 +245,7 @@
                   <Panel Layout="Scale">
                     <Children>
                       <Text Content="[Application.BreadCrumbs]" HorizontalAlignment="Center"
-                            Font="Segoe Media Center, 18" Color="White" />
+                            Font="font://f:Diamond_Medium" Color="White" />
                     </Children>
                   </Panel>
                 </Children>

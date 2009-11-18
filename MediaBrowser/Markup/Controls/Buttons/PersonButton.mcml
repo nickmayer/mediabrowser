@@ -4,6 +4,7 @@
       xmlns:a="assembly://MediaBrowser/MediaBrowser"
 	    xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
 	    xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+      xmlns:f="file://Fonts_DoNotEdit.mcml"
 	    xmlns:s="file://Styles_DoNotEdit.mcml"
       xmlns:me="Me">
 
@@ -22,7 +23,7 @@
       
       <Size Name="Size" Size="330,100" />
       <Size Name="MinSize" Size="50,50" />
-      <Font Name="Font" Font="Segoe Media Center, 16" />
+      <Font Name="Font" Font="font://f:Diamond_Small" />
       <Color Name="Color" Color="color://s:FontColorLight"/>
       
       <Image Name="ImageFocus" Image="image://me:ButtonLeftFocus" />

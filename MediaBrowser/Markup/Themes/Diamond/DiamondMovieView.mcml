@@ -554,7 +554,7 @@
             </Layout>
             <Children>
               <Text Font="[TitleFont]" Color="[AttributeColor]" Content="MEDIA INFO" Visible="[FullMode]" MinimumSize="[MinSize]"/>
-              <Text Name="MediaInfo" Font="Arial, 14" Color="[ValueColor]" Margins="0,0,0,0" MaximumSize="0,100" />
+              <Text Name="MediaInfo" Font="font://f:Diamond_MediaInfo" Color="[ValueColor]" Margins="0,0,0,0" MaximumSize="0,100" />
             </Children>
           </Panel>
 
