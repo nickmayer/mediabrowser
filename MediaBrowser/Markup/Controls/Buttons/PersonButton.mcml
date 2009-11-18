@@ -95,7 +95,7 @@
 
     <Content>
 
-      <Graphic Name="imgButton" Content="[ImageNoFocus]" MinimumSize="[Size]" Padding="5,5,5,5">
+      <Graphic Name="imgButton" Content="[ImageNoFocus]" MinimumSize="[Size]" MaximumSize="[Size]" Padding="5,5,5,5">
         <Layout>
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
         </Layout>
