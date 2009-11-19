@@ -17,7 +17,6 @@
     xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
     xmlns:pv="resx://MediaBrowser/MediaBrowser.Resources/Pivot"
       
-	  xmlns:wea="resx://MediaBrowser/MediaBrowser.Resources/Weather"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
@@ -378,20 +377,11 @@
               <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
                         Application="[Application]" >
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.3" Right="Parent,.7"
-                           Top="Parent,0.35" Bottom="Parent,.7" />
+                  <FormLayoutInput Left="Parent,0.3" Right="Parent,.7" Top="Parent,0.35" Bottom="Parent,.7" />
                 </LayoutInput>
               </pp:PopupPlay>
 
-              <!-- Weather Panel -->
-              <wea:YahooWeatherLarge>
-                <LayoutInput>
-                  <AnchorLayoutInput Top="Parent,0,10" Left="Parent,0,5"/>
-                </LayoutInput>
-              </wea:YahooWeatherLarge>
-
-
-
+              
               <!-- Gradient Center Panel Borders -->
               <Panel>
                 <LayoutInput>
@@ -512,7 +502,7 @@
               <!-- Now Playing Box -->
               <np:NowPlayingViewportLarge Name="NowPlaying" Visible="false" Application="[Application]">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.02" Right="Parent,0.28" Top="Parent,0.32" Bottom="Parent,0.68"/>
+                  <FormLayoutInput Left="Parent,0.02" Right="Parent,0.28" Top="Parent,0.28" Bottom="Parent,0.63"/>
                 </LayoutInput>
               </np:NowPlayingViewportLarge>
 
@@ -533,53 +523,44 @@
               <!-- Poster Box -->
               <Panel Name="PanelPoster" Layout="Center" Padding="10,10,10,15">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,20" Right="Parent,0.30" Top="Parent,0.3" Bottom="Parent,0.7"/>
+                  <FormLayoutInput Left="Parent,0,20" Right="Parent,0.30" Top="Parent,0.25" Bottom="Parent,0.65"/>
                 </LayoutInput>
                 <Children>
                   <Graphic Name="Frame" Content="image://me:PosterFrame"
-                           MaintainAspectRatio="false" Margins="-15,-10,-15,-15" />
+                           MaintainAspectRatio="false" Margins="-25,-10,-25,-15" />
                   <Graphic Name="CurrentPoster"
                            MaintainAspectRatio="true"  >
                   </Graphic>
                 </Children>
               </Panel>
-
-              <!-- Recent Items selector -->
-              <!--<pv:Pivot Model="[RecentItems]" Name="RecentItemPivot" Navigation="RememberFocus">
-                <LayoutInput>
-                  <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.17"  />
-                </LayoutInput>
-              </pv:Pivot>-->
-
-              <Panel>
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.45" Top="Parent,0.17"  />
-                </LayoutInput>
-                <Layout>
-                  <FlowLayout Orientation="Horizontal" Spacing="10,0" />
-                </Layout>
-                <Children>
-                  <hb:HeaderButton Label="Added"
-                              Command="[CmdRecentlyAdded]"
-                              BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
-                                  />
-                  <hb:HeaderButton Label="Watched"
-                                   Command="[CmdRecentlyWatched]"
-                                   BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
-                                  />
-
-                </Children>
-              </Panel>
- 
+              
+              <!-- Sorting Indicator -->
               <Panel Name="recentlyAdded">
                 <LayoutInput>
-                  <FormLayoutInput Right="Parent,.95,-10" Top="Parent,0.17" />
+                  <FormLayoutInput Right="Parent,1,-100" Top="Parent,0, 10"  />
                 </LayoutInput>
                 <Layout>
-                  <FlowLayout ItemAlignment="Center"/>
+                  <FlowLayout Orientation="Vertical" ItemAlignment="Far" />
                 </Layout>
                 <Children>
-                  <ColorFill Content="Transparent" Padding="8,0,8,-3" Layout="Anchor">
+                  <Panel>
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal" Spacing="10,0" />
+                    </Layout>
+                    <Children>
+                      <hb:HeaderButton Label="Added"
+                                  Command="[CmdRecentlyAdded]"
+                                  BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
+                                  />
+                      <hb:HeaderButton Label="Watched"
+                                       Command="[CmdRecentlyWatched]"
+                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
+                                  />
+                    </Children>
+                  </Panel>
+                  
+                  <Panel Padding="8,0,8,-3" Layout="Anchor">
+                    
                     <Children>
                       <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
                             Font="Segoe Media Center, 24" Margins="50,0,0,0" />
@@ -590,7 +571,7 @@
                         </LayoutInput>
                       </Text>
                     </Children>
-                  </ColorFill>
+                  </Panel>
                 </Children>
               </Panel>
               
@@ -605,6 +586,8 @@
                   <AnchorLayoutInput Left="RecentListPanel,1" Top="RecentListPanel,0" Right="Parent,1" Bottom="RecentListPanel,1"/>
                 </LayoutInput>
               </ColorFill>
+              
+              
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
@@ -619,16 +602,22 @@
                 </Children>
               </Clip>
 
-              <!-- Recent Panel Background Fade-->
-              <Clip Name="NPClipP" FadeSize="5" Orientation="Horizontal" FadeAmount="1" >
+              <!-- Background Fade Object (hidden when no background image selected)-->
+              <Graphic Name="NPClipP" Content="image://me:50AlphaBg" Visible="[Application.Config.ShowRootBackground]">
+                <LayoutInput>
+                  <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="RecentListPanel,0,-10" Right="RecentListPanel,1,10" />
+                </LayoutInput>
+              </Graphic>
+              
+              <!--<Clip Name="NPClipP" FadeSize="5" Orientation="Horizontal" FadeAmount="1" Visible="[Application.Config.ShowRootBackground]">
                 <LayoutInput>
                   <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="Parent,0,-10" Right="Parent,1,10" />
                 </LayoutInput>
                 <Children>
-                  <ColorFill Content="color://s:FillColor" Alpha="0.7" Layout="Fill">
+                  <ColorFill Content="color://s:FillColor" Alpha="0.55" Layout="Fill">
                   </ColorFill>
                 </Children>
-              </Clip>
+              </Clip>-->
 
               <!-- Main Background -->
               <bd:Backdrop4 Name="MainBG" Visible="true" Image="[Folder.BackdropImage]" Item="[Folder]">
@@ -847,7 +836,7 @@
       <a:Application Name="Application" Application="$Required" />
       <lib:Item Name="Item" Item="$Required" />
       <Index Name="Index" Index="$Required"/>
-      <Size Name="MinSize" Size="640,80"/>
+      <Size Name="MinSize" Size="640,95"/>
     </Properties>
 
     <Locals>
@@ -934,10 +923,10 @@
               <AnchorLayoutInput Left="Parent,0,125" Top="Parent, 0"/>
             </LayoutInput>
             <Children>
-              <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="Segoe Media Center, 20" />
+              <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="font://f:Diamond_Large" />
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 16" Margins="50,0,0,0" />
+                  <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="font://f:Diamond_Small" Margins="50,0,0,0" />
                   <Graphic Name="TickIndicator" ColorFilter="color://s:FontColorDark" Visible="false" Content="[Tick]" Margins="20,0,0,0" />
                 </Children>
               </Panel>
@@ -953,6 +942,7 @@
   <Image Name="HiliteBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilite" NineGrid="10,10,10,10" />
   <Image Name="HiliteFocusBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilitefocus" NineGrid="10,10,10,10" />
   <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/poster_frame" NineGrid="10,10,10,10" />
+  <Image Name="50AlphaBg" Source="resx://MediaBrowser/MediaBrowser.Resources/BlackBtnAlpha50" NineGrid="10,10,10,10" />
 
   <Image Name="FlashHorizontalT" Source="resx://MediaBrowser/MediaBrowser.Resources/flashHorT" />
   <Image Name="FlashHorizontalB" Source="resx://MediaBrowser/MediaBrowser.Resources/flashHorB" />
