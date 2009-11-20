@@ -149,6 +149,7 @@
       <Condition Source="[AspectRatio]" SourceValue="4:3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_43" />
       <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_32" />
       <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_169" />
+      <Condition Source="[AspectRatio]" SourceValue="1.78:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_169" />
       <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_1851" />
       <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_2391" />
       <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_2391" />
