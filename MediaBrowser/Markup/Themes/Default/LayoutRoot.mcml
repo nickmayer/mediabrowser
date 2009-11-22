@@ -537,7 +537,7 @@
               <!-- Sorting Indicator -->
               <Panel Name="recentlyAdded">
                 <LayoutInput>
-                  <FormLayoutInput Right="Parent,1,-100" Top="Parent,0, 10"  />
+                  <FormLayoutInput Right="Parent,1,-125" Top="Parent,0, 10"  />
                 </LayoutInput>
                 <Layout>
                   <FlowLayout Orientation="Vertical" ItemAlignment="Far" />
@@ -591,7 +591,7 @@
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.35,10" Top="recentlyAdded,1,10" Right="Parent,.35,670"
+                  <FormLayoutInput Left="Parent,0.33" Top="recentlyAdded,1,10" Right="Parent,.33, 680"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Layout>
@@ -836,7 +836,7 @@
       <a:Application Name="Application" Application="$Required" />
       <lib:Item Name="Item" Item="$Required" />
       <Index Name="Index" Index="$Required"/>
-      <Size Name="MinSize" Size="640,95"/>
+      <Size Name="MinSize" Size="670,95"/>
     </Properties>
 
     <Locals>
@@ -910,7 +910,7 @@
             </LayoutInput>
           </Graphic>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
-                   MaintainAspectRatio="true"   SizingPolicy="SizeToConstraint">
+                   MaintainAspectRatio="true" SizingPolicy="SizeToConstraint">
             <LayoutInput>
               <AnchorLayoutInput Left="Parent,0" Top="Parent, 0"/>
             </LayoutInput>
@@ -920,13 +920,13 @@
               <FlowLayout Orientation="Vertical" Spacing="-3,-3" />
             </Layout>
             <LayoutInput>
-              <AnchorLayoutInput Left="Parent,0,125" Top="Parent, 0"/>
+              <AnchorLayoutInput Left="Parent,0,165" Top="Parent, 0"/>
             </LayoutInput>
             <Children>
               <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="font://f:Diamond_Large" />
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="font://f:Diamond_Small" Margins="50,0,0,0" />
+                  <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="font://f:Diamond_Small" Margins="30,0,0,0" />
                   <Graphic Name="TickIndicator" ColorFilter="color://s:FontColorDark" Visible="false" Content="[Tick]" Margins="20,0,0,0" />
                 </Children>
               </Panel>
