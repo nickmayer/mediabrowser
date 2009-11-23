@@ -393,7 +393,7 @@ namespace MediaBrowser.Library
         public void RefreshMetadata()
         {
             Application.CurrentInstance.Information.AddInformationString("Refresh " + this.Name);
-            Async.Queue(() => { 
+            Async.Queue("UI Triggered Metadata Loader", () => { 
                 baseItem.RefreshMetadata(MetadataRefreshOptions.Force); 
                 // force images to reload
                 primaryImage = null;

@@ -191,7 +191,7 @@ namespace Configurator
 
                 RefreshPodcasts(podcasts);
 
-                Async.Queue(() =>
+                Async.Queue("Podcast Refresher", () =>
                 {
                     podcasts.ValidateChildren();
 

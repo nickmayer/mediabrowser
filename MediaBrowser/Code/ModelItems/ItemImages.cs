@@ -123,8 +123,8 @@ namespace MediaBrowser.Library
             {
                 backdropImages = new List<AsyncImageLoader>();
 
-                // we need to do this on the thread pool ... 
-                Async.Queue(() =>
+     
+                Async.Queue("Backdrop Loader", () =>
                 {
                     foreach (var image in baseItem.BackdropImages)
                     {
@@ -397,7 +397,7 @@ namespace MediaBrowser.Library
             Size size = GetWindowSize(new Size(1280, 720));
 
             size.Width = -1;
-            size.Height = size.Height / 4;
+            size.Height = size.Height / 3;
 
             foreach (var item in folder.Children)
             {

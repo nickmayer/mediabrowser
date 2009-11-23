@@ -50,7 +50,7 @@ namespace MediaBrowser.Library.Entities {
 
         public void EnsureLocalFileIsDownloading() {
             if (!LocalFileIsDownloaded) {
-                Async.Queue(DownloadFile);
+                Async.Queue("Vodcast Downloader", DownloadFile);
             }
         }
 

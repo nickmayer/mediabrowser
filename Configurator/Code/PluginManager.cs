@@ -36,7 +36,7 @@ namespace Configurator.Code {
 
         public PluginManager() {
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
-                Async.Queue(() =>
+                Async.Queue("Plugin refresher", () =>
                 {
                     RefreshInstalledPlugins();
                     RefreshAvailablePlugins();

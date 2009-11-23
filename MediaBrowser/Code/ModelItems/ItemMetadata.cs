@@ -228,7 +228,7 @@ namespace MediaBrowser.Library {
 
                     if (actors.Count > 0) {
 
-                        Async.Queue(() =>
+                        Async.Queue("Actor Loader", () =>
                         {
                             foreach (var actor in actors.Distinct()) {
                                 if (actor.Person.RefreshMetadata(MetadataRefreshOptions.FastOnly)) {
@@ -297,17 +297,23 @@ namespace MediaBrowser.Library {
             }
         }
 
+        List<StudioItemWrapper>  studioItems = null;
+
         public List<StudioItemWrapper> StudioItems
         {
             get
             {
+                if (studioItems != null) {
+                    return studioItems;
+                }
+
                 var studioStrs = this.Studios;
                 List<Studio> items = new List<Studio>();
 
                 foreach (string q in studioStrs)
                     items.Add(Studio.GetStudio(q));
 
-                Async.Queue(() =>
+                Async.Queue("Studio Item Loader", () =>
                 {
                     foreach (Studio studio in items)
                     {
@@ -324,7 +330,28 @@ namespace MediaBrowser.Library {
                 var siw = items
                     .Select(s => new StudioItemWrapper(s, this.PhysicalParent))
                     .OrderBy(x => x.Studio.Name);
-                return new List<StudioItemWrapper>(siw);
+
+
+                if (items.Count > 0) {
+
+                    Async.Queue("Studio Item Loader", () =>
+                    {
+                        foreach (var studio in items.Distinct()) {
+                            if (studio.RefreshMetadata(MetadataRefreshOptions.FastOnly)) {
+                                Kernel.Instance.ItemRepository.SaveItem(studio);
+                            }
+                        }
+
+                        foreach (var studio in items.Distinct()) {
+                            if (studio.RefreshMetadata()) {
+                                Kernel.Instance.ItemRepository.SaveItem(studio);
+                            }
+                        }
+                    });
+                }
+
+                studioItems =  new List<StudioItemWrapper>(siw);
+                return studioItems;
             }
         }
 

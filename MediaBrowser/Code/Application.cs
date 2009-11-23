@@ -345,10 +345,10 @@ namespace MediaBrowser
                     if (Config.EnableUpdates)
                     {
                         Updater update = new Updater(this);
-                        Async.Queue(update.checkUpdate);
+                        Async.Queue("Check For Updates", update.checkUpdate);
                     }
 
-                    Async.Queue(() =>
+                    Async.Queue("Full Refresh", () =>
                     {
                         using (new Profiler("Full Library Refresh"))
                         {

@@ -91,7 +91,7 @@ namespace MediaBrowser {
                 WaitForStream(mce);
                 //pause
 
-                Async.Queue(() => {
+                Async.Queue("Playback Pauser",() => {
                     Thread.Sleep(2000);
                     Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
                         mce.MediaExperience.Transport.PlayRate = 1;

@@ -61,7 +61,7 @@ namespace MediaBrowser.Library.Persistance {
             watcher.EnableRaisingEvents = true;
 
             if (enableAsyncValidation) {
-                Async.Queue(() =>
+                Async.Queue("Fast Load Loader",() =>
                 {
                     LoadFastLoadData();
                     Validate();

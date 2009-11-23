@@ -58,7 +58,7 @@ namespace MediaBrowser.Library {
             get {
                 if (unwatchedCountCache == -1) {
                     unwatchedCountCache = 0;
-                    Async.Queue(() =>
+                    Async.Queue("Unwatched Counter", () =>
                     { 
                         unwatchedCountCache = folder.UnwatchedCount;
                         FireWatchedChangedEvents();
@@ -127,7 +127,7 @@ namespace MediaBrowser.Library {
             if (newestItems == null) {
                 newestItems = new List<Item>();
                 if (folder != null) {
-                    Async.Queue(() =>
+                    Async.Queue("Newest Item Loader", () =>
                     {
                         var items = new SortedList<DateTime, BaseItem>();
                         FindNewestChildren(folder, items, count);
@@ -141,7 +141,7 @@ namespace MediaBrowser.Library {
                             FirePropertyChanged("NewestItems");
                             FirePropertyChanged("QuickListItems");
                         });
-                    });
+                    }, null, true);
                 }
             }
             return newestItems;
@@ -155,7 +155,7 @@ namespace MediaBrowser.Library {
                 recentWatchedItems = new List<Item>();
                 if (folder != null)
                 {
-                    Async.Queue(() =>
+                    Async.Queue("Recent Watched Loader", () =>
                     {
                         var items = new SortedList<DateTime, BaseItem>();
                         FindRecentWatchedChildren(folder, items, count);
@@ -169,7 +169,7 @@ namespace MediaBrowser.Library {
                             FirePropertyChanged("RecentItems");
                             FirePropertyChanged("QuickListItems");
                         });
-                    });
+                    },null, true);
                 }
             }
             return recentWatchedItems;
@@ -211,13 +211,13 @@ namespace MediaBrowser.Library {
 
                     folderOverviewCache = "";
 
-                    Async.Queue(() =>
+                    Async.Queue("Overview Loader", () =>
                     {
                         RefreshFolderOverviewCache();
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke( _ => {
                             FirePropertyChanged("Overview");
                         });
-                    });
+                    },null, true);
                   
                 }
                 return overview;

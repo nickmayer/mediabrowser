@@ -27,7 +27,7 @@ namespace Configurator.Code
             {
                 progress.Visibility = Visibility.Visible;
                 FakeProgress(progress, window);
-                Async.Queue(() =>
+                Async.Queue("Plugin Installer", () =>
                 {
                     PluginManager.Instance.InstallPlugin(plugin);
                 },
@@ -51,7 +51,7 @@ namespace Configurator.Code
 
         private void FakeProgress(System.Windows.Controls.ProgressBar progress, Window window)
         {
-            Async.Queue(() =>
+            Async.Queue("Fake progress for download", () =>
             {
                 int i = 0;
                 while (!done.WaitOne(100, false))
