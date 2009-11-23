@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Metadata;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Code.ModelItems {
     public class FolderChildren : BaseModelItem, IList, ICollection, IList<Item>, IDisposable{
@@ -263,7 +264,15 @@ namespace MediaBrowser.Code.ModelItems {
 
             var aspects = this.folder
                 .Children
-                .Select(calcAspect)
+                .Select(i =>
+                {
+                    float aspect = 0;
+                    try { aspect = calcAspect(i); } 
+                    catch (Exception e) {
+                        Logger.ReportException("Failed to calculate aspect for what would seem a dodge image for:" + i.Path, e);  
+                    }
+                    return aspect;
+                } )
                 .Where(ratio => ratio > 0)
                 .Take(4).ToArray();
 
