@@ -118,7 +118,7 @@ namespace MediaBrowser.Library.Threading {
                     action();
                 } catch (ThreadAbortException) { /* dont report on this, its normal */ } catch (Exception ex) {
                     Debug.Assert(false, "Async thread crashed! This must be fixed. " + ex.ToString());
-                    //Logger.ReportException("Async thread crashed! This must be fixed. ", ex);
+                    Logger.ReportException("Async thread crashed! This must be fixed. ", ex);
                 }
                 if (done != null) done();
             };
