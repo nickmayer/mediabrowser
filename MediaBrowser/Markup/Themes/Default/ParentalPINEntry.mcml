@@ -30,10 +30,10 @@
       <!--if not called by us (user used "back" to get to us) exit immediately-->
       <Condition Source="[Application.RequestingPIN]" SourceValue="false">
         <Actions>
-          <Invoke Target="[Application.Back]"/>
+          <Invoke Target="[Application.BackOut]" />
         </Actions>
       </Condition>
-      <Changed Source="[PINEntered.Invoked]" >
+     <Changed Source="[PINEntered.Invoked]" >
         <Actions>
           <Invoke Target="[Application.ParentalPINEntered]" />
         </Actions>

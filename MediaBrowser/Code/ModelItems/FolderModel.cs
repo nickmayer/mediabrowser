@@ -305,12 +305,12 @@ namespace MediaBrowser.Library {
 
         public void RefreshUI()
         {
+            //force an update of the children
+            this.folderChildren.RefreshChildren();
+            this.folderChildren.Sort();
             if (this.IsRoot)
             {
-                //if this is the root page - force an update of the children
-                this.folderChildren.RefreshChildren();
-                this.folderChildren.Sort();
-                //and then newest items
+                //if this is the root page - also the recent items
                 try
                 {
                     foreach (FolderModel folder in this.Children)

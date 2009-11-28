@@ -101,6 +101,7 @@ namespace Configurator
 
             PluginManager.Init();
 
+            RefreshEntryPoints(false);
         }
 
         public void InitFolderTree()
@@ -467,6 +468,7 @@ sortorder: {2}
             {
                 WriteVirtualFolder(dlg.SelectedFolder);
                 RefreshItems();
+                RefreshEntryPoints(false);
             }
         }
 
@@ -475,12 +477,79 @@ sortorder: {2}
             InitFolderTree();
         }
 
+        private void RefreshEntryPoints()
+        {
+            this.RefreshEntryPoints(true);
+        }
+
+        private void RefreshEntryPoints(bool RefreshPlugins)
+        {
+            EntryPointManager epm = null;
+
+            try
+            {
+                epm = new EntryPointManager();
+            }
+            catch (Exception ex)
+            {
+                //Write to error log, don't prompt user.
+                Logger.ReportError("Error starting Entry Point Manager in RefreshEntryPoints(). " + ex.Message);
+                return;
+            }
+
+            try
+            {
+                List<EntryPointItem> entryPoints = new List<EntryPointItem>();                
+                
+                if(RefreshPlugins)
+                    Kernel.Init(KernelLoadDirective.ShadowPlugins);
+                
+                Kernel.Instance.RootFolder.ValidateChildren();                
+                
+                foreach (var folder in Kernel.Instance.RootFolder.Children)                
+                {
+                    String displayName = folder.Name;
+                    if (displayName == null || displayName.Length <= 0)
+                        continue;
+
+                    String path = string.Empty;
+
+                    if (folder.GetType() == typeof(Folder) && folder.Path != null && folder.Path.Length > 1)
+                    {
+                        path = folder.Path;
+                    }
+                    else
+                    {
+                        path = folder.Id.ToString();
+                    }
+
+                    EntryPointItem ep = new EntryPointItem(displayName, path);
+                    entryPoints.Add(ep);                    
+                }
+
+                epm.ValidateEntryPoints(entryPoints);
+            }
+            catch (Exception ex)
+            {
+                String msg = "Error Refreshing Entry Points. " + ex.Message;
+                Logger.ReportError(msg);
+                MessageBox.Show(msg);
+            }
+        }
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
         {
+            String CurrentName = String.Empty;
+            String NewName = String.Empty;
+            String CurrentContext = String.Empty;
+            String NewContext = String.Empty;
+
             var virtualFolder = folderList.SelectedItem as VirtualFolder;
             if (virtualFolder != null)
             {
+                CurrentName = virtualFolder.Name;
+                CurrentContext = virtualFolder.Path;
+
                 var form = new RenameForm(virtualFolder.Name);
                 form.Owner = this;
                 form.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -488,8 +557,12 @@ sortorder: {2}
                 if (result == true)
                 {
                     virtualFolder.Name = form.tbxName.Text;
+                    NewName = virtualFolder.Name;
+                    NewContext = virtualFolder.Path;
+                    this.RenameVirtualFolderEntryPoint(CurrentName, NewName, CurrentContext, NewContext);
 
                     RefreshItems();
+                    RefreshEntryPoints(false);
 
                     foreach (VirtualFolder item in folderList.Items)
                     {
@@ -500,6 +573,33 @@ sortorder: {2}
                         }
                     }
                 }
+            }
+        }
+
+        private void RenameVirtualFolderEntryPoint(String OldName, String NewName, String OldContext, String NewContext)
+        {
+            EntryPointManager epm = null;
+
+            try
+            {
+                epm = new EntryPointManager();
+            }
+            catch (Exception ex)
+            {
+                //Write to error log, don't prompt user.
+                Logger.ReportError("Error starting Entry Point Manager in RenameVirtualFolderEntryPoint(). " + ex.Message);
+                return;
+            }
+
+            try
+            {
+                epm.RenameEntryPointTitle(OldName, NewName, OldContext, NewContext);
+            }
+            catch (Exception ex)
+            {
+                String msg = "Error renaming Entry Points. " + ex.Message;
+                Logger.ReportError(msg);
+                MessageBox.Show(msg);
             }
         }
 
@@ -519,6 +619,7 @@ sortorder: {2}
                     folderList.Items.Remove(virtualFolder);
                     updateFolderSort(current);
                     infoPanel.Visibility = Visibility.Hidden;
+                    RefreshEntryPoints(false);
                 }
             }            
         }
@@ -1089,6 +1190,7 @@ sortorder: {2}
             if (result == true) {
                 form.RSSFeed.Save(config.PodcastHome);
                 RefreshPodcasts();
+                RefreshEntryPoints(false);
             } 
 
         }
@@ -1113,6 +1215,7 @@ sortorder: {2}
                     vodcast.Parent.ValidateChildren();
                     podcastDetails(false);
                     RefreshPodcasts();
+                    RefreshEntryPoints(false);
                 }
             }
         }
@@ -1145,6 +1248,7 @@ sortorder: {2}
             if (
                   MessageBox.Show(message, "Remove plugin", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes) {
                 PluginManager.Instance.RemovePlugin(plugin);
+                RefreshEntryPoints(true);
             }
         }
 
@@ -1153,12 +1257,15 @@ sortorder: {2}
             window.Owner = this;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowDialog();
+            RefreshEntryPoints(true);
         }
 
         private void configurePlugin_Click(object sender, RoutedEventArgs e)
         {
-            if (pluginList.SelectedItem != null)
+            if (pluginList.SelectedItem != null)            
                 ((Plugin)pluginList.SelectedItem).Configure();
+            
+            this.RefreshEntryPoints(true);  
         }
 
         private void podcastDetails(bool display)

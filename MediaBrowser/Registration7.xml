@@ -13,4 +13,12 @@
        inactiveImageURL=".\ApplicationInactive.png">
     <category category="Custom Start Menu\Media Browser" order="1"/>
   </entrypoint>
+  <entrypoint id="{b8f02923-484e-483e-b227-e5a810c77724}"
+				addin="MediaBrowser.MyAddIn, MediaBrowser,Culture=Neutral,Version=2.1.3.0,PublicKeyToken=59fc04479785fd64"
+				title="Media Browser Config"
+				description="Configure Media Browser"
+        Context="configMB"
+      ImageUrl=".\Application.png"
+      inactiveImageURL=".\ApplicationInactive.png">
+  </entrypoint>
 </application>

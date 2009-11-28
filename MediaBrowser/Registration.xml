@@ -15,6 +15,5 @@
         Context="configMB"
       ImageUrl=".\Application.png"
       inactiveImageURL=".\ApplicationInactive.png">
-    <category category="Settings\Other"/>
   </entrypoint>  
 </application>

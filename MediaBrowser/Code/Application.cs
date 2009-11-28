@@ -252,6 +252,18 @@ namespace MediaBrowser
             }
         }
 
+        public void Close()
+        {
+            Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
+        }
+
+        public void BackOut()
+        {
+            //back up and close the app if that fails
+            if (!session.BackPage())
+                Close();
+        }
+
         public void Back()
         {
             session.BackPage();
@@ -364,7 +376,31 @@ namespace MediaBrowser
                         }
                     });
 
-                    OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
+                    //check for alternate entry point
+                    string entryPointPath = EntryPointResolver.EntryPointPath;
+                    if (!String.IsNullOrEmpty(entryPointPath))
+                    {
+                        //add in a fake breadcrumb so they will show properly
+                        session.AddBreadcrumb("DIRECTENTRY");
+                    }
+
+                    if (entryPointPath.ToLower() == "configmb") //specialized case for config page
+                    {
+                        //OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
+                        OpenConfiguration(true);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(entryPointPath)));
+                        }
+                        catch (Exception ex)
+                        {
+                            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser could not launch directly into " + entryPointPath + ". " + ex.ToString() + " " + ex.StackTrace.ToString(), "Entrypoint Error", DialogButtons.Ok, 30, true);
+                            Close();
+                        }
+                    }
                 }
             }
             catch (Exception e)

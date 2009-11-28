@@ -206,7 +206,7 @@ namespace MediaBrowser.Library
             {
                 env.Dialog("Incorrect PIN Entered", "Content Protected", DialogButtons.Ok, 60, true);
                 Logger.ReportInfo("PIN Incorrect attempting to open " + anItem.Name);
-                Application.CurrentInstance.Back(); //clear the PIN page
+                Application.CurrentInstance.BackOut(); //clear the PIN page
             }
         }
 
@@ -344,8 +344,10 @@ namespace MediaBrowser.Library
                 Application.CurrentInstance.Back(); //clear PIN screen
                 if (Config.Instance.HideParentalDisAllowed)
                 {
-                    Application.CurrentInstance.CurrentFolder.RefreshUI();
-                    Application.CurrentInstance.RootFolderModel.RefreshUI();
+                    if (Application.CurrentInstance.CurrentFolder != null && Application.CurrentInstance.CurrentFolder != Application.CurrentInstance.RootFolderModel)
+                        Application.CurrentInstance.CurrentFolder.RefreshUI();
+                    if (Application.CurrentInstance.RootFolderModel != null)
+                        Application.CurrentInstance.RootFolderModel.RefreshUI();
                 }
             }
             else
@@ -422,6 +424,8 @@ namespace MediaBrowser.Library
             {
                 Application.CurrentInstance.BackToRoot(); //back up to home screen
                 Application.CurrentInstance.RootFolderModel.RefreshUI();
+                //if (Application.CurrentInstance.RootFolderModel != null)
+                //    Application.CurrentInstance.RootFolderModel.RefreshUI();
             }
             Application.CurrentInstance.Information.AddInformationString("Library Re-Locked"); //and display a message
             //env.Dialog("Library Has Been Re-Locked for Parental Control.", "Unlock Time Expired", DialogButtons.Ok, 60, true);

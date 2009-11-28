@@ -621,6 +621,7 @@
     <Compile Include="Code\Updater.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Library\EntryPoint\EntryPointResolver.cs" />
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
     <Compile Include="Library\Localization\BaseStrings.cs" />
     <Compile Include="Library\Localization\LocalizedStrings.cs" />

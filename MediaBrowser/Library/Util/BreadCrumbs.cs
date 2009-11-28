@@ -40,7 +40,7 @@ namespace MediaBrowser.Library.Util {
             }
         }
 
-        //ebr - I'm sure sam can come up with a better way to do this, but we need to strip out PINEntry crumbs...
+        //ebr - I'm sure sam can come up with a better way to do this, but we need to strip out PINEntry and direct entry crumbs...
         private List<string> displayCrumbs
         {
             get
@@ -49,7 +49,7 @@ namespace MediaBrowser.Library.Util {
                 List<string> displayNames = new List<string>();
                 foreach (string i in nameArray)
                 {
-                    if (i != "PINENTRY")
+                    if (i != "PINENTRY" && i != "DIRECTENTRY")
                         displayNames.Add(i);
                 }
                 return displayNames;
