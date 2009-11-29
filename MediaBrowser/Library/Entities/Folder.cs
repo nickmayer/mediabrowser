@@ -50,7 +50,12 @@ namespace MediaBrowser.Library.Entities {
             this.location = location as IFolderMediaLocation;
         }
 
-        //added by ebr
+        public override bool PlayAction(Item item)
+        {
+            //set our flag to show the popup menu
+            return Application.CurrentInstance.DisplayPopupPlay = true;
+        }
+
         private List<BaseItem> parentalAllowedChildren
         {
             get

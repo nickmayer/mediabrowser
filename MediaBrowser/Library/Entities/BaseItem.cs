@@ -218,6 +218,13 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public virtual bool PlayAction(Item item)
+        {
+            //this will be overridden by sub-classes to perform the proper action for that item type
+            return false;
+        }
+
+
         public virtual void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id) {
             this.Id = id;
             this.Path = location.Path;

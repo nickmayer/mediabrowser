@@ -162,6 +162,16 @@ namespace MediaBrowser.Library
         }
 
         #region Playback
+
+        public bool PlayAction()
+        {
+            if (this.BaseItem != null)
+            {
+                return BaseItem.PlayAction(this);
+            }
+            else return false;
+        }
+
         public bool SupportsMultiPlay {
             get {
                 return baseItem is Folder;
