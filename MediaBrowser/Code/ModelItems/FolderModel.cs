@@ -226,14 +226,19 @@ namespace MediaBrowser.Library {
 
         private void RefreshFolderOverviewCache() {
             var items = new SortedList<DateTime, BaseItem>();
-            FindNewestChildren(folder, items, 20);
+            FindNewestChildren(folder, items, 20,1000);
             folderOverviewCache = string.Join("\n", items.Reverse()
                 .Select(i => i.Value.LongName)
                 .ToArray());
         }
 
-        static void FindNewestChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize) {
-            DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+        static void FindNewestChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize)
+        {
+            FindNewestChildren(folder, foundNames, maxSize, Config.Instance.RecentItemDays);
+        }
+
+        static void FindNewestChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize, int maxDays) {
+            DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
             foreach (var item in folder.Children) {
                 // skip folders
                 if (item is Folder) {
@@ -244,9 +249,9 @@ namespace MediaBrowser.Library {
                     }
                 } else {
                     DateTime creationTime = item.DateCreated;
+                    //only if added less than specified ago
                     if (DateTime.Compare(creationTime, daysAgo) > 0)
                     {
-                        //only if added less than 60 days ago (should be configurable)
                         while (foundNames.ContainsKey(creationTime))
                         {
                             // break ties 
