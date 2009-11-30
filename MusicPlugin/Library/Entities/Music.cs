@@ -13,6 +13,7 @@ using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library;
 using MusicPlugin.LibraryManagement;
+using MediaBrowser;
 
 namespace MusicPlugin.Library.Entities
 {
@@ -28,6 +29,11 @@ namespace MusicPlugin.Library.Entities
         [Persist]
         public MediaInfoData MediaInfo { get; set; }  //check this
 
+
+        public override bool SelectAction(Item item)
+        {
+            return Application.CurrentInstance.DisplayPopupPlay = true; //display the popup play menu for now...
+        }
         public override void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id)
         {
             base.Assign(location, parameters, id);

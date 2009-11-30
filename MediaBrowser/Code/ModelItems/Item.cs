@@ -161,6 +161,18 @@ namespace MediaBrowser.Library
             }
         }
 
+        public bool SelectAction()
+        {
+            if (this.BaseItem != null)
+            {
+                return BaseItem.SelectAction(this);
+            }
+            {
+                Logger.ReportWarning("BaseItem null in request to navigate to " + this.Name);
+                return false;
+            }
+        }
+
         #region Playback
 
         public bool PlayAction()
@@ -169,7 +181,11 @@ namespace MediaBrowser.Library
             {
                 return BaseItem.PlayAction(this);
             }
-            else return false;
+            else
+            {
+                Logger.ReportWarning("BaseItem null in request to play " + this.Name);
+                return false;
+            }
         }
 
         public bool SupportsMultiPlay {

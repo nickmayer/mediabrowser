@@ -56,12 +56,6 @@ namespace MediaBrowser.Library.Entities {
             return changed | base.AssignFromItem(item);
         }
 
-        public override bool PlayAction(Item item)
-        {
-            Application.CurrentInstance.Play(item);
-            return true;
-        }
-
         public override IEnumerable<string> Files
         {
             get { return VideoFiles; }

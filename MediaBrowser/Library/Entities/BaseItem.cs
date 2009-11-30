@@ -221,7 +221,15 @@ namespace MediaBrowser.Library.Entities {
         public virtual bool PlayAction(Item item)
         {
             //this will be overridden by sub-classes to perform the proper action for that item type
+            Logger.ReportWarning("No play action defined for item type " + this.GetType() + " on item " + item.Name);
             return false;
+        }
+
+        public virtual bool SelectAction(Item item)
+        {
+            //this can be overridden by sub-classes to perform the proper action for that item type
+            Application.CurrentInstance.Navigate(item);  //default is open the item
+            return true;
         }
 
 

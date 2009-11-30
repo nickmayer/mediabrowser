@@ -9,5 +9,11 @@ namespace MediaBrowser.Library.Entities {
         protected PlaybackStatus playbackStatus;
         public virtual PlaybackStatus PlaybackStatus { get { return playbackStatus; } }
         public abstract IEnumerable<string> Files {get;}
+
+        public override bool PlayAction(Item item)
+        {
+            Application.CurrentInstance.Play(item);
+            return true;
+        }
     }
 }

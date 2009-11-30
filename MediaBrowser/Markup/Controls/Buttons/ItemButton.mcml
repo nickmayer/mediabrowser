@@ -54,7 +54,7 @@
 
       <Changed Source="[Clicker.Invoked]">
         <Actions>
-          <Invoke Target="[Application.Navigate]" item="[Item]"/>
+          <Invoke Target="[Item.SelectAction]"/>
           <PlaySound Sound="sound://sounds:Miniselect" />
         </Actions>
       </Changed>
