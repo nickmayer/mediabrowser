@@ -398,9 +398,15 @@ namespace MediaBrowser.Library
                 if (value != HaveWatched) {
                     if (value && PlayState.PlayCount == 0) {
                         PlayState.PlayCount = 1;
+                        //don't add to watched list as we didn't really watch it (and it might just clutter up the list)
                         Application.CurrentInstance.Information.AddInformationString("Set Watched " + this.Name);
                     } else {
                         PlayState.PlayCount = 0;
+                        //remove ourselves from the watched list as well
+                        if (this.PhysicalParent != null)
+                        {
+                            this.PhysicalParent.RemoveNewlyWatched(this); //thought about asynch'ing this but its a list of 20 items...
+                        }
                         Application.CurrentInstance.Information.AddInformationString("Clear Watched " + this.Name);
                     }
                     PlayState.Save();

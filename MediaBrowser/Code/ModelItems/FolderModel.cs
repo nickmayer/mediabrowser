@@ -196,9 +196,25 @@ namespace MediaBrowser.Library {
                     GetRecentWatchedItems(Config.Instance.RecentItemCount);
                 }
                 FirePropertyChanged("RecentItems");
+                FirePropertyChanged("QuickListItems");
             }
         }
 
+        public void RemoveNewlyWatched(Item item)
+        {
+            //called when we clear the watched status manually (this way we don't have to re-build whole thing)
+            if (recentWatchedItems != null) // have a list
+            {
+                Item us = recentWatchedItems.Find(i => i.Id == item.Id);
+                if (us != null)
+                {
+                    recentWatchedItems.Remove(us);
+                    FirePropertyChanged("RecentItems");
+                    FirePropertyChanged("QuickListItems");
+                }
+            }
+        }
+       
         string folderOverviewCache = null;
         public override string Overview {
             get {
@@ -287,7 +303,7 @@ namespace MediaBrowser.Library {
                     if (item is Video) {
                         Video i = item as Video;
                         DateTime watchedTime = i.PlaybackStatus.LastPlayed;
-                        if (DateTime.Compare(watchedTime, daysAgo) > 0)
+                        if (i.PlaybackStatus.PlayCount > 0 && DateTime.Compare(watchedTime, daysAgo) > 0)
                         {
                             //only get ones watched within last 60 days
                             while (foundNames.ContainsKey(watchedTime))
