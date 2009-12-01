@@ -855,6 +855,21 @@ namespace MediaBrowser
             Play(item, false);
         }
 
+        public void PlayLocalTrailer(Item item)
+        {
+            PlayLocalTrailer(item, false);
+        }
+
+        public void PlayLocalTrailer(Item item, bool fullScreen)
+        {
+            if (!String.IsNullOrEmpty(item.TrailerPath))
+            {
+                currentPlaybackController = item.PlaybackController;
+                currentPlaybackController.PlayMedia(item.TrailerPath);
+                if (fullScreen) currentPlaybackController.GoToFullScreen();
+            }
+        }
+
         public void Play(Item item, bool queue)
         {
             if (item.IsPlayable || item.IsFolder)

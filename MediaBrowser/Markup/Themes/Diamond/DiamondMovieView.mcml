@@ -383,8 +383,7 @@
 
       <Changed Source="[LocalTrailerCommand.Invoked]">
         <Actions>
-          <Invoke Target="[Application.PlaybackController.PlayMedia]" path="[Item.TrailerPath]"/>
-          <Invoke Target="[Application.PlaybackController.GoToFullScreen]" />
+          <Invoke Target="[Application.PlayLocalTrailer]" item="[Item]" fullScreen="true" />
         </Actions>
       </Changed>
 
