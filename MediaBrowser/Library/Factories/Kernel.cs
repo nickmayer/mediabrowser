@@ -21,6 +21,7 @@ using MediaBrowser.Library.Input;
 using System.IO;
 using System.Diagnostics;
 using System.Net;
+using MediaBrowser.Util;
 
 namespace MediaBrowser.Library {
 
@@ -65,8 +66,13 @@ namespace MediaBrowser.Library {
            Init(KernelLoadDirective.None, config);
         }
 
-        public static void Init(KernelLoadDirective directives) { 
-            Init(directives, ConfigData.FromFile(ApplicationPaths.ConfigFile));
+
+        public static void Init(KernelLoadDirective directives) {
+            ConfigData config = null;
+
+            config = ConfigData.FromFile(ApplicationPaths.ConfigFile);
+           
+            Init(directives, config);
         } 
 
         public static void Init(KernelLoadDirective directives, ConfigData config) {
@@ -202,6 +208,25 @@ namespace MediaBrowser.Library {
 
         static Kernel GetDefaultKernel(ConfigData config, KernelLoadDirective loadDirective) {
 
+            IItemRepository repository = null;
+            if (config.EnableExperimentalSqliteSupport) {
+                string sqliteDb = Path.Combine(ApplicationPaths.AppCachePath, "cache.db");
+                string sqliteDll = Path.Combine(ApplicationPaths.AppConfigPath, "system.data.sqlite.dll");
+                if (File.Exists(sqliteDll)) {
+                    try {
+                        repository = new SafeItemRepository( SqliteItemRepository.GetRepository(sqliteDb, sqliteDll) );
+                    } catch (Exception e) {
+                        Logger.ReportException("Failed to init sqlite!", e);
+                        repository = null;
+                    }
+                }
+            }
+
+            if (repository == null) {
+                repository = new SafeItemRepository(new ItemRepository());
+            }
+
+           
             var kernel = new Kernel()
             {
                 PlaybackControllers = new List<IPlaybackController>(),
@@ -209,11 +234,11 @@ namespace MediaBrowser.Library {
                 ConfigData = config,
                 StringData = new LocalizedStrings(),
                 ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),                
-                ItemRepository = new SafeItemRepository(new ItemRepository()),
+                ItemRepository = repository,
                 MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory()
             };
 
-            kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
+            // kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
             kernel.PlaybackControllers.Add(new PlaybackController());
        
 
@@ -245,9 +270,7 @@ namespace MediaBrowser.Library {
                     kernel.Plugins.Remove(plugin);
                 }
             }
-
             return kernel;
-
         }
 
         static System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs args) {

@@ -8,6 +8,16 @@ namespace MediaBrowser.Util
 {
     class Profiler : IDisposable
     {
+
+        public static void TimeAction(string description, Action func) {
+            var watch = new Stopwatch();
+            watch.Start();
+            func();
+            watch.Stop();
+            Console.Write(description);
+            Console.WriteLine(" Time Elapsed {0} ms", watch.ElapsedMilliseconds);
+        }
+
         string caller;
         string name;
         Stopwatch stopwatch;  

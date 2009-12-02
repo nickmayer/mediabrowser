@@ -242,9 +242,9 @@ namespace MediaBrowser.Library {
 
         private void RefreshFolderOverviewCache() {
             var items = new SortedList<DateTime, BaseItem>();
-            FindNewestChildren(folder, items, 20,1000);
+            FindNewestChildren(folder, items, 20,-1);
             folderOverviewCache = string.Join("\n", items.Reverse()
-                .Select(i => i.Value.LongName)
+                .Select(i => (this.BaseItem.GetType() == typeof(Season) ? i.Value.Name : i.Value.LongName) )
                 .ToArray());
         }
 
@@ -266,7 +266,7 @@ namespace MediaBrowser.Library {
                 } else {
                     DateTime creationTime = item.DateCreated;
                     //only if added less than specified ago
-                    if (DateTime.Compare(creationTime, daysAgo) > 0)
+                    if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
                     {
                         while (foundNames.ContainsKey(creationTime))
                         {

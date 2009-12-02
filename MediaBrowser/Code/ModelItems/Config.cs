@@ -678,7 +678,7 @@ namespace MediaBrowser
         private void Save()
         {
             lock(this)
-                this.data.Save(ApplicationPaths.ConfigFile);
+                this.data.Save();
         }
 
         public void Reset()

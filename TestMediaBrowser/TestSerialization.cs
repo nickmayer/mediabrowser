@@ -234,7 +234,7 @@ namespace TestMediaBrowser {
                 list.Add(new DummyPersistanceObject() { Bar1 = i, Bar2 = "hello" });
             }
 
-            TimeAction("Standard serialization", () =>
+            Benchmarking.TimeAction("Standard serialization", () =>
             {
                 using (MemoryStream ms = new MemoryStream()) {
                     BinaryFormatter bf = new BinaryFormatter();
@@ -247,7 +247,7 @@ namespace TestMediaBrowser {
 
             GC.Collect();
 
-            TimeAction("Manual Serialization", () =>
+            Benchmarking.TimeAction("Manual Serialization", () =>
             {
                 using (MemoryStream ms = new MemoryStream()) {
                     BinaryWriter bw = new BinaryWriter(ms);
@@ -265,7 +265,7 @@ namespace TestMediaBrowser {
 
             GC.Collect();
 
-            TimeAction("Custom Serializer", () =>
+            Benchmarking.TimeAction("Custom Serializer", () =>
             {
                 using (MemoryStream ms = new MemoryStream()) {
                     foreach (var foo in list) {
@@ -286,13 +286,6 @@ namespace TestMediaBrowser {
         }
 
 
-        static void TimeAction(string description, Action func) {
-            var watch = new Stopwatch();
-            watch.Start();
-            func();
-            watch.Stop();
-            Console.Write(description);
-            Console.WriteLine(" Time Elapsed {0} ms", watch.ElapsedMilliseconds);
-        }
+      
     }
 }

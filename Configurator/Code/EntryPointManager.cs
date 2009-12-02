@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Win32;
+using MediaBrowser.Library.Logging;
 
 namespace Configurator.Code
 {
@@ -134,7 +135,8 @@ namespace Configurator.Code
                 }
             }
             catch (Exception ex)
-            {                
+            {
+                Logger.ReportException("Missing key", ex);
                 return false;
             }
         }
@@ -206,6 +208,7 @@ namespace Configurator.Code
             }
             catch (Exception ex)
             {
+                Logger.ReportException("Error deleting key", ex);
                 throw new Exception("Error deleting key " + GUID);
             }
 
@@ -289,7 +292,9 @@ namespace Configurator.Code
                     }
                 }
                 catch (Exception ex)
-                { }
+                {
+                    Logger.ReportException("Failed in FetchMediaBrowserEntryPoints", ex);
+                }
             }
 
             return EntryPoints;
@@ -322,6 +327,7 @@ namespace Configurator.Code
                     }
                     catch (Exception ex)
                     {
+                        Logger.ReportException("Failed tor read EntryPointItem.ContextName", ex);
                         Context = String.Empty;
                     }
 
@@ -358,6 +364,7 @@ namespace Configurator.Code
             }
             catch (Exception ex)
             {
+                Logger.ReportException("Failed to fetch app id", ex);
                 AppID = String.Empty;
             }
             return AppID;
@@ -448,6 +455,7 @@ namespace Configurator.Code
             }
             catch (Exception ex)
             {
+                Logger.ReportException("Failed when testing for regitry access", ex);
                 return false;
             }
             return true;

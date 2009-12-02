@@ -57,7 +57,7 @@ namespace MediaBrowser.Util
 
         // Blocking call to check the XML file up in the cloud to see if we need an update.
         // This is really meant to be called as its own thread.
-        public void checkUpdate()
+        public void CheckForUpdate()
         {
             try
             {

@@ -267,7 +267,7 @@ namespace Configurator
 
         private void SaveConfig()
         {
-            config.Save(ApplicationPaths.ConfigFile);
+            config.Save();
         }
 
         private void LoadComboBoxes()

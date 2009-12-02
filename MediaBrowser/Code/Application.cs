@@ -357,11 +357,16 @@ namespace MediaBrowser
                     if (Config.EnableUpdates)
                     {
                         Updater update = new Updater(this);
-                        Async.Queue("Check For Updates", update.checkUpdate);
+                        Async.Queue("Check For Updates", () => {
+                            System.Threading.Thread.Sleep(40000);
+                            update.CheckForUpdate();
+                    });
                     }
 
                     Async.Queue("Full Refresh", () =>
                     {
+                        // wait a while so it does not impact us on startup
+                        System.Threading.Thread.Sleep(20000);
                         using (new Profiler("Full Library Refresh"))
                         {
                             try

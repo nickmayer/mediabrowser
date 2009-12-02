@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MediaBrowser, Version=2.1.1.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MediaBrowser\bin\Debug\MediaBrowser.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.MediaCenter" />
     <Reference Include="Microsoft.MediaCenter.UI" />
     <Reference Include="nunit.core, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -61,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Integration\TestKernel.cs" />
+    <Compile Include="SupportingClasses\Benchmarking.cs" />
     <Compile Include="SupportingClasses\MockMediaLocationFactory.cs" />
     <Compile Include="TestBreadCrumbs.cs" />
     <Compile Include="TestExtensions.cs" />
@@ -90,7 +87,10 @@
     <Compile Include="TestTheMovieDB.cs" />
     <Compile Include="TestTVDBMetadata.cs" />
     <Compile Include="TestVodCast.cs" />
+    <Compile Include="Unit\TestKernel.cs" />
     <Compile Include="Unit\TestSorting.cs" />
+    <Compile Include="Unit\TestSqliteRepository.cs" />
+    <Compile Include="Unit\TestXmlSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SampleMedia\TV\South Park\Season 1\02.mkv" />
@@ -106,6 +106,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MediaBrowser.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
+      <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
+      <Name>MediaBrowser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

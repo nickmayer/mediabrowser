@@ -9,13 +9,16 @@ using System.Globalization;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Persistance;
 
 namespace MediaBrowser.Library.Localization
 {
     [Serializable]
-    public class BaseStrings : LocalizedStringData
+    public class BaseStrings
     {
-        private string version = "1.0003"; //this is used to see if we have changed and need to re-save
+        const string VERSION = "1.0003";
+
+        public string Version = VERSION; //this is used to see if we have changed and need to re-save
 
         //these are our strings keyed by property name
         public string LoggingDesc = "Write messages to a log file at run time.";
@@ -68,44 +71,23 @@ namespace MediaBrowser.Library.Localization
         public string ShowFanArtonViewsDesc = "Display fan art as a Background in views that support this capability. [TIER 1] Highest tier background effect takes precedence.";
         public string EnhancedMouseSupportDesc = "Enable Better Scrolling Support with the Mouse.  Leave OFF if You Don't Use a Mouse.  Won't Take Effect Until MediaBrowser is Restarted.";
 
-        BaseStrings(string file)
-        {
-            this.FileName = file;
-        }
 
-        BaseStrings() //for the serializer
+        public BaseStrings() //for the serializer
         {
         }
 
         public static BaseStrings FromFile(string file)
         {
-            BaseStrings s;
-
-            if (!File.Exists(file))
-            {
-                s = new BaseStrings(file);
-                s.Save();
-            }
+            BaseStrings s = new BaseStrings() ;
+            XmlSettings<BaseStrings> settings = XmlSettings<BaseStrings>.Bind(s, file);
+           
             Logger.ReportInfo("Using String Data from " + file);
-            XmlSerializer xs = new XmlSerializer(typeof(BaseStrings));
-            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+           
+            if (VERSION != s.Version)
             {
-                try
-                {
-                    s = (BaseStrings)xs.Deserialize(fs);
-                }
-                catch
-                {
-                    //file is mucked up - just re-create it
-                    s = new BaseStrings(file);
-                }
-            }
-            if (s.Version != s.version)
-            {
-                //new version - save over old file
-                s = new BaseStrings(file);
-                s.Version = s.version;
-                s.Save();
+                File.Delete(file);
+                s = new BaseStrings();
+                settings = XmlSettings<BaseStrings>.Bind(s, file);
             }
             return s;
         }

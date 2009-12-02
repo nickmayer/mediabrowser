@@ -12,13 +12,16 @@ using MediaBrowser.LibraryManagement;
 using System.Xml.Serialization;
 using MediaBrowser.Library.Playables;
 using MediaBrowser.Library.Configuration;
+using MediaBrowser.Library.Persistance;
 
 namespace MediaBrowser
 {
     [Serializable]
     public class ConfigData
     {
-        // this makes sure the now playing window has a decent title always
+        
+        [Comment(@"If you enable this, make sure System.Data.SQLite.DLL is copied to c:\program data\media browser, make sure you install the right version there is a x32 and x64")]
+        public bool EnableExperimentalSqliteSupport = false;
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;
@@ -122,44 +125,30 @@ namespace MediaBrowser
         // for the serializer
         public ConfigData ()
 	    {
-
 	    }
+
 
         public ConfigData(string file)
         {
             this.file = file;
+            this.settings = XmlSettings<ConfigData>.Bind(this, file);
         }
 
+        [SkipField]
         string file;
+
+        [SkipField]
+        XmlSettings<ConfigData> settings;
+
 
         public static ConfigData FromFile(string file)
         {
-            if (!File.Exists(file))
-            {
-                ConfigData d = new ConfigData(file);
-                d.Save();
-            }
-            XmlSerializer xs = new XmlSerializer(typeof(ConfigData));
-            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                return (ConfigData)xs.Deserialize(fs);
-            }
+            return new ConfigData(file);  
         }
 
         public void Save() {
-            Save(file); 
+            this.settings.Write();
         } 
 
-        /// <summary>
-        /// Write current config to file
-        /// </summary>
-        public void Save(string file)
-        {
-            XmlSerializer xs = new XmlSerializer(typeof(ConfigData));
-            using (FileStream fs = new FileStream(file, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                xs.Serialize(fs, this);
-            }
-        }
     }
 }

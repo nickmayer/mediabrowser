@@ -213,7 +213,8 @@ namespace MediaBrowser.Library
 
         public string ViewTypeString
         {
-            get { return ViewTypeNames.GetEnum((string)this.viewType.Chosen).ToString(); }
+            get {
+                return ViewTypeNames.GetEnum((string)this.viewType.Chosen).ToString(); }
         }
 
         public BooleanChoice ShowLabels

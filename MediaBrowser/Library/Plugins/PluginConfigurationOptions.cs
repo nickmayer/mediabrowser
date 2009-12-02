@@ -11,28 +11,17 @@ using System.Windows.Controls;
 using System.Reflection;
 using System.Windows.Media;
 using MediaBrowser.Library.Plugins.Configuration;
+using MediaBrowser.Library.Persistance;
 
 namespace MediaBrowser.Library.Plugins
 {
 
     public class PluginConfigurationOptions 
     {
-        public void Reset()
-        {
-            foreach (var property in this.GetType().GetProperties())
-            {
-                object[] attributes = property.GetCustomAttributes(false);
-                DefaultAttribute defaultAttribute = attributes.Select(x => x as DefaultAttribute).Where(i => i != null).First();
-
-                property.SetValue(this, defaultAttribute.Default, null);
-
-            }
-
-        }
     }
     
     // the new base configuration class 
-    public class PluginConfiguration<T> : IPluginConfiguration where T : PluginConfigurationOptions
+    public class PluginConfiguration<T> : IPluginConfiguration where T : PluginConfigurationOptions, new() 
     {
         private string initialPath;
         private string pluginID;
@@ -44,8 +33,7 @@ namespace MediaBrowser.Library.Plugins
             {
                 if (_instance == null)
                 {
-                    _instance = (T)Activator.CreateInstance(typeof(T));
-                    Save();
+                    Load();
                 }
                 return _instance;
             }
@@ -56,7 +44,6 @@ namespace MediaBrowser.Library.Plugins
 
             this.initialPath = Path.Combine(kernel.ConfigData.InitialFolder, @"..\Plugins\Configurations");
             this.pluginID = assembly.GetName().Name;
-            //this.parentName = parent.Name;
             this.configFile = Path.Combine(initialPath, string.Format("{0}.xml", pluginID));
             
         }
@@ -68,6 +55,15 @@ namespace MediaBrowser.Library.Plugins
             this.pluginID = fileName;
             this.configFile = Path.Combine(initialPath, string.Format("{0}.xml", pluginID));
         }
+
+        private void Reset() {
+            try {
+                File.Delete(configFile);
+            } catch (Exception e) {
+                Logger.ReportException("Failed during config file reset!", e);
+            }
+            Load();
+        } 
         
         public void Save()
         {
@@ -77,16 +73,9 @@ namespace MediaBrowser.Library.Plugins
                 return;
             }
 
-            if (!Directory.Exists(initialPath))
-                Directory.CreateDirectory(initialPath);
-
             try
             {
-                XmlSerializer ser = new XmlSerializer(typeof(T));
-
-                TextWriter writer = new StreamWriter(configFile);
-                ser.Serialize(writer, Instance);
-                writer.Close();
+                settings.Write();
             }
             catch (Exception e)
             {
@@ -94,20 +83,16 @@ namespace MediaBrowser.Library.Plugins
             }
         }
 
+        private XmlSettings<T> settings;
+
         public void Load()
         {
-            if (!File.Exists(configFile))
-            {
-                Instance.Reset();
-                Save();
-                return;
+            if (!Directory.Exists(initialPath)) {
+                Directory.CreateDirectory(initialPath);
             }
 
-            XmlSerializer ser = new XmlSerializer(typeof(T));
-
-            using (TextReader reader = new StreamReader(configFile)) {
-                _instance = (T)ser.Deserialize(reader);
-            }
+            _instance = new T();
+            settings = XmlSettings<T>.Bind(Instance, configFile);
         }
 
 
@@ -268,7 +253,7 @@ namespace MediaBrowser.Library.Plugins
 
         void reset_Click(object sender, RoutedEventArgs e)
         {
-            Instance.Reset();
+            Reset();
             PopulateControls(Instance);
         }
 
