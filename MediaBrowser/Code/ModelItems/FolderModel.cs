@@ -129,13 +129,9 @@ namespace MediaBrowser.Library {
                 if (folder != null) {
                     Async.Queue("Newest Item Loader", () =>
                     {
-                        var items = new SortedList<DateTime, BaseItem>();
+                        var items = new SortedList<DateTime, Item>();
                         FindNewestChildren(folder, items, count);
-                        newestItems = items.Values.Select(i => ItemFactory.Instance.Create(i)).Reverse().ToList();
-                        foreach (Item i in newestItems)
-                        {
-                            i.PhysicalParent = this;  //give us a parent so we can update ourselves
-                        }
+                        newestItems = items.Values.Select(i => i).Reverse().ToList();
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
                             FirePropertyChanged("NewestItems");
@@ -157,13 +153,9 @@ namespace MediaBrowser.Library {
                 {
                     Async.Queue("Recent Watched Loader", () =>
                     {
-                        var items = new SortedList<DateTime, BaseItem>();
+                        var items = new SortedList<DateTime, Item>();
                         FindRecentWatchedChildren(folder, items, count);
-                        recentWatchedItems = items.Values.Select(i => ItemFactory.Instance.Create(i)).Reverse().ToList();
-                        foreach (Item i in recentWatchedItems)
-                        {
-                            i.PhysicalParent = this;  //give us a parent so we can update ourselves
-                        }
+                        recentWatchedItems = items.Values.Select(i => i).Reverse().ToList();
                         Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                         {
                             FirePropertyChanged("RecentItems");
@@ -241,20 +233,22 @@ namespace MediaBrowser.Library {
         }
 
         private void RefreshFolderOverviewCache() {
-            var items = new SortedList<DateTime, BaseItem>();
+            var items = new SortedList<DateTime, Item>();
             FindNewestChildren(folder, items, 20,-1);
             folderOverviewCache = string.Join("\n", items.Reverse()
                 .Select(i => (this.BaseItem.GetType() == typeof(Season) ? i.Value.Name : i.Value.LongName) )
                 .ToArray());
         }
 
-        static void FindNewestChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize)
+        public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
         {
             FindNewestChildren(folder, foundNames, maxSize, Config.Instance.RecentItemDays);
         }
 
-        static void FindNewestChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize, int maxDays) {
+        public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize, int maxDays) {
             DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
+            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+            folderModel.PhysicalParent = this;
             foreach (var item in folder.Children) {
                 // skip folders
                 if (item is Folder) {
@@ -273,7 +267,10 @@ namespace MediaBrowser.Library {
                             // break ties 
                             creationTime = creationTime.AddMilliseconds(1);
                         }
-                        foundNames.Add(creationTime, item);
+                        Item modelItem = ItemFactory.Instance.Create(item);
+                        modelItem.PhysicalParent = folderModel;
+                        item.Parent = folder;
+                        foundNames.Add(creationTime, modelItem);
                         if (foundNames.Count > maxSize)
                         {
                             foundNames.RemoveAt(0);
@@ -284,9 +281,11 @@ namespace MediaBrowser.Library {
             }
         }
 
-        static void FindRecentWatchedChildren(Folder folder, SortedList<DateTime, BaseItem> foundNames, int maxSize)
+        public void FindRecentWatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
         {
             DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+            folderModel.PhysicalParent = this;
             foreach (var item in folder.Children)
             {
                 // skip folders
@@ -311,7 +310,10 @@ namespace MediaBrowser.Library {
                                 // break ties 
                                 watchedTime = watchedTime.AddMilliseconds(1);
                             }
-                            foundNames.Add(watchedTime, item);
+                            Item modelItem = ItemFactory.Instance.Create(item);
+                            modelItem.PhysicalParent = folderModel;
+                            item.Parent = folder;
+                            foundNames.Add(watchedTime, modelItem);
                             if (foundNames.Count > maxSize)
                             {
                                 foundNames.RemoveAt(0);

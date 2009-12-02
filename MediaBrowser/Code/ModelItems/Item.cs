@@ -66,6 +66,21 @@ namespace MediaBrowser.Library
 
         public FolderModel PhysicalParent { get; internal set; }
 
+        private FolderModel TopParent
+        {
+            get
+            {
+                if (PhysicalParent != null && !PhysicalParent.IsRoot)
+                {
+                    return PhysicalParent.TopParent;
+                }
+                else
+                {
+                    return this as FolderModel;
+                }
+            }
+        }
+
         public Guid Id { get { return baseItem.Id; } }
 
         public virtual void NavigatingInto()
@@ -228,7 +243,7 @@ namespace MediaBrowser.Library
                     }
                     this.PlayableItem.QueueItem = queue;                    
                     this.PlayableItem.Play(this.PlayState, resume);
-                    if (!this.IsFolder && this.PhysicalParent != null) this.PhysicalParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
+                    if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
                 }
             }
             catch (Exception)
