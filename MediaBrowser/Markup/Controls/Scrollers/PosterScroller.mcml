@@ -239,10 +239,10 @@
 			<Default Target="[ScrollingData.Repeater]" Value="[MyRepeater]"/>
 			<Binding Target="[FocusRect.Scaling]" Source="[Folder.PosterZoom]" />
 			<Binding Target="[MyRepeater.Source]" Source="[Folder.Children]" />
-      <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
-      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
+      <!--<Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />-->
 
-      <Rule>
+      <!--<Rule>
         <Conditions>
           <Equality Source="[Application.DisplayPopupPlay]" ConditionOp="Equals" Value="true" />
         </Conditions>
@@ -257,9 +257,9 @@
           <Set Target="[Application.DisplayPopupPlay]" Value="false" />
           <PlaySound Sound="sound://sounds:Miniselect" />
           <Set Target="[PopupPlay.Visible]" Value="false"/>
-          <!--<Invoke Target="[Scroller.NavigateInto]" />-->          
+          --><!--<Invoke Target="[Scroller.NavigateInto]" />--><!--          
         </Actions>
-      </Changed>
+      </Changed>-->
 
       <!-- Hide focus frame image -->
       <Condition Source="[Application.Config.HideFocusFrame]" ConditionOp="Equals" SourceValue="true" 
@@ -269,13 +269,13 @@
 		<Content>
 			<Panel Name="ItemPanel" Layout="Form" Navigation="ContainHorizontal" >
 				<Children>
-          <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
+          <!--<pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
                         Application="[Application]" >
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.2" Right="Parent,.8"
 											 Top="Parent,0.3" Bottom="Parent,.7" />
             </LayoutInput>
-          </pp:PopupPlay>
+          </pp:PopupPlay>-->
 					<fs:FocusSelector Name="FocusRect">
 						<LayoutInput>
 							<FormLayoutInput Left="Focus,0,-3" Right="Focus,1,3"

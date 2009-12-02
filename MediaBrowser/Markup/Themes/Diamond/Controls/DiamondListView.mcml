@@ -61,7 +61,7 @@
         </Actions>
       </Changed>
 
-      <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <!--<Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
 
       <Rule>
         <Conditions>
@@ -80,7 +80,7 @@
           <Set Target="[PopupPlay.Visible]" Value="false"/>
           <Invoke Target="[Scroller.NavigateInto]" />
         </Actions>
-      </Changed>
+      </Changed>-->
     </Rules>
 
     <Content>
@@ -102,12 +102,12 @@
           </Panel>
 
           <!-- Popup Play Panel -->
-          <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
+          <!--<pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
                     Application="[Application]" >
             <LayoutInput>
               <DockLayoutInput Alignment="Center"  Position="Client"  />
             </LayoutInput>
-          </pp:PopupPlay>
+          </pp:PopupPlay>-->
 
           <!-- List Repeater -->
           <Scroller Orientation="Vertical" FadeSize="-15" Margins="5,0,0,5" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]" >

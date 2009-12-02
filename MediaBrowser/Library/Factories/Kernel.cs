@@ -358,6 +358,39 @@ namespace MediaBrowser.Library {
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea));
         }
 
+        private List<MenuItem> menuOptions = new List<MenuItem>();
+        private List<Type> externalPlayableItems = new List<Type>();
+        private List<Type> externalPlayableFolders = new List<Type>();
+
+        public List<Type> ExternalPlayableItems { get { return externalPlayableItems; } }
+        public List<Type> ExternalPlayableFolders { get { return externalPlayableFolders; } }
+
+        public List<MenuItem> ContextMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Item)); } }
+        public List<MenuItem> PlayMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Play)); } }
+        public List<MenuItem> DetailMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Detail)); } }
+
+        public MenuItem AddMenuItem(MenuItem menuItem, int position)
+        {
+            menuOptions.Insert(position, menuItem);
+            return menuItem;
+        }
+
+        public MenuItem AddMenuItem(MenuItem menuItem)
+        {
+            menuOptions.Add(menuItem);
+            return menuItem;
+        }
+
+        public void AddExternalPlayableItem(Type aType)
+        {
+            externalPlayableItems.Add(aType);
+        }
+
+        public void AddExternalPlayableFolder(Type aType)
+        {
+            externalPlayableFolders.Add(aType);
+        }
+
         public T GetItem<T>(string path) where T : BaseItem
         {
             return GetItem<T>(GetLocation<IMediaLocation>(path));

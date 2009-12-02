@@ -328,7 +328,7 @@
       </Rule>
 
 
-      <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <!--<Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
       <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Rule>
@@ -348,7 +348,7 @@
           <Set Target="[PopupPlay.Visible]" Value="false"/>
           <Invoke Target="[Scroller.NavigateInto]" />
         </Actions>
-      </Changed>
+      </Changed>-->
 
     </Rules>
 

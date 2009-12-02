@@ -43,6 +43,24 @@
       
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
+      <Changed Source="[Command.Available]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Command.Available]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[imgButton.Alpha]" Value="1"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Command.Available]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Command.Available]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[imgButton.Alpha]" Value=".5"/>
+        </Actions>
+      </Changed>
+
       <Rule>
         <Conditions>
           <Equality Source="[Size]" Value="0,0"/>

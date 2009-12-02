@@ -659,6 +659,10 @@
     <Compile Include="Library\Plugins\PluginConfigurationOptions.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
     <Compile Include="Library\Ratings.cs" />
+    <Compile Include="Library\UI\MenuManager.cs" />
+    <Compile Include="Library\UI\ResumeMenuItem.cs" />
+    <Compile Include="Library\UI\MenuItem.cs" />
+    <Compile Include="Library\UI\MenuType.cs" />
     <Compile Include="Library\UI\ViewTheme.cs" />
     <Compile Include="Library\Util\BreadCrumbs.cs" />
     <Content Include="Markup\Base\Animations.mcml" />
@@ -675,6 +679,7 @@
     <Content Include="Markup\Controls\Buttons\SimpleButton.mcml" />
     <Content Include="Markup\Controls\CheckBox.mcml" />
     <Content Include="Markup\Controls\Buttons\HeaderButton.mcml" />
+    <Content Include="Markup\Controls\Popups\ContextMenu.mcml" />
     <Content Include="Markup\Controls\Popups\NumberPad.mcml" />
     <Content Include="Markup\Controls\Scrollers\FancyText.mcml" />
     <Content Include="Markup\Themes\Diamond\Controls\DiamondPagination.mcml" />

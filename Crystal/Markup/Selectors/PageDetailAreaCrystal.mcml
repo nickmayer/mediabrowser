@@ -32,17 +32,6 @@
         </Actions>
       </Rule>
       
-			<Condition Source="[Input.DeepKeyFocus]" SourceValue="false" ConditionOp="Equals">
-				<Actions>
-					<Set Target="[MainPanel.Alpha]" Value="0.2" />
-				</Actions>
-			</Condition>
-
-			<Condition Source="[Input.DeepKeyFocus]" SourceValue="true" ConditionOp="Equals">
-				<Actions>
-					<Set Target="[MainPanel.Alpha]" Value="1" />
-				</Actions>
-			</Condition>
 
 			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Detail" Target="[DetailsView.Visible]" Value="true" />
 			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Detail" Target="[DetailsView.Visible]" Value="false" />

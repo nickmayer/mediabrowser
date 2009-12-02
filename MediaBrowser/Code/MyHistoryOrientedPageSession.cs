@@ -69,7 +69,6 @@ namespace MediaBrowser
             base.LoadPage(target, source, sourceData, uiProperties, navigateForward);
         }
 
-
         public string Breadcrumbs
         {
             get

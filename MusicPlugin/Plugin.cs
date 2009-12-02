@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library;
@@ -14,6 +15,7 @@ using MusicPlugin.Util;
 using Microsoft.MediaCenter;
 using System.IO;
 using MusicPlugin.Views;
+using MediaBrowser;
 
 namespace MusicPlugin
 {
@@ -72,6 +74,10 @@ namespace MusicPlugin
 
                             kernel.RootFolder.AddVirtualChild(itunes);
                             kernel.ItemRepository.SaveItem(itunes);
+                            //add types to supported types
+                            kernel.AddExternalPlayableItem(typeof(iTunesSong));
+                            kernel.AddExternalPlayableFolder(typeof(iTunesAlbum));
+
                         }
                         catch (Exception ex)
                         {
@@ -97,10 +103,17 @@ namespace MusicPlugin
                             music.PrimaryImagePath = Settings.Instance.NormalLibraryIcon;
                         kernel.RootFolder.AddVirtualChild(music);
                         kernel.ItemRepository.SaveItem(music);
+                        //add types to supported types
+                        kernel.AddExternalPlayableItem(typeof(Song));
+                        kernel.AddExternalPlayableFolder(typeof(ArtistAlbum));
                     }
                 }
             }
-            
+
+            //add our music specific menu items
+            kernel.AddMenuItem(new MenuItem("Queue All", "resx://MediaBrowser/MediaBrowser.Resources/Lines", this.queue, new List<Type>() {typeof(ArtistAlbum)}, new List<MenuType>() { MenuType.Item, MenuType.Play }));
+            kernel.AddMenuItem(new MenuItem("Queue", "resx://MediaBrowser/MediaBrowser.Resources/Lines", this.queue, new List<Type>() { typeof(Song) }, new List<MenuType>() { MenuType.Item, MenuType.Play }));
+
             kernel.EntityResolver.Insert(kernel.EntityResolver.Count - 2, new SongResolver());
             kernel.EntityResolver.Insert(kernel.EntityResolver.Count - 2, new ArtistAlbumResolver());
             //kernel.EntityResolver.Insert(kernel.EntityResolver.Count - 2, new AlbumResolver());
@@ -163,5 +176,9 @@ namespace MusicPlugin
             }
         }
 
+        private void queue(Item item)
+        {
+            Application.CurrentInstance.AddToQueue(item);
+        }
     }
 }

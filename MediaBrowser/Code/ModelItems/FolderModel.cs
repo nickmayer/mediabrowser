@@ -461,6 +461,7 @@ namespace MediaBrowser.Library {
         private void SelectedChildChanged() {
             FirePropertyChanged("SelectedChildIndex");
             FirePropertyChanged("SelectedChild");
+            Application.CurrentInstance.CurrentItemChanged();
         }
 
         internal override void SetWatched(bool value) {

@@ -110,6 +110,66 @@ namespace MediaBrowser
             }
         }
 
+        private Item currentItem;
+
+        public Item CurrentItem
+        {
+            get
+            {
+                if (currentItem != null)
+                {
+                    return currentItem;
+                }
+                else
+                {
+                    if (Application.CurrentInstance.CurrentFolder.SelectedChild != null)
+                    {
+                        return Application.CurrentInstance.CurrentFolder.SelectedChild;
+                    }
+                    else return Item.BlankItem;
+                }
+            }
+            set
+            {
+                if (currentItem != value)
+                {
+                    currentItem = value;
+                    CurrentItemChanged();
+                }
+            }
+        }
+
+        public void CurrentItemChanged()
+        {
+            FirePropertyChanged("CurrentItem");
+        }
+
+        public List<MenuItem> ContextMenu
+        {
+            get
+            {
+                return Kernel.Instance.ContextMenuItems;
+            }
+        }
+
+        public List<MenuItem> PlayMenu
+        {
+            get
+            {
+                return Kernel.Instance.PlayMenuItems;
+            }
+        }
+
+        public List<MenuItem> DetailMenu
+        {
+            get
+            {
+                return Kernel.Instance.DetailMenuItems;
+            }
+        }
+
+        private MenuManager menuManager;
+
         public bool NavigatingForward
         {
             get { return navigatingForward; }
@@ -145,7 +205,11 @@ namespace MediaBrowser
             ConfigModel = new Choice();
             ConfigModel.Options = ConfigPanelNames;
 
+            //initialize our menu manager
+            menuManager = new MenuManager();
+
         }
+
 
         /// <summary>
         /// This is an oddity under TVPack, sometimes the MediaCenterEnvironemt and MediaExperience objects go bad and become

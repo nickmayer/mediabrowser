@@ -1,0 +1,152 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	    xmlns:cor="assembly://MSCorLib/System"
+      xmlns:a="assembly://MediaBrowser/MediaBrowser"
+	    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+	    xmlns:s="file://Styles_DoNotEdit.mcml"
+	    xmlns:f="file://Fonts_DoNotEdit.mcml"
+	    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	    xmlns:cb="resx://MediaBrowser/MediaBrowser.Resources/CheckBox"
+	    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
+      xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"      
+		  xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu" 
+      xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+	    xmlns:me="Me"
+	  >
+
+  <UI Name="ContextMenu">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Command Name="Close" Command="$Required"/>
+    </Properties>
+
+    <Content>
+      <me:ActionMenu Name="Menu" Close="[Close]" Application="[Application]" />
+    </Content>
+  </UI>
+
+  <UI Name="PlayMenu">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Command Name="Close" Command="$Required"/>
+    </Properties>
+
+    <Content>
+      <me:ActionMenu Name="Menu" Close="[Close]" Application="[Application]" MenuType="Play"/>
+    </Content>
+  </UI>
+
+  <UI Name="ActionMenu">
+      <Properties>        
+        <a:Application Name="Application" Application="$Required"/>
+        <Command Name="Close" Command="$Required"/>
+        <cor:String Name="MenuType" String="Context" />
+      </Properties>
+    
+      <Locals>
+        <ShortcutHandler Name="BackHandler"  Handle="true" Shortcut="Back" HandlerStage="Bubbled" Command="[Close]"/>
+      </Locals>
+    
+      <Rules>
+        <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+        <Default Target="[Input.KeyInteractive]" Value="true" />
+        <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+
+        <Condition Source="[MenuType]" SourceValue="Play" >
+          <Actions>
+            <Set Target="[Title.Content]" Value="Play Menu" />
+            <Set Target="[ListRepeater.Source]" Value="[Application.PlayMenu]" />
+          </Actions>
+        </Condition>
+
+        <Condition Source="[Application.ContextMenu.Count]" SourceValue="0" Target="[Empty.Visible]" Value="true" />
+
+      </Rules>
+    
+      <Content>
+        <ColorFill Name="Main" Content="255,0,15,60"  Navigation="ContainAll,Group">
+          <Children>
+            <Graphic Content="image://i:ZoomPane"  SizingPolicy="SizeToChildren"
+                     MaintainAspectRatio="false" Padding="20,20,20,20" >
+              <Layout>
+                <FlowLayout Orientation="Vertical" ItemAlignment="Far"/>
+              </Layout>
+              <Children>
+                <Panel >
+                  <Layout>
+                    <FlowLayout Orientation="Vertical" ItemAlignment="Near"/>
+                  </Layout>
+                  <Children>
+                    <Text Name="Title" Content="Item Menu" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
+                    <ColorFill Content="DimGray" Alpha="0.8" Layout="Fill" MaximumSize="300,2" />
+                    <Text Content=" "/>
+                    <Text Name="Empty" Content="No Available Options" Font="font://f:MM_ButtonFont" Color="color://s:FontColorLight" Visible="false" />
+                    <Repeater Name="ListRepeater" Source="[Application.ContextMenu]" Layout="VerticalFlow">
+                      <Content>
+                        <me:MenuItem option="[RepeatedItem!lib:MenuItem]" Close="[Close]" Font="font://f:MM_ButtonFont" Application="[Application]" />
+                      </Content>
+                    </Repeater>
+                  </Children>
+                </Panel>
+                <Panel >
+                  <Layout>
+                    <FlowLayout Orientation="Vertical" ItemAlignment="Fill"/>
+                  </Layout>
+                  <Children>
+                    <Text Content=" "/>
+                    <vm:BaseBtn LabelText="Close" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
+                  </Children>
+                </Panel>
+              </Children>
+            </Graphic>
+          </Children>
+        </ColorFill>
+      </Content>
+    </UI>
+  <UI Name="MenuItem">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:MenuItem Name="option" MenuItem="$Required" />
+      <Command Name="Close" Command="$Required"/>
+      <Font Name="Font" Font="$Required"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="DoAction"/>
+    </Locals>
+
+    <Rules>
+      <Changed Source="[DoAction.Invoked]">
+        <Actions>
+          <Invoke Target="[Close.Invoke]" />
+          <Invoke Target="[option.DoCommand]"  item="[Application.CurrentItem]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Application.CurrentItem]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[OptionButton.Icon]" Value="[option.Icon]" />
+          <Set Target="[OptionButton.Text]" Value="[option.Text]" />
+          <Set Target="[OptionButton.Visible]" Value="[option.Available]" />
+          <Set Target="[DoAction.Available]" Value="[option.Enabled]" />
+        </Actions>
+      </Changed>
+
+      <Binding Target="[OptionButton.Visible]" Source="[option.Available]" />
+      <Binding Target="[DoAction.Available]" Source="[option.Enabled]" />
+      <Binding Target="[OptionButton.Icon]" Source="[option.Icon]" />
+      <Binding Target="[OptionButton.Text]" Source="[option.Text]" />
+
+    </Rules>
+
+    <Content>
+      <Panel Layout="HorizontalFlow" >
+        <Children>
+          <ib:ImageButton Name="OptionButton" Text="[option.Text]" Color="color://s:FontColorMedium" Command="[DoAction]"
+                          Icon="[option.Icon]" Size="300,50"
+                          Font="[Font]" DisplayText="true" MinSize="300,50" Visible="true"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  </Mcml>

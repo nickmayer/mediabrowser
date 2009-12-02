@@ -8,6 +8,8 @@
     xmlns:pc="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
 		xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu"  
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
+    xmlns:cm="resx://MediaBrowser/MediaBrowser.Resources/ContextMenu"
+	    xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
 	  
 	  xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailArea"
     xmlns:me="Me"
@@ -42,7 +44,10 @@
 			<Command Name="CloseSortConfiguration" />
 			<Command Name="ShowIndexConfiguration" />
 			<Command Name="CloseIndexConfiguration" />
-			<Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="250" /> <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
+      <Command Name="CloseContextMenu" />
+      <Command Name="ClosePopupPlay" />
+      <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="250" /> <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
+      <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
       <a:Clock Name="Clock"/>
       <KeyHandler Name="SwitchKey" Key="D8" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
       <!--<Timer Name="NavTimer" Interval="150" AutoRepeat="false" Enabled="true"/>-->
@@ -86,12 +91,39 @@
           <Modified Source="[SwitchKey.Invoked]" />
         </Conditions>
         <Actions>
-          <Invoke Target="[Folder.DisplayPrefs.ToggleViewTypes]" />
+          <Set Target="[ContextMenu.Visible]" Value="true"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
         </Actions>
       </Rule>
-      
-      
-			<Changed Source="[RefocusViewTimer.Tick]">
+
+      <Changed Source="[CloseContextMenu.Invoked]" >
+        <Actions>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[ContextMenu.Visible]" Value="false" />
+        </Actions>
+      </Changed>
+ 
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.DisplayPopupPlay]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[PopupPlay.Visible]" Value="true" />
+          <Invoke Target="[PopupPlay.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[ClosePopupPlay.Invoked]">
+        <Actions>
+          <Set Target="[Application.DisplayPopupPlay]" Value="false" />
+          <!--<PlaySound Sound="sound://sd:Miniselect" />-->
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[PopupPlay.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
+
+      <Changed Source="[RefocusViewTimer.Tick]">
 				<Actions>
 					<Invoke Target="[ViewConfig.NavigateInto]" />
 				</Actions>
@@ -234,6 +266,7 @@
 
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Detail" Target="[NowPlayingIsText.Value]" Value="true" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Detail" Target="[NowPlayingIsText.Value]" Value="false" />
+      
      
     </Rules>
 
@@ -367,6 +400,12 @@
 									<FormLayoutInput Left="Parent,0,-10" Bottom="Parent,1,20" />
 								</LayoutInput>
 							</np:NowPlayingViewport>
+              
+              <!-- Context Menu -->
+              <cm:ContextMenu Name="ContextMenu" Application="[Application]" Close="[CloseContextMenu]" Visible="false" />
+
+              <!-- Play Menu -->
+              <cm:PlayMenu Name="PopupPlay" Application="[Application]" Close="[ClosePopupPlay]" Visible="false" />
 
 
               <Panel Name="MainBG" Layout="Fill" Margins="-50,-20,-150,-20" >

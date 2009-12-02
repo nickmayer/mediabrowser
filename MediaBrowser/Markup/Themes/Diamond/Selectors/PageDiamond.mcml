@@ -10,6 +10,8 @@
     xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
 	  xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
 	  xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailAreaDiamond"
+	    xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+    xmlns:cm="resx://MediaBrowser/MediaBrowser.Resources/ContextMenu"
       
     xmlns:me="Me"
       >
@@ -46,6 +48,8 @@
       <!-- Navigate Timer to bypass view triggering -->
       <Timer Name="NavTimer" Interval="2000" AutoRepeat="false" Enabled="true"/>
       <Timer Name="RefocusTimer" Interval="200" AutoRepeat="false" Enabled="false"/>
+      <Command Name="CloseContextMenu" />
+      <Command Name="ClosePopupPlay" />
     </Locals>
 
     <Rules>
@@ -143,10 +147,39 @@
           <Modified Source="[SwitchKey.Invoked]" />
         </Conditions>
         <Actions>
-          <Invoke Target="[Folder.DisplayPrefs.ToggleViewTypes]" />
-          <Set Target="[RefocusTimer.Enabled]" Value="true" />
+          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
+          <Set Target="[FindAsYouTypePanel.Visible]" Value="false" />
+          <Set Target="[ContextMenu.Visible]" Value="true"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
         </Actions>
       </Rule>
+
+      <Changed Source="[CloseContextMenu.Invoked]" >
+        <Actions>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[ContextMenu.Visible]" Value="false" />
+          <Set Target="[FindAsYouTypePanel.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.DisplayPopupPlay]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[PopupPlay.Visible]" Value="true" />
+          <Invoke Target="[PopupPlay.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[ClosePopupPlay.Invoked]">
+        <Actions>
+          <Set Target="[Application.DisplayPopupPlay]" Value="false" />
+          <!--<PlaySound Sound="sound://sd:Miniselect" />-->
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[PopupPlay.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
 
 
       <!---->
@@ -283,6 +316,11 @@
                 </Children>
               </Panel>
 
+              <!-- Context Menu -->
+              <cm:ContextMenu Name="ContextMenu" Application="[Application]" Close="[CloseContextMenu]" Visible="false" />
+
+              <!-- Play Menu -->
+              <cm:PlayMenu Name="PopupPlay" Application="[Application]" Close="[ClosePopupPlay]" Visible="false" />
 
               <!--  View Details-->
               <pda:PageDetailAreaDiamond Name="ViewPanel" Folder="[Folder]" Application="[Application]"  >

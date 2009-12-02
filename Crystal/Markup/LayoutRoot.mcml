@@ -112,8 +112,8 @@
       <Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>
       <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
       <Binding Source="[SelectedItem.PreferredImage]" Target="[CurrentPoster.Content]"/>
-      <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
-      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
+      <!--<Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />-->
       <Binding Target="[Repeater.Source]" Source="[Folder.Children]"/>
 
       <Binding Source="[Clock.Time]" Target="[TimeDate.Content]">
@@ -166,7 +166,7 @@
         </Actions>
       </Changed>
 
-      <Rule>
+      <!--<Rule>
         <Conditions>
           <Equality Source="[Application.DisplayPopupPlay]" ConditionOp="Equals" Value="true" />
         </Conditions>
@@ -183,7 +183,7 @@
           <Set Target="[PopupPlay.Visible]" Value="false"/>
           <Invoke Target="[Scroller.NavigateInto]" />
         </Actions>
-      </Changed>
+      </Changed>-->
 
       <!-- Folder/Item Selection -->
       <Changed Source="[Folder.SelectedChildIndex]">
@@ -346,13 +346,13 @@
             <Children>
 
               <!-- Popup Play Panel -->
-              <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
+              <!--<pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
                         Application="[Application]" >
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0.3" Right="Parent,.7"
                            Top="Parent,0.35" Bottom="Parent,.7" />
                 </LayoutInput>
-              </pp:PopupPlay>
+              </pp:PopupPlay>-->
 
               <!-- Weather Panel -->
               <wea:YahooWeatherLarge>
@@ -622,6 +622,8 @@
     <Rules>
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Actions>
+          <!--recent list no longer has focus so set current item back to normal-->
+          <Set Target="[Application.CurrentItem]" Value="null" />
           <Set Target="[SelectedIndex.Value]" Value="[Index]"/>
           <Set Target="[Bg.Content]" Value="image://me:HiliteFocusBg" />
           <Set Target="[FlashTop.Visible]" Value="true"/>
@@ -846,6 +848,7 @@
           <Equality Source="[Input.KeyFocus]" Value="true" />
         </Conditions>
         <Actions>
+          <Set Target="[Application.CurrentItem]" Value="[Item]" />
           <Set Target="[Bg.Content]" Value="image://me:HiliteBtn" />
           <Set Target="[Txt1.Color]" Value="color://s:FontColorLight" />
           <Set Target="[Txt2.Color]" Value="color://s:FontColorMedium" />

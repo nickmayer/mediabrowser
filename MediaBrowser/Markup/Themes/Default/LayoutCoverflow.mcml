@@ -321,7 +321,7 @@
       </Rule>
 
 
-      <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <!--<Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
       <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Rule>
@@ -341,7 +341,7 @@
           <Set Target="[PopupPlay.Visible]" Value="false"/>
           <Invoke Target="[Scroller.NavigateInto]" />
         </Actions>
-      </Changed>
+      </Changed>-->
 
     </Rules>
 
@@ -349,13 +349,13 @@
       <!-- Coverflow Scroller -->
       <Panel Name="Panel" Navigation="ContainHorizontal" Layout="Anchor" >
         <Children>
-          <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
+          <!--<pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
                         Application="[Application]" >
             <LayoutInput>              
               <AnchorLayoutInput Left="Parent,0.3" Right="Parent,.7"
 											 Top="Parent,0.15" Bottom="Parent,.4" />
             </LayoutInput>
-          </pp:PopupPlay>
+          </pp:PopupPlay>-->
           
           <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="-20" ScrollingData="[SD]" Navigation="RememberFocus" 
                     Margins="0,-20,0,0" >
