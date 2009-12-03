@@ -98,13 +98,13 @@ namespace MediaBrowser.Library.Plugins
 
         // hackyness to stop WPF from loading in ehexthost, cause that screws up fonts, needs a refactor. 
         object oControlBindings = null;
- 
-        Dictionary<Control, PropertyInfo> _controlBindings {
+
+        Dictionary<Control, AbstractMember> _controlBindings {
             get {
                 if (oControlBindings == null) {
-                   oControlBindings =  new Dictionary<Control, PropertyInfo>();
+                    oControlBindings = new Dictionary<Control, AbstractMember>();
                 }
-                return oControlBindings as Dictionary<Control, PropertyInfo>; 
+                return oControlBindings as Dictionary<Control, AbstractMember>; 
             }
         } 
                 
@@ -117,8 +117,17 @@ namespace MediaBrowser.Library.Plugins
             Window window  = BuildWindow();
             window.Content = (grid);
 
-            foreach (var property in type.GetProperties())
-                BuildControl(grid, property, Instance);
+            foreach (var member in type.GetMembers()) {
+                AbstractMember abstractMember = null;
+                if (member.MemberType == MemberTypes.Property) {
+                    abstractMember = new PropertyMember((PropertyInfo)member);
+                } else if (member.MemberType == MemberTypes.Field) {
+                    abstractMember = new FieldMember((FieldInfo)member);
+                }
+                if (abstractMember != null) {
+                    BuildControl(grid, abstractMember, Instance);
+                }
+            }
 
             PopulateControls(Instance);
 
@@ -143,11 +152,11 @@ namespace MediaBrowser.Library.Plugins
             foreach (var item in _controlBindings.Keys)
             {
                 if (item is CheckBox)
-                    (item as CheckBox).IsChecked = (bool)_controlBindings[item].GetValue(pluginConfigurationOptions, null);
+                    (item as CheckBox).IsChecked = (bool)_controlBindings[item].Read(pluginConfigurationOptions);
                 else if (item is TextBox)
-                    (item as TextBox).Text = (string)_controlBindings[item].GetValue(pluginConfigurationOptions, null);
+                    (item as TextBox).Text = (string)_controlBindings[item].Read(pluginConfigurationOptions);
                 else if (item is ComboBox)
-                    (item as ComboBox).Text = (string)_controlBindings[item].GetValue(pluginConfigurationOptions, null);
+                    (item as ComboBox).Text = (string)_controlBindings[item].Read(pluginConfigurationOptions);
             }
         }
 
@@ -200,34 +209,34 @@ namespace MediaBrowser.Library.Plugins
             return panel;
         }
 
-        void BuildControl(Grid grid, PropertyInfo property, PluginConfigurationOptions pluginConfigurationOptions)
+        void BuildControl(Grid grid, AbstractMember member, PluginConfigurationOptions pluginConfigurationOptions)
         {
             Control control = null;
-            object[] attributes = property.GetCustomAttributes(false);
+            object[] attributes = member.GetAttributes();
 
             if (attributes == null || attributes.Length == 0)
                 return;
 
             LabelAttribute labelAttribute = attributes.Select(x => x as LabelAttribute).Where(i => i != null).First();
 
-            bool isBool = property.PropertyType == typeof(bool);
-            bool isString = property.PropertyType == typeof(string);
+            bool isBool = member.Type == typeof(bool);
+            bool isString = member.Type == typeof(string);
             bool isChoice = attributes.FirstOrDefault(x => x is ItemsAttribute) != null;
 
             if (isBool) {
-                control = new CheckBox() { VerticalAlignment = VerticalAlignment.Center, IsChecked = (bool)property.GetValue(pluginConfigurationOptions, null), Name = property.Name };
+                control = new CheckBox() { VerticalAlignment = VerticalAlignment.Center, IsChecked = (bool)member.Read(pluginConfigurationOptions), Name = member.Name };
                 (control as CheckBox).Checked += new RoutedEventHandler(PluginConfigureView_Checked);
                 (control as CheckBox).Unchecked += new RoutedEventHandler(PluginConfigureView_Checked);
             } else if (isChoice) {
-                control = new ComboBox() { Margin = new Thickness(0, 2, 0, 2), Name = property.Name, Width = 200 };
+                control = new ComboBox() { Margin = new Thickness(0, 2, 0, 2), Name = member.Name, Width = 200 };
                 (control as ComboBox).SelectionChanged += new SelectionChangedEventHandler(PluginConfigureView_SelectionChanged);
                 ItemsAttribute itemsAttribute = attributes.Select(x => x as ItemsAttribute).Where(i => i != null).First();
                 foreach (var item in itemsAttribute.Items.Split(','))
                     (control as ComboBox).Items.Add(item);
-                (control as ComboBox).Text = (string)property.GetValue(pluginConfigurationOptions, null);
+                (control as ComboBox).Text = (string)member.Read(pluginConfigurationOptions);
             } 
             else if (isString) {
-                control = new TextBox() { Margin = new Thickness(0, 2, 0, 2), Text = (string)property.GetValue(pluginConfigurationOptions, null), Name = property.Name, Width = 200 };
+                control = new TextBox() { Margin = new Thickness(0, 2, 0, 2), Text = (string)member.Read(pluginConfigurationOptions), Name = member.Name, Width = 200 };
                 (control as TextBox).TextChanged += new TextChangedEventHandler(PluginConfigureView_TextChanged);
             } else {
                 return;
@@ -241,7 +250,7 @@ namespace MediaBrowser.Library.Plugins
             grid.Children.Add(control);
             Grid.SetColumn(control, 1);
             Grid.SetRow(control, grid.RowDefinitions.Count - 1);
-            _controlBindings.Add(control, property);
+            _controlBindings.Add(control, member);
         }
 
 
@@ -273,15 +282,15 @@ namespace MediaBrowser.Library.Plugins
             {
                 if (sender is CheckBox)
                 {
-                    _controlBindings[(Control)sender].SetValue(Instance, (sender as CheckBox).IsChecked, null);
+                    _controlBindings[(Control)sender].Write(Instance, (sender as CheckBox).IsChecked);
                 }
                 else if (sender is TextBox)
                 {
-                    _controlBindings[(Control)sender].SetValue(Instance, (sender as TextBox).Text, null);
+                    _controlBindings[(Control)sender].Write(Instance, (sender as TextBox).Text);
                 }
                 else if (sender is ComboBox)
                 {
-                    _controlBindings[(Control)sender].SetValue(Instance, (sender as ComboBox).SelectedValue, null);
+                    _controlBindings[(Control)sender].Write(Instance, (sender as ComboBox).SelectedValue);
                 }
             }
         }

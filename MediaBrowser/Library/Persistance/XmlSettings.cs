@@ -278,66 +278,6 @@ namespace MediaBrowser.Library.Persistance {
             Read();
         }
 
-        #region Unified access to fields and properties
-
-        abstract class AbstractMember {
-            public abstract object Read(object instance);
-            public abstract void Write(object instance, object value);
-            public abstract Type Type { get; }
-            public abstract string Name { get; }
-        }
-
-        class PropertyMember : AbstractMember {
-
-            PropertyInfo propertyInfo;
-
-            public PropertyMember(PropertyInfo propertyInfo) {
-                this.propertyInfo = propertyInfo;
-            }
-
-            public override object Read(object instance) {
-                return propertyInfo.GetGetMethod().Invoke(instance, System.Type.EmptyTypes);
-            }
-
-            public override void Write(object instance, object value) {
-                propertyInfo.GetSetMethod().Invoke(instance, new object[] { value });
-            }
-
-            public override Type Type {
-                get { return propertyInfo.PropertyType; }
-            }
-
-            public override string Name {
-                get { return propertyInfo.Name; }
-            }
-        }
-
-        class FieldMember : AbstractMember {
-            FieldInfo fieldInfo;
-
-            public FieldMember(FieldInfo fieldInfo) {
-                this.fieldInfo = fieldInfo;
-            }
-
-            public override object Read(object instance) {
-                return fieldInfo.GetValue(instance);
-            }
-
-            public override void Write(object instance, object value) {
-                fieldInfo.SetValue(instance, value);
-            }
-
-            public override Type Type {
-                get { return fieldInfo.FieldType; }
-            }
-
-            public override string Name {
-                get { return fieldInfo.Name; }
-            }
-        }
-
-        #endregion
-
         static List<AbstractMember> SettingMembers(Type type) {
 
             // todo: cache this, not really important 
