@@ -369,17 +369,23 @@ namespace MediaBrowser.Library {
         public List<MenuItem> PlayMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Play)); } }
         public List<MenuItem> DetailMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Detail)); } }
 
-        public MenuItem AddMenuItem(MenuItem menuItem, int position)
-        {
-            menuOptions.Insert(position, menuItem);
+        public MenuItem AddMenuItem(MenuItem menuItem) {
+            menuOptions.Add(menuItem);       
             return menuItem;
         }
 
-        public MenuItem AddMenuItem(MenuItem menuItem)
+        public MenuItem AddMenuItem(MenuItem menuItem, int position)
         {
-            menuOptions.Add(menuItem);
+            Debug.Assert(position <= menuOptions.Count, "cowboy you are trying to insert a menu item in an invalid position!");
+            if (position > menuOptions.Count) {
+                Logger.ReportWarning("Attempting to insert a menu item in an invalid position, appending to the end instead " + menuItem.Text);
+                menuOptions.Add(menuItem);
+            } else {
+                menuOptions.Insert(position, menuItem);
+            }
             return menuItem;
         }
+
 
         public void AddExternalPlayableItem(Type aType)
         {
