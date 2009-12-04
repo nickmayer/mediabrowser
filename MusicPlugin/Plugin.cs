@@ -111,8 +111,11 @@ namespace MusicPlugin
             }
 
             //add our music specific menu items
-            kernel.AddMenuItem(new MenuItem("Queue All", "resx://MediaBrowser/MediaBrowser.Resources/Lines", this.queue, new List<Type>() {typeof(ArtistAlbum)}, new List<MenuType>() { MenuType.Item, MenuType.Play }));
-            kernel.AddMenuItem(new MenuItem("Queue", "resx://MediaBrowser/MediaBrowser.Resources/Lines", this.queue, new List<Type>() { typeof(Song) }, new List<MenuType>() { MenuType.Item, MenuType.Play }));
+            if (!isConfigurator)
+            {
+                kernel.AddMenuItem(new MenuItem("Queue All", "resx://MediaBrowser/MediaBrowser.Resources/Lines", this.queue, new List<Type>() { typeof(ArtistAlbum) }, new List<MenuType>() { MenuType.Item, MenuType.Play }));
+                kernel.AddMenuItem(new MenuItem("Queue", "resx://MediaBrowser/MediaBrowser.Resources/Lines", this.queue, new List<Type>() { typeof(Song) }, new List<MenuType>() { MenuType.Item, MenuType.Play }));
+            }
 
             kernel.EntityResolver.Insert(kernel.EntityResolver.Count - 2, new SongResolver());
             kernel.EntityResolver.Insert(kernel.EntityResolver.Count - 2, new ArtistAlbumResolver());
