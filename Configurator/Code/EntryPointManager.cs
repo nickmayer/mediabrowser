@@ -156,7 +156,7 @@ namespace Configurator.Code
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error creating Entrypoint. " +ex.Message);
             }
         }
 
@@ -188,7 +188,7 @@ namespace Configurator.Code
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception ("Error saving entrypoint. " + ex.Message);
             }
         }
 
