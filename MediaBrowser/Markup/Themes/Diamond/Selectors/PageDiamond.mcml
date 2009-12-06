@@ -40,7 +40,6 @@
 
       <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
       <a:Clock Name="Clock"/>
-      <KeyHandler Name="SwitchKey" Key="D8" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
       <BooleanChoice Name="TopBarHasFocus" Value="false" />
 
       <AnchorLayoutInput Name="LayoutTopBarShow" Top="Parent,0" Left="Parent,0" Right="Parent,1" Horizontal="Center" />
@@ -49,6 +48,7 @@
       <Timer Name="NavTimer" Interval="2000" AutoRepeat="false" Enabled="true"/>
       <Timer Name="RefocusTimer" Interval="200" AutoRepeat="false" Enabled="false"/>
       <Command Name="CloseContextMenu" />
+      <Command Name="Popup" />
       <Command Name="ClosePopupPlay" />
     </Locals>
 
@@ -144,7 +144,7 @@
 
       <Rule>
         <Conditions>
-          <Modified Source="[SwitchKey.Invoked]" />
+          <Modified Source="[Popup.Invoked]" />
         </Conditions>
         <Actions>
           <Set Target="[TypingHandler.EditableText.Value]" Value="" />
@@ -159,6 +159,15 @@
           <Invoke Target="[ViewPanel.NavigateInto]" />
           <Set Target="[ContextMenu.Visible]" Value="false" />
           <Set Target="[FindAsYouTypePanel.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="*" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Popup.Invoke]" />
         </Actions>
       </Changed>
 

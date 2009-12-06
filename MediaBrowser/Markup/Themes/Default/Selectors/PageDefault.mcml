@@ -94,6 +94,7 @@
         <Actions>
           <Set Target="[ContextMenu.Visible]" Value="true"/>
           <Invoke Target="[ContextMenu.NavigateInto]" />
+          <Set Target="[FindAsYouTypePanel.Visible]" Value="false" />
         </Actions>
       </Rule>
 
