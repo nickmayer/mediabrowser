@@ -1,0 +1,4 @@
+glob:Configurator/bin/*
+glob:Configurator/obj/*
+glob:MediaBrowser/bin/*
+glob:MediaBrowser/obj/*
