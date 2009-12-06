@@ -27,13 +27,13 @@
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
 
 			<ScrollingData Name="VScrollingData" />
-			<ScrollingData Name="HScrollingData" EndPaddingRelativeTo="Far" EndPadding="400" BeginPadding="100" BeginPaddingRelativeTo="Near"/>
+			<ScrollingData Name="HScrollingData" EndPaddingRelativeTo="Far" EndPadding="10" BeginPadding="10" BeginPaddingRelativeTo="Near"  LockedAlignment="1" LockedPosition="0.8"/>
 			<ScrollingData Name="CenterScollingData" LockedAlignment="0.5" LockedPosition="0.5"/>
-			<ScrollingData Name="ScrollingData" />
+			<ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.6"  />
 			
 			<Environment Name="Environment" />
 
-			<GridLayout Name="MyLayout" Repeat="WhenTooBig" RepeatGap="100" Orientation="Vertical" Rows="[RowLimit]" Columns="0"
+			<GridLayout Name="MyLayout" Repeat="WhenTooBig" RepeatGap="10" Orientation="Vertical" Rows="[RowLimit]" Columns="0"
 						AllowWrap="true" Spacing="[Application.Config.GridSpacing]" MinorAlignment="Center" MajorAlignment="Center" />
 
 			<ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
@@ -118,8 +118,7 @@
 					<Set Target="[ItemPanel.Padding]" Value="0,0,0,0" />
 					<Set Target="[Scroller.LayoutInput]" Value="[HLayout]" />
 					<Set Target="[MyLayout.Repeat]" Value="WhenTooBig" />
-					<Set Target="[MyLayout.RepeatGap]" Value="100" />
-					
+					<Set Target="[MyLayout.RepeatGap]" Value="0" />					
 				</Actions>
 			</Condition>
 
@@ -250,7 +249,6 @@
 											 ContributesToHeight="false"
 											 ContributesToWidth="false"/>
 						</LayoutInput>
-
 					</fs:FocusSelector>
 					<Scroller Orientation="Horizontal" FadeSize="-50" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]">
 						<Children>

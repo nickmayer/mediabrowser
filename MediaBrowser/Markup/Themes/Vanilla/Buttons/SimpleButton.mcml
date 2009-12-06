@@ -3,6 +3,9 @@
       xmlns:a="assembly://MediaBrowser/MediaBrowser"
       xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
       xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+      xmlns:f="file://Fonts_DoNotEdit.mcml"
+	    xmlns:s="file://Styles_DoNotEdit.mcml"
+      xmlns:me="Me"
       >
  
   <UI Name="SimpleButton">
@@ -11,11 +14,13 @@
       <a:Application Name="Application" Application="$Required"/>
       <ICommand Name="Command" ICommand="$Required" />
       <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
-      <Size Name="Size" Size="135,135" />
-      <Image Name="FocusImage" Image="image://vi:MenuOptionBGFocused" />
-      <Image Name="NoFocusImage" Image="image://vi:MenuOptionBGNotFocused" />
+      <Size Name="Size" Size="135,135"/>
+      <Image Name="FocusImage"          Image="image://me:InfoBoxBlue" />
+      <Image Name="FocusImageDefault"   Image="image://me:InfoBoxYellow"/>
+      <Image Name="NoFocusImage"        Image="image://me:InfoBox" />
+      <Image Name="NoFocusImageDefault" Image="image://me:InfoBoxDefault" />
       <Image Name="ImageNoFocus" Image="$Required" />
-      <Image Name="BlankImage" Image="null" />
+      <Image Name="BlankImage" Image="image://me:InfoBox" />
     </Properties>
 
     <Locals>
@@ -24,13 +29,13 @@
     </Locals>
 
     <Rules>
-
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+      
       <Binding Source="[Command]" Target="[Clicker.Command]" />
       <Binding Source="[Command.Available]" Target="[Input.KeyInteractive]" />
       <Default Target="[Input.KeyInteractive]" Value="true" />
-
-      <Condition Source="[Config.Theme]" SourceValue="Black" Target="[NoFocusImage]"  Value="image://vi:MenuOptionBGNotFocusedBlack"/>
-
+      
       <Rule>
         <Conditions>
           <Modified Source="[Clicker.Invoked]"/>
@@ -38,6 +43,7 @@
         </Conditions>
         <Actions>
           <PlaySound Sound="sound://sounds:Select" />
+          <PlayAnimation Target="[BoxImage]" Animation="animation://me:ButtonPress"/>
         </Actions>
       </Rule>
 
@@ -48,6 +54,7 @@
         </Conditions>
         <Actions>
           <PlaySound Sound="sound://sounds:Miniselect" />
+          <PlayAnimation Target="[BoxImage]" Animation="animation://me:ButtonPress"/>
         </Actions>
       </Rule>
 
@@ -85,11 +92,11 @@
 
       <Panel>
         <Children>
-          <Graphic Name="BoxImage" Content="[BlankImage]" SizingPolicy="SizeToChildren" Padding="3,3,3,3">
+          <Graphic Name="BoxImage" Content="[BlankImage]" SizingPolicy="SizeToChildren" Alpha="0.8">
             <Children>
               <Panel >
                 <Children>
-                  <Graphic Content="[ImageNoFocus]" MaximumSize="[Size]" MaintainAspectRatio="true" />
+                  <Graphic Content="[ImageNoFocus]" MaximumSize="[Size]" MaintainAspectRatio="true" Margins="12,12,17,22" />
                 </Children>
               </Panel>
             </Children>
@@ -97,6 +104,112 @@
         </Children>
       </Panel>
     </Content>
-  </UI> 
- 
+  </UI>
+
+  <UI Name="SimpleButtonText">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <ICommand Name="Command" ICommand="$Required" />
+      <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
+      <Image Name="FocusImage" Image="image://me:InfoBoxBlue" />
+      <Image Name="NoFocusImage" Image="image://me:InfoBox" />
+      <cor:String Name="ButtonText" String=""/>
+      <Image Name="BlankImage" Image="image://me:InfoBox" />
+    </Properties>
+
+    <Locals>
+      <a:Config Name="Config" Config="[Application.Config]"/>
+      <ClickHandler Name="Clicker" />
+    </Locals>
+
+    <Rules>
+
+      <Binding Source="[Command]" Target="[Clicker.Command]" />
+      <Binding Source="[Command.Available]" Target="[Input.KeyInteractive]" />
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="true" />
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="sound://sounds:Select" />
+          <PlayAnimation Target="[BoxImage]" Animation="animation://me:ButtonPress"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="sound://sounds:Miniselect" />
+          <PlayAnimation Target="[BoxImage]" Animation="animation://me:ButtonPress"/>
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[Command.Available]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[FocusImage]"/>
+          <Set Target="[BText.Color]" Value="color://s:FontColorLight"/>
+          <PlaySound Sound="sound://sounds:Focus" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="false"/>
+          <Equality Source="[Command.Available]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[NoFocusImage]"/>
+          <Set Target="[BText.Color]" Value="color://s:FontColorMedium"/>
+          <PlaySound Sound="sound://sounds:Focus" />
+        </Actions>
+      </Rule>
+
+      <Condition Source="[Command.Available]" ConditionOp="Equals" SourceValue="false">
+        <Actions>
+          <Set Target="[BoxImage.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+    <Content>
+
+      <Panel>
+        <Children>
+          <Graphic Name="BoxImage" Content="[BlankImage]" SizingPolicy="SizeToChildren" Alpha="0.8">
+            <Children>
+              <Panel >
+                <Children>
+                  <Text Name="BText" Content="[ButtonText]" Font="font://f:DV_GenreFont" WordWrap="false" Color="color://s:FontColorMedium" Margins="12,12,17,22"/>
+                </Children>
+              </Panel>
+            </Children>
+          </Graphic>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  
+  <Animation Name="ButtonPress" Loop="0" CenterPointPercent="0.5,0.5,1.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.00" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.08" Value="0.9,0.9,1.0"/>
+      <ScaleKeyframe Time="0.15" Value="1.0,1.0,1.0"/>
+    </Keyframes>
+  </Animation>
+  <Image Name="InfoBox"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox"        NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxDefault" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault" NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxBlue"    Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxBlue"    NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxYellow"  Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxYellow"  NineGrid="12,12,17,22" />
 </Mcml>

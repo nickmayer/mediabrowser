@@ -37,7 +37,7 @@
           <Equality Source="[Input.KeyFocus]" Value="true"/>
         </Conditions>
         <Actions>
-          <Set Target="[BoxImage.Scale]" Value="2,2,1"/>
+          <Set Target="[BoxImage.Scale]" Value="1.5,1.5,1"/>
           <Set Target="[BoxImage.Content]" Value="[FocusImage]"/>
           <Set Target="[VideoPanel.LetterboxColor]" Value="Black"/>
           <PlaySound Sound="sound://sd:Focus" />
@@ -59,7 +59,7 @@
     </Rules>
 
     <Content>
-       <Graphic Name="NPVPosition" Padding="10,10,10,10" SizingPolicy="SizeToChildren"  >
+       <Graphic Name="NPVPosition" Padding="5,5,5,5" SizingPolicy="SizeToChildren"  >
         <Children>
           <Graphic Name="BoxImage" Content="[NoFocusImage]" SizingPolicy="SizeToChildren" Padding="4,4,4,4">
             <Animations>
@@ -71,7 +71,7 @@
               </Animation>
             </Animations>
             <Children>
-              <Video Name="VideoPanel" MaximumSize="[NPVSize]" MinimumSize="[NPVSize]"/>
+              <Video Name="VideoPanel" MaximumSize="[NPVSize]" MinimumSize="[NPVSize]"/>              
             </Children>
           </Graphic>
         </Children>

@@ -81,7 +81,7 @@ namespace MediaBrowser
 
         public string UserSettingsPath = null;
         public string ViewTheme = "Default";
-        public int AlphaBlending = 50;
+        public int AlphaBlending = 80;
         public bool ShowConfigButton = false;
 
         public bool EnableSyncViews = true;

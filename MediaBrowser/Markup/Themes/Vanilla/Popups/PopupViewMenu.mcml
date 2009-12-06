@@ -1,4 +1,5 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:a="assembly://MediaBrowser/MediaBrowser"
 	    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
       xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
       xmlns:vmb="resx://MediaBrowser/MediaBrowser.Resources/VanillaMenuButton"
@@ -9,6 +10,7 @@
 
   <UI Name="PopupViewMenu">
     <Properties>
+      <a:Application Name="Application" Application="$Required"/>
       <lib:DisplayPreferences Name="Prefs" DisplayPreferences="$Required" />
       <Command Name="Close" Command="$Required"/>
     </Properties>
@@ -34,7 +36,7 @@
       </Changed>
     </Rules>
     <Content>
-      <Panel  Navigation="ContainAll,RememberFocus">
+      <Panel  Navigation="ContainAll,RememberFocus" FocusOrder="0">
         <Animations>
           <Animation Name="AlphaAnimation" Type="Show">
             <Keyframes>
@@ -53,19 +55,19 @@
           <FlowLayout Orientation="Vertical" ItemAlignment="Center"/>
         </Layout>
         <Children>
-          <vrb:RadioGroup Model="[Prefs.ViewType]" Size="200,135"/>
+          <vrb:RadioGroup Application="[Application]" Model="[Prefs.ViewType]" Size="200,135"/>
           <Panel>
             <Layout>
               <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
             </Layout>
             <Children>
-              <me:MenuCheckBox Name="UseBackdrop" Checked="[Prefs.UseBackdrop]" Image="image://vi:MenuOptionBackdrop"/>
-              <me:MenuCheckBox Name="ShowLabels" Checked="[Prefs.ShowLabels]" Image="image://vi:MenuOptionLabels"/>
-              <me:MenuCheckBox Name="VerticalScroll" Checked="[Prefs.VerticalScroll]" Image="image://vi:MenuOptionVertScroll"/>
-              <me:MenuCheckBox Name="UseBanner" Checked="[Prefs.UseBanner]" Image="image://vi:MenuOptionBanners"/>
-              <vmb:MenuButton Command="[Increase]" Image="image://vi:MenuOptionEnlarge"/>
-              <vmb:MenuButton Command="[Decrease]" Image="image://vi:MenuOptionShrink"/>
-              <vmb:MenuButton Command="[Close]" Image="image://vi:MenuOptionClose" Red="true"/>
+              <me:MenuCheckBox Name="UseBackdrop"    Application="[Application]" Checked="[Prefs.UseBackdrop]" Image="image://vi:MenuOptionBackdrop"/>
+              <me:MenuCheckBox Name="ShowLabels"     Application="[Application]" Checked="[Prefs.ShowLabels]" Image="image://vi:MenuOptionLabels"/>
+              <me:MenuCheckBox Name="VerticalScroll" Application="[Application]" Checked="[Prefs.VerticalScroll]" Image="image://vi:MenuOptionVertScroll"/>
+              <me:MenuCheckBox Name="UseBanner"      Application="[Application]" Checked="[Prefs.UseBanner]" Image="image://vi:MenuOptionBanners"/>
+              <vmb:MenuButton Application="[Application]" Command="[Increase]" Image="image://vi:MenuOptionEnlarge"/>
+              <vmb:MenuButton Application="[Application]" Command="[Decrease]" Image="image://vi:MenuOptionShrink"/>
+              <vmb:MenuButton Application="[Application]" Command="[Close]" Image="image://vi:MenuOptionClose" Red="true" />
             </Children>
           </Panel>
         </Children>
@@ -76,19 +78,24 @@
   <UI Name="MenuCheckBox">
 
     <Properties>
+      <a:Application Name="Application" Application="$Required"/>
       <BooleanChoice Name="Checked" BooleanChoice="$Required" />
       <Image Name="Image" Image="$Required"/>
     </Properties>
 
     <Locals>
       <ClickHandler Name="Clicker" />
-      <Image Name="FocusImage" Image="image://vi:MenuOptionBGFocused" />
-      <Image Name="SelectedImage" Image="image://vi:MenuOptionBGSelected" />
-      <Image Name="NoFocusImage" Image="image://vi:MenuOptionBGNotFocused" />
-      <Image Name="BlankImage" Image="image://vi:MenuOptionBGNotFocused"/>
+      <Image Name="FocusImage"        Image="image://me:InfoBoxBlue" />
+      <Image Name="FocusImageDefault" Image="image://me:InfoBoxYellow" />
+      <Image Name="SelectedImage" Image="image://me:InfoBoxGreen" />
+      <Image Name="NoFocusImage" Image="image://me:InfoBox" />
+      <Image Name="NoFocusImageDefault" Image="image://me:InfoBoxDefault"/>
+      <Image Name="BlankImage" Image="image://me:InfoBox"/>
     </Locals>
 
     <Rules>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
 
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Binding Source="[Image]" Target="[GrapicImage.Content]"/>
@@ -100,6 +107,7 @@
             </Transformer>
           </Set>
           <PlaySound Sound="sound://sounds:Miniselect" />
+          <PlayAnimation Target="[BoxImage]" Animation="animation://me:ButtonPress"/>
         </Actions>
       </Changed>
 
@@ -117,18 +125,11 @@
           <Equality Source="[Checked.Value]" Value="false" />
         </Conditions>
         <Actions>
+          
           <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
         </Actions>
       </Condition>
 
-      <Condition Source="[Clicker.Clicking]" SourceValue="true">
-        <Conditions>
-          <Equality Source="[Checked.Value]" Value="false" />
-        </Conditions>
-        <Actions>
-          <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
-        </Actions>
-      </Condition>
 
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Conditions>
@@ -174,7 +175,7 @@
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center" />
         </Layout>
         <Children>
-          <Graphic Name="BoxImage" Content="image://vi:MenuOptionBGNotFocused" SizingPolicy="SizeToChildren">
+          <Graphic Name="BoxImage" Content="image://vi:MenuOptionBGNotFocused" SizingPolicy="SizeToChildren" Alpha="0.8">
             <Children>
               <Panel >
                 <Children>
@@ -188,4 +189,19 @@
     </Content>
 
   </UI>
+
+  <Animation Name="ButtonPress" Loop="0" CenterPointPercent="0.5,0.5,1.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.00" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.08" Value="0.9,0.9,1.0"/>
+      <ScaleKeyframe Time="0.15" Value="1.0,1.0,1.0"/>
+    </Keyframes>
+  </Animation>
+  
+  <Image Name="InfoBox"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox"        NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxGreen"   Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxGreen"   NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxBlue"    Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxBlue"    NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxYellow"  Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxYellow"  NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxDefault" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault" NineGrid="12,12,17,22" />
+
 </Mcml>

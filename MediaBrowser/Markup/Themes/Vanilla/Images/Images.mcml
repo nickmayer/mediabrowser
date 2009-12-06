@@ -1,13 +1,6 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
       >
 
-  <Image Name="LeftBorderDefault"      Source="resx://MediaBrowser/MediaBrowser.Resources/LeftBorderDefault" />
-  <Image Name="LeftBorderBlack"        Source="resx://MediaBrowser/MediaBrowser.Resources/LeftBorderBlack" />
-  <Image Name="DetailBorderShadow"     Source="resx://MediaBrowser/MediaBrowser.Resources/DetailBorderShadow" />
-  <Image Name="LeftMenuBorderDefault"  Source="resx://MediaBrowser/MediaBrowser.Resources/LeftMenuBorderDefault" />
-  <Image Name="RightMenuBorderDefault" Source="resx://MediaBrowser/MediaBrowser.Resources/RightMenuBorderDefault" />
-  <Image Name="LeftMenuBorderBlack"    Source="resx://MediaBrowser/MediaBrowser.Resources/LeftMenuBorderBlack" />
-  <Image Name="RightMenuBorderBlack"   Source="resx://MediaBrowser/MediaBrowser.Resources/RightMenuBorderBlack" />
   <Image Name="IconActor" Source="resx://MediaBrowser/MediaBrowser.Resources/IconActors"  />
   <Image Name="IconPlay" Source="resx://MediaBrowser/MediaBrowser.Resources/IconPlay"  />
   <Image Name="IconMusic" Source="resx://MediaBrowser/MediaBrowser.Resources/IconMusic"  />
@@ -15,6 +8,9 @@
   <Image Name="IconSummary" Source="resx://MediaBrowser/MediaBrowser.Resources/IconSummary"  />
   <Image Name="IconTrailer" Source="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer"  />
   <Image Name="IconRefresh" Source="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh"  />
+  <Image Name="IconDelete" Source="resx://MediaBrowser/MediaBrowser.Resources/IconDelete"  />
+  <Image Name="IconShuffle" Source="resx://MediaBrowser/MediaBrowser.Resources/IconShuffle"  />
+  <Image Name="IconQueue" Source="resx://MediaBrowser/MediaBrowser.Resources/IconQueue"  />
   <Image Name="BlankActor" Source="resx://MediaBrowser/MediaBrowser.Resources/MissingPerson"  />
   <Image Name="HDLogo720" Source="resx://MediaBrowser/MediaBrowser.Resources/hd720old"  />
   <Image Name="HDLogo1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hd1080old"  />
@@ -24,6 +20,8 @@
   <Image Name="MenuOptionIndex" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionIndex"/>
   <Image Name="MenuOptionViews" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionViews"/>
   <Image Name="MenuOptionClose" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionClose"/>
+  <Image Name="MenuOptionPCUnlock" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionPCUnlock"/>
+  <Image Name="MenuOptionPCLock" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionPCLock"/>
   <Image Name="MenuOptionBGFocused" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionBGFocused"/>
   <Image Name="MenuOptionBGNotFocused" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionBGNotFocused"/>
   <Image Name="MenuOptionBGNotFocusedBlack" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionBGNotFocusedBlack"/>
@@ -46,10 +44,16 @@
   <Image Name="MenuOptionGenre" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionGenre"/>
   <Image Name="MenuOptionDirector" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionDirector"/>
   <Image Name="MenuOptionStudio" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionStudio"/>
+  <Image Name="MenuOptionPlay" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionPlay"/>
+  <Image Name="MenuOptionResume" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionResume"/>
   <Image Name="MenuOptionPlayAll" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionPlayAll"/>
   <Image Name="MenuOptionPlayRandom" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionPlayRandom"/>
   <Image Name="MenuOptionQueueAll" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionQueueAll"/>
   <Image Name="MenuOptionPlayUnwatched" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionPlayUnwatched"/>
+  <Image Name="MenuOptionMarkUnwatched" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionUnwatched"/>
+  <Image Name="MenuOptionMarkWatched" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionMarkWatched"/>
+  <Image Name="MenuOptionLikeThis" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionLikeThis"/>
+  <Image Name="MenuOptionUnknown" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionUnknown"/>
   <Image Name="ViewThumb" Source="resx://MediaBrowser/MediaBrowser.Resources/ViewThumb"/>
   <Image Name="ViewCoverflow" Source="resx://MediaBrowser/MediaBrowser.Resources/ViewCoverflow"/>
   <Image Name="ViewPoster" Source="resx://MediaBrowser/MediaBrowser.Resources/ViewPoster"/>
@@ -67,6 +71,14 @@
   <Image Name="RatedRfull" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_R_full" />
   <Image Name="RatedNRfull" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_NR_full" />
 
+  <Image Name="TV-G" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_G" />
+  <Image Name="TV-MA" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_MA" />
+  <Image Name="TV-Y7" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_Y7" />
+  <Image Name="TV-Y" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_Y" />
+  <Image Name="TV-14" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_14" />
+  <Image Name="TV-PG" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_PG" />
+  <Image Name="TV-V7-FV" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_V7_FV" />
+  
   <Image Name="ButtonLeftFocusDefault"   Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusDefault"         NineGrid="7,7,7,7" />
   <Image Name="ButtonLeftFocusBlack"     Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusBlack"         NineGrid="7,7,7,7" />
 

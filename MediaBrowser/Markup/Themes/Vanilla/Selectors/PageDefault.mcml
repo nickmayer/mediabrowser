@@ -5,18 +5,22 @@
       xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
       xmlns:s="file://Styles_DoNotEdit.mcml"
       xmlns:f="file://Fonts_DoNotEdit.mcml"
+      xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
 	    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+      xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
 	    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
       xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
       xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
       xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailAreaVanilla"
-      xmlns:pp="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupPlay"
+      xmlns:vcm="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupContextMenu"
+      xmlns:vpp="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupPlay"
       xmlns:pvm="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupViewMenu"
       xmlns:prm="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupRadioMenu"
       xmlns:vsb="resx://MediaBrowser/MediaBrowser.Resources/VanillaSimpleButton"
       xmlns:vmb="resx://MediaBrowser/MediaBrowser.Resources/VanillaMenuButton"
       xmlns:vnpv="resx://MediaBrowser/MediaBrowser.Resources/VanillaNPV"
       xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+      xmlns:vpi="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupInfo"
       xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
       xmlns:me="Me"
 	  >
@@ -27,49 +31,77 @@
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
       <IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
       <FormLayoutInput Name="FullScreen" Bottom="Parent,1" Left="Parent,0" Right="Parent,1" Top="Parent,0"/>
-      <AnchorLayoutInput Name="NPVCenter" Top="Parent,0"/>
       <AnchorLayoutInput Name="NPVRight" Right="Parent,1" Top="Parent,0"/>
     </Properties>
 
     <Locals>
       <a:Config Name="Config" Config="[Application.Config]"/>
-      <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="100" />
+
       <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="PreSelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
-      <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
 
-      <cor:Boolean Name="CanPlay" Boolean="false" />
+      <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="500" />
+      <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
       <Timer Name="HideFindAsYouType" Interval="3000" AutoRepeat="false"/>
-      <cor:String Name="NavigatorText" String="Test"/>
+      <Timer Name="ClockTimer" AutoRepeat="true" Interval="500" Enabled="true"/>
+      <Timer Name="MicrosoftSucksTimer" Interval="1000" AutoRepeat="false" Enabled="true" />
+      
+      <cor:Boolean  Name="CanPlay"       Boolean="false" />
+      <cor:Boolean  Name="DetailShown"   Boolean="true"/>
+      <cor:String   Name="NavigatorText" String="Test"/>
+      <cor:DateTime Name="CurrentTime"/>
+
+      <IntRangedValue Name="Hour"/>
+
       <addin:AddInHost Name="AddInHost" />
-      <Command Name="Configure" />
+
+      
+      <KeyHandler Name="SwitchKey" Key="D8" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
+      <ShortcutHandler Name="RecordBtn" Handle="true" Shortcut="Record" HandlerStage="Bubbled"/>
+      <TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap"  >
+        <EditableText>
+          <EditableText Value="" />
+        </EditableText>
+      </TypingHandler>
+
+      <Command Name="ClosePopupPlay"/>
+      <Command Name="NowPlayingPanel"/>
       <Command Name="ShowViewConfiguration" />
       <Command Name="CloseViewConfiguration" />
       <Command Name="ShowSortConfiguration" />
       <Command Name="CloseSortConfiguration" />
       <Command Name="ShowIndexConfiguration" />
       <Command Name="CloseIndexConfiguration" />
-      <Command Name="RefreshCommand" />
-      <Command Name="CloseCommand" />
-      <Command Name="ConfigOptions" />
-      <Command Name="NowPlayingPanel"/>
-
-
-      <KeyHandler Name="MenuKey" Key="D3" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
-      <KeyHandler Name="ViewKey" Key="D8" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
-      <ShortcutHandler Name="RecordBtn" Handle="true" Shortcut="Record" HandlerStage="Bubbled"/>
-
-      <TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap"  >
-        <EditableText>
-          <EditableText Value="" />
-        </EditableText>
-      </TypingHandler>
-      <Command Name="ClosePopupPlay"/>
+      <Command Name="CloseContextMenu" />
+      
+      <BooleanChoice Name="TopBarHasFocus" Value="false" />
+      <AnchorLayoutInput Name="LayoutTopBarShow" Top="Parent,0,-5"   />
+      <AnchorLayoutInput Name="LayoutTopBarHide" Top="Parent,0,-135" />
     </Locals>
 
     <Rules>
+
+      <Changed Source="[MicrosoftSucksTimer.Tick]">
+        <Actions>
+          <Set Target="[MicrosoftSucksTimer.Enabled]" Value="false" />          
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[TheTopBar.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[ClockTimer.Tick]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[CurrentTime]" Value="[CurrentTime.Now]"/>
+          <Set Target="[Hour.Value]" Value="[CurrentTime.Hour]"/>
+          <Set Target="[TimeDisplay.Content]" Value="[CurrentTime]">
+            <Transformer>
+              <DateTimeTransformer Format="ShortTime"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Changed>
 
       <Changed Source="[FullDetailsTimer.Tick]">
         <Actions>
@@ -117,132 +149,28 @@
         </Actions>
       </Rule>
 
-      <Changed Source="[RefocusViewTimer.Tick]">
-        <Actions>
-          <Invoke Target="[ViewConfig.NavigateInto]" />
-        </Actions>
-      </Changed>
-      <Changed Source="[Configure.Invoked]">
-        <Actions>
-          <Invoke Target="[Application.OpenConfiguration]" showFullOptions="true" />
-        </Actions>
-      </Changed>
-
-      <Changed Source="[ShowViewConfiguration.Invoked]">
-        <Actions>
-          <Set Target="[ViewConfig.Visible]" Value="true"/>
-          <Set Target="[SortConfig.Visible]" Value="false"/>
-          <Set Target="[IndexConfig.Visible]" Value="false"/>
-          <Invoke Target="[ViewConfig.NavigateInto]" />
-          <Set Target="[ConfigurationMenu.Visible]" Value="false"/>
-        </Actions>
-      </Changed>
-      <Changed Source="[CloseViewConfiguration.Invoked]">
-        <Actions>
-          <Set Target="[ViewConfig.Visible]" Value="false"/>
-          <Set Target="[ConfigurationMenu.Visible]" Value="true"/>
-          <Invoke Target="[ConfigurationMenu.NavigateInto]" />
-        </Actions>
-      </Changed>
-      <Changed Source="[Folder.DisplayPrefs.ViewType.Chosen]" >
+      <Rule>
         <Conditions>
-          <Equality Source="[ViewConfig.Visible]" Value="true" />
+          <Modified Source="[SwitchKey.Invoked]" />
         </Conditions>
         <Actions>
-          <Invoke Target="[RefocusViewTimer.Start]" />
+          <Set Target="[ContextMenu.Visible]" Value="true"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
         </Actions>
-      </Changed>
-      <Changed Source="[ShowSortConfiguration.Invoked]">
+      </Rule>
+
+      <Changed Source="[CloseContextMenu.Invoked]" >
         <Actions>
-          <Set Target="[SortConfig.Visible]" Value="true"/>
-          <Set Target="[ViewConfig.Visible]" Value="false"/>
-          <Set Target="[IndexConfig.Visible]" Value="false"/>
-          <Invoke Target="[SortConfig.NavigateInto]" />
-          <Set Target="[ConfigurationMenu.Visible]" Value="false"/>
-        </Actions>
-      </Changed>
-      <Changed Source="[CloseSortConfiguration.Invoked]">
-        <Actions>
-          <Set Target="[SortConfig.Visible]" Value="false"/>
-          <Set Target="[ConfigurationMenu.Visible]" Value="true"/>
-          <Invoke Target="[ConfigurationMenu.NavigateInto]" />
-        </Actions>
-      </Changed>
-      <Changed Source="[Folder.DisplayPrefs.SortOrders.Chosen]" >
-        <Actions>
-          <Set Target="[SortConfig.Visible]" Value="false"/>
-          <Invoke Target="[ConfigurationMenu.NavigateInto]" />
-        </Actions>
-      </Changed>
-      <Changed Source="[ShowIndexConfiguration.Invoked]">
-        <Actions>
-          <Set Target="[IndexConfig.Visible]" Value="true"/>
-          <Set Target="[ViewConfig.Visible]" Value="false"/>
-          <Set Target="[SortConfig.Visible]" Value="false"/>
-          <Invoke Target="[IndexConfig.NavigateInto]" />
-          <Set Target="[ConfigurationMenu.Visible]" Value="false"/>
-        </Actions>
-      </Changed>
-      <Changed Source="[CloseIndexConfiguration.Invoked]">
-        <Actions>
-          <Set Target="[IndexConfig.Visible]" Value="false"/>
-          <Set Target="[ConfigurationMenu.Visible]" Value="true"/>
-          <Invoke Target="[ConfigurationMenu.NavigateInto]" />
-        </Actions>
-      </Changed>
-      <Changed Source="[Folder.DisplayPrefs.IndexByChoice.Chosen]" >
-        <Actions>
-          <Set Target="[IndexConfig.Visible]" Value="false"/>
           <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[ContextMenu.Visible]" Value="false" />
         </Actions>
       </Changed>
-
-
-
-
-      <!-- Switch Views -->
-      <Rule>
-        <Conditions>
-          <Modified Source="[ViewKey.Invoked]" />
-        </Conditions>
-        <Actions>
-          <Invoke Target="[Folder.DisplayPrefs.ToggleViewTypes]" />
-        </Actions>
-      </Rule>
-
-      <!-- Bring Up Options Menu -->
-      <Rule ConditionLogicalOp="Or">
-        <Conditions>
-          <Modified Source="[MenuKey.Invoked]" />
-          <Modified Source="[ConfigOptions.Invoked]" />
-        </Conditions>
-        <Actions>
-          <Set Target="[ConfigurationMenu.Visible]" Value="true"/>
-          <Invoke Target="[ConfigurationMenu.NavigateInto]" />
-        </Actions>
-      </Rule>
-
-      <!-- Close Options Menu -->
-      <Rule>
-        <Conditions>
-          <Modified Source="[CloseCommand.Invoked]" />
-        </Conditions>
-        <Actions>
-          <Set Target="[ConfigurationMenu.Visible]" Value="false"/>
-        </Actions>
-      </Rule>
-
-      <!-- Show Configuration Button -->
-      <Condition Source="[Folder.IsRoot]" SourceValue="true" Target="[ConfigurationKey.Visible]" Value="true"/>
-      <Condition Source="[Application.Config.ShowConfigButton]" SourceValue="true" Target="[ConfigurationKey.Visible]" Value="true"/>
 
       <Changed Source="[NowPlayingPanel.Invoked]">
         <Actions>
           <Invoke Target="[Application.PlaybackController.GoToFullScreen]"/>
         </Actions>
       </Changed>
-      <!--
-      <Binding Source="[Application.ShowNowPlaying]" Target="[TrailerPanel.Visible]" />-->
 
       <Rule ConditionLogicalOp="And">
         <Conditions>
@@ -273,7 +201,8 @@
 
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="200,110" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="400,220" />
-
+      
+      
       <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
       <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
@@ -292,10 +221,110 @@
           <Set Target="[Application.DisplayPopupPlay]" Value="false" />
           <PlaySound Sound="sound://sounds:Miniselect" />
           <Set Target="[PopupPlay.Visible]" Value="false"/>
-          <!--<Invoke Target="[Scroller.NavigateInto]" />-->
         </Actions>
       </Changed>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[TopBarHasFocus.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TheTopBar.LayoutInput]" Value="[LayoutTopBarShow]" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[TopBarHasFocus.Value]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TheTopBar.LayoutInput]" Value="[LayoutTopBarHide]" />
+        </Actions>
+      </Rule>
+
+      <!-- Show View Popup Panel -->
+      <Changed Source="[ShowViewConfiguration.Invoked]">
+        <Actions>
+          <Set Target="[ViewConfig.Visible]" Value="true"/>
+          <Set Target="[SortConfig.Visible]" Value="false"/>
+          <Set Target="[IndexConfig.Visible]" Value="false"/>
+          <Invoke Target="[ViewConfig.NavigateInto]" />
+        </Actions>
+      </Changed>
+      
+      <!-- Hide View Popup Panel -->
+      <Changed Source="[CloseViewConfiguration.Invoked]">
+        <Actions>
+          <Set Target="[ViewConfig.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[Folder.DisplayPrefs.ViewType.Chosen]" >
+        <Actions>
+          <Invoke Target="[ViewConfig.NavigateInto]" />
+        </Actions>
+      </Changed>
+      <Changed Source="[RefocusViewTimer.Tick]">
+        <Actions>
+          <Invoke Target="[ViewConfig.NavigateInto]" />
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[Folder.DisplayPrefs.ViewType.Chosen]" >
+        <Conditions>
+          <Equality Source="[ViewConfig.Visible]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[RefocusViewTimer.Start]" />
+        </Actions>
+      </Changed>
+
+      <!-- Show Sort By Popup Panel -->
+      <Changed Source="[ShowSortConfiguration.Invoked]">
+        <Actions>
+          <Set Target="[SortConfig.Visible]" Value="true"/>
+          <Set Target="[ViewConfig.Visible]" Value="false"/>
+          <Set Target="[IndexConfig.Visible]" Value="false"/>
+          <Invoke Target="[SortConfig.NavigateInto]" />
+        </Actions>
+      </Changed>
+      <!-- Hide Sort By Popup Panel -->
+      <Changed Source="[CloseSortConfiguration.Invoked]">
+        <Actions>
+          <Set Target="[SortConfig.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+      <!-- Sort By Chosen -->
+      <Changed Source="[Folder.DisplayPrefs.SortOrders.Chosen]" >
+        <Actions>
+          <Set Target="[SortConfig.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <!-- Show Indexed By Popup Panel -->
+      <Changed Source="[ShowIndexConfiguration.Invoked]">
+        <Actions>
+          <Set Target="[IndexConfig.Visible]" Value="true"/>
+          <Set Target="[ViewConfig.Visible]" Value="false"/>
+          <Set Target="[SortConfig.Visible]" Value="false"/>
+          <Invoke Target="[IndexConfig.NavigateInto]" />          
+        </Actions>
+      </Changed>
+      <!-- Hide Indexed By Popup Panel -->
+      <Changed Source="[CloseIndexConfiguration.Invoked]">
+        <Actions>
+          <Set Target="[IndexConfig.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+      <!-- Index By Chosen -->
+      <Changed Source="[Folder.DisplayPrefs.IndexByChoice.Chosen]" >
+        <Actions>
+          <Set Target="[IndexConfig.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+      
     </Rules>
+    
+
 
 
 
@@ -308,7 +337,20 @@
             </Animations>
             <Children>
 
-              <pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder]" Close="[ClosePopupPlay]" Application="[Application]" />
+              <!-- Configuration Menu System -->
+              <me:TopBar Name="TheTopBar" Application="[Application]" Folder="[Folder]" InFocus="[TopBarHasFocus]" Visible="false" Views="[ShowViewConfiguration]" Sort="[ShowSortConfiguration]" Index="[ShowIndexConfiguration]"/>
+              
+              <!-- View Menu System -->
+              <pvm:PopupViewMenu Application="[Application]" Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Folder.DisplayPrefs]"/>
+              
+              <!-- Sort Menu System -->
+              <prm:PopupRadioMenu Application="[Application]" Name="SortConfig"  Visible="false"  Close="[CloseSortConfiguration]"  Choice="[Folder.DisplayPrefs.SortOrders]"/>
+              
+              <!-- Filtering Menu System -->
+              <prm:PopupRadioMenu Application="[Application]" Name="IndexConfig" Visible="false"  Close="[CloseIndexConfiguration]" Choice="[Folder.DisplayPrefs.IndexByChoice]"/>
+
+              <!-- PopupPlay Menu System -->
+              <vpp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder]" Close="[ClosePopupPlay]" Application="[Application]" />
 
               <!-- Now Playing View Port -->
               <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false" >
@@ -317,37 +359,11 @@
                 </Children>
               </Panel>
 
-              <pvm:PopupViewMenu  Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Folder.DisplayPrefs]"/>
-              <prm:PopupRadioMenu Name="SortConfig"  Visible="false"  Close="[CloseSortConfiguration]"  Choice="[Folder.DisplayPrefs.SortOrders]"/>
-              <prm:PopupRadioMenu Name="IndexConfig" Visible="false"  Close="[CloseIndexConfiguration]" Choice="[Folder.DisplayPrefs.IndexByChoice]"/>
-
-              <!-- Configuration -->
-              <Panel Name="ConfigurationMenu" Visible="false" Navigation="ContainAll,RememberFocus">
-                <Animations>
-                  <Animation Animation="animation://an:PageHide" />
-
-                  <Animation Animation="animation://an:PageShow" />
-
-                </Animations>
-                <Children>
-                  <Panel Layout="Center">
-                    <Children>
-                      <Panel Name="ScrollButton"  Layout="HorizontalFlow">
-                        <Children>
-                          <vmb:MenuButton Name="ConfigBtn"     Command="[Configure]"              Image="image://vi:MenuOptionConfiguration"/>
-                          <vmb:MenuButton Name="ViewsBtn"      Command="[ShowViewConfiguration]"  Image="image://vi:MenuOptionViews"/>
-                          <vmb:MenuButton Name="SortOrdersBtn" Command="[ShowSortConfiguration]"  Image="image://vi:MenuOptionSort"/>
-                          <vmb:MenuButton Name="IndexesBtn"    Command="[ShowIndexConfiguration]" Image="image://vi:MenuOptionIndex" />
-                          <vmb:MenuButton Name="RefreshButton" Command="[CloseCommand]"           Image="image://vi:MenuOptionClose" Red="true"/>
-                        </Children>
-                      </Panel>
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-
+              <!-- Context Menu -->
+              <vcm:ContextMenu Name="ContextMenu" Application="[Application]" Close="[CloseContextMenu]" Visible="false" />
+ 
               <!-- find in list panel - highest Z-Order -->
-              <Panel Name="FindAsYouTypePanel" >
+              <Panel Name="FindAsYouTypePanel" Alpha="0" >
                 <LayoutInput>
                   <FormLayoutInput Bottom="Parent,1,-30" Right="Parent,1,-30"/>
                 </LayoutInput>
@@ -357,7 +373,7 @@
                 <Children>
                   <ColorFill Content="Transparent" Padding="8,0,8,-3" Layout="Anchor">
                     <Children>
-                      <Text Name="FindAsYouType" Font="Segoe Media Center Semibold,150" Content="" Color="color://s:FontColorMedium"  />
+                      <Text Name="FindAsYouType" Font="Segoe Media Center Semibold,150" Content="" Color="color://s:FontColorMedium" />
                       <Text Name="ShadowLabel" Content="" Color="255, 0, 0, 0" Font="Segoe Media Center Semibold,150">
                         <LayoutInput>
                           <AnchorLayoutInput Top="FindAsYouType, 0, 2" Left="FindAsYouType, 0, 2"/>
@@ -368,36 +384,191 @@
                 </Children>
               </Panel>
 
-              <!-- Configuration Key -->
-              <Panel Name="ConfigurationKey" Visible="false">
+              <!-- RSS Info -->
+              <Panel>
                 <LayoutInput>
-                  <FormLayoutInput Bottom="Parent,1,-40" Left="Parent,0,2"/>
+                  <AnchorLayoutInput Bottom="Parent,1,-12"/>
                 </LayoutInput>
                 <Children>
-                  <vsb:SimpleButton Name="ConfigMenuButton" Application="[Application]" ImageNoFocus="image://i:ConfigImg" Command="[ConfigOptions]"/>
-                </Children>
-              </Panel>
-              <!-- PC Indicator Button -->
-              <Panel Name="PCBtn" Visible="true">
-                <LayoutInput>
-                  <FormLayoutInput Bottom="Parent,1,-42" Right="Parent,1,2"/>
-                </LayoutInput>
-                <Children>
-                  <pci:PCIndicatorButton Application="[Application]" Size="22,22"/>
+                  <in:InfoMarquee Application="[Application]" />
                 </Children>
               </Panel>
 
+              <!-- Clock Display -->
+              <Panel Name="ClockDisplay">
+                <LayoutInput>
+                  <FormLayoutInput Bottom="Parent,1,-13" Right="Parent,1,-50"/>
+                </LayoutInput>
+                <Children>
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <Text Name="TimeDisplay" Color="color://s:FontColorLight" Font="font://f:Vanilla_ClockFont" Visible="[Application.Config.ShowClock]" />
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+             
+              <!-- Page Selector -->
               <pda:PageDetailArea Name="ViewPanel" Folder="[Folder]" Application="[Application]"  LayoutInput="[FullScreen]"/>
 
+              <!-- Backdrop -->
               <Graphic Name="MainBG" Content="image://vi:BlankGraphic" Layout="Fill"/>
             </Children>
           </Clip>
-
-
-
         </Children>
-
       </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="TopBar">
+    <Properties>
+      <IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
+      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
+      <a:Application Name="Application" Application="$Required"/>
+      <BooleanChoice Name="InFocus" BooleanChoice="$Required" />
+      <ICommand Name="Views" ICommand="$Required"/>
+      <ICommand Name="Sort"  ICommand="$Required"/>
+      <ICommand Name="Index" ICommand="$Required"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="Configure" />
+      <Command Name="PCUnlock"/>
+      <Command Name="PCLock"/>
+      <Command Name="CloseCommand" />
+      
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+
+      <Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>
+
+      
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Folder.IsRoot]" ConditionOp="Equals" Value="true"/>
+          <Equality Source="[Application.Config.EnableRootPage]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewsBtn.Visible]" Value="false"/>
+          <Set Target="[SortOrdersBtn.Visible]" Value="false"/>
+          <Set Target="[IndexesBtn.Visible]" Value="false"/>      
+        </Actions>
+      </Rule>
+      
+      <!--<Binding Source="[Folder.IsRoot]" Target="[ViewsBtn.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>-->
+      
+      <!-- Sort and Index current values-->
+      <!--<Binding Source="[Folder.DisplayPrefs.SortOrders.Chosen!cor:String]" Target="[SortOrdersBtn.Content]" />
+      <Binding Source="[Folder.DisplayPrefs.IndexByChoice.Chosen!cor:String]" Target="[IndexesBtn.Content]" />-->
+
+      <!--<Condition Source="[Folder.DisplayPrefs.IndexByChoice.Chosen!cor:String]" ConditionOp="Equals" SourceValue="none" Target="[SortOrdersBtn.Enabled]" Value="true"/>
+      <Condition Source="[Folder.DisplayPrefs.IndexByChoice.Chosen!cor:String]" ConditionOp="NotEquals" SourceValue="none" Target="[SortOrdersBtn.Enabled]" Value="false"/>-->
+
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[InFocus.Value]" Value="true" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[InFocus.Value]" Value="false" />
+        </Actions>
+      </Rule>
+
+      <!-- Go To Configuration Page -->
+      <Changed Source="[Configure.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.OpenConfiguration]" showFullOptions="true" />
+        </Actions>
+      </Changed>
+
+      <!--<Changed Source="[RefocusViewTimer.Tick]">
+        <Actions>
+          <Invoke Target="[ViewConfig.NavigateInto]" />
+        </Actions>
+      </Changed>-->
+
+      <!--<Changed Source="[Folder.DisplayPrefs.ViewType.Chosen]" >
+        <Actions>
+          <Invoke Target="[ViewConfig.NavigateInto]" />
+        </Actions>
+      </Changed>-->
+      <!--<Changed Source="[Folder.DisplayPrefs.ViewType.Chosen]" >
+        <Conditions>
+          <Equality Source="[ViewConfig.Visible]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ViewConfig.NavigateInto]" />
+          <Set Target="[ViewConfig.Visible]" Value="false"/>
+          <Invoke Target="[ConfigurationMenu.NavigateInto]" />
+        </Actions>
+      </Changed>-->
+
+
+
+      <Binding Source="[Application.Config.ParentalControlUnlocked]" Target="[PCLockBtn.Visible]"/>
+      <Binding Source="[Application.Config.ParentalControlUnlocked]" Target="[PCUnlockBtn.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+
+      <Changed Source="[PCUnlock.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sounds:Miniselect" />
+          <Invoke Target="[Application.UnlockPC]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[PCLock.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sounds:Miniselect" />
+          <Invoke Target="[Application.RelockPC]"/>
+        </Actions>
+      </Changed>
+
+      <Condition Source="[Folder.ItemTypeString]" ConditionOp="Equals" SourceValue="ArtistAlbum" Target="[ConfigurationMenu.Visible]" Value="false"/>
+    </Rules>
+    <Content>
+      <Panel>
+        <Children>
+      <Graphic Name="TopConfigBar">
+        <Layout>
+          <FlowLayout Orientation="Vertical" ItemAlignment="Center" StripAlignment="Near" Spacing="10,10"/>
+        </Layout>
+        <Children>
+          <!-- Configuration Buttons -->
+          <Panel Name="ConfigurationMenu">
+            <Layout>
+              <FlowLayout Orientation="Horizontal" Spacing="10,10"/>
+            </Layout>
+            <Children>
+              <vsb:SimpleButton Name="ConfigBtn"     ImageNoFocus="image://vi:MenuOptionConfiguration"  Command="[Configure]" Application="[Application]" />
+              <vsb:SimpleButton Name="ViewsBtn"      ImageNoFocus="image://vi:MenuOptionViews"          Command="[Views]"     Application="[Application]" />
+              <vsb:SimpleButton Name="SortOrdersBtn" ImageNoFocus="image://vi:MenuOptionSort"           Command="[Sort]"      Application="[Application]" />
+              <vsb:SimpleButton Name="IndexesBtn"    ImageNoFocus="image://vi:MenuOptionIndex"          Command="[Index]"     Application="[Application]" />
+              <vsb:SimpleButton Name="PCLockBtn"     ImageNoFocus="image://vi:MenuOptionPCLock"         Command="[PCLock]"    Application="[Application]" />
+              <vsb:SimpleButton Name="PCUnlockBtn"   ImageNoFocus="image://vi:MenuOptionPCUnlock"       Command="[PCUnlock]"  Application="[Application]" />
+            </Children>
+          </Panel>
+        </Children>
+      </Graphic>
+        </Children>
+      </Panel>
+
 
     </Content>
   </UI>

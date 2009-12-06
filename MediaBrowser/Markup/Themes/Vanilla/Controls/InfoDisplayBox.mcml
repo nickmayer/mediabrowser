@@ -1,0 +1,165 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:a="assembly://MediaBrowser/MediaBrowser"
+      xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+      xmlns:cor="assembly://MSCorLib/System"
+      xmlns:f="file://Fonts_DoNotEdit.mcml"
+	    xmlns:s="file://Styles_DoNotEdit.mcml"
+      xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
+      xmlns:gl="resx://MediaBrowser/MediaBrowser.Resources/GenreList"
+      xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+      xmlns:me="Me"
+	  >
+
+  <UI Name="InfoDisplayBox">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:Item Name="Item" Item="$Required"/>
+      <Font Name="Font" Font="$Required"/>
+    </Properties>
+
+    <Rules>
+
+      <!-- Watched Status Indicator -->
+      <!--<Condition Source="[Application.Config.EnableListViewTicks]" SourceValue="true" Target="[WatchedPanel.Visible]" Value="true"/>
+      <Condition Source="[Item.HaveWatched]" SourceValue="true" Target="[TickIndicator.Visible]" Value="true"/>-->
+
+      <!-- PC Lock Indicator -->
+      <!--<Condition Source="[Application.Config.ParentalControlUnlocked]" SourceValue="true" Target="[ParentalPanel.Visible]" Value="false"/>
+      <Binding Source="[Item.ParentalAllowed]" Target="[PCIndicator.Visible]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>-->
+
+      <!-- Bind Item Specific MetaData -->
+      <Binding Target="[Title.Content]"           Source="[Item.Name]"/>
+      <Binding Target="[Title.Font]"              Source="[Font]"/>
+      <Binding Target="[Genres.SourceData]"       Source="[Item.Genres]"/>
+      <Binding Target="[StarRating.Value]"        Source="[Item.ImdbRating]" />
+      <Binding Target="[ProductionYear.Content]"  Source="[Item.ProductionYearString]"/>
+
+      <!--<Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Season"  Target="[SeasonGenrePanel.Visible]"  Value="false"/>-->
+
+      
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Item.ItemTypeString]" Value="Season"/>
+          <Equality ConditionOp="Equals" Source="[Item.ItemTypeString]" Value="Series"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TVExtraInfoPanel.Visible]"  Value="true"/>
+          <Set Target="[Counter.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
+            <Transformer>
+              <FormatTransformer Format="{0}"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Rule>
+
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie">
+        <Actions>
+          <Set Target="[MovieExtraInfoPanel.Visible]"  Value="true"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="ArtistAlbum">
+        <Actions>
+          <Set Target="[TrackCount.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
+            <Transformer>
+              <FormatTransformer Format="{0}"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Condition>
+      <Condition Source="[Item.ItemTypeString]"     ConditionOp="Equals" SourceValue="Episode"     Target="[EpisodeGenrePanel.Visible]" Value="true"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="ArtistAlbum" Target="[AlbumExtraInfoPanel.Visible]" Value="true"/>
+
+      <Binding Target="[DirectorRepeater.Source]"  Source="[Item.Directors]"/>
+      <Binding Target="[WriterRepeater.Source]"    Source="[Item.Writers]"/>
+
+
+    </Rules>
+
+    <Content>
+      <Panel Layout="Dock">
+        <Children>
+          <Panel Margins="5,0,0,0">
+            <LayoutInput>
+              <DockLayoutInput Alignment="Near"  Position="Client"/>
+            </LayoutInput>
+            <Layout>
+              <FlowLayout Orientation="Vertical" StripAlignment="Center"/>
+            </Layout>
+            <Children>
+              <Text Name="Title" Color="color://s:FontColorLight"  Font="[Font]"/>
+              <Panel Name="EpisodeGenrePanel" Layout="HorizontalFlow" Visible="false">
+                <Children>
+                  <Text Name="WriterSpacer" Content="Writer: "  Color="color://s:FontColorMedium"  WordWrap="true" Font="font://f:Vanilla_MinorMetaFont"/>
+                  <Repeater  Name="WriterRepeater" Source="[Item.Writers]" DividerName="Divider">
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal" AllowWrap="true"/>
+                    </Layout>
+                    <Content>
+                      <Text Content="[RepeatedItem!cor:String]" Font="font://f:Vanilla_MinorMetaFont" Color="color://s:FontColorLight"/>
+                    </Content>
+                  </Repeater>
+                  <Text Name="DirectorSpacer" Content="Director: " Color="color://s:FontColorMedium" WordWrap="true" Font="font://f:Vanilla_MinorMetaFont" Margins="10,0,0,0"/>
+                  <Repeater  Name="DirectorRepeater" Source="[Item.Directors]" DividerName="Divider"   >
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal" AllowWrap="true"/>
+                    </Layout>
+                    <Content>
+                      <Text Content="[RepeatedItem!cor:String]" Font="font://f:Vanilla_MinorMetaFont" Color="color://s:FontColorLight"/>
+                    </Content>
+                  </Repeater>
+                </Children>
+              </Panel>
+              <gl:GenreList Name="Genres" SourceData="[Item.Genres]" Font="font://f:Vanilla_GenreFont" Color="color://s:FontColorMedium" WordWrap="false"/>
+            </Children>
+          </Panel>
+          <Panel Margins="5,0,5,0">
+            <LayoutInput>
+              <DockLayoutInput Alignment="Center"  Position="Right"/>
+            </LayoutInput>
+            <Children>
+              <Panel Name="MovieExtraInfoPanel" Layout="VerticalFlow" Visible="false">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" StripAlignment="Center" ItemAlignment="Center"/>
+                </Layout>
+                <Children>
+                  <Text Name="ProductionYear" Content="[Item.ProductionYearString]" Color="color://s:FontColorMedium"  Font="font://f:Vanilla_MinorMetaFont" WordWrap="false"/>
+                  <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Size="0,10"/>
+                </Children>
+              </Panel>
+              <Panel Name="TVExtraInfoPanel" Visible="false">
+                <Children>
+                  <Graphic  Content="image://me:Counter" Layout="Center" MaximumSize="45,45">
+                    <Children>
+                      <Text Name="Counter" Font="font://f:Vanilla_SmallTitleFont" WordWrap="false" Color="color://s:FontColorLight"/>
+                    </Children>
+                  </Graphic>
+                </Children>
+              </Panel>
+              <Panel Name="AlbumExtraInfoPanel" Visible="false">
+                <Children>
+                  <Graphic  Content="image://me:Counter" Layout="Center" MaximumSize="45,45">
+                    <Children>
+                      <Text Name="TrackCount" Font="font://f:Vanilla_SmallTitleFont" WordWrap="false" Color="color://s:FontColorLight"/>
+                    </Children>
+                  </Graphic>
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+    <Content Name="Divider">
+      <Text Content=" , " Font="font://f:Vanilla_MinorMetaFont" WordWrap="false" Color="color://s:FontColorLight" />
+    </Content>
+  </UI>
+
+  <Image Name="Counter" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaCounter"/>
+
+</Mcml>

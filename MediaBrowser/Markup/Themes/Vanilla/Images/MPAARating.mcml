@@ -27,13 +27,13 @@
       <Condition Source="[MPAARating]" SourceValue="R"        ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:RatedRfull" />
       <Condition Source="[MPAARating]" SourceValue="Unrated"  ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:RatedNRfull" />
       <Condition Source="[MPAARating]" SourceValue="NR"       ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:RatedNRfull" />
-      <Condition Source="[MPAARating]" SourceValue="TV-G"     ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-G" />
-      <Condition Source="[MPAARating]" SourceValue="TV-MA"    ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-MA" />
-      <Condition Source="[MPAARating]" SourceValue="TV-Y7"    ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-Y7" />
-      <Condition Source="[MPAARating]" SourceValue="TV-Y"     ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-Y" />
-      <Condition Source="[MPAARating]" SourceValue="TV-14"    ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-14" />
-      <Condition Source="[MPAARating]" SourceValue="TV-PG"    ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-PG" />
-      <Condition Source="[MPAARating]" SourceValue="TV-V7-FV" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-V7-FV" />
+      <Condition Source="[MPAARating]" SourceValue="TV-G"     ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:TV-G" />
+      <Condition Source="[MPAARating]" SourceValue="TV-MA"    ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:TV-MA" />
+      <Condition Source="[MPAARating]" SourceValue="TV-Y7"    ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:TV-Y7" />
+      <Condition Source="[MPAARating]" SourceValue="TV-Y"     ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:TV-Y" />
+      <Condition Source="[MPAARating]" SourceValue="TV-14"    ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:TV-14" />
+      <Condition Source="[MPAARating]" SourceValue="TV-PG"    ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:TV-PG" />
+      <Condition Source="[MPAARating]" SourceValue="TV-V7-FV" ConditionOp="Equals" Target="[Image.Content]" Value="image://vi:TV-V7-FV" />
     </Rules>
 
     <Content>

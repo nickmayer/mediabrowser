@@ -4,8 +4,7 @@
       xmlns:cor="assembly://MSCorLib/System"
       xmlns:gl="resx://MediaBrowser/MediaBrowser.Resources/GenreList"
       xmlns:f="file://Fonts_DoNotEdit.mcml"
-      xmlns:s="file://Styles_DoNotEdit.mcml"
-      xmlns:it="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+      xmlns:s="file://Styles_DoNotEdit.mcml"      
       xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
       xmlns:fs="resx://MediaBrowser/MediaBrowser.Resources/FocusSelector"
       xmlns:sy="resx://MediaBrowser/MediaBrowser.Resources/Summary"
@@ -14,30 +13,19 @@
       xmlns:anim="resx://MediaBrowser/MediaBrowser.Resources/Animations"
       xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
       xmlns:mi="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
+      xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
       xmlns:vmpaa="resx://MediaBrowser/MediaBrowser.Resources/VanillaMPAA"
       xmlns:vs="resx://MediaBrowser/MediaBrowser.Resources/VanillaStudio"
+      xmlns:vpi="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupInfo"
+      xmlns:vidb="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoDisplayBox"
       xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
 	  >
-  <!--xmlns:ts="resx://MediaBrowser/MediaBrowser.Resources/TitleSet"-->
+
 
   <UI Name="LayoutStrip">
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
-
-      <Animation Name="MovePanelUp">
-        <Keyframes>
-          <PositionKeyframe Time="0.0" RelativeTo="Current" Value="0,0,0" Interpolation="Bezier,-1.0,1.0"/>
-          <PositionKeyframe Time="0.5" RelativeTo="Final" Value="0,-200,0"/>
-        </Keyframes>
-      </Animation>
-      <Animation Name="MovePanelDown">
-        <Keyframes>
-          <PositionKeyframe Time="0.0" RelativeTo="Current" Value="0,0,0" Interpolation="Bezier,-1.0,1.0"/>
-          <PositionKeyframe Time="0.5" RelativeTo="Final" Value="0,0,0"/>
-        </Keyframes>
-      </Animation>
-
     </Properties>
 
     <Locals>
@@ -45,49 +33,36 @@
       <lib:Item Name="PreSelectedItem"      Item="[Folder.SelectedChild]" />
       <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
       <lib:Item Name="BlankItem"            Item="[Folder.BlankItem]"/>
-      <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
-      <cor:Int32 Name="CounterValue" Int32="0" />
+      <Timer Name="FullDetailsTimer"  Interval="300"  AutoRepeat="false"/>
+      <cor:Int32   Name="CounterValue" Int32="0" />
+      <cor:Boolean Name="DetailShown"  Boolean="true"/>
       <IntRangedValue Name="SelectedIndex" Value="0"/>
-
-      <!-- Variable that uses the .NET Framework DateTime object -->
-      <cor:DateTime Name="CurrentTime"/>
-      <cor:Boolean Name="DetailShown" Boolean="false"/>
-      <!-- Timer to use to update the clock display -->
-      <Timer Name="MyTimer" AutoRepeat="true" Interval="500" Enabled="true"/>
-      <IntRangedValue Name="Hour"/>
-      <KeyHandler Key="Down" Name="ShowPanel" Handle="false" HandlerStage="Bubbled"/>
+      <KeyHandler Key="D3" Name="InfoKey" Handle="false" HandlerStage="Bubbled"  Modifiers="Shift"/>
     </Locals>
 
     <Rules>
-
-      <Changed Source="[ShowPanel.Invoked]">
+      <Changed Source="[InfoKey.Invoked]">
         <Conditions>
           <Equality Source="[DetailShown]" ConditionOp="Equals" Value="false"/>
         </Conditions>
         <Actions>
-          <PlayAnimation Target="[Test]">           
-            <Animation>
-              <Animation Animation="[MovePanelUp]"/>
-            </Animation>
-          </PlayAnimation>
+          <Set Target="[SummaryFrame.Visible]" Value="true"/>
           <Set Target="[DetailShown]" Value="true"/>
+          <Set Target="[InfoBackSplash.Alpha]" Value="0.6"/>
         </Actions>
       </Changed>
 
-      <Changed Source="[ShowPanel.Invoked]">
+      <Changed Source="[InfoKey.Invoked]" InitialEvaluate="true">
         <Conditions>
           <Equality Source="[DetailShown]" ConditionOp="Equals" Value="true"/>
         </Conditions>
         <Actions>
-          <PlayAnimation Target="[Test]">
-            <Animation>
-              <Animation Animation="[MovePanelDown]"/>
-            </Animation>
-          </PlayAnimation>
+          <Set Target="[SummaryFrame.Visible]" Value="false"/>
           <Set Target="[DetailShown]" Value="false"/>
+          <Set Target="[InfoBackSplash.Alpha]" Value="0"/>
         </Actions>
       </Changed>
-      
+
       <Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
         <Conditions>
           <Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
@@ -119,18 +94,6 @@
         </Actions>
       </Changed>
 
-      <Changed Source="[MyTimer.Tick]" InitialEvaluate="true">
-        <Actions>
-          <Set Target="[CurrentTime]" Value="[CurrentTime.Now]"/>
-          <Set Target="[Hour.Value]" Value="[CurrentTime.Hour]"/>
-          <Set Target="[TimeDisplay.Content]" Value="[CurrentTime]">
-            <Transformer>
-              <DateTimeTransformer Format="ShortTime"/>
-            </Transformer>
-          </Set>
-        </Actions>
-      </Changed>
-
       <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
       <Binding Source="[SelectedIndex.Value]" Target="[CounterValue]" >
         <Transformer>
@@ -149,78 +112,21 @@
         </Transformer>
       </Binding>
 
-      <Condition Source="[Application.Config.Theme]" SourceValue="Black" Target="[DetailBackdrop.Content]" Value="image://it:BackgroundBlack"/>
-      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[DetailBackdrop.Alpha]">
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[RSSBox.Alpha]">
         <Transformer>
           <MathTransformer Divide="100"/>
         </Transformer>
       </Binding>
 
-      <Binding Source="[Folder.DisplayPrefs.UseBackdrop.Value]" Target="[Backdrop.Visible]"/>
-      <Binding Target="[Backdrop.Image]" Source="[PreSelectedItem.BackdropImage]" />
-      <Binding Target="[Backdrop.Item]" Source="[PreSelectedItem]" />
-      <Binding Source="[Application.Config.ShowClock]"        Target="[ClockDisplay.Visible]"/>
+      <Binding Target="[Backdrop.Visible]"   Source="[Folder.DisplayPrefs.UseBackdrop.Value]"/>
+      <Binding Target="[Backdrop.Image]"     Source="[PreSelectedItem.BackdropImage]"/>
+      <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>
+      <Binding Target="[PopInfoWindow.Item]" Source="[PreSelectedItem]"/>
 
-      <!-- Bind Series Specific MetaData -->
-      <Binding Target="[SeriesSummary.Content]"   Source="[PreSelectedItem.Overview]"  />
-      <Binding Target="[SeriesPoster.Content]"    Source="[PreSelectedItem.PrimaryImage]"/>
-      <Binding Target="[StarRating.Value]"        Source="[PreSelectedItem.ImdbRating]" />
-      <Binding Target="[RunTime.Content]"         Source="[PreSelectedItem.RunningTimeString]"/>
-      <Binding Target="[Status.Content]"          Source="[PreSelectedItem.Status]"/>
-      <Binding Target="[NetworkRepeater.Source]"  Source="[PreSelectedItem.StudioItems]"/>
-      
-
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="Equals" SourceValue="Series">
-        <Actions>
-          <Set Target="[Seasons.Content]" Value="[PreSelectedItem!lib:FolderModel.Folder.Children.Count]">
-            <Transformer>
-              <FormatTransformer Format="{0}"/>
-            </Transformer>
-          </Set>
-        </Actions>
-      </Condition>
-
-
-      <!-- Bind Season Specific MetaData -->
-      <Binding Target="[SeasonSummary.Content]"    Source="[PreSelectedItem.Overview]"  />
-      <Binding Target="[SeasonPoster.Content]"     Source="[PreSelectedItem.PreferredImage]"/>
-
-      <!-- Bind Episode Specific MetaData -->
-      <Binding Target="[EpisodeSummary.Content]"   Source="[PreSelectedItem.Overview]"  />
-      <Binding Target="[EpisodePoster.Content]"    Source="[PreSelectedItem.PreferredImage]"/>
-      <Binding Target="[LastWatched.Content]"      Source="[PreSelectedItem.LastPlayedString]"/>
-      <Binding Target="[LastWatchedPanel.Visible]" Source="[PreSelectedItem.HaveWatched]"/>
-      <Binding Target="[FirstAired.Content]"       Source="[PreSelectedItem.FirstAired]"/>
-      <Binding Target="[MediaInfo.Item]"           Source="[PreSelectedItem]"/>
-
-      <!-- Bind Movie Specific MetaData -->
-      <Binding Target="[MovieSummary.Content]"   Source="[PreSelectedItem.Overview]"  />
-      <Binding Target="[StudioRepeater.Source]"  Source="[PreSelectedItem.StudioItems]"/>
-      <Binding Target="[MoviePoster.Content]"    Source="[PreSelectedItem.PreferredImage]"/>
-      <Binding Target="[MovieMediaInfo.Item]"    Source="[PreSelectedItem]"/>
-      <Binding Target="[MPAARating.Value]"       Source="[PreSelectedItem.MpaaRating]"/>
-      
-      <!-- Show Proper Item Panel -->
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="Equals"    SourceValue="Episode" Target="[EpisodePanel.Visible]" Value="true"/>
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Episode" Target="[EpisodePanel.Visible]" Value="false"/>
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="Equals"    SourceValue="Season"  Target="[SeasonPanel.Visible]"  Value="true"/>
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Season"  Target="[SeasonPanel.Visible]"  Value="false"/>
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="Equals"    SourceValue="Series"  Target="[SeriesPanel.Visible]"  Value="true"/>
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Series"  Target="[SeriesPanel.Visible]"  Value="false"/>
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie"   Target="[MoviePanel.Visible]"   Value="true"/>
-      <Condition Source="[PreSelectedItem.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Movie"   Target="[MoviePanel.Visible]"   Value="false"/>
-
-      <!-- Hide/Show MetaData -->
-      <Condition Source="[PreSelectedItem.Status]"            ConditionOp="Equals"      SourceValue=""  Target="[StatusPanel.Visible]"  Value="false"/>
-      <Condition Source="[PreSelectedItem.Status]"            ConditionOp="NotEquals"   SourceValue=""  Target="[StatusPanel.Visible]"  Value="true"/>
-      <Condition Source="[PreSelectedItem.ImdbRating]"  ConditionOp="LessThan"    SourceValue="0" Target="[Rating.Visible]"       Value="false"/>
-      <Condition Source="[PreSelectedItem.ImdbRating]"  ConditionOp="GreaterThan" SourceValue="0" Target="[Rating.Visible]"       Value="true"/>
-      <Condition Source="[PreSelectedItem.RunningTimeString]" ConditionOp="Equals"      SourceValue=""  Target="[Runtime.Visible]"      Value="false"/>
-      <Condition Source="[PreSelectedItem.RunningTimeString]" ConditionOp="NotEquals"   SourceValue=""  Target="[Runtime.Visible]"      Value="true"/>
-      <Condition Source="[PreSelectedItem.FirstAired]"        ConditionOp="Equals"      SourceValue=""  Target="[FirstAiredPanel.Visible]" Value="false"/>
-      <Condition Source="[PreSelectedItem.FirstAired]"        ConditionOp="NotEquals"   SourceValue=""  Target="[FirstAiredPanel.Visible]" Value="true"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
 
     </Rules>
+    
     <Content>
       <Panel  Layout="Form">
         <LayoutInput>
@@ -228,281 +134,56 @@
         </LayoutInput>
         <Children>
 
-          <Panel Name="Test" Layout="Form">
+          <!-- Popup Info Box -->
+          <Panel Name="SummaryFrame" Layout="Form" Navigation="ContainAll">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Top="Parent,0" Right="Parent,1" Bottom="Parent,1"/>
+              <FormLayoutInput Left="Parent,0.15" Top="Parent,0.15" Bottom="Parent,0.85" Right="Parent,0.85"/>
             </LayoutInput>
             <Children>
-            <Panel Name="ClockDisplay">
-              <LayoutInput>
-                <FormLayoutInput Bottom="Parent,1,-40" Left="Parent,0,50"/>
-              </LayoutInput>
-              <Children>
-                <Panel Layout="HorizontalFlow">
-                  <Children>
-                    <Text Name="TimeDisplay" Color="color://s:FontColorLight" Font="font://f:SV_CounterFont"/>
-                  </Children>
-                </Panel>
-              </Children>
-            </Panel>
-
-            <Panel>
-              <LayoutInput>
-                <FormLayoutInput Bottom="Parent,1,-40" Right="Parent,1,-50"/>
-              </LayoutInput>
-              <Children>
-                <Panel Layout="HorizontalFlow">
-                  <Children>
-                    <Text Name="List_Counter" Content="0" Color="color://s:FontColorLight" Font="font://f:SV_CounterFont" />
-                    <Text Name="List_Total" Content="0" Color="color://s:FontColorMedium" Font="font://f:SV_CounterFont"/>
-                  </Children>
-                </Panel>
-              </Children>
-            </Panel>
-
-
-            <Panel Name="DetailViewListing" Layout="Center"  >
-              <LayoutInput>
-                <FormLayoutInput Left="Parent,0,150" Top="Parent,1,-100" Bottom="Parent,1" Right="Parent,1,-150"/>
-              </LayoutInput>
-              <Children>
-                <me:ListView FocusOrder="1" Name="ListItems"  Application="[Application]" Item="[Folder]" Font="font://f:DV_ListButtonFont"/>
-              </Children>
-            </Panel>
-
-              <!-- Selected Item Is Series -->
-              <Panel Name="SeriesPanel" Layout="Form" Padding="10,0,10,0">
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,35" Top="Parent,1" Bottom="Parent,1,200" Right="Parent,1,-35"/>
-                </LayoutInput>
-                <Children>
-                  <Panel Name="SeriesPosterPanel" Padding="10,0,10,10" MaximumSize="0,200">
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1"/>
-                    </LayoutInput>
-                    <Children>
-                      <Graphic Name="SeriesPoster" Content="[Folder.PreferredImage]" MaximumSize="0,200" Padding="0,0,0,0" MaintainAspectRatio="true"/>
-                    </Children>
-                  </Panel>
-                  <Panel Padding="10,0,10,0">
-                    <LayoutInput>
-                      <FormLayoutInput Left="SeriesPosterPanel,1" Top="Parent,0" Bottom="Parent,1" Right="ExtraInfoPanel,0"/>
-                    </LayoutInput>
-                    <Children>
-                      <Text Name="SeriesSummary" Font="font://f:SV_SummaryFont" Color="color://s:FontColorLight" WordWrap="true" FadeSize="100"/>
-                    </Children>
-                  </Panel>
-                  <Panel Name="ExtraInfoPanel" Layout="VerticalFlow">
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,1,-250" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-                    </LayoutInput>
-                    <Children>
-                      <Panel Name="Network" MaximumSize="250,60" MinimumSize="250,60" Layout="Scale" Padding="0,0,0,5">
-                        <Children>
-                          <Repeater Name="NetworkRepeater" Source="[Folder.StudioItems]">
-                            <Layout>
-                              <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="10,10"/>
-                            </Layout>
-                            <Content>
-                              <vs:Studio StudioItem="[RepeatedItem!lib:StudioItemWrapper]" Name="NetworkLogo"/>
-                            </Content>
-                          </Repeater>
-                        </Children>
-                      </Panel>
-                      <Panel Name="Rating" Layout="HorizontalFlow">
-                        <Children>
-                          <Text Content="Rating:  " Font="font://f:SV_SubTitleFont" WordWrap="false" Color="color://s:FontColorMedium"  />
-                          <sr:StarRating Name="StarRating" />
-                        </Children>
-                      </Panel>
-                      <Panel Name="Runtime" Layout="HorizontalFlow">
-                        <Children>
-                          <Text Content="Run Time:  " Font="font://f:SV_SubTitleFont" WordWrap="false" Color="color://s:FontColorMedium"  />
-                          <Text Name="RunTime" Content="" Font="font://f:SV_SubTitleFont" WordWrap="false" Color="color://s:FontColorLight"/>
-                        </Children>
-                      </Panel>
-                      <Panel Name="SeasonsPanel" Layout="HorizontalFlow">
-                        <Children>
-                          <Text Content="Seasons:  " Font="font://f:SV_SubTitleFont" WordWrap="false" Color="color://s:FontColorMedium"  />
-                          <Text Name="Seasons" Font="font://f:SV_SubTitleFont" WordWrap="false" Color="color://s:FontColorLight"/>
-                        </Children>
-                      </Panel>
-                      <Panel Name="StatusPanel" Layout="HorizontalFlow">
-                        <Children>
-                          <Text Content="Status:  " Font="font://f:SV_SubTitleFont" WordWrap="false" Color="color://s:FontColorMedium"  />
-                          <Text Name="Status" Font="font://f:SV_SubTitleFont" WordWrap="false" Color="color://s:FontColorLight"/>
-                        </Children>
-                      </Panel>
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-
-              <!-- Selected Item Is Season -->
-              <Panel Name="SeasonPanel" Layout="Form" Padding="10,10,10,10">
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,35" Top="Parent,1" Bottom="Parent,1,200" Right="Parent,1,-35"/>
-                </LayoutInput>
-                <Children>
-                  <Panel Name="SeasonPosterPanel" Padding="10,0,10,10" MaximumSize="0,200">
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1"/>
-                    </LayoutInput>
-                    <Children>
-                      <Graphic Name="SeasonPoster" Content="[Folder.PreferredImage]" MaximumSize="0,200" Padding="0,0,0,0" MaintainAspectRatio="true"/>
-                    </Children>
-                  </Panel>
-                  <Panel Padding="10,0,10,0">
-                    <LayoutInput>
-                      <FormLayoutInput Left="SeasonPosterPanel,1" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-                    </LayoutInput>
-                    <Children>
-                      <Text Name="SeasonSummary" Font="font://f:SV_SummaryFont" Color="color://s:FontColorLight" WordWrap="true" FadeSize="100"/>
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-
-
-              <!-- Selected Item Is Episode -->
-              <Panel Name="EpisodePanel" Layout="Form" Padding="10,10,10,10">
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,35" Top="Parent,1" Bottom="Parent,1,200" Right="Parent,1,-35"/>
-                </LayoutInput>
-                <Children>
-                  <Panel Name="EpisodePosterPanel" Padding="10,0,10,10" MaximumSize="0,200">
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1"/>
-                    </LayoutInput>
-                    <Children>
-                      <Graphic Name="EpisodePoster" Content="[Folder.PreferredImage]" MaximumSize="0,200" Padding="0,0,0,0" MaintainAspectRatio="true"/>
-                    </Children>
-                  </Panel>
-                  <Panel Padding="10,0,10,0">
-                    <LayoutInput>
-                      <FormLayoutInput Left="EpisodePosterPanel,1" Top="Parent,0" Bottom="Parent,1" Right="EpisodeExtraInfoPanel,0"/>
-                    </LayoutInput>
-                    <Children>
-                      <Text Name="EpisodeSummary" Font="font://f:SV_SummaryFont" Color="color://s:FontColorLight" WordWrap="true" FadeSize="100"/>
-                    </Children>
-                  </Panel>
-                  <Panel Name="EpisodeExtraInfoPanel">
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,1,-250" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-                    </LayoutInput>
-                    <Layout>
-                      <FlowLayout Orientation="Vertical" Spacing="5,5"/>
-                    </Layout>
-                    <Children>
-                      <Panel Name="LastWatchedPanel" Layout="HorizontalFlow">
-                        <Children>
-                          <Text Content="Last Watched:  " Font="font://f:SV_LastWatchedFont" Color="color://s:FontColorMedium"/>
-                          <Text Name="LastWatched" Font="font://f:SV_LastWatchedFont" Color="color://s:FontColorLight"/>
-                        </Children>
-                      </Panel>
-                      <Panel Name="FirstAiredPanel" Layout="HorizontalFlow">
-                        <Children>
-                          <Text Content="First Aired:  " Font="font://f:SV_LastWatchedFont" Color="color://s:FontColorMedium"/>
-                          <Text Name="FirstAired" Font="font://f:SV_LastWatchedFont" Color="color://s:FontColorLight"/>
-                        </Children>
-                      </Panel>
-
-                      <mi:MediaInfoPanel Name="MediaInfo" Item="[SelectedItem]" MaxIconSize="0,40"  >
-                        <Layout>
-                          <FlowLayout Spacing="10,10" StripAlignment="Center" />
-                        </Layout>
-                      </mi:MediaInfoPanel>
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-
-
-              <!-- Selected Item Is Movie -->
-              <Panel Name="MoviePanel" Layout="Form" Padding="10,10,10,10">
-                <LayoutInput>
-                   <FormLayoutInput Left="Parent,0,35" Top="Parent,1" Bottom="Parent,1,200" Right="Parent,1,-35"/>
-                </LayoutInput>
-                <Children>
-                  <Panel Name="MoviePosterPanel" Padding="10,0,10,10" MaximumSize="0,200">
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1"/>
-                    </LayoutInput>
-                    <Children>
-                      <Graphic Name="MoviePoster" Content="[Folder.PreferredImage]" MaximumSize="0,200" Padding="0,0,0,0" MaintainAspectRatio="true"/>
-                    </Children>
-                  </Panel>
-                  <Panel Padding="0,10,10,0">
-                    <LayoutInput>
-                      <FormLayoutInput Left="MoviePosterPanel,1" Top="Parent,0" Bottom="Parent,1" Right="MovieExtraInfoPanel,0"/>
-                    </LayoutInput>
-                    <Children>
-                      <Text Name="MovieSummary" Font="font://f:SV_SummaryFont" Color="color://s:FontColorLight" WordWrap="true" FadeSize="100"/>
-                    </Children>
-                  </Panel>
-                  <Panel Name="MovieExtraInfoPanel">
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,1,-250" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-                    </LayoutInput>
-                    <Layout>
-                      <FlowLayout ItemAlignment="Center" Orientation="Vertical"/>
-                    </Layout>
-                    <Children>
-                      <Panel Name="Studio" MaximumSize="250,60" Layout="Scale">
-                        <Children>
-                          <Repeater Name="StudioRepeater" Source="[SelectedItem.StudioItems]">
-                            <Layout>
-                              <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="10,10"/>
-                            </Layout>
-                            <Content>
-                              <vs:Studio StudioItem="[RepeatedItem!lib:StudioItemWrapper]" Name="StudioLogo"/>
-                            </Content>
-                          </Repeater>
-                        </Children>
-                      </Panel>
-                      <vmpaa:MPAARating Name="MPAARating" MaximumSize="0,70">
-                        <Layout>
-                          <FlowLayout StripAlignment="Center"/>
-                        </Layout>
-                      </vmpaa:MPAARating>
-                      <mi:MediaInfoPanel Name="MovieMediaInfo" Item="[SelectedItem]" MaxIconSize="0,35">
-                        <Layout>
-                          <FlowLayout Spacing="10,10" StripAlignment="Center"/>
-                        </Layout>
-                      </mi:MediaInfoPanel>
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-              
-              <Panel Layout="HorizontalFlow">
-              <LayoutInput>
-                <FormLayoutInput Left="Parent,0" Right="Parent,1" Top="Parent,1,-111" Bottom="Parent,1,-100"/>
-              </LayoutInput>
-              <Children>
-                <Graphic Layout="Fill" MaintainAspectRatio="true" Content="image://it:DetailBorderShadow"/>
-              </Children>
-            </Panel>
-
-            <Panel Name="PosterShadow">
-              <LayoutInput>
-                <FormLayoutInput Left="Parent,0" Top="Parent,1,-100" Bottom="Parent,1,300" Right="Parent,1"/>
-              </LayoutInput>
-              <Children>
-                <Graphic Name="DetailBackdrop" MaintainAspectRatio="true" Content="image://it:BackgroundDefault"/>
-              </Children>
-            </Panel>
-              
-     
+              <vpi:PopupInfo Name="PopInfoWindow" Application="[Application]" Item="[PreSelectedItem]"/>
             </Children>
           </Panel>
-          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[PreSelectedItem.BackdropImage]" Item="[PreSelectedItem]"/>
-        </Children>
+          <ColorFill Name="InfoBackSplash" Content="Black" Layout="Fill"/>
 
+          <!-- Item Counter -->
+          <Panel>
+            <LayoutInput>
+              <FormLayoutInput Bottom="Parent,1,-13" Left="Parent,0,50"/>
+            </LayoutInput>
+            <Children>
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Name="List_Counter" Content="0" Color="color://s:FontColorLight"  Font="font://f:Vanilla_CounterFont"/>
+                  <Text Name="List_Total"   Content="0" Color="color://s:FontColorMedium" Font="font://f:Vanilla_CounterFont"/>
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+
+          <!-- Item Scroller -->
+          <Panel Name="DetailViewListing" Layout="Center">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,150" Top="Parent,1,-140" Bottom="Parent,1,-50" Right="Parent,1,-150"/>
+            </LayoutInput>
+            <Children>
+              <me:ListView FocusOrder="1" Name="ListItems"  Application="[Application]" Item="[Folder]" Font="font://f:DV_ListButtonFont"/>
+            </Children>
+          </Panel>
+
+          <!-- RSS Box -->
+          <Panel Layout="HorizontalFlow">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Right="Parent,1" Top="Parent,1,-50" Bottom="Parent,1"/>
+            </LayoutInput>
+            <Children>
+              <Graphic Name="RSSBox" Layout="Fill" Content="image://me:InfoBox"/>
+            </Children>
+          </Panel>
+
+          <!-- Backdrop -->
+          <bd:BackdropUnaltered Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Folder.BackdropImage]" Item="[Folder]"/>
+        </Children>
       </Panel>
-    </Content>
-    <Content Name="Divider">
-      <Text Content="," Font="font://f:SV_LastWatchedFont" WordWrap="false" Color="color://s:FontColorLight" />
     </Content>
   </UI>
 
@@ -516,12 +197,12 @@
 
     <Locals>
       <!-- Use the MouseWheel handler to handle the mouse wheel.  -->
-      <ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true" 
+      <ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
       <ScrollingData Name="ScrollingData" LockedPosition="0.5" EndPaddingRelativeTo="Far" BeginPaddingRelativeTo="Near" />
       <cor:Int32 Name="CounterValue" Int32="0" />
       <IntRangedValue Name="SelectedIndex" Value="0"/>
-      <GridLayout Name="MyLayout" Orientation="Horizontal" AllowWrap="false" Spacing="600,0" Repeat="Never" RepeatGap="-60" Rows="1" Columns="1" MinorAlignment="Center" />
+      <GridLayout Name="MyLayout" Orientation="Horizontal" AllowWrap="true" Spacing="50,0" Repeat="Always" Rows="1" Columns="1" MinorAlignment="Center" />
     </Locals>
 
     <Rules>
@@ -561,10 +242,13 @@
       <Panel Layout="Center">
         <Children>
 
-                <!-- List Repeater -->
-          <Scroller  Orientation="Horizontal" FadeSize="-10" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]"  >
+          <!-- List Repeater -->
+          <Scroller  Orientation="Horizontal" FadeSize="-10" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]"   >
             <Children>
-              <Repeater Source="[Item.Children]" Name="MyRepeater" Layout="[MyLayout]" ContentName="BaseItem" >
+              <Repeater Source="[Item.Children]" Name="MyRepeater" ContentName="BaseItem"  >
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" AllowWrap="true" Repeat="Always" Spacing="600,0" RepeatGap="600,0"/>
+                </Layout>
                 <Animations>
                   <Animation Animation="animation://anim:ScrollerMoveItemSmooth"/>
                 </Animations>
@@ -600,6 +284,12 @@
 
     <Rules>
 
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[DetailBackdrop.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
+      
       <Rule>
         <Conditions>
           <Modified Source="[PlayBtn.Invoked]"/>
@@ -625,62 +315,20 @@
         </Actions>
       </Condition>
 
-      <!-- Bind Series Specific MetaData -->
-      <Binding Target="[SeriesMPAARating.Value]"   Source="[Item.MpaaRating]"/>
-      
-      <!-- Bind Season Specific MetaData -->
-
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Season">
-        <Actions>
-          <Set Target="[Episodes.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
-            <Transformer>
-              <FormatTransformer Format="{0}"/>
-            </Transformer>
-          </Set>
-        </Actions>
-      </Condition>
-
-      
-      <!-- Bind Movie Specific MetaData -->
-      <Binding Target="[MovieLength.Content]"     Source="[Item.RunningTimeString]"/>
-      <Binding Target="[Production.Content]"      Source="[Item.ProductionYearString]"/>
-
-      <!-- Show Proper Item Panel -->
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Episode" Target="[EpisodePanel.Visible]" Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Episode" Target="[EpisodePanel.Visible]" Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Season"  Target="[SeasonPanel.Visible]"  Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Season"  Target="[SeasonPanel.Visible]"  Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Series"  Target="[SeriesPanel.Visible]"  Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Series"  Target="[SeriesPanel.Visible]"  Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie"   Target="[MoviePanel.Visible]"   Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Movie"   Target="[MoviePanel.Visible]"   Value="false"/>
-
-      <!-- Hide/Show MetaData -->
-      <Condition Source="[Item.DirectorString]"    ConditionOp="Equals"      SourceValue=""  Target="[DirectorSpacer.Visible]"      Value="false"/>
-      <Condition Source="[Item.DirectorString]"    ConditionOp="NotEquals"   SourceValue=""  Target="[DirectorSpacer.Visible]"      Value="true"/>
-      <Condition Source="[Item.WritersString]"    ConditionOp="Equals"      SourceValue=""  Target="[WriterSpacer.Visible]"      Value="false"/>
-      <Condition Source="[Item.WritersString]"    ConditionOp="NotEquals"   SourceValue=""  Target="[WriterSpacer.Visible]"      Value="true"/>
-      <Condition Source="[Item.ProductionYearString]" ConditionOp="Equals"    SourceValue="" Target="[ProductionSpacer.Visible]" Value="false"/>
-      <Condition Source="[Item.ProductionYearString]" ConditionOp="NotEquals" SourceValue="" Target="[ProductionSpacer.Visible]" Value="true"/>
-      <Condition Source="[Item.RunningTimeString]" ConditionOp="Equals"      SourceValue=""  Target="[MovieSpacer.Visible]"      Value="false"/>
-      <Condition Source="[Item.RunningTimeString]" ConditionOp="NotEquals"   SourceValue=""  Target="[MovieSpacer.Visible]"      Value="true"/>
-      <Condition Source="[Item.MpaaRating]"           ConditionOp="Equals"    SourceValue="" Target="[MPAAspacer.Visible]"       Value="false"/>
-      <Condition Source="[Item.MpaaRating]"           ConditionOp="NotEquals" SourceValue="" Target="[MPAAspacer.Visible]"       Value="true"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
 
     </Rules>
 
     <Content>
-      <Panel >
-        <Layout>
-          <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
-        </Layout>
+      <!-- Info Box -->
+      <Panel Name="ThumbDetails" MaximumSize="800,95">
         <Children>
-          <Panel>
+          <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="7,10,12,22">
             <Layout>
-              <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
+              <FlowLayout Orientation="Horizontal" Spacing="10,0" ItemAlignment="Center"/>
             </Layout>
             <Children>
-              <Graphic Name="ArrowLeft"  MaximumSize="20,20" MinimumSize="20,20" Content="image://me:PivotArrowLeft" Margins="0,0,10,0" MaintainAspectRatio="true">
+              <Graphic Name="ArrowLeft"  MaximumSize="20,20" MinimumSize="20,20" Content="image://me:PivotArrowLeft" Margins="5,0,0,0" MaintainAspectRatio="true">
                 <Animations>
                   <Animation Loop="-1">
                     <Keyframes>
@@ -692,70 +340,12 @@
                   </Animation>
                 </Animations>
               </Graphic>
-
-              <Panel MaximumSize="600,0">
-                <Layout>
-                  <FlowLayout Orientation="Vertical" ItemAlignment="Center"/>
-                </Layout>
+              <Panel MaximumSize="700,0">
                 <Children>
-                  <Text Name="Title" Content="[Item.Name]" Font="font://f:SV_TitleFont" Color="color://s:FontColorLight"/>
-                  <!--<ts:TitleSet Model="[Item]" ModelFast="[Item]" Layout="Scale" Font="font://f:SV_TitleFont" SubFont="font://f:SV_PosterLabelFont"/>-->
-                  <Panel Name="SeriesPanel" Layout="HorizontalFlow">
-                    <Children>
-                      <Panel Name="Genre" Layout="HorizontalFlow" Visible="true">
-                        <Children>
-                          <vmpaa:MPAARating Name="SeriesMPAARating" MaximumSize="0,25"/>
-                          <Text Name="MPAAspacer" Content=" ∙ " Font="font://f:DV_GenreFont" WordWrap="false" Color="color://s:FontColorLight"  />
-                          <gl:GenreList Name="SeriesGenres" SourceData="[Item.Genres]" Font="font://f:DV_GenreFont" Color="color://s:FontColorLight"/>
-                        </Children>
-                      </Panel>
-                    </Children>
-                  </Panel>
-                  <Panel Name="SeasonPanel" Layout="HorizontalFlow">
-                    <Children>
-                      <Text Content="Episodes:  " Font="font://f:SV_PosterTopLabelFont" WordWrap="false" Color="color://s:FontColorMedium"  />
-                      <Text Name="Episodes" Font="font://f:SV_PosterTopLabelFont" WordWrap="false" Color="color://s:FontColorLight"/>
-                    </Children>
-                  </Panel>
-                  <Panel Name="EpisodePanel" Layout="HorizontalFlow">
-                    <Children>
-                      <Text Name="WriterSpacer" Content="Writer: "  Color="color://s:FontColorMedium"  WordWrap="false" Font="font://f:SV_SummaryFont"/>
-                      <Repeater  Name="WriterRepeater" Source="[Item.Writers]" DividerName="Divider" >
-                        <Layout>
-                          <FlowLayout Orientation="Horizontal" AllowWrap="false"/>
-                        </Layout>
-                        <Content>
-                          <Text Content="[RepeatedItem!cor:String]" Font="font://f:SV_SummaryFont" Color="color://s:FontColorLight"/>
-                        </Content>
-                      </Repeater>
-                      <Text Name="DirectorSpacer" Content="Director: " Color="color://s:FontColorMedium" WordWrap="false" Font="font://f:SV_SummaryFont" Margins="10,0,0,0"/>
-                      <Repeater  Name="DirectorRepeater" Source="[Item.Directors]" DividerName="Divider">
-                        <Layout>
-                          <FlowLayout Orientation="Horizontal" AllowWrap="false"/>
-                        </Layout>
-                        <Content>
-                          <Text Content="[RepeatedItem!cor:String]" Font="font://f:SV_SummaryFont" Color="color://s:FontColorLight"/>
-                        </Content>
-                      </Repeater>
-                    </Children>
-                  </Panel>
-                  <Panel Name="MoviePanel" Layout="HorizontalFlow">
-                    <Children>
-                      <Panel Layout="HorizontalFlow">
-                        <Children>
-                          <Text Name="Production"       Content=""    Font="font://f:DV_GenreFont" WordWrap="false" Color="color://s:FontColorLight"/>
-                          <Text Name="ProductionSpacer" Content=" ∙ " Font="font://f:DV_GenreFont" WordWrap="false" Color="color://s:FontColorLight"  />
-                          <Text Name="MovieLength"      Content=""    Font="font://f:DV_GenreFont" WordWrap="false" Color="color://s:FontColorLight"/>
-                          <Text Name="MovieSpacer"      Content=" ∙ " Font="font://f:DV_GenreFont" WordWrap="false" Color="color://s:FontColorLight"  />
-                          <gl:GenreList Name="MovieGenres" SourceData="[Item.Genres]" Font="font://f:DV_GenreFont" Color="color://s:FontColorLight"/>
-                        </Children>
-                      </Panel>
-                    </Children>
-                  </Panel>           
+                  <vidb:InfoDisplayBox Name="InfoBox" Application="[Application]" Item="[Item]" Font="font://f:Vanilla_InfoTitleFont"/>
                 </Children>
               </Panel>
-
-              <Graphic Name="ArrowRight" MaximumSize="20,20" MinimumSize="20,20" Content="image://me:PivotArrowRight" Margins="10,0,0,0" MaintainAspectRatio="true">
+              <Graphic Name="ArrowRight" MaximumSize="20,20" MinimumSize="20,20" Content="image://me:PivotArrowRight" Margins="0,0,5,0" MaintainAspectRatio="true">
                 <Animations>
                   <Animation Loop="-1">
                     <Keyframes>
@@ -767,19 +357,15 @@
                   </Animation>
                 </Animations>
               </Graphic>
-              
             </Children>
-          </Panel>
+          </Graphic>
         </Children>
       </Panel>
     </Content>
-    <Content Name="Divider">
-      <Text Content=", " Font="font://f:SV_CounterFont" WordWrap="false" Color="color://s:FontColorLight"/>
-    </Content>
-
   </UI>
 
   <Image Name="PivotArrowLeft"          Source="resx://MediaBrowser/MediaBrowser.Resources/PivotArrowLeft"/>
   <Image Name="PivotArrowRight"         Source="resx://MediaBrowser/MediaBrowser.Resources/PivotArrowRight"/>
-
+  <Image Name="InfoBox"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox"        NineGrid="12,12,17,22"/>
+  <Image Name="InfoBoxDefault" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault" NineGrid="12,12,17,22"/>
 </Mcml>

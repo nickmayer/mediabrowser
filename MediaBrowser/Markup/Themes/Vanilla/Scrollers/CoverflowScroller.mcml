@@ -196,8 +196,7 @@
       <Panel Name="Panel" Navigation="ContainHorizontal" Layout="Anchor" >
         <Children>
 
-          <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="-20" ScrollingData="[SD]" Navigation="RememberFocus"
-                    Margins="0,-20,0,0" >
+          <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="0" ScrollingData="[SD]" Navigation="RememberFocus"  Margins="0,-20,0,0" >
             <LayoutInput>
               <AnchorLayoutInput Horizontal="Fill"/>
             </LayoutInput>

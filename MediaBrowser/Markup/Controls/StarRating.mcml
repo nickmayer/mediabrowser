@@ -10,7 +10,7 @@
   <UI Name="StarRating">
     <Properties>
       <cor:Single Name="Value" Single="0"/>
-
+      <Size Name="Size" Size="0,25"/>
     </Properties>
     <Locals>
       <Image Name="EmptyStar" Image="image://i:StarEmpty" />
@@ -180,7 +180,7 @@
     </Rules>
 
     <Content>
-      <Panel Layout="HorizontalFlow">
+      <Panel Layout="Scale" MaximumSize="[Size]" >
         <Children>
           <Panel>
             <Children>

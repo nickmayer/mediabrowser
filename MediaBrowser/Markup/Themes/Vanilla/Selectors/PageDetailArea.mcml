@@ -7,7 +7,8 @@
 	  xmlns:lde="resx://MediaBrowser/MediaBrowser.Resources/LayoutDetailsVanilla"
 	  xmlns:lcf="resx://MediaBrowser/MediaBrowser.Resources/LayoutCoverflowVanilla"
 	  xmlns:lr="resx://MediaBrowser/MediaBrowser.Resources/LayoutRootVanilla"
-	  xmlns:lts="resx://MediaBrowser/MediaBrowser.Resources/LayoutStripVanilla">
+	  xmlns:lts="resx://MediaBrowser/MediaBrowser.Resources/LayoutStripVanilla"
+    xmlns:lal="resx://MediaBrowser/MediaBrowser.Resources/LayoutAlbumVanilla">
 
 	<UI Name="PageDetailArea">
 		<Properties>
@@ -44,6 +45,20 @@
         </Actions>
       </Rule>
 
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[Folder.ItemTypeString]" Value="ArtistAlbum"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LayoutAlbum.Visible]" Value="true"/>
+          <Set Target="[LayoutDetails.Visible]" Value="false"/>
+          <Set Target="[LayoutPoster.Visible]" Value="false"/>
+          <Set Target="[LayoutThumb.Visible]" Value="false"/>
+          <Set Target="[LayoutStrip.Visible]" Value="false"/>
+          <Set Target="[LayoutCoverflow.Visible]" Value="false"/>
+        </Actions>
+      </Rule>
+
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Detail" Target="[LayoutDetails.Visible]" Value="true" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Detail" Target="[LayoutDetails.Visible]" Value="false" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[LayoutPoster.Visible]" Value="true" />
@@ -54,7 +69,7 @@
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="ThumbStrip" Target="[LayoutStrip.Visible]" Value="false" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="CoverFlow" Target="[LayoutCoverflow.Visible]" Value="true" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="CoverFlow" Target="[LayoutCoverflow.Visible]" Value="false" />
-
+      <Condition Source="[Folder.ItemTypeString]" ConditionOp="NotEquals" SourceValue="ArtistAlbum" Target="[LayoutAlbum.Visible]" Value="false" />
     </Rules>
 
 		<Content>
@@ -68,7 +83,7 @@
 					</Animation>
 				</Animations>
 				<Children>
-
+          
           <lr:LayoutRoot Name="LayoutRoot" Folder="[Folder]" Application="[Application]" Visible="false"  >
             <LayoutInput>
               <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
@@ -104,6 +119,12 @@
 							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
 						</LayoutInput>
 					</lts:LayoutStrip>
+
+          <lal:LayoutAlbum Name="LayoutAlbum" Visible="true" Item="[Folder]" Application="[Application]" >
+            <LayoutInput>
+              <FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+            </LayoutInput>
+          </lal:LayoutAlbum>
 					
 				</Children>
 			</Panel>

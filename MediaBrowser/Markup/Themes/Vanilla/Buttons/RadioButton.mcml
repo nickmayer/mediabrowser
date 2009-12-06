@@ -1,12 +1,15 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	    xmlns:cor="assembly://MSCorLib/System"
+      xmlns:a="assembly://MediaBrowser/MediaBrowser"
       xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+      xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
       xmlns:me="Me"
       >
   
   <UI Name="RadioGroup" >
 
     <Properties>
+      <a:Application Name="Application" Application="$Required"/>
       <Choice Name="Model" Choice="$Required" />
       <Size Name="Size" Size="135,135"/>
     </Properties>
@@ -28,12 +31,13 @@
       </Panel>
     </Content>
     <Content Name="RadioButton">
-      <me:ViewButtons Model="[Model]" Option="[RepeatedItem!cor:String]" Size="[Size]"/>
+      <me:ViewButtons Application="[Application]" Model="[Model]" Option="[RepeatedItem!cor:String]" Size="[Size]"/>
     </Content>
   </UI>
 
   <UI Name="ViewButtons">
     <Properties>
+      <a:Application Name="Application" Application="$Required"/>
       <Choice     Name="Model" Choice="$Required"/>
       <cor:String Name="Option" String="$Required"/>
       <Size       Name="Size" Size="135,135"/>
@@ -58,17 +62,24 @@
       <Image Name="MenuOptionDirector" Image="image://vi:MenuOptionDirector"/>
       <Image Name="MenuOptionStudio" Image="image://vi:MenuOptionStudio"/>
       <Image Name="MenuOptionClose" Image="image://vi:MenuOptionClose"/>
-      <Image Name="FocusImage" Image="image://vi:MenuOptionBGFocused" />
-      <Image Name="NoFocusImage" Image="image://vi:MenuOptionBGNotFocused" />
-      <Image Name="SelectedImage" Image="image://vi:MenuOptionBGSelected" />
+      <Image Name="FocusImage"        Image="image://me:InfoBoxBlue" />
+      <Image Name="FocusImageDefault" Image="image://me:InfoBoxYellow" />
+      <Image Name="NoFocusImage" Image="image://me:InfoBox" />
+      <Image Name="NoFocusImageDefault" Image="image://me:InfoBoxDefault" />
+      <Image Name="SelectedImage" Image="image://me:InfoBoxGreen" />
       <Image Name="BlankImage" Image="null" />
     </Locals>
     <Rules>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
       <Changed Source="[Clicker.Invoked]">
         <Actions>
           <Set Target="[Model.Chosen]" Value="[Option]"/>
+          <PlaySound Sound="sound://sounds:Miniselect" />
+          <PlayAnimation Target="[BoxImage]" Animation="animation://me:ButtonPress"/>
         </Actions>
       </Changed>
 
@@ -79,6 +90,7 @@
         </Conditions>
         <Actions>
           <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
         </Actions>
       </Changed>
 
@@ -99,6 +111,7 @@
         </Conditions>
         <Actions>
           <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
         </Actions>
       </Changed>
 
@@ -118,6 +131,7 @@
         </Conditions>
         <Actions>
           <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
         </Actions>
       </Condition>
 
@@ -127,6 +141,7 @@
         </Conditions>
         <Actions>
           <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
         </Actions>
       </Condition>
 
@@ -173,7 +188,7 @@
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
         </Layout>
         <Children>
-          <Graphic Name="BoxImage" Content="[BlankImage]" SizingPolicy="SizeToChildren">
+          <Graphic Name="BoxImage" Content="[BlankImage]" SizingPolicy="SizeToChildren" Alpha="0.8">
             <Children>
               <Panel >
                 <Children>
@@ -188,4 +203,191 @@
 
   </UI>
 
+  <UI Name="SimpleRadioGroup" >
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Choice Name="Model" Choice="$Required" />
+      <Size Name="Size" Size="135,135"/>
+    </Properties>
+
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+      <Binding Source="[Model.Options]" Target="[Repeater.Source]" />
+    </Rules>
+    <Content>
+      <Panel>
+        <Children>
+          <Repeater Name="Repeater" ContentName="RadioButton" Navigation="RememberFocus" DefaultFocusIndex="[Model.DefaultIndex]" >
+            <Layout>
+              <FlowLayout Orientation="Horizontal" Spacing="5,5" ItemAlignment="Near" AllowWrap="true"/>
+            </Layout>
+          </Repeater>
+        </Children>
+      </Panel>
+    </Content>
+    <Content Name="RadioButton">
+      <me:DetailButton Application="[Application]" Model="[Model]" Option="[RepeatedItem!cor:String]" Size="[Size]"/>
+    </Content>
+  </UI>
+
+  <UI Name="DetailButton">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Choice     Name="Model" Choice="$Required"/>
+      <cor:String Name="Option" String="$Required"/>
+      <Size       Name="Size" Size="135,135"/>
+      
+      <!--<ICommand Name="Command" ICommand="$Required" />
+      <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
+      <Size Name="Size" Size="135,135" />
+-->
+    </Properties>
+
+    <Locals>
+      <ClickHandler Name="Clicker" HandleEnterSpaceKeys ="true" HandlePrimaryMouseButton ="true" HandlerStage="Bubbled"/>
+      <Image Name="Summary"             Image="image://vi:IconSummary" />
+      <Image Name="Actors"              Image="image://vi:IconActor" />
+      <Image Name="SelectedImage"       Image="image://me:InfoBoxGreen" />
+      <Image Name="ImageNoFocus"        Image="$Required" />
+      <Image Name="FocusImage"          Image="image://me:InfoBoxBlue" />
+      <Image Name="FocusImageDefault"   Image="image://me:InfoBoxYellow" />
+      <Image Name="NoFocusImage"        Image="image://me:InfoBox" />
+      <Image Name="NoFocusImageDefault" Image="image://me:InfoBoxDefault" />
+      <Image Name="SelectedImage"       Image="image://me:InfoBoxGreen" />
+      <Image Name="BlankImage"          Image="null" />
+    </Locals>
+    <Rules>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+
+
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Changed Source="[Clicker.Invoked]">
+        <Actions>
+          <Set Target="[Model.Chosen]" Value="[Option]"/>
+          <PlaySound Sound="sound://sounds:Miniselect" />
+          <PlayAnimation Target="[BoxImage]" Animation="animation://me:ButtonPress"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Model.Chosen]">
+        <Conditions>
+          <Equality Source="[Model.Chosen]" Value="[Option]" />
+          <Equality Source="[Input.KeyFocus]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Model.Chosen]">
+        <Conditions>
+          <Equality Source="[Model.Chosen]" Value="[Option]" />
+          <Equality Source="[Input.KeyFocus]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[NoFocusImage]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Model.Chosen]">
+        <Conditions>
+          <Equality Source="[Model.Chosen]"  ConditionOp="NotEquals" Value="[Option]" />
+          <Equality Source="[Input.KeyFocus]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Model.Chosen]">
+        <Conditions>
+          <Equality Source="[Model.Chosen]" ConditionOp="NotEquals" Value="[Option]" />
+          <Equality Source="[Input.KeyFocus]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[NoFocusImage]" />
+        </Actions>
+      </Changed>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Conditions>
+          <Equality Source="[Model.Chosen]" Value="[Option]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Conditions>
+          <Equality Source="[Model.Chosen]" ConditionOp="NotEquals" Value="[Option]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[FocusImage]" />
+          <PlaySound Sound="sound://sounds:Focus" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Conditions>
+          <Equality Source="[Model.Chosen]" Value="[Option]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[SelectedImage]" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Conditions>
+          <Equality Source="[Model.Chosen]"  ConditionOp="NotEquals" Value="[Option]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BoxImage.Content]" Value="[NoFocusImage]" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Option]" SourceValue="Summary" Target="[GraphicImage.Content]" Value="[Summary]"/>
+      <Condition Source="[Option]" SourceValue="Actors" Target="[GraphicImage.Content]" Value="[Actors]"/>
+      <!--<Condition Source="[Option]" SourceValue="Cover Flow" Target="[GraphicImage.Content]" Value="[ViewCoverflow]"/>-->
+    </Rules>
+
+    <Content>
+
+      <Panel>
+        <Children>
+          <Graphic Name="BoxImage" Content="[BlankImage]" SizingPolicy="SizeToChildren" Alpha="0.8">
+            <Children>
+              <Panel >
+                <Children>
+                  <Graphic Name="GraphicImage" Content="[ImageNoFocus]" MaximumSize="[Size]" MaintainAspectRatio="true" Margins="12,12,17,22" />
+                </Children>
+              </Panel>
+            </Children>
+          </Graphic>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <Animation Name="ButtonPress" Loop="0" CenterPointPercent="0.5,0.5,1.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.00" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.08" Value="0.9,0.9,1.0"/>
+      <ScaleKeyframe Time="0.15" Value="1.0,1.0,1.0"/>
+    </Keyframes>
+  </Animation>
+  
+  <Image Name="InfoBox"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox" NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxGreen"   Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxGreen" NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxBlue"    Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxBlue" NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxYellow"  Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxYellow" NineGrid="12,12,17,22" />
+  <Image Name="InfoBoxDefault" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault" NineGrid="12,12,17,22" />
 </Mcml>

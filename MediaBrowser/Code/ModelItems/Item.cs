@@ -155,7 +155,8 @@ namespace MediaBrowser.Library
 
         public string ItemTypeString {
             get {
-                return ItemType.ToString();
+                string[] items = BaseItem.GetType().ToString().Split('.');
+                return items[items.Length - 1];
             }
         }
 
@@ -466,6 +467,23 @@ namespace MediaBrowser.Library
             }
         }
 
+        public FolderModel Season {
+            get {
+
+                FolderModel season = null;
+                Episode episode = baseItem as Episode;
+                FolderModel parent = PhysicalParent;
+
+                    if (episode != null)
+                    {
+                       season = ItemFactory.Instance.Create(episode.Season) as FolderModel;
+                    }
+
+                return season;
+            }
+        }
+
+
         public FolderModel Series {
             get {
 
@@ -473,17 +491,18 @@ namespace MediaBrowser.Library
 
                 Episode episode = baseItem as Episode; 
                 Season season = baseItem as Season;
+
                 FolderModel parent = PhysicalParent;
                 FolderModel grandParent = null;
-
+                
                 if (parent != null) {
                     grandParent = PhysicalParent.PhysicalParent;
                 }
-
+                /*
                 if (parent != null && parent.baseItem is Series) {
                     series = parent;
                 }
-
+                */
                 if (series == null) {
 
                     if (episode != null) {
@@ -502,6 +521,38 @@ namespace MediaBrowser.Library
                     }
                 }
                 return series;
+            }
+        }
+
+        public string SeasonNumber {
+            get {
+                Episode episode = baseItem as Episode;
+                if (episode != null)
+                {
+                    if (episode.SeasonNumber != null)
+                        return episode.SeasonNumber;
+                    else
+                        return "";
+                }
+                else
+                    return "";
+            }
+        }
+
+        public string EpisodeNumber
+        {
+            get
+            {
+                Episode episode = baseItem as Episode;
+                if (episode != null)
+                {
+                    if (episode.EpisodeNumber != null)
+                        return episode.EpisodeNumber;
+                    else
+                        return "";
+                }
+                else
+                    return "";
             }
         }
 

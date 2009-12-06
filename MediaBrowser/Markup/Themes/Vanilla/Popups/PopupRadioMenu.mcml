@@ -1,4 +1,5 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:a="assembly://MediaBrowser/MediaBrowser"
       xmlns:vmb="resx://MediaBrowser/MediaBrowser.Resources/VanillaMenuButton"
       xmlns:vrb="resx://MediaBrowser/MediaBrowser.Resources/VanillaRadioButton"
       xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
@@ -7,6 +8,7 @@
 
   <UI Name="PopupRadioMenu">
     <Properties>
+      <a:Application Name="Application" Application="$Required"/>
       <Choice Name="Choice" Choice="$Required" />
       <Command Name="Close" Command="$Required"/>
     </Properties>
@@ -39,8 +41,8 @@
           </Animation>
         </Animations>
         <Children>
-          <vrb:RadioGroup Model="[Choice]" Size="135,135"/>
-          <vmb:MenuButton Command="[Close]" Image="image://vi:MenuOptionClose" Red="true"/>
+          <vrb:RadioGroup Application="[Application]" Model="[Choice]" Size="135,135"/>
+          <vmb:MenuButton Application="[Application]" Command="[Close]" Image="image://vi:MenuOptionClose" Red="true"/>
         </Children>
       </Panel>
     </Content>

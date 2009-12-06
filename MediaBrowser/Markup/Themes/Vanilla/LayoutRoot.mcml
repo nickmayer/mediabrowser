@@ -13,16 +13,23 @@
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
     xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
     xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
-      
 	  xmlns:wea="resx://MediaBrowser/MediaBrowser.Resources/Weather"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
 	  xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
+    xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
+    xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
     xmlns:mdi="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
+    xmlns:gl="resx://MediaBrowser/MediaBrowser.Resources/GenreList"
+    xmlns:vpv="resx://MediaBrowser/MediaBrowser.Resources/VanillaPivot"
+    xmlns:vs="resx://MediaBrowser/MediaBrowser.Resources/VanillaStudio"
+    xmlns:vls="resx://MediaBrowser/MediaBrowser.Resources/VanillaListScroller"
     xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+    xmlns:vcfs="resx://MediaBrowser/MediaBrowser.Resources/VanillaCoverflowScroller"
     xmlns:vmpaa="resx://MediaBrowser/MediaBrowser.Resources/VanillaMPAA"
+    xmlns:vpi="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupInfo"
     xmlns:me="Me"
 	  >
 
@@ -32,6 +39,7 @@
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
       <cor:Boolean Name="UseCustomAnchor" Boolean="false" />
+      <BooleanChoice Name="NavInto" Value="false" />
     </Properties>
 
     <Locals>
@@ -45,9 +53,8 @@
 
       <IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
       <Timer Name="InfoTimer" AutoRepeat="false" Interval="200" Enabled="false"/>
-      <ScrollingHandler Name="ScrollingHandler"  HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
-							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" />
-      <ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.35"  />
+      <ScrollingHandler Name="ScrollingHandler"  HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true" HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" />
+      <ScrollingData Name="ScrollingData"/>
 
 
       <cor:Boolean Name="CanPlay" Boolean="false" />
@@ -59,10 +66,6 @@
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="150" Enabled="true" />
       <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
-
-      <a:Clock Name="Clock"/>
-
-      <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
       <IntRangedValue Name="SelectedIndex" Value="0"/>
 
 
@@ -73,22 +76,45 @@
       <cor:Int32 Name="AnimDelay" Int32="300" />
       <!-- This must be greater than NormalKeyRepeat-->
       <cor:Int32 Name="SpeedUpDelay" Int32="2"/>
+      <Choice Name="RecentItems">
+        <Options>
+          <cor:String String="Recently Added" />
+          <cor:String String="Recently Watched" />
+        </Options>
+      </Choice>
     </Locals>
 
     <Rules>
+
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
-      <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
+      <!--<Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />-->
 
       <!-- Bindings -->
       <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
       <Binding Source="[SelectedItem.PreferredImage]" Target="[CurrentPoster.Content]"/>
 
-      <Binding Source="[Clock.Time]" Target="[TimeDate.Content]">
+
+
+
+      <!--Just indicate which we are showing - need to add full recent watched capability-->
+      <Changed Source="[Application]" InitialEvaluate="true">
         <Conditions>
-          <Equality Source="[Application.Config.ShowClock]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[Application.RecentItemOption]" Value="added" />
         </Conditions>
-      </Binding>
+        <Actions>
+          <Set Target="[RecentItems.ChosenIndex]" Value="0" />
+        </Actions>
+      </Changed>
+
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="added" />
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="watched" />
+
+      <Changed Source="[RecentItems.ChosenIndex]" >
+        <Actions>
+          <Invoke Target="[SelectedItem.RecentItemsChanged]" />
+        </Actions>
+      </Changed>
 
       <!--<Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]">
         <Transformer>
@@ -101,12 +127,12 @@
         </Transformer>
       </Binding>-->
       <!--<Binding Source="[Folder.BackdropImage]" Target="[MainBG.Content]" >-->
-        <!--<Conditions>
+      <!--<Conditions>
           <Equality Source="[Folder.HasBackdropImage]" ConditionOp="Equals" Value="true" />
         </Conditions>-->
       <!--</Binding>-->
 
-      <Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
+      <!--<Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />-->
 
       <!-- Commands -->
       <Changed Source="[Configure.Invoked]">
@@ -114,8 +140,6 @@
           <Invoke Target="[Application.OpenConfiguration]" showFullOptions="true" />
         </Actions>
       </Changed>
-
-
 
       <!-- Folder/Item Selection -->
       <Changed Source="[Folder.SelectedChildIndex]">
@@ -133,40 +157,10 @@
         </Conditions>
         <Actions>
           <Set Target="[RefocusViewTimer.Enabled]" Value="true" />
-          <!--<Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]"/>-->
           <Set Target="[RecentItemsPanel.Visible]" Value="true"/>
-          <!--<Invoke Target="[Application.Information.AddInformationString]" info="[SelectedItem!lib:FolderModel.Children.Count.ToString]" />-->
+          <Set Target="[NavInto.Value]" Value="true" />
         </Actions>
       </Changed>
-      <Changed Source="[SelectedItem]" >
-        <Conditions>
-          <Equality Source="[SelectedItem.ShowNewestItems]" Value="false"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[RecentItemsPanel.Visible]" Value="false"/>
-        </Actions>
-      </Changed>
-
-
-      <!-- Playback Control -->
-      <!--<Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[Application.PlaybackController.IsStopped]" Value="true"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[NowPlaying.Visible]" Value="false" />
-          <Set Target="[PanelPoster.Visible]" Value="true" />
-        </Actions>
-      </Rule>
-      <Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[Application.PlaybackController.IsPlaying]" Value="true"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[NowPlaying.Visible]" Value="true" />
-          <Set Target="[PanelPoster.Visible]" Value="false" />
-        </Actions>
-      </Rule>-->
 
       <Rule>
         <Conditions>
@@ -175,15 +169,25 @@
         </Conditions>
         <Actions>
           <Set Target="[RefocusViewTimer.Enabled]" Value="false" />
+          <Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]" />
           <Invoke Target="[ItemMenuPanel.NavigateInto]" />
-          <Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]"/>
         </Actions>
       </Rule>
 
-      <!-- Typing Handler / Jump List -->
-      <Changed Source="[Application]" InitialEvaluate="true">
+      <Changed Source="[NavInto.Value]">
+        <Conditions>
+          <Equality Source="[NavInto.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
         <Actions>
-          <Invoke Target="[Application.FixRepeatRate]" scroller="[Scroller]" val="[NormalKeyRepeat]" />
+          <Set Target="[NavInto.Value]" Value="false" />
+          <Invoke Target="[ItemMenuPanel.NavigateInto]" />
+        </Actions>
+      </Changed>
+
+      <!-- Typing Handler / Jump List -->
+      <!--<Changed Source="[Application]" InitialEvaluate="true">
+        <Actions>
+          <Invoke Target="[Application.FixRepeatRate]" scroller="[ListItems.Scroller]" val="[NormalKeyRepeat]" />
         </Actions>
       </Changed>
 
@@ -203,7 +207,7 @@
         <Actions>
           <Invoke Target="[Application.FixRepeatRate]" scroller="[Scroller]" val="[NormalKeyRepeat]" />
         </Actions>
-      </Changed>
+      </Changed>-->
 
       <Changed Source="[Folder.JILShift]">
         <Actions>
@@ -229,97 +233,97 @@
         </Actions>
       </Rule>
 
-      <Rule>
-        <Conditions>
-          <Modified Source="[JumpForward.Invoked]"/>
-        </Conditions>
-        <Actions>
-          <Invoke Target="[ScrollingData.PageDown]"/>
-        </Actions>
-      </Rule>
 
-      <Rule>
-        <Conditions>
-          <Modified Source="[JumpBack.Invoked]"/>
-        </Conditions>
-        <Actions>
-          <Invoke Target="[ScrollingData.PageUp]"/>
-        </Actions>
-      </Rule>
 
-      <!--Just indicate which we are showing - need to add full recent watched capability-->
-      <Changed Source="[Application.Config.RecentItemOption]" InitialEvaluate="true">
-        <Conditions>
-          <Equality Source="[Application.Config.RecentItemOption]" Value="watched" />
-        </Conditions>
-        <Actions>
-          <Set Target="[NPVTitle.Content]" Value="recently watched" />
-          <Set Target="[NPVTitleShadow.Content]" Value="recently watched" />
-        </Actions>
-      </Changed>
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[PanelPosterBackdrop.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
+
+      <Binding Target="[Backdrop.Visible]"   Source="[Folder.DisplayPrefs.UseBackdrop.Value]"/>
+      
+      <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[DetailBackdrop.Alpha]"/>
+      <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[RSSBox.Alpha]"/>
+      <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[PivotPanel.Alpha]"/>
+
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[PivotPanel.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[PanelPosterBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
 
     </Rules>
 
+
     <Content>
-      <Panel>
+      <Panel Layout="Form">
         <Children>
-          <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]" CenterPointPercent="0.5,0.5,0.5">
+
+          <!-- Pivot Table -->
+          <Panel Name="RecentItemsPivotPanel" Layout="Fill" Navigation="ContainHorizontal">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,10" Right="Parent,0,350" Top="Parent,0,50" Bottom="Parent,0,120"/>
+            </LayoutInput>
             <Children>
-
-              <!-- Weather Panel -->
-              <wea:YahooWeatherLarge>
-                <LayoutInput>
-                  <AnchorLayoutInput Top="Parent,0,15" Left="Parent,0,35"/>
-                </LayoutInput>
-              </wea:YahooWeatherLarge>
-
-              <!-- Gradient Center Panel Borders -->
-              <Panel>
-                <LayoutInput>
-                  <AnchorLayoutInput Bottom="ItemMenuPanel,0" Horizontal="Fill"/>
-                </LayoutInput>
+              <Graphic Name="PivotPanel"  Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="12,12,18,22">
                 <Children>
-                  <Clip FadeSize="50" Orientation="Horizontal" FadeAmount="1" >
-                    <Children>
-                      <ColorFill Content="color://s:FontColorLight" Alpha="0.8" Layout="Fill" MaximumSize="0,2" />
-                    </Children>
-                  </Clip>
+                  <vpv:Pivot Model="[RecentItems]" Name="RecentItemPivot" Navigation="RememberFocus"/>
                 </Children>
-              </Panel>
-              <Panel>
-                <LayoutInput>
-                  <AnchorLayoutInput Top="ItemMenuPanel,1" Horizontal="Fill"/>
-                </LayoutInput>
+              </Graphic>
+            </Children>
+          </Panel>
+          
+          <!-- Poster Box -->
+          <Panel Name="PanelPoster" Layout="Fill">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,10" Right="Parent,0,350" Top="RecentItemsPivotPanel,1" Bottom="RecentItemsPivotPanel,1,300"/>
+            </LayoutInput>
+            <Children>
+              <Graphic Name="PanelPosterBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="12,12,18,22">
+                <Layout>
+                  <FlowLayout ItemAlignment="Center" StripAlignment="Center"/>
+                </Layout>
                 <Children>
-                  <Clip FadeSize="50" Orientation="Horizontal" FadeAmount="1" >
-                    <Children>
-                      <ColorFill Content="color://s:FontColorLight" Alpha="0.8" Layout="Fill" MaximumSize="0,2" />
-                    </Children>
-                  </Clip>
+                  <Graphic Name="CurrentPoster" MaintainAspectRatio="true"/>
                 </Children>
-              </Panel>
+              </Graphic>
+            </Children>
+          </Panel>
 
-              <!-- Center Scrolling Panel -->
-              <Graphic Name="ItemMenuPanel" Layout="Anchor" >
-                <LayoutInput>
-                  <AnchorLayoutInput Horizontal="Fill" Top="Parent,0.8" Bottom="Parent,0.8,65"/>
-                </LayoutInput>
+          <!-- Virtual Folder Scroller -->
+          <Panel Name="ItemMenuPanel" Layout="Form" Margins="0,0,0,0" FocusOrder="1">
+            <Animations>
+              <Animation Name="AlphaAnimation" Type="Alpha">
+                <Keyframes>
+                  <AlphaKeyframe Time="0.0"  RelativeTo="Current" Interpolation="EaseIn"/>
+                  <AlphaKeyframe Time="0.5"  RelativeTo="Final"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,10" Right="Parent,0,350" Top="PanelPoster,1" Bottom="Parent,1,-50"/>
+            </LayoutInput>
+            <Children>
+              <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="7,12,12,22" >
                 <Children>
-                  <Scroller Orientation="Horizontal" FadeSize="5" Name="Scroller" Navigation="RememberFocus"
-                            ScrollingData="[ScrollingData]" Padding="50,0,50,0" >
-                    <LayoutInput>
-                      <AnchorLayoutInput Horizontal="Fill" Vertical="Fill" />
-                    </LayoutInput>
+                  <Scroller Orientation="Vertical" FadeSize="1" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]">
                     <Children>
-                      <Repeater Source="[Folder.Children]" Name="Repeater" ContentName="BaseItem" DiscardOffscreenVisuals="false" >
+                      <Repeater Source="[Folder.Children]" Name="MyRepeater" ContentName="BaseItem" >
                         <Layout>
-                          <FlowLayout Orientation="Horizontal" Spacing="50,0"/>
+                          <FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="0,0"/>
                         </Layout>
+                        <Divider>
+                          <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                            <Children>
+                              <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                            </Children>
+                          </Clip>
+                        </Divider>
                         <Animations>
                           <Animation Type="Move">
                             <Keyframes>
                               <PositionKeyframe Time="0" RelativeTo="Current"/>
-                              <PositionKeyframe Time="0.3" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.2" RelativeTo="Final"/>
                             </Keyframes>
                           </Animation>
                         </Animations>
@@ -327,140 +331,34 @@
                     </Children>
 
                   </Scroller>
-                  <ColorFill Content="color://s:FillColor" Alpha="0.65">
-                    <LayoutInput>
-                      <AnchorLayoutInput Horizontal="Fill" Vertical="Fill" ContributesToHeight="false" ContributesToWidth="false"/>
-                    </LayoutInput>
-                  </ColorFill>
                 </Children>
               </Graphic>
-
-              <!-- Media Browser Name Panel -->
-              <Graphic Name="TopMiniPanel" Content="resx://MediaBrowser/MediaBrowser.Resources/roottopw">
-                <LayoutInput>
-                  <AnchorLayoutInput Top="ItemMenuPanel,0,-37" Bottom="ItemMenuPanel,0,-2" Left="Parent,0.85" Right="Parent,1"/>
-                </LayoutInput>
-                <Layout>
-                  <FlowLayout Orientation="Horizontal" StripAlignment="Far"/>
-                </Layout>
-                <Children>
-                  <ColorFill Content="Transparent" Layout="Anchor">
-                    <Children>
-                      <Text Name="logoName" Content="media browser " Color="White" Font="Segoe UI, 16" />
-                      <Text Content="media browser " Color="Black" Font="Segoe UI, 16" >
-                        <LayoutInput>
-                          <AnchorLayoutInput Top="logoName, 0, 2" Left="logoName, 0, 2"/>
-                        </LayoutInput>
-                      </Text>
-                    </Children>
-                  </ColorFill>
-                </Children>
-              </Graphic>
-
-              <!-- Right Bottom Main Menu Panel -->
-              <Panel Name="ClockDisplay">
-                <LayoutInput>
-                  <FormLayoutInput Bottom="Parent,1,-40" Left="Parent,0,50"/>
-                </LayoutInput>
-                <Children>
-                  <Panel Layout="HorizontalFlow">
-                    <Children>
-                      <Text Name="TimeDate" Color="color://s:FontColorLight" Font="font://f:CV_CounterFont" Visible="[Application.Config.ShowClock]" />
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-
-              <!-- Left Bottom Main Menu Panel-->
-              <Panel>
-                <LayoutInput>
-                  <AnchorLayoutInput Top="ItemMenuPanel,1,2" Bottom="ItemMenuPanel,1,37" Left="Parent,0.35" Right="Parent,1"/>
-                </LayoutInput>
-                <Children>
-                  <in:InfoMarquee Application="[Application]" />
-                  <ColorFill Layout="Fill" Content="Black" Alpha="0.15" />
-                </Children>
-              </Panel>
-
-              <!--Security Indicator-->
-              <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Anchor" Visible="false" Name="PCLock">
-                <LayoutInput>
-                  <AnchorLayoutInput Left="PanelPoster,0,15" Bottom="PanelPoster,1,-15"/>
-                </LayoutInput>
-                <Children>
-                  <Graphic Name="PCLockImage" Content="image://i:Lock" Margins="0,0,5,5" MaximumSize="35,35" MaintainAspectRatio="true">
-                    <LayoutInput>
-                      <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
-                    </LayoutInput>
-                  </Graphic>
-                </Children>
-              </Panel>
-
-              <!-- Poster Box -->
-              <Panel Name="PanelPoster" Layout="Center" Padding="10,10,10,15">
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,20" Right="Parent,0.30" Top="recentlyAdded,1,10" Bottom="Parent,0.7"/>
-                </LayoutInput>
-                <Children>
-                  <Graphic Name="Frame" Content="image://me:PosterFrame"
-                           MaintainAspectRatio="false" Margins="-10,-10,-10,-15" />
-                  <Graphic Name="CurrentPoster"
-                           MaintainAspectRatio="true"  >
-                  </Graphic>
-                </Children>
-              </Panel>
-
-              <Panel Name="recentlyAdded">
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.30,10" Top="Parent,0.2,-10" />
-                </LayoutInput>
-                <Layout>
-                  <FlowLayout ItemAlignment="Center"/>
-                </Layout>
-                <Children>
-                  <ColorFill Content="Transparent" Padding="8,0,8,-3" Layout="Anchor">
-                    <Children>
-                      <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
-                            Font="Segoe Media Center, 24" Margins="50,0,0,0" />
-                      <Text Name="NPVTitleShadow" Content="recently added" Color="Black"
-                            Font="Segoe Media Center, 24" Margins="50,0,0,0">
-                        <LayoutInput>
-                          <AnchorLayoutInput Top="NPVTitle, 0, 2" Left="NPVTitle, 0, 2"/>
-                        </LayoutInput>
-                      </Text>
-                    </Children>
-                  </ColorFill>
-                </Children>
-              </Panel>
-              <!-- Recent Items -->
-              
-                <!--<Clip FadeSize="25" Orientation="Horizontal" FadeAmount="1" >
-                  <Children>
-                    <ColorFill Content="color://s:FontColorDark" Alpha="0.8" Layout="Fill" MaximumSize="0,2" />
-                  </Children>
-                </Clip>-->
-
-              <Panel>
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.30,10" Top="recentlyAdded,1,10" Right="Parent,0.9"
-                                   Bottom="Parent, 0.7,0"/>
-                </LayoutInput>
-                <Children>
-                  <me:RecentItemList Name="RecentItemsPanel" Application="[Application]" />
-                </Children>
-              </Panel>
-
-              <!-- Main Background -->
-              <bd:Backdrop4 Name="Backdrop" Visible="true" Image="[Folder.BackdropImage]" Item="[Folder]"/>
-              <!--<Graphic Name="MainBG" Content="resx://MediaBrowser/MediaBrowser.Resources/Background"
-                   Margins="-50,-20,-50,-20" >
-                <LayoutInput>
-                  <AnchorLayoutInput Top="Parent,0" Bottom="Parent,1" Left="Parent,0" Right="Parent,1" />
-                </LayoutInput>
-              </Graphic>-->
-
             </Children>
-          </Clip>
+          </Panel>
+
+          <!-- Recent Items selector -->
+          <Panel>
+            <LayoutInput>
+              <FormLayoutInput Left="ItemMenuPanel,1,10" Top="Parent,0,10" Right="Parent,0.9" Bottom="Parent, 1,-50"/>
+            </LayoutInput>
+            <Children>
+              <me:RecentItemList Name="RecentItemsPanel" Application="[Application]" NavInto="[NavInto]"/>
+            </Children>
+          </Panel>
+
+          <!-- RSS Box -->
+          <Panel Layout="HorizontalFlow">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Right="Parent,1" Top="Parent,1,-50" Bottom="Parent,1"/>
+            </LayoutInput>
+            <Children>
+              <Graphic Name="RSSBox" Layout="Fill" Content="image://me:InfoBox"/>
+            </Children>
+          </Panel>
+
+          <!-- Main Background -->
+          <bd:BackdropUnaltered Name="Backdrop" Visible="true" Image="[Folder.BackdropImage]" Item="[Folder]"/>
+
         </Children>
       </Panel>
     </Content>
@@ -469,6 +367,7 @@
                            SelectedIndex="[SelectedIndex]" Index="[RepeatedItemIndex.SourceValue]" NavCount="[NavCount]" />
     </Content>
   </UI>
+
 
   <UI Name="RootScrollerItem" BaseUI="ib:ItemButton">
     <Properties>
@@ -486,10 +385,10 @@
     <Rules>
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Actions>
+          <!--recent list no longer has focus so set current item back to normal-->
+          <Set Target="[Application.CurrentItem]" Value="null" />
           <Set Target="[SelectedIndex.Value]" Value="[Index]"/>
           <Set Target="[Bg.Content]" Value="image://me:HiliteFocusBg" />
-          <Set Target="[FlashTop.Visible]" Value="true"/>
-          <Set Target="[FlashBottom.Visible]" Value="true"/>
         </Actions>
       </Condition>
 
@@ -520,107 +419,61 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" MinimumSize="0,65" Content="image://i:BlankImage" SizingPolicy="SizeToChildren" Padding="25,0,25,0">
+      <Graphic Name="Bg" MinimumSize="321,60" Content="image://i:BlankImage" SizingPolicy="SizeToChildren"  MaximumSize="0,60">
         <Children>
           <ColorFill Name="BoxItem" Content="Transparent" Layout="Anchor" Alpha="1" >
             <Children>
-              <Text Name="Title" Content="[Item.Name]" Color="[IdleColor]" Margins="0,5,0,0" Font="Segoe Media Center Semibold,32" >
-                <LayoutInput>
-                  <AnchorLayoutInput Top="Parent, 0, 5" Left="Parent, 0" />
-                </LayoutInput>
-              </Text>
-              <Graphic Name="FlashTop" Content="image://me:FlashHorizontalT" Visible="false">
-                <LayoutInput>
-                  <AnchorLayoutInput Top="Parent, 0, 4" Left="Parent, 0, 0" ContributesToHeight="false" ContributesToWidth="false"/>
-                </LayoutInput>
-                <Animations>
-                  <TransformAnimation Delay="1">
-                    <Source>
-                      <Animation Loop="-1">
-                        <Keyframes>
-                          <PositionKeyframe Time="0" RelativeTo="Current"/>
-                          <PositionKeyframe Time="3" Value="100,0,0"/>
-                          <PositionKeyframe Time="11" Value="100,0,0"/>
-                          <AlphaKeyframe Time="0.0" Value="0"/>
-                          <AlphaKeyframe Time="1.0" Value="1"/>
-                          <AlphaKeyframe Time="2.0" Value="1"/>
-                          <AlphaKeyframe Time="3.0" Value="0"/>
-                          <AlphaKeyframe Time="11.0" Value="0"/>
-                        </Keyframes>
-                      </Animation>
-                    </Source>
-                  </TransformAnimation>
-                </Animations>
-              </Graphic>
-
-              <Graphic Name="FlashBottom" Content="image://me:FlashHorizontalB" Visible="false">
-                <LayoutInput>
-                  <FormLayoutInput Bottom="Parent,1,6" Left="Title,1,24" ContributesToHeight="false" ContributesToWidth="false"/>
-                </LayoutInput>
-                <Animations>
-                  <TransformAnimation Delay="6">
-                    <Source>
-                      <Animation Loop="-1">
-                        <Keyframes>
-                          <PositionKeyframe Time="0" RelativeTo="Current"/>
-                          <PositionKeyframe Time="3" Value="-100,0,0"/>
-                          <PositionKeyframe Time="6" Value="-100,0,0"/>
-                          <AlphaKeyframe Time="0.0" Value="0"/>
-                          <AlphaKeyframe Time="1.0" Value="1"/>
-                          <AlphaKeyframe Time="2.0" Value="1"/>
-                          <AlphaKeyframe Time="3.0" Value="0"/>
-                          <AlphaKeyframe Time="6.0" Value="0"/>
-                        </Keyframes>
-                      </Animation>
-                    </Source>
-                  </TransformAnimation>
-                </Animations>
-              </Graphic>
+              <Text Name="Title" Content="[Item.Name]" Color="[IdleColor]" Font="font://f:Vanilla_RootItemFont" Margins="5,10,5,0"/>
             </Children>
           </ColorFill>
-
         </Children>
       </Graphic>
     </Content>
   </UI>
-
+  
   <UI Name="RecentItemList">
     <Properties>
       <lib:FolderModel Name="Folder"/>
       <a:Application Name="Application" Application="$Required"/>
-      
+      <BooleanChoice Name="NavInto" BooleanChoice="$Required" />
     </Properties>
     <Locals>
-      <GridLayout Name="MyLayout" Orientation="Horizontal" AllowWrap="false" Spacing="600,0" Repeat="Never" RepeatGap="-60" Rows="1" Columns="1" MinorAlignment="Center"/>
+      <ScrollingHandler Name="ScrollingHandler"  HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
+							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" />
+      <ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.45"/>
     </Locals>
     <Rules>
-      <Binding Source="[Folder.NewestItems]" Target="[Repeater.Source]"/>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+      <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
+      <!--<Condition Source="[Folder.QuickListItems.Count]" SourceValue="0" Target="[EmptyList.Visible]" Value="true" />-->
+      <!-- Binding for Newest Items-->
+      <Binding Source="[Folder.QuickListItems]" Target="[Repeater.Source]"/>
+      <Changed Source="[Folder.QuickListItems]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]" InvokePolicy="Synchronous" />
+        </Actions>
+      </Changed>
     </Rules>
     <Content>
-      <Scroller Orientation="Horizontal" FadeSize="-20" Margins="0,0,0,0" Name="Scroller">
-        <LayoutInput>
-          <DockLayoutInput Alignment="Fill"  Position="Client"  />
-        </LayoutInput>
+      <Scroller Name="Scroller" Orientation="Vertical" FadeSize="50" Navigation="RememberFocus,ContainVertical" ScrollingData="[ScrollingData]" >
         <Children>
-
-          <Repeater Name="Repeater" Layout="[MyLayout]">
-      <!--DiscardOffscreenVisuals="true" MinorAlignment="Center">-->
-        <!--<Layout>
-          <FlowLayout Orientation="Horizontal" Spacing="600,100" ItemAlignment="Near"/>
-        </Layout>-->
-        <Animations>
-          <Animation Loop="0" CenterPointPercent="1.0,0.0,1.0" Type="Move">
-            <Keyframes>
-              <PositionKeyframe Time="0.00" RelativeTo="Current" Interpolation="Bezier,-1.0,1.0"/>
-              <PositionKeyframe Time="1.00" RelativeTo="Final"/>
-            </Keyframes>
-          </Animation>
-        </Animations>
-        <Content>
-          <me:RecentItems Application="[Application]" Item="[RepeatedItem!lib:Item]" Index="[RepeatedItemIndex]" />
-        </Content>
-      </Repeater>
-      </Children>
+          <Repeater Name="Repeater">
+            <Layout>
+              <FlowLayout AllowWrap="false" Orientation="Vertical" Spacing="0,-10" Repeat="Never" />
+            </Layout>
+            <Animations>
+              <Animation Loop="0" CenterPointPercent="1.0,0.0,1.0" Type="Move">
+                <Keyframes>
+                  <PositionKeyframe Time="0.00" RelativeTo="Current" Interpolation="Bezier,-1.0,1.0"/>
+                  <PositionKeyframe Time="1.00" RelativeTo="Final"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+            <Content>
+              <me:RecentItems Application="[Application]" Item="[RepeatedItem!lib:Item]" Index="[RepeatedItemIndex]" />
+            </Content>
+          </Repeater>
+        </Children>
       </Scroller>
     </Content>
   </UI>
@@ -634,33 +487,35 @@
 
     <Locals>
       <ClickHandler Name="Clicker"/>
+      <BooleanChoice Name="InFocus" Value="false" />
     </Locals>
 
     <Rules>
 
-      <Default Target="[Input.KeyInteractive]" Value="true" />
+      <Condition Source="[Application.Config.RecentItemOption]" SourceValue="added" Target="[AddedPanel.Visible]" Value="true" />
+      <Condition Source="[Application.Config.RecentItemOption]" SourceValue="watched" Target="[WatchedPanel.Visible]" Value="true" />
 
-      <Binding Source="[Item.PreferredImage]" Target="[ItemPoster.Content]" />
-      <Binding Source="[Item.LongName]" Target="[Txt1.Content]" />
-      <Binding Source="[Item.CreatedDateString]" Target="[Txt2.Content]" />
-      <Binding Source="[Item.Overview]" Target="[Txt3.Content]" />
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[FullContent.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
 
-      <!--<Condition Source="[Index.Value]" ConditionOp="GreaterThan" SourceValue="3" Target="[Bg.Alpha]" Value="0" />-->
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[SmallContent.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
 
-      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
+      <!--<Condition Source="[Item.Index]" SourceValue="0" Target="[FullContent.Visible]" Value="true"/>-->
 
       <Changed Source="[Input.KeyFocus]" >
         <Conditions>
           <Equality Source="[Input.KeyFocus]" Value="false" />
         </Conditions>
         <Actions>
-          <Set Target="[Bg.Content]" Value="image://vi:BlankGraphic" />
-          <Set Target="[ArrowRight.Content]" Value="image://vi:BlankGraphic" />
-          <Set Target="[ArrowLeft.Content]" Value="image://vi:BlankGraphic" />
-          <Set Target="[Txt1.Color]" Value="color://s:FontColorDark" />
-          <Set Target="[Txt2.Color]" Value="color://s:FontColorDark" />
-          <Set Target="[Txt3.Color]" Value="color://s:FontColorDark" />
-          <Set Target="[Txt4.Color]" Value="color://s:FontColorDark" />
+          <Set Target="[SmallContent.Visible]" Value="true"/>
+          <Set Target="[FullContent.Visible]" Value="false"/>
         </Actions>
       </Changed>
 
@@ -669,123 +524,627 @@
           <Equality Source="[Input.KeyFocus]" Value="true" />
         </Conditions>
         <Actions>
-          <Set Target="[Bg.Content]" Value="image://me:PosterFrame" />
-          <Set Target="[ArrowRight.Content]" Value="image://me:PivotArrowRight" />
-          <Set Target="[ArrowLeft.Content]" Value="image://me:PivotArrowLeft" />
-          <Set Target="[Txt1.Color]" Value="color://s:FontColorLight" />
-          <Set Target="[Txt2.Color]" Value="color://s:FontColorMedium" />
-          <Set Target="[Txt3.Color]" Value="color://s:FontColorMedium" />
-          <Set Target="[Txt4.Color]" Value="color://s:FontColorLight" />
+          <Set Target="[SmallContent.Visible]" Value="false"/>
+          <Set Target="[FullContent.Visible]" Value="true"/>
         </Actions>
       </Changed>
-      
-      <Condition Source="[Index.Value]" ConditionOp="Equals" SourceValue="0" Target="[ArrowLeft.Visible]" Value="false"/>
-      <Condition Source="[Index.Value]" ConditionOp="NotEquals" SourceValue="0" Target="[ArrowLeft.Visible]" Value="true"/>
-      <Condition Source="[Index.Value]" ConditionOp="Equals" SourceValue="19" Target="[ArrowRight.Visible]" Value="false"/>
-      <Condition Source="[Index.Value]" ConditionOp="NotEquals" SourceValue="19" Target="[ArrowRight.Visible]" Value="true"/>
-      
+
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Binding Target="[MPAARating.Value]"    Source="[Item.MpaaRating]"/>
+      <Binding Target="[MPAARating2.Value]"   Source="[Item.MpaaRating]"/>
+      <Binding Target="[MPAARating3.Value]"   Source="[Item.MpaaRating]"/>
       <Changed Source="[Clicker.Invoked]">
         <Actions>
           <PlaySound Sound="res://ehres!MiniSelect_a.wav" />
           <Invoke Target="[Application.Navigate]" item="[Item]"/>
         </Actions>
       </Changed>
+
+      <Binding Target="[CreatedDate.Content]" Source="[Item.CreatedDateString]"/>
+      <Binding Target="[WatchDate.Content]" Source="[Item.LastPlayedString]"/>
+
+      <!-- Episode Specific Metadata -->
+
+      <Binding Target="[FirstAired.Content]"       Source="[Item.FirstAired]"/>
+      <Binding Target="[DirectorRepeater.Source]"  Source="[Item.Directors]"/>
+      <Binding Target="[WriterRepeater.Source]"    Source="[Item.Writers]"/>
+      <Binding Target="[TxtRuntime.Content]"       Source="[Item.RunningTimeString]"/>
+      <Binding Target="[EpisodeSummary.Content]"   Source="[Item.Overview]"/>
+      <Binding Target="[EpisodePoster.Content]"    Source="[Item.PrimaryImage]"/>
+
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Episode">
+        <Actions>
+          <Set Target="[BannerText.Visible]" Value="false"/>
+          <Set Target="[AllSmallContentPanel.Visible]" Value="true"/>
+        </Actions>
+      </Condition>
+
+      <!-- Hide Missing Metadata Information -->
+      <Condition Source="[Item.SeasonNumber]"   SourceValue="" ConditionOp="Equals" Target="[SeasonSmallContentSeparator.Visible]" Value="false"/>
+      <Condition Source="[Item.SeasonNumber]"   SourceValue="" ConditionOp="Equals" Target="[SeasonFullContentSeparator.Visible]"  Value="false"/>
+      <Condition Source="[Item.WritersString]"  SourceValue="" ConditionOp="Equals" Target="[WriterSpacer.Visible]"                Value="false"/>
+      <Condition Source="[Item.DirectorString]" SourceValue="" ConditionOp="Equals" Target="[DirectorSpacer.Visible]"              Value="false"/>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Item.WritersString]" ConditionOp="Equals" Value=""/>
+          <Equality Source="[Item.DirectorString]" ConditionOp="Equals" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[CastPanel.Visible]" Value="false"/>
+          <Set Target="[CastPanelSeparator.Visible]" Value="false"/>
+        </Actions>
+      </Rule>
+      
+      <!-- Movie Specific Metadata -->
+      <Binding Target="[MovieGenres.SourceData]"   Source="[Item.Genres]"/>
+      <Binding Target="[MovieLength.Content]"      Source="[Item.RunningTimeString]"/>
+      <Binding Target="[Production.Content]"       Source="[Item.ProductionYearString]"/>
+      <Binding Target="[MovieSummary.Content]"     Source="[Item.Overview]"/>
+      <Binding Target="[MoviePoster.Content]"      Source="[Item.PrimaryImage]"/>
+      <Binding Target="[MovieStarRating.Value]"    Source="[Item.ImdbRating]" />
+      
+      <!-- Trailer Specific Metadata -->
+      <Binding Target="[TrailerMovieGenres.SourceData]"   Source="[Item.Genres]"/>
+      <Binding Target="[TrailerMovieSummary.Content]"     Source="[Item.Overview]"/>
+      <Binding Target="[TrailerMoviePoster.Content]"      Source="[Item.PrimaryImage]"/>
+
+      <!-- Default Metadata -->
+      
+      <Binding Target="[DefaultSummary.Content]"     Source="[Item.Overview]"/>
+      <Binding Target="[DefaultPoster.Content]"      Source="[Item.PrimaryImage]"/>
+      
+      <!-- Song Specific Metadata -->
+      <Binding Target="[MusicPoster.Content]"      Source="[Item.PhysicalParent.PrimaryImage]"/>
+      
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Episode">
+        <Actions>
+          <Set Target="[EpisodePanel.Visible]" Value="true"/>
+          <Set Target="[DefaultPanel.Visible]" Value="false"/>
+          <Set Target="[BannerText.Visible]" Value="true"/>
+          <Set Target="[BannerText.Content]" Value="[Item.Series.Name]"/>
+          <Set Target="[SeasonText.Content]" Value="[Item.SeasonNumber]"/>
+          <Set Target="[SeasonNumberSmallContent.Content]" Value="[Item.SeasonNumber]"/>
+          <Set Target="[BannerTitleText.Content]" Value="[Item.Series.Name]"/>
+          <Set Target="[EpisodeSmallContentPanel.Visible]" Value="true"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Movie">
+        <Actions>
+          <Set Target="[MoviePanel.Visible]" Value="true"/>
+          <Set Target="[DefaultPanel.Visible]" Value="false"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Trailer">
+        <Actions>
+          <Set Target="[TrailerPanel.Visible]" Value="true"/>
+          <Set Target="[DefaultPanel.Visible]" Value="false"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Song">
+        <Actions>
+          <Set Target="[MusicPanel.Visible]" Value="true"/>
+          <Set Target="[DefaultPanel.Visible]" Value="false"/>
+        </Actions>
+      </Condition>
+      
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Episode" Target="[EpisodePanel.Visible]" Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Movie"   Target="[MoviePanel.Visible]"   Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Trailer" Target="[TrailerPanel.Visible]" Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Song"    Target="[MusicPanel.Visible]"   Value="false"/>
+
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FullContent.Content]"  Value="image://me:InfoBoxDefaultHighlighted"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[SmallContent.Content]" Value="image://me:InfoBoxDefault"/>
+
     </Rules>
 
     <Content>
-      <Panel>
+
+      <Panel Name="MainPanel" MaximumSize="0,400">
+        <Animations>
+          <Animation Name="SizeAnimation" Type="Hide">
+            <Keyframes>
+              
+              <SizeKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current" Interpolation="EaseIn"/>
+              <SizeKeyframe Time="0.5" Value="1,1,1" RelativeTo="Final"/>
+            </Keyframes>
+          </Animation>
+          <Animation Name="AlphaAnimation" Type="Show">
+            <Keyframes>
+              <AlphaKeyframe Time="0.0" Value="0" RelativeTo="Current" Interpolation="EaseIn"/>
+              <AlphaKeyframe Time="0.5" Value="1" RelativeTo="Final"/>
+            </Keyframes>
+          </Animation>
+          <Animation Name="AlphaAnimationHide" Type="Hide">
+            <Keyframes>
+              <AlphaKeyframe Time="0.0" Value="1" RelativeTo="Current" Interpolation="EaseIn"/>
+              <AlphaKeyframe Time="0.5" Value="0" RelativeTo="Final"/>
+            </Keyframes>
+          </Animation>
+        </Animations>
         <Layout>
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
         </Layout>
+
         <Children>
-          <Graphic Name="ArrowLeft"  MaximumSize="40,40" MinimumSize="40,40" Content="image://vi:BlankGraphic" Margins="0,0,10,0" MaintainAspectRatio="true">
-          <Animations>
-            <Animation Name="Flicker" Loop="-1" >
-              <Keyframes>
-                <AlphaKeyframe Time="0.00" RelativeTo="Current"  Value="0" Interpolation="Linear"/>
-                <AlphaKeyframe Time="0.25" RelativeTo="Current" Value="1" Interpolation="Linear"/>
-                <AlphaKeyframe Time="0.75" RelativeTo="Current" Value="1" Interpolation="Linear"/>
-                <AlphaKeyframe Time="1.0" RelativeTo="Final" Value="0" Interpolation="Linear"/>
-              </Keyframes>
-            </Animation>
-          </Animations>
-        </Graphic>
-          <Graphic Name="Bg" Content="image://vi:BlankGraphic" MaximumSize="600,0" Padding="30,20,30,20">
-        <Layout>
-          <FlowLayout Orientation="Vertical" Spacing="5,5" />
-        </Layout>
-        <Children>
-          <Panel Layout="HorizontalFlow">
+          <Graphic Name="FullContent" Content="image://me:InfoBoxHighlighted" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="12,12,17,22" Visible="false">
             <Children>
-              <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="Segoe Media Center, 20" />
-              <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
-            </Children>
-          </Panel>
-          <Panel>
-            <Layout>
-              <FlowLayout Orientation="Horizontal" />
-            </Layout>
-            <Children>
-              <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson" MaintainAspectRatio="true" MaximumSize="200,225" />
-              <Panel Margins="10,0,0,0">
+
+              <Panel Padding="5,0,0,10">
                 <Layout>
-                  <FlowLayout Orientation="Vertical"/>
+                  <FlowLayout Orientation="Vertical" Spacing="5,5"/>
                 </Layout>
                 <Children>
-                  <vmpaa:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" MaximumSize="250,50">
+                  <!-- Selected Item is an Episode -->
+                  <Panel Name="EpisodePanel" Visible="false">
                     <Layout>
-                      <FlowLayout StripAlignment="Near"/>
+                      <FlowLayout Orientation="Vertical" Spacing="5,5"/>
                     </Layout>
-                  </vmpaa:MPAARating>
-                  <mdi:MediaInfoPanel Name="EpisodeMediaInfo" Item="[Item]" MaxIconSize="0,35">
+                    <Children>
+                      <Panel  Layout="Dock" MaximumSize="0,45">
+                        <Children>
+                          <Panel>
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Near" Position="Client"/>
+                            </LayoutInput>
+                            <Children>
+                              <Panel>
+                                <Children>
+                                  <Text  Name="BannerTitleText" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight"/>
+                                </Children>
+                              </Panel>
+                            </Children>
+                          </Panel>
+                          <Panel>
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Center" Position="Right"/>
+                            </LayoutInput>
+                            <Children>
+                              <Text Name="FirstAired" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>                           
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>              
+                      <Panel Name="EpisodeGenrePanel" Layout="Dock" MaximumSize="0,30">
+                      <Children>
+                        <Panel>
+                          <LayoutInput>
+                            <DockLayoutInput Alignment="Near" Position="Client"/>
+                          </LayoutInput>
+                          <Layout>
+                            <FlowLayout Orientation="Horizontal"/>
+                          </Layout>
+                          <Children>
+                            <Text Name="SeasonText" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
+                            <Text Name="SeasonFullContentSeparator" Content="x" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
+                            <Text Content="[Item.Name]" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight" WordWrap="false"/>
+                          </Children>
+                        </Panel>
+                        <Panel Layout="HorizontalFlow">
+                          <LayoutInput>
+                            <DockLayoutInput Alignment="Near" Position="Right"/>
+                          </LayoutInput>
+                          <Children>
+                            <Text Name="TxtRuntime" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
+                          </Children>
+                        </Panel>
+                      </Children>
+                    </Panel>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Panel Name="EpisodeData" Padding="0,5,0,5" MaximumSize="0,225" MinimumSize="0,225">
+                        <Layout>
+                          <FlowLayout ItemAlignment="Near" Orientation="Vertical" Spacing="5,5"/>
+                        </Layout>
+                        <Children>
+                          <Panel Name="ConstraintPanel" MaximumSize="0,175" MinimumSize="0,175">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Horizontal" Spacing="10,10"/>
+                            </Layout>
+                            <Children>
+                              <Graphic Name="EpisodePoster" Content="[Item.PreferredImage]" MaintainAspectRatio="true" MaximumSize="300,250"/>
+                              <Text Name="EpisodeSummary" WordWrap="true"  Font="font://f:Vanilla_OverviewFont" Color="color://s:FontColorMedium"/>
+                            </Children>
+                          </Panel>
+                          <Clip Name="CastPanelSeparator" FadeSize="150" Orientation="Horizontal" FadeAmount="1">
+                            <Children>
+                              <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                            </Children>
+                          </Clip>
+                          <Panel Name="CastPanel" Layout="HorizontalFlow">
+                            <Children>
+                              <Text Name="WriterSpacer" Content="Writer: "  Color="color://s:FontColorMedium"  WordWrap="false" Font="font://f:Vanilla_MetaFont"/>
+                              <Repeater  Name="WriterRepeater" Source="[Item.Writers]" DividerName="Divider">
+                                <Layout>
+                                  <FlowLayout Orientation="Horizontal" AllowWrap="false"/>
+                                </Layout>
+                                <Content>
+                                  <Text Content="[RepeatedItem!cor:String]" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
+                                </Content>
+                              </Repeater>
+                              <Text Name="DirectorSpacer" Content="Director: " Color="color://s:FontColorMedium" WordWrap="false" Font="font://f:Vanilla_MetaFont" Margins="10,0,0,0"/>
+                              <Repeater  Name="DirectorRepeater" Source="[Item.Directors]" DividerName="Divider"   >
+                                <Layout>
+                                  <FlowLayout Orientation="Horizontal" AllowWrap="false"/>
+                                </Layout>
+                                <Content>
+                                  <Text Content="[RepeatedItem!cor:String]" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
+                                </Content>
+                              </Repeater>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>                    
+                    </Children>
+                  </Panel>
+                  <!-- Selected Item is a Movie -->
+                  <Panel Name="MoviePanel" Visible="false">
                     <Layout>
-                      <FlowLayout Spacing="10,10" StripAlignment="Near"/>
+                      <FlowLayout Orientation="Vertical"/>
                     </Layout>
-                  </mdi:MediaInfoPanel>
-<!--                  <Text Color="color://s:FontColorDark" Content="[Item.ItemTypeString]" Font="Segoe Media Center, 16" Margins="10,0,0,0" WordWrap="true" />-->
-                  <Text Name="Txt3" Color="color://s:FontColorDark" Content="" Font="Segoe Media Center, 16" WordWrap="true" MaximumLines="5" />
+                    <Children>
+                      <Panel Name="MovieTitlePanel" Layout="Dock" MaximumSize="0,45" >
+                        <Children>
+                          <Panel>
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Near" Position="Client"/>
+                            </LayoutInput>
+                            <Children>
+                              <Panel>
+                                <Children>
+                                  <Text Content="[Item.Name]" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight" />
+                                </Children>
+                              </Panel>
+                            </Children>
+                          </Panel>
+                          <Panel>
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Near" Position="Right"/>
+                            </LayoutInput>
+                            <Children>
+                              <vmpaa:MPAARating Name="MPAARating" MaximumSize="0,45"/>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Panel Name="MovieGenrePanel" MaximumSize="0,45">
+                        <Layout>
+                          <FlowLayout Orientation="Horizontal" Spacing="5,5" ItemAlignment="Center"/>
+                        </Layout>
+                        <Children>
+                          <Panel Layout="VerticalFlow">
+                            <Layout>
+                              <FlowLayout Orientation="Vertical" StripAlignment="Center" ItemAlignment="Center"/>
+                            </Layout>
+                            <Children>
+                              <Text Name="Production" Content="[Item.ProductionYearString]" Color="color://s:FontColorLight"  Font="font://f:Vanilla_MinorMetaFont" WordWrap="false"/>
+                              <sr:StarRating Name="MovieStarRating" Value="[Item.ImdbRating]" Size="0,10"/>
+                            </Children>
+                          </Panel>
+                          <Clip FadeSize="0" Orientation="Vertical" FadeAmount="1">
+                            <Children>
+                              <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="1,45" />
+                            </Children>
+                          </Clip>
+                          <Text Name="MovieLength"      Content=""    Font="font://f:Vanilla_MinorMetaFont" WordWrap="false" Color="color://s:FontColorLight"/>
+                          <Clip FadeSize="0" Orientation="Vertical" FadeAmount="1">
+                            <Children>
+                              <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="1,45" />
+                            </Children>
+                          </Clip>
+                          <gl:GenreList Name="MovieGenres" SourceData="[Item.Genres]" Font="font://f:Vanilla_GenreFont" Color="color://s:FontColorLight" WordWrap="false"/>
+                        </Children>
+                      </Panel>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Panel Name="MovieData" Padding="0,5,0,5" MaximumSize="0,225">
+                        <Layout>
+                          <FlowLayout ItemAlignment="Near" Orientation="Horizontal"/>
+                        </Layout>
+                        <Children>
+                          <Panel MaximumSize="300,0">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
+                            </Layout>
+                            <Children>
+                              <Graphic Name="MoviePoster" Content="[Item.PrimaryImage]" SizingPolicy="SizeToConstraint" MaintainAspectRatio="true">
+                                <LayoutInput>
+                                  <AnchorLayoutInput Horizontal="Center"/>
+                                </LayoutInput>
+                              </Graphic>
+                            </Children>
+                          </Panel>
+                          <Panel Margins="10,0,0,0">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
+                            </Layout>
+                            <Children>
+                              <!-- Summary MetaData Panel -->
+                              <Text Name="MovieSummary" Font="font://f:Vanilla_OverviewFont" Color="color://s:FontColorMedium" WordWrap="true" />
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>                
+                  <!-- Selected Item is a Trailer -->
+                  <Panel Name="TrailerPanel" Visible="false">
+                    <Layout>
+                      <FlowLayout Orientation="Vertical" Spacing="5,5"/>
+                    </Layout>
+                    <Children>
+                      <Panel Layout="Dock" MaximumSize="0,45" >
+                        <Children>
+                          <Panel>
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Near" Position="Client"/>
+                            </LayoutInput>
+                            <Children>
+                              <Panel>
+                                <Children>
+                                  <Text Content="[Item.Name]" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight" />
+                                </Children>
+                              </Panel>
+                            </Children>
+                          </Panel>
+                          <Panel>
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Near" Position="Right"/>
+                            </LayoutInput>
+                            <Children>
+                              <vmpaa:MPAARating Name="MPAARating2" MaximumSize="0,45"/>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Panel Name="TrailerGenrePanel" Layout="VerticalFlow" MaximumSize="0,30">
+                        <Children>
+                          <Panel Layout="HorizontalFlow" >
+                            <Children>
+                              <gl:GenreList Name="TrailerMovieGenres" SourceData="[Item.Genres]" Font="font://f:Vanilla_GenreFont" Color="color://s:FontColorLight" WordWrap="false"/>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Panel Name="TrailerData" Padding="0,5,0,5" MaximumSize="0,225">
+                        <Layout>
+                          <FlowLayout ItemAlignment="Near" Orientation="Horizontal"/>
+                        </Layout>
+                        <Children>
+                          <Panel MaximumSize="300,0">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
+                            </Layout>
+                            <Children>
+                              <Graphic Name="TrailerMoviePoster" Content="[Item.PrimaryImage]" SizingPolicy="SizeToConstraint" MaintainAspectRatio="true">
+                                <LayoutInput>
+                                  <AnchorLayoutInput Horizontal="Center"/>
+                                </LayoutInput>
+                              </Graphic>
+                            </Children>
+                          </Panel>
+                          <Panel Margins="10,0,0,0">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
+                            </Layout>
+                            <Children>
+                              <!-- Summary MetaData Panel -->
+                              <Text Name="TrailerMovieSummary" Font="font://f:Vanilla_OverviewFont" Color="color://s:FontColorMedium" WordWrap="true" />
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>
+                  <!-- Selected Item is a Song -->
+                  <Panel Name="MusicPanel" Visible="false">
+                    <Layout>
+                      <FlowLayout Orientation="Vertical" Spacing="5,5"/>
+                    </Layout>
+                    <Children>
+                      
+                      <Text Name="AlbumTitle" Content="[Item.PhysicalParent.Name]" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight" />
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Text Name="SongTitle" Content="[Item.Name]" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Panel Padding="0,5,0,5" MaximumSize="0,225">
+                        <Layout>
+                          <FlowLayout ItemAlignment="Near" Orientation="Horizontal"/>
+                        </Layout>
+                        <Children>
+                          <Panel MaximumSize="300,0">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
+                            </Layout>
+                            <Children>
+                              <Graphic Name="MusicPoster" Content="[Item.PrimaryImage]" SizingPolicy="SizeToConstraint" MaintainAspectRatio="true">
+                                <LayoutInput>
+                                  <AnchorLayoutInput Horizontal="Center"/>
+                                </LayoutInput>
+                              </Graphic>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>
+                  <!-- Selected Item is Anything Else -->
+                  <Panel Name="DefaultPanel">
+                    <Layout>
+                      <FlowLayout Orientation="Vertical" Spacing="5,5"/>
+                    </Layout>
+                    <Children>
+                      <Text Name="DefaultTitle" Content="[Item.Name]" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight" />
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
+                      <Panel Padding="0,5,0,5" MaximumSize="0,270">
+                        <Layout>
+                          <FlowLayout ItemAlignment="Near" Orientation="Horizontal"/>
+                        </Layout>
+                        <Children>
+                          <Panel MaximumSize="300,0">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
+                            </Layout>
+                            <Children>
+                              <Graphic Name="DefaultPoster" Content="[Item.PrimaryImage]" SizingPolicy="SizeToConstraint" MaintainAspectRatio="true">
+                                <LayoutInput>
+                                  <AnchorLayoutInput Horizontal="Center"/>
+                                </LayoutInput>
+                              </Graphic>
+                            </Children>
+                          </Panel>
+                          <Panel Margins="10,0,0,0">
+                            <Layout>
+                              <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
+                            </Layout>
+                            <Children>
+                              <Text Name="DefaultSummary" Font="font://f:Vanilla_OverviewFont" Color="color://s:FontColorMedium" WordWrap="true" />
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>
+                  
+                  <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1">
+                    <Children>
+                      <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                    </Children>
+                  </Clip>
+                  <!-- Selected Item's Date Added-->
+                  <Panel Name="AddedPanel" Layout="Center" Visible="false">
+                    <Layout>
+                      <FlowLayout ItemAlignment="Center" Orientation="Horizontal" StripAlignment="Center"/>
+                    </Layout>
+                    <Children>
+                      <Text Content="Added On: " Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
+                      <Text Name="CreatedDate"   Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
+                    </Children>
+                  </Panel>
+                  <!-- Selected Item's Last Watched-->
+                  <Panel Name="WatchedPanel" Layout="Center" Visible="false">
+                    <Layout>
+                      <FlowLayout ItemAlignment="Center" Orientation="Horizontal" StripAlignment="Center"/>
+                    </Layout>
+                    <Children>
+                      <Text Content="Last Watched: " Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
+                      <Text Name="WatchDate"         Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
+                    </Children>
+                  </Panel>
                 </Children>
               </Panel>
             </Children>
-          </Panel>
-          <Panel>
-            <Layout>
-              <FlowLayout Orientation="Horizontal" StripAlignment="Far"/>
-            </Layout>
+          </Graphic>
+          <Graphic Name="SmallContent" Content="image://me:InfoBox" MaintainAspectRatio="false" MaximumSize="0,60" SizingPolicy="SizeToConstraint" Visible="true">
             <Children>
-              <Text Name="Txt4" Color="color://s:FontColorDark" Content="Added On: " Font="Segoe Media Center, 14"/>
-              <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="Segoe Media Center, 14" Margins="10,0,0,0" />
-             </Children>
-            </Panel>
-        </Children>
-      </Graphic>
-          <Graphic Name="ArrowRight" MaximumSize="40,40" MinimumSize="40,40" Content="image://vi:BlankGraphic" Margins="10,0,0,0" MaintainAspectRatio="true">
-            <Animations>
-              <Animation Loop="-1">
-                <Keyframes>
-                  <AlphaKeyframe Time="0.00" RelativeTo="Current"  Value="0" Interpolation="Linear"/>
-                  <AlphaKeyframe Time="0.25" RelativeTo="Current" Value="1" Interpolation="Linear"/>
-                  <AlphaKeyframe Time="0.75" RelativeTo="Current" Value="1" Interpolation="Linear"/>
-                  <AlphaKeyframe Time="1.0" RelativeTo="Final" Value="0" Interpolation="Linear"/>
-                </Keyframes>
-              </Animation>
-            </Animations>
+              <Panel Name="EpisodeSmallContentPanel" Layout="Dock" Margins="12,12,18,22" MaximumSize="0,45" Visible="false">
+                <Children>
+                  <!-- Searies Name -->
+                  <Panel>
+                    <LayoutInput>
+                      <DockLayoutInput Alignment="Near" Position="Client"/>
+                    </LayoutInput>
+                    <Children>
+                      <Text  Name="BannerText" Font="font://f:Vanilla_SmallTitleFont" Color="color://s:FontColorLight"/>
+                    </Children>
+                  </Panel>
+                  <!-- Episode Name -->
+                  <Panel Margins="10,0,0,0">
+                    <LayoutInput>
+                      <DockLayoutInput Alignment="Center" Position="Right"/>
+                    </LayoutInput>
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal"/>
+                    </Layout>
+                    <Children>
+                      <Text Name="SeasonNumberSmallContent"    Content=""            Font="font://f:Vanilla_SmallTitleFont" Color="color://s:FontColorLight"/>
+                      <Text Name="SeasonSmallContentSeparator" Content="x"           Font="font://f:Vanilla_SmallTitleFont" Color="color://s:FontColorLight"/>
+                      <Text Name="EpisodeTitleSmallContent"    Content="[Item.Name]" Font="font://f:Vanilla_SmallTitleFont" Color="color://s:FontColorLight"/>
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+              <Panel Name="AllSmallContentPanel" Layout="Dock" Margins="12,12,18,22" MaximumSize="0,45" Visible="false">
+                <Children>
+                  <!-- Item Name -->
+                  <Panel>
+                    <LayoutInput>
+                      <DockLayoutInput Alignment="Near" Position="Client"/>
+                    </LayoutInput>
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal"/>
+                    </Layout>
+                    <Children>
+                      <Text Content="[Item.Name]" Font="font://f:Vanilla_SmallTitleFont" Color="color://s:FontColorLight"/>
+                    </Children>
+                  </Panel>
+                  <!-- Item MPAA Rating -->
+                  <Panel >
+                    <LayoutInput>
+                      <DockLayoutInput Alignment="Near" Position="Right"/>
+                    </LayoutInput>
+                    <Children>
+                      <vmpaa:MPAARating Name="MPAARating3" MaximumSize="0,45"/>
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+            </Children>
           </Graphic>
         </Children>
       </Panel>
     </Content>
+    <Content Name="Divider">
+      <Text Content=", " Font="font://f:Vanilla_MetaFont" WordWrap="false" Color="color://s:FontColorLight" />
+    </Content>
   </UI>
+
 
   <Image Name="HiliteBtn" Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusBlack" NineGrid="5,5,5,5" />
   <Image Name="HiliteBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilite" NineGrid="10,10,10,10" />
   <Image Name="HiliteFocusBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilitefocus" NineGrid="10,10,10,10" />
-  <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/poster_frame" NineGrid="10,10,10,10" />
 
-  <Image Name="FlashHorizontalT" Source="resx://MediaBrowser/MediaBrowser.Resources/flashHorT" />
-  <Image Name="FlashHorizontalB" Source="resx://MediaBrowser/MediaBrowser.Resources/flashHorB" />
-
-  <Image Name="PivotArrowLeft"          Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaRootLeftArrow"/>
-  <Image Name="PivotArrowRight"         Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaRootRightArrow"/>
-
-
+  
+  <Image Name="InfoBox"                   Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox"                   NineGrid="12,12,17,22"/>
+  <Image Name="InfoBoxHighlighted"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxHighlighted"        NineGrid="12,12,17,22"/>
+  <Image Name="InfoBoxDefault"            Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault"            NineGrid="12,12,17,22"/>
+  <Image Name="InfoBoxDefaultHighlighted" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefaultHighlighted" NineGrid="12,12,17,22"/>
 </Mcml>

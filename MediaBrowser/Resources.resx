@@ -469,6 +469,9 @@
   <data name="LayoutRootVanilla" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\LayoutRoot.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="LayoutAlbumVanilla" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\Vanilla\LayoutAlbum.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="PageDetailAreaVanilla" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Selectors\PageDetailArea.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -481,11 +484,17 @@
   <data name="VanillaNPV" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Controls\NowPlayingViewport.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="VanillaInfoDisplayBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\Vanilla\Controls\InfoDisplayBox.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="PageVanilla" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Selectors\PageDefault.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="VanillaPosterScroller" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Scrollers\PosterScroller.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VanillaBannerScroller" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\Vanilla\Scrollers\BannerScroller.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="VanillaCoverflowScroller" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Scrollers\CoverflowScroller.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -493,8 +502,14 @@
   <data name="VanillaListScroller" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Scrollers\ListScroller.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="VanillaPopupContextMenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\Vanilla\Popups\PopupContextMenu.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="VanillaPopupPlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Popups\PopupPlay.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VanillaPopupInfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\Vanilla\Popups\PopupInfo.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="VanillaPopupViewMenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Popups\PopupViewMenu.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -517,23 +532,17 @@
   <data name="VanillaStudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Images\Studio.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="VanillaPivot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\Vanilla\Pivots\Pivot.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="DetailBorderShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\DetailBorderShadow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RightMenuBorderDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\vanilla\RightMenuBorderDefault.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LeftMenuBorderDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\vanilla\LeftMenuBorderDefault.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RightMenuBorderBlack" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\vanilla\RightMenuBorderBlack.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LeftMenuBorderBlack" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\vanilla\LeftMenuBorderBlack.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="IconTrailer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\icons\IconTrailers.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconQueue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\icons\IconQueue.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IconMusic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\icons\IconMusic.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -559,6 +568,27 @@
   <data name="Rated_NR_full" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\ratings\rated-nr_full.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Vanilla_TV_14" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\ratings\tv-14.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vanilla_TV_G" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\ratings\tv-g.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vanilla_TV_MA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\ratings\tv-ma.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vanilla_TV_PG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\ratings\tv-pg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vanilla_TV_Y" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\ratings\tv-y.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vanilla_TV_Y7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\ratings\tv-y7.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vanilla_TV_Y7_FV" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\ratings\tv-y7-fv.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MenuOptionConfiguration" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\buttons\config.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -573,6 +603,12 @@
   </data>
   <data name="MenuOptionClose" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\buttons\close.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuOptionPCUnlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\pcunlock.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuOptionPCLock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\pclock.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MenuOptionBGFocused" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\buttons\bg-focused.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -640,6 +676,12 @@
   <data name="MenuOptionStudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\buttons\studio.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MenuOptionPlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\Play.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuOptionResume" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\Resume.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MenuOptionPlayAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\buttons\PlayAll.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -648,6 +690,18 @@
   </data>
   <data name="MenuOptionPlayUnwatched" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\buttons\PlayUnwatched.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuOptionMarkUnwatched" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\MarkUnwatched.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuOptionMarkWatched" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\MarkWatched.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuOptionLikeThis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\LikeThis.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuOptionUnknown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\buttons\Unknown.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ViewThumb" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\buttons\viewthumb.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -676,11 +730,47 @@
   <data name="VanillaRootRightArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\vanilla\arrows\right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="VanillaInfoBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaInfoBoxHighlighted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBoxHighlighted.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaInfoBoxDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBoxDefault.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaInfoBoxDefaultHighlighted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBoxDefaultHighlighted.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaInfoBoxGreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBoxGreen.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaInfoBoxRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBoxRed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaInfoBoxBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBoxBlue.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaInfoBoxYellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\InfoBoxYellow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaPosterFrame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\PosterBacking.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaCounter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\counterbox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BackgroundDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\backgrounddefault.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BackgroundBlack" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\backgroundblack.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VanillaCoverflowBacking" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\coverflowbacking.png;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="BlankGraphic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\spacer.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

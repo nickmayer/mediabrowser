@@ -1,0 +1,298 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:a="assembly://MediaBrowser/MediaBrowser"
+      xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+      xmlns:cor="assembly://MSCorLib/System"
+      xmlns:f="file://Fonts_DoNotEdit.mcml"
+      xmlns:s="file://Styles_DoNotEdit.mcml"
+      xmlns:sy="resx://MediaBrowser/MediaBrowser.Resources/Summary"
+      xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
+      xmlns:me="Me"
+      xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
+      xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+      xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
+      xmlns:mi="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
+      xmlns:gl="resx://MediaBrowser/MediaBrowser.Resources/GenreList"
+      xmlns:vmpaa="resx://MediaBrowser/MediaBrowser.Resources/VanillaMPAA"
+      xmlns:vpi="resx://MediaBrowser/MediaBrowser.Resources/VanillaPopupInfo"
+      xmlns:vs="resx://MediaBrowser/MediaBrowser.Resources/VanillaStudio"
+      xmlns:vbs="resx://MediaBrowser/MediaBrowser.Resources/VanillaBannerScroller"
+      xmlns:vls="resx://MediaBrowser/MediaBrowser.Resources/VanillaListScroller"
+      xmlns:vsb="resx://MediaBrowser/MediaBrowser.Resources/VanillaSimpleButton"
+      xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+      xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
+	  >
+
+  <UI Name="LayoutAlbum">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Timer Name="InfoTimer" AutoRepeat="false" Interval="200" Enabled="false"/>
+      <lib:FolderModel Name="Item" FolderModel="$Required"/>
+      <!--<FormLayoutInput Name="FullDetails"    Left="DetailViewListing,1" Right="Parent,0.8" Top="Parent,0.7" Bottom="Parent,1" />
+      <FormLayoutInput Name="EpisodeDetails" Left="DetailViewListing,1" Right="Parent,0.8" Top="Parent,0.7" Bottom="Parent,1" />-->
+
+      <Animation Name="ShowPanel">
+        <Keyframes>
+          <AlphaKeyframe Time ="0.0" RelativeTo="Current" Value="0" Interpolation="Linear"/>
+          <AlphaKeyframe Time ="0.5" RelativeTo="Final" Value="1"/>
+        </Keyframes>
+      </Animation>
+      <Animation Name="HidePanel">
+        <Keyframes>
+          <AlphaKeyframe Time ="0.0" RelativeTo="Current" Value="1" Interpolation="Linear"/>
+          <AlphaKeyframe Time ="0.5" RelativeTo="Final" Value="0"/>
+        </Keyframes>
+      </Animation>
+    </Properties>
+
+    <Locals>
+      <lib:Item Name="SelectedItem"         Item="[Item.SelectedChild]"/>
+      <lib:Item Name="PreSelectedItem"      Item="[Item.SelectedChild]" />
+      <lib:Item Name="PreviousSelectedItem" Item="[Item.SelectedChild]" />
+      <lib:Item Name="BlankItem"            Item="[Item.BlankItem]"/>
+      <cor:Int32 Name="CounterValue" Int32="0" />
+      <IntRangedValue Name="SelectedIndex" Value="0"/>
+      <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
+      <ScrollingData Name="ScrollData"/>
+      <ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
+          HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollHandler"/>
+      <KeyHandler Name="InfoKey" Key="D4" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
+      <cor:Boolean Name="DetailShown" Boolean="true"/>
+      <Command Name="PlayAlbumCommand" />
+      <Command Name="AddAlbumCommand"/>
+      <Command Name="ShuffleAlbumCommand"/>
+    </Locals>
+
+    <Rules>
+
+      <Changed Source="[PlayAlbumCommand.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sd:Miniselect" />
+          <Invoke Target="[Application.Play]" item="[Item]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[AddAlbumCommand.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sd:Miniselect" />
+          <Invoke Target="[Application.AddToQueue]" item="[Item]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ShuffleAlbumCommand.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sd:Miniselect" />
+          <Invoke Target="[Application.Shuffle]" item="[Item]" />
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[InfoKey.Invoked]">
+        <Conditions>
+          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SummaryFrame.Visible]" Value="true"/>
+          <Set Target="[DetailShown]" Value="true"/>
+          <Set Target="[InfoBackSplash.Alpha]" Value="0.6"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[InfoKey.Invoked]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SummaryFrame.Visible]" Value="false"/>
+          <Set Target="[DetailShown]" Value="false"/>
+          <Set Target="[InfoBackSplash.Alpha]" Value="0"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Item.SelectedChildIndex]" InitialEvaluate="true">
+        <Conditions>
+          <Equality ConditionOp="NotEquals" Source="[Item.SelectedChildIndex]" Value="-1"></Equality>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[FullDetailsTimer.Stop]" />
+          <Invoke Target="[FullDetailsTimer.Start]" />
+          <Set Target="[SelectedItem]"     Value="[BlankItem]" />
+          <Set Target="[PreSelectedItem]"  Value="[Item.SelectedChild]" />
+          <Set Target="[SelectedIndex.Value]" Value="[Item.SelectedChildIndex]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Item.SelectedChildIndex]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Item.SelectedChildIndex]" Value="-1"></Equality>
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectedItem]"          Value="[BlankItem]" />
+          <Set Target="[PreSelectedItem]"       Value="[BlankItem]" />
+          <Set Target="[PreviousSelectedItem]"  Value="[BlankItem]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[FullDetailsTimer.Tick]">
+        <Actions>
+          <Set Target="[SelectedItem]"         Value="[PreSelectedItem]"/>
+          <Set Target="[PreviousSelectedItem]" Value="[PreSelectedItem]"/>
+        </Actions>
+      </Changed>
+
+      <Binding Target="[Backdrop.Visible]"   Source="[Item.DisplayPrefs.UseBackdrop.Value]"/>
+      <Binding Target="[Backdrop.Image]"     Source="[PreSelectedItem.BackdropImage]"/>
+      <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>
+      <Binding Target="[PopInfoWindow.Item]" Source="[PreSelectedItem]"/>
+
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[DetailBackdrop.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
+
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[RSSBox.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
+
+      <Binding Target="[ScrollHandler.ScrollingData]" Source="[ScrollData]"/>
+
+
+      <Binding Source="[SelectedIndex.Value]" Target="[Item.SelectedChildIndex]" />
+      <Binding Source="[SelectedIndex.Value]" Target="[CounterValue]" >
+        <Transformer>
+          <MathTransformer Add="1" />
+        </Transformer>
+      </Binding>
+
+      <Binding Source="[CounterValue]" Target="[List_Counter.Content]" >
+        <Transformer>
+          <FormatTransformer Format="{0} "/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[Item.Children.Count]" Target="[List_Total.Content]" >
+        <Transformer>
+          <FormatTransformer Format="| {0}" />
+        </Transformer>
+      </Binding>
+      
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+
+          <!-- Popup Info Box -->
+          <Panel Name="SummaryFrame" Layout="Form" Navigation="ContainAll">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.15" Top="Parent,0.15" Bottom="Parent,0.85" Right="Parent,0.85"/>
+            </LayoutInput>
+            <Children>
+              <vpi:PopupInfo Name="PopInfoWindow" Application="[Application]" Item="[PreSelectedItem]"/>
+            </Children>
+          </Panel>
+          <ColorFill Name="InfoBackSplash" Content="Black" Layout="Fill"/>
+
+          <!-- Item Counter -->
+          <Panel Name="ItemCounter">
+            <LayoutInput>
+              <FormLayoutInput Bottom="Parent,1,-11" Left="Parent,0,50"/>
+            </LayoutInput>
+            <Children>
+              <Panel Name="DateTimePosition" Layout="HorizontalFlow">
+                <Children>
+                  <Text Name="List_Counter" Content="0" Color="color://s:FontColorLight" Font="font://f:Vanilla_CounterFont" />
+                  <Text Name="List_Total"   Content="0" Color="color://s:FontColorMedium" Font="font://f:Vanilla_CounterFont"/>
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+
+          <!-- RSS Box -->
+          <Panel Layout="HorizontalFlow">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Right="Parent,1" Top="Parent,1,-50" Bottom="Parent,1"/>
+            </LayoutInput>
+            <Children>
+              <Graphic Name="RSSBox" Layout="Fill" Content="image://me:InfoBox"/>
+            </Children>
+          </Panel>
+
+          <!-- Menu Buttons -->
+          <Panel Name="ButtonPanel" Layout="Dock">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Parent,0" Left="PosterPanel,1" Bottom="ListItems,0"/>
+            </LayoutInput>
+            <Children>
+              <Panel FocusOrder="1">
+                <LayoutInput>
+                  <DockLayoutInput Alignment="Center" Position="Left"/>
+                </LayoutInput>
+                <Layout>
+                  <FlowLayout Orientation="Vertical"/>
+                </Layout>
+                <Children>                  
+                  <vsb:SimpleButtonText Name="PlayAlbumButton"    ButtonText="Play Album"    Command="[PlayAlbumCommand]"    Application="[Application]"/>
+                  <vsb:SimpleButtonText Name="AddAlbumButton"     ButtonText="Queue Album"   Command="[AddAlbumCommand]"     Application="[Application]"/>
+                  <vsb:SimpleButtonText Name="ShuffleAlbumButton" ButtonText="Shuffle Album" Command="[ShuffleAlbumCommand]" Application="[Application]"/>                 
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+          
+          <!-- Poster -->
+          <Panel Name="PosterPanel" MaximumSize="350,350">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0" Top="Parent,0"/>
+            </LayoutInput>
+            <Layout>
+              <FlowLayout ItemAlignment="Near" StripAlignment="Near"/>
+            </Layout>
+            <Children>
+              <Graphic Content="image://me:PosterFrame" MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" Padding="40,40,40,40">
+                <Layout>
+                  <FlowLayout StripAlignment="Center"/>
+                </Layout>
+                <Children>
+                  <Graphic Name="Poster" Content="[Item.PrimaryImage]" MaintainAspectRatio="true" SizingPolicy="SizeToConstraint"/>
+                </Children>
+              </Graphic>
+            </Children>
+          </Panel>
+          
+          <!-- List Scroller -->
+          <Panel Name="ListItems" Layout="Form">
+            <Animations>
+              <Animation Name="AlphaAnimation" Type="Alpha">
+                <Keyframes>
+                  <AlphaKeyframe Time="0.0"  RelativeTo="Current" Interpolation="EaseIn"/>
+                  <AlphaKeyframe Time="0.5"  RelativeTo="Final"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Top="PosterPanel,1" Bottom="Parent,1,-50" Right="Parent,0,600"/>
+            </LayoutInput>
+            <Children>
+              <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="7,12,18,22">
+                <Children>
+                  <vls:ListScroller   FocusOrder="2" Application="[Application]" Folder="[Item]" Font="Segoe Media Center,16" Size="0,40"/>                  
+                </Children>
+              </Graphic>
+            </Children>
+          </Panel>
+          
+          <!-- Backdrop -->
+          <bd:BackdropUnaltered Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.SelectedChild.BackdropImage]" Item="[Item.SelectedChild]"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <Image Name="InfoBox"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox"        NineGrid="12,12,17,22"/>
+  <Image Name="InfoBoxDefault" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault" NineGrid="12,12,17,22"/>
+  <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaPosterFrame" NineGrid="72,72,72,82" />
+</Mcml>

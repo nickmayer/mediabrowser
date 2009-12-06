@@ -1,0 +1,138 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	    xmlns:cor="assembly://MSCorLib/System"
+      xmlns:a="assembly://MediaBrowser/MediaBrowser"
+	    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+	    xmlns:s="file://Styles_DoNotEdit.mcml"
+	    xmlns:f="file://Fonts_DoNotEdit.mcml"
+	    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	    xmlns:cb="resx://MediaBrowser/MediaBrowser.Resources/CheckBox"
+	    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
+      xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
+		  xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu"
+      xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+      xmlns:vmb="resx://MediaBrowser/MediaBrowser.Resources/VanillaMenuButton"
+      xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+	    xmlns:me="Me"
+	  >
+
+  <UI Name="ContextMenu">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Command Name="Close" Command="$Required"/>
+    </Properties>
+
+    <Content>
+      <me:ActionMenu Name="Menu" Close="[Close]" Application="[Application]" />
+    </Content>
+  </UI>
+
+  <UI Name="PlayMenu">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Command Name="Close" Command="$Required"/>
+    </Properties>
+
+    <Content>
+      <me:ActionMenu Name="Menu" Close="[Close]" Application="[Application]" MenuType="Play"/>
+    </Content>
+  </UI>
+
+  <UI Name="ActionMenu">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Command Name="Close" Command="$Required"/>
+      <cor:String Name="MenuType" String="Context" />
+    </Properties>
+
+    <Locals>
+      <ShortcutHandler Name="BackHandler"  Handle="true" Shortcut="Back" HandlerStage="Bubbled" Command="[Close]"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+      <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+
+      <Condition Source="[MenuType]" SourceValue="Play" >
+        <Actions>
+          <Set Target="[ListRepeater.Source]" Value="[Application.PlayMenu]" />
+        </Actions>
+      </Condition>
+    </Rules>
+
+    <Content>
+
+      <Panel Name="Main" Navigation="ContainAll,Group">
+        <Layout>
+          <FlowLayout Orientation="Horizontal"/>
+        </Layout>
+        <Children>
+          <Repeater Name="ListRepeater" Source="[Application.ContextMenu]" Layout="HorizontalFlow">
+            <Content>
+              <me:MenuItem option="[RepeatedItem!lib:MenuItem]" Close="[Close]" Application="[Application]" />
+            </Content>
+          </Repeater>
+          <vmb:MenuButton Application="[Application]" Command="[Close]" Image="image://vi:MenuOptionClose" Red="true" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="MenuItem">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:MenuItem Name="option" MenuItem="$Required" />
+      <Command Name="Close" Command="$Required"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="DoAction"/>
+      <Image Name="MenuOptionPlay"          Image="image://vi:MenuOptionPlay"/>
+      <Image Name="MenuOptionResume"        Image="image://vi:MenuOptionResume"/>
+      <Image Name="MenuOptionPlayAll"       Image="image://vi:MenuOptionPlayAll"/>
+      <Image Name="MenuOptionPlayRandom"    Image="image://vi:MenuOptionPlayRandom"/>
+      <Image Name="MenuOptionPlayUnwatched" Image="image://vi:MenuOptionPlayUnwatched"/>
+      <Image Name="MenuOptionMarkUnwatched" Image="image://vi:MenuOptionMarkUnwatched"/>
+      <Image Name="MenuOptionMarkWatched"   Image="image://vi:MenuOptionMarkWatched"/>
+      <Image Name="MenuOptionLikeThis"      Image="image://vi:MenuOptionLikeThis"/>
+    </Locals>
+
+    <Rules>
+      <Changed Source="[DoAction.Invoked]">
+        <Actions>
+          <Invoke Target="[Close.Invoke]" />
+          <Invoke Target="[option.DoCommand]"  item="[Application.CurrentItem]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Application.CurrentItem]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[OptionButton.Visible]" Value="[option.Available]" />
+          <Set Target="[DoAction.Available]" Value="[option.Enabled]" />
+        </Actions>
+      </Changed>
+
+      <Binding Target="[OptionButton.Visible]" Source="[option.Available]" />
+      <Binding Target="[DoAction.Available]" Source="[option.Enabled]" />
+
+      <Condition Source="[option.Text]" SourceValue="Play"           Target="[OptionButton.Image]" Value="[MenuOptionPlay]"/>
+      <Condition Source="[option.Text]" SourceValue="Like This..."   Target="[OptionButton.Image]" Value="[MenuOptionLikeThis]"/>
+      <Condition Source="[option.Text]" SourceValue="Like This"   Target="[OptionButton.Image]" Value="[MenuOptionLikeThis]"/>
+      <Condition Source="[option.Text]" SourceValue="Resume"         Target="[OptionButton.Image]" Value="[MenuOptionResume]"/>
+      <Condition Source="[option.Text]" SourceValue="Play All"       Target="[OptionButton.Image]" Value="[MenuOptionPlayAll]"/>
+      <Condition Source="[option.Text]" SourceValue="Shuffle Play"   Target="[OptionButton.Image]" Value="[MenuOptionPlayRandom]"/>
+      <Condition Source="[option.Text]" SourceValue="Play Unwatched" Target="[OptionButton.Image]" Value="[MenuOptionPlayUnwatched]"/>
+      <Condition Source="[option.Text]" SourceValue="Mark Unwatched" Target="[OptionButton.Image]" Value="[MenuOptionMarkUnwatched]"/>
+      <Condition Source="[option.Text]" SourceValue="Mark Watched"   Target="[OptionButton.Image]" Value="[MenuOptionMarkWatched]"/>
+    </Rules>
+
+    <Content>
+      <Panel Layout="HorizontalFlow" >
+        <Children>
+          <vmb:MenuButton Application="[Application]" Name="OptionButton" Command="[DoAction]" Image="image://vi:MenuOptionUnknown"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+</Mcml>

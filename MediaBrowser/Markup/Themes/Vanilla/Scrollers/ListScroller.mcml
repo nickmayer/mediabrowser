@@ -4,15 +4,23 @@
     xmlns:a="assembly://MediaBrowser/MediaBrowser"
     xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
+    xmlns:f="file://Fonts_DoNotEdit.mcml"
     xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
-      >
+    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
+    xmlns:gl="resx://MediaBrowser/MediaBrowser.Resources/GenreList"
+    xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
+    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+    xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
+    xmlns:vidb="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoDisplayBox"
+    xmlns:me="Me" >
 
 	<UI Name="ListScroller">
 
 		<Properties>
 			<a:Application Name="Application" Application="$Required"/>
 			<lib:FolderModel Name="Folder" FolderModel="$Required"/>
-			<Font Name="Font" Font="$Required" />
+			<Font Name="Font" Font="Segoe Media Center Semibold,18" />
+      <Size Name="Size" Size="0,60"/>
 		</Properties>
 
 		<Locals>
@@ -21,36 +29,17 @@
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
 
 			<ScrollingData Name="ScrollingData" />
-			<cor:Int32 Name="CounterValue" Int32="0" />
 			<IntRangedValue Name="SelectedIndex" Value="0"/>
 		</Locals>
 
 		<Rules>
 
-			<Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
+		
 			<!-- Give ScrollingData to ScrollingHandler. -->
 			<Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
 
 			<!-- Give Repeater to ScrollingData. -->
 			<Default Target="[ScrollingData.Repeater]" Value="[MyRepeater]"/>
-
-			<Binding Source="[SelectedIndex.Value]" Target="[CounterValue]" >
-				<Transformer>
-					<MathTransformer Add="1" />
-				</Transformer>
-			</Binding>
-			<Binding Source="[CounterValue]" Target="[List_Counter.Content]" >
-				<Transformer>
-					<FormatTransformer Format="{0} "/>
-				</Transformer>
-			</Binding>
-
-			<!--`Bind the current number of Folder Items to the List Total -->
-			<Binding Source="[Folder.Children.Count]" Target="[List_Total.Content]" >
-				<Transformer>
-					<FormatTransformer Format="| {0}" />
-				</Transformer>
-			</Binding>
 
 			<Binding Source="[Folder.Children]" Target="[MyRepeater.Source]"/>
 			<Rule ConditionLogicalOp="And">
@@ -78,53 +67,115 @@
 		</Rules>
 
 		<Content>
-			<Panel Layout="Dock">
+			<Panel>
 				<Children>
 
-					<!-- Spacer -->
-					<Panel>
-						<LayoutInput>
-							<DockLayoutInput Position="Left" Alignment="Near"  />
-						</LayoutInput>
-						<Children>
-							<ColorFill Content="Transparent" Alpha=".8" MinimumSize="1,440" Margins="15,10,5,10" />
-						</Children>
-					</Panel>
-
-					<!-- List Counter -->
-					<Panel>
-						<LayoutInput>
-							<DockLayoutInput Alignment="Far" Position="Bottom"  />
-						</LayoutInput>
-						<Children>
-							<Panel Layout="HorizontalFlow" Margins="0,5,0,0" >
-								<Children>
-									<Text Name="List_Counter" Content="0" Color="color://s:FontColorLight" Font="[Font]" />
-									<Text Name="List_Total" Content="0" Color="color://s:FontColorMedium" Font="[Font]" Margins="0,0,20,0" />
-								</Children>
-							</Panel>
-						</Children>
-					</Panel>
-
 					<!-- List Repeater -->
-					<Scroller Orientation="Vertical" FadeSize="-10" Margins="15,0,0,5" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]" >
-						<LayoutInput>
-							<DockLayoutInput Alignment="Fill"  Position="Client"  />
-						</LayoutInput>
-						<Children>
-							<Repeater Source="[Folder.Children]" Layout="Fill" Name="MyRepeater" ContentName="BaseItem">
-								<Layout>
-									<FlowLayout Orientation="Vertical"  ItemAlignment="Center" Spacing="4,0"/>
-								</Layout>
-							</Repeater>
-						</Children>
-					</Scroller>
+          <Scroller Orientation="Vertical" FadeSize="1" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]">
+            <Children>
+              <Repeater Source="[Folder.Children]" Name="MyRepeater" ContentName="BaseItem" >
+                <Layout>
+                  <FlowLayout Orientation="Vertical" ItemAlignment="Near" Spacing="0,0"/>
+                </Layout>
+                <Divider>
+                  <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                    <Children>
+                      <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                    </Children>
+                  </Clip>
+                </Divider>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0" RelativeTo="Current"/>
+                      <PositionKeyframe Time="0.2" RelativeTo="Final"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+              </Repeater>
+            </Children>
+
+          </Scroller>
 				</Children>
 			</Panel>
 		</Content>
 		<Content Name="BaseItem">
-			<lb:ListButton Application="[Application]" Index="[RepeatedItemIndex]" Item="[RepeatedItem!lib:Item]" SelectedIndex="[SelectedIndex]" Font="[Font]"/>
+			<me:VanillaListButton Application="[Application]" Index="[RepeatedItemIndex]" ParentItem="[Folder]" Item="[RepeatedItem!lib:Item]" SelectedIndex="[SelectedIndex]" Font="[Font]" Size="[Size]"/>
 		</Content>
 	</UI>
+
+  <UI Name="VanillaListButton" BaseUI="ib:ItemButton">
+
+    <Properties>
+      <IntRangedValue Name="SelectedIndex" IntRangedValue="$Required"/>
+      <lib:FolderModel Name="ParentItem" FolderModel="$Required"/>
+      <cor:String Name="Text" String="" />
+      <Index Name="Index" Index="$Required"/>
+      <Font Name="Font" Font="$Required"/>
+      <Size Name="Size" Size="0,60"/>
+    </Properties>
+
+    <Locals>
+      <Image Name="ImageFocus"   Image="image://me:ButtonFocus" />
+      <Image Name="ImageNoFocus" Image="image://me:ButtonNoFocus" />
+      <Color Name="Color"        Color="color://s:FontColorMedium" />
+      <Color Name="FocusColor"   Color="color://s:FontColorLight" />
+      <Timer Name="AnimTimer" Interval="1000" Enabled="false" AutoRepeat="false"/>
+      <BooleanChoice Name="InFocus" Value="false" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Changed Source="[Input.KeyFocus]" >
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[AnimTimer.Stop]" />       
+          <Set Target="[SelectedIndex.Value]" Value="[SelectedIndex.Value]" ExclusiveApply="false">
+            <Transformer>
+              <MathTransformer Add="1"/>
+            </Transformer>
+          </Set>
+          <Set Target="[InFocus.Value]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Input.KeyFocus]" >
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[AnimTimer.Start]" />
+          <Set Target="[imgButton.Content]" Value="[ImageFocus]"/>
+          <!--<Set Target="[Label.Color]" Value="[FocusColor]" />-->
+          <PlaySound Sound="sound://sounds:Focus" />
+          <Set Target="[ParentItem.SelectedChildIndex]" Value="[Index.SourceValue]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[AnimTimer.Tick]">
+        <Actions>
+          <Set Target="[InFocus.Value]" Value="true"/>
+          <Set Target="[SelectedIndex.Value]" Value="0" ExclusiveApply="false"/>
+        </Actions>
+      </Changed>
+      
+      <Binding Target="[InfoBox.Font]"  Source="[Font]"/>
+
+    </Rules>
+
+    <Content>
+      <Graphic Name="imgButton"  Content="[ImageNoFocus]" MouseInteractive="true" MaximumSize="[Size]" SizingPolicy="SizeToConstraint" HorizontalAlignment="Near" VerticalAlignment="Fill" MaintainAspectRatio="false"        >
+        <Children>
+          <vidb:InfoDisplayBox Name="InfoBox" Application="[Application]" Item="[Item]" Font="[Font]"/>
+        </Children>
+      </Graphic>
+    </Content>
+  </UI>
+  
+  <Image Name="ButtonFocus"         Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaFocus"            NineGrid="7,7,7,7" />
+  <Image Name="ButtonNoFocus"           Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonNoFocus"           NineGrid="7,7,7,7" />
 
 </Mcml>

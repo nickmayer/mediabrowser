@@ -20,13 +20,20 @@
         <Command Name="CmdAddToQueue"/>
         <Command Name="CmdPlayRandom"/>
         <Command Name="CmdPlayUnwatched"/>
+        
       </Locals>
     
       <Rules>
         <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
         <Default Target="[Input.KeyInteractive]" Value="true" />
         <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
-
+        
+        <Binding Source="[Item.IsNotVideo]" Target="[UnwatchedButton.Visible]" >
+          <Transformer>
+            <BooleanTransformer Inverse="true"/>
+          </Transformer>
+        </Binding>
+        
         <Changed Source="[CmdPlayAll.Invoked]">
           <Actions>
             <Invoke Target="[Close.Invoke]" InvokePolicy="AsynchronousNormal" />
@@ -66,11 +73,11 @@
             <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
           </Layout>
           <Children>
-            <vmb:MenuButton Command="[CmdPlayAll]" Image="image://vi:MenuOptionPlayAll"/>
-            <vmb:MenuButton Command="[CmdAddToQueue]" Image="image://vi:MenuOptionQueueAll" Visible ="[Item.IsNotVideo]"/>
-            <vmb:MenuButton Command="[CmdPlayRandom]" Image="image://vi:MenuOptionPlayRandom"/>
-            <vmb:MenuButton Command="[CmdPlayUnwatched]" Image="image://vi:MenuOptionPlayUnwatched"/>
-            <vmb:MenuButton Command="[Close]" Image="image://vi:MenuOptionClose" Red="true"/>
+            <vmb:MenuButton Application="[Application]" Command="[CmdPlayAll]" Image="image://vi:MenuOptionPlayAll"/>
+            <vmb:MenuButton Application="[Application]" Command="[CmdAddToQueue]" Image="image://vi:MenuOptionQueueAll" Visible ="[Item.IsNotVideo]"/>
+            <vmb:MenuButton Application="[Application]" Command="[CmdPlayRandom]" Image="image://vi:MenuOptionPlayRandom"/>
+            <vmb:MenuButton Name="UnwatchedButton" Application="[Application]" Command="[CmdPlayUnwatched]" Image="image://vi:MenuOptionPlayUnwatched"/>
+            <vmb:MenuButton Application="[Application]" Command="[Close]" Image="image://vi:MenuOptionClose" Red="true"/>
           </Children>
         </Panel>
       </Content>
