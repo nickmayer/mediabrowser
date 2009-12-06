@@ -804,7 +804,10 @@ namespace MediaBrowser
                 }
                 if (Config.Instance.AutoEnterSingleDirs && (folder.Folder.Children.Count == 1))
                 {
-                    session.AddBreadcrumb(folder.Name);
+                    if (folder.IsRoot) //special breadcrumb if we are going from a single item root
+                        session.AddBreadcrumb("DIRECTENTRY");
+                    else
+                        session.AddBreadcrumb(folder.Name);
                     Navigate(folder.Children[0]);
                 }
                 else
