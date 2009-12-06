@@ -134,14 +134,14 @@ namespace MediaBrowser.Library.Entities {
         /// <param name="searchFunction"></param>
         /// <returns></returns>
         public Index Search(Func<BaseItem, bool> searchFunction, string name) {
-            var items = new List<BaseItem>();
+            var items = new Dictionary<Guid,BaseItem>();
 
             foreach (var item in RecursiveChildren) {
                 if (searchFunction(item)) {
-                    items.Add(item);
+                    items[item.Id] = item;
                 }
             }
-            return new Index(this, items);
+            return new Index(this, items.Values.ToList());
         }
 
         class BaseItemIndexComparer : IEqualityComparer<BaseItem> {
