@@ -27,27 +27,29 @@
 
   <UI Name="Page">
     <Properties>
-      <a:Application Name="Application" Application="$Required"/>
-      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
-      <IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
-      <FormLayoutInput Name="FullScreen" Bottom="Parent,1" Left="Parent,0" Right="Parent,1" Top="Parent,0"/>
+      <a:Application     Name="Application" Application="$Required"/>
+      <lib:FolderModel   Name="Folder" FolderModel="$Required"/>
+      <IntRangedValue    Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
+      <FormLayoutInput   Name="FullScreen" Bottom="Parent,1" Left="Parent,0" Right="Parent,1" Top="Parent,0"/>
       <AnchorLayoutInput Name="NPVRight" Right="Parent,1" Top="Parent,0"/>
     </Properties>
 
     <Locals>
       <a:Config Name="Config" Config="[Application.Config]"/>
 
-      <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
-      <lib:Item Name="PreSelectedItem" Item="[Folder.SelectedChild]" />
-      <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]" />
-      <lib:Item Name="BlankItem"  Item="[Folder.BlankItem]"/>
+      <lib:Item Name="SelectedItem"         Item="[Folder.SelectedChild]"/>
+      <lib:Item Name="PreSelectedItem"      Item="[Folder.SelectedChild]"/>
+      <lib:Item Name="PreviousSelectedItem" Item="[Folder.SelectedChild]"/>
+      <lib:Item Name="BlankItem"            Item="[Folder.BlankItem]"/>
 
-      <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="500" />
-      <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
-      <Timer Name="HideFindAsYouType" Interval="3000" AutoRepeat="false"/>
-      <Timer Name="ClockTimer" AutoRepeat="true" Interval="500" Enabled="true"/>
-      <Timer Name="MicrosoftSucksTimer" Interval="1000" AutoRepeat="false" Enabled="true" />
+      <Timer Name="RefocusViewTimer"    Interval="500"  AutoRepeat="false"/>
+      <Timer Name="FullDetailsTimer"    Interval="300"  AutoRepeat="false"/>
+      <Timer Name="HideFindAsYouType"   Interval="3000" AutoRepeat="false"/>
+      <Timer Name="ClockTimer"          Interval="500"  AutoRepeat="true"  Enabled="true"/>
+      <Timer Name="MicrosoftSucksTimer" Interval="1000" AutoRepeat="false" Enabled="true"/>
       
+      <IntRangedValue Name="SelectedIndex" Value="0"/>
+      <cor:Int32 Name="CounterValue" Int32="0" />
       <cor:Boolean  Name="CanPlay"       Boolean="false" />
       <cor:Boolean  Name="DetailShown"   Boolean="true"/>
       <cor:String   Name="NavigatorText" String="Test"/>
@@ -57,8 +59,7 @@
 
       <addin:AddInHost Name="AddInHost" />
 
-      
-      <KeyHandler Name="SwitchKey" Key="D8" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
+      <!--<KeyHandler Name="SwitchKey" Key="D8" Handle="true" Modifiers="Shift" HandlerStage="Bubbled"/>-->
       <ShortcutHandler Name="RecordBtn" Handle="true" Shortcut="Record" HandlerStage="Bubbled"/>
       <TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap"  >
         <EditableText>
@@ -75,7 +76,9 @@
       <Command Name="ShowIndexConfiguration" />
       <Command Name="CloseIndexConfiguration" />
       <Command Name="CloseContextMenu" />
-      
+      <Command Name="Popup"/>
+      <Command Name="InfoKey"/>
+      <BooleanChoice Name="Typy" Value="true"/>
       <BooleanChoice Name="TopBarHasFocus" Value="false" />
       <AnchorLayoutInput Name="LayoutTopBarShow" Top="Parent,0,-5"   />
       <AnchorLayoutInput Name="LayoutTopBarHide" Top="Parent,0,-135" />
@@ -91,6 +94,7 @@
         </Actions>
       </Changed>
       
+      <!-- Clock Timer -->
       <Changed Source="[ClockTimer.Tick]" InitialEvaluate="true">
         <Actions>
           <Set Target="[CurrentTime]" Value="[CurrentTime.Now]"/>
@@ -110,6 +114,45 @@
         </Actions>
       </Changed>
 
+      <Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
+        <Conditions>
+          <Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[FullDetailsTimer.Stop]" />
+          <Invoke Target="[FullDetailsTimer.Start]" />
+          <Set Target="[SelectedItem]"  Value="[BlankItem]" />
+          <Set Target="[PreSelectedItem]"  Value="[Folder.SelectedChild]" />
+          <Set Target="[SelectedIndex.Value]" Value="[Folder.SelectedChildIndex]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Folder.SelectedChildIndex]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectedItem]"  Value="[BlankItem]" />
+          <Set Target="[PreSelectedItem]"  Value="[BlankItem]" />
+          <Set Target="[PreviousSelectedItem]"  Value="[BlankItem]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[FullDetailsTimer.Tick]">
+        <Actions>
+          <Set Target="[SelectedItem]"         Value="[PreSelectedItem]"/>
+          <Set Target="[PreviousSelectedItem]" Value="[PreSelectedItem]"/>
+        </Actions>
+      </Changed>
+
+      <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
+      <Binding Source="[SelectedIndex.Value]" Target="[CounterValue]" >
+        <Transformer>
+          <MathTransformer Add="1" />
+        </Transformer>
+      </Binding>
+
+
       <Binding Source="[FindAsYouType.Content]" Target="[ShadowLabel.Content]" />
       <Binding Source="[TypingHandler.DisplayValue]" Target="[FindAsYouType.Content]" />
       <Binding Source="[TypingHandler.DisplayValue]" Target="[Folder.TripleTapSelect]" />
@@ -117,12 +160,31 @@
       <Changed Source="[TypingHandler.DisplayValue]" >
         <Conditions>
           <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="NotEquals" Value="" />
-
         </Conditions>
         <Actions>
           <Invoke Target="[HideFindAsYouType.Start]" />
         </Actions>
       </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="*" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
+          <Invoke Target="[Popup.Invoke]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="#"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[InfoKey.Invoke]" />
+        </Actions>
+      </Changed>
+      
       <Changed Source="[HideFindAsYouType.Tick]">
         <Actions>
           <Set Target="[TypingHandler.EditableText.Value]" Value="" />
@@ -149,20 +211,22 @@
         </Actions>
       </Rule>
 
+      <!-- Context Menu -->
       <Rule>
         <Conditions>
-          <Modified Source="[SwitchKey.Invoked]" />
+          <Modified Source="[Popup.Invoked]" />
         </Conditions>
         <Actions>
           <Set Target="[ContextMenu.Visible]" Value="true"/>
           <Invoke Target="[ContextMenu.NavigateInto]" />
+          <Set Target="[FindAsYouTypePanel.Visible]" Value="false" />
         </Actions>
       </Rule>
-
       <Changed Source="[CloseContextMenu.Invoked]" >
         <Actions>
           <Invoke Target="[ViewPanel.NavigateInto]" />
           <Set Target="[ContextMenu.Visible]" Value="false" />
+          <Set Target="[FindAsYouTypePanel.Visible]" Value="true" />
         </Actions>
       </Changed>
 
@@ -203,7 +267,7 @@
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="400,220" />
       
       
-      <Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
+      <Binding Target="[PopupPlay.Item]"    Source="[Folder.SelectedChild]" />
       <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />
 
       <Rule>
@@ -244,8 +308,8 @@
       <!-- Show View Popup Panel -->
       <Changed Source="[ShowViewConfiguration.Invoked]">
         <Actions>
-          <Set Target="[ViewConfig.Visible]" Value="true"/>
-          <Set Target="[SortConfig.Visible]" Value="false"/>
+          <Set Target="[ViewConfig.Visible]"  Value="true"/>
+          <Set Target="[SortConfig.Visible]"  Value="false"/>
           <Set Target="[IndexConfig.Visible]" Value="false"/>
           <Invoke Target="[ViewConfig.NavigateInto]" />
         </Actions>
@@ -281,8 +345,8 @@
       <!-- Show Sort By Popup Panel -->
       <Changed Source="[ShowSortConfiguration.Invoked]">
         <Actions>
-          <Set Target="[SortConfig.Visible]" Value="true"/>
-          <Set Target="[ViewConfig.Visible]" Value="false"/>
+          <Set Target="[SortConfig.Visible]"  Value="true"/>
+          <Set Target="[ViewConfig.Visible]"  Value="false"/>
           <Set Target="[IndexConfig.Visible]" Value="false"/>
           <Invoke Target="[SortConfig.NavigateInto]" />
         </Actions>
@@ -304,8 +368,8 @@
       <Changed Source="[ShowIndexConfiguration.Invoked]">
         <Actions>
           <Set Target="[IndexConfig.Visible]" Value="true"/>
-          <Set Target="[ViewConfig.Visible]" Value="false"/>
-          <Set Target="[SortConfig.Visible]" Value="false"/>
+          <Set Target="[ViewConfig.Visible]"  Value="false"/>
+          <Set Target="[SortConfig.Visible]"  Value="false"/>
           <Invoke Target="[IndexConfig.NavigateInto]" />          
         </Actions>
       </Changed>
@@ -321,7 +385,36 @@
           <Set Target="[IndexConfig.Visible]" Value="false"/>
         </Actions>
       </Changed>
+
+      <Changed Source="[InfoKey.Invoked]">
+        <Conditions>
+          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SummaryFrame.Visible]"             Value="true"/>
+          <Set Target="[DetailShown]"                      Value="true"/>
+          <Set Target="[InfoBackSplash.Alpha]"             Value="0.6"/>
+          <Set Target="[FindAsYouTypePanel.Visible]"       Value="false"/>
+          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
+          <Set Target="[TypingHandler.Value]"              Value="" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[InfoKey.Invoked]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SummaryFrame.Visible]"             Value="false"/>
+          <Set Target="[DetailShown]"                      Value="false"/>
+          <Set Target="[FindAsYouTypePanel.Visible]"       Value="true" />
+          <Set Target="[InfoBackSplash.Alpha]"             Value="0"/>
+          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
+          <Set Target="[TypingHandler.Value]"              Value=""/>
+        </Actions>
+      </Changed>
       
+      <Binding Target="[PopInfoWindow.Item]" Source="[PreSelectedItem]"/>
     </Rules>
     
 
@@ -352,6 +445,17 @@
               <!-- PopupPlay Menu System -->
               <vpp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder]" Close="[ClosePopupPlay]" Application="[Application]" />
 
+              <!-- Popup Info Box -->
+              <Panel Name="SummaryFrame" Layout="Form" Navigation="ContainAll">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0.15" Top="Parent,0.15" Bottom="Parent,0.85" Right="Parent,0.85"/>
+                </LayoutInput>
+                <Children>
+                  <vpi:PopupInfo Name="PopInfoWindow" Application="[Application]" Item="[PreSelectedItem]"/>
+                </Children>
+              </Panel>
+              <ColorFill Name="InfoBackSplash" Content="Black" Layout="Fill"/>
+
               <!-- Now Playing View Port -->
               <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false" >
                 <Children>
@@ -363,7 +467,7 @@
               <vcm:ContextMenu Name="ContextMenu" Application="[Application]" Close="[CloseContextMenu]" Visible="false" />
  
               <!-- find in list panel - highest Z-Order -->
-              <Panel Name="FindAsYouTypePanel" Alpha="0" >
+              <Panel Name="FindAsYouTypePanel" Alpha="1" >
                 <LayoutInput>
                   <FormLayoutInput Bottom="Parent,1,-30" Right="Parent,1,-30"/>
                 </LayoutInput>

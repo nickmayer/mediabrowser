@@ -2,21 +2,21 @@
       xmlns:a="assembly://MediaBrowser/MediaBrowser"
       xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
       xmlns:cor="assembly://MSCorLib/System"
-      xmlns:ps="resx://MediaBrowser/MediaBrowser.Resources/VanillaPosterScroller"
-      xmlns:ls="resx://MediaBrowser/MediaBrowser.Resources/VanillaListScroller"
-      xmlns:it="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+      xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
       xmlns:f="file://Fonts_DoNotEdit.mcml"
       xmlns:s="file://Styles_DoNotEdit.mcml"
       xmlns:sy="resx://MediaBrowser/MediaBrowser.Resources/Summary"
-      xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
-      xmlns:me="Me"
+      xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"      
       xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
       xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
       xmlns:mi="resx://MediaBrowser/MediaBrowser.Resources/DiamondMediaInfoPanel"
       xmlns:gl="resx://MediaBrowser/MediaBrowser.Resources/GenreList"
       xmlns:vmpaa="resx://MediaBrowser/MediaBrowser.Resources/VanillaMPAA"
       xmlns:vs="resx://MediaBrowser/MediaBrowser.Resources/VanillaStudio"
-      xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
+      xmlns:ps="resx://MediaBrowser/MediaBrowser.Resources/VanillaPosterScroller"
+      xmlns:ls="resx://MediaBrowser/MediaBrowser.Resources/VanillaListScroller"
+      xmlns:it="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
+      xmlns:me="Me"
 	  >
 
   <UI Name="PopupInfo">
@@ -27,74 +27,77 @@
     </Properties>
 
     <Rules>
-      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[Frame.Alpha]">
-        <Transformer>
-          <MathTransformer Divide="100"/>
-        </Transformer>
-      </Binding>
+      <!-- Show Proper Item Panel -->
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Episode" Target="[EpisodeInfoPanel.Visible]" Value="true"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Episode" Target="[EpisodeInfoPanel.Visible]" Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Season"  Target="[SeasonInfoPanel.Visible]"  Value="true"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Season"  Target="[SeasonInfoPanel.Visible]"  Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Series"  Target="[SeriesInfoPanel.Visible]"  Value="true"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Series"  Target="[SeriesInfoPanel.Visible]"  Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie"   Target="[MovieInfoPanel.Visible]"   Value="true"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Movie"   Target="[MovieInfoPanel.Visible]"   Value="false"/>
 
-      <!-- Series Specific Metadata -->
-      <Binding Target="[SeriesMPAARating.Value]"   Source="[Item.MpaaRating]"/>
-      <Binding Target="[SeriesTitle.Content]"      Source="[Item.Name]"  />
-      <Binding Target="[NetworkRepeater.Source]"   Source="[Item.StudioItems]"/>
-      <Binding Target="[Status.Content]"           Source="[Item.Status]"/>
-      <Binding Target="[RunTime.Content]"          Source="[Item.RunningTimeString]"/>
-      <Binding Target="[SeriesGenres.SourceData]"  Source="[Item.Genres]"/>
-      <Binding Target="[StarRating.Value]"         Source="[Item.ImdbRating]" />
-      <Binding Target="[SeriesPoster.Content]"     Source="[Item.PrimaryImage]"/>
-      <Binding Target="[SeriesSummary.Content]"    Source="[Item.Overview]"/>
-      
-      
+      <!-- Hide Default Panel if Known Item Type -->
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Movie"   Target="[DefaultPanel.Visible]" Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Series"  Target="[DefaultPanel.Visible]" Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Season"  Target="[DefaultPanel.Visible]" Value="false"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Episode" Target="[DefaultPanel.Visible]" Value="false"/>
+
+      <!-- Series Metadata -->
+      <Binding Target="[SeriesTitle.Content]"     Source="[Item.Name]"/>
+      <Binding Target="[SeriesPoster.Content]"    Source="[Item.PrimaryImage]"/>
+      <Binding Target="[SeriesGenres.SourceData]" Source="[Item.Genres]"/>
+      <Binding Target="[SeriesMPAARating.Value]"  Source="[Item.MpaaRating]"/>
+      <Binding Target="[SeriesSummary.Content]"   Source="[Item.Overview]"/>
+      <Binding Target="[NetworkRepeater.Source]"  Source="[Item.StudioItems]"/>
+      <Binding Target="[Status.Content]"          Source="[Item.Status]"/>
+      <Binding Target="[RunTime.Content]"         Source="[Item.RunningTimeString]"/>
+      <Binding Target="[StarRating.Value]"        Source="[Item.ImdbRating]" />
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Series">
         <Actions>
-          <Set Target="[DefaultPanel.Visible]" Value="false"/>
           <Set Target="[Seasons.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
             <Transformer>
               <FormatTransformer Format="{0}"/>
             </Transformer>
           </Set>
         </Actions>
-      </Condition>  
+      </Condition>
       
-      <!-- Season Specific Metadata-->
-     
-      <Binding Target="[SeasonTitle.Content]"         Source="[Item.Name]"  />
-      <Binding Target="[SeasonSummary.Content]"       Source="[Item.Overview]"/>
-      <Binding Target="[SeasonPoster.Content]"        Source="[Item.PrimaryImage]"/>
+      <!-- Season Metadata-->
+      <Binding Target="[SeasonTitle.Content]"   Source="[Item.Name]"/>
+      <Binding Target="[SeasonSummary.Content]" Source="[Item.Overview]"/>
+      <Binding Target="[SeasonPoster.Content]"  Source="[Item.PrimaryImage]"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Season">
         <Actions>
-          <Set Target="[DefaultPanel.Visible]" Value="false"/>
-          <Set Target="[SeasonSeriesTitle.Content]"         Value="[Item.PhysicalParent.Name]"/>
-          <Set Target="[EpisodeCount.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
+          <Set Target="[SeasonSeriesTitle.Content]" Value="[Item.PhysicalParent.Name]"/>
+          <Set Target="[EpisodeCount.Content]"      Value="[Item!lib:FolderModel.Folder.Children.Count]">
             <Transformer>
               <FormatTransformer Format="{0}"/>
             </Transformer>
           </Set>
         </Actions>
       </Condition>
-
+      
       <!-- Episode Specific Metadata -->
       <Binding Target="[EpisodeTitle.Content]"         Source="[Item.Name]"/>
       <Binding Target="[EpisodeMediaInfo.Item]"        Source="[Item]"/>
       <Binding Target="[FirstAired.Content]"           Source="[Item.FirstAired]"/>
       <Binding Target="[DirectorRepeater.Source]"      Source="[Item.Directors]"/>
       <Binding Target="[WriterRepeater.Source]"        Source="[Item.Writers]"/>
-      <!--<Binding Target="[LastWatched.Content]"          Source="[Item.LastPlayedString]"/>
-      <Binding Target="[LastWatchedPanel.Visible]"     Source="[Item.HaveWatched]"/>-->
       <Binding Target="[TxtRuntime.Content]"           Source="[Item.RunningTimeString]"/>
       <Binding Target="[EpisodeMediaInfoText.Content]" Source="[Item.MediaInfo.CombinedInfo]" />
       <Binding Target="[EpisodeSummary.Content]"       Source="[Item.Overview]"/>
       <Binding Target="[Poster.Content]"               Source="[Item.PrimaryImage]"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Episode">
         <Actions>
-          <Set Target="[DefaultPanel.Visible]" Value="false"/>
           <Set Target="[SeriesTitleText.Content]" Value="[Item.Series.Name]"/>
-          <Set Target="[SeasonTitleText.Content]" Value="[Item.SeasonNumber]"/>          
+          <Set Target="[SeasonTitleText.Content]" Value="[Item.SeasonNumber]"/>
         </Actions>
-      </Condition>
+      </Condition>      
+      <!--<Binding Target="[LastWatched.Content]"          Source="[Item.LastPlayedString]"/>
+      <Binding Target="[LastWatchedPanel.Visible]"     Source="[Item.HaveWatched]"/>-->
 
-
-      <!-- Movie Specific Metadata -->
+      <!-- Movie Metadata -->
       <Binding Target="[MovieTitle.Content]"         Source="[Item.Name]"  />
       <Binding Target="[MovieMPAARating.Value]"      Source="[Item.MpaaRating]"/>
       <Binding Target="[StudioRepeater.Source]"      Source="[Item.StudioItems]"/>
@@ -106,42 +109,33 @@
       <Binding Target="[MoviePoster.Content]"        Source="[Item.PrimaryImage]"/>
       <Binding Target="[MovieMediaInfoText.Content]" Source="[Item.MediaInfo.CombinedInfo]" />
       <Binding Target="[MovieStarRating.Value]"      Source="[Item.ImdbRating]" />
-      
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Movie" Target="[DefaultPanel.Visible]" Value="false"/>
-      
 
       <!-- Default Metadata -->
-      <Binding Target="[DefaultTitle.Content]"      Source="[Item.Name]"  />
-      <Binding Target="[DefaultPoster.Content]"     Source="[Item.PrimaryImage]"/>
-      <Binding Target="[DefaultSummary.Content]"    Source="[Item.Overview]"/>
-
-      <!--<Condition Source="[Item.Status]"            ConditionOp="Equals"      SourceValue=""  Target="[StatusPanel.Visible]"  Value="false"/>
-      <Condition Source="[Item.Status]"            ConditionOp="NotEquals"   SourceValue=""  Target="[StatusPanel.Visible]"  Value="true"/>-->
-<!--      <Condition Source="[Item.ImdbRating]"        ConditionOp="LessThan"    SourceValue="0" Target="[Rating.Visible]"       Value="false"/>
-      <Condition Source="[Item.ImdbRating]"        ConditionOp="GreaterThan" SourceValue="0" Target="[Rating.Visible]"       Value="true"/>-->
-      <Condition Source="[Item.DirectorString]"    ConditionOp="Equals"      SourceValue=""  Target="[DirectorSpacer.Visible]"      Value="false"/>
-      <Condition Source="[Item.DirectorString]"    ConditionOp="NotEquals"   SourceValue=""  Target="[DirectorSpacer.Visible]"      Value="true"/>
-      <Condition Source="[Item.WritersString]"     ConditionOp="Equals"      SourceValue=""  Target="[WriterSpacer.Visible]"      Value="false"/>
-      <Condition Source="[Item.WritersString]"     ConditionOp="NotEquals"   SourceValue=""  Target="[WriterSpacer.Visible]"      Value="true"/>
-
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Episode" Target="[EpisodeInfoPanel.Visible]" Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Episode" Target="[EpisodeInfoPanel.Visible]" Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Season"  Target="[SeasonInfoPanel.Visible]"  Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Season"  Target="[SeasonInfoPanel.Visible]"  Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Series"  Target="[SeriesInfoPanel.Visible]"  Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Series"  Target="[SeriesInfoPanel.Visible]"  Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie"   Target="[MovieInfoPanel.Visible]"   Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Movie"   Target="[MovieInfoPanel.Visible]"   Value="false"/>
+      <Binding Target="[DefaultTitle.Content]"   Source="[Item.Name]"  />
+      <Binding Target="[DefaultPoster.Content]"  Source="[Item.PrimaryImage]"/>
+      <Binding Target="[DefaultSummary.Content]" Source="[Item.Overview]"/>      
       
-      <!-- Apply Theme Coloring -->
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[Frame.Content]" Value="image://me:InfoBoxDefault"/>
-            
       <!-- Hide Missing MetaData -->
-      <Condition Source="[Item.MpaaRating]" ConditionOp="Equals" SourceValue="" Target="[SeriesRatingSeparator.Visible]" Value="false"/>
-      <Condition Source="[Item.MpaaRating]" ConditionOp="NotEquals" SourceValue="" Target="[SeriesRatingSeparator.Visible]" Value="true"/>
-      <Condition Source="[Item.ImdbRating]" ConditionOp="LessThan"     SourceValue="0"     Target="[SeriesStarRatingSeparator.Visible]" Value="false"/>
-      <Condition Source="[Item.ImdbRating]" ConditionOp="GreaterThan"  SourceValue="0"     Target="[SeriesStarRatingSeparator.Visible]" Value="true"/>
+      <Condition Source="[Item.MpaaRating]"     ConditionOp="Equals"      SourceValue=""  Target="[SeriesRatingSeparator.Visible]"     Value="false"/>
+      <Condition Source="[Item.MpaaRating]"     ConditionOp="NotEquals"   SourceValue=""  Target="[SeriesRatingSeparator.Visible]"     Value="true"/>
+      <Condition Source="[Item.ImdbRating]"     ConditionOp="LessThan"    SourceValue="0" Target="[SeriesStarRatingSeparator.Visible]" Value="false"/>
+      <Condition Source="[Item.ImdbRating]"     ConditionOp="GreaterThan" SourceValue="0" Target="[SeriesStarRatingSeparator.Visible]" Value="true"/>
+      <Condition Source="[Item.DirectorString]" ConditionOp="Equals"      SourceValue=""  Target="[DirectorSpacer.Visible]"      Value="false"/>
+      <Condition Source="[Item.DirectorString]" ConditionOp="NotEquals"   SourceValue=""  Target="[DirectorSpacer.Visible]"      Value="true"/>
+      <Condition Source="[Item.WritersString]"  ConditionOp="Equals"      SourceValue=""  Target="[WriterSpacer.Visible]"      Value="false"/>
+      <Condition Source="[Item.WritersString]"  ConditionOp="NotEquals"   SourceValue=""  Target="[WriterSpacer.Visible]"      Value="true"/>
+     
+      <!-- Theme Coloring -->
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[Frame.Content]" Value="image://me:InfoBoxDefault"/>
+      
+      <!-- Theme Alpha Blending Properties -->
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[Frame.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>       
     </Rules>
+    
     <Content>
       <Panel Layout="Form" >
         <Animations>
@@ -383,7 +377,7 @@
                               <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
                             </Layout>
                             <Children>
-                              <Panel Name="Network" MaximumSize="250,80" Layout="Scale">
+                              <Panel Name="Network" MaximumSize="0,80">
                                 <Children>
                                   <Repeater Name="NetworkRepeater" Source="[Item.StudioItems]">
                                     <Layout>

@@ -91,7 +91,13 @@ namespace MediaBrowser.Library {
             get {
                 if (Application.CurrentInstance.RecentItemOption == "watched") {
                     return RecentItems;
-                } else {
+                }
+                else if (Application.CurrentInstance.RecentItemOption == "unwatched")
+                {
+                    return UnwatchedItems;
+                }
+                else
+                {
                     return NewestItems;
                 }
             } 
@@ -119,6 +125,23 @@ namespace MediaBrowser.Library {
                 } else {
                     return new List<Item>(); //return empty list if folder is protected
                 }
+            }
+        }
+
+        public List<Item> UnwatchedItems
+        {
+            get
+            {
+                //only want items from non-protected folders
+                if (folder != null && folder.ParentalAllowed)
+                {
+                    return GetRecentUnwatchedItems(Config.Instance.RecentItemCount);
+                }
+                else
+                {
+                    return new List<Item>(); //return empty list if folder is protected
+                }
+
             }
         }
         
@@ -167,6 +190,30 @@ namespace MediaBrowser.Library {
             return recentWatchedItems;
         }
 
+        List<Item> recentUnwatchedItems = null;
+        public List<Item> GetRecentUnwatchedItems(int count)
+        {
+            if (recentUnwatchedItems == null)
+            {
+                recentUnwatchedItems = new List<Item>();
+                if (folder != null)
+                {
+                    Async.Queue("Recent Watched Loader", () =>
+                    {
+                        var items = new SortedList<DateTime, Item>();
+                        FindRecentUnwatchedChildren(folder, items, count);
+                        recentUnwatchedItems = items.Values.Select(i => i).Reverse().ToList();
+                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                        {
+                            FirePropertyChanged("RecentItems");
+                            FirePropertyChanged("QuickListItems");
+                        });
+                    }, null, true);
+                }
+            }
+            return recentUnwatchedItems;
+        }
+
         public void AddNewlyWatched(Item item)
         {
             //called when we watch something so add to top of list (this way we don't have to re-build whole thing)
@@ -205,8 +252,33 @@ namespace MediaBrowser.Library {
                     FirePropertyChanged("QuickListItems");
                 }
             }
+            if (recentUnwatchedItems != null) // have a list
+            {
+                Item us = recentUnwatchedItems.Find(i => i.Id == item.Id);
+                if (us != null)
+                {
+                    recentUnwatchedItems.Remove(us);
+                    FirePropertyChanged("UnwatchedItems");
+                    FirePropertyChanged("QuickListItems");
+                }
+            }
         }
-       
+
+        public void RemoveRecentlyUnwatched(Item item)
+        {
+            //called when watched status set manually (this way we don't have to re-build whole thing)
+            if (recentUnwatchedItems != null) // have a list
+            {
+                Item us = recentUnwatchedItems.Find(i => i.Id == item.Id);
+                if (us != null)
+                {
+                    recentUnwatchedItems.Remove(us);
+                    FirePropertyChanged("UnwatchedItems");
+                    FirePropertyChanged("QuickListItems");
+                }
+            }
+        }
+
         string folderOverviewCache = null;
         public override string Overview {
             get {
@@ -314,6 +386,46 @@ namespace MediaBrowser.Library {
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folder;
                             foundNames.Add(watchedTime, modelItem);
+                            if (foundNames.Count > maxSize)
+                            {
+                                foundNames.RemoveAt(0);
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        public void FindRecentUnwatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
+        {
+            DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+            folderModel.PhysicalParent = this;
+            foreach (var item in folder.Children)
+            {
+                // skip folders
+                if (item is Folder)
+                {
+                    //don't return items inside protected folders
+                    if (item.ParentalAllowed)
+                    {
+                        FindRecentUnwatchedChildren(item as Folder, foundNames, maxSize);
+                    }
+                }
+                else
+                {
+                    if (item is Video)
+                    {
+                        Video i = item as Video;
+                        if (i.PlaybackStatus.WasPlayed == false)
+                        {
+                            DateTime creationTime = item.DateCreated;
+                            Item modelItem = ItemFactory.Instance.Create(item);
+                            modelItem.PhysicalParent = folderModel;
+                            item.Parent = folder;
+                            foundNames.Add(creationTime, modelItem);
                             if (foundNames.Count > maxSize)
                             {
                                 foundNames.RemoveAt(0);

@@ -1,19 +1,20 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
       >
 
-  <Image Name="IconActor" Source="resx://MediaBrowser/MediaBrowser.Resources/IconActors"  />
-  <Image Name="IconPlay" Source="resx://MediaBrowser/MediaBrowser.Resources/IconPlay"  />
-  <Image Name="IconMusic" Source="resx://MediaBrowser/MediaBrowser.Resources/IconMusic"  />
-  <Image Name="IconResume" Source="resx://MediaBrowser/MediaBrowser.Resources/IconResume"  />
-  <Image Name="IconSummary" Source="resx://MediaBrowser/MediaBrowser.Resources/IconSummary"  />
-  <Image Name="IconTrailer" Source="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer"  />
-  <Image Name="IconRefresh" Source="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh"  />
-  <Image Name="IconDelete" Source="resx://MediaBrowser/MediaBrowser.Resources/IconDelete"  />
-  <Image Name="IconShuffle" Source="resx://MediaBrowser/MediaBrowser.Resources/IconShuffle"  />
-  <Image Name="IconQueue" Source="resx://MediaBrowser/MediaBrowser.Resources/IconQueue"  />
-  <Image Name="BlankActor" Source="resx://MediaBrowser/MediaBrowser.Resources/MissingPerson"  />
-  <Image Name="HDLogo720" Source="resx://MediaBrowser/MediaBrowser.Resources/hd720old"  />
-  <Image Name="HDLogo1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hd1080old"  />
+  <Image Name="IconActor"   Source="resx://MediaBrowser/MediaBrowser.Resources/IconActors"/>
+  <Image Name="IconPlay"    Source="resx://MediaBrowser/MediaBrowser.Resources/IconPlay"/>
+  <Image Name="IconMusic"   Source="resx://MediaBrowser/MediaBrowser.Resources/IconMusic"/>
+  <Image Name="IconResume"  Source="resx://MediaBrowser/MediaBrowser.Resources/IconResume"/>
+  <Image Name="IconSummary" Source="resx://MediaBrowser/MediaBrowser.Resources/IconSummary"/>
+  <Image Name="IconTrailer" Source="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer"/>
+  <Image Name="IconRefresh" Source="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh"/>
+  <Image Name="IconDelete"  Source="resx://MediaBrowser/MediaBrowser.Resources/IconDelete"/>
+  <Image Name="IconShuffle" Source="resx://MediaBrowser/MediaBrowser.Resources/IconShuffle"/>
+  <Image Name="IconQueue"   Source="resx://MediaBrowser/MediaBrowser.Resources/IconQueue"/>
+  
+  <Image Name="BlankActor" Source="resx://MediaBrowser/MediaBrowser.Resources/MissingPerson"/>
+  <Image Name="HDLogo720" Source="resx://MediaBrowser/MediaBrowser.Resources/hd720old"/>
+  <Image Name="HDLogo1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hd1080old"/>
 
   <Image Name="MenuOptionConfiguration" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionConfiguration"/>
   <Image Name="MenuOptionSort" Source="resx://MediaBrowser/MediaBrowser.Resources/MenuOptionSort"/>
@@ -61,25 +62,22 @@
   <Image Name="ViewThumbstrip" Source="resx://MediaBrowser/MediaBrowser.Resources/ViewThumbstrip"/>
    
   <Image Name="BackgroundDefault" Source="resx://MediaBrowser/MediaBrowser.Resources/BackgroundDefault" />
-  <Image Name="BackgroundBlack" Source="resx://MediaBrowser/MediaBrowser.Resources/BackgroundBlack" />
-  <Image Name="BlankGraphic" Source="resx://MediaBrowser/MediaBrowser.Resources/BlankGraphic" />
+  <Image Name="BackgroundBlack"   Source="resx://MediaBrowser/MediaBrowser.Resources/BackgroundBlack" />
+  <Image Name="BlankGraphic"      Source="resx://MediaBrowser/MediaBrowser.Resources/BlankGraphic" />
    
-  <Image Name="RatedGfull" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_G_full" />
-  <Image Name="RatedNC17full" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_NC_17_full" />
-  <Image Name="RatedPG13full" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_PG_13_full" />
-  <Image Name="RatedPGfull" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_PG_full" />
-  <Image Name="RatedRfull" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_R_full" />
-  <Image Name="RatedNRfull" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_NR_full" />
+  <Image Name="RatedGfull"    Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_G_full"/>
+  <Image Name="RatedNC17full" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_NC_17_full"/>
+  <Image Name="RatedPG13full" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_PG_13_full"/>
+  <Image Name="RatedPGfull"   Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_PG_full"/>
+  <Image Name="RatedRfull"    Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_R_full"/>
+  <Image Name="RatedNRfull"   Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_NR_full"/>
 
-  <Image Name="TV-G" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_G" />
-  <Image Name="TV-MA" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_MA" />
-  <Image Name="TV-Y7" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_Y7" />
-  <Image Name="TV-Y" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_Y" />
-  <Image Name="TV-14" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_14" />
-  <Image Name="TV-PG" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_PG" />
-  <Image Name="TV-V7-FV" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_V7_FV" />
-  
-  <Image Name="ButtonLeftFocusDefault"   Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusDefault"         NineGrid="7,7,7,7" />
-  <Image Name="ButtonLeftFocusBlack"     Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusBlack"         NineGrid="7,7,7,7" />
-
+  <Image Name="TV-G"     Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_G"/>
+  <Image Name="TV-MA"    Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_MA"/>
+  <Image Name="TV-Y7"    Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_Y7"/>
+  <Image Name="TV-Y"     Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_Y"/>
+  <Image Name="TV-14"    Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_14"/>
+  <Image Name="TV-PG"    Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_PG"/>
+  <Image Name="TV-V7-FV" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_V7_FV"/>
+ 
 </Mcml>

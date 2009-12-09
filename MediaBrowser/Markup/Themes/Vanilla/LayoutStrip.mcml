@@ -35,34 +35,10 @@
       <lib:Item Name="BlankItem"            Item="[Folder.BlankItem]"/>
       <Timer Name="FullDetailsTimer"  Interval="300"  AutoRepeat="false"/>
       <cor:Int32   Name="CounterValue" Int32="0" />
-      <cor:Boolean Name="DetailShown"  Boolean="true"/>
       <IntRangedValue Name="SelectedIndex" Value="0"/>
-      <KeyHandler Key="D3" Name="InfoKey" Handle="false" HandlerStage="Bubbled"  Modifiers="Shift"/>
     </Locals>
 
     <Rules>
-      <Changed Source="[InfoKey.Invoked]">
-        <Conditions>
-          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="false"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[SummaryFrame.Visible]" Value="true"/>
-          <Set Target="[DetailShown]" Value="true"/>
-          <Set Target="[InfoBackSplash.Alpha]" Value="0.6"/>
-        </Actions>
-      </Changed>
-
-      <Changed Source="[InfoKey.Invoked]" InitialEvaluate="true">
-        <Conditions>
-          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="true"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[SummaryFrame.Visible]" Value="false"/>
-          <Set Target="[DetailShown]" Value="false"/>
-          <Set Target="[InfoBackSplash.Alpha]" Value="0"/>
-        </Actions>
-      </Changed>
-
       <Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
         <Conditions>
           <Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
@@ -121,7 +97,6 @@
       <Binding Target="[Backdrop.Visible]"   Source="[Folder.DisplayPrefs.UseBackdrop.Value]"/>
       <Binding Target="[Backdrop.Image]"     Source="[PreSelectedItem.BackdropImage]"/>
       <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>
-      <Binding Target="[PopInfoWindow.Item]" Source="[PreSelectedItem]"/>
 
       <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
 
@@ -133,17 +108,6 @@
           <FormLayoutInput Left="Parent,0" Top="Parent,0" Right="Parent,1" Bottom="Parent,1"/>
         </LayoutInput>
         <Children>
-
-          <!-- Popup Info Box -->
-          <Panel Name="SummaryFrame" Layout="Form" Navigation="ContainAll">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.15" Top="Parent,0.15" Bottom="Parent,0.85" Right="Parent,0.85"/>
-            </LayoutInput>
-            <Children>
-              <vpi:PopupInfo Name="PopInfoWindow" Application="[Application]" Item="[PreSelectedItem]"/>
-            </Children>
-          </Panel>
-          <ColorFill Name="InfoBackSplash" Content="Black" Layout="Fill"/>
 
           <!-- Item Counter -->
           <Panel>

@@ -79,6 +79,7 @@
       <Choice Name="RecentItems">
         <Options>
           <cor:String String="Recently Added" />
+          <cor:String String="Recently Unwatched" />
           <cor:String String="Recently Watched" />
         </Options>
       </Choice>
@@ -107,9 +108,10 @@
         </Actions>
       </Changed>
 
-      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="added" />
-      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="watched" />
-
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="added"/>
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="unwatched"/>
+      <Condition Source="[RecentItems.ChosenIndex]" SourceValue="2" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="watched"/>
+      
       <Changed Source="[RecentItems.ChosenIndex]" >
         <Actions>
           <Invoke Target="[SelectedItem.RecentItemsChanged]" />
@@ -1137,12 +1139,9 @@
     </Content>
   </UI>
 
-
-  <Image Name="HiliteBtn" Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusBlack" NineGrid="5,5,5,5" />
   <Image Name="HiliteBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilite" NineGrid="10,10,10,10" />
   <Image Name="HiliteFocusBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilitefocus" NineGrid="10,10,10,10" />
-
-  
+ 
   <Image Name="InfoBox"                   Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox"                   NineGrid="12,12,17,22"/>
   <Image Name="InfoBoxHighlighted"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxHighlighted"        NineGrid="12,12,17,22"/>
   <Image Name="InfoBoxDefault"            Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault"            NineGrid="12,12,17,22"/>

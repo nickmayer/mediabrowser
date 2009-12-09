@@ -56,8 +56,7 @@
       <ScrollingData Name="ScrollData"/>
       <ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
           HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollHandler"/>
-      <KeyHandler Name="InfoKey" Key="D4" Handle="false" Modifiers="Shift" HandlerStage="Bubbled"/>
-      <cor:Boolean Name="DetailShown" Boolean="true"/>
+       <cor:Boolean Name="DetailShown" Boolean="true"/>
       <Command Name="PlayAlbumCommand" />
       <Command Name="AddAlbumCommand"/>
       <Command Name="ShuffleAlbumCommand"/>
@@ -86,28 +85,6 @@
         </Actions>
       </Changed>
       
-      <Changed Source="[InfoKey.Invoked]">
-        <Conditions>
-          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="false"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[SummaryFrame.Visible]" Value="true"/>
-          <Set Target="[DetailShown]" Value="true"/>
-          <Set Target="[InfoBackSplash.Alpha]" Value="0.6"/>
-        </Actions>
-      </Changed>
-
-      <Changed Source="[InfoKey.Invoked]" InitialEvaluate="true">
-        <Conditions>
-          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="true"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[SummaryFrame.Visible]" Value="false"/>
-          <Set Target="[DetailShown]" Value="false"/>
-          <Set Target="[InfoBackSplash.Alpha]" Value="0"/>
-        </Actions>
-      </Changed>
-
       <Changed Source="[Item.SelectedChildIndex]" InitialEvaluate="true">
         <Conditions>
           <Equality ConditionOp="NotEquals" Source="[Item.SelectedChildIndex]" Value="-1"></Equality>
@@ -142,7 +119,6 @@
       <Binding Target="[Backdrop.Visible]"   Source="[Item.DisplayPrefs.UseBackdrop.Value]"/>
       <Binding Target="[Backdrop.Image]"     Source="[PreSelectedItem.BackdropImage]"/>
       <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>
-      <Binding Target="[PopInfoWindow.Item]" Source="[PreSelectedItem]"/>
 
       <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[DetailBackdrop.Alpha]">
         <Transformer>
@@ -184,18 +160,7 @@
     <Content>
       <Panel Layout="Form">
         <Children>
-
-          <!-- Popup Info Box -->
-          <Panel Name="SummaryFrame" Layout="Form" Navigation="ContainAll">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.15" Top="Parent,0.15" Bottom="Parent,0.85" Right="Parent,0.85"/>
-            </LayoutInput>
-            <Children>
-              <vpi:PopupInfo Name="PopInfoWindow" Application="[Application]" Item="[PreSelectedItem]"/>
-            </Children>
-          </Panel>
-          <ColorFill Name="InfoBackSplash" Content="Black" Layout="Fill"/>
-
+          
           <!-- Item Counter -->
           <Panel Name="ItemCounter">
             <LayoutInput>
@@ -279,7 +244,7 @@
             <Children>
               <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="7,12,18,22">
                 <Children>
-                  <vls:ListScroller   FocusOrder="2" Application="[Application]" Folder="[Item]" Font="Segoe Media Center,16" Size="0,40"/>                  
+                  <vls:ListScroller   FocusOrder="2" Application="[Application]" Folder="[Item]" Font="font://f:Vanilla_SmallTitleFont" Size="0,40"/>                  
                 </Children>
               </Graphic>
             </Children>

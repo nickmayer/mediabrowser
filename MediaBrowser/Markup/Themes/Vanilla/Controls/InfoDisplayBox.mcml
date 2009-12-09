@@ -38,9 +38,8 @@
       <Binding Target="[Genres.SourceData]"       Source="[Item.Genres]"/>
       <Binding Target="[StarRating.Value]"        Source="[Item.ImdbRating]" />
       <Binding Target="[ProductionYear.Content]"  Source="[Item.ProductionYearString]"/>
-
-      <!--<Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Season"  Target="[SeasonGenrePanel.Visible]"  Value="false"/>-->
-
+      <Binding Target="[DirectorRepeater.Source]" Source="[Item.Directors]"/>
+      <Binding Target="[WriterRepeater.Source]"   Source="[Item.Writers]"/>
       
       <Rule ConditionLogicalOp="Or">
         <Conditions>
@@ -56,13 +55,9 @@
           </Set>
         </Actions>
       </Rule>
-
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie">
-        <Actions>
-          <Set Target="[MovieExtraInfoPanel.Visible]"  Value="true"/>
-        </Actions>
-      </Condition>
-
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Movie"       Target="[MovieExtraInfoPanel.Visible]" Value="true"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Episode"     Target="[EpisodeGenrePanel.Visible]"   Value="true"/>
+      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="ArtistAlbum" Target="[AlbumExtraInfoPanel.Visible]" Value="true"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="ArtistAlbum">
         <Actions>
           <Set Target="[TrackCount.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
@@ -72,13 +67,6 @@
           </Set>
         </Actions>
       </Condition>
-      <Condition Source="[Item.ItemTypeString]"     ConditionOp="Equals" SourceValue="Episode"     Target="[EpisodeGenrePanel.Visible]" Value="true"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="ArtistAlbum" Target="[AlbumExtraInfoPanel.Visible]" Value="true"/>
-
-      <Binding Target="[DirectorRepeater.Source]"  Source="[Item.Directors]"/>
-      <Binding Target="[WriterRepeater.Source]"    Source="[Item.Writers]"/>
-
-
     </Rules>
 
     <Content>

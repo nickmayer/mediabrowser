@@ -67,7 +67,7 @@
 
     <Rules>
 
-      <!-- Update the display each time the timer ticks -->
+      <!-- Clock -->
       <Changed Source="[MyTimer.Tick]" InitialEvaluate="true">
         <Actions>
           <Set Target="[CurrentTime]" Value="[CurrentTime.Now]"/>
@@ -80,51 +80,12 @@
         </Actions>
       </Changed>
 
-      <Changed Source="[DeleteMovieCommand.Invoked]">
-        <Actions>
-          <Invoke Target="[Application.DeleteMediaItem]">
-            <Item>
-              <lib:Item Item="[Item]"/>
-            </Item>
-          </Invoke>
-        </Actions>
-      </Changed>
-
-      <Changed Source="[PlayMovieCommand.Invoked]">
-        <Actions>
-          <Set Target="[NowPlaying.Visible]"       Value="true"/>
-          <Invoke Target="[Application.Play]" item="[Item]"/>
-        </Actions>
-      </Changed>
-
-      <Condition Source="[ShowDetails.Chosen!cor:String]" ConditionOp="Equals" SourceValue="Actors">
-        <Actions>
-          <Set Target="[SummaryPanel.Visible]"  Value="false"/>
-          <Set Target="[ActorPanel.Visible]"    Value="true"/>
-        </Actions>
-      </Condition>
-
-      <Condition Source="[ShowDetails.Chosen!cor:String]" ConditionOp="Equals" SourceValue="Summary">
-        <Actions>
-          <Set Target="[SummaryPanel.Visible]"  Value="true"/>
-          <Set Target="[ActorPanel.Visible]"    Value="false"/>
-        </Actions>
-      </Condition>
-
+      <!-- NPV -->
       <Changed Source="[NowPlayingPanel.Invoked]">
         <Actions>
           <Invoke Target="[Application.PlaybackController.GoToFullScreen]"/>
         </Actions>
       </Changed>
-
-      <Changed Source="[TrailerCommand.Invoked]">
-        <Actions>
-          <Set Target="[NowPlaying.Visible]"   Value="true"/>
-          <Invoke Target="[Application.PlayLocalTrailer]" item="[Item]" />
-          <Invoke Target="[NowPlaying.NavigateInto]"/>
-        </Actions>
-      </Changed>
-
       <Rule ConditionLogicalOp="Or">
         <Conditions>
           <Equality Source="[Application.PlaybackController.IsPlaying]" Value="true"/>
@@ -135,6 +96,48 @@
         </Actions>
       </Rule>
 
+      <!-- Resume Button -->
+      <Condition Source="[Item.CanResume]" ConditionOp="Equals" SourceValue="false" Target="[ResumeMovieButton.Visible]" Value="false"/>
+      <Changed Source="[ResumeMovieCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.Resume]" item="[Item]"/>
+        </Actions>
+      </Changed>
+      
+      <!-- Play Button -->
+      <Changed Source="[PlayMovieCommand.Invoked]">
+        <Actions>
+          <Set Target="[NowPlaying.Visible]"       Value="true"/>
+          <Invoke Target="[Application.Play]" item="[Item]"/>
+        </Actions>
+      </Changed>
+       
+      <!-- Trailer Button -->
+      <Condition Source="[MediaPath]" SourceValue="" Target="[TrailerButton.Visible]" Value="false"/>
+      <Changed Source="[Item.TrailerPath]">
+        <Conditions>
+          <Equality Source="[Item.TrailerPath]" ConditionOp="NotEquals" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TrailerButton.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[TrailerCommand.Invoked]">
+        <Actions>
+          <Set Target="[NowPlaying.Visible]"   Value="true"/>
+          <Invoke Target="[Application.PlayLocalTrailer]" item="[Item]" />
+          <Invoke Target="[NowPlaying.NavigateInto]"/>
+        </Actions>
+      </Changed>
+      
+      <!-- Refresh Button -->
+      <Changed Source="[RefreshCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Item.RefreshMetadata]"/>
+        </Actions>
+      </Changed>
+
+      <!-- Delete Button -->
       <Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Application.Config.Advanced_EnableDelete]" ConditionOp="Equals" Value="true" />
@@ -144,65 +147,65 @@
           <Set Target="[DeleteButton.Visible]" Value="true" />
         </Actions>
       </Rule>
-
-      <Changed Source="[RefreshCommand.Invoked]">
+      <Changed Source="[DeleteMovieCommand.Invoked]">
         <Actions>
-          <Invoke Target="[Item.RefreshMetadata]"/>
+          <Invoke Target="[Application.DeleteMediaItem]">
+            <Item>
+              <lib:Item Item="[Item]"/>
+            </Item>
+          </Invoke>
         </Actions>
       </Changed>
-
-      <Changed Source="[ResumeMovieCommand.Invoked]">
+      
+      <!-- Summary Button -->
+      <Condition Source="[ShowDetails.Chosen!cor:String]" ConditionOp="Equals" SourceValue="Summary">
         <Actions>
-          <Invoke Target="[Application.Resume]" item="[Item]"/>
+          <Set Target="[SummaryPanel.Visible]"  Value="true"/>
+          <Set Target="[ActorPanel.Visible]"    Value="false"/>
         </Actions>
-      </Changed>
-
-      <Condition Source="[Item.CanResume]" ConditionOp="Equals" SourceValue="false" Target="[ResumeMovieButton.Visible]" Value="false"/>
-
-      <Binding Target="[MediaPath]"            Source="[Item.TrailerPath]" />
-      <Binding Target="[StarRating.Value]"     Source="[Item.ImdbRating]" />
-      <Binding Target="[Produced.Content]"     Source="[Item.ProductionYearString]"/>
-      <Binding Target="[GenreRepeater.Source]" Source="[Item.Genres]"/>
-      <Binding Target="[MPAARating.Value]"     Source="[Item.MpaaRating]"/>
-      <Binding Target="[MovieTitle.Content]"   Source="[Item.Name]"/>
-      <Binding Target="[EpisodeTitle.Content]" Source="[Item.Name]"/>
+      </Condition>
+      
+      <!-- Actor Button -->
+      <Condition Source="[ShowDetails.Chosen!cor:String]" ConditionOp="Equals" SourceValue="Actors">
+        <Actions>
+          <Set Target="[SummaryPanel.Visible]"  Value="false"/>
+          <Set Target="[ActorPanel.Visible]"    Value="true"/>
+        </Actions>
+      </Condition>
+      
+      <!-- Parental Control Icon -->
+      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
+      
+      <!-- Default Metadata -->
       <Binding Target="[DefaultTitle.Content]" Source="[Item.Name]"/>
-      <Binding Target="[EpisodeOverview.Text]" Source="[Item.Overview]"/>
-      <Binding Target="[DefaultOverview.Text]" Source="[Item.Overview]"/>
-      <Binding Target="[MovieOverview.Text]"   Source="[Item.Overview]"/>
-      <Binding Target="[Poster.Content]"       Source="[PosterImage]"/>
-      <Binding Target="[MovieMediaInfoText.Content]"   Source="[Item.MediaInfo.CombinedInfo]" />
+      <Binding Target="[DefaultOverview.Text]" Source="[Item.Overview]"/> 
+      
+      <!-- Movie Metadata -->
+      <Binding Target="[MovieTitle.Content]"         Source="[Item.Name]"/>
+      <Binding Target="[MovieOverview.Text]"         Source="[Item.Overview]"/>
+      <Binding Target="[MovieMediaInfoText.Content]" Source="[Item.MediaInfo.CombinedInfo]" />
+      <Binding Target="[MediaPath]"                  Source="[Item.TrailerPath]" />
+      <Binding Target="[GenreRepeater.Source]"       Source="[Item.Genres]"/>
+      <Binding Target="[Produced.Content]"           Source="[Item.ProductionYearString]"/>
+      <Binding Target="[MPAARating.Value]"           Source="[Item.MpaaRating]"/>
+      <Binding Target="[StarRating.Value]"           Source="[Item.ImdbRating]" />
+      <Binding Target="[MovieRuntime.Content]"       Source="[Item.RunningTimeString]"/>
+      
+      <!-- Episode Metadata -->
+      <Binding Target="[EpisodeTitle.Content]"         Source="[Item.Name]"/>
+      <Binding Target="[EpisodeOverview.Text]"         Source="[Item.Overview]"/>
+      <Binding Target="[FirstAired.Content]"           Source="[Item.FirstAired]"/>
       <Binding Target="[EpisodeMediaInfoText.Content]" Source="[Item.MediaInfo.CombinedInfo]" />
-      <Binding Target="[DirectorRepeater.Source]"  Source="[Item.Directors]"/>
-      <Binding Target="[WriterRepeater.Source]"    Source="[Item.Writers]"/>
+      <Binding Target="[EpisodeRuntime.Content]"       Source="[Item.RunningTimeString]"/>
       <!--<Binding Target="[LastWatched.Content]"      Source="[Item.LastPlayedString]"/>
       <Binding Target="[LastWatchedPanel.Visible]" Source="[Item.HaveWatched]"/>-->
-      <Binding Target="[FirstAired.Content]"       Source="[Item.FirstAired]"/>
-      <Binding Target="[TxtRuntime.Content]"       Source="[Item.RunningTimeString]"/>
+      
+      <!-- Common Metadata -->
+      <Binding Target="[Poster.Content]"               Source="[PosterImage]"/>
+      <Binding Target="[DirectorRepeater.Source]"      Source="[Item.Directors]"/>
+      <Binding Target="[WriterRepeater.Source]"        Source="[Item.Writers]"/>  
 
-      <Changed Source="[Item.TrailerPath]">
-        <Conditions>
-          <Equality Source="[Item.TrailerPath]" ConditionOp="NotEquals" Value=""/>
-        </Conditions>
-        <Actions>
-          <Set Target="[TrailerButton.Visible]" Value="true"/>
-        </Actions>
-      </Changed>
-
-      <Condition Source="[MediaPath]" SourceValue="" Target="[TrailerButton.Visible]" Value="false"/>
-
-      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[DetailBackdrop.Alpha]">
-        <Transformer>
-          <MathTransformer Divide="100"/>
-        </Transformer>
-      </Binding>
-      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[RSSBox.Alpha]">
-        <Transformer>
-          <MathTransformer Divide="100"/>
-        </Transformer>
-      </Binding>
-      <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
-
+      <!-- Item is a Movie -->
       <Condition  Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie">
         <Actions>
           <Set Target="[PosterPanel.LayoutInput]" Value="[MoviePosterLayout]"/>
@@ -213,6 +216,8 @@
           <Set Target="[WriterPanel.Visible]"     Value="false"/>
         </Actions>
       </Condition>
+      
+      <!-- Item is an Episode -->
       <Condition  Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Episode">
         <Actions>
           <Set Target="[PosterPanel.LayoutInput]" Value="[EpisodePosterLayout]"/>
@@ -224,10 +229,22 @@
           <Set Target="[SeasonTitleText.Content]" Value="[Item.SeasonNumber]"/>
         </Actions>
       </Condition>
+
+      <!-- Theme Colors -->
       <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
       <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
-      <Binding Source="[ActorScroller.PosterProfile]" Target="[PosterImage]"/>
 
+      <!-- Theme Alpha Blending Properties -->
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[DetailBackdrop.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[RSSBox.Alpha]">
+        <Transformer>
+          <MathTransformer Divide="100"/>
+        </Transformer>
+      </Binding>
 
       <!-- Hide Missing Metadata -->
       <Rule>
@@ -248,6 +265,9 @@
           <Set Target="[DirectorSeparator.Visible]" Value="false"/>
         </Actions>
       </Rule>
+
+      <!-- Currently Not Working -->
+      <Binding Source="[ActorScroller.PosterProfile]" Target="[PosterImage]"/>
     </Rules>
 
     <Content>
@@ -298,16 +318,6 @@
                 </Children>
               </Panel>
 
-              <!-- RSS Info -->
-              <Panel>
-                <LayoutInput>
-                  <AnchorLayoutInput Bottom="Parent,1,-12"/>
-                </LayoutInput>
-                <Children>
-                  <in:InfoMarquee Application="[Application]" />
-                </Children>
-              </Panel>
-
               <!-- Clock Display -->
               <Panel Name="ClockDisplay">
                 <LayoutInput>
@@ -339,6 +349,16 @@
                 </Children>
               </Panel>
 
+              <!-- RSS Info -->
+              <Panel>
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent,1,-12"/>
+                </LayoutInput>
+                <Children>
+                  <in:InfoMarquee Application="[Application]" />
+                </Children>
+              </Panel>
+              
               <!-- RSS Box -->
               <Panel Layout="HorizontalFlow">
                 <LayoutInput>
@@ -363,6 +383,7 @@
                               <FlowLayout Orientation="Vertical"/>
                             </Layout>
                             <Children>
+                              <!-- Movie Title -->
                               <Panel MaximumSize="0,45">
                                 <Layout>
                                   <FlowLayout Orientation="Horizontal" Spacing="5,5"/>
@@ -377,6 +398,7 @@
                                   <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                                 </Children>
                               </Clip>
+                              <!-- Movie Details -->
                               <Panel Name="MovieSubLine">
                                 <Layout>
                                   <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
@@ -405,6 +427,12 @@
                                       <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="1,45" />
                                     </Children>
                                   </Clip>
+                                  <Text Name="MovieRuntime" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
+                                  <Clip FadeSize="0" Orientation="Vertical" FadeAmount="1" >
+                                    <Children>
+                                      <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="1,45" />
+                                    </Children>
+                                  </Clip>                       
                                   <Repeater Name="GenreRepeater" Source="[Item.Genres]" Margins="5,0,5,0" MaximumSize="0,100" >
                                     <Layout>
                                       <FlowLayout Orientation="Horizontal" AllowWrap="false"  Spacing="25,0"  />
@@ -423,6 +451,7 @@
                                   <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                                 </Children>
                               </Clip>
+                              <!-- Movie Summary -->
                               <Panel MaximumSize="0,135" Margins="0,5,0,5">
                                 <Layout>
                                   <AnchorLayout SizeToVerticalChildren="true"/>
@@ -436,6 +465,7 @@
                                   <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                                 </Children>
                               </Clip>
+                              <!-- Movie Studios & Media Info -->
                               <Panel Name="MovieEndLine" MaximumSize="0,50" MinimumSize="0,50" Layout="Center" >
                                 <Children>
                                   <Panel>
@@ -481,6 +511,7 @@
                               <FlowLayout Orientation="Vertical" Spacing="5,5"/>
                             </Layout>
                             <Children>
+                              <!-- Series Title & Air Date -->
                               <Panel Name="EpisodeTitlePanel" Layout="Dock" MaximumSize="0,45">
                                 <Children>
                                   <Panel>
@@ -510,6 +541,7 @@
                                   <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                                 </Children>
                               </Clip>
+                              <!-- Episode Title & Runtime -->
                               <Panel Layout="Dock" MaximumSize="0,30">
                                 <Children>
                                   <Panel>
@@ -530,42 +562,17 @@
                                       <DockLayoutInput Alignment="Center" Position="Right"/>
                                     </LayoutInput>
                                     <Children>
-                                      <Text Name="TxtRuntime" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
+                                      <Text Name="EpisodeRuntime" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
                                     </Children>
                                   </Panel>
                                 </Children>
                               </Panel>
-                              <!--
-                          <Panel Name="EpisodeSubLine">
-                            <Layout>
-                              <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="10,0"/>
-                            </Layout>
-                            <Children>
-                              <Panel Name="LastWatchedPanel" Layout="HorizontalFlow">
-                                <Children>
-                                  <Text Content="Last Watched:  " Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
-                                  <Text Name="LastWatched"        Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
-                                </Children>
-                              </Panel>
-                              <Panel Name="FirstAiredPanel" Layout="HorizontalFlow">
-                                <Children>
-                                  <Text Content="First Aired:  " Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
-                                  <Text Name="FirstAired"        Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
-                                </Children>
-                              </Panel>
-                              <Panel Name="EpisodeRuntimePanel" Layout="HorizontalFlow">
-                                <Children>
-                                  <Text Content="Runtime:  " Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorMedium"/>
-                                  <Text Name="TxtRuntime"    Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
-                                </Children>
-                              </Panel>
-                            </Children>
-                          </Panel>-->
                               <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
                                 <Children>
                                   <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                                 </Children>
                               </Clip>
+                              <!-- Episode Summary -->
                               <Panel MaximumSize="0,135" Margins="0,5,0,5">
                                 <Layout>
                                   <AnchorLayout SizeToVerticalChildren="true"/>
@@ -579,6 +586,7 @@
                                   <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                                 </Children>
                               </Clip>
+                              <!-- Episode Media Info -->
                               <Panel Name="EpisodeEndLine" Layout="Fill" MaximumSize="0,50" >
                                 <Layout>
                                   <FlowLayout Orientation="Horizontal" StripAlignment="Center" ItemAlignment="Center"/>
@@ -589,26 +597,21 @@
                                 </Children>
                               </Panel>
                             </Children>
-                          </Panel>
+                          </Panel>                       
                           <!-- Item is anything else -->
                           <Panel Name="DefaultPanel">
                             <Layout>
                               <FlowLayout Orientation="Vertical"/>
                             </Layout>
                             <Children>
-                              <Panel MaximumSize="0,45">
-                                <Layout>
-                                  <FlowLayout Orientation="Horizontal" Spacing="5,5"/>
-                                </Layout>
-                                <Children>
-                                  <Text  Name="DefaultTitle" Content="[Item.Name]" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight"/>
-                                </Children>
-                              </Panel>
+                              <!-- Title -->
+                              <Text  Name="DefaultTitle" Content="[Item.Name]" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight"/>
                               <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
                                 <Children>
                                   <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                                 </Children>
                               </Clip>
+                              <!-- Summary -->
                               <Panel Margins="0,5,0,5">
                                 <Layout>
                                   <AnchorLayout SizeToVerticalChildren="true"/>

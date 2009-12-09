@@ -288,11 +288,12 @@ namespace MediaBrowser.Library {
             get
             {
                 List<string> studios = null;
-                var show = baseItem as Show;
+                var show = baseItem as IShow;
                 if (show != null && show.Studios != null)
                 {
                     studios = show.Studios;
                 }
+
                 return studios ?? new List<string>();
             }
         }

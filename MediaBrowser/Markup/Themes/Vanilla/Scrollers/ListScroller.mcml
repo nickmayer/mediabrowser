@@ -163,12 +163,31 @@
       </Changed>
       
       <Binding Target="[InfoBox.Font]"  Source="[Font]"/>
+      <!-- Watched Status Indicator -->
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.Config.EnableListViewTicks]" ConditionOp="Equals" Value="true"/>
+          <Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TickIndicator.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
 
     </Rules>
 
     <Content>
       <Graphic Name="imgButton"  Content="[ImageNoFocus]" MouseInteractive="true" MaximumSize="[Size]" SizingPolicy="SizeToConstraint" HorizontalAlignment="Near" VerticalAlignment="Fill" MaintainAspectRatio="false"        >
+        <Layout>
+          <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
+        </Layout>
         <Children>
+          <Graphic  Name="TickIndicator" Visible="false" Content="image://me:Counter" Layout="Center" MaximumSize="35,35">
+            <Children>
+              <Graphic Content="image://i:Tick"/>
+            </Children>
+          </Graphic>
           <vidb:InfoDisplayBox Name="InfoBox" Application="[Application]" Item="[Item]" Font="[Font]"/>
         </Children>
       </Graphic>
@@ -177,5 +196,5 @@
   
   <Image Name="ButtonFocus"         Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaFocus"            NineGrid="7,7,7,7" />
   <Image Name="ButtonNoFocus"           Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonNoFocus"           NineGrid="7,7,7,7" />
-
+  <Image Name="Counter" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaCounter"/>
 </Mcml>
