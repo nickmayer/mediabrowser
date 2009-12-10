@@ -159,6 +159,11 @@
     <Rules>
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Content]" />
 
+      <Changed Source="[Item]">
+        <Actions>
+          <Set Target="[StartupTimer.Enabled]" Value="true"/>
+        </Actions>
+      </Changed>
       <Rule>
         <Conditions>
           <Modified Source="[StartupTimer.Tick]"  />

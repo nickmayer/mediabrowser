@@ -494,8 +494,9 @@
 
     <Rules>
 
-      <Condition Source="[Application.Config.RecentItemOption]" SourceValue="added" Target="[AddedPanel.Visible]" Value="true" />
-      <Condition Source="[Application.Config.RecentItemOption]" SourceValue="watched" Target="[WatchedPanel.Visible]" Value="true" />
+      <Condition Source="[Application.Config.RecentItemOption]" SourceValue="added"     Target="[AddedPanel.Visible]"   Value="true" />
+      <Condition Source="[Application.Config.RecentItemOption]" SourceValue="unwatched" Target="[AddedPanel.Visible]"   Value="true" />
+      <Condition Source="[Application.Config.RecentItemOption]" SourceValue="watched"   Target="[WatchedPanel.Visible]" Value="true" />
 
       <Binding Source="[Application.Config.AlphaBlending!cor:Single]" Target="[FullContent.Alpha]">
         <Transformer>
