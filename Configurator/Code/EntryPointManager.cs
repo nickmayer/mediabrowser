@@ -36,23 +36,24 @@ namespace Configurator.Code
         public void ValidateEntryPoints(List<EntryPointItem> entryPoints)
         {
             try
-            {
+            {               
                 List<EntryPointItem> EntryPointsInRegistry = FetchMediaBrowserEntryPoints();
-               
+
+                
                 // Add any missing entry Points
                 foreach (var ep in entryPoints)
-                {
+                {                    
                     bool epMatchFound = false;
-
+                    
                     foreach (var RegEp in EntryPointsInRegistry)
                     {
                         if (ep.Context.Value.ToString().ToLower().Trim() == RegEp.Context.Value.ToString().ToLower().Trim())
-                        {
+                        {                            
                             if (ep.Title.Value.ToString() != RegEp.Title.Value.ToString())
                             {
                                 this.RenameEntryPointTitle(RegEp.Title.Value.ToString(), ep.Title.Value.ToString(), ep.Context.Value.ToString(), ep.Context.Value.ToString());
                             }
-
+                            
                             if (!ValidateHiddenEntryPoint(RegEp.GUID))
                             {
                                 CreateHiddenCategoryEntryPoint(RegEp.GUID);
@@ -62,16 +63,15 @@ namespace Configurator.Code
                             break;
                         }
                     }
-
+                    
                     if (!epMatchFound)
-                    {
+                    {                       
                         CreateEntryPoint(ep);
                     }
                 }
-
                 // Delete any left over entry points
                 foreach (var RegEp in EntryPointsInRegistry)
-                {
+                { 
                     bool epMatchFound = false;
 
                     foreach (var ep in entryPoints)
@@ -82,15 +82,16 @@ namespace Configurator.Code
                             break;
                         }
                     }
-
+                    
                     if (!epMatchFound)
                     {
-                        DeleteEntryPointKey(RegEp.GUID);
+                        DeleteEntryPointKey(RegEp.GUID);                        
                     } 
                 }
             }
             catch (Exception ex)
             {
+                Logger.ReportException("Error validating entrypoints. " + ex.Message, ex);
                 throw new Exception("Error validating entrypoints. " + ex.Message);
             }
         }
@@ -194,54 +195,79 @@ namespace Configurator.Code
 
         private void DeleteEntryPointKey(String GUID)
         {
-            EntryPointItem entryPoint = FetchEntryPoint(GUID);
-
             try
             {
                 RegistryKey EntryPointsTree = Registry.LocalMachine.OpenSubKey(Constants.ENTRYPOINTS_REGISTRY_PATH, true);
                 RegistryKey EntryPointsSubKey = EntryPointsTree.OpenSubKey(GUID, true);
-
-                if (EntryPointsSubKey != null && entryPoint.AppID.Value.ToString().ToLower() == Constants.APPLICATION_ID.ToLower())
+                               
+                if (EntryPointsSubKey != null && this.FetchAppID(GUID).ToLower() == Constants.APPLICATION_ID.ToLower())
                 {
                     EntryPointsTree.DeleteSubKey(GUID);
                 }
+
+                DeleteEntryPointKeyFromCategory(GUID); 
             }
             catch (Exception ex)
             {
                 Logger.ReportException("Error deleting key", ex);
                 throw new Exception("Error deleting key " + GUID);
-            }
-
-            DeleteEntryPointKeyFromCategory(GUID);            
+            }                       
         }
 
         public void DeleteEntryPointKeyFromCategory(String GUID)
         {
-            RegistryKey EntryPointsKey = Registry.LocalMachine.OpenSubKey(Constants.CATEGORIES_REGISTRY_PATH);
+            try
+            {
+                RegistryKey EntryPointsKey = Registry.LocalMachine.OpenSubKey(Constants.CATEGORIES_REGISTRY_PATH);
 
-            DeleteEntryPointKeyFromCategory_Recursive(GUID, EntryPointsKey);
+                DeleteEntryPointKeyFromCategory_Recursive(GUID, EntryPointsKey);
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Error deleting key in DeleteEntryPointKeyFromCategory()", ex);
+                throw new Exception("Error deleting key in DeleteEntryPointKeyFromCategory() " + ex.Message);
+            }
         }
 
         private bool DeleteEntryPointKeyFromCategory_Recursive(String GUID, RegistryKey key)
         {
-            String[] CatKeySplit = key.Name.Split('\\');
-
-            if (CatKeySplit[CatKeySplit.Length-1].ToLower() == GUID.ToLower())
+            try
             {
-                //delete key                
-                return true;
-            }
+                String[] CatKeySplit = key.Name.Split('\\');
 
-            foreach (var subkeyStr in key.GetSubKeyNames())
-            {
-                RegistryKey CategorySubKey = key.OpenSubKey(subkeyStr, true);
-
-                if (DeleteEntryPointKeyFromCategory_Recursive(GUID, CategorySubKey) == true)
+                if (CatKeySplit[CatKeySplit.Length - 1].ToLower() == GUID.ToLower())
                 {
-                    key.DeleteSubKey(subkeyStr);
+                    //delete key                
+                    return true;
                 }
+
+                foreach (var subkeyStr in key.GetSubKeyNames())
+                {
+                    RegistryKey CategorySubKey;
+
+                    try
+                    {
+                        CategorySubKey = key.OpenSubKey(subkeyStr, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.ReportException("Could not open registry key " + subkeyStr + " for write access in DeleteEntryPointKeyFromCategory_Recursive. ", ex);
+                        continue;//Move to next key
+                    }
+
+                    if (DeleteEntryPointKeyFromCategory_Recursive(GUID, CategorySubKey) == true)
+                    {
+                        key.DeleteSubKey(subkeyStr);
+                    }                    
+                }
+
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                Logger.ReportException("Error deleting key in DeleteEntryPointKeyFromCategory_Recursive(). " + ex.Message , ex);
+                throw new Exception("Error deleting key in DeleteEntryPointKeyFromCategory_Recursive() " + ex.Message + GUID);
+            }            
         }
 
         public void RenameEntryPointTitle(String OldName, String NewName, String OldContextStr, String NewContextStr)
@@ -293,7 +319,8 @@ namespace Configurator.Code
                 }
                 catch (Exception ex)
                 {
-                    Logger.ReportException("Failed in FetchMediaBrowserEntryPoints", ex);
+                    Logger.ReportException("Failed in FetchMediaBrowserEntryPoints " + ex.Message + ". Deleting entrypoing " + Key, ex);
+                    this.DeleteEntryPointKey(Key);
                 }
             }
 
@@ -319,19 +346,22 @@ namespace Configurator.Code
                 {
                     AppID = ReadValue(EntryPointsSubKey, EntryPointItem.AppIdName).Value.ToString();
 
-                    AddIn = ReadValue(EntryPointsSubKey, EntryPointItem.AddInName).Value.ToString();                    
-
-                    try
-                    {
-                        Context = ReadValue(EntryPointsSubKey, EntryPointItem.ContextName).Value.ToString();
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.ReportException("Failed tor read EntryPointItem.ContextName", ex);
-                        Context = String.Empty;
-                    }
+                    AddIn = ReadValue(EntryPointsSubKey, EntryPointItem.AddInName).Value.ToString();
 
                     Title = ReadValue(EntryPointsSubKey, EntryPointItem.TitleName).Value.ToString();
+
+                    if (EntryPointUID.ToLower() != Constants.MB_MAIN_ENTRYPOINT_GUID)
+                    {
+                        try
+                        {
+                            Context = ReadValue(EntryPointsSubKey, EntryPointItem.ContextName).Value.ToString();
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.ReportException("Failed to read EntryPointItem.ContextName for Title:" + Title + " and GUID:" + EntryPointUID, ex);
+                            throw ex;
+                        }
+                    }                    
 
                     Description = ReadValue(EntryPointsSubKey, EntryPointItem.DescriptionName).Value.ToString();
 
