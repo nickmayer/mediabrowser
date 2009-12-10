@@ -12,5 +12,8 @@ namespace ITunesTrailers
     {
         [Label("Menu Name:")]
         public string MenuName = "Apple Trailers";
+
+        [Label("Use HD Trailers")]
+        public bool HDTrailers = false;
     }
 }

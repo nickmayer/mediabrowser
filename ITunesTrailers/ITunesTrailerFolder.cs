@@ -66,7 +66,7 @@ namespace ITunesTrailers {
             List<BaseItem> children = new List<BaseItem>();
 
             using (WebClient client = new WebClient()) {
-                using (Stream stream = client.OpenRead(HiFiUrl)) {
+                using (Stream stream = client.OpenRead(Plugin.PluginOptions.Instance.HDTrailers ? HiFiUrl : LoFiUrl)) {
                     XmlTextReader reader = new XmlTextReader(stream);
 
                     reader.Read();
