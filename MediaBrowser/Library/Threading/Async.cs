@@ -123,7 +123,7 @@ namespace MediaBrowser.Library.Threading {
                 if (done != null) done();
             };
 
-            GetThreadPool(uniqueId).Queue(action, urgent);
+            GetThreadPool(uniqueId).Queue(workItem, urgent);
         }
 
         private static ThreadPool GetThreadPool(string uniqueId) {
