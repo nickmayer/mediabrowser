@@ -44,7 +44,7 @@ namespace Configurator
         Ratings ratings = new Ratings();
 
         public MainWindow()
-        {
+        { 
             try {        
                 Initialize();
             } catch (Exception ex) {
@@ -499,13 +499,22 @@ sortorder: {2}
 
             try
             {
-                List<EntryPointItem> entryPoints = new List<EntryPointItem>();                
-                
-                if(RefreshPlugins)
-                    Kernel.Init(KernelLoadDirective.ShadowPlugins);
-                
-                Kernel.Instance.RootFolder.ValidateChildren();                
-                
+                List<EntryPointItem> entryPoints = new List<EntryPointItem>();
+
+                try
+                {
+                    Logger.ReportInfo("Reloading Virtual children");
+                    if (RefreshPlugins)
+                        Kernel.Init(KernelLoadDirective.ShadowPlugins);
+
+                    Kernel.Instance.RootFolder.ValidateChildren();
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportError("Error validating children. " + ex.Message, ex);
+                    throw new Exception("Error validating children. " + ex.Message);
+                }
+
                 foreach (var folder in Kernel.Instance.RootFolder.Children)                
                 {
                     String displayName = folder.Name;
@@ -532,7 +541,7 @@ sortorder: {2}
             catch (Exception ex)
             {
                 String msg = "Error Refreshing Entry Points. " + ex.Message;
-                Logger.ReportError(msg);
+                Logger.ReportError(msg, ex);
                 MessageBox.Show(msg);
             }
         }
