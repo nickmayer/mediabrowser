@@ -60,7 +60,7 @@
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="ApplicationShortcut" Guid="C68522A1-03ED-4416-8326-F1375212ACB0">
         <Shortcut Id="ConfigurationWizard"
-                  Name="Configuration Wizard"
+                  Name="Media Browser Configuration Wizard"
                   Description="media browser configuration wizard"
                   Target="[APPROOTDIRECTORY]Configurator.exe"
                   WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
