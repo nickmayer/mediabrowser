@@ -30,6 +30,8 @@ using System.Diagnostics;
 using MediaBrowser.Library.Threading;
 using System.Windows.Threading;
 using System.Threading;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace Configurator
 {
@@ -102,6 +104,75 @@ namespace Configurator
             PluginManager.Init();
 
             RefreshEntryPoints(false);
+
+            ValidateMBAppDataFolderPermissions();
+        }
+
+        public void ValidateMBAppDataFolderPermissions()
+        {
+            String windowsAccount = "Users";
+            FileSystemRights fileSystemRights = FileSystemRights.FullControl;
+            DirectoryInfo folder = new DirectoryInfo(ApplicationPaths.AppConfigPath);
+
+            if(!folder.Exists)
+            {
+                MessageBox.Show(folder.FullName + " does not exist. Cannot validate permissions.");
+                return;
+            }
+            
+
+            if (!ValidateFolderPermissions(windowsAccount, fileSystemRights, folder))
+            {               
+                String folderSecurityQuestion = "All users MUST have proper permissions set in order for MediaBrowser to function properly in all situations. Would you like to set these permissions properly?\n\n(Might take up to a minute to apply changes.)";
+                if (MessageBox.Show(folderSecurityQuestion, "Folder permissions", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    SetDirectoryAccess(folder, windowsAccount, fileSystemRights, AccessControlType.Allow);
+                }
+            }
+        }
+
+        public bool ValidateFolderPermissions(String windowsAccount, FileSystemRights fileSystemRights, DirectoryInfo folder)
+        { 
+            try
+            {                              
+                DirectorySecurity dSecurity = folder.GetAccessControl();
+
+                foreach (FileSystemAccessRule rule in dSecurity.GetAccessRules(true, false, typeof(SecurityIdentifier)))
+                {
+                    NTAccount account = new NTAccount(windowsAccount);
+                    SecurityIdentifier sID = account.Translate(typeof(SecurityIdentifier)) as SecurityIdentifier;
+                    if(sID.CompareTo(rule.IdentityReference as SecurityIdentifier) == 0)
+                    {
+                        if (fileSystemRights == rule.FileSystemRights)                        
+                            return true; // Validation complete                        
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                string msg = "Error validating permissions set on " + folder.FullName + " for the Account \"" + windowsAccount + "\"";
+                Logger.ReportException(msg, ex);
+                MessageBox.Show(msg);
+                return false;
+            }                       
+        }
+
+        public void SetDirectoryAccess(DirectoryInfo folder, String windowsAccount, FileSystemRights rights, AccessControlType controlType)
+        {
+            try
+            {
+                DirectorySecurity dSecurity = folder.GetAccessControl();
+                dSecurity.AddAccessRule(new FileSystemAccessRule(windowsAccount, rights,InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, controlType));                
+                folder.SetAccessControl(dSecurity);
+            }
+            catch (Exception ex)
+            {
+                string msg = "Error applying permissions to " + folder.FullName + " for the Account \"" + windowsAccount + "\"";
+                Logger.ReportException(msg, ex);
+                MessageBox.Show(msg);
+            }
         }
 
         public void InitFolderTree()
