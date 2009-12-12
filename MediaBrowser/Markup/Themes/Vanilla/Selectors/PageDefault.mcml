@@ -289,6 +289,7 @@
           <Set Target="[Application.DisplayPopupPlay]" Value="false" />
           <PlaySound Sound="sound://sounds:Miniselect" />
           <Set Target="[PopupPlay.Visible]" Value="false"/>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
         </Actions>
       </Changed>
 
