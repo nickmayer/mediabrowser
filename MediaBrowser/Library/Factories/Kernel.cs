@@ -365,9 +365,9 @@ namespace MediaBrowser.Library {
         public List<Type> ExternalPlayableItems { get { return externalPlayableItems; } }
         public List<Type> ExternalPlayableFolders { get { return externalPlayableFolders; } }
 
-        public List<MenuItem> ContextMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Item)); } }
-        public List<MenuItem> PlayMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Play)); } }
-        public List<MenuItem> DetailMenuItems { get { return menuOptions.FindAll(m => m.Supports(MenuType.Detail)); } }
+        public List<MenuItem> ContextMenuItems { get { return menuOptions.FindAll(m => (m.Available && m.Supports(MenuType.Item))); } }
+        public List<MenuItem> PlayMenuItems { get { return menuOptions.FindAll(m => (m.Available && m.Supports(MenuType.Play))); } }
+        public List<MenuItem> DetailMenuItems { get { return menuOptions.FindAll(m => (m.Available && m.Supports(MenuType.Detail))); } }
 
         public MenuItem AddMenuItem(MenuItem menuItem) {
             menuOptions.Add(menuItem);       

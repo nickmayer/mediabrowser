@@ -147,7 +147,6 @@
           <Modified Source="[Popup.Invoked]" />
         </Conditions>
         <Actions>
-          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
           <Set Target="[FindAsYouTypePanel.Visible]" Value="false" />
           <Set Target="[ContextMenu.Visible]" Value="true"/>
           <Invoke Target="[ContextMenu.NavigateInto]" />

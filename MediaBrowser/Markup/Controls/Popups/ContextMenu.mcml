@@ -44,21 +44,64 @@
     
       <Locals>
         <ShortcutHandler Name="BackHandler"  Handle="true" Shortcut="Back" HandlerStage="Bubbled" Command="[Close]"/>
+        <cor:Int32 Name="ItemCount" Int32="0" />
       </Locals>
     
       <Rules>
         <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
         <Default Target="[Input.KeyInteractive]" Value="true" />
         <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+        <Default Target="[Title.Content]" Value="Play Menu" >
+          <Conditions>
+            <Equality Source="[MenuType]" Value="Play" />
+          </Conditions>
+        </Default>
 
-        <Condition Source="[MenuType]" SourceValue="Play" >
+        <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
+          <Conditions>
+            <Equality Source="[MenuType]" Value="Play" />
+          </Conditions>
           <Actions>
-            <Set Target="[Title.Content]" Value="Play Menu" />
             <Set Target="[ListRepeater.Source]" Value="[Application.PlayMenu]" />
+            <Set Target="[ItemCount]" Value="[Application.PlayMenu.Count]" />
           </Actions>
-        </Condition>
+        </Changed>
+        <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
+          <Conditions>
+            <Equality Source="[MenuType]" Value="Context" />
+          </Conditions>
+          <Actions>
+            <Set Target="[ListRepeater.Source]" Value="[Application.ContextMenu]" />
+            <Set Target="[ItemCount]" Value="[Application.ContextMenu.Count]" />
+          </Actions>
+        </Changed>
 
-        <Condition Source="[Application.ContextMenu.Count]" SourceValue="0" Target="[Empty.Visible]" Value="true" />
+        <Changed Source="[ItemCount]"  InitialEvaluate="true">
+          <Conditions>
+            <Equality Source="[ItemCount]" Value="0" />
+          </Conditions>
+          <Actions>
+            <Set Target="[Empty.Visible]" Value="true" />
+          </Actions>
+        </Changed>
+        <Changed Source="[ItemCount]"  InitialEvaluate="true">
+          <Conditions>
+            <Equality Source="[ItemCount]" Value="0" ConditionOp="NotEquals" />
+          </Conditions>
+          <Actions>
+            <Set Target="[Empty.Visible]" Value="false" />
+          </Actions>
+        </Changed>
+
+
+        <!--<Changed Source="[Input.DeepKeyFocus]" >
+          <Conditions>
+            <Equality Source="[Input.DeepKeyFocus]" Value="false" />
+          </Conditions>
+          <Actions>
+            <Invoke Target="[Close.Invoke]" />
+          </Actions>
+        </Changed>-->
 
       </Rules>
     
@@ -79,10 +122,10 @@
                     <Text Name="Title" Content="Item Menu" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
                     <ColorFill Content="DimGray" Alpha="0.8" Layout="Fill" MaximumSize="300,2" />
                     <Text Content=" "/>
-                    <Text Name="Empty" Content="No Available Options" Font="font://f:MM_ButtonFont" Color="color://s:FontColorLight" Visible="false" />
-                    <Repeater Name="ListRepeater" Source="[Application.ContextMenu]" Layout="VerticalFlow">
+                    <Text Name="Empty" Content="No Available Options" Font="font://f:MI_NotAvailableFont" Alpha=".7" Color="color://s:FontColorLight" Visible="false" />
+                    <Repeater Name="ListRepeater" Source="[Application.ContextMenu]" Layout="VerticalFlow" MinimumSize="200,50">
                       <Content>
-                        <me:MenuItem option="[RepeatedItem!lib:MenuItem]" Close="[Close]" Font="font://f:MM_ButtonFont" Application="[Application]" />
+                        <me:MenuItem option="[RepeatedItem!lib:MenuItem]" Close="[Close]" Font="font://f:MI_ButtonFont" Application="[Application]" />
                       </Content>
                     </Repeater>
                   </Children>
@@ -126,12 +169,10 @@
         <Actions>
           <Set Target="[OptionButton.Icon]" Value="[option.Icon]" />
           <Set Target="[OptionButton.Text]" Value="[option.Text]" />
-          <Set Target="[OptionButton.Visible]" Value="[option.Available]" />
           <Set Target="[DoAction.Available]" Value="[option.Enabled]" />
         </Actions>
       </Changed>
 
-      <Binding Target="[OptionButton.Visible]" Source="[option.Available]" />
       <Binding Target="[DoAction.Available]" Source="[option.Enabled]" />
       <Binding Target="[OptionButton.Icon]" Source="[option.Icon]" />
       <Binding Target="[OptionButton.Text]" Source="[option.Text]" />

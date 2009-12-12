@@ -130,4 +130,9 @@
   <Font Name="Vanilla_LabelFont"      Font="Calibri,16,Italic"/>
   <Font Name="Vanilla_CastFont"       Font="Calibri,16,Italic"/>
   <Font Name="Vanilla_MediaFont"      Font="Segoe Media Center,12"/>
+  
+  <!-- Menu Fonts -->
+  <Font Name="MI_ButtonFont" Font="Segoe Media Center, 20" />
+  <Font Name="MI_NotAvailableFont" Font="Brush Script MT,18" />
+
 </Mcml>
