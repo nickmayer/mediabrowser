@@ -148,7 +148,7 @@
           <!-- Item Scroller -->
           <Panel>
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0,100" Bottom="Parent,1,-125"/>
+              <AnchorLayoutInput Top="Parent,0,200" Bottom="Parent,1,-125"/>
             </LayoutInput>
             <Children>
               <Panel Name="SeriesScroller" >

@@ -25,7 +25,7 @@
 			<!-- Use the MouseWheel handler to handle the mouse wheel.  -->
 			<ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
-			<ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.4"/>
+			<ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.5"/>
 
 
 			<!--<GridLayout Name="MyLayout" Repeat="WhenTooBig" RepeatGap="10" Orientation="Vertical" Rows="0" Columns="0"

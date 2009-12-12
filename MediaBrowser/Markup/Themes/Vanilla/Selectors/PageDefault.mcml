@@ -266,8 +266,8 @@
         </Actions>
       </Rule>
 
-      <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="200,110" />
-      <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[NowPlayingViewPort.NPVSize]" Value="400,220" />
+      <Condition Source="[Folder.IsRoot]" ConditionOp="Equals" SourceValue="true" Target="[NowPlayingViewPort.NPVSize]" Value="200,110" />
+
       
       
       <Binding Target="[PopupPlay.Item]"    Source="[Folder.SelectedChild]" />
@@ -533,7 +533,7 @@
               <!-- Now Playing View Port -->
               <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false"  >
                 <Children>
-                  <vnpv:LargeNPV Name="NowPlayingViewPort" Command="[NowPlayingPanel]" NPVSize="200,110"/>
+                  <vnpv:LargeNPV Name="NowPlayingViewPort" Command="[NowPlayingPanel]" NPVSize="400,220"/>
                 </Children>
               </Panel>
 

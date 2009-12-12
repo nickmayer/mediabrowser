@@ -113,15 +113,7 @@
       </Changed>
        
       <!-- Trailer Button -->
-      <Condition Source="[MediaPath]" SourceValue="" Target="[TrailerButton.Visible]" Value="false"/>
-      <Changed Source="[Item.TrailerPath]">
-        <Conditions>
-          <Equality Source="[Item.TrailerPath]" ConditionOp="NotEquals" Value=""/>
-        </Conditions>
-        <Actions>
-          <Set Target="[TrailerButton.Visible]" Value="true"/>
-        </Actions>
-      </Changed>
+      <Condition Source="[Item.TrailerPath]" ConditionOp="NotEquals" SourceValue="" Target="[TrailerButton.Visible]" Value="true"/>
       <Changed Source="[TrailerCommand.Invoked]">
         <Actions>
           <Set Target="[NowPlaying.Visible]"   Value="true"/>
@@ -302,7 +294,7 @@
                     <Children>
                       <vsb:SimpleButton Name="ResumeMovieButton" ImageNoFocus="image://vi:IconResume"  Command="[ResumeMovieCommand]" Application="[Application]" />
                       <vsb:SimpleButton Name="PlayMovieButton"   ImageNoFocus="image://vi:IconPlay"    Command="[PlayMovieCommand]" Application="[Application]" />
-                      <vsb:SimpleButton Name="TrailerButton"     ImageNoFocus="image://vi:IconTrailer" Command="[TrailerCommand]" Application="[Application]"/>
+                      <vsb:SimpleButton Name="TrailerButton"     ImageNoFocus="image://vi:IconTrailer" Command="[TrailerCommand]" Application="[Application]" Visible="false"/>
                       <vsb:SimpleButton Name="RefreshButton"     ImageNoFocus="image://vi:IconRefresh" Command="[RefreshCommand]" Application="[Application]"/>
                       <vsb:SimpleButton Name="DeleteButton"      ImageNoFocus="image://vi:IconDelete"  Command="[DeleteMovieCommand]" Application="[Application]" Visible="false"/>
                     </Children>
