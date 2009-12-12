@@ -341,7 +341,7 @@
           <!-- Recent Items selector -->
           <Panel>
             <LayoutInput>
-              <FormLayoutInput Left="ItemMenuPanel,1,10" Top="Parent,0,10" Right="Parent,0.9" Bottom="Parent, 1,-50"/>
+              <FormLayoutInput Left="ItemMenuPanel,1,10" Top="Parent,0,25" Right="Parent,0.9" Bottom="Parent, 1,-50"/>
             </LayoutInput>
             <Children>
               <me:RecentItemList Name="RecentItemsPanel" Application="[Application]" NavInto="[NavInto]"/>

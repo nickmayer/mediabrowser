@@ -82,6 +82,7 @@
       <BooleanChoice Name="TopBarHasFocus"    Value="false" />
       <BooleanChoice Name="LeftWallHasFocus"  Value="false" />
       <BooleanChoice Name="RightWallHasFocus" Value="false" />
+      <BooleanChoice Name="BottomWallHasFocus" Value="false" />
       <AnchorLayoutInput Name="LayoutTopBarShow" Top="Parent,0,-5"   />
       <AnchorLayoutInput Name="LayoutTopBarHide" Top="Parent,0,-135" />
       <AnchorLayoutInput Name="LayoutLeftWall" Left="Parent,0,-135"   />
@@ -338,6 +339,25 @@
         </Actions>
       </Rule>
 
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[BottomWallHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[TrailerPanel.Visible]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[TrailerPanel.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[BottomWallHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[TrailerPanel.Visible]" ConditionOp="Equals" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[TheTopBar.NavigateInto]" />
+        </Actions>
+      </Rule>
+
       
       <!-- Show View Popup Panel -->
       <Changed Source="[ShowViewConfiguration.Invoked]">
@@ -506,6 +526,11 @@
                   <AnchorLayoutInput Right="Parent,1,135"/>
                 </LayoutInput>
               </me:Wall>
+              <me:Wall Name="BottomWall" Application="[Application]" InFocus="[BottomWallHasFocus]">
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent,1,135"/>
+                </LayoutInput>
+              </me:Wall>
               
               <!-- View Menu System -->
               <pvm:PopupViewMenu Application="[Application]" Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Folder.DisplayPrefs]"/>
@@ -621,7 +646,16 @@
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
 
-      <Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Folder.IsRoot]" ConditionOp="Equals" Value="true"/>
+          <Equality Source="[Application.Config.ShowConfigButton]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ConfigBtn.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+      <!--<Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>-->
 
       
       <Rule ConditionLogicalOp="And">
@@ -734,7 +768,7 @@
               <FlowLayout Orientation="Horizontal" Spacing="10,10"/>
             </Layout>
             <Children>
-              <vsb:SimpleButton Name="ConfigBtn"     ImageNoFocus="image://vi:MenuOptionConfiguration"  Command="[Configure]" Application="[Application]" />
+              <vsb:SimpleButton Name="ConfigBtn"     ImageNoFocus="image://vi:MenuOptionConfiguration"  Command="[Configure]" Application="[Application]" Visible="false" />
               <vsb:SimpleButton Name="ViewsBtn"      ImageNoFocus="image://vi:MenuOptionViews"          Command="[Views]"     Application="[Application]" />
               <vsb:SimpleButton Name="SortOrdersBtn" ImageNoFocus="image://vi:MenuOptionSort"           Command="[Sort]"      Application="[Application]" />
               <vsb:SimpleButton Name="IndexesBtn"    ImageNoFocus="image://vi:MenuOptionIndex"          Command="[Index]"     Application="[Application]" />
