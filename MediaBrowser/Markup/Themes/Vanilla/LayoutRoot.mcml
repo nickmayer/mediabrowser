@@ -89,7 +89,7 @@
 
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
-      <!--<Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />-->
+      <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
 
       <!-- Bindings -->
       <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
@@ -111,7 +111,7 @@
       <Condition Source="[RecentItems.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="added"/>
       <Condition Source="[RecentItems.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="unwatched"/>
       <Condition Source="[RecentItems.ChosenIndex]" SourceValue="2" ConditionOp="Equals" Target="[Application.RecentItemOption]" Value="watched"/>
-      
+
       <Changed Source="[RecentItems.ChosenIndex]" >
         <Actions>
           <Invoke Target="[SelectedItem.RecentItemsChanged]" />
@@ -244,7 +244,7 @@
       </Binding>
 
       <Binding Target="[Backdrop.Visible]"   Source="[Folder.DisplayPrefs.UseBackdrop.Value]"/>
-      
+
       <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[DetailBackdrop.Alpha]"/>
       <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[RSSBox.Alpha]"/>
       <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[PivotPanel.Alpha]"/>
@@ -274,7 +274,7 @@
               </Graphic>
             </Children>
           </Panel>
-          
+
           <!-- Poster Box -->
           <Panel Name="PanelPoster" Layout="Fill">
             <LayoutInput>
@@ -310,7 +310,7 @@
                 <Children>
                   <Scroller Orientation="Vertical" FadeSize="1" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]">
                     <Children>
-                      <Repeater Source="[Folder.Children]" Name="MyRepeater" ContentName="BaseItem" >
+                      <Repeater Source="[Folder.Children]" Name="Repeater" ContentName="BaseItem" >
                         <Layout>
                           <FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="0,0"/>
                         </Layout>
@@ -432,7 +432,7 @@
       </Graphic>
     </Content>
   </UI>
-  
+
   <UI Name="RecentItemList">
     <Properties>
       <lib:FolderModel Name="Folder"/>
@@ -457,7 +457,7 @@
       </Changed>
     </Rules>
     <Content>
-      <Scroller Name="Scroller" Orientation="Vertical" FadeSize="50" Navigation="RememberFocus,ContainVertical" ScrollingData="[ScrollingData]" >
+      <Scroller Name="Scroller" Orientation="Vertical" FadeSize="50" ScrollingData="[ScrollingData]" Navigation="PreferFocusOrder,ContainVertical">
         <Children>
           <Repeater Name="Repeater">
             <Layout>
@@ -472,7 +472,7 @@
               </Animation>
             </Animations>
             <Content>
-              <me:RecentItems Application="[Application]" Item="[RepeatedItem!lib:Item]" Index="[RepeatedItemIndex]" />
+              <me:RecentItems Name="RecentItemsList" Application="[Application]" Item="[RepeatedItem!lib:Item]" Index="[RepeatedItemIndex]" />
             </Content>
           </Repeater>
         </Children>
@@ -578,7 +578,7 @@
           <Set Target="[CastPanelSeparator.Visible]" Value="false"/>
         </Actions>
       </Rule>
-      
+
       <!-- Movie Specific Metadata -->
       <Binding Target="[MovieGenres.SourceData]"   Source="[Item.Genres]"/>
       <Binding Target="[MovieLength.Content]"      Source="[Item.RunningTimeString]"/>
@@ -586,20 +586,20 @@
       <Binding Target="[MovieSummary.Content]"     Source="[Item.Overview]"/>
       <Binding Target="[MoviePoster.Content]"      Source="[Item.PrimaryImage]"/>
       <Binding Target="[MovieStarRating.Value]"    Source="[Item.ImdbRating]" />
-      
+
       <!-- Trailer Specific Metadata -->
       <Binding Target="[TrailerMovieGenres.SourceData]"   Source="[Item.Genres]"/>
       <Binding Target="[TrailerMovieSummary.Content]"     Source="[Item.Overview]"/>
       <Binding Target="[TrailerMoviePoster.Content]"      Source="[Item.PrimaryImage]"/>
 
       <!-- Default Metadata -->
-      
+
       <Binding Target="[DefaultSummary.Content]"     Source="[Item.Overview]"/>
       <Binding Target="[DefaultPoster.Content]"      Source="[Item.PrimaryImage]"/>
-      
+
       <!-- Song Specific Metadata -->
       <Binding Target="[MusicPoster.Content]"      Source="[Item.PhysicalParent.PrimaryImage]"/>
-      
+
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Episode">
         <Actions>
           <Set Target="[EpisodePanel.Visible]" Value="true"/>
@@ -630,7 +630,7 @@
           <Set Target="[DefaultPanel.Visible]" Value="false"/>
         </Actions>
       </Condition>
-      
+
       <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Episode" Target="[EpisodePanel.Visible]" Value="false"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Movie"   Target="[MoviePanel.Visible]"   Value="false"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Trailer" Target="[TrailerPanel.Visible]" Value="false"/>
@@ -647,7 +647,7 @@
         <Animations>
           <Animation Name="SizeAnimation" Type="Hide">
             <Keyframes>
-              
+
               <SizeKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current" Interpolation="EaseIn"/>
               <SizeKeyframe Time="0.5" Value="1,1,1" RelativeTo="Final"/>
             </Keyframes>
@@ -703,7 +703,7 @@
                               <DockLayoutInput Alignment="Center" Position="Right"/>
                             </LayoutInput>
                             <Children>
-                              <Text Name="FirstAired" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>                           
+                              <Text Name="FirstAired" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
                             </Children>
                           </Panel>
                         </Children>
@@ -712,32 +712,32 @@
                         <Children>
                           <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                         </Children>
-                      </Clip>              
+                      </Clip>
                       <Panel Name="EpisodeGenrePanel" Layout="Dock" MaximumSize="0,30">
-                      <Children>
-                        <Panel>
-                          <LayoutInput>
-                            <DockLayoutInput Alignment="Near" Position="Client"/>
-                          </LayoutInput>
-                          <Layout>
-                            <FlowLayout Orientation="Horizontal"/>
-                          </Layout>
-                          <Children>
-                            <Text Name="SeasonText" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
-                            <Text Name="SeasonFullContentSeparator" Content="x" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
-                            <Text Content="[Item.Name]" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight" WordWrap="false"/>
-                          </Children>
-                        </Panel>
-                        <Panel Layout="HorizontalFlow">
-                          <LayoutInput>
-                            <DockLayoutInput Alignment="Near" Position="Right"/>
-                          </LayoutInput>
-                          <Children>
-                            <Text Name="TxtRuntime" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
-                          </Children>
-                        </Panel>
-                      </Children>
-                    </Panel>
+                        <Children>
+                          <Panel>
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Near" Position="Client"/>
+                            </LayoutInput>
+                            <Layout>
+                              <FlowLayout Orientation="Horizontal"/>
+                            </Layout>
+                            <Children>
+                              <Text Name="SeasonText" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
+                              <Text Name="SeasonFullContentSeparator" Content="x" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
+                              <Text Content="[Item.Name]" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight" WordWrap="false"/>
+                            </Children>
+                          </Panel>
+                          <Panel Layout="HorizontalFlow">
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Near" Position="Right"/>
+                            </LayoutInput>
+                            <Children>
+                              <Text Name="TxtRuntime" Font="font://f:Vanilla_MetaFont" Color="color://s:FontColorLight"/>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
                       <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
                         <Children>
                           <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
@@ -785,7 +785,7 @@
                             </Children>
                           </Panel>
                         </Children>
-                      </Panel>                    
+                      </Panel>
                     </Children>
                   </Panel>
                   <!-- Selected Item is a Movie -->
@@ -885,7 +885,7 @@
                         </Children>
                       </Panel>
                     </Children>
-                  </Panel>                
+                  </Panel>
                   <!-- Selected Item is a Trailer -->
                   <Panel Name="TrailerPanel" Visible="false">
                     <Layout>
@@ -971,7 +971,7 @@
                       <FlowLayout Orientation="Vertical" Spacing="5,5"/>
                     </Layout>
                     <Children>
-                      
+
                       <Text Name="AlbumTitle" Content="[Item.PhysicalParent.Name]" Font="font://f:Vanilla_MainTitleFont" Color="color://s:FontColorLight" />
                       <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
                         <Children>
@@ -1046,7 +1046,7 @@
                       </Panel>
                     </Children>
                   </Panel>
-                  
+
                   <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1">
                     <Children>
                       <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
@@ -1142,7 +1142,7 @@
 
   <Image Name="HiliteBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilite" NineGrid="10,10,10,10" />
   <Image Name="HiliteFocusBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilitefocus" NineGrid="10,10,10,10" />
- 
+
   <Image Name="InfoBox"                   Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBox"                   NineGrid="12,12,17,22"/>
   <Image Name="InfoBoxHighlighted"        Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxHighlighted"        NineGrid="12,12,17,22"/>
   <Image Name="InfoBoxDefault"            Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaInfoBoxDefault"            NineGrid="12,12,17,22"/>
