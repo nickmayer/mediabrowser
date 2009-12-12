@@ -37,11 +37,31 @@
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals"    SourceValue="Movie"   Target="[MovieInfoPanel.Visible]"   Value="true"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Movie"   Target="[MovieInfoPanel.Visible]"   Value="false"/>
 
-      <!-- Hide Default Panel if Known Item Type -->
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Movie"   Target="[DefaultPanel.Visible]" Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Series"  Target="[DefaultPanel.Visible]" Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Season"  Target="[DefaultPanel.Visible]" Value="false"/>
-      <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Episode" Target="[DefaultPanel.Visible]" Value="false"/>
+      
+      <!-- Hide/Show Default Panel if Known Item Type -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="Equals" Value="Movie"/>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="Equals" Value="Series"/>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="Equals" Value="Season"/>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="Equals" Value="Episode"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[DefaultPanel.Visible]" Value="false"/>
+        </Actions>
+      </Rule>     
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="NotEquals" Value="Movie"/>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="NotEquals" Value="Series"/>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="NotEquals" Value="Season"/>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="NotEquals" Value="Episode"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[DefaultPanel.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+
 
       <!-- Series Metadata -->
       <Binding Target="[SeriesTitle.Content]"     Source="[Item.Name]"/>
@@ -133,7 +153,8 @@
         <Transformer>
           <MathTransformer Divide="100"/>
         </Transformer>
-      </Binding>       
+      </Binding>
+      <Binding Source="[Item.ItemTypeString]" Target="[ItemType.Content]"/>
     </Rules>
     
     <Content>
@@ -611,6 +632,12 @@
                           <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
                         </Children>
                       </Clip>
+                      <Text Name="ItemType" Content="[Item.ItemTypeString]" Font="font://f:Vanilla_SubTitleFont" Color="color://s:FontColorLight"/>
+                      <Clip FadeSize="150" Orientation="Horizontal" FadeAmount="1" >
+                        <Children>
+                          <ColorFill Content="White" Alpha="0.8" Layout="Fill" MaximumSize="0,1" />
+                        </Children>
+                      </Clip>
                       <Panel Name="DefaultData" Padding="0,5,0,5">
                         <Layout>
                           <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
@@ -638,7 +665,6 @@
                                   <FlowLayout ItemAlignment="Near" Orientation="Vertical"/>
                                 </Layout>
                                 <Children>
-                                  <!-- Summary MetaData Panel -->
                                   <Text Name="DefaultSummary" WordWrap="true" Font="font://f:Vanilla_OverviewFont" Color="color://s:FontColorLight"/>
                                 </Children>
                               </Panel>

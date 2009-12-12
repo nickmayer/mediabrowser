@@ -33,8 +33,6 @@
     </Locals>
     
     <Rules>
-      
-
 
       <Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
         <Conditions>
@@ -98,8 +96,7 @@
 
       <Binding Target="[Backdrop.Visible]"   Source="[Folder.DisplayPrefs.UseBackdrop.Value]"/>
       <Binding Target="[Backdrop.Image]"     Source="[PreSelectedItem.BackdropImage]"/>
-      <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>
-      
+      <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>      
       <Binding Target="[InfoBox.Item]"       Source="[PreSelectedItem]"/>
 
       <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
@@ -109,8 +106,6 @@
       <Panel Layout="Form">
         <Children>
 
-
-          
           <!-- Item Counter -->
           <Panel>
             <LayoutInput>
@@ -127,9 +122,9 @@
           </Panel>
 
           <!-- Info Box -->
-          <Panel>
+          <Panel MaximumSize="600,95">
             <LayoutInput>
-              <AnchorLayoutInput Bottom="Parent, 0,95" Left="Parent,0,5" Right="Parent,.5,-60" Vertical="Near" />
+              <AnchorLayoutInput Bottom="Parent,1,-50"/>
             </LayoutInput>
             <Children>
               <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="12,12,17,22">
@@ -151,9 +146,9 @@
           </Panel>
           
           <!-- Item Scroller -->
-          <Panel Layout="Form">
+          <Panel>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Top="Parent,0,25" Right="Parent,1" Bottom="Parent,1,-15" />
+              <AnchorLayoutInput Top="Parent,0,100" Bottom="Parent,1,-125"/>
             </LayoutInput>
             <Children>
               <Panel Name="SeriesScroller" >

@@ -25,16 +25,11 @@
 			<!-- Use the MouseWheel handler to handle the mouse wheel.  -->
 			<ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
+			<ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.4"/>
 
-			<ScrollingData Name="VScrollingData" />
-			<ScrollingData Name="HScrollingData" EndPaddingRelativeTo="Far" EndPadding="10" BeginPadding="10" BeginPaddingRelativeTo="Near"  LockedAlignment="1" LockedPosition="0.8"/>
-			<ScrollingData Name="CenterScollingData" LockedAlignment="0.5" LockedPosition="0.5"/>
-			<ScrollingData Name="ScrollingData" LockedAlignment="0.5" LockedPosition="0.6"  />
-			
-			<Environment Name="Environment" />
 
-			<GridLayout Name="MyLayout" Repeat="WhenTooBig" RepeatGap="10" Orientation="Vertical" Rows="[RowLimit]" Columns="0"
-						AllowWrap="true" Spacing="[Application.Config.GridSpacing]" MinorAlignment="Center" MajorAlignment="Center" />
+			<!--<GridLayout Name="MyLayout" Repeat="WhenTooBig" RepeatGap="10" Orientation="Vertical" Rows="0" Columns="0"
+						AllowWrap="true" Spacing="[Application.Config.GridSpacing]" MinorAlignment="Center" MajorAlignment="Center" />-->
 
 			<ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
 			<ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
@@ -56,115 +51,6 @@
 
 
 		<Rules>
-      <!--These rules allow the user to move over the posters with the mouse without them scrolling away under them-->
-      <Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[Application.IsMouseActive]" Value="true"/>
-          <Equality Source="[NoEndPadding]" Value="false" />
-        </Conditions>
-        <Actions>
-          <Set Target="[ScrollingData.LockedPosition]" Value="-1" />
-          <Set Target="[ScrollingData.LockedAlignment]" Value="-1" />
-          <Set Target="[ScrollingData.BeginPadding]" Value="30" />
-          <Set Target="[ScrollingData.EndPadding]" Value="30" />
-        </Actions>
-      </Rule>
-      <Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[Application.IsMouseActive]" Value="false"/>
-          <Equality Source="[CenterFocus]" Value="false" />
-          <Equality Source="[NoEndPadding]" Value="false" />
-        </Conditions>
-        <Actions>
-          <Set Target="[ScrollingData.BeginPadding]" Value="100" />
-          <Set Target="[ScrollingData.EndPadding]" Value="400" />
-        </Actions>
-      </Rule>
-      <Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[Application.IsMouseActive]" Value="false"/>
-          <Equality Source="[CenterFocus]" Value="true" />
-        </Conditions>
-        <Actions>
-          <Set Target="[ScrollingData.LockedAlignment]" Value=".5" />
-          <Set Target="[ScrollingData.LockedPosition]" Value=".5" />
-        </Actions>
-      </Rule>
-      
-      <Binding Source="[Folder.ReferenceSize]" Target="[MyLayout.ReferenceSize]"/>
-			<Condition Source="[NoEndPadding]" ConditionOp="Equals" SourceValue="true">
-				<Actions>
-					<Set Target="[HScrollingData.EndPadding]" Value="30" />
-					<Set Target="[HScrollingData.BeginPadding]" Value="30" />
-				</Actions>
-			</Condition>
-			<Condition Source="[Folder.DisplayPrefs.VerticalScroll.Value]" SourceValue="true">
-				<Actions>
-					<Set Target="[Scroller.Orientation]" Value="Vertical" />
-					<Set Target="[MyLayout.Orientation]" Value="Horizontal" />
-					<Set Target="[MyLayout.Rows]" Value="0" />
-					<Set Target="[ItemPanel.Padding]" Value="0,50,0,50" />
-					<Set Target="[Scroller.LayoutInput]" Value="[VLayout]" />
-					<Set Target="[MyLayout.Repeat]" Value="Never" />
-					<Set Target="[MyLayout.RepeatGap]" Value="0" />
-					<Set Target="[ScrollingData]" Value="[VScrollingData]" />
-				</Actions>
-			</Condition>
-			<Condition Source="[Folder.DisplayPrefs.VerticalScroll.Value]" SourceValue="false">
-				<Actions>
-					<Set Target="[Scroller.Orientation]" Value="Horizontal" />
-					<Set Target="[MyLayout.Orientation]" Value="Vertical" />
-					<!--<Set Target="[MyLayout.Rows]" Value="[RowLimit]" />-->
-					<Set Target="[ItemPanel.Padding]" Value="0,0,0,0" />
-					<Set Target="[Scroller.LayoutInput]" Value="[HLayout]" />
-					<Set Target="[MyLayout.Repeat]" Value="WhenTooBig" />
-					<Set Target="[MyLayout.RepeatGap]" Value="0" />					
-				</Actions>
-			</Condition>
-
-			<Changed Source="[Folder.DisplayPrefs.VerticalScroll.Value]" InitialEvaluate="true">
-				<Conditions>
-					<Equality Source="[Folder.DisplayPrefs.VerticalScroll.Value]" Value="false" />	
-					<Equality Source="[CenterFocus]"  Value="false"/>
-				</Conditions>
-				<Actions>
-					<Set Target="[ScrollingData]" Value="[HScrollingData]" />	
-				</Actions>
-			</Changed>
-
-			<Changed Source="[Folder.DisplayPrefs.VerticalScroll.Value]" InitialEvaluate="true">
-				<Conditions>
-					<Equality Source="[Folder.DisplayPrefs.VerticalScroll.Value]" Value="false" />
-					<Equality Source="[CenterFocus]"  Value="true"/>
-				</Conditions>
-				<Actions>
-					<Set Target="[ScrollingData]" Value="[CenterScollingData]" />
-				</Actions>
-			</Changed>
-			
-		
-
-			<Rule>
-				<Conditions>
-					<Equality Source="[Folder.Children.Count]" ConditionOp="LessThanOrEquals"  Value="4"/>
-					<Equality Source="[Folder.DisplayPrefs.VerticalScroll.Value]" Value="false" />
-				</Conditions>
-				<Actions>
-					<Set Target="[MyLayout.Rows]" Value="1" />
-				</Actions>
-			</Rule>
-
-			<Rule>
-				<Conditions>
-					<Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan"  Value="4"/>
-					<Equality Source="[Folder.DisplayPrefs.VerticalScroll.Value]" Value="false" />
-				</Conditions>
-				<Actions>
-					<Set Target="[MyLayout.Rows]" Value="[RowLimit]" />
-				</Actions>
-			</Rule>
-
-
 			<Rule>
 				<Conditions>
 					<Modified Source="[JumpForward.Invoked]"/>
@@ -240,7 +126,7 @@
 		</Rules>
 
 		<Content>
-			<Panel Name="ItemPanel" Layout="Form" Navigation="ContainHorizontal" >
+			<Panel Name="ItemPanel" Layout="Form">
 				<Children>
 					<fs:FocusSelector Name="FocusRect">
 						<LayoutInput>
@@ -250,24 +136,32 @@
 											 ContributesToWidth="false"/>
 						</LayoutInput>
 					</fs:FocusSelector>
-					<Scroller Orientation="Horizontal" FadeSize="-50" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]">
-						<Children>
-							<Repeater Source="[Folder.Children]" Name="MyRepeater" ContentName="BaseItem" Layout="[MyLayout]" DiscardOffscreenVisuals="false" >
-								<Animations>
-									<Animation Type="Move">
-										<Keyframes>
-											<PositionKeyframe Time="0" RelativeTo="Current"/>
-											<PositionKeyframe Time="0.15" RelativeTo="Final"/>
-										</Keyframes>
-									</Animation>
-								</Animations>
-							</Repeater>
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Horizontal="Fill" Vertical="Center"/>
-						</LayoutInput>
-					</Scroller>
-				</Children>
+          <Panel Layout="Center">
+            <Children>
+              <Scroller Orientation="Vertical" Name="Scroller" Navigation="RememberFocus" ScrollingData="[ScrollingData]">
+                <Children>
+                  <Repeater Source="[Folder.Children]" Name="MyRepeater" ContentName="BaseItem" DiscardOffscreenVisuals="false" >
+                    <Layout>
+                      <GridLayout Repeat="WhenTooBig" Orientation="Horizontal"
+                AllowWrap="true" Spacing="[Application.Config.GridSpacing]" MinorAlignment="Center" MajorAlignment="Center"/>
+                    </Layout>
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" RelativeTo="Current"/>
+                          <PositionKeyframe Time="0.15" RelativeTo="Final"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Repeater>
+                </Children>
+                <LayoutInput>
+                  <FormLayoutInput Horizontal="Fill" Vertical="Center"/>
+                </LayoutInput>
+              </Scroller>
+            </Children>
+          </Panel>
+        </Children>
 			</Panel>
 		</Content>
 		<Content Name="BaseItem">

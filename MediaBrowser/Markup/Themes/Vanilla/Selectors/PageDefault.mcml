@@ -59,7 +59,7 @@
 
       <addin:AddInHost Name="AddInHost" />
 
-      <!--<KeyHandler Name="SwitchKey" Key="D8" Handle="true" Modifiers="Shift" HandlerStage="Bubbled"/>-->
+      <KeyHandler Name="InfoKey" Key="D3" Handle="true" Modifiers="Shift" HandlerStage="Bubbled"/>
       <ShortcutHandler Name="RecordBtn" Handle="true" Shortcut="Record" HandlerStage="Bubbled"/>
       <TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap"  >
         <EditableText>
@@ -77,11 +77,14 @@
       <Command Name="CloseIndexConfiguration" />
       <Command Name="CloseContextMenu" />
       <Command Name="Popup"/>
-      <Command Name="InfoKey"/>
+      <Command Name="Info"/>
       <BooleanChoice Name="Typy" Value="true"/>
-      <BooleanChoice Name="TopBarHasFocus" Value="false" />
+      <BooleanChoice Name="TopBarHasFocus"    Value="false" />
+      <BooleanChoice Name="LeftWallHasFocus"  Value="false" />
+      <BooleanChoice Name="RightWallHasFocus" Value="false" />
       <AnchorLayoutInput Name="LayoutTopBarShow" Top="Parent,0,-5"   />
       <AnchorLayoutInput Name="LayoutTopBarHide" Top="Parent,0,-135" />
+      <AnchorLayoutInput Name="LayoutLeftWall" Left="Parent,0,-135"   />
     </Locals>
 
     <Rules>
@@ -181,7 +184,7 @@
           <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="#"/>
         </Conditions>
         <Actions>
-          <Invoke Target="[InfoKey.Invoke]" />
+          <Invoke Target="[Info.Invoke]" />
         </Actions>
       </Changed>
       
@@ -236,17 +239,17 @@
         </Actions>
       </Changed>
 
-      <Rule ConditionLogicalOp="And">
+      <Rule>
         <Conditions>
-          <Equality Source="[Application.PlaybackController.IsStopped]" Value="true"/>
+          <Equality Source="[Application.PlaybackController.IsStopped]" ConditionOp="Equals" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[TrailerPanel.Visible]" Value="false" />
         </Actions>
       </Rule>
-      <Rule ConditionLogicalOp="And">
+      <Rule>
         <Conditions>
-          <Equality Source="[Application.PlaybackController.IsPlaying]" Value="true"/>
+          <Equality Source="[Application.PlaybackController.IsPlaying]" ConditionOp="Equals" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[TrailerPanel.Visible]" Value="true" />
@@ -288,6 +291,7 @@
         </Actions>
       </Changed>
 
+      
       <Rule>
         <Conditions>
           <Equality Source="[TopBarHasFocus.Value]" ConditionOp="Equals" Value="true" />
@@ -305,6 +309,36 @@
         </Actions>
       </Rule>
 
+
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[LeftWallHasFocus.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[TheTopBar.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[RightWallHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[TrailerPanel.Visible]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[TrailerPanel.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[RightWallHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[TrailerPanel.Visible]" ConditionOp="Equals" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[TheTopBar.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      
       <!-- Show View Popup Panel -->
       <Changed Source="[ShowViewConfiguration.Invoked]">
         <Actions>
@@ -386,21 +420,39 @@
         </Actions>
       </Changed>
 
-      <Changed Source="[InfoKey.Invoked]">
+
+      
+      <Changed Source="[Info.Invoked]" >
         <Conditions>
           <Equality Source="[DetailShown]" ConditionOp="Equals" Value="false"/>
         </Conditions>
         <Actions>
           <Set Target="[SummaryFrame.Visible]"             Value="true"/>
           <Set Target="[DetailShown]"                      Value="true"/>
-          <Set Target="[InfoBackSplash.Alpha]"             Value="0.6"/>
           <Set Target="[FindAsYouTypePanel.Visible]"       Value="false"/>
+          <Set Target="[InfoBackSplash.Alpha]"             Value="0.6"/>
+          <Set Target="[TypingHandler.EditableText.Value]" Value=""/>
+          <Set Target="[TypingHandler.Value]"              Value=""/>
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[Info.Invoked]"  InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SummaryFrame.Visible]"             Value="false"/>
+          <Set Target="[DetailShown]"                      Value="false"/>
+          <Set Target="[FindAsYouTypePanel.Visible]"       Value="true" />
+          <Set Target="[InfoBackSplash.Alpha]"             Value="0"/>
           <Set Target="[TypingHandler.EditableText.Value]" Value="" />
           <Set Target="[TypingHandler.Value]"              Value="" />
         </Actions>
       </Changed>
 
-      <Changed Source="[InfoKey.Invoked]" InitialEvaluate="true">
+      
+      <!-- Extender -->
+      <!--<Changed Source="[InfoKey.Invoked]" InitialEvaluate="true">
         <Conditions>
           <Equality Source="[DetailShown]" ConditionOp="Equals" Value="true"/>
         </Conditions>
@@ -413,14 +465,24 @@
           <Set Target="[TypingHandler.Value]"              Value=""/>
         </Actions>
       </Changed>
+      <Changed Source="[InfoKey.Invoked]">
+        <Conditions>
+          <Equality Source="[DetailShown]" ConditionOp="Equals" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SummaryFrame.Visible]"             Value="true"/>
+          <Set Target="[DetailShown]"                      Value="true"/>
+          <Set Target="[InfoBackSplash.Alpha]"             Value="0.6"/>
+          <Set Target="[FindAsYouTypePanel.Visible]"       Value="false"/>
+          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
+          <Set Target="[TypingHandler.Value]"              Value="" />
+        </Actions>
+      </Changed>-->
+
       
       <Binding Target="[PopInfoWindow.Item]" Source="[PreSelectedItem]"/>
     </Rules>
     
-
-
-
-
     <Content>
       <Panel Layout="Form"  Navigation="RememberFocus">
         <Children>
@@ -432,6 +494,18 @@
 
               <!-- Configuration Menu System -->
               <me:TopBar Name="TheTopBar" Application="[Application]" Folder="[Folder]" InFocus="[TopBarHasFocus]" Visible="false" Views="[ShowViewConfiguration]" Sort="[ShowSortConfiguration]" Index="[ShowIndexConfiguration]"/>
+
+              <!-- Wall Bounces -->
+              <me:Wall Name="LeftWall" Application="[Application]" InFocus="[LeftWallHasFocus]">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,-135"/>
+                </LayoutInput>
+              </me:Wall>
+              <me:Wall Name="RightWall" Application="[Application]" InFocus="[RightWallHasFocus]">
+                <LayoutInput>
+                  <AnchorLayoutInput Right="Parent,1,135"/>
+                </LayoutInput>
+              </me:Wall>
               
               <!-- View Menu System -->
               <pvm:PopupViewMenu Application="[Application]" Name="ViewConfig"  Visible="false"  Close="[CloseViewConfiguration]"  Prefs="[Folder.DisplayPrefs]"/>
@@ -457,7 +531,7 @@
               <ColorFill Name="InfoBackSplash" Content="Black" Layout="Fill"/>
 
               <!-- Now Playing View Port -->
-              <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false" >
+              <Panel Name="TrailerPanel" Layout="Anchor" LayoutInput="[NPVRight]" Visible="false"  >
                 <Children>
                   <vnpv:LargeNPV Name="NowPlayingViewPort" Command="[NowPlayingPanel]" NPVSize="200,110"/>
                 </Children>
@@ -677,4 +751,52 @@
     </Content>
   </UI>
 
+
+  <UI Name="Wall">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <BooleanChoice Name="InFocus" BooleanChoice="$Required" />
+    </Properties>
+
+    <Locals>
+      <Command Name="Configure" />
+      <Command Name="PCUnlock"/>
+      <Command Name="PCLock"/>
+      <Command Name="CloseCommand" />
+
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+      
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[InFocus.Value]" Value="true" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[InFocus.Value]" Value="false" />
+        </Actions>
+      </Rule>
+
+      <!-- Go To Configuration Page -->
+      <Changed Source="[Configure.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.OpenConfiguration]" showFullOptions="true" />
+        </Actions>
+      </Changed>
+    </Rules>
+    
+    <Content>
+      <vsb:SimpleButton Name="ConfigBtn"     ImageNoFocus="image://vi:MenuOptionConfiguration"  Command="[Configure]" Application="[Application]" />
+    </Content>
+  </UI>
 </Mcml>

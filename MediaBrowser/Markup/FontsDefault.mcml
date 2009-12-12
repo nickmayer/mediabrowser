@@ -119,8 +119,8 @@
   <Font Name="Vanilla_MainTitleFont"  Font="Arial Rounded MT Bold,24"/>
   <Font Name="Vanilla_SmallTitleFont" Font="Arial Rounded MT Bold,16"/>
   <Font Name="Vanilla_SubTitleFont"   Font="Segoe Media Center,18"/>
-  <Font Name="Vanilla_InfoTitleFont"  Font="Segoe Media Center Semibold,18"/>
-  <Font Name="Vanilla_GenreFont"      Font="Brush Script MT,16"/>
+  <Font Name="Vanilla_InfoTitleFont"  Font="Segoe Media Center Semibold,20"/>
+  <Font Name="Vanilla_GenreFont"      Font="Segoe Media Center,16"/>
   <Font Name="Vanilla_RootItemFont"   Font="Roman SD,22,Bold"/>
   <Font Name="Vanilla_MetaFont"       Font="Segoe Media Center,16"/>
   <Font Name="Vanilla_MinorMetaFont"  Font="Segoe Media Center,14"/>
