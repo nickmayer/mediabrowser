@@ -178,7 +178,7 @@
     </Rules>
 
     <Content>
-      <Graphic Name="imgButton"  Content="[ImageNoFocus]" MouseInteractive="true" MaximumSize="[Size]" SizingPolicy="SizeToConstraint" HorizontalAlignment="Near" VerticalAlignment="Fill" MaintainAspectRatio="false"        >
+      <Graphic Name="imgButton"  Content="[ImageNoFocus]" MouseInteractive="true" MaximumSize="[Size]" MinimumSize="[Size]" SizingPolicy="SizeToConstraint" HorizontalAlignment="Near" VerticalAlignment="Fill" MaintainAspectRatio="false"        >
         <Layout>
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
         </Layout>

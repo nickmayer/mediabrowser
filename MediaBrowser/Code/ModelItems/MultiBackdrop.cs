@@ -31,10 +31,12 @@ namespace MediaBrowser
         public void BeginRotation(Item item)
         {
             this._item = item;
-            cycle = new Timer(this);
-            cycle.Interval = cycleInterval;
-            cycle.Tick += delegate { OnRefresh(); };
-            cycle.Enabled = true;
+            if (cycle == null) {
+                cycle = new Timer(this);
+                cycle.Interval = cycleInterval;
+                cycle.Tick += delegate { OnRefresh(); };
+                cycle.Enabled = true;
+            }
         }
 
         private void OnRefresh()

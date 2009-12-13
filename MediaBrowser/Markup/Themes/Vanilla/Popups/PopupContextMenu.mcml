@@ -89,6 +89,7 @@
       <Command Name="DoAction"/>
       <Image Name="MenuOptionPlay"          Image="image://vi:MenuOptionPlay"/>
       <Image Name="MenuOptionResume"        Image="image://vi:MenuOptionResume"/>
+      <Image Name="MenuOptionQueueAll"      Image="image://vi:MenuOptionQueueAll"/>
       <Image Name="MenuOptionPlayAll"       Image="image://vi:MenuOptionPlayAll"/>
       <Image Name="MenuOptionPlayRandom"    Image="image://vi:MenuOptionPlayRandom"/>
       <Image Name="MenuOptionPlayUnwatched" Image="image://vi:MenuOptionPlayUnwatched"/>
@@ -117,7 +118,8 @@
 
       <Condition Source="[option.Text]" SourceValue="Play"           Target="[OptionButton.Image]" Value="[MenuOptionPlay]"/>
       <Condition Source="[option.Text]" SourceValue="Like This..."   Target="[OptionButton.Image]" Value="[MenuOptionLikeThis]"/>
-      <Condition Source="[option.Text]" SourceValue="Like This"   Target="[OptionButton.Image]" Value="[MenuOptionLikeThis]"/>
+      <Condition Source="[option.Text]" SourceValue="Queue All"      Target="[OptionButton.Image]" Value="[MenuOptionQueueAll]"/>
+      <Condition Source="[option.Text]" SourceValue="Queue"          Target="[OptionButton.Image]" Value="[MenuOptionQueueAll]"/>
       <Condition Source="[option.Text]" SourceValue="Resume"         Target="[OptionButton.Image]" Value="[MenuOptionResume]"/>
       <Condition Source="[option.Text]" SourceValue="Play All"       Target="[OptionButton.Image]" Value="[MenuOptionPlayAll]"/>
       <Condition Source="[option.Text]" SourceValue="Shuffle Play"   Target="[OptionButton.Image]" Value="[MenuOptionPlayRandom]"/>

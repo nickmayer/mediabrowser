@@ -74,7 +74,7 @@ namespace MediaBrowser.Library.Providers
             string file = Path.Combine(Location, name + ".jpg");
             if (File.Exists(file))
                 return file;
-            
+
             file = Path.Combine(Location, name + ".png");
             if (File.Exists(file))
                 return file;

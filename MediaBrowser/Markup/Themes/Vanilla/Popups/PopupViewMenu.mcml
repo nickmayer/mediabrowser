@@ -62,8 +62,7 @@
             </Layout>
             <Children>
               <me:MenuCheckBox Name="UseBackdrop"    Application="[Application]" Checked="[Prefs.UseBackdrop]" Image="image://vi:MenuOptionBackdrop"/>
-              <me:MenuCheckBox Name="ShowLabels"     Application="[Application]" Checked="[Prefs.ShowLabels]" Image="image://vi:MenuOptionLabels"/>
-              <me:MenuCheckBox Name="VerticalScroll" Application="[Application]" Checked="[Prefs.VerticalScroll]" Image="image://vi:MenuOptionVertScroll"/>
+              <me:MenuCheckBox Name="ShowLabels"     Application="[Application]" Checked="[Prefs.ShowLabels]" Image="image://vi:MenuOptionLabels"/>              
               <me:MenuCheckBox Name="UseBanner"      Application="[Application]" Checked="[Prefs.UseBanner]" Image="image://vi:MenuOptionBanners"/>
               <vmb:MenuButton Application="[Application]" Command="[Increase]" Image="image://vi:MenuOptionEnlarge"/>
               <vmb:MenuButton Application="[Application]" Command="[Decrease]" Image="image://vi:MenuOptionShrink"/>
