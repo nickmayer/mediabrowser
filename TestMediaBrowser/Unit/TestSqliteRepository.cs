@@ -24,6 +24,7 @@ namespace TestMediaBrowser.Unit {
 
             SqliteItemRepository repository = GetRepo();
             repository.SaveChildren(parent, children);
+            repository.FlushWriter();
             var items = repository.RetrieveChildren(parent);
 
             Assert.IsTrue(children.OrderBy(_ => _).SequenceEqual(items.OrderBy(_ => _)));
@@ -37,6 +38,7 @@ namespace TestMediaBrowser.Unit {
 
             SqliteItemRepository repository = GetRepo();
             repository.SaveItem(episode);
+            repository.FlushWriter();
             var copy = repository.RetrieveItem(episode.Id);
 
             Assert.AreEqual(copy.Name , episode.Name);
@@ -51,6 +53,7 @@ namespace TestMediaBrowser.Unit {
 
             SqliteItemRepository repository = GetRepo();
             repository.SaveItem(episode);
+            repository.FlushWriter();
             var copy = (Episode)repository.RetrieveItem(episode.Id);
 
             Assert.AreEqual(copy.Name, episode.Name);
@@ -66,6 +69,7 @@ namespace TestMediaBrowser.Unit {
 
             SqliteItemRepository repository = GetRepo();
             repository.SavePlayState(state);
+            repository.FlushWriter();
             var clone = repository.RetrievePlayState(state.Id);
 
             Assert.AreEqual(state.Id, clone.Id);
@@ -99,6 +103,7 @@ namespace TestMediaBrowser.Unit {
             SqliteItemRepository repository = GetRepo();
             Guid id = Guid.NewGuid();
             repository.SaveProviders(id, providers);
+            repository.FlushWriter();
             var clone = repository.RetrieveProviders(id).OrderBy(i => ((DummyProvider)i).Velocity).ToList();
 
             Assert.AreEqual(clone.Count, 2);

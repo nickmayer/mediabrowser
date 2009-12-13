@@ -9,6 +9,8 @@ using MediaBrowser.Library.Configuration;
 using System.IO;
 using MediaBrowser.Library.Logging;
 using System.Reflection;
+using System.Threading;
+using MediaBrowser.Library.Threading;
 
 
 namespace MediaBrowser.Library.Persistance {
@@ -41,7 +43,7 @@ namespace MediaBrowser.Library.Persistance {
         public static byte[] GetBytes(this SQLiteDataReader reader, int col) {
             byte[] buffer = new byte[8000];
             using (var ms = new MemoryStream()) {
-                long read = 0; 
+                long read = 0;
                 long offset = 0;
                 while ((read = reader.GetBytes(col, offset, buffer, 0, buffer.Length)) > 0) {
                     offset += read;
@@ -72,10 +74,52 @@ namespace MediaBrowser.Library.Persistance {
 
             return new SqliteItemRepository(dbPath);
 
-        } 
+        }
 
 
         SQLiteConnection connection;
+        List<SQLiteCommand> delayedCommands = new List<SQLiteCommand>();
+
+
+        ManualResetEvent flushing = new ManualResetEvent(false);
+
+        private void DelayedWriter() {
+            while (true) {
+                flushing.Reset(); 
+                InternalFlush();
+                flushing.Set();
+
+                Thread.Sleep(1000); 
+            }
+        }
+
+        private void InternalFlush() {
+            try {
+
+                List<SQLiteCommand> copy;
+                lock (delayedCommands) {
+                    copy = delayedCommands.ToList();
+                    delayedCommands.Clear();
+                }
+
+                lock (connection) {
+                    var tran = connection.BeginTransaction();
+                    foreach (var command in copy) {
+                        command.Transaction = tran;
+                        command.ExecuteNonQuery();
+                    }
+                    tran.Commit();
+                }
+
+            } catch (Exception e) {
+                Logger.ReportException("Critical Exception Failed to Flush:", e);
+            }
+        }
+
+        public void FlushWriter() {
+            InternalFlush();
+            flushing.WaitOne();
+        }
 
         private SqliteItemRepository(string dbPath) {
 
@@ -100,39 +144,45 @@ namespace MediaBrowser.Library.Persistance {
                 } catch (Exception e) {
                     Logger.ReportInfo(e.ToString());
                 }
-
             }
+
+            Async.Queue("Sqlite Writer", DelayedWriter); 
 
         }
 
         public void SaveChildren(Guid id, IEnumerable<Guid> children) {
 
-            lock (connection) {
+            Guid[] childrenCopy;
+            lock (children) {
+                childrenCopy = children.ToArray();
+            }
 
-                Guid[] childrenCopy;
-                lock (children) {
-                    childrenCopy = children.ToArray();
-                }
+            var cmd = connection.CreateCommand();
 
-                var cmd = connection.CreateCommand();
-                var tran = connection.BeginTransaction();
-                cmd.Transaction = tran;
+            cmd.CommandText = "delete from children where guid = @guid";
+            cmd.AddParam("@guid", id);
 
-                cmd.CommandText = "delete from children where guid = @guid";
-                var guidParam = cmd.Parameters.Add("@guid", System.Data.DbType.Guid);
-                guidParam.Value = id;
-                cmd.ExecuteNonQuery();
+            QueueCommand(cmd);
 
+            foreach (var guid in children) {
+                cmd = connection.CreateCommand();
+                cmd.AddParam("@guid", id);
                 cmd.CommandText = "insert into children (guid, child) values (@guid, @child)";
                 var childParam = cmd.Parameters.Add("@child", System.Data.DbType.Guid);
 
-                foreach (var guid in children) {
-                    childParam.Value = guid;
-                    cmd.ExecuteNonQuery();
-                }
-                tran.Commit();
+                childParam.Value = guid;
+                QueueCommand(cmd);
             }
         }
+
+
+
+        private void QueueCommand(SQLiteCommand cmd) {
+            lock (delayedCommands) {
+                delayedCommands.Add(cmd);
+            }
+        }
+
 
         public IEnumerable<Guid> RetrieveChildren(Guid id) {
 
@@ -189,8 +239,8 @@ namespace MediaBrowser.Library.Persistance {
                     prefs.ShowLabels.Value = reader.GetBoolean(1);
                     prefs.VerticalScroll.Value = reader.GetBoolean(2);
                     prefs.SortOrder = (SortOrder)Enum.Parse(typeof(SortOrder), reader.GetString(3));
-                    
-                    
+
+
                     prefs.IndexBy = (IndexType)Enum.Parse(typeof(IndexType), reader.GetString(4));
                     if (!Config.Instance.RememberIndexing)
                         prefs.IndexBy = IndexType.None;
@@ -219,12 +269,12 @@ namespace MediaBrowser.Library.Persistance {
             cmd.AddParam("@playlist_position", playState.PlaylistPosition);
             cmd.AddParam("@last_played", playState.LastPlayed);
 
-            cmd.ExecuteNonQuery();
-        
+            QueueCommand(cmd);
+
         }
 
         public void SaveDisplayPreferences(DisplayPreferences prefs) {
-          
+
             var cmd = connection.CreateCommand();
             cmd.CommandText = @"replace into display_prefs (
                                     guid, view_type, show_labels, vertical_scroll, 
@@ -241,14 +291,14 @@ namespace MediaBrowser.Library.Persistance {
             cmd.AddParam("@vertical_scroll", prefs.VerticalScroll.Value);
             cmd.AddParam("@sort_order", prefs.SortOrder.ToString());
             cmd.AddParam("@index_by", prefs.IndexBy.ToString());
-            cmd.AddParam("@use_banner",prefs.UseBanner.Value );
+            cmd.AddParam("@use_banner", prefs.UseBanner.Value);
             cmd.AddParam("@thumb_constraint_width", prefs.ThumbConstraint.Value.Width);
             cmd.AddParam("@thumb_constraint_height", prefs.ThumbConstraint.Value.Height);
             cmd.AddParam("@use_coverflow", prefs.UseCoverflow.Value);
             cmd.AddParam("@use_backdrop", prefs.UseBackdrop.Value);
 
 
-            cmd.ExecuteNonQuery();
+            QueueCommand(cmd);
         }
 
         public BaseItem RetrieveItem(Guid id) {
@@ -262,7 +312,7 @@ namespace MediaBrowser.Library.Persistance {
             using (var reader = cmd.ExecuteReader()) {
                 if (reader.Read()) {
                     var data = reader.GetBytes(0);
-                    using (var stream = new MemoryStream(data)) {                      
+                    using (var stream = new MemoryStream(data)) {
                         item = Serializer.Deserialize<BaseItem>(stream);
                     }
                 }
@@ -287,7 +337,7 @@ namespace MediaBrowser.Library.Persistance {
                 guidParam.Value = item.Id;
                 dataParam.Value = fs.ToArray();
 
-                cmd.ExecuteNonQuery();
+                QueueCommand(cmd);
 
             }
         }
@@ -317,53 +367,46 @@ namespace MediaBrowser.Library.Persistance {
 
         public void SaveProviders(Guid guid, IEnumerable<IMetadataProvider> providers) {
 
-            lock (connection) {
-
-                IMetadataProvider[] providerCopy;
-                lock (providers) {
-                    providerCopy = providers.ToArray();
-                }
-
-                var cmd = connection.CreateCommand();
-                var tran = connection.BeginTransaction();
-                cmd.Transaction = tran;
-
-                cmd.CommandText = "delete from provider_data where guid = @guid";
-                var guidParam = cmd.Parameters.Add("@guid", System.Data.DbType.Guid);
-                guidParam.Value = guid;
-                cmd.ExecuteNonQuery();
-
-                cmd.CommandText = "insert into provider_data (guid, data) values (@guid, @data)";
-                var dataParam = cmd.AddParam("@data");
-
-                foreach (var provider in providerCopy) {
-                    using (var ms = new MemoryStream()) {
-                        Serializer.Serialize(ms, (object)provider);
-                        dataParam.Value = ms.ToArray();
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                tran.Commit();
+            IMetadataProvider[] providerCopy;
+            lock (providers) {
+                providerCopy = providers.ToArray();
             }
 
+            var cmd = connection.CreateCommand();
+
+            cmd.CommandText = "delete from provider_data where guid = @guid";
+            cmd.AddParam("@guid", guid);
+            QueueCommand(cmd);
+
+            foreach (var provider in providerCopy) {
+                cmd = connection.CreateCommand();
+                cmd.CommandText = "insert into provider_data (guid, data) values (@guid, @data)";
+                cmd.AddParam("@guid", guid);
+                var dataParam = cmd.AddParam("@data");
+
+
+                using (var ms = new MemoryStream()) {
+                    Serializer.Serialize(ms, (object)provider);
+                    dataParam.Value = ms.ToArray();
+                    QueueCommand(cmd);
+                }
+            }
         }
-
-
-
-
-        public void CleanCache() {
-
-        }
-
-
-
-        #region IItemRepository Members
-
 
         public bool ClearEntireCache() {
-            throw new NotImplementedException();
+            lock (connection) {
+                var tran = connection.BeginTransaction();
+                connection.Exec("delete from provider_data"); 
+                connection.Exec("delete from items");
+                connection.Exec("delete from children");
+                connection.Exec("delete from display_prefs");
+                // People will get annoyed if this is lost
+                // connection.Exec("delete from play_states");
+                tran.Commit(); 
+            }
+
+            return true;
         }
 
-        #endregion
     }
 }

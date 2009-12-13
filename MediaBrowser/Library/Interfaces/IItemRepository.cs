@@ -23,8 +23,6 @@ namespace MediaBrowser.Library
         void SaveDisplayPreferences(DisplayPreferences prefs);
 
 
-        void CleanCache();
-
         bool ClearEntireCache();
         
     }
