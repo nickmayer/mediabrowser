@@ -94,14 +94,14 @@
         </Changed>
 
 
-        <!--<Changed Source="[Input.DeepKeyFocus]" >
+        <Changed Source="[Input.DeepKeyFocus]" >
           <Conditions>
             <Equality Source="[Input.DeepKeyFocus]" Value="false" />
           </Conditions>
           <Actions>
             <Invoke Target="[Close.Invoke]" />
           </Actions>
-        </Changed>-->
+        </Changed>
 
       </Rules>
     
