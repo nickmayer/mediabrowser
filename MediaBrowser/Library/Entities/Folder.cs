@@ -223,14 +223,12 @@ namespace MediaBrowser.Library.Entities {
 
             sortedIndex.AddRange(
                 index
-                    .Select(pair => new Index(pair.Key, pair.Value))
+                    .Select(pair => new Index(pair.Key, pair.Value.Distinct(i => i.Id).ToList()))
                 );
 
 
             sortedIndex.Sort((x, y) =>
             {
-                if (x.Children.Count == 1 && y.Children.Count > 1) return 1;
-                if (x.Children.Count > 1 && y.Children.Count == 1) return -1;
                 return x.Name.CompareTo(y.Name);
             });
 
