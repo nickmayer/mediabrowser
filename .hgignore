@@ -3,3 +3,7 @@ glob:Configurator/obj/*
 glob:MediaBrowser/bin/*
 glob:MediaBrowser/obj/*
 glob:*.suo
+glob:ITunesTrailers/bin/*
+glob:ITunesTrailers/obj/*
+glob:TestMediaBrowser/bin/*
+glob:TestMediaBrowser/obj/*

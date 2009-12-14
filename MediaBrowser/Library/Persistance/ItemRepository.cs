@@ -178,9 +178,6 @@ namespace MediaBrowser.Library {
             return ProtectedFileStream.OpenSharedReader(file);
         }
 
-        public void CleanCache() {
-
-        }
 
         private string GetChildrenFilename(Guid id) {
             return GetFile("children", id);

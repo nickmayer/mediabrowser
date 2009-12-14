@@ -2,7 +2,7 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "2.1.3.0" ?>
+<?define Property_ProductVersion = "2.1.4.0" ?>
 <?define Property_ProductCode = "39561278-78E9-4e0d-971F-0F13C7157BC8" ?>
 <?define Property_UpgradeCode = "1AA59629-46C2-42d5-AD06-534A20F68296" ?>
 
@@ -95,7 +95,10 @@
       <Component Id="ApplicationInactive.png" Guid="B555C4A3-415F-47a7-8565-C994A03F49C6" DiskId="1">
         <File Id="ApplicationInactive.png" Name="ApplicationInactive.png" Source="..\MediaBrowser\Images\ApplicationInactive.png" Checksum="no" />
       </Component>
-		</DirectoryRef>
+      <Component Id="MigrateIBN.exe" Guid="D31E4AFD-6F21-4e09-9F07-8561CB59195F" DiskId="1">
+        <File Id="MigrateIBN.exe" Name="MigrateIBN.exe" Source="..\MigrateIBN.exe" Checksum="no" />
+      </Component>
+    </DirectoryRef>
 
 		<!-- This is a list of features that are installed as a part of this product. In this case, there is -->
 		<!-- only one feature. Each feature contains a list of components that it will install. Features can -->
@@ -108,6 +111,7 @@
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Registration7.xml" />
+      <ComponentRef Id="MigrateIBN.exe" />
     </Feature>
 
 		<!-- The media table defines the location that the MSI will look to find source files during         -->
@@ -276,9 +280,14 @@
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
     <CustomAction Id="StartAppOnExit" FileKey="Configurator.exe" ExeCommand="" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Configure initial settings" />
-    
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX2" Value="1" />
+    <CustomAction Id="StartMigOnExit" FileKey="MigrateIBN.exe" ExeCommand="" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT2" Value="Migrate ImagesByName Folder (MUST be done once)" />
+
     <UI>
       <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="StartAppOnExit">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Order="2" Event="DoAction" Value="StartMigOnExit">WIXUI_EXITDIALOGOPTIONALCHECKBOX2 = 1 and NOT Installed</Publish>
     </UI>
    
   </Product>
