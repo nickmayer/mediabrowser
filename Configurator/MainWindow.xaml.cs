@@ -44,6 +44,7 @@ namespace Configurator
 
         ConfigData config;
         Ratings ratings = new Ratings();
+        PermissionDialog waitWin;
 
         public MainWindow()
         { 
@@ -126,10 +127,27 @@ namespace Configurator
                 String folderSecurityQuestion = "All users MUST have proper permissions set in order for MediaBrowser to function properly in all situations. Would you like to set these permissions properly?\n\n(Might take up to a minute to apply changes.)";
                 if (MessageBox.Show(folderSecurityQuestion, "Folder permissions", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    SetDirectoryAccess(folder, windowsAccount, fileSystemRights, AccessControlType.Allow);
+                    //hide our main window and throw up a quick dialog to tell user what is going on
+                    this.Visibility = Visibility.Hidden;
+                    waitWin = new PermissionDialog();
+                    waitWin.Show();
+                    Async.Queue("Configurator Permissions Set", () =>
+                        {
+                            SetDirectoryAccess(folder, windowsAccount, fileSystemRights, AccessControlType.Allow);
+                        }, () => { this.Dispatcher.Invoke(new doneProcess(permissionsDone)); });
                 }
             }
         }
+
+        public delegate void doneProcess();
+        public void permissionsDone()
+        {
+            //close window and make us visible
+            waitWin.Close();
+            this.Visibility = Visibility.Visible;
+        }
+    
+
 
         public bool ValidateFolderPermissions(String windowsAccount, FileSystemRights fileSystemRights, DirectoryInfo folder)
         { 
