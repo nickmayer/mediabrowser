@@ -99,9 +99,12 @@
       <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>      
       <Binding Target="[InfoBox.Item]"       Source="[PreSelectedItem]"/>
 
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[RSSBox.Content]"         Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[RSSBox.Content]"         Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
     </Rules>
+    
     <Content>
       <Panel Layout="Form">
         <Children>
@@ -148,7 +151,7 @@
           <!-- Item Scroller -->
           <Panel>
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0,200" Bottom="Parent,1,-125"/>
+              <AnchorLayoutInput Top="Parent,0,200" Bottom="Parent,1,-300"/>
             </LayoutInput>
             <Children>
               <Panel Name="SeriesScroller" >

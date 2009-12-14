@@ -7,6 +7,7 @@
       xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
       xmlns:gl="resx://MediaBrowser/MediaBrowser.Resources/GenreList"
       xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+      xmlns:vi="resx://MediaBrowser/MediaBrowser.Resources/VanillaImages"
       xmlns:vs="resx://MediaBrowser/MediaBrowser.Resources/VanillaStudio"
       xmlns:me="Me"
 	  >
@@ -96,11 +97,14 @@
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Season"      Target="[DefaultPanel.Visible]" Value="false"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Episode"     Target="[DefaultPanel.Visible]" Value="false"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="ArtistAlbum" Target="[DefaultPanel.Visible]" Value="false"/>
-      
+
+      <Binding Source="[Item.IsHD]" Target="[HDIndicator.Visible]"/>
+      <Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="720"  Target="[HDIndicator.Content]" Value="image://vi:hd720" />
+      <Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="1080" Target="[HDIndicator.Content]" Value="image://vi:hd1080" />
     </Rules>
 
     <Content>
-      <Panel Margins="5,0,0,0">
+      <Panel Margins="5,0,0,0" Layout="Dock">
         <Children>
           <!-- Item is a Movie -->
           <Panel Name="MovieInfoPanel" Layout="Dock" Visible="false">
@@ -117,7 +121,7 @@
                   <gl:GenreList Name="MovieGenres" SourceData="[Item.Genres]" Font="font://f:Vanilla_GenreFont" Color="color://s:FontColorMedium" WordWrap="false"/>
                 </Children>
               </Panel>
-              <Panel>
+              <Panel Padding="0,0,6,0">
                 <LayoutInput>
                   <DockLayoutInput Alignment="Center"  Position="Right"/>
                 </LayoutInput>
@@ -127,6 +131,7 @@
                 <Children>
                   <Text Name="ProductionYear" Content="[Item.ProductionYearString]" Color="color://s:FontColorMedium"  Font="font://f:Vanilla_MinorMetaFont" WordWrap="false"/>
                   <sr:StarRating Name="MovieStarRating" Value="[Item.ImdbRating]" Size="0,10"/>
+                  <Graphic Name="HDIndicator" MaintainAspectRatio="true" MaximumSize="0,20" Margins="0,2,0,0"/>
                 </Children>
               </Panel>
             </Children>
@@ -197,9 +202,9 @@
             </Children>
           </Panel>
           <!-- Item is an Episode -->
-          <Panel Name="EpisodeInfoPanel" Layout="Dock" Visible="false">
+          <Panel Name="EpisodeInfoPanel"  Visible="false">
             <LayoutInput>
-              <DockLayoutInput Alignment="Center"  Position="Right"/>
+              <DockLayoutInput Alignment="Center"  Position="Left"/>
             </LayoutInput>
             <Layout>
               <FlowLayout Orientation="Vertical"/>

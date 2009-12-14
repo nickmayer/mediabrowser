@@ -79,5 +79,7 @@
   <Image Name="TV-14"    Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_14"/>
   <Image Name="TV-PG"    Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_PG"/>
   <Image Name="TV-V7-FV" Source="resx://MediaBrowser/MediaBrowser.Resources/Vanilla_TV_V7_FV"/>
- 
+
+  <Image Name="hd720"  Source="resx://MediaBrowser/MediaBrowser.Resources/v_hd720"/>
+  <Image Name="hd1080" Source="resx://MediaBrowser/MediaBrowser.Resources/v_hd1080"/>
 </Mcml>

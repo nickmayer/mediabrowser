@@ -487,6 +487,9 @@
   <data name="VanillaInfoDisplayBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Controls\InfoDisplayBox.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="VanillaPosterViewItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\themes\Vanilla\Controls\posterviewitem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="PageVanilla" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\themes\Vanilla\Selectors\PageDefault.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -549,6 +552,12 @@
   </data>
   <data name="IconSummary" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\icons\IconSummary.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="v_hd1080" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\mediainfo\hd1080.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="v_hd720" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\vanilla\mediainfo\hd720.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Rated_R_full" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\ratings\rated-r_full.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

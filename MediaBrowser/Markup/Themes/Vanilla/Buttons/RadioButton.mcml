@@ -70,8 +70,10 @@
       <Image Name="BlankImage" Image="null" />
     </Locals>
     <Rules>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
 
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
@@ -260,8 +262,10 @@
       <Image Name="BlankImage"          Image="null" />
     </Locals>
     <Rules>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
 
 
       <Default Target="[Input.KeyInteractive]" Value="true" />

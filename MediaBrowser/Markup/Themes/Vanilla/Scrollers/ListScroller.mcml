@@ -178,7 +178,7 @@
     </Rules>
 
     <Content>
-      <Graphic Name="imgButton"  Content="[ImageNoFocus]" MouseInteractive="true" MaximumSize="[Size]" MinimumSize="[Size]" SizingPolicy="SizeToConstraint" HorizontalAlignment="Near" VerticalAlignment="Fill" MaintainAspectRatio="false"        >
+      <Graphic Name="imgButton"  Content="[ImageNoFocus]" MouseInteractive="true" MaximumSize="[Size]" MinimumSize="[Size]" HorizontalAlignment="Near" VerticalAlignment="Fill" MaintainAspectRatio="false"        >
         <Layout>
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
         </Layout>
@@ -193,8 +193,8 @@
       </Graphic>
     </Content>
   </UI>
-  
-  <Image Name="ButtonFocus"         Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaFocus"            NineGrid="7,7,7,7" />
-  <Image Name="ButtonNoFocus"           Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonNoFocus"           NineGrid="7,7,7,7" />
-  <Image Name="Counter" Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaCounter"/>
+
+  <Image Name="ButtonFocus"   Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilitefocus" NineGrid="10,10,10,10" />
+  <Image Name="ButtonNoFocus" Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonNoFocus"         NineGrid="7,7,7,7"/>
+  <Image Name="Counter"       Source="resx://MediaBrowser/MediaBrowser.Resources/VanillaCounter"/>
 </Mcml>

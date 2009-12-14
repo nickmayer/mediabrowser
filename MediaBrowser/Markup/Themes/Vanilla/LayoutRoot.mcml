@@ -249,10 +249,18 @@
       <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[RSSBox.Alpha]"/>
       <Binding Source="[PanelPosterBackdrop.Alpha]" Target="[PivotPanel.Alpha]"/>
 
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[PivotPanel.Content]" Value="image://me:InfoBoxDefault"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[PanelPosterBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Application.Config.Theme]" ConditionOp="Equals" Value="Default"/>
+          <Equality Source="[Application.Config.Theme]" ConditionOp="Equals" Value="Extender Default"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[PivotPanel.Content]"          Value="image://me:InfoBoxDefault"/>
+          <Set Target="[PanelPosterBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+          <Set Target="[DetailBackdrop.Content]"      Value="image://me:InfoBoxDefault"/>
+          <Set Target="[RSSBox.Content]"              Value="image://me:InfoBoxDefault"/>
+        </Actions>
+      </Rule>
 
     </Rules>
 
@@ -636,9 +644,10 @@
       <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Trailer" Target="[TrailerPanel.Visible]" Value="false"/>
       <Condition Source="[Item.ItemTypeString]" ConditionOp="NotEquals" SourceValue="Song"    Target="[MusicPanel.Visible]"   Value="false"/>
 
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FullContent.Content]"  Value="image://me:InfoBoxDefaultHighlighted"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[SmallContent.Content]" Value="image://me:InfoBoxDefault"/>
-
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[FullContent.Content]"  Value="image://me:InfoBoxDefaultHighlighted"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[SmallContent.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[FullContent.Content]"  Value="image://me:InfoBoxDefaultHighlighted"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[SmallContent.Content]" Value="image://me:InfoBoxDefault"/>
     </Rules>
 
     <Content>
