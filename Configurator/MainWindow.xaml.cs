@@ -109,7 +109,7 @@ namespace Configurator
             //only show migrate button if IBN appears to not already be in right format
             string imgRoot = config.ImageByNameLocation;
             if (imgRoot == null || imgRoot.Length == 0) imgRoot = System.IO.Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
-            if (!Directory.Exists(System.IO.Path.Combine(imgRoot,"Genre"))) {
+            if (Directory.Exists(imgRoot) && !Directory.Exists(System.IO.Path.Combine(imgRoot,"Genre"))) {
                 btnMigrateIBN.Visibility = Visibility.Visible;
             }
 
