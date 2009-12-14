@@ -106,6 +106,13 @@ namespace Configurator
 
             RefreshEntryPoints(false);
 
+            //only show migrate button if IBN appears to not already be in right format
+            string imgRoot = config.ImageByNameLocation;
+            if (imgRoot == null || imgRoot.Length == 0) imgRoot = System.IO.Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
+            if (!Directory.Exists(System.IO.Path.Combine(imgRoot,"Genre"))) {
+                btnMigrateIBN.Visibility = Visibility.Visible;
+            }
+
             ValidateMBAppDataFolderPermissions();
         }
 
@@ -1440,6 +1447,28 @@ sortorder: {2}
                         if (curFolder.CustomRating != null)
                             curFolder.SaveXML();
                     }
+                }
+            }
+        }
+
+        private void btnMigrateIBN_Click(object sender, RoutedEventArgs e)
+        {
+            //just kick off the migrate tool
+            string migrateTool = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MediaBrowser\\MediaBrowser\\MigrateIBN.exe");
+            try
+            {
+                Process.Start(migrateTool);
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Unable to start migrate tool.  Trying 32bit location: "+migrateTool, ex);
+                try
+                {
+                    Process.Start("c:\\Program Files (x86)\\MediaBrowser\\MediaBrowser\\MigrateIBN.exe");
+                }
+                catch (Exception ex2)
+                {
+                    Logger.ReportException("Still unable to start migrate tool.", ex2);
                 }
             }
         }
