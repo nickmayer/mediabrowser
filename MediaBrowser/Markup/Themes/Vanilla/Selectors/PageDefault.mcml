@@ -180,9 +180,19 @@
         </Actions>
       </Changed>
 
+
       <Changed Source="[TypingHandler.DisplayValue]">
         <Conditions>
           <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="#"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Info.Invoke]" />
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[TypingHandler.DisplayValue]">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="##"/>
         </Conditions>
         <Actions>
           <Invoke Target="[Info.Invoke]" />

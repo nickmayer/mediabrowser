@@ -129,10 +129,14 @@
         </Transformer>
       </Binding>
 
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[BannerDetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[RSSBox.Content]"               Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[DetailBackdrop.Content]"       Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[BannerDetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[RSSBox.Content]"               Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[DetailBackdrop.Content]"       Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[BannerDetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
     </Rules>
+    
 
     <Content>
       <Panel Name="DetailViewListing" Layout="Form">
@@ -175,10 +179,9 @@
             </Animations>
             <LayoutInput>
               <AnchorLayoutInput Left="Parent,0" Bottom="Parent,1,-50" Right="Parent,0,600"/>
-              <!--<FormLayoutInput Left="Parent,0" Top="Parent,0,20" Bottom="Parent,1,-50" Right="Parent,0,600"/>-->
             </LayoutInput>
             <Children>
-              <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToChildren" Padding="7,12,18,22">
+              <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToChildren" Padding="7,12,12,22">
                 <Children>
                   <vls:ListScroller FocusOrder="1" Application="[Application]" Folder="[Item]" Font="font://f:Vanilla_InfoTitleFont" Size="0,60"/>                  
                 </Children>

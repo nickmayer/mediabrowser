@@ -98,7 +98,8 @@
       <Binding Target="[Backdrop.Image]"     Source="[PreSelectedItem.BackdropImage]"/>
       <Binding Target="[Backdrop.Item]"      Source="[PreSelectedItem]"/>
 
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
 
     </Rules>
     
@@ -211,7 +212,7 @@
             <Children>
               <Repeater Source="[Item.Children]" Name="MyRepeater" ContentName="BaseItem"  >
                 <Layout>
-                  <FlowLayout Orientation="Horizontal" AllowWrap="true" Repeat="Always" Spacing="600,0" RepeatGap="600,0"/>
+                  <FlowLayout Orientation="Horizontal" Repeat="WhenTooBig" Spacing="600,0" RepeatGap="600,0"/>
                 </Layout>
                 <Animations>
                   <Animation Animation="animation://anim:ScrollerMoveItemSmooth"/>
@@ -279,7 +280,8 @@
         </Actions>
       </Condition>
 
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
 
     </Rules>
 

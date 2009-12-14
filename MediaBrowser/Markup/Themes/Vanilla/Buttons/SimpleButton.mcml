@@ -29,9 +29,11 @@
     </Locals>
 
     <Rules>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
-      
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+
       <Binding Source="[Command]" Target="[Clicker.Command]" />
       <Binding Source="[Command.Available]" Target="[Input.KeyInteractive]" />
       <Default Target="[Input.KeyInteractive]" Value="true" />
@@ -124,6 +126,11 @@
     </Locals>
 
     <Rules>
+      
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[FocusImage]"    Value="image://me:InfoBoxYellow"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[NoFocusImage]"  Value="image://me:InfoBoxDefault"/>
 
       <Binding Source="[Command]" Target="[Clicker.Command]" />
       <Binding Source="[Command.Available]" Target="[Input.KeyInteractive]" />

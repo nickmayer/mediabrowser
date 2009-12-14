@@ -153,8 +153,10 @@
         </Transformer>
       </Binding>
       
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[RSSBox.Content]" Value="image://me:InfoBoxDefault"/>
-      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[RSSBox.Content]"         Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Default"          Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[RSSBox.Content]"         Value="image://me:InfoBoxDefault"/>
+      <Condition Source="[Application.Config.Theme]" ConditionOp="Equals" SourceValue="Extender Default" Target="[DetailBackdrop.Content]" Value="image://me:InfoBoxDefault"/>
     </Rules>
 
     <Content>
@@ -242,7 +244,7 @@
               <FormLayoutInput Left="Parent,0" Top="PosterPanel,1" Bottom="Parent,1,-50" Right="Parent,0,600"/>
             </LayoutInput>
             <Children>
-              <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="7,12,18,22">
+              <Graphic Name="DetailBackdrop" Content="image://me:InfoBox" MaintainAspectRatio="false" SizingPolicy="SizeToConstraint" Padding="7,12,12,22">
                 <Children>
                   <vls:ListScroller   FocusOrder="2" Application="[Application]" Folder="[Item]" Font="font://f:Vanilla_SmallTitleFont" Size="0,40"/>                  
                 </Children>

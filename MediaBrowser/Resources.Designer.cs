@@ -2316,6 +2316,20 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap v_hd1080 {
+            get {
+                object obj = ResourceManager.GetObject("v_hd1080", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap v_hd720 {
+            get {
+                object obj = ResourceManager.GetObject("v_hd720", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Vanilla_TV_14 {
             get {
                 object obj = ResourceManager.GetObject("Vanilla_TV_14", resourceCulture);
