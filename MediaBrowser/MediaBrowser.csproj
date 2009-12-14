@@ -748,6 +748,7 @@
     <Content Include="Markup\Themes\Vanilla\Buttons\SimpleButton.mcml" />
     <Content Include="Markup\Themes\Vanilla\Controls\InfoDisplayBox.mcml" />
     <Content Include="Markup\Themes\Vanilla\Controls\NowPlayingViewport.mcml" />
+    <Content Include="Markup\Themes\Vanilla\Controls\PosterViewItem.mcml" />
     <Content Include="Markup\Themes\Vanilla\Images\Images.mcml" />
     <Content Include="Markup\Themes\Vanilla\Images\MPAARating.mcml" />
     <Content Include="Markup\Themes\Vanilla\Images\Studio.mcml" />

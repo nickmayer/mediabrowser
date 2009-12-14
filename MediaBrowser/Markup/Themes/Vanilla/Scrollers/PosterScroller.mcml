@@ -3,7 +3,7 @@
     xmlns:a="assembly://MediaBrowser/MediaBrowser"
     xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
     xmlns:fs="resx://MediaBrowser/MediaBrowser.Resources/FocusSelector"
-    xmlns:pvi="resx://MediaBrowser/MediaBrowser.Resources/PosterViewItem"
+    xmlns:vpvi="resx://MediaBrowser/MediaBrowser.Resources/VanillaPosterViewItem"
     xmlns:s="file://Styles_DoNotEdit.mcml"
     xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
     xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"      
@@ -154,7 +154,7 @@
 		<Content Name="BaseItem">
 
 
-			<pvi:PosterViewItem ImageSize="[Folder.ActualThumbSize]" AnimDelay="[AnimDelay]" NavCount="[NavCount]" 
+			<vpvi:PosterViewItem ImageSize="[Folder.ActualThumbSize]" AnimDelay="[AnimDelay]" NavCount="[NavCount]" 
                           ShowLabels="[Folder.DisplayPrefs.ShowLabels]" Application="[Application]" Index="[RepeatedItemIndex]" 
                           Item="[RepeatedItem!lib:Item]" ParentItem="[Folder]" TopLabelFont="[TopLabelFont]" 
                           LabelFont="[LabelFont]" UnwatchedCountFont="[UnwatchedCountFont]"/>

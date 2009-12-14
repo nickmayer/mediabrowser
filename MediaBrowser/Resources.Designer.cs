@@ -2568,6 +2568,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static byte[] VanillaPosterViewItem {
+            get {
+                object obj = ResourceManager.GetObject("VanillaPosterViewItem", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] VanillaRadioButton {
             get {
                 object obj = ResourceManager.GetObject("VanillaRadioButton", resourceCulture);
