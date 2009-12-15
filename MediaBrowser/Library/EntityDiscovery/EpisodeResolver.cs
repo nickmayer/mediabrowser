@@ -23,7 +23,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
                 bool isDvd = IsDvd(location); 
                 bool isVideo = !(location is IFolderMediaLocation) &&
-                    (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path));
+                    (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path) || location.IsVob());
 
                 if ( (isDvd || isVideo ) &&
                     TVUtils.IsEpisode(location.Path)) {
