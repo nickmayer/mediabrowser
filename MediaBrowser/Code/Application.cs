@@ -351,6 +351,12 @@ namespace MediaBrowser
             // Present dialog
             DialogResult dr = mce.Dialog(msg, caption, DialogButtons.No | DialogButtons.Yes, 0, true);
 
+            if (dr == DialogResult.No)
+            {
+                mce.Dialog("Item NOT Deleted.", "Delete Cancelled by User", DialogButtons.Ok, 0, true);
+                return;
+            }
+
             if (dr == DialogResult.Yes && this.Config.Advanced_EnableDelete == true 
                 && this.Config.EnableAdvancedCmds == true)
             {
