@@ -43,6 +43,7 @@ namespace MediaBrowser.Library.Extensions {
 
                 foreach (IMediaLocation child in folder.Children) {
                     if (!(child is IFolderMediaLocation)  &&
+                        child.IsVideo() &&
                         TVUtils.EpisodeNumberFromFile(child.Path, false) != null)
                         return true;
                 }
