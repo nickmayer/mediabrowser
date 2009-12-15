@@ -10,5 +10,6 @@ namespace MediaBrowser.Library.Entities {
         int? RunningTime { get; set; }
         List<string> Studios { get; set; }
         string AspectRatio { get; set; }
+        int? ProductionYear { get; set; }
     }
 }
