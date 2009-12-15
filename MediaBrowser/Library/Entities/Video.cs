@@ -80,6 +80,7 @@ namespace MediaBrowser.Library.Entities {
 
         public virtual IEnumerable<string> VideoFiles {
             get {
+
                 if (!ContainsRippedMedia && MediaLocation is IFolderMediaLocation) {
                     foreach (var path in GetChildVideos((IFolderMediaLocation)MediaLocation)) {
                         yield return path;
@@ -107,7 +108,8 @@ namespace MediaBrowser.Library.Entities {
 
             foreach (var child in location.Children)
 	        {
-                if (child.IsVideo()) yield return child.Path;
+                // MCE plays vobs natively 
+                if (child.IsVideo() || child.IsVob()) yield return child.Path;
                 else if (child is IFolderMediaLocation && Kernel.Instance.ConfigData.EnableNestedMovieFolders) {
                     foreach (var grandChild in GetChildVideos(child as IFolderMediaLocation)) {
                         yield return grandChild;
