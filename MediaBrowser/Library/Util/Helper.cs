@@ -138,7 +138,7 @@ namespace MediaBrowser.LibraryManagement
             }
         }
 
-        public static bool IsDvd(String filename)
+        public static bool IsVob(String filename)
         {
             string extension = System.IO.Path.GetExtension(filename).ToLower();
             return extension == ".vob";
