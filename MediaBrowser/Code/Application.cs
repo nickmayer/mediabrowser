@@ -482,6 +482,9 @@ namespace MediaBrowser
         void FullRefresh(Folder folder)
         {
             folder.RefreshMetadata();
+            //refresh our children too in case sortname has changed in configurator
+            foreach (BaseItem child in folder.Children)
+                child.RefreshMetadata();
 
             using (new Profiler("Full Library Validation"))
             {

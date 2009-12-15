@@ -50,7 +50,7 @@
                     <Button Height="32.24" HorizontalAlignment="Left" Margin="20,0,0,17" x:Name="btnAddFolder" VerticalAlignment="Bottom" Width="57" Click="btnAddFolder_Click" FontSize="14" ToolTip="Add a new media collection" Content="Add"/>
                     <Button Height="32" HorizontalAlignment="Left" Margin="148,0,0,17" x:Name="btnRemoveFolder" VerticalAlignment="Bottom" Width="65" Click="btnRemoveFolder_Click" FontSize="14" ToolTip="Remove media collection" Content="Remove"/>
                     <Button Height="32" HorizontalAlignment="Left" Margin="82,0,0,17" x:Name="btnRename" VerticalAlignment="Bottom" Width="59" Click="btnRename_Click" ToolTip="Rename media collection" Content="Rename" FontSize="14" />
-                    <Canvas Margin="328,6,19,13" x:Name="infoPanel">
+                    <Canvas Margin="0,6,19,59" x:Name="infoPanel" HorizontalAlignment="Right" Width="297">
                         <Button Height="32" x:Name="btnChangeImage" Width="111" Canvas.Left="29" Canvas.Top="104" Click="btnChangeImage_Click" FontSize="14" Content="Change Image" ToolTip="Change the default image for the media collection" />
                         <ListBox Height="115" x:Name="internalFolder" Width="285" Canvas.Left="6" Canvas.Top="176" FontSize="14" />
                         <Button Height="32" x:Name="btnAddSubFolder" Width="90" Canvas.Left="6" Canvas.Top="297" Click="btnAddSubFolder_Click" FontSize="14" ToolTip="Add another folder inside your media collection" Content="Add"/>
@@ -64,6 +64,7 @@
                     <Label Height="34" HorizontalAlignment="Left" Margin="52,6,0,0" x:Name="lblStep1b" VerticalAlignment="Top" Width="237" Foreground="#FF030303" Content="Add your media"/>
                     <Button Height="32" HorizontalAlignment="Left" Margin="233,0,0,17" Name="btnUp" VerticalAlignment="Bottom" Width="24" Click="btnUp_Click">^</Button>
                     <Button Height="32" HorizontalAlignment="Left" Margin="265,0,0,17" Name="btnDn" VerticalAlignment="Bottom" Width="24" Click="btnDn_Click">v</Button>
+                    <Button Name="btnMigrateIBN" Margin="396,0,78,17" Height="30.76" VerticalAlignment="Bottom" Click="btnMigrateIBN_Click" Visibility="Hidden" ToolTip="Run a utility to migrate your ImagesByName folder to the new format">Migrate ImagesByName</Button>
                 </Grid>
             </TabItem>
             <TabItem Header="podcasts" FontSize="14">
