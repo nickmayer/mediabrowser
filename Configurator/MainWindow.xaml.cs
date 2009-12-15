@@ -44,6 +44,7 @@ namespace Configurator
 
         ConfigData config;
         Ratings ratings = new Ratings();
+        PermissionDialog waitWin;
 
         public MainWindow()
         { 
@@ -105,6 +106,13 @@ namespace Configurator
 
             RefreshEntryPoints(false);
 
+            //only show migrate button if IBN appears to not already be in right format
+            string imgRoot = config.ImageByNameLocation;
+            if (imgRoot == null || imgRoot.Length == 0) imgRoot = System.IO.Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
+            if (Directory.Exists(imgRoot) && !Directory.Exists(System.IO.Path.Combine(imgRoot,"Genre"))) {
+                btnMigrateIBN.Visibility = Visibility.Visible;
+            }
+
             ValidateMBAppDataFolderPermissions();
         }
 
@@ -126,10 +134,27 @@ namespace Configurator
                 String folderSecurityQuestion = "All users MUST have proper permissions set in order for MediaBrowser to function properly in all situations. Would you like to set these permissions properly?\n\n(Might take up to a minute to apply changes.)";
                 if (MessageBox.Show(folderSecurityQuestion, "Folder permissions", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    SetDirectoryAccess(folder, windowsAccount, fileSystemRights, AccessControlType.Allow);
+                    //hide our main window and throw up a quick dialog to tell user what is going on
+                    this.Visibility = Visibility.Hidden;
+                    waitWin = new PermissionDialog();
+                    waitWin.Show();
+                    Async.Queue("Configurator Permissions Set", () =>
+                        {
+                            SetDirectoryAccess(folder, windowsAccount, fileSystemRights, AccessControlType.Allow);
+                        }, () => { this.Dispatcher.Invoke(new doneProcess(permissionsDone)); });
                 }
             }
         }
+
+        public delegate void doneProcess();
+        public void permissionsDone()
+        {
+            //close window and make us visible
+            waitWin.Close();
+            this.Visibility = Visibility.Visible;
+        }
+    
+
 
         public bool ValidateFolderPermissions(String windowsAccount, FileSystemRights fileSystemRights, DirectoryInfo folder)
         { 
@@ -1422,6 +1447,28 @@ sortorder: {2}
                         if (curFolder.CustomRating != null)
                             curFolder.SaveXML();
                     }
+                }
+            }
+        }
+
+        private void btnMigrateIBN_Click(object sender, RoutedEventArgs e)
+        {
+            //just kick off the migrate tool
+            string migrateTool = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MediaBrowser\\MediaBrowser\\MigrateIBN.exe");
+            try
+            {
+                Process.Start(migrateTool);
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Unable to start migrate tool.  Trying 32bit location: "+migrateTool, ex);
+                try
+                {
+                    Process.Start("c:\\Program Files (x86)\\MediaBrowser\\MediaBrowser\\MigrateIBN.exe");
+                }
+                catch (Exception ex2)
+                {
+                    Logger.ReportException("Still unable to start migrate tool.", ex2);
                 }
             }
         }
