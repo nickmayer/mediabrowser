@@ -37,7 +37,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
         /// </summary>
         private static readonly Regex[] episodeExpressionsInASeasonFolder = new Regex[] {
                         new Regex(@".*\\(?<epnumber>\d{1,2})\s?-\s?[^\\]*$"), // 01 - blah.avi, 01-blah.avi
-                        new Regex(@".*\\(?<epnumber>\d{1,2})[^\d\\]+[^\\]*$"), // 01.avi, 01.blah.avi "01 - 22 blah.avi" 
+                        new Regex(@".*\\(?<epnumber>\d{1,2})[^\d\\]*[^\\]*$"), // 01.avi, 01.blah.avi "01 - 22 blah.avi" 
                         new Regex(@".*\\(?<seasonnumber>\d)(?<epnumber>\d{1,2})[^\d\\]+[^\\]*$"), // 01.avi, 01.blah.avi
                         new Regex(@".*\\\D*\d+(?<epnumber>\d{2})") // hell0 - 101 -  hello.avi
 
@@ -75,8 +75,6 @@ namespace MediaBrowser.Library.Providers.TVDB {
         }
 
         public static string EpisodeNumberFromFile(string fullPath, bool isInSeason) {
-            if (!(Helper.IsVideo(fullPath) || Helper.IsIso(fullPath)))
-                return null;
 
             string fl = fullPath.ToLower();
             foreach (Regex r in episodeExpressions) {
