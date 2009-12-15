@@ -435,6 +435,11 @@ namespace MediaBrowser
                         {
                             try
                             {
+                                //refresh the root folder children in case we changed sort order
+                                foreach (BaseItem child in this.RootFolder.Children)
+                                {
+                                    child.RefreshMetadata(MetadataRefreshOptions.Force);
+                                }
                                 FullRefresh(this.RootFolder);
                             }
                             catch (Exception ex)
@@ -482,9 +487,6 @@ namespace MediaBrowser
         void FullRefresh(Folder folder)
         {
             folder.RefreshMetadata();
-            //refresh our children too in case sortname has changed in configurator
-            foreach (BaseItem child in folder.Children)
-                child.RefreshMetadata();
 
             using (new Profiler("Full Library Validation"))
             {
