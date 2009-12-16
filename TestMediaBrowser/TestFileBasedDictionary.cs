@@ -59,8 +59,8 @@ namespace TestMediaBrowser {
             var store = new FileBasedDictionary<Dog>(path);
             var store2 = new FileBasedDictionary<Dog>(path);
 #if (DEBUG)
-            store.TrackingId = "first";
-            store2.TrackingId = "second";
+            //store.TrackingId = "first";
+            //store2.TrackingId = "second";
 #endif
 
             Guid id = Guid.NewGuid();
