@@ -61,7 +61,7 @@
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="150" Enabled="true" />
       <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
-      <Timer Name="InitialFocusTimer" AutoRepeat="false" Interval="2500" Enabled="true" />
+      <Timer Name="InitialFocusTimer" AutoRepeat="false" Interval="2500" Enabled="false" />
 
       <a:Clock Name="Clock"/>
 
@@ -747,6 +747,7 @@
       <Changed Source="[Folder.QuickListItems]">
         <Actions>
           <Invoke Target="[ScrollingData.Home]" InvokePolicy="Synchronous" />
+          <Set Target="[NavInto.Value]" Value="true" />
         </Actions>
       </Changed>
       <Binding Source="[ScrollingData.CurrentPage]" Target="[Pagination.Value]" />
