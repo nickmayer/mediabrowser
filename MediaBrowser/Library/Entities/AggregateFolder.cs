@@ -16,7 +16,13 @@ namespace MediaBrowser.Library.Entities {
             virtualChildren.Add(child);
         }
 
-        protected override List<BaseItem> GetNonCachedChildren() {
+        public void RemoveVirtualChild(BaseItem child)
+        {
+            virtualChildren.Remove(child);
+        }
+
+        protected override List<BaseItem> GetNonCachedChildren()
+        {
             var list =  base.GetNonCachedChildren();
             list.AddRange(virtualChildren);
             return list;

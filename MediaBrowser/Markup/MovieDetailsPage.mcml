@@ -4,7 +4,6 @@
     xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
 	  xmlns:vd="resx://MediaBrowser/MediaBrowser.Resources/ViewMovieDefault"
     xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMovieMinimal"
-    xmlns:vv="resx://MediaBrowser/MediaBrowser.Resources/ViewMovieVanilla"
     xmlns:dm="resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView"
     xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
     xmlns:me="Me"

@@ -351,6 +351,12 @@ namespace MediaBrowser
             // Present dialog
             DialogResult dr = mce.Dialog(msg, caption, DialogButtons.No | DialogButtons.Yes, 0, true);
 
+            if (dr == DialogResult.No)
+            {
+                mce.Dialog("Item NOT Deleted.", "Delete Cancelled by User", DialogButtons.Ok, 0, true);
+                return;
+            }
+
             if (dr == DialogResult.Yes && this.Config.Advanced_EnableDelete == true 
                 && this.Config.EnableAdvancedCmds == true)
             {
@@ -435,6 +441,11 @@ namespace MediaBrowser
                         {
                             try
                             {
+                                //refresh the root folder children in case we changed sort order
+                                foreach (BaseItem child in this.RootFolder.Children)
+                                {
+                                    child.RefreshMetadata(MetadataRefreshOptions.Force);
+                                }
                                 FullRefresh(this.RootFolder);
                             }
                             catch (Exception ex)
@@ -482,9 +493,6 @@ namespace MediaBrowser
         void FullRefresh(Folder folder)
         {
             folder.RefreshMetadata();
-            //refresh our children too in case sortname has changed in configurator
-            foreach (BaseItem child in folder.Children)
-                child.RefreshMetadata();
 
             using (new Profiler("Full Library Validation"))
             {

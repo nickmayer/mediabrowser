@@ -107,10 +107,18 @@ namespace Configurator
             RefreshEntryPoints(false);
 
             //only show migrate button if IBN appears to not already be in right format
-            string imgRoot = config.ImageByNameLocation;
+            string imgRoot = config.ImageByNameLocation.Trim();
             if (imgRoot == null || imgRoot.Length == 0) imgRoot = System.IO.Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
-            if (Directory.Exists(imgRoot) && !Directory.Exists(System.IO.Path.Combine(imgRoot,"Genre"))) {
-                btnMigrateIBN.Visibility = Visibility.Visible;
+            try
+            {
+                if (Directory.Exists(imgRoot) && !Directory.Exists(System.IO.Path.Combine(imgRoot, "Genre")))
+                {
+                    btnMigrateIBN.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Cannot access ImagesByName location", ex);
             }
 
             ValidateMBAppDataFolderPermissions();
