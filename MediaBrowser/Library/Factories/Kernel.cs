@@ -349,8 +349,7 @@ namespace MediaBrowser.Library {
             {
                 {"Default", new ViewTheme()},
                 {"Diamond", new ViewTheme("Diamond", "resx://MediaBrowser/MediaBrowser.Resources/PageDiamond#PageDiamond", "resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView#DiamondMovieView")},
-                {"Vanilla", new ViewTheme("Vanilla", "resx://MediaBrowser/MediaBrowser.Resources/PageVanilla#Page", "resx://MediaBrowser/MediaBrowser.Resources/ViewMovieVanilla#ViewMovieVanilla")},
-            };
+             };
 
         //method for external entities (plug-ins) to add a new theme - only support replacing detail areas for now...
         public void AddTheme(string name, string pageArea, string detailArea)
