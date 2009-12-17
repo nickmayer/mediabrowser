@@ -167,7 +167,7 @@ namespace MediaBrowser.Library.Entities {
         public IList<Index> IndexBy(IndexType indexType) {
 
             if (indexType == IndexType.None) throw new ArgumentException("Index type should not be none!");
-            Func<Show, IEnumerable<BaseItem>> indexingFunction = null;
+            Func<IShow, IEnumerable<BaseItem>> indexingFunction = null;
 
             switch (indexType) {
                 case IndexType.Actor:
@@ -199,7 +199,7 @@ namespace MediaBrowser.Library.Entities {
 
             var index = new Dictionary<BaseItem, List<BaseItem>>(new BaseItemIndexComparer());
             foreach (var item in RecursiveChildren) {
-                Show show = item as Show;
+                IShow show = item as IShow;
                 IEnumerable<BaseItem> subIndex = null;
                 if (show != null) {
                     subIndex = indexingFunction(show);
@@ -208,12 +208,15 @@ namespace MediaBrowser.Library.Entities {
 
                 if (subIndex != null) {
                     foreach (BaseItem innerItem in subIndex) {
-                        AddItemToIndex(index, innerItem, item);
-                        added = true;
+                        if (!(item is Episode) && !(item is Season)) //exclude episodes/seasons as their series will be there
+                        {
+                            AddItemToIndex(index, innerItem, item);
+                            added = true;
+                        }
                     }
                 }
 
-                if (!added && item is Show) {
+                if (!added && item is IShow && !(item is Episode) && !(item is Season)) {
                     AddItemToIndex(index, unknown, item);
                 }
 

@@ -36,5 +36,9 @@ namespace MediaBrowser.Library.Entities {
 
         [Persist]
         public string AspectRatio { get; set; }
+
+        //no persist so we don't muck the cache - this isn't presently used as 'series' don't have a single year
+        // but we need it to be compatable with index creation
+        public int? ProductionYear { get; set; }
     }
 }

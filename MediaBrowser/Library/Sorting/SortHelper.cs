@@ -7,6 +7,8 @@ namespace MediaBrowser.Library.Sorting {
     static class SortHelper {
 
         public static string GetSortableName(string name) {
+            if (name == null) return ""; //some items may not have name filled in properly
+
             string sortable = name.ToLower();
             foreach (string search in Config.Instance.SortRemoveCharactersArray) {
                 sortable = sortable.Replace(search.ToLower(), string.Empty);

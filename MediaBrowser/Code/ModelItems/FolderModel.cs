@@ -440,29 +440,34 @@ namespace MediaBrowser.Library {
 
         public void RefreshUI()
         {
-            //force an update of the children
-            this.folderChildren.RefreshChildren();
-            this.folderChildren.Sort();
-            if (this.IsRoot)
+            //this could take a bit so kick this off in the background
+            Async.Queue("Refresh UI", () =>
             {
-                //if this is the root page - also the recent items
-                try
+                //force an update of the children
+                this.folder.ValidateChildren();
+                this.folderChildren.RefreshChildren();
+                this.folderChildren.Sort();
+                if (this.IsRoot)
                 {
-                    foreach (FolderModel folder in this.Children)
+                    //if this is the root page - also the recent items
+                    try
                     {
-                        folder.newestItems = null; //force it to go get the real items
-                        folder.GetNewestItems(Config.Instance.RecentItemCount);
-                        folder.recentWatchedItems = null;
-                        folder.GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                        foreach (FolderModel folder in this.Children)
+                        {
+                            folder.newestItems = null; //force it to go get the real items
+                            folder.GetNewestItems(Config.Instance.RecentItemCount);
+                            folder.recentWatchedItems = null;
+                            folder.GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        Logger.ReportException("Invalid root folder type", ex);
+                    }
+                    this.SelectedChildChanged(); //make sure recent list changes
                 }
-                catch (Exception ex)
-                {
-                    Logger.ReportException("Invalid root folder type", ex);
-                }
-                this.SelectedChildChanged(); //make sure recent list changes
-            }
-            FireChildrenChangedEvents(); //force UI to update
+                FireChildrenChangedEvents(); //force UI to update
+            }, null, true);
         }
 
         protected void FireChildrenChangedEvents() {

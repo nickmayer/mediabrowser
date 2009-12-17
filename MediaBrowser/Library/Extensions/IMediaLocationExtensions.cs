@@ -22,6 +22,10 @@ namespace MediaBrowser.Library.Extensions {
             return Helper.IsVideo(location.Path);
         }
 
+        public static bool IsVob(this IMediaLocation location) {
+            return Helper.IsVob(location.Path);
+        }
+
         public static bool IsSeriesFolder(this IMediaLocation location) { 
             IFolderMediaLocation folder = location as IFolderMediaLocation;
             if (folder != null) {
@@ -43,6 +47,7 @@ namespace MediaBrowser.Library.Extensions {
 
                 foreach (IMediaLocation child in folder.Children) {
                     if (!(child is IFolderMediaLocation)  &&
+                        child.IsVideo() &&
                         TVUtils.EpisodeNumberFromFile(child.Path, false) != null)
                         return true;
                 }

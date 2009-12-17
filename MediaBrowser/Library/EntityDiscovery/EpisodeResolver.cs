@@ -23,11 +23,10 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
                 bool isDvd = IsDvd(location); 
                 bool isVideo = !(location is IFolderMediaLocation) &&
-                    (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path));
+                    (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path) || location.IsVob());
 
                 if ( (isDvd || isVideo ) &&
                     TVUtils.IsEpisode(location.Path)) {
-
                     factory = BaseItemFactory<Episode>.Instance;
                 }
             }
@@ -39,7 +38,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
             var folder = location as IFolderMediaLocation;
             if (folder != null && folder.Children != null) {
                 foreach (var item in folder.Children) {
-                    isDvd |= Helper.IsDvd(item.Path);
+                    isDvd |= Helper.IsVob(item.Path);
                     isDvd |= item.Path.ToUpper().EndsWith("VIDEO_TS");
                     if (isDvd) break;
                 } 

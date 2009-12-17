@@ -78,7 +78,7 @@ namespace Configurator
             BrowseInfo.iImage = -1;
 
             this.Title = "Please select a folder below:";
-            this.InitialExpandedFolder = @"c:\";
+            this.InitialExpandedFolder = @"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; 
             this.OKButtonText = "OK";
         }
 
