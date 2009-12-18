@@ -20,7 +20,6 @@ namespace MediaBrowser.Library.UI
         public ConfigPanel(string resourceName)
         {
             resource = resourceName;
-            config = new ModelItem();
         }
 
         public string Resource { get { return resource; } }
