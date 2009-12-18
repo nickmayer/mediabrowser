@@ -380,7 +380,7 @@ namespace Configurator
             //ddlOptionViewTheme.Items.Add("Classic"); 
             ddlOptionViewTheme.Items.Add("Default");            
             ddlOptionViewTheme.Items.Add("Diamond");
-            ddlOptionViewTheme.Items.Add("Vanilla");
+            //ddlOptionViewTheme.Items.Add("Vanilla");
             // Colors
             ddlOptionThemeColor.Items.Add("Default");
             ddlOptionThemeColor.Items.Add("Black");

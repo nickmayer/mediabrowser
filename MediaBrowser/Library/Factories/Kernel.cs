@@ -22,6 +22,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Net;
 using MediaBrowser.Util;
+using Microsoft.MediaCenter.UI;
 
 namespace MediaBrowser.Library {
 
@@ -335,14 +336,19 @@ namespace MediaBrowser.Library {
 
             this.ParentalControls.ClearEnteredList();
         }
-        public Dictionary<string, string> ConfigPanels = new Dictionary<string, string>() {
-            {"General",""},{"Media Options",""},{"Themes",""},{"ParentalControl",""} }; //defaults are embedded in configpage others will be added to end
+        public Dictionary<string, ConfigPanel> ConfigPanels = new Dictionary<string, ConfigPanel>() {
+            {"General",new ConfigPanel("")},{"Media Options",new ConfigPanel("")},{"Themes",new ConfigPanel("")},{"ParentalControl",new ConfigPanel("")} }; //defaults are embedded in configpage others will be added to end
 
         //method for external entities (plug-ins) to add a new config panels
         //panel should be a resx reference to a UI that fits within the config panel area and takes Application and FocusItem as parms
         public void AddConfigPanel(string name, string panel)
         {
-            ConfigPanels.Add(name, panel);
+            ConfigPanels.Add(name, new ConfigPanel(panel));
+        }
+
+        public void AddConfigPanel(string name, string panel, ModelItem configObject)
+        {
+            ConfigPanels.Add(name, new ConfigPanel(panel,configObject));
         }
 
         public Dictionary<string, ViewTheme> AvailableThemes = new Dictionary<string, ViewTheme>()
