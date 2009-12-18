@@ -67,7 +67,7 @@ namespace MediaBrowser
         {
             if (Kernel.Instance.ConfigPanels.ContainsKey(name))
             {
-                return Kernel.Instance.ConfigPanels[name];
+                return Kernel.Instance.ConfigPanels[name].Resource;
             }
             else
             {
@@ -81,10 +81,18 @@ namespace MediaBrowser
         {
             get
             {
-                return Kernel.Instance.ConfigPanels[ConfigModel.Chosen.ToString()];
+                return Kernel.Instance.ConfigPanels[ConfigModel.Chosen.ToString()].Resource;
             }
         }
 
+        public ModelItem CurrentConfigObject
+        {
+            get
+            {
+                ModelItem temp = Kernel.Instance.ConfigPanels[ConfigModel.Chosen.ToString()].ConfigObject;
+                return temp;
+            }
+        }
 
         public Dictionary<string, ViewTheme> AvailableThemes { get { return Kernel.Instance.AvailableThemes; } }
 

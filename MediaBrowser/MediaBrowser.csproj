@@ -652,6 +652,7 @@
     <Compile Include="Library\Plugins\PluginConfigurationOptions.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
     <Compile Include="Library\Ratings.cs" />
+    <Compile Include="Library\UI\ConfigPanel.cs" />
     <Compile Include="Library\UI\MenuManager.cs" />
     <Compile Include="Library\UI\ResumeMenuItem.cs" />
     <Compile Include="Library\UI\MenuItem.cs" />

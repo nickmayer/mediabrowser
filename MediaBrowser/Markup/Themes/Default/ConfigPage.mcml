@@ -1,4 +1,5 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:mc="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI"
 	  xmlns:cor="assembly://MSCorLib/System"
 	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
 	  xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
@@ -656,7 +657,7 @@
 
               <Graphic Name="Panel99" Visible="false" Content="image://me:50AlphaBg" Layout="HorizontalFlow" MinimumSize="[PanelSize]" Padding="[SMargin]">
                 <Children>
-                  <me:AddinPanel Name="AddinPanel" Application="[Application]" FocusItem="[FocusItem]" />
+                  <me:AddinPanel Name="AddinPanel" Application="[Application]" FocusItem="[FocusItem]" ConfigObject="[Application.CurrentConfigObject]"/>
                 </Children>
               </Graphic>
 
@@ -781,6 +782,7 @@
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <EditableText Name="FocusItem" />
+      <mc:ModelItem Name="ConfigObject" />
     </Properties>
   </UI>
   
