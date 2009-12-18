@@ -80,6 +80,9 @@ namespace MediaBrowser {
 
         public virtual void PlayMedia(string path)
         {
+            // Test fix for crappy playback on 7
+            System.Threading.Thread.Sleep(200);
+
             if (lastWasDVD) mediaTransport = null;
             PlayPath(path, MediaType.Video, false);
             lastWasDVD = false;
