@@ -12,6 +12,7 @@ using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Util;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Threading;
+using System.Reflection;
 
 
 namespace MediaBrowser {
@@ -80,9 +81,6 @@ namespace MediaBrowser {
 
         public virtual void PlayMedia(string path)
         {
-            // Test fix for crappy playback on 7
-            System.Threading.Thread.Sleep(200);
-
             if (lastWasDVD) mediaTransport = null;
             PlayPath(path, MediaType.Video, false);
             lastWasDVD = false;
@@ -164,14 +162,38 @@ namespace MediaBrowser {
 
         public virtual void GoToFullScreen()
         {
-            System.Threading.Thread.Sleep(200);
-            var mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience; 
+            var mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
+
+            // great window 7 has bugs, lets see if we can work around them 
+            if (mce == null) {
+                System.Threading.Thread.Sleep(200);
+                mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
+                if (mce == null) {
+                    try {
+                        var fi = AddInHost.Current.MediaCenterEnvironment.GetType()
+                            .GetField("_checkedMediaExperience", BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (fi != null) {
+                            fi.SetValue(AddInHost.Current.MediaCenterEnvironment, false);
+                            mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
+                        }
+      
+                    } catch (Exception e) { 
+                        // give up ... I do not know what to do 
+                        Logger.ReportException("AddInHost.Current.MediaCenterEnvironment.MediaExperience is null", e);
+                    }
+                
+                }
+            }
+
             if (mce != null) {
                 mce.GoToFullScreen();
             } 
             else 
             {
                 Logger.ReportError("AddInHost.Current.MediaCenterEnvironment.MediaExperience is null, we have no way to go full screen!");
+                
+              
+                
                 AddInHost.Current.MediaCenterEnvironment.Dialog("We can not maximize the window! This is a known bug with Windows 7 and TV Pack, you will have to restart Media Browser!", "", Microsoft.MediaCenter.DialogButtons.Ok, 0, true);
             }
         }
