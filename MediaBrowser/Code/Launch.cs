@@ -42,8 +42,6 @@ namespace MediaBrowser
                 return;
             }
 
-            Kernel.Init(config); 
-
             Environment.CurrentDirectory = ApplicationPaths.AppConfigPath;
             try
             {
@@ -56,6 +54,8 @@ namespace MediaBrowser
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
                 return;
             }
+
+            Kernel.Init(config); 
 
             Application app = new Application(new MyHistoryOrientedPageSession(), host);
 

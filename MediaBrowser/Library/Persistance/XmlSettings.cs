@@ -14,7 +14,7 @@ namespace MediaBrowser.Library.Persistance {
 
 
     [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class SkipFieldAttribute : Attribute {
+    public sealed class SkipFieldAttribute : Attribute {
 
         // This is a positional argument
         public SkipFieldAttribute() {
@@ -22,7 +22,7 @@ namespace MediaBrowser.Library.Persistance {
     }
 
     [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class CommentAttribute : Attribute {
+    public sealed class CommentAttribute : Attribute {
 
         string comment;
 
@@ -328,6 +328,10 @@ namespace MediaBrowser.Library.Persistance {
                 }
             } catch (Exception) {
                 // corrupt or missing config so create
+                // copy it in case was old format
+                string saveName = Path.Combine(Path.GetDirectoryName(filename),Path.GetFileNameWithoutExtension(filename))+"(old).config";
+                if (File.Exists(saveName)) File.Delete(saveName);
+                if (File.Exists(filename)) File.Copy(filename,saveName); 
                 File.WriteAllText(filename, "<Settings></Settings>");
                 dom.Load(filename);
                 settingsNode = GetSettingsNode(dom);

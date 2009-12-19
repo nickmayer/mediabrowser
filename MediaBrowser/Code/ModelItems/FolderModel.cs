@@ -305,11 +305,40 @@ namespace MediaBrowser.Library {
         }
 
         private void RefreshFolderOverviewCache() {
-            var items = new SortedList<DateTime, Item>();
-            FindNewestChildren(folder, items, 20,-1);
-            folderOverviewCache = string.Join("\n", items.Reverse()
-                .Select(i => (this.BaseItem.GetType() == typeof(Season) ? i.Value.Name : i.Value.LongName) )
-                .ToArray());
+            //produce list sorted by episode number if we are a TV season
+            if (this.BaseItem is Season)
+            {
+                int unknown = 9999; //use this for episodes that don't have episode number
+                var items = new SortedList<int, BaseItem>();
+                foreach (BaseItem i in this.Folder.Children) {
+                    Episode ep = i as Episode;
+                    if (ep != null)
+                    {
+                        int epNum;
+                        try
+                        {
+                            epNum = Convert.ToInt32(ep.EpisodeNumber);
+                        }
+                        catch { epNum = unknown++; }
+                        try
+                        {
+                            items.Add(epNum, ep);
+                        } catch {
+                            //probably more than one episode coming up as "0"
+                            items.Add(unknown++, ep);
+                        }
+                    }
+                }
+                folderOverviewCache = string.Join("\n", items.Select(i => (i.Value.Name)).ToArray());
+            }
+            else // normal folder
+            {
+                var items = new SortedList<DateTime, Item>();
+                FindNewestChildren(folder, items, 20, -1);
+                folderOverviewCache = string.Join("\n", items.Reverse()
+                    .Select(i => (this.BaseItem.GetType() == typeof(Season) ? i.Value.Name : i.Value.LongName))
+                    .ToArray());
+            }
         }
 
         public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
