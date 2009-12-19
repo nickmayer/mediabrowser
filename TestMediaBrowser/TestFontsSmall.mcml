@@ -1,0 +1,20 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System">
+
+  <!-- SMALL Vanilla Fonts -->
+  <Font Name="Vanilla_MainTitleFont"  Font="Arial Rounded MT Bold,24"/>
+  <Font Name="Vanilla_SmallTitleFont" Font="Arial Rounded MT Bold,16"/>
+  <Font Name="Vanilla_SubTitleFont"   Font="Segoe Media Center,18"/>
+  <Font Name="Vanilla_InfoTitleFont"  Font="Segoe Media Center Semibold,20"/>
+  <Font Name="Vanilla_GenreFont"      Font="Segoe Media Center,16"/>
+  <Font Name="Vanilla_RootItemFont"   Font="Roman SD,22,Bold"/>
+  <Font Name="Vanilla_MetaFont"       Font="Segoe Media Center,16"/>
+  <Font Name="Vanilla_MinorMetaFont"  Font="Segoe Media Center,14"/>
+  <Font Name="Vanilla_OverviewFont"   Font="Calibri,18,Italic"/>
+  <Font Name="Vanilla_CounterFont"    Font="Segoe Media Center,16"/>
+  <Font Name="Vanilla_ClockFont"      Font="Segoe Media Center,16"/>
+  <Font Name="Vanilla_LabelFont"      Font="Calibri,16,Italic"/>
+  <Font Name="Vanilla_CastFont"       Font="Calibri,16,Italic"/>
+  <Font Name="Vanilla_MediaFont"      Font="Segoe Media Center,12"/>
+
+</Mcml>
