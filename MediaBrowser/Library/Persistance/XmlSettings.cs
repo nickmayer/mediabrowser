@@ -14,7 +14,7 @@ namespace MediaBrowser.Library.Persistance {
 
 
     [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class SkipFieldAttribute : Attribute {
+    public sealed class SkipFieldAttribute : Attribute {
 
         // This is a positional argument
         public SkipFieldAttribute() {
@@ -22,7 +22,7 @@ namespace MediaBrowser.Library.Persistance {
     }
 
     [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class CommentAttribute : Attribute {
+    public sealed class CommentAttribute : Attribute {
 
         string comment;
 
