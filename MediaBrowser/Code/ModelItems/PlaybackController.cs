@@ -164,6 +164,7 @@ namespace MediaBrowser {
 
         public virtual void GoToFullScreen()
         {
+            System.Threading.Thread.Sleep(200);
             var mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience; 
             if (mce != null) {
                 mce.GoToFullScreen();
