@@ -122,7 +122,23 @@ namespace Configurator
             }
 
             ValidateMBAppDataFolderPermissions();
+            if (pluginUpgradesAvailable()) MessageBox.Show("Some of your installed plug-ins have newer versions available.  You should upgrade these plugins from the 'Plug-ins' tab.\n\nYour current versions may not work with this version of MediaBrowser.", "Upgrade Plugins");
         }
+
+        private bool pluginUpgradesAvailable()
+        {
+            //Look to see if any of our installed plugins have upgrades available
+            foreach (IPlugin plugin in Kernel.Instance.Plugins)
+            {
+                System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
+                if (v != null)
+                {
+                    if (v > plugin.Version) return true;
+                }
+            }
+            return false;
+        }
+
 
         public void ValidateMBAppDataFolderPermissions()
         {
@@ -139,7 +155,10 @@ namespace Configurator
 
             if (!ValidateFolderPermissions(windowsAccount, fileSystemRights, folder))
             {               
-                String folderSecurityQuestion = "All users MUST have proper permissions set in order for MediaBrowser to function properly in all situations. Would you like to set these permissions properly?\n\n(Might take up to a minute to apply changes.)";
+                String folderSecurityQuestion = "Your folder permission are not set correctly for MediaBrowser.  "+
+                    "Would you like to set these permissions properly?\n\nIf you click 'Yes', here's what we'll do:"+
+                    "\n\nThe Group 'Users' will be given full access to ONLY the private program data directory for MediaBrowser."+
+                    "\n\nNo other permissions will be altered.\n\nIf you click 'No', no permissions will be altered but MediaBrowser may not function correctly.";
                 if (MessageBox.Show(folderSecurityQuestion, "Folder permissions", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     //hide our main window and throw up a quick dialog to tell user what is going on
