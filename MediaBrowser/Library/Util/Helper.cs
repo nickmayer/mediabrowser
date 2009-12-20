@@ -144,6 +144,11 @@ namespace MediaBrowser.LibraryManagement
             return extension == ".vob";
         }
 
+        public static bool IsIfo(string filename) {
+            string extension = System.IO.Path.GetExtension(filename).ToLower();
+            return extension == ".ifo";
+        }
+
         public static bool IsShortcut(string filename)
         {
             return System.IO.Path.GetExtension(filename).ToLower() == ".lnk";
@@ -356,5 +361,7 @@ namespace MediaBrowser.LibraryManagement
 
             return null;
         }
+
+       
     }
 }

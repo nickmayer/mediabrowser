@@ -21,26 +21,42 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
             if (!location.IsHidden()) {
 
-                bool isDvd = IsDvd(location); 
+                bool containsIfo;
+                bool isDvd = IsDvd(location, out containsIfo);
+                bool isIso = Helper.IsIso(location.Path); 
                 bool isVideo = !(location is IFolderMediaLocation) &&
-                    (Helper.IsVideo(location.Path) || Helper.IsIso(location.Path) || location.IsVob());
+                    (Helper.IsVideo(location.Path) || isIso || location.IsVob());
 
                 if ( (isDvd || isVideo ) &&
                     TVUtils.IsEpisode(location.Path)) {
+
+                    if (containsIfo || isIso) {
+                        MediaType mt = isIso ? MediaType.ISO : MediaType.DVD;
+                        setup = new List<InitializationParameter>() {
+                            new MediaTypeInitializationParameter() {MediaType = mt}
+                        };
+                    } 
+
                     factory = BaseItemFactory<Episode>.Instance;
                 }
             }
         }
 
-        private bool IsDvd(IMediaLocation location) {
+        private bool IsDvd(IMediaLocation location, out bool containsIfo) {
             bool isDvd = false;
+            containsIfo = false;
 
             var folder = location as IFolderMediaLocation;
             if (folder != null && folder.Children != null) {
                 foreach (var item in folder.Children) {
                     isDvd |= Helper.IsVob(item.Path);
-                    isDvd |= item.Path.ToUpper().EndsWith("VIDEO_TS");
-                    if (isDvd) break;
+                    if (item.Path.ToUpper().EndsWith("VIDEO_TS")) {
+                        isDvd = true;
+                        containsIfo = true;
+                    }
+                    containsIfo |= Helper.IsIfo(item.Path);
+
+                    if (isDvd && containsIfo) break;
                 } 
             }
             
