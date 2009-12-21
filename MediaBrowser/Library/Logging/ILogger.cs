@@ -15,6 +15,5 @@ namespace MediaBrowser.Library.Logging {
         void LogMessage(LogRow row);
         void Flush();
         LogSeverity Severity { get; set; }
-        void Dispose();
     }
 }
