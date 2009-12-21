@@ -18,7 +18,7 @@ namespace MediaBrowser.Library.Entities {
 
         public void RemoveVirtualChild(BaseItem child)
         {
-            virtualChildren.Remove(child);
+            virtualChildren.Remove(virtualChildren.Find(c => c.Id == child.Id));
         }
 
         protected override List<BaseItem> GetNonCachedChildren()
