@@ -112,7 +112,8 @@
   <Font Name="Diamond_Small_SemiBold" Font="Segoe Media Center Semibold,14"/>
   <Font Name="Diamond_OverviewMini" Font="Segoe Media Center,14"/>
   <Font Name="Diamond_Overview" Font="Segoe Media Center,16"/>
-
+  <Font Name="Diamond_MediaInfo" Font="Arial, 14"/>
+  
   <!-- Menu Fonts -->
   <Font Name="MI_ButtonFont" Font="Segoe Media Center, 14" />
   <Font Name="MI_NotAvailableFont" Font="Brush Script MT, 12"  FontStyle="Italic"/>
