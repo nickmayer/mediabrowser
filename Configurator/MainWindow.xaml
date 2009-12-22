@@ -64,7 +64,6 @@
                     <Label Height="34" HorizontalAlignment="Left" Margin="52,6,0,0" x:Name="lblStep1b" VerticalAlignment="Top" Width="237" Foreground="#FF030303" Content="Add your media"/>
                     <Button Height="32" HorizontalAlignment="Left" Margin="233,0,0,17" Name="btnUp" VerticalAlignment="Bottom" Width="24" Click="btnUp_Click">^</Button>
                     <Button Height="32" HorizontalAlignment="Left" Margin="265,0,0,17" Name="btnDn" VerticalAlignment="Bottom" Width="24" Click="btnDn_Click">v</Button>
-                    <Button Name="btnMigrateIBN" Margin="396,0,78,17" Height="30.76" VerticalAlignment="Bottom" Click="btnMigrateIBN_Click" Visibility="Hidden" ToolTip="Run a utility to migrate your ImagesByName folder to the new format">Migrate ImagesByName</Button>
                 </Grid>
             </TabItem>
             <TabItem Header="podcasts" FontSize="14">

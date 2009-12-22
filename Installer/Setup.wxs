@@ -95,9 +95,6 @@
       <Component Id="ApplicationInactive.png" Guid="B555C4A3-415F-47a7-8565-C994A03F49C6" DiskId="1">
         <File Id="ApplicationInactive.png" Name="ApplicationInactive.png" Source="..\MediaBrowser\Images\ApplicationInactive.png" Checksum="no" />
       </Component>
-      <Component Id="MigrateIBN.exe" Guid="D31E4AFD-6F21-4e09-9F07-8561CB59195F" DiskId="1">
-        <File Id="MigrateIBN.exe" Name="MigrateIBN.exe" Source="..\MigrateIBN.exe" Checksum="no" />
-      </Component>
     </DirectoryRef>
 
 		<!-- This is a list of features that are installed as a part of this product. In this case, there is -->
@@ -111,7 +108,6 @@
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Registration7.xml" />
-      <ComponentRef Id="MigrateIBN.exe" />
     </Feature>
 
 		<!-- The media table defines the location that the MSI will look to find source files during         -->

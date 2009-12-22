@@ -106,21 +106,6 @@ namespace Configurator
 
             RefreshEntryPoints(false);
 
-            //only show migrate button if IBN appears to not already be in right format
-            string imgRoot = config.ImageByNameLocation.Trim();
-            if (imgRoot == null || imgRoot.Length == 0) imgRoot = System.IO.Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
-            try
-            {
-                if (Directory.Exists(imgRoot) && !Directory.Exists(System.IO.Path.Combine(imgRoot, "Genre")))
-                {
-                    btnMigrateIBN.Visibility = Visibility.Visible;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.ReportException("Cannot access ImagesByName location", ex);
-            }
-
             ValidateMBAppDataFolderPermissions();
             if (pluginUpgradesAvailable()) MessageBox.Show("Some of your installed plug-ins have newer versions available.  You should upgrade these plugins from the 'Plug-ins' tab.\n\nYour current versions may not work with this version of MediaBrowser.", "Upgrade Plugins");
         }
@@ -1478,29 +1463,6 @@ sortorder: {2}
             }
         }
 
-        private void btnMigrateIBN_Click(object sender, RoutedEventArgs e)
-        {
-            //just kick off the migrate tool
-            string migrateTool = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MediaBrowser\\MediaBrowser\\MigrateIBN.exe");
-            try
-            {
-                Process.Start(migrateTool);
-            }
-            catch (Exception ex)
-            {
-                Logger.ReportException("Unable to start migrate tool.  Trying 32bit location: "+migrateTool, ex);
-                try
-                {
-                    Process.Start("c:\\Program Files (x86)\\MediaBrowser\\MediaBrowser\\MigrateIBN.exe");
-                }
-                catch (Exception ex2)
-                {
-                    Logger.ReportException("Still unable to start migrate tool.", ex2);
-                }
-            }
-        }
-
-        
     }
     #region FormatParser Class
     class FormatParser
