@@ -72,7 +72,8 @@ namespace MediaBrowser
         public List<ExternalPlayer> ExternalPlayers = new List<ExternalPlayer>();
         public string Theme = "Default";
         public string FontTheme = "Default";
-        public bool ShowClock = true;
+        // I love the clock, but it keeps on crashing the app, so disabling it for now
+        public bool ShowClock = false;
         public bool EnableAdvancedCmds = false;
         public bool Advanced_EnableDelete = false;
         public bool UseAutoPlayForIso = false;

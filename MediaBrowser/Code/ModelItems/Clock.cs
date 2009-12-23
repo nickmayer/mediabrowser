@@ -9,6 +9,7 @@ namespace MediaBrowser {
         private string _time = String.Empty;
         private Timer _timer;
 
+
         public Clock() {
             _timer = new Timer(this);
             _timer.Interval = 10000;
@@ -34,6 +35,8 @@ namespace MediaBrowser {
             // todo (decide if we want to localize) 
             // this forces the format, and I tested every possibility for a hang. 
             Time = DateTime.Now.ToString("h:mm tt");
+            //time = time.AddMinutes(1);
+            //Time = time.ToString("h:mm tt"); ; 
         }
     }
 

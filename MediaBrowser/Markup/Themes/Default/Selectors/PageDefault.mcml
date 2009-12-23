@@ -295,7 +295,7 @@
                   <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
                 </Layout>
                 <LayoutInput>
-                  <AnchorLayoutInput Left="Parent,0,50" Bottom="ViewsBtn,1" Right="Parent,0,150" Horizontal="Center"/>
+                  <AnchorLayoutInput Left="Parent,0,45" Bottom="ViewsBtn,1" Right="Parent,0,155" Horizontal="Center"/>
                 </LayoutInput>
                 <Children>
                   <Text Name="TimeDate" Font="font://f:P_ClockFont"  Color="White" Visible="[Application.Config.ShowClock]" />
@@ -310,13 +310,13 @@
 
               <vm:CfgButton Name="ConfigBtn" Command="[Configure]" >
 								<LayoutInput>
-									<FormLayoutInput Left="Parent,0,130" Bottom="Parent,0,120" />
+									<FormLayoutInput Left="Parent,0,150" Bottom="Parent,0,120" />
 								</LayoutInput>
 							</vm:CfgButton>
 							
 							<vm:ViewsButton Name="ViewsBtn" Command="[ShowViewConfiguration]" Font="font://f:P_ConfigButtons">
 								<LayoutInput>
-									<FormLayoutInput Left="Parent,0,180" Bottom="Parent,0,120"/>
+									<FormLayoutInput Left="Parent,0,190" Bottom="Parent,0,120"/>
 								</LayoutInput>
 							</vm:ViewsButton>
 
