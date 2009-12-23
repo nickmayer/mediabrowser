@@ -7,3 +7,10 @@ glob:ITunesTrailers/bin/*
 glob:ITunesTrailers/obj/*
 glob:TestMediaBrowser/bin/*
 glob:TestMediaBrowser/obj/*
+relre:DvrmsMetadataProvider/bin/*
+relre:FilmTrailerPlugin/obj/*
+relre:FilmTrailerPlugin/bin/*
+relre:FrameGrabProvider/bin/*
+relre:Installer/obj/*
+relre:bin/*
+relre:obj/*
