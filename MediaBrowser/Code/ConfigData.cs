@@ -20,7 +20,7 @@ namespace MediaBrowser
     public class ConfigData
     {
         
-        [Comment(@"If you enable this, make sure System.Data.SQLite.DLL is copied to c:\program data\media browser, make sure you install the right version there is a x32 and x64")]
+        [Comment(@"If you enable this, make sure System.Data.SQLite.DLL is copied to c:\program data\mediabrowser, make sure you install the right version there is a x32 and x64")]
         public bool EnableExperimentalSqliteSupport = false;
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
