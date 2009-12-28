@@ -354,7 +354,7 @@ namespace MediaBrowser.Library {
         public Dictionary<string, ViewTheme> AvailableThemes = new Dictionary<string, ViewTheme>()
             {
                 {"Default", new ViewTheme()},
-                {"Diamond", new ViewTheme("Diamond", "resx://MediaBrowser/MediaBrowser.Resources/PageDiamond#PageDiamond", "resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView#DiamondMovieView")},
+                //{"Diamond", new ViewTheme("Diamond", "resx://MediaBrowser/MediaBrowser.Resources/PageDiamond#PageDiamond", "resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView#DiamondMovieView")},
              };
 
         //method for external entities (plug-ins) to add a new theme - only support replacing detail areas for now...

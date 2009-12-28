@@ -14,13 +14,13 @@
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <Size Name="Size" Size="25,25" />
-
+      <Image Name="FocusImage" Image="image://i:ButtonLeftFocus" />
+      <Image Name="BlankImage" Image="null" />
     </Properties>
 
     <Locals>
       <ClickHandler Name="Clicker" />
-      <Image Name="FocusImage" Image="image://i:ButtonLeftFocus" />
-      <Image Name="BlankImage" Image="null" />
+      
     </Locals>
     <Rules>
 
