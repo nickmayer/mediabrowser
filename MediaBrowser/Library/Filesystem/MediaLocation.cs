@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using MediaBrowser.Library.Util;
+using MediaBrowser.LibraryManagement;
 
 namespace MediaBrowser.Library.Filesystem {
     public class MediaLocation : IMediaLocation {

@@ -15,6 +15,7 @@ using MediaBrowser.Library.Sorting;
 using MediaBrowser.Library.Metadata;
 using System.ComponentModel;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.LibraryManagement;
 
 namespace MediaBrowser.Library.Entities {
 
@@ -242,7 +243,7 @@ namespace MediaBrowser.Library.Entities {
             if (location is IFolderMediaLocation) {
                 defaultName = location.Name;
             } else {
-                defaultName = System.IO.Path.GetFileNameWithoutExtension(location.Name);
+                defaultName = Helper.GetNameFromFile(location.Name);
             }
         }
 

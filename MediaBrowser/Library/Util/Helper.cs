@@ -362,6 +362,57 @@ namespace MediaBrowser.LibraryManagement
             return null;
         }
 
+        public static string GetNameFromFile(string filename)
+        {
+            string temp;
+            string fn;
+            //first, if the specified name is a file system folder, it probably doesn't have an extention so use the whole name
+            if (System.IO.Directory.Exists(filename))
+                fn = System.IO.Path.GetFileName(filename);
+            else
+                fn = System.IO.Path.GetFileNameWithoutExtension(filename);
+
+            //now - strip out anything inside brackets
+            temp = GetStringInBetween("[", "]", fn, true, true)[0];
+            while (temp.Length > 0)
+            {
+                fn = fn.Replace(temp, "");
+                temp = GetStringInBetween("[", "]", fn, true, true)[0];
+            }
+            return fn;
+        }
+
+        public static string[] GetStringInBetween(string strBegin,
+            string strEnd, string strSource,
+            bool includeBegin, bool includeEnd)
+        {
+            string[] result = { "", "" };
+            int iIndexOfBegin = strSource.IndexOf(strBegin);
+            if (iIndexOfBegin != -1)
+            {
+                // include the Begin string if desired 
+                if (includeBegin)
+                    iIndexOfBegin -= strBegin.Length;
+                strSource = strSource.Substring(iIndexOfBegin
+                    + strBegin.Length);
+                int iEnd = strSource.IndexOf(strEnd);
+                if (iEnd != -1)
+                {
+                    // include the End string if desired 
+                    if (includeEnd)
+                        iEnd += strEnd.Length;
+                    result[0] = strSource.Substring(0, iEnd);
+                    // advance beyond this segment 
+                    if (iEnd + strEnd.Length < strSource.Length)
+                        result[1] = strSource.Substring(iEnd
+                            + strEnd.Length);
+                }
+            }
+            else
+                // stay where we are 
+                result[1] = strSource;
+            return result;
+        }
        
     }
 }
