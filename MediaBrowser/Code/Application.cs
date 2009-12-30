@@ -25,14 +25,14 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.UI;
 using MediaBrowser.Library.Input;
+using MediaBrowser.Library.DirectoryWatcher;
 
 
 namespace MediaBrowser
 {
 
     public class Application : ModelItem, IDisposable
-    {
-
+    {        
         public Config Config
         {
             get
@@ -399,7 +399,44 @@ namespace MediaBrowser
                 mce.Dialog("The selected media item cannot be deleted due to its Item-Type or you have not enabled this feature in the configuration file.", "Delete Failed", DialogButtons.Ok, 0, true);
         }
 
-
+        public void RefreshUI(String UpdatedFolder)
+        {
+            try
+            {
+                if (this.CurrentFolder.Folder.FolderMediaLocation.GetType() == typeof(VirtualFolderMediaLocation))
+                {
+                    bool isChangeInCurrentFolder = false;
+                    string[] folders = ((VirtualFolderMediaLocation)this.CurrentFolder.Folder.FolderMediaLocation).VirtualFolder.Folders.ToArray();
+                    foreach (string folder in folders)
+                    {
+                        if (UpdatedFolder.ToLower().StartsWith(folder.ToLower()))
+                        {
+                            isChangeInCurrentFolder = true;
+                            break;
+                        }
+                    }
+                    // Only update UI if a change was made to a folder visable in the current UI
+                    if (isChangeInCurrentFolder)
+                    {
+                        Logger.ReportInfo("Refreshing UI because " + UpdatedFolder + " was changed.");
+                        this.CurrentFolder.RefreshUI();
+                    }
+                    else
+                    {
+                        Logger.ReportInfo(UpdatedFolder + " was changed, but UI will NOT be refreshed.");
+                    }
+                }
+                else
+                {
+                    this.CurrentFolder.RefreshUI();
+                    Logger.ReportError("Could not determine CurrentFolder.Folder.FolderMediaLocation type. Will refresh UI to be safe. ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Error refreshing UI. ", ex);
+            }
+        }  
 
         private void DeleteNavigationHelper(Item Parent)
         {
@@ -419,7 +456,7 @@ namespace MediaBrowser
 
         // Entry point for the app
         public void GoToMenu()
-        {
+        { 
             try
             {
                 if (Config.IsFirstRun)
@@ -481,7 +518,7 @@ namespace MediaBrowser
                     {
                         try
                         {
-                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(entryPointPath)));
+                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(entryPointPath)));                            
                         }
                         catch (Exception ex)
                         {
@@ -496,7 +533,7 @@ namespace MediaBrowser
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser encountered a critical error and had to shut down: " + e.ToString() + " " + e.StackTrace.ToString(), "Critical Error", DialogButtons.Ok, 60, true);
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
-        }
+        }              
 
         void FullRefresh(Folder folder)
         {
@@ -713,6 +750,7 @@ namespace MediaBrowser
 
         public FolderModel CurrentFolder; //used to keep track of the current folder so we can update the UI if needed
         public FolderModel RootFolderModel; //used to keep track of root folder as foldermodel for same reason
+        public MBDirectoryWatcher directoryWatcher;
 
         private void OpenFolderPage(FolderModel folder)
         {
@@ -732,6 +770,45 @@ namespace MediaBrowser
             {
                 Logger.ReportError("Session is null in OpenPage");
             }
+            try
+            {
+                if(directoryWatcher != null)
+                    directoryWatcher.Dispose();
+
+                directoryWatcher = new MBDirectoryWatcher(this.RefreshUI, GetAllVirtualFoldersPaths());
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Could not instantiate MBDirectoryWatcher. Virtual Folders will NOT be monitored for changes. ", ex);
+            }
+            
+        }
+
+        private string[] GetAllVirtualFoldersPaths()
+        {
+            List<string> Paths = new List<string>();
+            
+            foreach (BaseItem item in Application.CurrentInstance.RootFolder.Children)
+            {
+                try
+                {
+                    if (item.GetType() == typeof(Folder))
+                    {
+                        Folder VirtualFolders = (Folder)item;
+                        string[] folders = ((VirtualFolderMediaLocation)VirtualFolders.FolderMediaLocation).VirtualFolder.Folders.ToArray();
+                        foreach (string vf in folders)
+                        {
+                            Paths.Add(vf);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Could not get path of VF " + item.Name, ex);
+                }
+            }
+
+            return (string[])Paths.ToArray();
         }
 
         private Folder GetStartingFolder(BaseItem item)
