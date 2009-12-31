@@ -243,7 +243,7 @@ namespace MediaBrowser.Library.Entities {
             if (location is IFolderMediaLocation) {
                 defaultName = location.Name;
             } else {
-                defaultName = Helper.GetNameFromFile(location.Name);
+                defaultName = Helper.GetNameFromFile(location.Path);
             }
         }
 
