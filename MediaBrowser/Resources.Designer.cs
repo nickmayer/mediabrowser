@@ -879,48 +879,6 @@ namespace MediaBrowser {
             }
         }
         
-        internal static System.Drawing.Bitmap dia_list_bg {
-            get {
-                object obj = ResourceManager.GetObject("dia_list_bg", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap dia_list_focus {
-            get {
-                object obj = ResourceManager.GetObject("dia_list_focus", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap dia_overlay_all {
-            get {
-                object obj = ResourceManager.GetObject("dia_overlay_all", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap dia_overlay_all_dark {
-            get {
-                object obj = ResourceManager.GetObject("dia_overlay_all_dark", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap dia_overlay_bottom {
-            get {
-                object obj = ResourceManager.GetObject("dia_overlay_bottom", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap dia_overlay_top_dark {
-            get {
-                object obj = ResourceManager.GetObject("dia_overlay_top_dark", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         /// <summary>
         ///   Looks up a localized string similar to Button Selected.
         /// </summary>
@@ -930,79 +888,9 @@ namespace MediaBrowser {
             }
         }
         
-        internal static byte[] DiamondLayoutCoverflow {
-            get {
-                object obj = ResourceManager.GetObject("DiamondLayoutCoverflow", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondLayoutDetails {
-            get {
-                object obj = ResourceManager.GetObject("DiamondLayoutDetails", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondLayoutPoster {
-            get {
-                object obj = ResourceManager.GetObject("DiamondLayoutPoster", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondLayoutThumb {
-            get {
-                object obj = ResourceManager.GetObject("DiamondLayoutThumb", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondLayoutThumbStrip {
-            get {
-                object obj = ResourceManager.GetObject("DiamondLayoutThumbStrip", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondListView {
-            get {
-                object obj = ResourceManager.GetObject("DiamondListView", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondMediaInfoPanel {
-            get {
-                object obj = ResourceManager.GetObject("DiamondMediaInfoPanel", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondMovieView {
-            get {
-                object obj = ResourceManager.GetObject("DiamondMovieView", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
         internal static byte[] DiamondPagination {
             get {
                 object obj = ResourceManager.GetObject("DiamondPagination", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondTab {
-            get {
-                object obj = ResourceManager.GetObject("DiamondTab", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] DiamondToolBox {
-            get {
-                object obj = ResourceManager.GetObject("DiamondToolBox", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1451,20 +1339,6 @@ namespace MediaBrowser {
         internal static byte[] PageDetailArea {
             get {
                 object obj = ResourceManager.GetObject("PageDetailArea", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] PageDetailAreaDiamond {
-            get {
-                object obj = ResourceManager.GetObject("PageDetailAreaDiamond", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] PageDiamond {
-            get {
-                object obj = ResourceManager.GetObject("PageDiamond", resourceCulture);
                 return ((byte[])(obj));
             }
         }
