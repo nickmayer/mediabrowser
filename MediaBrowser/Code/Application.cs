@@ -399,44 +399,57 @@ namespace MediaBrowser
                 mce.Dialog("The selected media item cannot be deleted due to its Item-Type or you have not enabled this feature in the configuration file.", "Delete Failed", DialogButtons.Ok, 0, true);
         }
 
-        public void RefreshUI(String UpdatedFolder)
+        public void RefreshUI()
         {
             try
             {
-                if (this.CurrentFolder.Folder.FolderMediaLocation.GetType() == typeof(VirtualFolderMediaLocation))
-                {
-                    bool isChangeInCurrentFolder = false;
-                    string[] folders = ((VirtualFolderMediaLocation)this.CurrentFolder.Folder.FolderMediaLocation).VirtualFolder.Folders.ToArray();
-                    foreach (string folder in folders)
-                    {
-                        if (UpdatedFolder.ToLower().StartsWith(folder.ToLower()))
-                        {
-                            isChangeInCurrentFolder = true;
-                            break;
-                        }
-                    }
-                    // Only update UI if a change was made to a folder visable in the current UI
-                    if (isChangeInCurrentFolder)
-                    {
-                        Logger.ReportInfo("Refreshing UI because " + UpdatedFolder + " was changed.");
-                        this.CurrentFolder.RefreshUI();
-                    }
-                    else
-                    {
-                        Logger.ReportInfo(UpdatedFolder + " was changed, but UI will NOT be refreshed.");
-                    }
-                }
-                else
-                {
-                    this.CurrentFolder.RefreshUI();
-                    Logger.ReportError("Could not determine CurrentFolder.Folder.FolderMediaLocation type. Will refresh UI to be safe. ");
-                }
+                Logger.ReportInfo("Refreshing UI because the current folder has updated.");
+                this.CurrentFolder.RefreshUI();
             }
             catch (Exception ex)
             {
                 Logger.ReportException("Error refreshing UI. ", ex);
             }
-        }  
+        }
+
+        //public void RefreshUI(String UpdatedFolder)
+        //{
+        //    try
+        //    {
+        //        if (this.CurrentFolder.Folder.FolderMediaLocation.GetType() == typeof(VirtualFolderMediaLocation))
+        //        {
+        //            bool isChangeInCurrentFolder = false;
+        //            string[] folders = ((VirtualFolderMediaLocation)this.CurrentFolder.Folder.FolderMediaLocation).VirtualFolder.Folders.ToArray();
+        //            foreach (string folder in folders)
+        //            {
+        //                if (UpdatedFolder.ToLower().StartsWith(folder.ToLower()))
+        //                {
+        //                    isChangeInCurrentFolder = true;
+        //                    break;
+        //                }
+        //            }
+        //            // Only update UI if a change was made to a folder visable in the current UI
+        //            if (isChangeInCurrentFolder)
+        //            {
+        //                Logger.ReportInfo("Refreshing UI because " + UpdatedFolder + " was changed.");
+        //                this.CurrentFolder.RefreshUI();
+        //            }
+        //            else
+        //            {
+        //                Logger.ReportInfo(UpdatedFolder + " was changed, but UI will NOT be refreshed.");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            this.CurrentFolder.RefreshUI();
+        //            Logger.ReportError("Could not determine CurrentFolder.Folder.FolderMediaLocation type. Will refresh UI to be safe. ");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.ReportException("Error refreshing UI. ", ex);
+        //    }
+        //}  
 
         private void DeleteNavigationHelper(Item Parent)
         {
@@ -775,40 +788,57 @@ namespace MediaBrowser
                 if(directoryWatcher != null)
                     directoryWatcher.Dispose();
 
-                directoryWatcher = new MBDirectoryWatcher(this.RefreshUI, GetAllVirtualFoldersPaths());
+                if (!folder.IsRoot)
+                    directoryWatcher = new MBDirectoryWatcher(this.RefreshUI, GetVirtualFolderPaths(CurrentFolder));
+                
             }
             catch (Exception ex)
             {
                 Logger.ReportException("Could not instantiate MBDirectoryWatcher. Virtual Folders will NOT be monitored for changes. ", ex);
-            }
-            
+            }            
         }
 
-        private string[] GetAllVirtualFoldersPaths()
+        private string[] GetVirtualFolderPaths(FolderModel currentFolder)
         {
-            List<string> Paths = new List<string>();
-            
-            foreach (BaseItem item in Application.CurrentInstance.RootFolder.Children)
+            try
             {
-                try
+                if (currentFolder.Folder.GetType() == typeof(Folder))
                 {
-                    if (item.GetType() == typeof(Folder))
-                    {
-                        Folder VirtualFolders = (Folder)item;
-                        string[] folders = ((VirtualFolderMediaLocation)VirtualFolders.FolderMediaLocation).VirtualFolder.Folders.ToArray();
-                        foreach (string vf in folders)
-                        {
-                            Paths.Add(vf);
-                        }
-                    }
+                    return (string[])((VirtualFolderMediaLocation)currentFolder.Folder.FolderMediaLocation).VirtualFolder.Folders.ToArray();
                 }
-                catch (Exception ex)
-                {
-                    Logger.ReportException("Could not get path of VF " + item.Name, ex);
+                else
+                {                    
+                    return new string[] { }; 
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Could not gather Virtual Folder paths. ", ex);
+                return new string[] {};
+            }
 
-            return (string[])Paths.ToArray();
+            //List<string> Paths = new List<string>();
+            //foreach (BaseItem item in Application.CurrentInstance.RootFolder.Children)
+            //{
+            //    try
+            //    {
+            //        if (item.GetType() == typeof(Folder))
+            //        {
+            //            Folder VirtualFolders = (Folder)item;
+            //            string[] folders = ((VirtualFolderMediaLocation)VirtualFolders.FolderMediaLocation).VirtualFolder.Folders.ToArray();
+            //            foreach (string vf in folders)
+            //            {
+            //                Paths.Add(vf);
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Logger.ReportException("Could not get path of VF " + item.Name, ex);
+            //    }
+            //}
+
+            //return (string[])Paths.ToArray();
         }
 
         private Folder GetStartingFolder(BaseItem item)

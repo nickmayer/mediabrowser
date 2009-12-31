@@ -12,19 +12,26 @@ namespace MediaBrowser.Library.DirectoryWatcher
     {        
         private List<FileSystemWatcher> fileSystemWatchers = null;
         private Timer queueTimer = null;
-        private DirectoryWatcherQueue changedDirectoriesQueue = null;
+        //private DirectoryWatcherQueue changedDirectoriesQueue = null;
         private string[] watchedFolders = null;       
 
-        public delegate void RefreshUI(String FullPath);
+        //public delegate void RefreshUI(String FullPath);
+        public delegate void RefreshUI();
         private RefreshUI refreshUI;
 
         public MBDirectoryWatcher(RefreshUI refreshUI, string[] watchedFolders)
-        {            
+        {
+            if (watchedFolders == null || watchedFolders.Length <= 0)
+            {
+                Logger.ReportInfo("MBDirectoryWatcher not created because watchedFolders.length is 0. ");
+                return;
+            }
+
             this.refreshUI = refreshUI;
             this.watchedFolders = watchedFolders;
             this.fileSystemWatchers = new List<FileSystemWatcher>();
             InitFileSystemWatcher(this.watchedFolders);
-            changedDirectoriesQueue = new DirectoryWatcherQueue();
+            //changedDirectoriesQueue = new DirectoryWatcherQueue();
             InitQueueTimer();
         }
 
@@ -41,7 +48,7 @@ namespace MediaBrowser.Library.DirectoryWatcher
                 queueTimer.Enabled = false;
 
             queueTimer = null;
-            changedDirectoriesQueue = null;
+            //changedDirectoriesQueue = null;
 
             if (fileSystemWatchers != null)
             {
@@ -96,10 +103,15 @@ namespace MediaBrowser.Library.DirectoryWatcher
             {
                 if (Directory.Exists(FullPath))
                 {                    
-                    if(this.changedDirectoriesQueue.Add(FullPath))
-                        Logger.ReportInfo("A change of type \"" + changeType.ToString() + "\" has occured in " + FullPath);
+                    //if(this.changedDirectoriesQueue.Add(FullPath))
+                    //    Logger.ReportInfo("A change of type \"" + changeType.ToString() + "\" has occured in " + FullPath);
 
-                    this.queueTimer.Enabled = true;
+                    //this.queueTimer.Enabled = true;
+                    if (!this.queueTimer.Enabled)
+                    {
+                        this.queueTimer.Enabled = true;
+                        Logger.ReportInfo("A change of type \"" + changeType.ToString() + "\" has occured in " + FullPath);
+                    }
                 }
             }
             catch (Exception ex)
@@ -134,12 +146,14 @@ namespace MediaBrowser.Library.DirectoryWatcher
             {
                 this.queueTimer.Enabled = false;
                 Logger.ReportInfo("Directory watcher timer expired.");
-                foreach (string folder in this.changedDirectoriesQueue.GetUpdatedDirectories())
-                {
-                    this.refreshUI(folder);
-                }
+                this.refreshUI();
 
-                this.changedDirectoriesQueue.ClearQueue();
+                //foreach (string folder in this.changedDirectoriesQueue.GetUpdatedDirectories())
+                //{
+                //    this.refreshUI(folder);                    
+                //}
+
+                //this.changedDirectoriesQueue.ClearQueue();
             }
             catch (Exception ex)
             {
