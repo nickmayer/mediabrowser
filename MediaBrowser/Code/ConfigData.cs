@@ -26,7 +26,7 @@ namespace MediaBrowser
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;
         public bool IsFirstRun = true;
-        public string ImageByNameLocation = "";
+        public string ImageByNameLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
         public Vector3 OverScanScaling = new Vector3() {X=1, Y=1, Z=1};
         public Inset OverScanPadding = new Inset();
         public bool EnableTraceLogging = false;
