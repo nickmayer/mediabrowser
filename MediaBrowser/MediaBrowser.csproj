@@ -670,6 +670,7 @@
     <Content Include="Markup\Controls\DiamondPagination.mcml" />
     <Content Include="Markup\Controls\Popups\ContextMenu.mcml" />
     <Content Include="Markup\Controls\Popups\NumberPad.mcml" />
+    <Content Include="Markup\Controls\Scrollers\DiamondPagination.mcml" />
     <Content Include="Markup\Controls\Scrollers\FancyText.mcml" />
     <Content Include="Markup\Controls\InfoMarquee.mcml" />
     <Content Include="Markup\Controls\Directors.mcml" />
