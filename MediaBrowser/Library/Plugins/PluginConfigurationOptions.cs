@@ -194,7 +194,7 @@ namespace MediaBrowser.Library.Plugins
         StackPanel BuildButtonPanel(Window window)
         {
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Height = 40 };
-            Button ok = new Button() { HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(5, 10, 5, 0), Content = "OK", Height = 25, Width = 60 };
+            Button ok = new Button() { HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(5, 10, 5, 0), Content = "OK", Height = 25, Width = 60, IsDefault = true };
             Button reset = new Button() { HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(5, 10, 5, 0), Content = "Reset", Height = 25, Width = 60 };
             Button cancel = new Button() { IsCancel = true, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(5, 10, 0, 0), Content = "Cancel", Height = 25, Width = 60 };
             

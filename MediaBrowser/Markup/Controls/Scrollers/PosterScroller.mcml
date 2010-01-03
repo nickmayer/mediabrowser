@@ -62,7 +62,7 @@
       <Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Application.IsMouseActive]" Value="true"/>
-          <Equality Source="[NoEndPadding]" Value="false" />
+          <!--<Equality Source="[NoEndPadding]" Value="false" />-->
         </Conditions>
         <Actions>
           <Set Target="[ScrollingData.LockedPosition]" Value="-1" />
@@ -75,7 +75,7 @@
         <Conditions>
           <Equality Source="[Application.IsMouseActive]" Value="false"/>
           <Equality Source="[CenterFocus]" Value="false" />
-          <Equality Source="[NoEndPadding]" Value="false" />
+          <!--<Equality Source="[NoEndPadding]" Value="false" />-->
         </Conditions>
         <Actions>
           <Set Target="[ScrollingData.BeginPadding]" Value="100" />

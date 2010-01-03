@@ -245,6 +245,11 @@ namespace MediaBrowser.Library
                     this.PlayableItem.QueueItem = queue;                    
                     this.PlayableItem.Play(this.PlayState, resume);
                     if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
+                    Async.Queue("Resume state updater", () =>
+                    {
+                        Thread.Sleep(10000); //we have to wait for playstate object to be created before we can...
+                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
+                    });
                 }
             }
             catch (Exception)
@@ -253,7 +258,6 @@ namespace MediaBrowser.Library
                 ev.Dialog("There was a problem playing the content. Check location exists\n" + baseItem.Path, "Content Error", DialogButtons.Ok, 60, true);
             }
         }
-
 
         private void Play(bool resume)
         {

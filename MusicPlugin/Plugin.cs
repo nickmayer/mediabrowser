@@ -30,7 +30,7 @@ namespace MusicPlugin
             _kernel = kernel;
             //AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             Logger.ReportInfo(string.Format("Tyring to load {0} v{1} loaded by {2}.", Name, LatestVersion.ToString(), AppDomain.CurrentDomain.FriendlyName));
-            bool isConfigurator = AppDomain.CurrentDomain.FriendlyName.Contains("Configurator");
+            bool isConfigurator = !AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
 
             if (Settings.ValidateSettings(kernel.ConfigData.InitialFolder, true))
             {

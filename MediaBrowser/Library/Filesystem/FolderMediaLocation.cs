@@ -34,7 +34,7 @@ namespace MediaBrowser.Library.Filesystem {
 
 
         protected override void SetName() {
-            Name = System.IO.Path.GetFileName(Path);
+            Name = Helper.GetNameFromFile(Path);
         }
 
         Dictionary<string, IMediaLocation> CreateIndex() {

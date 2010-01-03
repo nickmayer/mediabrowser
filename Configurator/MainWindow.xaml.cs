@@ -58,11 +58,11 @@ namespace Configurator
 
         private void Initialize() {
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
+            config = Kernel.Instance.ConfigData;
             
             InitializeComponent();
             LoadComboBoxes();
 
-            config = Kernel.Instance.ConfigData;
 
             infoPanel.Visibility = Visibility.Hidden;
             infoPlayerPanel.Visibility = Visibility.Hidden;
@@ -378,13 +378,25 @@ namespace Configurator
             config.Save();
         }
 
+        private void RefreshThemes()
+        {
+            ddlOptionViewTheme.ItemsSource = Kernel.Instance.AvailableThemes.Keys;
+            if (ddlOptionViewTheme.Items != null)
+            {
+                if (!ddlOptionViewTheme.Items.Contains(config.ViewTheme))
+                {
+                    //must have just deleted our theme plugin - set to default
+                    config.ViewTheme = "Default";
+                    SaveConfig();
+                    ddlOptionViewTheme.SelectedItem = config.ViewTheme;
+                }
+            }
+        }
+
         private void LoadComboBoxes()
         {
             // Themes
-            //ddlOptionViewTheme.Items.Add("Classic"); 
-            ddlOptionViewTheme.Items.Add("Default");            
-            ddlOptionViewTheme.Items.Add("Diamond");
-            //ddlOptionViewTheme.Items.Add("Vanilla");
+            RefreshThemes();            
             // Colors
             ddlOptionThemeColor.Items.Add("Default");
             ddlOptionThemeColor.Items.Add("Black");
@@ -1366,6 +1378,7 @@ sortorder: {2}
                   MessageBox.Show(message, "Remove plugin", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes) {
                 PluginManager.Instance.RemovePlugin(plugin);
                 RefreshEntryPoints(true);
+                RefreshThemes();
             }
         }
 
@@ -1375,6 +1388,7 @@ sortorder: {2}
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowDialog();
             RefreshEntryPoints(true);
+            RefreshThemes();
         }
 
         private void configurePlugin_Click(object sender, RoutedEventArgs e)

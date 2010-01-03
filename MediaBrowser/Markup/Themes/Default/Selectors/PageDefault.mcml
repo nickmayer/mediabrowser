@@ -255,14 +255,53 @@
 				</Actions>
 			</Changed>
 
-      <Changed Source="[TypingHandler.DisplayValue]">
+      <Changed Source="[TypingHandler.DisplayValue]"  ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="*" />
+          <Equality Source="[ContextMenu.Visible]" Value="false" />
         </Conditions>
         <Actions>
           <Invoke Target="[Popup.Invoke]" />
-          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
-          <Set Target="[TypingHandler.Value]" Value="" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]"  ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="***" />
+          <Equality Source="[ContextMenu.Visible]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Popup.Invoke]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]"  ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="**" />
+          <Equality Source="[ContextMenu.Visible]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Popup.Invoke]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]"  ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="*" />
+          <Equality Source="[ContextMenu.Visible]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[CloseContextMenu.Invoke]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]"  ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="**" />
+          <Equality Source="[ContextMenu.Visible]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[CloseContextMenu.Invoke]" />
         </Actions>
       </Changed>
 
