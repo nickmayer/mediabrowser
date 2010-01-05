@@ -111,6 +111,8 @@ namespace MediaBrowser
         public int RecentItemDays = 60;
         public string RecentItemOption = "added";
 
+        public bool ShowHDIndicatorOnPosters = false;
+
         public class ExternalPlayer
         {
             public MediaType MediaType { get; set; }

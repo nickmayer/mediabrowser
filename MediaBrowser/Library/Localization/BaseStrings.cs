@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0003";
+        const string VERSION = "1.0004";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
 
@@ -70,6 +70,7 @@ namespace MediaBrowser.Library.Localization
         public string ShowInitialFolderBackgroundDesc = "Display initial backdrop in all views. (backdrop.png or backdrop.jpg sourced from your initial folder) [TIER 2] Highest tier background effect takes precedence.";
         public string ShowFanArtonViewsDesc = "Display fan art as a Background in views that support this capability. [TIER 1] Highest tier background effect takes precedence.";
         public string EnhancedMouseSupportDesc = "Enable Better Scrolling Support with the Mouse.  Leave OFF if You Don't Use a Mouse.  Won't Take Effect Until MediaBrowser is Restarted.";
+        public string ShowHDOverlayonPostersDesc = "Show 'HD' or resolution overlay on Hi-def items in Poster Views.";
 
 
         public BaseStrings() //for the serializer

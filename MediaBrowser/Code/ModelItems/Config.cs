@@ -349,6 +349,12 @@ namespace MediaBrowser
             set { if (this.data.ShowWatchTickInPosterView != value) { this.data.ShowWatchTickInPosterView = value; Save(); FirePropertyChanged("ShowWatchTickInPosterView"); } }
         }
 
+        public bool ShowHDIndicatorOnPosters
+        {
+            get { return this.data.ShowHDIndicatorOnPosters; }
+            set { if (this.data.ShowHDIndicatorOnPosters != value) { this.data.ShowHDIndicatorOnPosters = value; Save(); FirePropertyChanged("ShowHDIndicatorOnPosters"); } }
+        }
+
 
         [Comment("Enables the views to default to the first unwatched item in a folder of movies or tv shows")]
         public bool DefaultToFirstUnwatched

@@ -105,7 +105,7 @@
       <BooleanChoice Name="AlwaysShowDetailsPage" Value="[Application.Config.AlwaysShowDetailsPage]" />
       <BooleanChoice Name="ShowRootBackground" Value="[Application.Config.ShowRootBackground]" />
       <BooleanChoice Name="EnableMouseHook" Value="[Application.Config.EnableMouseHook]" />
-
+      <BooleanChoice Name="ShowHDIndicatorOnPosters" Value="[Application.Config.ShowHDIndicatorOnPosters]" />
       <BooleanChoice Name="DefaultToFirstUnwatched" Value="[Application.Config.DefaultToFirstUnwatched]" />
       <BooleanChoice Name="AutoEnterSingleDirs" Value="[Application.Config.AutoEnterSingleDirs]" />
       <BooleanChoice Name="DefaultShowLabels" Value="[Application.Config.DefaultShowLabels]" />
@@ -326,6 +326,7 @@
       <Binding Source="[ShowUnwatchedCount.Value]" Target="[Config.ShowUnwatchedCount]" />
       <Binding Source="[ShowWatchedTickOnFolders.Value]" Target="[Config.ShowWatchedTickOnFolders]" />
       <Binding Source="[ShowWatchTickInPosterView.Value]" Target="[Config.ShowWatchTickInPosterView]" />
+      <Binding Source="[ShowHDIndicatorOnPosters.Value]" Target="[Config.ShowHDIndicatorOnPosters]" />
       <Binding Source="[DimUnselectedPosters.Value]" Target="[Config.DimUnselectedPosters]" />
       <Binding Source="[AllowInternetMetadataProviders.Value]" Target="[Config.AllowInternetMetadataProviders]" />
       <Binding Source="[UseAutoPlayForIso.Value]" Target="[Config.UseAutoPlayForIso]" />
@@ -537,7 +538,8 @@
                       <cb:CheckBox Label="Show Fan Art on Views" Checked="[ShowBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Show Initial Folder Background" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowRootBackground]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Show Theme Background" Checked="[ShowThemeBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      
+                      <cb:CheckBox Label="Show HD Overlay on Posters" Checked="[ShowHDIndicatorOnPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+
                       <cb:CheckBox Label="Enable Advanced Commands" Checked="[EnableAdvancedCmds]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
 
                     </Children>

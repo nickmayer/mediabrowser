@@ -189,7 +189,11 @@
 			<Binding Source="[ImageSize.Value]" Target="[ConstraintPanel.MaximumSize]" />
 			<Binding Source="[ImageSize.Value]" Target="[BelowLabelPanel.MaximumSize]" />
 			<Binding Source="[ImageSize.Value]" Target="[ConstraintPanel.MinimumSize]" />
-			<Binding Source="[Item.IsHD]" Target="[HDIndicator.Visible]" />
+      <Binding Source="[Item.IsHD]" Target="[HDIndicator.Visible]"  ConditionLogicalOp="And"  >
+        <Conditions>
+          <Equality Source="[Application.Config.ShowHDIndicatorOnPosters]" Value="true" />
+        </Conditions>
+      </Binding>
 			<Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="720" Target="[HDImage.Content]" Value="image://i:HDLogo720" />
 			<Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="1080" Target="[HDImage.Content]" Value="image://i:HDLogo1080" />
 		</Rules>
