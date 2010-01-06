@@ -927,10 +927,10 @@
               <AnchorLayoutInput Left="Parent,0,165" Top="Parent, 0"/>
             </LayoutInput>
             <Children>
-              <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="font://f:Diamond_Large" />
+              <Text Name="Txt1" Color="color://s:FontColorDark" Content="Title of Item 1" Font="font://f:MM_ButtonFont" />
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="font://f:Diamond_Small" Margins="30,0,0,0" />
+                  <Text Name="Txt2" Color="color://s:FontColorDark" Content="2-Mar-2009 | 14:34" Font="font://f:MM_SummaryFont" Margins="30,0,0,0" />
                   <Graphic Name="TickIndicator" ColorFilter="color://s:FontColorDark" Visible="false" Content="[Tick]" Margins="20,0,0,0" />
                 </Children>
               </Panel>

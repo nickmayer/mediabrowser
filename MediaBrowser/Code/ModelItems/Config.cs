@@ -592,11 +592,6 @@ namespace MediaBrowser
             get { return this.data.MetadataCheckForUpdateAge; }
             set { if (this.data.MetadataCheckForUpdateAge != value) { this.data.MetadataCheckForUpdateAge = value; Save(); FirePropertyChanged("MetadataCheckForUpdateAge"); } }
         }
-        public bool StartDiamondMovieMinimal
-        {
-            get { return this.data.StartDiamondMovieMinimal; }
-            set { if (this.data.StartDiamondMovieMinimal != value) { this.data.StartDiamondMovieMinimal = value; Save(); FirePropertyChanged("StartDiamondMovieMinimal"); } }
-        }
         public bool ShowRootBackground
         {
             get { return this.data.ShowRootBackground; }
