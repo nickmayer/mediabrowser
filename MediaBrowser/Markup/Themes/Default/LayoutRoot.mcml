@@ -559,8 +559,13 @@
                     </Children>
                   </Panel>
                   
-                  <Panel Padding="8,0,8,-3" Layout="Anchor">
-                    
+                </Children>
+              </Panel>
+              
+                  <Panel Name="RecentText" Padding="8,0,8,-3" Layout="Anchor" >
+                    <LayoutInput>
+                      <AnchorLayoutInput Right="NPClipP,1,0" Bottom="RecentListPanel,0,-4"/>
+                    </LayoutInput>
                     <Children>
                       <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
                             Font="Segoe Media Center, 24" Margins="50,0,0,0" />
@@ -572,9 +577,6 @@
                       </Text>
                     </Children>
                   </Panel>
-                </Children>
-              </Panel>
-              
               <!-- These two ColorFills on either side of the scroller distract the mouse so it won't scroll when you go across screen -->
               <ColorFill MouseInteractive="true" Content="Transparent">
                 <LayoutInput>
@@ -591,7 +593,7 @@
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.33" Top="recentlyAdded,1,10" Right="Parent,.33, 680"
+                  <FormLayoutInput Left="Parent,0.33" Top="recentlyAdded,1,65" Right="Parent,.33, 680"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Layout>
@@ -605,10 +607,16 @@
               <!-- Background Fade Object (hidden when no background image selected)-->
               <Graphic Name="NPClipP" Content="image://me:50AlphaBg" Visible="[Application.Config.ShowRootBackground]">
                 <LayoutInput>
-                  <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="RecentListPanel,0,-10" Right="RecentListPanel,1,10" />
+                  <AnchorLayoutInput Top="recentlyAdded,1,60" Bottom="Parent,0.7,25" Left="RecentListPanel,0,-10" Right="RecentListPanel,1,10" />
                 </LayoutInput>
               </Graphic>
-              
+
+              <!-- Background For recent text (hidden when no background image selected)-->
+              <Graphic Name="RecentBack" Content="image://me:50AlphaBg" Visible="[Application.Config.ShowRootBackground]">
+                <LayoutInput>
+                  <AnchorLayoutInput Top="RecentText,0,-5" Bottom="RecentText,1,8" Left="RecentText,0,0" Right="RecentText,1,0" />
+                </LayoutInput>
+              </Graphic>
               <!--<Clip Name="NPClipP" FadeSize="5" Orientation="Horizontal" FadeAmount="1" Visible="[Application.Config.ShowRootBackground]">
                 <LayoutInput>
                   <AnchorLayoutInput Top="recentlyAdded,1,5" Bottom="Parent,0.7,25" Left="Parent,0,-10" Right="Parent,1,10" />
