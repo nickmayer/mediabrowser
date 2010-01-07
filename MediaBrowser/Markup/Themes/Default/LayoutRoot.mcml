@@ -605,16 +605,16 @@
               </Clip>
 
               <!-- Background Fade Object (hidden when no background image selected)-->
-              <Graphic Name="NPClipP" Content="image://me:50AlphaBg" Visible="[Application.Config.ShowRootBackground]">
+              <Graphic Name="NPClipP" Content="image://me:50AlphaBgforTab" Visible="[Application.Config.ShowRootBackground]">
                 <LayoutInput>
                   <AnchorLayoutInput Top="recentlyAdded,1,60" Bottom="Parent,0.7,25" Left="RecentListPanel,0,-10" Right="RecentListPanel,1,10" />
                 </LayoutInput>
               </Graphic>
 
               <!-- Background For recent text (hidden when no background image selected)-->
-              <Graphic Name="RecentBack" Content="image://me:50AlphaBg" Visible="[Application.Config.ShowRootBackground]">
+              <Graphic Name="RecentBack" Content="image://me:50AlphaTab" Visible="[Application.Config.ShowRootBackground]">
                 <LayoutInput>
-                  <AnchorLayoutInput Top="RecentText,0,-5" Bottom="RecentText,1,8" Left="RecentText,0,0" Right="RecentText,1,0" />
+                  <AnchorLayoutInput Top="RecentText,0,-5" Bottom="NPClipP,0" Left="RecentText,0,0" Right="RecentText,1,0" />
                 </LayoutInput>
               </Graphic>
               <!--<Clip Name="NPClipP" FadeSize="5" Orientation="Horizontal" FadeAmount="1" Visible="[Application.Config.ShowRootBackground]">
@@ -955,6 +955,8 @@
   <Image Name="HiliteFocusBg" Source="resx://MediaBrowser/MediaBrowser.Resources/rootscrollhilitefocus" NineGrid="10,10,10,10" />
   <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/poster_frame" NineGrid="10,10,10,10" />
   <Image Name="50AlphaBg" Source="resx://MediaBrowser/MediaBrowser.Resources/BlackBtnAlpha50" NineGrid="10,10,10,10" />
+  <Image Name="50AlphaBgforTab" Source="resx://MediaBrowser/MediaBrowser.Resources/BlackBtnAlpha50forTabRt" NineGrid="10,10,10,10" />
+  <Image Name="50AlphaTab" Source="resx://MediaBrowser/MediaBrowser.Resources/BlackTabAlpha50" NineGrid="10,10,10,10" />
 
   <Image Name="FlashHorizontalT" Source="resx://MediaBrowser/MediaBrowser.Resources/flashHorT" />
   <Image Name="FlashHorizontalB" Source="resx://MediaBrowser/MediaBrowser.Resources/flashHorB" />

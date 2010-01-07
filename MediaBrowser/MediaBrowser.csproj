@@ -249,7 +249,9 @@
     <Content Include="Images\BackgroundDefault.png" />
     <None Include="Images\banner.png" />
     <Content Include="Images\BlackBtnAlpha50.png" />
+    <Content Include="Images\BlackBtnAlpha50forTabRt.png" />
     <Content Include="Images\BlackBtnAlpha65.png" />
+    <Content Include="Images\BlackTabAlpha50.png" />
     <Content Include="Images\BlockedCover.png" />
     <Content Include="Images\Button\ButtonLeftFocusBlack.png" />
     <Content Include="Images\Button\ButtonLeftFocusDefault.png" />
