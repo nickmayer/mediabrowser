@@ -20,6 +20,7 @@
 		<Properties>
 			<a:Application Name="Application" Application="$Required"/>
 			<lib:FolderModel Name="Folder" FolderModel="$Required"/>
+      <cor:Object Name="ThemeConfig" />
 			<IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
 			
 		</Properties>

@@ -89,8 +89,11 @@ namespace MediaBrowser
         {
             get
             {
-                ModelItem temp = Kernel.Instance.ConfigPanels[ConfigModel.Chosen.ToString()].ConfigObject;
-                return temp;
+                if (Kernel.Instance.ConfigPanels[ConfigModel.Chosen.ToString()] != null)
+                {
+                    return Kernel.Instance.ConfigPanels[ConfigModel.Chosen.ToString()].ConfigObject;
+                }
+                else return null;
             }
         }
 
@@ -719,6 +722,7 @@ namespace MediaBrowser
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["Folder"] = folder;
+            properties["ThemeConfig"] = CurrentTheme.Config;
             CurrentFolder = folder; //store our current folder
             if (folder.IsRoot)
                 RootFolderModel = folder; //store the root as well
@@ -808,6 +812,7 @@ namespace MediaBrowser
                     Dictionary<string, object> properties = new Dictionary<string, object>();
                     properties["Application"] = this;
                     properties["Item"] = item;
+                    properties["ThemeConfig"] = CurrentTheme.Config;
                     session.GoToPage(CurrentTheme.DetailPage, properties);
                     return;
                 }

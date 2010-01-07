@@ -28,6 +28,7 @@
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <lib:Item Name="Item" Item="$Required"/>
+      <cor:Object Name="ThemeConfig" />
       <Image Name="UpButton" Image="resx://MediaBrowser/MediaBrowser.Resources/Up"/>
       <Image Name="DownButton" Image="resx://MediaBrowser/MediaBrowser.Resources/Down"/>
     </Properties>

@@ -363,6 +363,10 @@ namespace MediaBrowser.Library {
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea));
         }
 
+        public void AddTheme(string name, string pageArea, string detailArea, object config)
+        {
+            AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea, config));
+        }
         private List<MenuItem> menuOptions = new List<MenuItem>();
         private List<Type> externalPlayableItems = new List<Type>();
         private List<Type> externalPlayableFolders = new List<Type>();
