@@ -355,6 +355,17 @@ namespace MediaBrowser
             set { if (this.data.ShowHDIndicatorOnPosters != value) { this.data.ShowHDIndicatorOnPosters = value; Save(); FirePropertyChanged("ShowHDIndicatorOnPosters"); } }
         }
 
+        public bool ShowRemoteIndicatorOnPosters
+        {
+            get { return this.data.ShowRemoteIndicatorOnPosters; }
+            set { if (this.data.ShowRemoteIndicatorOnPosters != value) { this.data.ShowRemoteIndicatorOnPosters = value; Save(); FirePropertyChanged("ShowRemoteIndicatorOnPosters"); } }
+        }
+
+        public bool ExcludeRemoteContentInSearch
+        {
+            get { return this.data.ExcludeRemoteContentInSearch; }
+            set { if (this.data.ExcludeRemoteContentInSearch != value) { this.data.ExcludeRemoteContentInSearch = value; Save(); FirePropertyChanged("ExcludeRemoteContentInSearch"); } }
+        }
 
         [Comment("Enables the views to default to the first unwatched item in a folder of movies or tv shows")]
         public bool DefaultToFirstUnwatched

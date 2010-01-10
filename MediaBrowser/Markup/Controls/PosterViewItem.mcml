@@ -194,6 +194,11 @@
           <Equality Source="[Application.Config.ShowHDIndicatorOnPosters]" Value="true" />
         </Conditions>
       </Binding>
+      <Binding Source="[Item.IsRemoteContent]" Target="[RemoteContentImage.Visible]" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.Config.ShowRemoteIndicatorOnPosters]" Value="true" />
+        </Conditions>
+      </Binding>
 			<Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="720" Target="[HDImage.Content]" Value="image://i:HDLogo720" />
 			<Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="1080" Target="[HDImage.Content]" Value="image://i:HDLogo1080" />
 		</Rules>
@@ -279,6 +284,11 @@
                           </Graphic>
                         </Children>
                       </Panel>
+                      <Graphic Name="RemoteContentImage" Content="resx://MediaBrowser/MediaBrowser.Resources/IconRemote" Margins="0,0,5,5" Alpha=".75" MaximumSize="30,30" MaintainAspectRatio="true" Visible="false">
+                        <LayoutInput>
+                          <AnchorLayoutInput Horizontal="Far" Vertical="Far"/>
+                        </LayoutInput>
+                      </Graphic>
 											<Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Center">
 												<LayoutInput>
 													<AnchorLayoutInput Horizontal="Fill" Vertical="Fill"/>

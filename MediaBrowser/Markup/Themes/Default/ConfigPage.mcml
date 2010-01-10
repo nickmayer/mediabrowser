@@ -105,6 +105,8 @@
       <BooleanChoice Name="ShowRootBackground" Value="[Application.Config.ShowRootBackground]" />
       <BooleanChoice Name="EnableMouseHook" Value="[Application.Config.EnableMouseHook]" />
       <BooleanChoice Name="ShowHDIndicatorOnPosters" Value="[Application.Config.ShowHDIndicatorOnPosters]" />
+      <BooleanChoice Name="ShowRemoteIndicatorOnPosters" Value="[Application.Config.ShowRemoteIndicatorOnPosters]" />
+      <BooleanChoice Name="ExcludeRemoteContentInSearch" Value="[Application.Config.ExcludeRemoteContentInSearch]" />
       <BooleanChoice Name="DefaultToFirstUnwatched" Value="[Application.Config.DefaultToFirstUnwatched]" />
       <BooleanChoice Name="AutoEnterSingleDirs" Value="[Application.Config.AutoEnterSingleDirs]" />
       <BooleanChoice Name="DefaultShowLabels" Value="[Application.Config.DefaultShowLabels]" />
@@ -326,6 +328,8 @@
       <Binding Source="[ShowWatchedTickOnFolders.Value]" Target="[Config.ShowWatchedTickOnFolders]" />
       <Binding Source="[ShowWatchTickInPosterView.Value]" Target="[Config.ShowWatchTickInPosterView]" />
       <Binding Source="[ShowHDIndicatorOnPosters.Value]" Target="[Config.ShowHDIndicatorOnPosters]" />
+      <Binding Source="[ShowRemoteIndicatorOnPosters.Value]" Target="[Config.ShowRemoteIndicatorOnPosters]" />
+      <Binding Source="[ExcludeRemoteContentInSearch.Value]" Target="[Config.ExcludeRemoteContentInSearch]" />
       <Binding Source="[DimUnselectedPosters.Value]" Target="[Config.DimUnselectedPosters]" />
       <Binding Source="[AllowInternetMetadataProviders.Value]" Target="[Config.AllowInternetMetadataProviders]" />
       <Binding Source="[UseAutoPlayForIso.Value]" Target="[Config.UseAutoPlayForIso]" />
@@ -524,6 +528,7 @@
                       <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Always Show Details" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[AlwaysShowDetailsPage]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Exclude Remote Content In Searches" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ExcludeRemoteContentInSearch]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Enhanced Mouse Support" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableMouseHook]"  Font="font://f:CP_ConfigItemFont"/>
                     </Children>
                   </Panel>
@@ -537,6 +542,7 @@
                       <cb:CheckBox Label="Show Initial Folder Background" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowRootBackground]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Show Theme Background" Checked="[ShowThemeBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Show HD Overlay on Posters" Checked="[ShowHDIndicatorOnPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Show Icon on Remote Content" Checked="[ShowRemoteIndicatorOnPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
 
                       <cb:CheckBox Label="Enable Advanced Commands" Checked="[EnableAdvancedCmds]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
 

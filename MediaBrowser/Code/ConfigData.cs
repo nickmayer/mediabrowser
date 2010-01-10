@@ -111,6 +111,8 @@ namespace MediaBrowser
         public string RecentItemOption = "added";
 
         public bool ShowHDIndicatorOnPosters = false;
+        public bool ShowRemoteIndicatorOnPosters = true;
+        public bool ExcludeRemoteContentInSearch = true;
 
         public class ExternalPlayer
         {

@@ -177,6 +177,11 @@ namespace MediaBrowser.Library
             }
         }
 
+        public bool IsRemoteContent
+        {
+            get { return baseItem.IsRemoteContent; }
+        }
+
         public bool SelectAction()
         {
             if (this.BaseItem != null)

@@ -1091,6 +1091,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap IconRemote {
+            get {
+                object obj = ResourceManager.GetObject("IconRemote", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap IconResume {
             get {
                 object obj = ResourceManager.GetObject("IconResume", resourceCulture);

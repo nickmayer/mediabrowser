@@ -127,7 +127,7 @@ namespace Configurator
 
         public void ValidateMBAppDataFolderPermissions()
         {
-            String windowsAccount = "Users";
+            String windowsAccount = "S-1-5-32-545"; //use the SID for 'users' so it works in any language
             FileSystemRights fileSystemRights = FileSystemRights.FullControl;
             DirectoryInfo folder = new DirectoryInfo(ApplicationPaths.AppConfigPath);
 
@@ -201,7 +201,7 @@ namespace Configurator
             try
             {
                 DirectorySecurity dSecurity = folder.GetAccessControl();
-                dSecurity.AddAccessRule(new FileSystemAccessRule(windowsAccount, rights,InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, controlType));                
+                dSecurity.AddAccessRule(new FileSystemAccessRule(windowsAccount , rights,InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, controlType));                
                 folder.SetAccessControl(dSecurity);
             }
             catch (Exception ex)

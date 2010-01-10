@@ -264,6 +264,7 @@
     <None Include="Images\Root\roottopw.png" />
     <None Include="Images\Root\rootscrollhilite.png" />
     <Content Include="Images\Icons\IconAdded.png" />
+    <Content Include="Images\Icons\IconRemote.png" />
     <Content Include="Images\Icons\IconWatched.png" />
     <Content Include="Images\Lock.png" />
     <Content Include="Images\MediaInfo\Diamond\d_aspect_169.png" />
