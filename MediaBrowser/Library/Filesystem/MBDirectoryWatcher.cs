@@ -21,6 +21,7 @@ namespace MediaBrowser.Library.Filesystem
 
         public MBDirectoryWatcher(Folder aFolder)
         {
+            lastRefresh = System.DateTime.Now.AddMilliseconds(-60000); //initialize this
             this.folder = aFolder;
             IFolderMediaLocation location = folder.FolderMediaLocation;
             if (location is VirtualFolderMediaLocation)
@@ -33,7 +34,16 @@ namespace MediaBrowser.Library.Filesystem
                 if (location != null)
                 {
                     //regular folder
-                    this.watchedFolders[0] = location.Path;
+                    if (Directory.Exists(location.Path))
+                    {
+                        this.watchedFolders = new string[] { location.Path };
+                    }
+                    else
+                    {
+                        this.watchedFolders = new string[0];
+                        Logger.ReportError("Cannot watch non-folder location " + aFolder.Name);
+                    }
+
                 }
                 else
                 {
@@ -95,9 +105,9 @@ namespace MediaBrowser.Library.Filesystem
                 try
                 {
                     FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(folder,"*.*");
-                    fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes | NotifyFilters.DirectoryName;
+                    fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes | NotifyFilters.DirectoryName | NotifyFilters.FileName;
                     fileSystemWatcher.IncludeSubdirectories = true;
-                    //fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged);
+                    //fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged); //I think this will only cause potential issues with thrashing -ebr
                     fileSystemWatcher.Created += new FileSystemEventHandler(WatchedFolderCreation);
                     fileSystemWatcher.Deleted += new FileSystemEventHandler(WatchedFolderDeletion);
                     fileSystemWatcher.Renamed += new RenamedEventHandler(WatchedFolderRename);
@@ -119,10 +129,11 @@ namespace MediaBrowser.Library.Filesystem
             {
                 if (Directory.Exists(FullPath))
                 {
-                    if (System.DateTime.Now > System.DateTime.Now.AddMilliseconds(-60000))
+                    if (System.DateTime.Now > lastRefresh.AddMilliseconds(-60000))
                     {
                         //initial change event - wait 5 seconds and then update
                         this.initialTimer.Enabled = true;
+                        lastRefresh = System.DateTime.Now;
                         Logger.ReportInfo("A change of type \"" + changeType.ToString() + "\" has occured in " + FullPath);
                     }
                     else
@@ -176,8 +187,15 @@ namespace MediaBrowser.Library.Filesystem
 
         private void RefreshFolder()
         {
-            Logger.ReportInfo("Refreshing " + folder.Name);
-            folder.ValidateChildren();
+            Logger.ReportInfo("Refreshing " + Application.CurrentInstance.CurrentFolder.Name + " due to change in "+folder.Name);
+            //Refresh whatever folder we are currently viewing plus all parents up the tree
+            FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
+            aFolder.RefreshUI();
+            while (aFolder != Application.CurrentInstance.RootFolderModel)
+            {
+                aFolder = aFolder.PhysicalParent;
+                aFolder.RefreshUI();
+            }
         }
         
     }
