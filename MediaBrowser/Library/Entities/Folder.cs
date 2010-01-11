@@ -22,6 +22,7 @@ namespace MediaBrowser.Library.Entities {
         protected IFolderMediaLocation location;
         SortOrder sortOrder = SortOrder.Name;
         object validateChildrenLock = new object();
+        public MBDirectoryWatcher directoryWatcher;
 
         public Folder()
             : base() {

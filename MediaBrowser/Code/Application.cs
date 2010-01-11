@@ -25,7 +25,6 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.UI;
 using MediaBrowser.Library.Input;
-using MediaBrowser.Library.DirectoryWatcher;
 
 
 namespace MediaBrowser
@@ -763,7 +762,6 @@ namespace MediaBrowser
 
         public FolderModel CurrentFolder; //used to keep track of the current folder so we can update the UI if needed
         public FolderModel RootFolderModel; //used to keep track of root folder as foldermodel for same reason
-        public MBDirectoryWatcher directoryWatcher;
 
         private void OpenFolderPage(FolderModel folder)
         {
@@ -783,63 +781,8 @@ namespace MediaBrowser
             {
                 Logger.ReportError("Session is null in OpenPage");
             }
-            try
-            {
-                if(directoryWatcher != null)
-                    directoryWatcher.Dispose();
-
-                if (!folder.IsRoot)
-                    directoryWatcher = new MBDirectoryWatcher(this.RefreshUI, GetVirtualFolderPaths(CurrentFolder));
-                
-            }
-            catch (Exception ex)
-            {
-                Logger.ReportException("Could not instantiate MBDirectoryWatcher. Virtual Folders will NOT be monitored for changes. ", ex);
-            }            
         }
 
-        private string[] GetVirtualFolderPaths(FolderModel currentFolder)
-        {
-            try
-            {
-                if (currentFolder.Folder.GetType() == typeof(Folder))
-                {
-                    return (string[])((VirtualFolderMediaLocation)currentFolder.Folder.FolderMediaLocation).VirtualFolder.Folders.ToArray();
-                }
-                else
-                {                    
-                    return new string[] { }; 
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.ReportException("Could not gather Virtual Folder paths. ", ex);
-                return new string[] {};
-            }
-
-            //List<string> Paths = new List<string>();
-            //foreach (BaseItem item in Application.CurrentInstance.RootFolder.Children)
-            //{
-            //    try
-            //    {
-            //        if (item.GetType() == typeof(Folder))
-            //        {
-            //            Folder VirtualFolders = (Folder)item;
-            //            string[] folders = ((VirtualFolderMediaLocation)VirtualFolders.FolderMediaLocation).VirtualFolder.Folders.ToArray();
-            //            foreach (string vf in folders)
-            //            {
-            //                Paths.Add(vf);
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Logger.ReportException("Could not get path of VF " + item.Name, ex);
-            //    }
-            //}
-
-            //return (string[])Paths.ToArray();
-        }
 
         private Folder GetStartingFolder(BaseItem item)
         {

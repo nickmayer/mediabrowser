@@ -252,6 +252,16 @@ namespace MediaBrowser.Library {
             var root = kernel.GetLocation(ResolveInitialFolder(kernel.ConfigData.InitialFolder));
             kernel.RootFolder = (AggregateFolder)BaseItemFactory<AggregateFolder>.Instance.CreateInstance(root, null);
 
+            // create filewatchers for each of our top-level folders
+            foreach (BaseItem item in kernel.RootFolder.Children)
+            {
+                Folder folder = item as Folder;
+                if (folder != null)
+                {
+                    folder.directoryWatcher = new MBDirectoryWatcher(folder);
+                }
+            }
+
             // our root folder needs metadata
             kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
                 kernel.RootFolder;
