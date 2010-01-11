@@ -54,7 +54,7 @@ namespace MediaBrowser.Library.Filesystem
 
             this.fileSystemWatchers = new List<FileSystemWatcher>();
             InitFileSystemWatcher(this.watchedFolders);
-            InitTimers();
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => { InitTimers(); }); //timers only on app thread
         }
 
         ~MBDirectoryWatcher()
