@@ -364,7 +364,7 @@ namespace MediaBrowser.Library {
         public Dictionary<string, ViewTheme> AvailableThemes = new Dictionary<string, ViewTheme>()
             {
                 {"Default", new ViewTheme()},
-                {"Diamond", new ViewTheme("Diamond", "resx://MediaBrowser/MediaBrowser.Resources/PageDiamond#PageDiamond", "resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView#DiamondMovieView")},
+                //{"Diamond", new ViewTheme("Diamond", "resx://MediaBrowser/MediaBrowser.Resources/PageDiamond#PageDiamond", "resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView#DiamondMovieView")},
              };
 
         //method for external entities (plug-ins) to add a new theme - only support replacing detail areas for now...
@@ -373,6 +373,10 @@ namespace MediaBrowser.Library {
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea));
         }
 
+        public void AddTheme(string name, string pageArea, string detailArea, object config)
+        {
+            AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea, config));
+        }
         private List<MenuItem> menuOptions = new List<MenuItem>();
         private List<Type> externalPlayableItems = new List<Type>();
         private List<Type> externalPlayableFolders = new List<Type>();

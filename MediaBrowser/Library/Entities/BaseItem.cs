@@ -233,6 +233,20 @@ namespace MediaBrowser.Library.Entities {
             return true;
         }
 
+        private string contentSource;
+
+        public bool IsRemoteContent
+        {
+            get
+            {
+                if (contentSource == null)
+                {
+                    contentSource = Path.Substring(0, 7).ToLower();
+                }
+                return contentSource == "http://";
+            }
+        }
+
 
         public virtual void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id) {
             this.Id = id;
@@ -243,7 +257,7 @@ namespace MediaBrowser.Library.Entities {
             if (location is IFolderMediaLocation) {
                 defaultName = location.Name;
             } else {
-                defaultName = Helper.GetNameFromFile(location.Name);
+                defaultName = Helper.GetNameFromFile(location.Path);
             }
         }
 

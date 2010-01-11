@@ -23,7 +23,7 @@
       
       <Size Name="Size" Size="330,100" />
       <Size Name="MinSize" Size="50,50" />
-      <Font Name="Font" Font="font://f:Diamond_Small" />
+      <Font Name="Font" Font="font://f:MM_SummaryFont" />
       <Color Name="Color" Color="color://s:FontColorLight"/>
       
       <Image Name="ImageFocus" Image="image://me:ButtonLeftFocus" />

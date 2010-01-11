@@ -17,11 +17,12 @@ namespace FilmTrailerPlugin {
             PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
             PluginOptions.Load();
 
-            var trailers = kernel.ItemRepository.RetrieveItem(TrailersGuid) ?? new FilmTrailerFolder(); 
+            FilmTrailerFolder trailers = (FilmTrailerFolder)kernel.ItemRepository.RetrieveItem(TrailersGuid) ?? new FilmTrailerFolder(); 
             trailers.Path = "";
             trailers.Id = TrailersGuid;
 
             kernel.RootFolder.AddVirtualChild(trailers);
+            Logger.ReportInfo("Film Trailer Plug-in (version " + Version + ") Loaded.  Using feed from " + Plugin.PluginOptions.Instance.TrailerSource + " (" + trailers.Feed + ")");
         }
 
         public override bool IsConfigurable {

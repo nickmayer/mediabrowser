@@ -32,6 +32,21 @@ namespace MusicPlugin.Library.Entities
                 return items;
             }
         }
-        
+
+        string _name;
+        public override string Name
+        { 
+            get
+            { 
+                if (Settings.Instance.LoadNormalLibrary)
+                    return Settings.Instance.NormalLibraryVirtualFolderName;
+                return _name;
+            }
+            set 
+            {
+                base.Name = value;
+                _name = value;
+            }
+        }
     }
 }

@@ -349,6 +349,23 @@ namespace MediaBrowser
             set { if (this.data.ShowWatchTickInPosterView != value) { this.data.ShowWatchTickInPosterView = value; Save(); FirePropertyChanged("ShowWatchTickInPosterView"); } }
         }
 
+        public bool ShowHDIndicatorOnPosters
+        {
+            get { return this.data.ShowHDIndicatorOnPosters; }
+            set { if (this.data.ShowHDIndicatorOnPosters != value) { this.data.ShowHDIndicatorOnPosters = value; Save(); FirePropertyChanged("ShowHDIndicatorOnPosters"); } }
+        }
+
+        public bool ShowRemoteIndicatorOnPosters
+        {
+            get { return this.data.ShowRemoteIndicatorOnPosters; }
+            set { if (this.data.ShowRemoteIndicatorOnPosters != value) { this.data.ShowRemoteIndicatorOnPosters = value; Save(); FirePropertyChanged("ShowRemoteIndicatorOnPosters"); } }
+        }
+
+        public bool ExcludeRemoteContentInSearch
+        {
+            get { return this.data.ExcludeRemoteContentInSearch; }
+            set { if (this.data.ExcludeRemoteContentInSearch != value) { this.data.ExcludeRemoteContentInSearch = value; Save(); FirePropertyChanged("ExcludeRemoteContentInSearch"); } }
+        }
 
         [Comment("Enables the views to default to the first unwatched item in a folder of movies or tv shows")]
         public bool DefaultToFirstUnwatched
@@ -585,11 +602,6 @@ namespace MediaBrowser
         {
             get { return this.data.MetadataCheckForUpdateAge; }
             set { if (this.data.MetadataCheckForUpdateAge != value) { this.data.MetadataCheckForUpdateAge = value; Save(); FirePropertyChanged("MetadataCheckForUpdateAge"); } }
-        }
-        public bool StartDiamondMovieMinimal
-        {
-            get { return this.data.StartDiamondMovieMinimal; }
-            set { if (this.data.StartDiamondMovieMinimal != value) { this.data.StartDiamondMovieMinimal = value; Save(); FirePropertyChanged("StartDiamondMovieMinimal"); } }
         }
         public bool ShowRootBackground
         {

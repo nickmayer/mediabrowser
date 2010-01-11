@@ -14,30 +14,36 @@ namespace MediaBrowser.Library.UI
         protected string pageArea = "resx://MediaBrowser/MediaBrowser.Resources/PageDefault#Page";
         protected string detailArea = "resx://MediaBrowser/MediaBrowser.Resources/ViewMovieMinimal#ViewMovieMinimal";
         protected string rootLayout = "resx://MediaBrowser/MediaBrowser.Resources/LayoutRoot#LayoutRoot";
+        protected object configObject;
 
         public ViewTheme()
         {
-            init(null,null,null,null,null,null);
+            init(null,null,null,null,null,null,null);
         }
 
         public ViewTheme(string themeName, string pageAreaRef, string detailAreaRef)
         {
-            init(themeName,pageAreaRef,detailAreaRef,null,null,null);
+            init(themeName,pageAreaRef,detailAreaRef,null,null,null,null);
+        }
+
+        public ViewTheme(string themeName, string pageAreaRef, string detailAreaRef, object config)
+        {
+            init(themeName, pageAreaRef, detailAreaRef, null, null, null, config);
         }
 
         public ViewTheme(string themeName, string pageAreaRef, string detailAreaRef, string rootLayoutRef)
         {
-            init(themeName, pageAreaRef, detailAreaRef, null, null, rootLayoutRef);
+            init(themeName, pageAreaRef, detailAreaRef, null, null, rootLayoutRef,null);
 
         }
 
         public ViewTheme(string themeName, string pageAreaRef, string detailAreaRef, string folderPageRef, string detailPageRef, string rootLayoutRef )
         {
-            init(themeName, pageAreaRef, detailAreaRef, rootLayoutRef, folderPageRef, detailPageRef);
+            init(themeName, pageAreaRef, detailAreaRef, rootLayoutRef, folderPageRef, detailPageRef, null);
 
         }
 
-        private void init(string themeName, string pageAreaRef, string detailAreaRef, string folderPageRef, string detailPageRef, string rootLayoutRef) {
+        private void init(string themeName, string pageAreaRef, string detailAreaRef, string folderPageRef, string detailPageRef, string rootLayoutRef, object config) {
             if (!String.IsNullOrEmpty(themeName))
                 name = themeName;
             if (!String.IsNullOrEmpty(pageAreaRef))
@@ -50,6 +56,7 @@ namespace MediaBrowser.Library.UI
                 folderPage = folderPageRef;
             if (!String.IsNullOrEmpty(detailPageRef))
                 detailPage = detailPageRef;
+            configObject = config;
         }
 
         public string Name
@@ -88,5 +95,11 @@ namespace MediaBrowser.Library.UI
             get { return rootLayout; }
             set { rootLayout = value; }
         }
+        public object Config
+        {
+            get { return configObject; }
+            set { configObject = value; }
+        }
+        
     }
 }

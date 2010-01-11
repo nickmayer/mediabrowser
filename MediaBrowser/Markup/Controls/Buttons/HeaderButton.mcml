@@ -15,7 +15,7 @@
       <Image Name="BulletImage" NineGrid="0,0,0,0" />
       <Size Name="MaxSize" Size="175,45" />
       <Size Name="InitialSize" Size="55,45" />
-      <Font Name="Font" Font="font://f:Diamond_Large" />
+      <Font Name="Font" Font="font://f:MM_ButtonFont" />
     </Properties>
 
     <Locals>

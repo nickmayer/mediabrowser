@@ -7,7 +7,7 @@ using System.Xml;
 using System.IO;
 using System.Net;
 using System.Xml.XPath;
-
+using System.Text.RegularExpressions;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library;
@@ -22,12 +22,66 @@ namespace FilmTrailerPlugin
 {
     public class FilmTrailerFolder : Folder
     {
-        private static readonly string FileName = "filmtrailers.xml";
-        private readonly string DownloadToFilePath = System.IO.Path.Combine(ApplicationPaths.AppRSSPath, FileName);
-        private readonly string Feed = @"http://uk.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1";
-        //private readonly string Feed = @"http://uk.feed.filmtrailer.com/v2.0/?ListType=AllCinemaMovies&channel_user_id=441100001-1";
+        public static string FeedDefault = @"http://uk.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1";
 
-        const int RefreshIntervalHrs = 24;  // once a day
+        public string Feed
+        {
+            get
+            {
+                string _feed = FeedDefault;
+                switch (Plugin.PluginOptions.Instance.TrailerSource)
+                {
+                    case "Australia": _feed = @"http://au.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Denmark": _feed = @"http://dk.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Finland": _feed = @"http://fi.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "France": _feed = @"http://fr.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Germany": _feed = @"http://de.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Italy": _feed = @"http://it.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Spain": _feed = @"http://es.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Sweden": _feed = @"http://se.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Switzerland": _feed = @"http://ch.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "Switzerland (fr)": _feed = @"http://ch-fr.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "The Netherlands": _feed = @"http://nl.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "United Kingdom": _feed = @"http://uk.feed.filmtrailer.com/v2.0/?ListType=Latest30InCinema&channel_user_id=441100001-1"; break;
+                    case "** CUSTOM **": _feed = Plugin.PluginOptions.Instance.TrailerSourceCustom; break;
+                    default: _feed = FeedDefault; break;
+                }
+
+                return _feed;
+            }
+            set { }
+        }
+
+        private int RefreshIntervalHrs
+        {
+            get
+            {
+                Int32 val;
+                try
+                {
+                    val = Convert.ToInt32(Plugin.PluginOptions.Instance.RefreshIntervalHrs);
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Bad refresh interval in film trailer plugin settings.  Must be an integer.  Using default of 24.", ex);
+                    val = 24;
+                }
+                return val;
+            }
+            set { }
+        }
+
+        private string DownloadToFilePath
+        {
+            get
+            {
+                // FileName based on feed to force a refresh if feed is changed
+                string fileName = Regex.Replace(Feed, ".*//(.*).feed.filmtrailer.com.*", "filmtrailers-$1.xml");
+                return System.IO.Path.Combine(ApplicationPaths.AppRSSPath, fileName);
+            }
+            set { }
+        }
+
 
         #region Base Item methods
 

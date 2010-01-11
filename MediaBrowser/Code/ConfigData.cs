@@ -26,7 +26,7 @@ namespace MediaBrowser
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;
         public bool IsFirstRun = true;
-        public string ImageByNameLocation = "";
+        public string ImageByNameLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
         public Vector3 OverScanScaling = new Vector3() {X=1, Y=1, Z=1};
         public Inset OverScanPadding = new Inset();
         public bool EnableTraceLogging = false;
@@ -88,7 +88,6 @@ namespace MediaBrowser
         public bool EnableSyncViews = true;
         public string YahooWeatherFeed = "UKXX0085";
         public string YahooWeatherUnit = "c";
-        public bool StartDiamondMovieMinimal = false;
         public bool ShowRootBackground = true;
 
         public string PodcastHome = ApplicationPaths.DefaultPodcastPath;
@@ -110,6 +109,10 @@ namespace MediaBrowser
         public int RecentItemCount = 20;
         public int RecentItemDays = 60;
         public string RecentItemOption = "added";
+
+        public bool ShowHDIndicatorOnPosters = false;
+        public bool ShowRemoteIndicatorOnPosters = true;
+        public bool ExcludeRemoteContentInSearch = true;
 
         public class ExternalPlayer
         {
