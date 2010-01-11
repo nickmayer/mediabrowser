@@ -6,7 +6,7 @@
     	<Label Margin="25,27,266,0" VerticalAlignment="Top" Height="32" Content="Plug-in sources" FontSize="14"/>
     	<ListBox IsSynchronizedWithCurrentItem="True" Margin="25,75,25,80" Name="sourceList" />
     	<Button HorizontalAlignment="Left" Margin="25,0,0,24" VerticalAlignment="Bottom" Width="74" Height="37" Content="Add" Name="addButton" Click="addButton_Click" />
-    	<Button HorizontalAlignment="Right" Margin="0,0,25,24" VerticalAlignment="Bottom" Width="83" Height="37" Content="Remove" Name="removeButton" Click="removeButton_Click" />
-        
+    	<Button HorizontalAlignment="Left" Margin="112,0,0,24" VerticalAlignment="Bottom" Width="83" Height="37" Content="Remove" Name="removeButton" Click="removeButton_Click" />
+        <Button Height="37" HorizontalAlignment="Right" Margin="0,0,25,24" Name="btnDone" VerticalAlignment="Bottom" Width="90" Click="btnDone_Click">Done</Button>
     </Grid>
 </Window>

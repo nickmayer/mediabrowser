@@ -127,7 +127,7 @@ namespace Configurator
 
         public void ValidateMBAppDataFolderPermissions()
         {
-            String windowsAccount = "S-1-5-32-545"; //use the SID for 'users' so it works in any language
+            String windowsAccount = "Users"; 
             FileSystemRights fileSystemRights = FileSystemRights.FullControl;
             DirectoryInfo folder = new DirectoryInfo(ApplicationPaths.AppConfigPath);
 
@@ -176,9 +176,10 @@ namespace Configurator
 
                 foreach (FileSystemAccessRule rule in dSecurity.GetAccessRules(true, false, typeof(SecurityIdentifier)))
                 {
-                    NTAccount account = new NTAccount(windowsAccount);
-                    SecurityIdentifier sID = account.Translate(typeof(SecurityIdentifier)) as SecurityIdentifier;
-                    if(sID.CompareTo(rule.IdentityReference as SecurityIdentifier) == 0)
+                    //NTAccount account = new NTAccount(windowsAccount);
+                    //SecurityIdentifier sID = account.Translate(typeof(SecurityIdentifier)) as SecurityIdentifier;
+                    SecurityIdentifier sid = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null); 
+                    if (sid.CompareTo(rule.IdentityReference as SecurityIdentifier) == 0)
                     {
                         if (fileSystemRights == rule.FileSystemRights)                        
                             return true; // Validation complete                        
@@ -201,7 +202,8 @@ namespace Configurator
             try
             {
                 DirectorySecurity dSecurity = folder.GetAccessControl();
-                dSecurity.AddAccessRule(new FileSystemAccessRule(windowsAccount , rights,InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, controlType));                
+                SecurityIdentifier sid = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
+                dSecurity.AddAccessRule(new FileSystemAccessRule(sid, rights, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, controlType));                
                 folder.SetAccessControl(dSecurity);
             }
             catch (Exception ex)

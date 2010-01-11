@@ -54,7 +54,7 @@ namespace Configurator.Code
             Async.Queue("Fake progress for download", () =>
             {
                 int i = 0;
-                while (!done.WaitOne(100, false))
+                while (!done.WaitOne(500, false))
                 {
                     i += 10;
                     i = i % 100;

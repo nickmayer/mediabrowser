@@ -50,5 +50,10 @@ namespace Configurator {
             this.Close();
         }
 
+        private void btnDone_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }
