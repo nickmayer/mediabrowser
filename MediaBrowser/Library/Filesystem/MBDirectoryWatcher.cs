@@ -107,7 +107,7 @@ namespace MediaBrowser.Library.Filesystem
                     FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(folder,"*.*");
                     fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes | NotifyFilters.DirectoryName | NotifyFilters.FileName;
                     fileSystemWatcher.IncludeSubdirectories = true;
-                    //fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged); //I think this will only cause potential issues with thrashing -ebr
+                    fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged); //should only fire if attribute or name changes
                     fileSystemWatcher.Created += new FileSystemEventHandler(WatchedFolderCreation);
                     fileSystemWatcher.Deleted += new FileSystemEventHandler(WatchedFolderDeletion);
                     fileSystemWatcher.Renamed += new RenamedEventHandler(WatchedFolderRename);
@@ -129,7 +129,7 @@ namespace MediaBrowser.Library.Filesystem
             {
                 if (Directory.Exists(FullPath))
                 {
-                    if (System.DateTime.Now > lastRefresh.AddMilliseconds(-60000))
+                    if (System.DateTime.Now > lastRefresh.AddMilliseconds(60000))
                     {
                         //initial change event - wait 5 seconds and then update
                         this.initialTimer.Enabled = true;
