@@ -41,13 +41,13 @@ namespace MediaBrowser.Library.Filesystem
                     else
                     {
                         this.watchedFolders = new string[0];
-                        Logger.ReportError("Cannot watch non-folder location " + aFolder.Name);
+                        Logger.ReportInfo("Cannot watch non-folder location " + aFolder.Name);
                     }
 
                 }
                 else
                 {
-                    Logger.ReportError("Cannot watch non-folder location " + aFolder.Name);
+                    Logger.ReportInfo("Cannot watch non-folder location " + aFolder.Name);
                     return;
                 }
             }
@@ -107,7 +107,7 @@ namespace MediaBrowser.Library.Filesystem
                     FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(folder,"*.*");
                     fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes | NotifyFilters.DirectoryName | NotifyFilters.FileName;
                     fileSystemWatcher.IncludeSubdirectories = true;
-                    fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged); //should only fire if attribute or name changes
+                    //fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged); //This shouldn't be necessary and will cause too many refreshes
                     fileSystemWatcher.Created += new FileSystemEventHandler(WatchedFolderCreation);
                     fileSystemWatcher.Deleted += new FileSystemEventHandler(WatchedFolderDeletion);
                     fileSystemWatcher.Renamed += new RenamedEventHandler(WatchedFolderRename);
