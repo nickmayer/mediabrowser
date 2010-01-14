@@ -15,6 +15,7 @@ namespace Configurator
 		public AddPluginSourceWindow()
 		{
 			this.InitializeComponent();
+            pluginSource.Focus();
 			
 			// Insert code required on object creation below this point.
 		}

@@ -14,3 +14,8 @@ relre:FrameGrabProvider/bin/*
 relre:Installer/obj/*
 relre:bin/*
 relre:obj/*
+glob:*.sln
+glob:*.csproj.user
+glob:MediaBrowser/TestProject1
+glob:MediaBrowser/MediaBrowser.vsmdi
+glob:MediaBrowser/Select

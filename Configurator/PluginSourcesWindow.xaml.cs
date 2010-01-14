@@ -30,7 +30,7 @@ namespace Configurator {
             var window = new AddPluginSourceWindow();
             var result = window.ShowDialog();
 
-            if (result != null && result.Value) {
+            if (result != null && result.Value && window.pluginSource.Text.Length > 0) {
                 PluginSourceCollection.Instance.Add(window.pluginSource.Text);
             }
        
@@ -38,6 +38,11 @@ namespace Configurator {
 
         private void removeButton_Click(object sender, RoutedEventArgs e) {
             PluginSourceCollection.Instance.Remove(sourceList.SelectedItem as string);
+        }
+
+        private void btnDone_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
