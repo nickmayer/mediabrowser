@@ -513,6 +513,7 @@ namespace MediaBrowser.Library {
             folderChildren.ListenForChanges();
 
             FirePropertyChanged("Children");
+            FirePropertyChanged("SelectedChildIndex");
             lock (watchLock)
                 unwatchedCountCache = -1;
             FireWatchedChangedEvents();

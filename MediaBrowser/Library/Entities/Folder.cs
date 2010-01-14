@@ -22,6 +22,7 @@ namespace MediaBrowser.Library.Entities {
         protected IFolderMediaLocation location;
         SortOrder sortOrder = SortOrder.Name;
         object validateChildrenLock = new object();
+        public MBDirectoryWatcher directoryWatcher;
 
         public Folder()
             : base() {
@@ -322,6 +323,7 @@ namespace MediaBrowser.Library.Entities {
                     lock (ActualChildren) {
                         item.Parent = this;
                         ActualChildren.Add(item);
+                        item.RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions.Force); //necessary to get it to show up without user intervention
                     }
                 }
             }

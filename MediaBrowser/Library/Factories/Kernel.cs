@@ -95,6 +95,16 @@ namespace MediaBrowser.Library {
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
 
+                // create filewatchers for each of our top-level folders
+                foreach (BaseItem item in kernel.RootFolder.Children)
+                {
+                    Folder folder = item as Folder;
+                    if (folder != null)
+                    {
+                        folder.directoryWatcher = new MBDirectoryWatcher(folder);
+                    }
+                }
+
                 // add the podcast home
                 var podcastHome = kernel.GetItem<Folder>(kernel.ConfigData.PodcastHome);
                 if (podcastHome != null && podcastHome.Children.Count > 0) {
@@ -255,6 +265,7 @@ namespace MediaBrowser.Library {
             // our root folder needs metadata
             kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
                 kernel.RootFolder;
+
             // create a mouseActiveHooker for us to know if the mouse is active on our window (used to handle mouse scrolling control)
             // we will wire it to an event on application
             kernel.MouseActiveHooker = new IsMouseActiveHooker();

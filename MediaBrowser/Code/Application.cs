@@ -31,8 +31,7 @@ namespace MediaBrowser
 {
 
     public class Application : ModelItem, IDisposable
-    {
-
+    {        
         public Config Config
         {
             get
@@ -402,7 +401,57 @@ namespace MediaBrowser
                 mce.Dialog("The selected media item cannot be deleted due to its Item-Type or you have not enabled this feature in the configuration file.", "Delete Failed", DialogButtons.Ok, 0, true);
         }
 
+        public void RefreshUI()
+        {
+            try
+            {
+                Logger.ReportInfo("Refreshing UI because the current folder has updated.");
+                this.CurrentFolder.RefreshUI();
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Error refreshing UI. ", ex);
+            }
+        }
 
+        //public void RefreshUI(String UpdatedFolder)
+        //{
+        //    try
+        //    {
+        //        if (this.CurrentFolder.Folder.FolderMediaLocation.GetType() == typeof(VirtualFolderMediaLocation))
+        //        {
+        //            bool isChangeInCurrentFolder = false;
+        //            string[] folders = ((VirtualFolderMediaLocation)this.CurrentFolder.Folder.FolderMediaLocation).VirtualFolder.Folders.ToArray();
+        //            foreach (string folder in folders)
+        //            {
+        //                if (UpdatedFolder.ToLower().StartsWith(folder.ToLower()))
+        //                {
+        //                    isChangeInCurrentFolder = true;
+        //                    break;
+        //                }
+        //            }
+        //            // Only update UI if a change was made to a folder visable in the current UI
+        //            if (isChangeInCurrentFolder)
+        //            {
+        //                Logger.ReportInfo("Refreshing UI because " + UpdatedFolder + " was changed.");
+        //                this.CurrentFolder.RefreshUI();
+        //            }
+        //            else
+        //            {
+        //                Logger.ReportInfo(UpdatedFolder + " was changed, but UI will NOT be refreshed.");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            this.CurrentFolder.RefreshUI();
+        //            Logger.ReportError("Could not determine CurrentFolder.Folder.FolderMediaLocation type. Will refresh UI to be safe. ");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.ReportException("Error refreshing UI. ", ex);
+        //    }
+        //}  
 
         private void DeleteNavigationHelper(Item Parent)
         {
@@ -422,7 +471,7 @@ namespace MediaBrowser
 
         // Entry point for the app
         public void GoToMenu()
-        {
+        { 
             try
             {
                 if (Config.IsFirstRun)
@@ -484,7 +533,7 @@ namespace MediaBrowser
                     {
                         try
                         {
-                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(entryPointPath)));
+                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(entryPointPath)));                            
                         }
                         catch (Exception ex)
                         {
@@ -499,7 +548,7 @@ namespace MediaBrowser
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser encountered a critical error and had to shut down: " + e.ToString() + " " + e.StackTrace.ToString(), "Critical Error", DialogButtons.Ok, 60, true);
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
-        }
+        }              
 
         void FullRefresh(Folder folder)
         {
@@ -737,6 +786,7 @@ namespace MediaBrowser
                 Logger.ReportError("Session is null in OpenPage");
             }
         }
+
 
         private Folder GetStartingFolder(BaseItem item)
         {
