@@ -19,7 +19,7 @@ namespace MediaBrowser.Library.Filesystem
 
         private Folder folder;
 
-        public MBDirectoryWatcher(Folder aFolder)
+        public MBDirectoryWatcher(Folder aFolder, bool watchChanges)
         {
             lastRefresh = System.DateTime.Now.AddMilliseconds(-60000); //initialize this
             this.folder = aFolder;
@@ -53,7 +53,7 @@ namespace MediaBrowser.Library.Filesystem
             }
 
             this.fileSystemWatchers = new List<FileSystemWatcher>();
-            InitFileSystemWatcher(this.watchedFolders);
+            InitFileSystemWatcher(this.watchedFolders, watchChanges);
             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => { InitTimers(); }); //timers only on app thread
         }
 
@@ -98,7 +98,7 @@ namespace MediaBrowser.Library.Filesystem
             this.secondaryTimer.Interval = 60000; // 60 seconds            
         }        
 
-        private void InitFileSystemWatcher(string[] watchedFolders)
+        private void InitFileSystemWatcher(string[] watchedFolders, bool watchChanges)
         {
             foreach (string folder in watchedFolders)
             {
@@ -107,7 +107,8 @@ namespace MediaBrowser.Library.Filesystem
                     FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(folder,"*.*");
                     fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes | NotifyFilters.DirectoryName | NotifyFilters.FileName;
                     fileSystemWatcher.IncludeSubdirectories = true;
-                    //fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged); //This shouldn't be necessary and will cause too many refreshes
+                    if (watchChanges) // we will only watch changes in special situations (startup folder)
+                        fileSystemWatcher.Changed += new FileSystemEventHandler(WatchedFolderChanged); 
                     fileSystemWatcher.Created += new FileSystemEventHandler(WatchedFolderCreation);
                     fileSystemWatcher.Deleted += new FileSystemEventHandler(WatchedFolderDeletion);
                     fileSystemWatcher.Renamed += new RenamedEventHandler(WatchedFolderRename);

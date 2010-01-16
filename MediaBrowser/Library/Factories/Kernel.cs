@@ -101,9 +101,12 @@ namespace MediaBrowser.Library {
                     Folder folder = item as Folder;
                     if (folder != null)
                     {
-                        folder.directoryWatcher = new MBDirectoryWatcher(folder);
+                        folder.directoryWatcher = new MBDirectoryWatcher(folder, false);
                     }
                 }
+
+                // create a watcher for the startup folder too - and watch all changes there
+                kernel.RootFolder.directoryWatcher = new MBDirectoryWatcher(kernel.RootFolder, true); 
 
                 // add the podcast home
                 var podcastHome = kernel.GetItem<Folder>(kernel.ConfigData.PodcastHome);
