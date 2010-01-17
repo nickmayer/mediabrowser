@@ -45,7 +45,15 @@ namespace Configurator.Code {
         }
 
         public void RefreshAvailablePlugins() {
+
+            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread) {
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)RefreshAvailablePlugins);
+                return;
+            }
+
             availablePlugins.Clear();
+            latestVersions.Clear();
+
             var source = PluginSourceCollection.Instance;
             foreach (var plugin in source.AvailablePlugins) {
                 availablePlugins.Add(plugin);

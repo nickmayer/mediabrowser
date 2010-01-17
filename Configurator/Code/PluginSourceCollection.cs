@@ -14,8 +14,6 @@ using MediaBrowser.Library.Logging;
 namespace Configurator.Code {
     class PluginSourceCollection : ObservableCollection<string> {
 
-       
-
         public static PluginSourceCollection Instance = new PluginSourceCollection();
 
         private PluginSourceCollection() {

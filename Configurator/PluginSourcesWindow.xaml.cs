@@ -33,6 +33,8 @@ namespace Configurator {
             if (result != null && result.Value && window.pluginSource.Text.Length > 0) {
                 PluginSourceCollection.Instance.Add(window.pluginSource.Text);
             }
+
+            PluginManager.Instance.RefreshAvailablePlugins();
        
         }
 
