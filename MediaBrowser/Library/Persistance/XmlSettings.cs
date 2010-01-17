@@ -337,35 +337,30 @@ namespace MediaBrowser.Library.Persistance {
                 settingsNode = GetSettingsNode(dom);
             }
 
-
-            Profiler.TimeAction("Load fields", () =>
-            {
-                foreach (AbstractMember member in SettingMembers(typeof(T))) {
+            foreach (AbstractMember member in SettingMembers(typeof(T))) {
 
 
-                    var serializer = FindSerializer(member.Type);
+                var serializer = FindSerializer(member.Type);
 
-                    XmlNode node = settingsNode.SelectSingleNode(member.Name);
+                XmlNode node = settingsNode.SelectSingleNode(member.Name);
 
-                    if (node == null) {
-                        node = dom.CreateNode(XmlNodeType.Element, member.Name, null);
-                        settingsNode.AppendChild(node);
-                        serializer.Write(node, defaults[member.Name]);
-                        stuff_changed = true;
-                    }
-
-                    try {
-                        var data = serializer.Read(node, member.Type);
-                        member.Write(boundObject, data);
-                    } catch (Exception e) {
-                        Trace.WriteLine(e.ToString());
-                        serializer.Write(node, defaults[member.Name]);
-                        stuff_changed = true;
-                    }
+                if (node == null) {
+                    node = dom.CreateNode(XmlNodeType.Element, member.Name, null);
+                    settingsNode.AppendChild(node);
+                    serializer.Write(node, defaults[member.Name]);
+                    stuff_changed = true;
                 }
 
+                try {
+                    var data = serializer.Read(node, member.Type);
+                    member.Write(boundObject, data);
+                } catch (Exception e) {
+                    Trace.WriteLine(e.ToString());
+                    serializer.Write(node, defaults[member.Name]);
+                    stuff_changed = true;
+                }
+            }
 
-            });
 
             if (stuff_changed) {
                 Write();
