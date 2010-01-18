@@ -75,13 +75,14 @@ namespace MediaBrowser
 
         private void OnRefresh()
         {
-            lock (informationItems) {
-                if (informationItems.Count > 0) {
-                    counter++;
-                    if (counter > (informationItems.Count - 1))
-                        counter = 0;
+            lock (informationItems)
+            {
+                if (informationItems.Count > 0)
+                {
                     DisplayItem();
-                } else {
+                }
+                else
+                {
                     DisplayText = string.Empty;
                 }
             }
@@ -89,13 +90,20 @@ namespace MediaBrowser
 
         private void DisplayItem()
         {
-            InfomationItem ipi = (InfomationItem)informationItems[counter];
+            // Get the Info Item from the collection
+            InfomationItem ipi = (InfomationItem)informationItems[0];
+
+            // Decrement the recurr interval, then save back to collection.
             ipi.RecurrXTimes--;
-            informationItems[counter] = ipi;
+            informationItems[0] = ipi;
+
+            // Display Text on screen, and log the message.
             DisplayText = ipi.Description;
-            // Check the Recurring flag, and remove this message once displayed
+            MediaBrowser.Library.Logging.Logger.ReportInfo("Information DisplayText: " + DisplayText);
+
+            // Check the Recurring flag and remove this message once displayed
             if (!ipi.RecurrMessage || ipi.RecurrXTimes <= 0)
-                RemoveItem(counter);
+                RemoveItem(0);
         }
 
         private void RemoveItem(int index)
