@@ -95,18 +95,22 @@ namespace MediaBrowser.Library {
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
 
-                // create filewatchers for each of our top-level folders
-                foreach (BaseItem item in kernel.RootFolder.Children)
+                // create filewatchers for each of our top-level folders (only if we are in MediaCenter, though)
+                bool isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
+                if (isMC) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
                 {
-                    Folder folder = item as Folder;
-                    if (folder != null)
+                    foreach (BaseItem item in kernel.RootFolder.Children)
                     {
-                        folder.directoryWatcher = new MBDirectoryWatcher(folder, false);
+                        Folder folder = item as Folder;
+                        if (folder != null)
+                        {
+                            folder.directoryWatcher = new MBDirectoryWatcher(folder, false);
+                        }
                     }
-                }
 
-                // create a watcher for the startup folder too - and watch all changes there
-                kernel.RootFolder.directoryWatcher = new MBDirectoryWatcher(kernel.RootFolder, true); 
+                    // create a watcher for the startup folder too - and watch all changes there
+                    kernel.RootFolder.directoryWatcher = new MBDirectoryWatcher(kernel.RootFolder, true);
+                }
 
                 // add the podcast home
                 var podcastHome = kernel.GetItem<Folder>(kernel.ConfigData.PodcastHome);
