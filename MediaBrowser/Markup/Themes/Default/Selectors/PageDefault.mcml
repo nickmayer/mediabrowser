@@ -1,6 +1,7 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
       xmlns:cor="assembly://MsCorLib/System"
 	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:mcui="assembly://Microsoft/Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI"
     xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
@@ -20,7 +21,7 @@
 		<Properties>
 			<a:Application Name="Application" Application="$Required"/>
 			<lib:FolderModel Name="Folder" FolderModel="$Required"/>
-      <cor:Object Name="ThemeConfig" />
+      <mcui:ModelItem Name="ThemeConfig" />
 			<IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
 			
 		</Properties>

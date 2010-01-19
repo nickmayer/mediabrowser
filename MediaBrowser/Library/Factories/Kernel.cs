@@ -381,7 +381,7 @@ namespace MediaBrowser.Library {
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea));
         }
 
-        public void AddTheme(string name, string pageArea, string detailArea, object config)
+        public void AddTheme(string name, string pageArea, string detailArea, ModelItem config)
         {
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea, config));
         }
