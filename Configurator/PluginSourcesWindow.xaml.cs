@@ -13,6 +13,9 @@ using System.Windows.Shapes;
 using Configurator.Properties;
 using System.Collections.ObjectModel;
 using Configurator.Code;
+using MediaBrowser.Library.Plugins;
+using MediaBrowser.Library;
+using MediaBrowser;
 
 namespace Configurator {
 
@@ -21,17 +24,19 @@ namespace Configurator {
     /// </summary>
     public partial class PluginSourcesWindow : Window {
 
+
         public PluginSourcesWindow() {
             InitializeComponent();
-            sourceList.ItemsSource = PluginSourceCollection.Instance;
+            sourceList.ItemsSource = PluginManager.Instance.Sources;
         }
+
 
         private void addButton_Click(object sender, RoutedEventArgs e) {
             var window = new AddPluginSourceWindow();
             var result = window.ShowDialog();
 
             if (result != null && result.Value && window.pluginSource.Text.Length > 0) {
-                PluginSourceCollection.Instance.Add(window.pluginSource.Text);
+                PluginManager.Instance.Sources.Add(window.pluginSource.Text);
             }
 
             PluginManager.Instance.RefreshAvailablePlugins();
@@ -39,7 +44,7 @@ namespace Configurator {
         }
 
         private void removeButton_Click(object sender, RoutedEventArgs e) {
-            PluginSourceCollection.Instance.Remove(sourceList.SelectedItem as string);
+            PluginManager.Instance.Sources.Remove(sourceList.SelectedItem as string);
         }
 
         private void btnDone_Click(object sender, RoutedEventArgs e)

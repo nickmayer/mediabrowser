@@ -647,6 +647,8 @@
     <Compile Include="Library\Plugins\BasePlugin.cs" />
     <Compile Include="Library\Plugins\IPluginConfiguration.cs" />
     <Compile Include="Library\Plugins\PluginConfigurationOptions.cs" />
+    <Compile Include="Library\Plugins\PluginSourceCollection.cs" />
+    <Compile Include="Library\Plugins\RemotePlugin.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
     <Compile Include="Library\Ratings.cs" />
     <Compile Include="Library\UI\ConfigPanel.cs" />

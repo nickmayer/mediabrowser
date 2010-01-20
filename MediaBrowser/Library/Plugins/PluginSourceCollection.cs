@@ -3,35 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
-using Configurator.Properties;
-using MediaBrowser.Library.Plugins;
 using System.Xml;
 using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Extensions;
 using System.IO;
 using MediaBrowser.Library.Logging;
 
-namespace Configurator.Code {
-    class PluginSourceCollection : ObservableCollection<string> {
+namespace MediaBrowser.Library.Plugins {
+    public class PluginSourceCollection : ObservableCollection<string> {
 
         public static PluginSourceCollection Instance = new PluginSourceCollection();
 
         private PluginSourceCollection() {
-            foreach (var item in Settings.Default.Repositories) {
+            foreach (var item in Config.Instance.PluginSources) {
                 Items.Add(item);
             }
         }
 
         protected override void InsertItem(int index, string item) {
             base.InsertItem(index, item);
-            Settings.Default.Repositories.Add(item);
-            Settings.Default.Save();
+            Config.Instance.PluginSources = this.Items.ToList(); //cause config to update
         }
 
         protected override void RemoveItem(int index) {
-            Settings.Default.Repositories.Remove(this[index]);
-            Settings.Default.Save();
             base.RemoveItem(index);
+            Config.Instance.PluginSources = this.Items.ToList(); //cause config to update
         }
 
         public IEnumerable<IPlugin> AvailablePlugins {
