@@ -13,7 +13,7 @@
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
-      <mcui:ModelItem Name="ThemeConfig" />
+      <mcui:ModelItem Name="ThemeConfig" ModelItem="$Required" />
     </Properties>
 
     <Rules>
