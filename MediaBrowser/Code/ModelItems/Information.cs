@@ -23,7 +23,7 @@ namespace MediaBrowser
 
         public Information()
         {
-            AddInformation(new InfomationItem("Welcome to Media Browser.", false));
+            AddInformation(new InfomationItem("Welcome to Media Browser.", 2));
             Begin();
         }
 
@@ -126,17 +126,13 @@ namespace MediaBrowser
         {
             this.Description = description;
             this.RecurrMessage = false;
-            this.RecurrXTimes = 0;
-        }
-        public InfomationItem(string description, bool recurrMessage)
-        {
-            this.Description = description;
-            this.RecurrMessage = recurrMessage;
-            this.RecurrXTimes = 0;
+            this.RecurrXTimes = 1;
         }
         public InfomationItem(string description, int recurrInterval)
         {
             this.Description = description;
+            if (recurrInterval < 1)
+                recurrInterval = 1;
             this.RecurrXTimes = recurrInterval;
             this.RecurrMessage = true;
         }
