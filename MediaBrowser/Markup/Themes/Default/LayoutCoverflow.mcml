@@ -451,6 +451,7 @@
           <!--<Set Target="[FocusBg.Content]" Value="[FocusImage]" />-->
           <Set Target="[ConstraintPanel1.ColorFilter]" Value="White" />
           <Set Target="[ConstraintPanel1.Alpha]" Value="1" />
+          <Set Target="[g1.Content]" Value="[Item.PreferredImage]" />
         </Actions>
       </Condition>
 
