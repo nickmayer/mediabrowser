@@ -53,6 +53,20 @@ namespace MediaBrowser
         private static string _background;
         //tracks whether to show recently added or watched items
         public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; } }
+        private bool pluginUpdatesAvailable = false;
+
+        public bool PluginUpdatesAvailable
+        {
+            get
+            {
+                return pluginUpdatesAvailable;
+            }
+            set
+            {
+                pluginUpdatesAvailable = value;
+                FirePropertyChanged("PluginUpdatesAvailable");
+            }
+        }
 
         public List<string> ConfigPanelNames
         {
@@ -440,6 +454,11 @@ namespace MediaBrowser
                             System.Threading.Thread.Sleep(40000);
                             update.CheckForUpdate();
                     });
+                        Async.Queue("Check For Plugin Updates", () =>
+                        {
+                            System.Threading.Thread.Sleep(60000);
+                            PluginUpdatesAvailable = update.PluginUpdatesAvailable();
+                        });
                     }
 
                     Async.Queue("Full Refresh", () =>
