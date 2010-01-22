@@ -182,8 +182,11 @@ namespace MediaBrowser.Library.ImageManagement {
                 }
             }             
         }
-        protected virtual void ProcessImage()
-        { }
+        protected virtual System.Drawing.Image ProcessImage(System.Drawing.Image image)
+        {
+            return image;
+
+        }
 
 
     }

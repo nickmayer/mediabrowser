@@ -330,7 +330,7 @@ namespace MediaBrowser.Library {
         public LocalizedStrings StringData { get; set; }
         public IItemRepository ItemRepository { get; set; }
         public IMediaLocationFactory MediaLocationFactory { get; set; }
-        public delegate void ImageProcessorRoutine(string path, BaseItem item);
+        public delegate System.Drawing.Image ImageProcessorRoutine(System.Drawing.Image image, BaseItem item);
         public ImageProcessorRoutine ImageProcessor;
         public IsMouseActiveHooker MouseActiveHooker;
         private ParentalControl parentalControls;
