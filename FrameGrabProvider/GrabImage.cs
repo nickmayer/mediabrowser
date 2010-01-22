@@ -5,9 +5,15 @@ using System.Text;
 using System.IO;
 using MediaBrowser.Library.ImageManagement;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Entities;
 
 namespace FrameGrabProvider {
-    class GrabImage : LibraryImage {
+    class GrabImage : FilesystemProcessedImage {
+
+        public GrabImage(BaseItem parentItem)
+        {
+            this.item = parentItem;
+        }
 
         protected override string LocalFilename {
             get {
@@ -27,6 +33,7 @@ namespace FrameGrabProvider {
                 Logger.ReportInfo("Trying to extract thumbnail for " + video);
 
                 if (ThumbCreator.CreateThumb(video, LocalFilename, 0.2)) {
+                    ProcessImage();
                     return LocalFilename;
                 } else {
                     Logger.ReportWarning("Failed to grab thumbnail for " + video);

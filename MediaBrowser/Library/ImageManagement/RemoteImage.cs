@@ -35,6 +35,7 @@ namespace MediaBrowser.Library.ImageManagement {
                 using (var stream = ProtectedFileStream.OpenExclusiveWriter(LocalFilename)) {
                     stream.Write(ms.ToArray(), 0, (int)ms.Length);
                 }
+                ProcessImage(); //hook in to do something to the image now that we cached it
 
                 //cache like proxy
                 if (createProxyCache) {
@@ -44,7 +45,6 @@ namespace MediaBrowser.Library.ImageManagement {
                         {
                             stream.Write(ms.ToArray(), 0, (int)ms.Length);
                         }
-                        ProcessImage(); //hook in to do something to the image now that we cached it
                     }
                     catch (Exception e)
                     {

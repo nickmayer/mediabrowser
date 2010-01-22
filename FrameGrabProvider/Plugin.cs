@@ -14,10 +14,10 @@ namespace FrameGrabProvider {
 
             kernel.MetadataProviderFactories.Add(new MetadataProviderFactory(typeof(FrameGrabProvider)));
 
-            kernel.ImageResolvers.Add(path =>
+            kernel.ImageResolvers.Add((path,canBeProcessed, item) =>
             {
                 if (path.ToLower().StartsWith("grab")) {
-                    return new GrabImage(); 
+                    return new GrabImage(item); 
                 }
                 return null;
             });
