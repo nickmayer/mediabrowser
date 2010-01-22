@@ -20,6 +20,7 @@ namespace MediaBrowser.Library.Util
 {
     public static class CustomResourceManager
     {
+        private const string STYLES_FILE = "Styles_DoNotEdit.mcml";
         private const string CUSTOM_STYLE_FILE = "CustomStyles.mcml";
         private const string FONTS_FILE = "Fonts_DoNotEdit.mcml";
         private const string CUSTOM_FONTS_FILE = "CustomFonts.mcml";
@@ -177,6 +178,51 @@ namespace MediaBrowser.Library.Util
                 catch (Exception ex)
                 {
                     Logger.ReportException("Error appending fonts file", ex);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool AppendStyles(string prefix, byte[] stdStyleResource, byte[] blackStyleResource)
+        {
+            string file = Path.Combine(ApplicationPaths.AppConfigPath, STYLES_FILE);
+            string custom = Path.Combine(ApplicationPaths.AppConfigPath, prefix + CUSTOM_STYLE_FILE);
+            if (File.Exists(custom))
+            {
+                Logger.ReportInfo("Using custom styles file: " + custom);
+                if (!VerifyXmlResource(custom, stdStyleResource))
+                {
+                    Logger.ReportWarning(custom + " has been patched with missing values");
+                }
+                try
+                {
+                    AppendXML(file, File.ReadAllBytes(custom));
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error appending styles file with " + custom, ex);
+                    return false;
+                }
+            }
+            else
+            {
+                try
+                {
+                    switch (Config.Instance.Theme)
+                    {
+                        case "Black":
+                            AppendXML(file, blackStyleResource);
+                            break;
+                        case "Default":
+                        default:
+                            AppendXML(file, stdStyleResource);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error appending styles file", ex);
                     return false;
                 }
             }
