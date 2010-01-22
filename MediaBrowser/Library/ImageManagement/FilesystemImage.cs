@@ -75,6 +75,7 @@ namespace MediaBrowser.Library.ImageManagement {
                             BinaryWriter bw = new BinaryWriter(stream);
                             bw.Write(data);
                         }
+                        ProcessImage(); //hook in to do something to the image now that we cached it
                     }
                     isValid = true;
                 }

@@ -5,10 +5,11 @@ using System.Text;
 using MediaBrowser.Library.ImageManagement;
 using System.Diagnostics;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Entities;
 
 namespace MediaBrowser.Library.Factories {
 
-    public delegate LibraryImage ImageResolver(string path); 
+    public delegate LibraryImage ImageResolver(string path, bool canBeProcessed, BaseItem item); 
 
     public class LibraryImageFactory {
         public static LibraryImageFactory Instance = new LibraryImageFactory();
@@ -32,7 +33,12 @@ namespace MediaBrowser.Library.Factories {
             }
         }
 
-        public LibraryImage GetImage(string path) {
+        public LibraryImage GetImage(string path)
+        {
+            return GetImage(path, false, null);
+        }
+
+        public LibraryImage GetImage(string path, bool canBeProcessed, BaseItem item) {
             LibraryImage image = null;
             bool cached = false;
 
@@ -44,12 +50,15 @@ namespace MediaBrowser.Library.Factories {
                 try {
 
                     foreach (var resolver in Kernel.Instance.ImageResolvers) {
-                        image = resolver(path);
+                        image = resolver(path, canBeProcessed, item);
                         if (image != null) break;
                     }
 
                     if (image == null) {
-                        image = new FilesystemImage();
+                        if (canBeProcessed)
+                            image = new FilesystemProcessedImage(item);
+                        else
+                            image = new FilesystemImage();
                     }
 
                     image.Path = path;

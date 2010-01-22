@@ -9,6 +9,7 @@ using System.IO;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Entities;
 
 namespace MediaBrowser.Library.ImageManagement {
     public abstract class LibraryImage {
@@ -181,5 +182,9 @@ namespace MediaBrowser.Library.ImageManagement {
                 }
             }             
         }
+        protected virtual void ProcessImage()
+        { }
+
+
     }
 }

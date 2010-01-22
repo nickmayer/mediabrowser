@@ -153,12 +153,15 @@ namespace MediaBrowser.Library {
 
         private static List<ImageResolver> DefaultImageResolvers(bool enableProxyLikeCaching) {
             return new List<ImageResolver>() {
-                (path) =>  { 
+                (path, canBeProcessed, item) =>  { 
                     if (path != null && path.ToLower().StartsWith("http")) {
                         if (enableProxyLikeCaching)
                             return new ProxyCachedRemoteImage();
                         else
-                            return new RemoteImage();
+                            if (canBeProcessed)
+                                return new RemoteProcessedImage(item);
+                            else
+                                return new RemoteImage();
                     }
                     return null;
                 }
@@ -327,6 +330,8 @@ namespace MediaBrowser.Library {
         public LocalizedStrings StringData { get; set; }
         public IItemRepository ItemRepository { get; set; }
         public IMediaLocationFactory MediaLocationFactory { get; set; }
+        public delegate void ImageProcessorRoutine(string path, BaseItem item);
+        public ImageProcessorRoutine ImageProcessor;
         public IsMouseActiveHooker MouseActiveHooker;
         private ParentalControl parentalControls;
         public ParentalControl ParentalControls
@@ -454,8 +459,13 @@ namespace MediaBrowser.Library {
             return GetLocation<IMediaLocation>(path);
         }
 
-        public LibraryImage GetImage(string path) {
-            return LibraryImageFactory.Instance.GetImage(path);
+        public LibraryImage GetImage(string path)
+        {
+            return GetImage(path, false, null);
+        }
+
+        public LibraryImage GetImage(string path,bool canBeProcessed, BaseItem item) {
+            return LibraryImageFactory.Instance.GetImage(path, canBeProcessed, item);
         }
 
         public void DeletePlugin(IPlugin plugin) {

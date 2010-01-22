@@ -61,7 +61,10 @@ namespace MediaBrowser.Library.Entities {
 
         public LibraryImage PrimaryImage {
             get {
-                return GetImage(PrimaryImagePath);
+                if (this is Media)
+                    return GetImage(PrimaryImagePath, true);
+                else
+                    return GetImage(PrimaryImagePath);
             }
         }
 
@@ -105,9 +108,14 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        private LibraryImage GetImage(string path) {
+        private LibraryImage GetImage(string path)
+        {
+            return GetImage(path, false);
+        }
+
+        private LibraryImage GetImage(string path, bool canBeProcessed) {
             if (string.IsNullOrEmpty(path)) return null;
-            return Kernel.Instance.GetImage(path);
+            return Kernel.Instance.GetImage(path, canBeProcessed, this);
         }
 
         #endregion

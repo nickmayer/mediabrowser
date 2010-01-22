@@ -625,6 +625,8 @@
     </Compile>
     <Compile Include="Library\EntryPoint\EntryPointResolver.cs" />
     <Compile Include="Library\Filesystem\MBDirectoryWatcher.cs" />
+    <Compile Include="Library\ImageManagement\FilesystemProcessedImage.cs" />
+    <Compile Include="Library\ImageManagement\RemoteProcessedImage.cs" />
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
     <Compile Include="Library\Localization\BaseStrings.cs" />
     <Compile Include="Library\Localization\LocalizedStrings.cs" />
