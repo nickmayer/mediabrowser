@@ -23,7 +23,7 @@ namespace MediaBrowser.Library.ImageManagement {
         /// </summary>
         public string Path { get; set; }
 
-        public bool Corrupt { private set; get; } 
+        public bool Corrupt { protected set; get; } 
 
         protected int width = -1;
         protected int height = -1;
@@ -121,9 +121,18 @@ namespace MediaBrowser.Library.ImageManagement {
         public virtual void EnsureImageSizeInitialized() {
             if ( (width < 0 || height < 0) && !Corrupt) {
                 try {
-                    using (var image = System.Drawing.Bitmap.FromFile(GetLocalImagePath())) {
-                        width = image.Width;
-                        height = image.Height;
+                    var file = GetLocalImagePath();
+                    if (file != null)
+                    {
+                        using (var image = System.Drawing.Bitmap.FromFile(file))
+                        {
+                            width = image.Width;
+                            height = image.Height;
+                        }
+                    }
+                    else
+                    {
+                        Logger.ReportWarning("Image path is null - maybe couldn't grab thumbnail...");
                     }
                 } catch (OutOfMemoryException) {
                     // we have a corrupt image. Memory should be fine

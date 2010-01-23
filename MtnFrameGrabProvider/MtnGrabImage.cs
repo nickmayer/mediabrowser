@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using MediaBrowser.Library.ImageManagement;
 using System.IO;
 using MediaBrowser.Library.Logging;
@@ -34,10 +35,17 @@ namespace MtnFrameGrabProvider {
                 Logger.ReportInfo("Trying to extract mtn thumbnail for " + video);
 
                 if (ThumbCreator.CreateThumb(video, LocalFilename, 600)) {
-                    ProcessImage();
+                    if (File.Exists(LocalFilename))
+                    {
+                        //load image and pass to processor
+                        Image img = Image.FromFile(LocalFilename);
+                        img = ProcessImage(img);
+                        img.Save(LocalFilename);
+                    }
                     return LocalFilename;
                 } else {
                     Logger.ReportWarning("Failed to grab mtn thumbnail for " + video);
+                    this.Corrupt = true;
                     return null;
                 }
 

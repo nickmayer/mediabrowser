@@ -357,7 +357,15 @@ namespace MediaBrowser.Library
             float aspect = 0;
             if (path != null)
             {
-                var image = LibraryImageFactory.Instance.GetImage(path);
+                LibraryImage image;
+                if (BaseItem is Media)
+                {
+                    image = LibraryImageFactory.Instance.GetImage(path, true, BaseItem);
+                }
+                else
+                {
+                    image = LibraryImageFactory.Instance.GetImage(path);
+                }
                 aspect = ((float)image.Height) / (float)image.Width;
             }
             return aspect;
