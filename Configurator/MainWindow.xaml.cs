@@ -550,6 +550,12 @@ sortorder: {2}
             }
             var destination = System.IO.Path.Combine(ApplicationPaths.AppInitialDirPath, name + ".vf");
 
+     
+            for (int i = 1; i < 999; i++) {
+                if (!File.Exists(destination)) break;
+                destination = System.IO.Path.Combine(ApplicationPaths.AppInitialDirPath, name  + i.ToString() + ".vf");
+            }
+
             File.WriteAllText(destination,
                 vf.Trim());
         }
