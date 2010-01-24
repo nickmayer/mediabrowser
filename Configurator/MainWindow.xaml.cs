@@ -413,18 +413,6 @@ namespace Configurator
             // Parental Ratings
             ddlOptionMaxAllowedRating.ItemsSource = ratings.ToString();
             ddlFolderRating.ItemsSource = ratings.ToString();
-            //ddlOptionMaxAllowedRating.Items.Add("G");
-            //ddlOptionMaxAllowedRating.Items.Add("PG");
-            //ddlOptionMaxAllowedRating.Items.Add("PG-13");
-            //ddlOptionMaxAllowedRating.Items.Add("R");
-            //ddlOptionMaxAllowedRating.Items.Add("NC-17");
-            //ddlOptionMaxAllowedRating.Items.Add("CS");
-            //ddlFolderRating.Items.Add("G");
-            //ddlFolderRating.Items.Add("PG");
-            //ddlFolderRating.Items.Add("PG-13");
-            //ddlFolderRating.Items.Add("R");
-            //ddlFolderRating.Items.Add("NC-17");
-            //ddlFolderRating.Items.Add("CS");
 
         }
         #endregion
@@ -471,7 +459,7 @@ namespace Configurator
                             vf.Save();
                         }
                         vfs.Add(vf.SortName, vf);
-                        i++;
+                        i = i + 10;
                     }
                     //else
                     //    throw new ArgumentException("Invalid virtual folder file extension: " + filename);
@@ -565,9 +553,9 @@ sortorder: {2}
             if (folderList.Items != null && folderList.Items.Count > start)
             {
                 //update the sortorder in the list starting with the specified index (we just removed or moved something)
-                for (int i = start; i < folderList.Items.Count; i++)
+                for (int i = start; i < folderList.Items.Count*10; i = i + 10)
                 {
-                    VirtualFolder vf = (VirtualFolder)folderList.Items[i];
+                    VirtualFolder vf = (VirtualFolder)folderList.Items[i/10];
                     vf.SortName = i.ToString("D3");
                     vf.Save();
                 }
@@ -745,7 +733,7 @@ sortorder: {2}
             var virtualFolder = folderList.SelectedItem as VirtualFolder;
             if (virtualFolder != null)
             {
-                int current = folderList.SelectedIndex;
+                int current = folderList.SelectedIndex*10;
 
                 var message = "About to remove the folder \"" + virtualFolder.Name + "\" from the menu.\nAre you sure?";
                 if (
@@ -884,15 +872,15 @@ sortorder: {2}
         {
             //move the current item up in the list
             VirtualFolder vf = (VirtualFolder)folderList.SelectedItem;
-            int current = folderList.SelectedIndex;
+            int current = folderList.SelectedIndex*10;
             if (vf != null && current > 0)
             {
                 //remove from current location
-                folderList.Items.RemoveAt(current);
+                folderList.Items.RemoveAt(current/10);
                 //add back above item above us
-                folderList.Items.Insert(current - 1, vf);
+                folderList.Items.Insert((current/10) - 1, vf);
                 //and re-index the items below us
-                updateFolderSort(current - 1);
+                updateFolderSort(current - 10);
                 //finally, re-select this item
                 folderList.SelectedItem = vf;
             }
@@ -902,13 +890,13 @@ sortorder: {2}
         {
             //move the current item down in the list
             VirtualFolder vf = (VirtualFolder)folderList.SelectedItem;
-            int current = folderList.SelectedIndex;
+            int current = folderList.SelectedIndex*10;
             if (vf != null && current < folderList.Items.Count-1)
             {
                 //remove from current location
-                folderList.Items.RemoveAt(current);
+                folderList.Items.RemoveAt(current/10);
                 //add back below item below us
-                folderList.Items.Insert(current + 1, vf);
+                folderList.Items.Insert((current/10) + 1, vf);
                 //and re-index the items below us
                 updateFolderSort(current);
                 //finally, re-select this item

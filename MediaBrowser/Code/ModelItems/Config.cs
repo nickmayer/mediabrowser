@@ -14,6 +14,7 @@ using MediaBrowser.Attributes;
 using Microsoft.MediaCenter;
 using System.Diagnostics;
 using MediaBrowser.Library.Configuration;
+using MediaBrowser.Library.Plugins;
 
 namespace MediaBrowser
 {
@@ -631,6 +632,12 @@ namespace MediaBrowser
         {
             get { return this.data.RecentItemOption; }
             set { if (this.data.RecentItemOption != value) { this.data.RecentItemOption = value; Save(); FirePropertyChanged("RecentItemOption"); } }
+        }
+
+        public List<string> PluginSources
+        {
+            get { return this.data.PluginSources; }
+            set { if (this.data.PluginSources != value) { this.data.PluginSources = value; Save(); FirePropertyChanged("PluginSources"); } }
         }
         /* End of app specific settings*/
 

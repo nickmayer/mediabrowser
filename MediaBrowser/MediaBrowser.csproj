@@ -298,6 +298,10 @@
     <Content Include="Images\Root\flashHorT.png" />
     <Content Include="Images\Root\poster-frame.png" />
     <Content Include="Images\Root\rootscrollhilitefocus.png" />
+    <Content Include="Images\Special\GreenBallDark.png" />
+    <Content Include="Images\Special\GreenBallGlow.png" />
+    <Content Include="Images\Special\GreenBallLight.png" />
+    <Content Include="Images\Special\GreenBallShadow.png" />
     <Content Include="Images\Spinner\DecrementFocused.png" />
     <Content Include="Images\Spinner\DecrementNoFocus.png" />
     <Content Include="Images\DetailBorderShadow.png" />
@@ -647,6 +651,8 @@
     <Compile Include="Library\Plugins\BasePlugin.cs" />
     <Compile Include="Library\Plugins\IPluginConfiguration.cs" />
     <Compile Include="Library\Plugins\PluginConfigurationOptions.cs" />
+    <Compile Include="Library\Plugins\PluginSourceCollection.cs" />
+    <Compile Include="Library\Plugins\RemotePlugin.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
     <Compile Include="Library\Ratings.cs" />
     <Compile Include="Library\UI\ConfigPanel.cs" />
@@ -668,6 +674,7 @@
     <Content Include="Markup\Controls\Buttons\LinkItem.mcml" />
     <Content Include="Markup\Controls\Buttons\ListButton.mcml" />
     <Content Include="Markup\Controls\Buttons\PersonButton.mcml" />
+    <Content Include="Markup\Controls\Buttons\PluginUpdateButton.mcml" />
     <Content Include="Markup\Controls\Buttons\SimpleButton.mcml" />
     <Content Include="Markup\Controls\CheckBox.mcml" />
     <Content Include="Markup\Controls\Buttons\HeaderButton.mcml" />

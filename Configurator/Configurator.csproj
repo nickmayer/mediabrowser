@@ -167,8 +167,6 @@
     <Compile Include="Code\LibraryFolder.cs" />
     <Compile Include="Code\PluginCollection.cs" />
     <Compile Include="Code\PluginManager.cs" />
-    <Compile Include="Code\PluginSourceCollection.cs" />
-    <Compile Include="Code\RemotePlugin.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PermissionDialog.xaml.cs">
       <DependentUpon>PermissionDialog.xaml</DependentUpon>

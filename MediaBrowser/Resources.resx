@@ -913,4 +913,19 @@
   <data name="IconRemote" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\icons\iconremote.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="GreenBallDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\special\greenballdark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GreenBallGlow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\special\greenballglow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GreenBallLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\special\greenballlight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GreenBallShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\special\greenballshadow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PluginUpdateButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\controls\buttons\pluginupdatebutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

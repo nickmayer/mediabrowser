@@ -13,6 +13,7 @@ using System.Xml.Serialization;
 using MediaBrowser.Library.Playables;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Persistance;
+using MediaBrowser.Library.Plugins;
 
 namespace MediaBrowser
 {
@@ -113,6 +114,8 @@ namespace MediaBrowser
         public bool ShowHDIndicatorOnPosters = false;
         public bool ShowRemoteIndicatorOnPosters = true;
         public bool ExcludeRemoteContentInSearch = true;
+
+        public List<string> PluginSources = new List<string>() {"http://www.mediabrowser.tv/plugins/plugin_info.xml"};
 
         public class ExternalPlayer
         {

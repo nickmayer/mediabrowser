@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MediaBrowser.Code.ModelItems;
+using Microsoft.MediaCenter.UI;
 
 namespace MediaBrowser.Library.UI
 {
@@ -14,7 +15,7 @@ namespace MediaBrowser.Library.UI
         protected string pageArea = "resx://MediaBrowser/MediaBrowser.Resources/PageDefault#Page";
         protected string detailArea = "resx://MediaBrowser/MediaBrowser.Resources/ViewMovieMinimal#ViewMovieMinimal";
         protected string rootLayout = "resx://MediaBrowser/MediaBrowser.Resources/LayoutRoot#LayoutRoot";
-        protected object configObject;
+        protected ModelItem configObject;
 
         public ViewTheme()
         {
@@ -26,7 +27,7 @@ namespace MediaBrowser.Library.UI
             init(themeName,pageAreaRef,detailAreaRef,null,null,null,null);
         }
 
-        public ViewTheme(string themeName, string pageAreaRef, string detailAreaRef, object config)
+        public ViewTheme(string themeName, string pageAreaRef, string detailAreaRef, ModelItem config)
         {
             init(themeName, pageAreaRef, detailAreaRef, null, null, null, config);
         }
@@ -43,7 +44,7 @@ namespace MediaBrowser.Library.UI
 
         }
 
-        private void init(string themeName, string pageAreaRef, string detailAreaRef, string folderPageRef, string detailPageRef, string rootLayoutRef, object config) {
+        private void init(string themeName, string pageAreaRef, string detailAreaRef, string folderPageRef, string detailPageRef, string rootLayoutRef, ModelItem config) {
             if (!String.IsNullOrEmpty(themeName))
                 name = themeName;
             if (!String.IsNullOrEmpty(pageAreaRef))
@@ -95,7 +96,7 @@ namespace MediaBrowser.Library.UI
             get { return rootLayout; }
             set { rootLayout = value; }
         }
-        public object Config
+        public ModelItem Config
         {
             get { return configObject; }
             set { configObject = value; }

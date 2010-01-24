@@ -993,6 +993,34 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap GreenBallDark {
+            get {
+                object obj = ResourceManager.GetObject("GreenBallDark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap GreenBallGlow {
+            get {
+                object obj = ResourceManager.GetObject("GreenBallGlow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap GreenBallLight {
+            get {
+                object obj = ResourceManager.GetObject("GreenBallLight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap GreenBallShadow {
+            get {
+                object obj = ResourceManager.GetObject("GreenBallShadow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap HD {
             get {
                 object obj = ResourceManager.GetObject("HD", resourceCulture);
@@ -1438,6 +1466,13 @@ namespace MediaBrowser {
             get {
                 object obj = ResourceManager.GetObject("plainborder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static byte[] PluginUpdateButton {
+            get {
+                object obj = ResourceManager.GetObject("PluginUpdateButton", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

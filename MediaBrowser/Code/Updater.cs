@@ -11,7 +11,8 @@ using Microsoft.MediaCenter.UI;
 using MediaBrowser;
 using System.Reflection;
 using MediaBrowser.Library.Logging;
-
+using MediaBrowser.Library.Plugins;
+using MediaBrowser.Library;
 
 
 // XML File structure
@@ -102,7 +103,7 @@ namespace MediaBrowser.Util
             catch (Exception e)
             {
                 // No biggie, just return out.
-                Logger.ReportException("Failed to update plugin", e);
+                Logger.ReportException("Error attempting to check for an update to Media Browser", e);
             }
 
         }
@@ -205,5 +206,34 @@ namespace MediaBrowser.Util
             context.ApplicationContext.CloseApplication();
 
         }
+
+        /// <summary>
+        /// Check our installed plugins against the available ones to see if there are updated versions available
+        /// Don't try and update from here just display messages and return a bool so we can set an attribute.
+        /// </summary>
+        public bool PluginUpdatesAvailable()
+        {
+            List<IPlugin> availablePlugins = (List<IPlugin>)PluginSourceCollection.Instance.AvailablePlugins;
+            bool updatesAvailable = false;
+            Logger.ReportInfo("Checking for Plugin Updates...");
+
+            foreach (IPlugin plugin in Kernel.Instance.Plugins)
+            {
+                IPlugin found = availablePlugins.Find(remote => remote.Name == plugin.Name);
+                if (found != null)
+                {
+                    if (found.Version > plugin.Version)
+                    {
+                        //newer one available - alert and set our bool
+                        Application.CurrentInstance.Information.AddInformationString("An update is available for plug-in " + plugin.Name);
+                        Logger.ReportInfo("Plugin " + plugin.Name + " (version " + plugin.Version + ") has update to Version " + found.Version + " Available.");
+                        updatesAvailable = true;
+                    }
+                }
+            }
+            if (!updatesAvailable) Application.CurrentInstance.Information.AddInformationString("No Plugin Updates Currently Available.");
+            return updatesAvailable;
+        }
+
     }
 }

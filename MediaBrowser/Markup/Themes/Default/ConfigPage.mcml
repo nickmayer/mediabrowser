@@ -18,6 +18,7 @@
     xmlns:pv="resx://MediaBrowser/MediaBrowser.Resources/Pivot"
     xmlns:pe="resx://MediaBrowser/MediaBrowser.Resources/PINEdit"
     xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
+    xmlns:pu="resx://MediaBrowser/MediaBrowser.Resources/PluginUpdateButton"  
 	  xmlns:me="Me"
 	  >
 
@@ -401,6 +402,7 @@
       <Binding Source="[ViewThemeModel.Chosen!cor:String]" Target="[Config.ViewTheme]" />
       <Binding Source="[ShowConfigButton.Value]" Target="[Config.ShowConfigButton]" />
       <Binding Source="[AlphaBlending.Value]" Target="[Config.AlphaBlending]" />
+      <Binding Source="[Application.PluginUpdatesAvailable]" Target="[UpdateButton.Visible]" />
     </Rules>
 
     <Content>
@@ -424,6 +426,14 @@
                 <Children>
                   <Text Content="version: " Font="font://f:CP_VersionFont" Color="color://s:FontColorDark" />
                   <Text Content="[Application.AppVersion]" Font="font://f:CP_VersionFont" Color="color://s:FontColorDark"/>
+                </Children>
+              </Panel>
+              <Panel Name="UpdateButton" Visible="[Application.PluginUpdatesAvailable]">
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent,1,-40" Left="Parent,0,15"/>
+                </LayoutInput>
+                <Children>
+                  <pu:PluginUpdateButton />
                 </Children>
               </Panel>
 

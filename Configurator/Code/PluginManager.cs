@@ -31,6 +31,7 @@ namespace Configurator.Code {
 
         PluginCollection installedPlugins = new PluginCollection();
         PluginCollection availablePlugins = new PluginCollection();
+        PluginSourceCollection sources = PluginSourceCollection.Instance;
 
         Dictionary<string, System.Version> latestVersions = new Dictionary<string, System.Version>();
 
@@ -54,8 +55,7 @@ namespace Configurator.Code {
             availablePlugins.Clear();
             latestVersions.Clear();
 
-            var source = PluginSourceCollection.Instance;
-            foreach (var plugin in source.AvailablePlugins) {
+            foreach (var plugin in sources.AvailablePlugins) {
                 availablePlugins.Add(plugin);
                 latestVersions.Add(plugin.Filename, plugin.Version);
             } 
@@ -128,7 +128,13 @@ namespace Configurator.Code {
                 return availablePlugins;
             } 
         }
-
+        public PluginSourceCollection Sources
+        {
+            get
+            {
+                return sources;
+            }
+        }
        
     }
 }

@@ -53,6 +53,20 @@ namespace MediaBrowser
         private static string _background;
         //tracks whether to show recently added or watched items
         public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; } }
+        private bool pluginUpdatesAvailable = false;
+
+        public bool PluginUpdatesAvailable
+        {
+            get
+            {
+                return pluginUpdatesAvailable;
+            }
+            set
+            {
+                pluginUpdatesAvailable = value;
+                FirePropertyChanged("PluginUpdatesAvailable");
+            }
+        }
 
         public List<string> ConfigPanelNames
         {
@@ -401,57 +415,6 @@ namespace MediaBrowser
                 mce.Dialog("The selected media item cannot be deleted due to its Item-Type or you have not enabled this feature in the configuration file.", "Delete Failed", DialogButtons.Ok, 0, true);
         }
 
-        public void RefreshUI()
-        {
-            try
-            {
-                Logger.ReportInfo("Refreshing UI because the current folder has updated.");
-                this.CurrentFolder.RefreshUI();
-            }
-            catch (Exception ex)
-            {
-                Logger.ReportException("Error refreshing UI. ", ex);
-            }
-        }
-
-        //public void RefreshUI(String UpdatedFolder)
-        //{
-        //    try
-        //    {
-        //        if (this.CurrentFolder.Folder.FolderMediaLocation.GetType() == typeof(VirtualFolderMediaLocation))
-        //        {
-        //            bool isChangeInCurrentFolder = false;
-        //            string[] folders = ((VirtualFolderMediaLocation)this.CurrentFolder.Folder.FolderMediaLocation).VirtualFolder.Folders.ToArray();
-        //            foreach (string folder in folders)
-        //            {
-        //                if (UpdatedFolder.ToLower().StartsWith(folder.ToLower()))
-        //                {
-        //                    isChangeInCurrentFolder = true;
-        //                    break;
-        //                }
-        //            }
-        //            // Only update UI if a change was made to a folder visable in the current UI
-        //            if (isChangeInCurrentFolder)
-        //            {
-        //                Logger.ReportInfo("Refreshing UI because " + UpdatedFolder + " was changed.");
-        //                this.CurrentFolder.RefreshUI();
-        //            }
-        //            else
-        //            {
-        //                Logger.ReportInfo(UpdatedFolder + " was changed, but UI will NOT be refreshed.");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            this.CurrentFolder.RefreshUI();
-        //            Logger.ReportError("Could not determine CurrentFolder.Folder.FolderMediaLocation type. Will refresh UI to be safe. ");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.ReportException("Error refreshing UI. ", ex);
-        //    }
-        //}  
 
         private void DeleteNavigationHelper(Item Parent)
         {
@@ -491,6 +454,11 @@ namespace MediaBrowser
                             System.Threading.Thread.Sleep(40000);
                             update.CheckForUpdate();
                     });
+                        Async.Queue("Check For Plugin Updates", () =>
+                        {
+                            System.Threading.Thread.Sleep(60000);
+                            PluginUpdatesAvailable = update.PluginUpdatesAvailable();
+                        });
                     }
 
                     Async.Queue("Full Refresh", () =>
