@@ -123,7 +123,12 @@ namespace MediaBrowser.Library.Providers
                     {
                         if (movie.Actors == null)
                             movie.Actors = new List<Actor>();
-                        movie.Actors.Add(new Actor { Name = node.SelectSingleNode("Name").InnerText, Role = node.SelectSingleNode("Role").InnerText });
+
+                        var name = node.SelectSingleNode("Name").InnerText;
+                        var role = node.SafeGetString("Role", "");
+                        var actor = new Actor() {Name = name, Role = role};
+
+                        movie.Actors.Add(actor);
                     }
                     catch
                     {
