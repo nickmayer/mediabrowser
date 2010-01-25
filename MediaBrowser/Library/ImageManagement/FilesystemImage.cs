@@ -64,7 +64,7 @@ namespace MediaBrowser.Library.ImageManagement {
                     } 
 
                     isValid = CacheDate > Max(remoteInfo.LastWriteTimeUtc, remoteInfo.CreationTimeUtc);
-                    isValid &= localInfo.Length == remoteInfo.Length;
+                    //isValid &= localInfo.Length == remoteInfo.Length; //isn't date enough?  This will always be true if we process the image...
                 }
 
                 if (!isValid) {
