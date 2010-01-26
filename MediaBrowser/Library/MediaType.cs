@@ -16,6 +16,7 @@ namespace MediaBrowser.Library {
         TS,
         ISO,
         PlayList, 
-        DVRMS
+        DVRMS,
+        Wmv
     }
 }

@@ -41,6 +41,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
                     mediaType = MediaType.ISO;
                 } else {
                     isMovie = location.IsVideo();
+                    if (isMovie) mediaType = location.GetVideoMediaType();
                 }
 
             }
@@ -124,6 +125,8 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
             if (volumes.Count > 0 && isoCount == 0) {
                 if (volumes.Count <= maxVideosPerMovie) {
+                    //figure out media type from file extension (first one will win...)
+                    mediaType = volumes[0].GetVideoMediaType();
                     isMovie = true;
                 }
             }

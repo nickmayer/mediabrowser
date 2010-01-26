@@ -55,6 +55,25 @@ namespace MediaBrowser.Library.Extensions {
             return false;
         }
 
+        public static MediaType GetVideoMediaType(this IMediaLocation location)
+        {
+            //figure out media type from file extension
+            switch (location.Path.Substring(location.Path.Length - 4).ToLower())
+            {
+                case ".mkv":
+                    return MediaType.Mkv;
+                case ".avi":
+                    return MediaType.Avi;
+                case ".wmv":
+                    return MediaType.Wmv;
+                case ".mp4":
+                case ".m4v":
+                    return MediaType.Mp4;
+                default:
+                    return MediaType.Unknown;
+            }
+        }
+
         public static bool IsVodcast(this IMediaLocation location) {
             return location.Path.ToLower().EndsWith(".vodcast");
         }
