@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Drawing;
 using MediaBrowser.Library.ImageManagement;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities;
@@ -33,7 +34,13 @@ namespace FrameGrabProvider {
                 Logger.ReportInfo("Trying to extract thumbnail for " + video);
 
                 if (ThumbCreator.CreateThumb(video, LocalFilename, 0.2)) {
-                    ProcessImage();
+                    if (File.Exists(LocalFilename))
+                    {
+                        //load image and pass to processor
+                        Image img = Image.FromFile(LocalFilename);
+                        img = ProcessImage(img);
+                        img.Save(LocalFilename);
+                    }
                     return LocalFilename;
                 } else {
                     Logger.ReportWarning("Failed to grab thumbnail for " + video);
