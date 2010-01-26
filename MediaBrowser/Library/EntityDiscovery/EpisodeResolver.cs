@@ -35,7 +35,14 @@ namespace MediaBrowser.Library.EntityDiscovery {
                         setup = new List<InitializationParameter>() {
                             new MediaTypeInitializationParameter() {MediaType = mt}
                         };
-                    } 
+                    }
+                    else if (isVideo)
+                    {
+                        MediaType mt = location.GetVideoMediaType();
+                        setup = new List<InitializationParameter>() {
+                            new MediaTypeInitializationParameter() {MediaType = mt}
+                        };
+                    }
 
                     factory = BaseItemFactory<Episode>.Instance;
                 }
