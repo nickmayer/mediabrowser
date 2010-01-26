@@ -35,7 +35,7 @@
       <Size Name="PanelSize" Size="800,400" />
       <a:Config Name="Config" Config="[Application.Config]"/>
       <Command Name="Close" />
-      <Command Name="Back" />
+      <Command Name="Back"/>
       <Command Name="ClearCache" />
       <Command Name="ResetConfig" />
       <Command Name="EnterPIN" />
@@ -224,7 +224,18 @@
           <Invoke Target="[Application.FinishInitialConfig]" />
         </Actions>
       </Changed>
+      <Changed Source="[Back.Invoked]">        
+        <Conditions>
+          <Equality Source="[Application.EntryPointPath]" Value="[Application.ConfigEntryPointVal]" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Application.Close]" />
+        </Actions>        
+      </Changed>
       <Changed Source="[Back.Invoked]">
+        <Conditions>
+          <Equality Source="[Application.EntryPointPath]" Value="[Application.ConfigEntryPointVal]" ConditionOp="NotEquals"/>
+        </Conditions>
         <Actions>
           <Invoke Target="[Application.Back]" />
         </Actions>
@@ -394,6 +405,9 @@
           <Set Target="[FullConfigNav.Visible]" Value="false" />
         </Actions>
       </Condition>
+      
+      
+      
 
       <!-- Backdrop Visbile Bindings -->      
       <Binding Source="[Application.Config.ShowRootBackground]" Target="[BG_InitialFolder.Visible]" />

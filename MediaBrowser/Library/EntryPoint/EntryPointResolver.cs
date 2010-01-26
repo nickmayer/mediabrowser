@@ -40,7 +40,7 @@ namespace MediaBrowser.Library
 
         public static BaseItem EntryPoint(string entryPointPath)
         {
-            if (entryPointPath.Length > 0 && entryPointPath.ToLower() != "configmb")
+            if (entryPointPath.Length > 0 && entryPointPath.ToLower() != Application.CONFIG_ENTRY_POINT)
             {
                 // Find entry point path in root folder                            
                 foreach (BaseItem item in Application.CurrentInstance.RootFolder.Children)

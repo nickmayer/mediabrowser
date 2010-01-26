@@ -200,6 +200,27 @@ namespace MediaBrowser
             set { navigatingForward = value; }
         }
 
+        
+        private string entryPointPath = string.Empty;
+
+        public string EntryPointPath
+        {
+            get
+            {
+                return this.entryPointPath.ToLower();
+            }
+        }
+
+        public const string CONFIG_ENTRY_POINT = "configmb";
+
+        public string ConfigEntryPointVal
+        {
+            get
+            {
+                return CONFIG_ENTRY_POINT.ToLower();
+            }
+        }
+
         static Application()
         {
 
@@ -485,14 +506,15 @@ namespace MediaBrowser
                     });
 
                     //check for alternate entry point
-                    string entryPointPath = EntryPointResolver.EntryPointPath;
-                    if (!String.IsNullOrEmpty(entryPointPath))
+                    this.entryPointPath = EntryPointResolver.EntryPointPath;
+
+                    if (!String.IsNullOrEmpty(this.EntryPointPath))
                     {
                         //add in a fake breadcrumb so they will show properly
                         session.AddBreadcrumb("DIRECTENTRY");
                     }
 
-                    if (entryPointPath.ToLower() == "configmb") //specialized case for config page
+                    if (this.EntryPointPath.ToLower() == ConfigEntryPointVal) //specialized case for config page
                     {
                         //OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
                         OpenConfiguration(true);
@@ -501,11 +523,11 @@ namespace MediaBrowser
                     {
                         try
                         {
-                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(entryPointPath)));                            
+                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath)));                            
                         }
                         catch (Exception ex)
                         {
-                            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser could not launch directly into " + entryPointPath + ". " + ex.ToString() + " " + ex.StackTrace.ToString(), "Entrypoint Error", DialogButtons.Ok, 30, true);
+                            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser could not launch directly into " + this.EntryPointPath + ". " + ex.ToString() + " " + ex.StackTrace.ToString(), "Entrypoint Error", DialogButtons.Ok, 30, true);
                             Close();
                         }
                     }
