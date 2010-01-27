@@ -21,9 +21,16 @@ namespace MediaBrowser.Library.ImageManagement
 
         protected override void CacheImage()
         {
-            Image data = Image.FromFile(Path);
-            data = ProcessImage(data); //hook in to do something to the image now that we cached it
-            data.Save(LocalFilename);
+            try
+            {
+                Image data = Image.FromFile(Path);
+                data = ProcessImage(data); //hook in to do something to the image now that we cached it
+                data.Save(LocalFilename);
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Failed to process image.  Path was " + Path,e);
+            }
         }
 
         protected override Image ProcessImage(Image rootImage)

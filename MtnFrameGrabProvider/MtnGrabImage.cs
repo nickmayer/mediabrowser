@@ -34,15 +34,34 @@ namespace MtnFrameGrabProvider {
 
                 Logger.ReportInfo("Trying to extract mtn thumbnail for " + video);
 
-                if (ThumbCreator.CreateThumb(video, LocalFilename, 600)) {
-                    if (File.Exists(LocalFilename))
+                string tempFile = ""; //this will get filled in by the thumb grabber
+
+                //try to grab thumb 10% into the file - if we don't know runtime then default to 10 mins
+                int secondsIn = 600;
+                Video videoItem = item as Video;
+                if (videoItem != null)
+                {
+                    if (videoItem.MediaInfo.RunTime > 0)
+                    {
+                        secondsIn = (Int32)((videoItem.MediaInfo.RunTime / 10)*60);
+                    }
+                }
+
+                if (ThumbCreator.CreateThumb(video, ref tempFile, secondsIn)) {
+                    if (File.Exists(tempFile))
                     {
                         //load image and pass to processor
-                        Image img = Image.FromFile(LocalFilename);
+                        Image img = Image.FromFile(tempFile);
                         img = ProcessImage(img);
                         img.Save(LocalFilename);
+                        return LocalFilename;
                     }
-                    return LocalFilename;
+                    else
+                    {
+                        Logger.ReportError("Unable to process thumb image for " + video);
+                        this.Corrupt = true;
+                        return null;
+                    }
                 } else {
                     Logger.ReportWarning("Failed to grab mtn thumbnail for " + video);
                     this.Corrupt = true;

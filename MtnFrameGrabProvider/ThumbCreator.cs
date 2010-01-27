@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace MtnFrameGrabProvider {
@@ -21,7 +22,7 @@ namespace MtnFrameGrabProvider {
             );
 
          
-        public static bool CreateThumb(string video, string destination, int secondsFromStart) {
+        public static bool CreateThumb(string video, ref string destination, int secondsFromStart) {
 
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.FileName = Plugin.MtnExe;
@@ -33,13 +34,11 @@ namespace MtnFrameGrabProvider {
             var process = Process.Start(psi);
             process.WaitForExit();
 
-            string tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video) + ".jpg");
-            try {
-                File.Move(tempFile, destination);
-            } catch (Exception) {
+            destination = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video) + ".jpg");
+            if (process.ExitCode == 0)
+                return true;
+            else
                 return false;
-            } 
-            return true;
         }
 
         private static string GetShortPath(string path) {
