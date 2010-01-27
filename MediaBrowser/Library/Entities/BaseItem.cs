@@ -241,17 +241,15 @@ namespace MediaBrowser.Library.Entities {
             return true;
         }
 
-        private string contentSource;
-
+        bool? isRemoteContent = null;
         public bool IsRemoteContent
         {
             get
             {
-                if (contentSource == null)
-                {
-                    contentSource = Path.Substring(0, 7).ToLower();
+                if (isRemoteContent == null) { 
+                    isRemoteContent = Path != null && Path.ToLower().StartsWith("http://");
                 }
-                return contentSource == "http://";
+                return isRemoteContent.Value;
             }
         }
 
