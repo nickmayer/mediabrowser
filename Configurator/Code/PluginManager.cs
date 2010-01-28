@@ -57,7 +57,7 @@ namespace Configurator.Code {
 
             foreach (var plugin in sources.AvailablePlugins) {
                 availablePlugins.Add(plugin);
-                latestVersions.Add(plugin.Filename, plugin.Version);
+                latestVersions.Add(System.IO.Path.GetFileName(plugin.Filename), plugin.Version);
             } 
         } 
 
