@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Configurator.Code;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library.Threading;
+using MediaBrowser.Library;
 using System.Windows.Forms;
 using System.Threading;
 using System.Windows.Threading;
@@ -53,6 +54,25 @@ namespace Configurator {
         private void btnDone_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void pluginList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //validate the required MB version for this plug-in
+            if (pluginList.SelectedItem != null && InstallButton != null && MessageLine != null)
+            {
+                IPlugin plugin = pluginList.SelectedItem as IPlugin;
+                if (plugin.RequiredMBVersion > Kernel.Instance.Version)
+                {
+                    InstallButton.IsEnabled = false;
+                    MessageLine.Content = plugin.Name + " requires at least version " + plugin.RequiredMBVersion + ".  Current MB version installed is " + Kernel.Instance.Version;
+                }
+                else
+                {
+                    InstallButton.IsEnabled = true;
+                    MessageLine.Content = "";
+                }
+            }
         }
 
     }

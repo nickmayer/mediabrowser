@@ -319,6 +319,10 @@ namespace MediaBrowser.Library {
             }
         }
 
+        public System.Version Version
+        {
+            get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; }
+        }
 
         public AggregateFolder RootFolder { get; set; }
         public List<IPlugin> Plugins { get; set; }

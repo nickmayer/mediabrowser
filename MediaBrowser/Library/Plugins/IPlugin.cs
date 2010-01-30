@@ -16,6 +16,7 @@ namespace MediaBrowser.Library.Plugins {
         string Name { get; }
         string Description { get; }
         System.Version Version { get; }
+        System.Version RequiredMBVersion { get; }
         bool IsConfigurable { get; }
         void Configure();
         bool InstallGlobally { get; }

@@ -64,11 +64,13 @@ namespace MediaBrowser.Library.Plugins {
             if (doc != null) {
                 foreach (XmlNode pluginRoot in doc.SelectNodes(@"Plugins//Plugin")) {
                     string installGlobally = pluginRoot.SafeGetString("InstallGlobally") ?? "false"; //get this safely in case its not there
+                    string requiredVersion = pluginRoot.SafeGetString("RequiredMBVersion") ?? "2.0.0.0"; //get this safely in case its not there
                     list.Add(new RemotePlugin()
                     {
                         Description = pluginRoot.SafeGetString("Description"),
                         Filename = pluginRoot.SafeGetString("Filename"),
                         Version = new System.Version(pluginRoot.SafeGetString("Version")),
+                        RequiredMBVersion = new System.Version(requiredVersion),
                         Name = pluginRoot.SafeGetString("Name"),
                         BaseUrl = GetPath(source),
                         InstallGlobally = XmlConvert.ToBoolean(installGlobally)

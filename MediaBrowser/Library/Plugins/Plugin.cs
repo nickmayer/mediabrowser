@@ -79,7 +79,13 @@ namespace MediaBrowser.Library.Plugins {
             get { return pluginInterface.Version; }
         }
 
-        public string Filename {
+        public System.Version RequiredMBVersion
+        {
+            get { return pluginInterface.RequiredMBVersion; }
+        }
+
+        public string Filename
+        {
             get { return Path.GetFileName(filename); } 
         }
 

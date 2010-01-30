@@ -29,7 +29,10 @@ namespace Configurator.Code {
             get { return new System.Version(1, 2, 3, 4);  }
         }
 
-
+        public System.Version RequiredMBVersion
+        {
+            get { return new System.Version(1, 2, 3, 4); }
+        }
 
         public string Filename {
             get { return "bob.dll"; }

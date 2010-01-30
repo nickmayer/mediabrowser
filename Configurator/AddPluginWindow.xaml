@@ -13,13 +13,15 @@
 				<MenuItem Header="Sources..." Click="MenuItem_Click"/> 
 			</MenuItem>
 		</Menu>
+        <Label Grid.RowSpan="2" Height="28" Margin="8,0,8,8" Name="MessageLine" VerticalAlignment="Bottom" FontWeight="Bold">Select a Plug-in to Add</Label>
 		<Label Margin="18,28,0,0" VerticalAlignment="Top" Height="31" Content="Choose a Plug-in from the list below:" HorizontalAlignment="Left" Width="213"/>
-		<ListBox DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" Margin="18,59,0,30" Width="244" HorizontalAlignment="Left" Name="pluginList" DataContext="{DynamicResource PluginManager}" ItemsSource="{Binding Path=AvailablePlugins, Mode=Default}" />
 		<Button Margin="351,0,0,30" Content="Install" Height="37" VerticalAlignment="Bottom" Click="InstallClick" Name="InstallButton" HorizontalAlignment="Left" Width="96" />
-		<TextBlock Margin="281,98,40,120" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
-		<Label Margin="281,0,190,89" VerticalAlignment="Bottom" Height="27" Content="Version:"/>
-		<Label HorizontalAlignment="Right" Margin="0,0,152,87" VerticalAlignment="Bottom" Width="88" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="latestPluginVersion"/>
+		<ListBox DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" Margin="18,59,0,30" Width="244" HorizontalAlignment="Left" Name="pluginList" DataContext="{DynamicResource PluginManager}" ItemsSource="{Binding Path=AvailablePlugins, Mode=Default}" SelectionChanged="pluginList_SelectionChanged" />
+		<TextBlock Margin="281,98,40,126" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
+		<Label Margin="0,218,99,98" Content="Plug-in Version:" HorizontalAlignment="Right" Width="94" />
+		<Label HorizontalAlignment="Right" Margin="0,0,32,96" VerticalAlignment="Bottom" Width="62" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="latestPluginVersion"/>
 		<Label Margin="277,59,26,0" VerticalAlignment="Top" Height="30.62" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS" x:Name="pluginName"/>
-		<ProgressBar Grid.Row="1" Margin="8,0,8,8" x:Name="progress" Visibility="Hidden"/><Button Height="37" HorizontalAlignment="Right" Margin="0,0,26,30" Name="btnDone" Click="btnDone_Click" IsCancel="True" VerticalAlignment="Bottom" Width="95">Done</Button>
+		<ProgressBar Grid.Row="1" Margin="8,0,8,8" x:Name="progress" Visibility="Hidden"/><Button Height="37" HorizontalAlignment="Right" Margin="0,0,26,30" Name="btnDone" Click="btnDone_Click" IsCancel="True" VerticalAlignment="Bottom" Width="95">Done</Button><Label Margin="0,0,99,76" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="124">Required MB Version:</Label>
+        <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="0,240,32,74" Name="reqdMBVersion" HorizontalAlignment="Right" Width="61" />
 	</Grid>
 </Window>

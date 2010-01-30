@@ -29,7 +29,14 @@ namespace MediaBrowser.Library.Plugins {
             set;
         }
 
-        public string BaseUrl {
+        public System.Version RequiredMBVersion
+        {
+            get;
+            set;
+        }
+
+        public string BaseUrl
+        {
             get;
             set;
         }

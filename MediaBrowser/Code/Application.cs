@@ -1086,9 +1086,8 @@ namespace MediaBrowser
 
         public string AppVersion
         {
-            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+            get { return Kernel.Instance.Version.ToString(); }
         }
-
 
         private Information _information = new Information();
         public Information Information
