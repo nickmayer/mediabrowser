@@ -81,6 +81,10 @@ namespace MediaBrowser.Library.Providers.TVDB {
             if (!string.IsNullOrEmpty(seasonNumber)) {
                 seasonNumber = seasonNumber.TrimStart('0');
 
+                if (string.IsNullOrEmpty(seasonNumber)) {
+                    seasonNumber = "0"; // Specials
+                }
+
                 XmlDocument doc = TVUtils.Fetch(string.Format(episodeQuery, TVUtils.TVDBApiKey, seriesId, seasonNumber, episodeNumber, Config.Instance.PreferredMetaDataLanguage));
                 //episode does not exist under this season, try absolute numbering.
                 //still assuming it's numbered as 1x01
