@@ -937,11 +937,20 @@ namespace MediaBrowser
                 Random rnd = new Random();
                 PlayableItem playable;
 
-                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null && v.ParentalAllowed).OrderBy(i => rnd.Next());
-                if (playableChildren.Count() > 0) //be sure we found something to play
+                var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null && v.IsPlaylistCapable() && v.ParentalAllowed).OrderBy(i => rnd.Next());
+                //if (playableChildren.Count() > 0) //be sure we found something to play
                 {
-                    playable = new PlayableMediaCollection<Media>(item.Name, playableChildren);
+                    playable = new PlayableMediaCollection<Media>(item.Name, playableChildren, folder.HasVideoChildren);
                     playable.QueueItem = false;
+                    playable.PlayableItems = playableChildren.Select(i => i.Path);
+                    foreach (var controller in Kernel.Instance.PlaybackControllers)
+                    {
+                        if (controller.CanPlay(playable.PlayableItems))
+                        {
+                            playable.PlaybackController = controller;
+                            break;
+                        }
+                    }
                     playable.Play(null, false);
                 }
 

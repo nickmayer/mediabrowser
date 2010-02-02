@@ -57,7 +57,7 @@ namespace MediaBrowser.Library.Factories {
         {            
             PlayableItem playable = null;
 
-            var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null).OrderBy(v => v.Path);
+            var playableChildren = folder.RecursiveChildren.Select(i => i as Media).Where(v => v != null && v.IsPlaylistCapable() && v.ParentalAllowed).OrderBy(v => v.Path);
             playable = new PlayableMediaCollection<Media>(folder.Name, playableChildren, folder.HasVideoChildren);
             playable.PlayableItems = playableChildren.Select(i => i.Path);
 

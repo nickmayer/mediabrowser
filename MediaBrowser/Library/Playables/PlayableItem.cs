@@ -54,7 +54,15 @@ namespace MediaBrowser.Library
         {
             this.PlayState = playstate;
             this.Prepare(resume);
-            PlayInternal(resume);
+            if (this is PlayableCollection && (this.PlayableItems == null || this.PlayableItems.Count() < 1))
+            {
+                Microsoft.MediaCenter.MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                ev.Dialog("No Content that can be played in this context.", "Play", Microsoft.MediaCenter.DialogButtons.Ok, 500, true);
+            }
+            else
+            {
+                PlayInternal(resume);
+            }
         }
 
         protected virtual void PlayInternal(bool resume)

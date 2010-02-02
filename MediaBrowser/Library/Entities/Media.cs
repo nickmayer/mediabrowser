@@ -15,5 +15,15 @@ namespace MediaBrowser.Library.Entities {
             Application.CurrentInstance.Play(item);
             return true;
         }
+
+        public bool IsPlaylistCapable()
+        {
+            Video us = this as Video;
+            if (us != null)
+            {
+                return !us.ContainsRippedMedia;
+            }
+            return true;
+        }
     }
 }
