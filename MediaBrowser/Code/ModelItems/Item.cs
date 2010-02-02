@@ -610,7 +610,113 @@ namespace MediaBrowser.Library
             }
         }
 
+        #region Dynamic Data Support
+        class FakeLateBoundOldDictionary : System.Collections.IDictionary
+        {
+
+            BaseItem item;
+
+            public FakeLateBoundOldDictionary(BaseItem item)
+            {
+                this.item = item;
+            }
+
+            public void Add(object key, object value)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Clear()
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool Contains(object key)
+            {
+                throw new NotImplementedException();
+            }
+
+            public System.Collections.IDictionaryEnumerator GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool IsFixedSize
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public bool IsReadOnly
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public System.Collections.ICollection Keys
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public void Remove(object key)
+            {
+                throw new NotImplementedException();
+            }
+
+            public System.Collections.ICollection Values
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public object this[object key]
+            {
+                get
+                {
+                    return item.GetType().GetProperty(key.ToString()).GetValue(item, null);
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+
+            public void CopyTo(Array array, int index)
+            {
+                throw new NotImplementedException();
+            }
+
+            public int Count
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public bool IsSynchronized
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public object SyncRoot
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+
+        }
+
+        public System.Collections.IDictionary DynamicProperties
+        {
+            get
+            {
+                return new FakeLateBoundOldDictionary(this.BaseItem);
+            }
+        }
+
     }
+        #endregion
 
 
 }
