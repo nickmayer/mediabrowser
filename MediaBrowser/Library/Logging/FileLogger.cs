@@ -3,11 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace MediaBrowser.Library.Logging {
     public class FileLogger : ThreadedLogger {
 
         static string instanceDisamiguator = Guid.NewGuid().ToString().Replace("-", "");
+        static string configID
+        {
+            get
+            {
+                if (AppDomain.CurrentDomain.FriendlyName.Contains("Configurator"))
+                {
+                    return "ConfigWizard-";
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
 
         string path;
         
@@ -23,7 +38,7 @@ namespace MediaBrowser.Library.Logging {
         private string CurrentFile {
             get
             {
-                return Path.Combine(path, DateTime.Now.ToString("dMyyyy") + instanceDisamiguator + ".log");
+                return Path.Combine(path, configID+DateTime.Now.ToString("dMyyyy") + instanceDisamiguator + ".log");
             }
         }
 
