@@ -52,6 +52,11 @@ namespace MediaBrowser.Library.Plugins {
             get {return new System.Version(2,0,0,0);}
         }
 
+        public System.Version TestedMBVersion
+        {
+            get { return new System.Version(2, 2, 1, 0); }
+        }
+
         public virtual bool IsConfigurable
         {
             get

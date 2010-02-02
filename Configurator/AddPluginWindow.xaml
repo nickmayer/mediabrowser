@@ -19,9 +19,9 @@
 		<ListBox DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" Margin="18,59,0,30" Width="244" HorizontalAlignment="Left" Name="pluginList" DataContext="{DynamicResource PluginManager}" ItemsSource="{Binding Path=AvailablePlugins, Mode=Default}" SelectionChanged="pluginList_SelectionChanged" />
 		<TextBlock Margin="281,98,40,126" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
 		<Label Margin="0,218,99,98" Content="Plug-in Version:" HorizontalAlignment="Right" Width="94" />
-		<Label HorizontalAlignment="Right" Margin="0,0,32,96" VerticalAlignment="Bottom" Width="62" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="latestPluginVersion"/>
+		<Label HorizontalAlignment="Right" Margin="0,0,31,96" VerticalAlignment="Bottom" Width="62" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="latestPluginVersion"/>
 		<Label Margin="277,59,26,0" VerticalAlignment="Top" Height="30.62" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS" x:Name="pluginName"/>
 		<ProgressBar Grid.Row="1" Margin="8,0,8,8" x:Name="progress" Visibility="Hidden"/><Button Height="37" HorizontalAlignment="Right" Margin="0,0,26,30" Name="btnDone" Click="btnDone_Click" IsCancel="True" VerticalAlignment="Bottom" Width="95">Done</Button><Label Margin="0,0,99,76" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="124">Required MB Version:</Label>
-        <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="0,240,32,74" Name="reqdMBVersion" HorizontalAlignment="Right" Width="61" />
+        <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="0,0,32,74" Name="reqdMBVersion" HorizontalAlignment="Right" Width="61" Height="29" VerticalAlignment="Bottom" />
 	</Grid>
 </Window>

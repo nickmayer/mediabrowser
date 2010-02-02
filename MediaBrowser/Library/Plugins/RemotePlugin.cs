@@ -35,6 +35,12 @@ namespace MediaBrowser.Library.Plugins {
             set;
         }
 
+        public System.Version TestedMBVersion
+        {
+            get;
+            set;
+        }
+
         public string BaseUrl
         {
             get;

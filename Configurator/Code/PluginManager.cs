@@ -62,6 +62,12 @@ namespace Configurator.Code {
         } 
 
         public void InstallPlugin(IPlugin plugin) {
+            if (plugin.TestedMBVersion < Kernel.Instance.Version)
+            {
+                var dlgResult = MessageBox.Show("Warning - " + plugin.Name + " has not been tested with your version of MediaBrowser. \n\nInstall anyway?", "Version not Tested", MessageBoxButton.YesNo);
+                if (dlgResult == MessageBoxResult.No) return;
+            }
+
             if (plugin is RemotePlugin) {
                 try
                 {
