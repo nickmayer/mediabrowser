@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Configurator.MainWindow"
-    Title="Media Browser Configuration Tool" Height="578" Width="700" MinWidth="700" MinHeight="550" Icon="/Configurator;component/Images/config.ico" 
+    Title="Media Browser Configuration Tool" Height="578" Width="700" MinWidth="700" MinHeight="550" Icon="/Configurator;component/Images/configurator.ico" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d" 
