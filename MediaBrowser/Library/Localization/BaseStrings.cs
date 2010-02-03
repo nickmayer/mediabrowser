@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0005";
+        const string VERSION = "1.0006";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
 
@@ -42,9 +42,9 @@ namespace MediaBrowser.Library.Localization
         public string WatchedIndicatorinDetailViewDesc = "Show the Watched Indicator in Lists as Well as Poster Views.";
         public string DefaultToFirstUnwatchedItemDesc = "Scroll to the First Unwatched Item When Entering a Folder.";
         public string AllowNestedMovieFoldersDesc = "Allow the Ability to Put Movie Folders Inside of Other Movie Folders.";
-        public string MoviePlaylistsDesc = "If a Folder Contains More than One Playable Item, Play Them in Sequence.";
+        public string TreatMultipleFilesAsSingleMovieDesc = "If a Folder Contains More than One Playable Item, Play Them in Sequence. Turn this off if you are having trouble with small collections.";
         public string AutoEnterSingleFolderItemsDesc = "If a Folder Contains Only One Item, Automatically Select and Either Play or Go to the Detail View for That Item.";
-        public string PlaylistSizeLimitDesc = "The Maximum Number of Items that will Automatically Play in Sequence.";
+        public string MultipleFileSizeLimitDesc = "The Maximum Number of Items that will Automatically Play in Sequence.";
         public string BreadcrumbCountDesc = "The Number of Navigation Items to Show in the Trail of Items Entered.";
         public string VisualThemeDesc = "The Basic Presentation Style for MediaBrowser Screens.";
         public string ColorSchemeDesc = "The Style of Colors for Backgrounds, etc.  Won't Take Effect Until MediaBrowser is Restarted.";
