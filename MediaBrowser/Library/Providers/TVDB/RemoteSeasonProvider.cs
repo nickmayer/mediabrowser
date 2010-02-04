@@ -51,13 +51,17 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
         private bool FetchSeasonData() {
             Season season = Season;
-
             string name = Item.Name;
+            
             Logger.ReportInfo("TvDbProvider: Fetching season data: " + name);
             string seasonNum = TVUtils.SeasonNumberFromFolderName(Item.Path);
             int seasonNumber = Int32.Parse(seasonNum);
 
             season.SeasonNumber = seasonNumber.ToString();
+
+            if (season.SeasonNumber == "0") {
+                season.Name = "Specials";
+            }
 
             if (!string.IsNullOrEmpty(seriesId)) {
                 if ((Item.PrimaryImagePath == null) || (Item.BannerImagePath == null) || (Item.BackdropImagePath == null)) {
