@@ -290,6 +290,8 @@
     <Content Include="Images\MediaInfo\Diamond\d_media_dvd.png" />
     <Content Include="Images\MediaInfo\Diamond\d_media_hddvd.png" />
     <Content Include="Images\MediaInfo\Diamond\d_media_mkv.png" />
+    <None Include="Images\MediaInfo\media_avi.png" />
+    <None Include="Images\MediaInfo\media_mkv.png" />
     <Content Include="Images\plainborder.png" />
     <Content Include="Images\Ratings\Rated-Custom.png" />
     <Content Include="Images\Ratings\Rated-Unrated.png" />

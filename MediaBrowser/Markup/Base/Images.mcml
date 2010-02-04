@@ -84,6 +84,8 @@
   <Image Name="Media_Bluray" Source="resx://MediaBrowser/MediaBrowser.Resources/media_bluray" />
   <Image Name="Media_Hddvd" Source="resx://MediaBrowser/MediaBrowser.Resources/media_hddvd" />
   <Image Name="Media_Dvd" Source="resx://MediaBrowser/MediaBrowser.Resources/media_dvd" />
+  <Image Name="Media_Avi" Source="resx://MediaBrowser/MediaBrowser.Resources/media_avi" />
+  <Image Name="Media_Mkv" Source="resx://MediaBrowser/MediaBrowser.Resources/media_mkv" />
 
   <Image Name="HDType_1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_1080" />
   <Image Name="HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_720" />

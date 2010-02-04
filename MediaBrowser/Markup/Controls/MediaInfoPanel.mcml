@@ -182,9 +182,8 @@
       <Condition Source="[MediaFormat]" SourceValue="bluray" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Bluray" />
       <Condition Source="[MediaFormat]" SourceValue="hddvd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Hddvd" />
       <Condition Source="[MediaFormat]" SourceValue="dvd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Dvd" />
-      <!--<Condition Source="[MediaFormat]" SourceValue="mkv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_1851" />
-      <Condition Source="[MediaFormat]" SourceValue="avi" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_2391" />
-      <Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_2391" />-->
+      <Condition Source="[MediaFormat]" SourceValue="mkv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mkv" />
+      <Condition Source="[MediaFormat]" SourceValue="avi" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Avi" />
 
     </Rules>
 
