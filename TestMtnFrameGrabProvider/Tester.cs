@@ -17,7 +17,8 @@ namespace TestMtnFrameGrabProvider {
 
         [Test]
         public void TestTumbnailing() {
-            ThumbCreator.CreateThumb(@"C:\Users\sam\Desktop\videos 123\01.avi", @"C:\Users\sam\Desktop\videos 123\hello2.jpg", 600); 
+            string image = "C:\\Users\\sam\\Desktop\\videos 123\\hello2.jpg";
+            ThumbCreator.CreateThumb(@"C:\Users\sam\Desktop\videos 123\01.avi", ref image, 600); 
         } 
     }
 
