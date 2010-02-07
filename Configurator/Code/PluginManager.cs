@@ -57,7 +57,15 @@ namespace Configurator.Code {
 
             foreach (var plugin in sources.AvailablePlugins) {
                 availablePlugins.Add(plugin);
-                latestVersions.Add(System.IO.Path.GetFileName(plugin.Filename), plugin.Version);
+                try
+                {
+                    //this could blow if we have two references to the same plugin...
+                    latestVersions.Add(plugin.Name + System.IO.Path.GetFileName(plugin.Filename), plugin.Version);
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Cannot add plugin latest version. Probably two references to same plugin.", e);
+                }
             } 
         } 
 
@@ -118,7 +126,7 @@ namespace Configurator.Code {
 
         public System.Version GetLatestVersion(IPlugin plugin) {
             System.Version version;
-            latestVersions.TryGetValue(plugin.Filename, out version);
+            latestVersions.TryGetValue(plugin.Name+plugin.Filename, out version);
             return version;
         } 
 

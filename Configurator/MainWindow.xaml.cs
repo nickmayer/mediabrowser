@@ -1388,7 +1388,10 @@ sortorder: {2}
             window.Owner = this;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowDialog();
-            RefreshEntryPoints(true);
+            Async.Queue("Refresh after plugin add", () =>
+            {
+                RefreshEntryPoints(true);
+            });
             RefreshThemes();
         }
 
