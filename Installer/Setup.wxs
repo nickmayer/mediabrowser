@@ -55,6 +55,12 @@
         <Directory Id="ApplicationProgramsFolder" Name="Media Browser"/>
       </Directory>
       <Directory Id="TEMPDIR" Name="TempFolder"/>
+      <Directory Id="CommonAppDataFolder" >
+        <Directory Id="MBFolder" Name="MediaBrowser">
+          <Directory Id="PluginsFolder" Name="Plugins">
+          </Directory>
+        </Directory>
+      </Directory>
 		</Directory>
 
     <DirectoryRef Id="ApplicationProgramsFolder">
@@ -97,6 +103,13 @@
       </Component>
     </DirectoryRef>
 
+    <!--This is some clean up code for version 2.2.2 - we need to remove the old framegrab plugins or they will cause all kinds of problems-->
+    <DirectoryRef Id="PluginsFolder">
+      <Component Id="RemPlugins" Guid="ACEB6DE6-B16C-4a5c-AF6B-1DD9DE41332A" >
+        <RemoveFile Id="RemFramePlugin" Name="*FrameGrabProvider.dll" On="install" />
+      </Component>
+    </DirectoryRef>
+
 		<!-- This is a list of features that are installed as a part of this product. In this case, there is -->
 		<!-- only one feature. Each feature contains a list of components that it will install. Features can -->
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
@@ -108,7 +121,9 @@
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Registration7.xml" />
+      <ComponentRef Id="RemPlugins" />
     </Feature>
+    
 
 		<!-- The media table defines the location that the MSI will look to find source files during         -->
 		<!-- installation or repair scenarios. In this case, the source files are in a cab file that will be -->
