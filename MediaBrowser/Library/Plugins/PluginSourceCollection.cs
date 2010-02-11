@@ -50,9 +50,21 @@ namespace MediaBrowser.Library.Plugins {
 
         private List<IPlugin> DiscoverLocalPlugins(string source) {
             var list = new List<IPlugin>();
-            foreach (var file in Directory.GetFiles(source)) {
-                if (file.ToLower().EndsWith(".dll")) {
-                    list.Add(Plugin.FromFile(file, true)); 
+            if (Directory.Exists(source))
+            {
+                foreach (var file in Directory.GetFiles(source))
+                {
+                    if (file.ToLower().EndsWith(".dll"))
+                    {
+                        try
+                        {
+                            list.Add(Plugin.FromFile(file, true));
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error attempting to load " + file + " as plug-in.", e);
+                        }
+                    }
                 }
             }
             return list;
