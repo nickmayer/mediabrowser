@@ -26,7 +26,23 @@ namespace TestMediaBrowser {
 
             Assert.AreEqual(movie.Name, "Jackass 2.5");
 
-        } 
+        }
+
+        [Test]
+        public void TestLocalTrailerResolution() { 
+             var resolver = CreateResolver();
+             var movie = MockFolderMediaLocation.CreateMockLocation(@"
+|Rushmore
+ |part 1
+  a.avi
+ |part 2
+  b.avi
+ |trailers
+  trailer1.avi
+  trailer2.avi");
+
+             Assert.AreEqual(resolver.ResolveType(movie), typeof(Movie));
+        }
 
         [Test]
         public void TestRecusiveMovieResolution()
@@ -126,7 +142,7 @@ namespace TestMediaBrowser {
 
         private static ChainedEntityResolver CreateResolver() {
             var resolver = new ChainedEntityResolver() { 
-                new MovieResolver(2, true),
+                new MovieResolver(2, true, true),
                 new FolderResolver()
             };
             return resolver;

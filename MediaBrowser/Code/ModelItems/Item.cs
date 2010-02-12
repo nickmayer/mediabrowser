@@ -14,6 +14,7 @@ using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Metadata;
 using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Library.Logging;
+using System.Linq;
 
 
 namespace MediaBrowser.Library
@@ -607,6 +608,37 @@ namespace MediaBrowser.Library
                         }
 
                 return playable;
+            }
+        }
+
+        public bool ContainsTrailers {
+            get {
+                var movie = BaseItem as Movie;
+                return (movie != null && movie.ContainsTrailers); 
+            }
+        }
+
+        public void PlayTrailers() { 
+            var movie = BaseItem as Movie;
+            if (movie.ContainsTrailers) {
+                var trailerFiles = movie.TrailerFiles.ToArray();
+                string filename = null;
+                if (trailerFiles.Length == 1) {
+                    filename = trailerFiles[0];                
+                }
+                if (trailerFiles.Length > 1) {
+                    filename = PlayableItem.CreateWPLPlaylist(BaseItem.Name, trailerFiles);
+                }
+
+                if (filename != null) {
+                    foreach (var controller in Kernel.Instance.PlaybackControllers) {
+                        if (controller.CanPlay(filename)) {
+                            controller.PlayMedia(filename);
+                            controller.GoToFullScreen();
+                            break;
+                        }
+                    }
+                }
             }
         }
 

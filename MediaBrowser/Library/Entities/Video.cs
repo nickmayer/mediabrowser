@@ -82,7 +82,7 @@ namespace MediaBrowser.Library.Entities {
             get {
 
                 if (!ContainsRippedMedia && MediaLocation is IFolderMediaLocation) {
-                    foreach (var path in GetChildVideos((IFolderMediaLocation)MediaLocation)) {
+                    foreach (var path in GetChildVideos((IFolderMediaLocation)MediaLocation, null)) {
                         yield return path;
                     }
                 } else {
@@ -103,7 +103,7 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        IEnumerable<string> GetChildVideos(IFolderMediaLocation location) {
+       protected static IEnumerable<string> GetChildVideos(IFolderMediaLocation location, string[] ignore) {
             if (location.Path.EndsWith("$RECYCLE.BIN")) yield break;
 
             foreach (var child in location.Children)
@@ -111,7 +111,10 @@ namespace MediaBrowser.Library.Entities {
                 // MCE plays vobs natively 
                 if (child.IsVideo() || child.IsVob()) yield return child.Path;
                 else if (child is IFolderMediaLocation && Kernel.Instance.ConfigData.EnableNestedMovieFolders) {
-                    foreach (var grandChild in GetChildVideos(child as IFolderMediaLocation)) {
+                    if (ignore != null && ignore.Any(path => path.ToUpper() == child.Name.ToUpper())) {
+                        continue;
+                    }
+                    foreach (var grandChild in GetChildVideos(child as IFolderMediaLocation, null)) {
                         yield return grandChild;
                     }
                 }

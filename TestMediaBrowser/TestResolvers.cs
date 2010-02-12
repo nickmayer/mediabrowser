@@ -16,7 +16,7 @@ namespace TestMediaBrowser {
 
         [Test]
         public void MovieResolverShouldIgnoreHiddenFiles() {
-            MovieResolver resolver = new MovieResolver(2, true);
+            MovieResolver resolver = new MovieResolver(2, true, true);
 
             var location = new MockMediaLocation("c:\\movie.avi");
 

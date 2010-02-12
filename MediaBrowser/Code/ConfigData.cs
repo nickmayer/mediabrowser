@@ -20,7 +20,11 @@ namespace MediaBrowser
     [Serializable]
     public class ConfigData
     {
-        
+
+        [Comment(@"By default we track a videos position to support resume, this can be disabled by setting this for diagnostic purposes")]
+        public bool EnableResumeSupport = true; 
+        [Comment(@"Any folder named trailers will be ignored and treated a folder containing trailers")]
+        public bool EnableLocalTrailerSupport = true; 
         [Comment(@"If you enable this, make sure System.Data.SQLite.DLL is copied to c:\program data\mediabrowser, make sure you install the right version there is a x32 and x64")]
         public bool EnableExperimentalSqliteSupport = false;
         public bool AlwaysShowDetailsPage = true;

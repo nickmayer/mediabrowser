@@ -146,7 +146,8 @@ namespace MediaBrowser.Library {
                 new SeriesResolver(), 
                 new MovieResolver(
                         config.EnableMoviePlaylists?config.PlaylistLimit:1, 
-                        config.EnableNestedMovieFolders), 
+                        config.EnableNestedMovieFolders, 
+                        config.EnableLocalTrailerSupport), 
                 new FolderResolver(),
             };
         }

@@ -181,7 +181,7 @@ namespace MediaBrowser.Library
         }
 
 
-        protected static string CreateWPLPlaylist(string name, IEnumerable<string> files) {
+        public static string CreateWPLPlaylist(string name, IEnumerable<string> files) {
 
             // we need to filter out all invalid chars 
             name = new string(name

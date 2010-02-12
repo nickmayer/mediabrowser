@@ -33,5 +33,44 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public bool ContainsTrailers {
+            get {
+                return TrailerFiles.Count() > 0;
+            }
+        }
+
+        public IEnumerable<string> TrailerFiles { 
+            get {
+                var folder = MediaLocation as IFolderMediaLocation; 
+                if (folder != null && folder.ContainsChild(MovieResolver.TrailersPath)) {
+
+                    var trailers = folder.GetChild(MovieResolver.TrailersPath) as IFolderMediaLocation;
+                    if (trailers != null) {
+                        foreach (var path in GetChildVideos(trailers, new string[] { MovieResolver.TrailersPath })) {
+                            yield return path;
+                        }
+                    }
+                }
+            }
+        }
+
+        public override IEnumerable<string> VideoFiles {
+            get {
+
+                string[] ignore = null;
+                if (Kernel.Instance.ConfigData.EnableLocalTrailerSupport) {
+                    ignore = new string[] { MovieResolver.TrailersPath };
+                }
+
+                if (!ContainsRippedMedia && MediaLocation is IFolderMediaLocation) {
+                    foreach (var path in GetChildVideos((IFolderMediaLocation)MediaLocation, ignore)) {
+                        yield return path;
+                    }
+                } else {
+                    yield return Path;
+                }
+            }
+        }
+
     }
 }

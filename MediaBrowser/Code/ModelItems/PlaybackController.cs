@@ -226,6 +226,9 @@ namespace MediaBrowser {
                 while (!terminate) {
                     lock (sync) {
                         Monitor.Wait(sync, ForceRefreshMillisecs);
+                        if (!MediaBrowser.Library.Kernel.Instance.ConfigData.EnableResumeSupport) {
+                            continue;
+                        }
                         if (terminate) {
                             break;
                         }

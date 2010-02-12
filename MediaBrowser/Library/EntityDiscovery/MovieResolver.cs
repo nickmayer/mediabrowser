@@ -11,12 +11,16 @@ using MediaBrowser.Library.Extensions;
 namespace MediaBrowser.Library.EntityDiscovery {
     public class MovieResolver : EntityResolver {
 
-        int maxVideosPerMovie;
-        bool searchForVideosRecursively; 
+        public const string TrailersPath = "TRAILERS";
 
-        public MovieResolver(int maxVideosPerMovie, bool searchForVideosRecursively) {
+        int maxVideosPerMovie;
+        bool searchForVideosRecursively;
+        bool enableTrailerSupport; 
+
+        public MovieResolver(int maxVideosPerMovie, bool searchForVideosRecursively, bool enableTrailerSupport) {
             this.maxVideosPerMovie = maxVideosPerMovie;
             this.searchForVideosRecursively = searchForVideosRecursively;
+            this.enableTrailerSupport = enableTrailerSupport; 
         }
 
         public override void ResolveEntity(IMediaLocation location, 
@@ -101,6 +105,13 @@ namespace MediaBrowser.Library.EntityDiscovery {
                 }
 
                 var childFolder = child as IFolderMediaLocation;
+                if (enableTrailerSupport &&
+                    childFolder != null &&
+                    childFolder.Name.ToUpper() == TrailersPath) {
+                    continue;
+                }
+
+                
                 if (childFolder != null && !childFolder.IsHidden()) {
                     childFolders.Add(childFolder);
                 }

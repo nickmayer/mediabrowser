@@ -265,11 +265,13 @@
       <Command Name="ResumeMovieCommand" />
       <Command Name="RefreshMovieCommand" />
       <Command Name="DeleteMovieCommand" />
+      <Command Name="PlayTrailersCommand" />
       <Command Name="NullCommand" />      
     </Locals>
 
     <Rules>
       <Binding Source="[Item.CanResume]" Target="[ResumeMovieButton.Visible]" />
+      <Binding Source="[Item.ContainsTrailers]" Target="[PlayTrailersButton.Visible]" />
       <Condition Source="[Item.CanResume]" ConditionOp="Equals" SourceValue="false" Target="[ResumeMovieButton.Visible]" Value="false"/>
 
       <Changed Source="[PlayMovieCommand.Invoked]">
@@ -281,6 +283,12 @@
       <Changed Source="[ResumeMovieCommand.Invoked]">
         <Actions>
           <Invoke Target="[Application.Resume]" item="[Item]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[PlayTrailersCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Item.PlayTrailers]"/>
         </Actions>
       </Changed>
 
@@ -329,6 +337,7 @@
                   <ib:ImageButton Name="ResumeMovieButton" Text="Resume" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
                   <ib:ImageButton Name="PlayMovieButton" Text="Play" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <ib:ImageButton Name="RefreshMovieButton" Text="Refresh" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="PlayTrailersButton" Text="Play Trailers" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <ib:ImageButton Name="CacheMovieButton" Text="Cache 2 xml" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                   <ib:ImageButton Name="DeleteMovieButton" Text="Delete" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />                  
                 </Children>
