@@ -46,7 +46,10 @@
     </Locals>
 
     <Rules>
-
+      
+      <!-- make non-interactive for now -->
+      <Default Target="[Input.KeyInteractive]" Value="false" />
+      
       <!-- The command description is displayed by the text box. A  -->
       <!-- binding is used in case the description changes at       -->
       <!-- runtime.                                                 -->
