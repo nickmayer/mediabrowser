@@ -564,7 +564,7 @@
               
                   <Panel Name="RecentText" Padding="8,0,8,-3" Layout="Anchor" >
                     <LayoutInput>
-                      <AnchorLayoutInput Right="NPClipP,1,0" Bottom="RecentListPanel,0,-4"/>
+                      <AnchorLayoutInput Right="RecentListPanel,1,10" Bottom="RecentListPanel,0,-4"/>
                     </LayoutInput>
                     <Children>
                       <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
