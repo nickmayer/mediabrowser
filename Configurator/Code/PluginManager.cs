@@ -15,6 +15,8 @@ using MediaBrowser.Library.Threading;
 namespace Configurator.Code {
     public class PluginManager {
 
+        public bool PluginsLoaded = false;
+
         static PluginManager instance; 
         public static PluginManager Instance {
             get {
@@ -41,6 +43,7 @@ namespace Configurator.Code {
                 {
                     RefreshInstalledPlugins();
                     RefreshAvailablePlugins();
+                    PluginsLoaded = true; //safe to go see if we have updates
                 });
             }
         }

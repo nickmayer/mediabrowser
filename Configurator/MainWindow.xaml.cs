@@ -110,8 +110,11 @@ namespace Configurator
                 RefreshEntryPoints(false);
 
                 ValidateMBAppDataFolderPermissions();
+
+                //wait for plugins to get loaded and then go see if we have updates
+                while (!PluginManager.Instance.PluginsLoaded) { }
+                if (pluginUpgradesAvailable()) MessageBox.Show("Some of your installed plug-ins have newer versions available.  You should upgrade these plugins from the 'Plug-ins' tab.\n\nYour current versions may not work with this version of MediaBrowser.", "Upgrade Plugins");
             });
-            //if (pluginUpgradesAvailable()) MessageBox.Show("Some of your installed plug-ins have newer versions available.  You should upgrade these plugins from the 'Plug-ins' tab.\n\nYour current versions may not work with this version of MediaBrowser.", "Upgrade Plugins");
         }
 
         private bool pluginUpgradesAvailable()
