@@ -107,6 +107,7 @@
       <BooleanChoice Name="EnableMouseHook" Value="[Application.Config.EnableMouseHook]" />
       <BooleanChoice Name="ShowHDIndicatorOnPosters" Value="[Application.Config.ShowHDIndicatorOnPosters]" />
       <BooleanChoice Name="ShowRemoteIndicatorOnPosters" Value="[Application.Config.ShowRemoteIndicatorOnPosters]" />
+      <BooleanChoice Name="ShowUnwatchedIndicator" Value="[Application.Config.ShowUnwatchedIndicator]" />
       <BooleanChoice Name="ExcludeRemoteContentInSearch" Value="[Application.Config.ExcludeRemoteContentInSearch]" />
       <BooleanChoice Name="DefaultToFirstUnwatched" Value="[Application.Config.DefaultToFirstUnwatched]" />
       <BooleanChoice Name="AutoEnterSingleDirs" Value="[Application.Config.AutoEnterSingleDirs]" />
@@ -337,6 +338,7 @@
       <Binding Source="[EnableAlphanumericSorting.Value]" Target="[Config.EnableAlphanumericSorting]" />
       <Binding Source="[EnableListViewTicks.Value]" Target="[Config.EnableListViewTicks]" />
       <Binding Source="[ShowUnwatchedCount.Value]" Target="[Config.ShowUnwatchedCount]" />
+      <Binding Source="[ShowUnwatchedIndicator.Value]" Target="[Config.ShowUnwatchedIndicator]" />
       <Binding Source="[ShowWatchedTickOnFolders.Value]" Target="[Config.ShowWatchedTickOnFolders]" />
       <Binding Source="[ShowWatchTickInPosterView.Value]" Target="[Config.ShowWatchTickInPosterView]" />
       <Binding Source="[ShowHDIndicatorOnPosters.Value]" Target="[Config.ShowHDIndicatorOnPosters]" />
@@ -586,6 +588,7 @@
                       <cb:CheckBox Label="Remember Index-By State" Checked="[RememberIndexing]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Show Unwatched Count" Checked="[ShowUnwatchedCount]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Watched Indicator on Folders" Checked="[ShowWatchedTickOnFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Highlight Unwatched Items" Checked="[ShowUnwatchedIndicator]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Watched Indicator on Videos" Checked="[ShowWatchTickInPosterView]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Watched Indicator in Detail View" Checked="[EnableListViewTicks]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="Default To First Unwatched Item" Checked="[DefaultToFirstUnwatched]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>

@@ -119,6 +119,8 @@ namespace MediaBrowser
         public bool ShowRemoteIndicatorOnPosters = true;
         public bool ExcludeRemoteContentInSearch = true;
 
+        public bool ShowUnwatchedIndicator = false;
+
         public List<string> PluginSources = new List<string>() {"http://www.mediabrowser.tv/plugins/plugin_info.xml"};
 
         public class ExternalPlayer

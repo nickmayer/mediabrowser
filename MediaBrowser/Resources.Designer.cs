@@ -1735,6 +1735,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap Starburst {
+            get {
+                object obj = ResourceManager.GetObject("Starburst", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] StarRating {
             get {
                 object obj = ResourceManager.GetObject("StarRating", resourceCulture);

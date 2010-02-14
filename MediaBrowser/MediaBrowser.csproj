@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -304,6 +304,7 @@
     <Content Include="Images\Special\GreenBallGlow.png" />
     <Content Include="Images\Special\GreenBallLight.png" />
     <Content Include="Images\Special\GreenBallShadow.png" />
+    <Content Include="Images\Special\Starburst.png" />
     <Content Include="Images\Spinner\DecrementFocused.png" />
     <Content Include="Images\Spinner\DecrementNoFocus.png" />
     <Content Include="Images\DetailBorderShadow.png" />

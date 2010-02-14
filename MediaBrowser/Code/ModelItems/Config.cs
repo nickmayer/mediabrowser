@@ -338,6 +338,12 @@ namespace MediaBrowser
             set { if (this.data.ShowUnwatchedCount != value) { this.data.ShowUnwatchedCount = value; Save(); FirePropertyChanged("ShowUnwatchedCount"); } }
         }
 
+        public bool ShowUnwatchedIndicator
+        {
+            get { return this.data.ShowUnwatchedIndicator; }
+            set { if (this.data.ShowUnwatchedIndicator != value) { this.data.ShowUnwatchedIndicator = value; Save(); FirePropertyChanged("ShowUnwatchedIndicator"); } }
+        }
+
         public bool ShowWatchedTickOnFolders
         {
             get { return this.data.ShowWatchedTickOnFolders; }

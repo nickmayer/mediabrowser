@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0006";
+        const string VERSION = "1.0007";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
 
@@ -73,6 +73,7 @@ namespace MediaBrowser.Library.Localization
         public string ShowHDOverlayonPostersDesc = "Show 'HD' or resolution overlay on Hi-def items in Poster Views.";
         public string ShowIcononRemoteContentDesc = "Show an indicator on items from the web in Poster Views.";
         public string ExcludeRemoteContentInSearchesDesc = "Don't show content from the web when searching entire library.";
+        public string HighlightUnwatchedItemsDesc = "Show a Highlight on Un-watched Content.";
 
 
         public BaseStrings() //for the serializer
