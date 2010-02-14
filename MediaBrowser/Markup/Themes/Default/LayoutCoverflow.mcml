@@ -417,7 +417,8 @@
 
     <Locals>
       <Timer Name="AnimTimer" Interval="[AnimDelay]" Enabled="false" AutoRepeat="false"/>
-      <BooleanChoice Name="InFocus" Value="false" />    
+      <BooleanChoice Name="InFocus" Value="false" />
+      <Size Name="GlowSize" Size="30,30" />
     </Locals>
 
     <Rules>
@@ -568,6 +569,21 @@
           <BooleanTransformer Inverse="true"/>
         </Transformer>
       </Binding>
+      <Changed Source="[ImageSize]" InitialEvaluate="true" >
+        <Actions>
+          <Set Target="[GlowSize.Height]" Value="[Item.PreferredImageSmallSize.Height]" >
+            <Transformer>
+              <MathTransformer DivideInt="8"/>
+            </Transformer>
+          </Set>
+          <Set Target="[GlowSize.Width]" Value="[Item.PreferredImageSmallSize.Height]" >
+            <Transformer>
+              <MathTransformer DivideInt="8"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Changed>
+
     </Rules>
 
     <Content>
@@ -611,9 +627,9 @@
                       <Graphic Visible="true" ColorFilter="color://s:FilterColor" Content="image://i:UnwatchedBase" MinimumSize="45,45" MaximumSize="45,45"  MaintainAspectRatio="true" Layout="Center" ></Graphic>
                     </Children>
                   </Panel>
-                  <Panel  Margins="2,2,0,0" Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha=".85" Name="UnwatchedGlowPanel" MaximumSize="30,30" Visible="[Application.Config.ShowUnwatchedIndicator]" >
+                  <Panel  Margins="2,2,0,0" Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha=".85" Name="UnwatchedGlowPanel" MaximumSize="[GlowSize]" Visible="[Application.Config.ShowUnwatchedIndicator]" >
                     <LayoutInput>
-                      <AnchorLayoutInput Left="Parent,0,-7" Top="Parent,0,-7"/>
+                      <AnchorLayoutInput Left="Parent,0,-8" Top="Parent,0,-8"/>
                     </LayoutInput>
                     <Children>
                       <Graphic Name="UnwatchedGlow" Content="image://i:Starburst"  Layout="Center" >
