@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MediaBrowser.Library.Plugins.Attributes;
 using FrameGrabProvider;
 
 // General Information about an assembly is controlled through the following 
@@ -31,5 +30,3 @@ using FrameGrabProvider;
 
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]
-[assembly: TestedVersion("2.2.2.0")]
-[assembly: RequiredVersion("2.2.2.0")]

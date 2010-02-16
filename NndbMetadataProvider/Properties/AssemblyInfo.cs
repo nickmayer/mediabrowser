@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MediaBrowser.Library.Plugins.Attributes;
 using NndbMetadataProvider;
 
 // General Information about an assembly is controlled through the following 
@@ -37,5 +36,3 @@ using NndbMetadataProvider;
 [assembly: AssemblyVersion("1.0.1.0")]
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]
-[assembly: TestedVersion("2.2.2.0")]
-[assembly: RequiredVersion("2.2.2.0")]

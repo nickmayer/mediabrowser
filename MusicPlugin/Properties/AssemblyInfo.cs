@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using MusicPlugin;
-using MediaBrowser.Library.Plugins.Attributes;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -37,5 +36,3 @@ using MediaBrowser.Library.Plugins.Attributes;
 
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]
-[assembly: TestedVersion("2.2.2.0")]
-[assembly: RequiredVersion("2.2.2.0")]
