@@ -9,6 +9,9 @@ using MediaBrowser.Library;
 namespace ITunesTrailers {
     public class Plugin : BasePlugin {
 
+        internal const string PluginName = "ITunes Trailers";
+        internal const string PluginDescription = "HD Trailers powered by Apple.";
+
         static readonly Guid TrailersGuid = new Guid("{828DCFEF-AEAF-44f2-B6A8-32AEAF27F3DA}");
         public static PluginConfiguration<PluginOptions>  PluginOptions {get;set;}
         
@@ -29,11 +32,11 @@ namespace ITunesTrailers {
         }
 
         public override string Name {
-            get { return "ITunes Trailers"; }
+            get { return PluginName; }
         }
 
         public override string Description {
-            get { return "HD Trailers powered by Apple."; }
+            get { return PluginDescription; }
         }
 
         public override bool IsConfigurable

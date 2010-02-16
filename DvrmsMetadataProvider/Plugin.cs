@@ -8,16 +8,19 @@ using MediaBrowser.Library;
 namespace DvrmsMetadataProvider {
     public class Plugin : BasePlugin {
 
+        internal const string PluginName = "DVR-MS metadata";
+        internal const string PluginDescription = "This plugin provides metadata for DVR-MS files. (all your recorded tv shows start off as dvr-ms files)"; 
+
         public override void Init(Kernel kernel) {
             kernel.MetadataProviderFactories.Add(new MetadataProviderFactory(typeof(DvrmsMetadataProvider))); 
         }
 
         public override string Name {
-            get { return "DVR-MS metadata"; }
+            get { return PluginName; }
         }
 
         public override string Description {
-            get { return "This plugin provides metadata for DVR-MS files. (all your recorded tv shows start off as dvr-ms files)"; }
+            get { return PluginDescription; }
         }
     }
 }

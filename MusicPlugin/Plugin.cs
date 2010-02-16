@@ -20,7 +20,11 @@ using MediaBrowser;
 namespace MusicPlugin
 {
     public class Plugin : BasePlugin
-    {        
+    {
+        internal const string PluginName = "Music and iTunes library.";
+        internal const string PluginDescription = "Music and iTunes library plugin for MediaBrowser by Nephelyn."; 
+
+ 
         static readonly Guid MusiciTunesGuid = new Guid("{97581452-7374-11DE-B53C-716855D89593}");
         static readonly Guid MusicNormalGuid = new Guid("{D0DAD4BA-90B8-11DE-9AC9-06AC55D89593}");
         Kernel _kernel;
@@ -134,12 +138,12 @@ namespace MusicPlugin
         
         public override string Name
         {
-            get { return "Music and iTunes library."; }
+            get { return PluginName; }
         }
 
         public override string Description
         {
-            get { return "Music and iTunes library plugin for MediaBrowser by Nephelyn."; }
+            get { return PluginDescription; }
         }
         public override System.Version LatestVersion
         {

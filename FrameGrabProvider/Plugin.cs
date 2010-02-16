@@ -9,6 +9,9 @@ using MediaBrowser.Library;
 namespace FrameGrabProvider {
     public class Plugin : BasePlugin {
 
+        internal const string PluginName = "Frame Grab provider";
+        internal const string PluginDescription = "This plugin provides frame grabs for videos which contain no cover art.";
+
         public override void Init(Kernel kernel) {
 
 
@@ -25,11 +28,11 @@ namespace FrameGrabProvider {
 
 
         public override string Name {
-             get { return "Frame Grab provider"; }
+            get { return PluginName; }
         }
 
         public override string Description {
-            get { return "This plugin provides frame grabs for videos which contain no cover art."; }
+            get { return PluginDescription; }
         }
 
     }

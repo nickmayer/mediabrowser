@@ -10,6 +10,9 @@ using MediaBrowser.Library;
 namespace FilmTrailerPlugin {
     class Plugin : BasePlugin {
 
+        internal const string PluginName = "Film Trailers";
+        internal const string PluginDescription = "Film Trailers powered by filmtrailer.com";
+
         static readonly Guid TrailersGuid = new Guid("{B70517FE-9B66-44a7-838B-CC2A2B6FEC0C}");
         public static PluginConfiguration<PluginOptions> PluginOptions { get; set; }
 
@@ -38,11 +41,11 @@ namespace FilmTrailerPlugin {
         }
 
         public override string Name {
-            get { return "Film Trailers"; }
+            get { return PluginName; }
         }
 
         public override string Description {
-            get { return "Film Trailers powered by filmtrailer.com"; }
+            get { return PluginDescription; }
         }
 
     }

@@ -14,6 +14,10 @@ using MediaBrowser.Library.Extensions;
 namespace MtnFrameGrabProvider {
     public class Plugin : BasePlugin {
 
+        internal const string PluginName = "High Quality Thumbnails";
+        internal const string PluginDescription = "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net"; 
+
+
         public static readonly string MtnPath = Path.Combine(ApplicationPaths.AppPluginPath, "mtn");
         public static readonly string MtnExe = Path.Combine(MtnPath, "mtn.exe");
         public static readonly string FrameGrabsPath = Path.Combine(MtnPath, "FrameGrabs");
@@ -34,11 +38,11 @@ namespace MtnFrameGrabProvider {
         }
 
         public override string Name {
-            get { return "High Quality Thumbnails"; }
+            get { return PluginName; }
         }
 
         public override string Description {
-            get { return "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net"; }
+            get { return PluginDescription; }
         }
 
         public static void EnsureMtnIsExtracted() {

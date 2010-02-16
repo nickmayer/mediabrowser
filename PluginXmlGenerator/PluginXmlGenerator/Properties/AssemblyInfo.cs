@@ -1,22 +1,18 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Resources;
-using System;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Media Browser")]
-[assembly: AssemblyDescription("Vista MCE Media Browser")]
+[assembly: AssemblyTitle("PluginXmlGenerator")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Media Browser")]
-[assembly: AssemblyProduct("Media Browser")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("PluginXmlGenerator")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("en")]
-[assembly: CLSCompliant(true)]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -24,7 +20,7 @@ using System;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0CD2DE4D-D6AC-43ab-B096-CC503BE42DE5")]
+[assembly: Guid("c753001e-359a-4842-94aa-fe3ba42b51cf")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -33,7 +29,8 @@ using System;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.2.2")]
-[assembly: AssemblyFileVersion("2.2.2")]
-
-[assembly: InternalsVisibleTo("TestMediaBrowser,PublicKey=00240000048000009400000006020000002400005253413100040000010001008fa0e394adf886d9c516901270b31bbb969a2e7557ea7321255097a7047f83f385fc8092939b08b283e47f24ed1e9572fa9d718ef93243204ff1ffccd6d02e6b5258443b13230289436318434c7226206483ca78103ff04db174b77d1db7cf1faf83184245338d5837311fcb683a58cd348d02fcb154b3675533eac5f6f903ec")]
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
