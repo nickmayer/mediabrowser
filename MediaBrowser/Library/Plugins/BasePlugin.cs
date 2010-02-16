@@ -21,6 +21,11 @@ namespace MediaBrowser.Library.Plugins {
             get;
         }
 
+        public virtual string RichDescURL
+        {
+            get { return ""; }
+        }
+
         /// <summary>
         /// Filename is assigned by the plugin discovery piece. 
         /// Do not override this.

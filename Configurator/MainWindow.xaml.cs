@@ -1389,7 +1389,7 @@ sortorder: {2}
         private void addPlugin_Click(object sender, RoutedEventArgs e) {
             AddPluginWindow window = new AddPluginWindow();
             window.Owner = this;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             window.ShowDialog();
             Async.Queue("Refresh after plugin add", () =>
             {

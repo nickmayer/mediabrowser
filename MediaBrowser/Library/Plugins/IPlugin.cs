@@ -15,6 +15,7 @@ namespace MediaBrowser.Library.Plugins {
         string Filename { get; }
         string Name { get; }
         string Description { get; }
+        string RichDescURL { get; }
         System.Version Version { get; }
         System.Version RequiredMBVersion { get; }
         System.Version TestedMBVersion { get; }

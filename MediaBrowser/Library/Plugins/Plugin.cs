@@ -75,7 +75,13 @@ namespace MediaBrowser.Library.Plugins {
             get { return pluginInterface.Description; }
         }
 
-        public System.Version Version {
+        public string RichDescURL
+        {
+            get { return pluginInterface.RichDescURL; }
+        }
+
+        public System.Version Version
+        {
             get { return pluginInterface.Version; }
         }
 

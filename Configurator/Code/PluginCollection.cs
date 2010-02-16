@@ -25,6 +25,12 @@ namespace Configurator.Code {
             get; set;
         }
 
+        public string RichDescURL
+        {
+            get;
+            set;
+        }
+
         public System.Version Version {
             get { return new System.Version(1, 2, 3, 4);  }
         }

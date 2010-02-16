@@ -24,7 +24,13 @@ namespace MediaBrowser.Library.Plugins {
             set;
         }
 
-        public System.Version Version {
+        public string RichDescURL
+        {
+            get;
+            set;
+        }
+        public System.Version Version
+        {
             get;
             set;
         }

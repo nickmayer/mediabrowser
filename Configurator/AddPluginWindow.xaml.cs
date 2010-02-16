@@ -17,6 +17,7 @@ using MediaBrowser.Library;
 using System.Windows.Forms;
 using System.Threading;
 using System.Windows.Threading;
+using MediaBrowser.Library.Logging;
 
 namespace Configurator {
     /// <summary>
@@ -72,7 +73,27 @@ namespace Configurator {
                     InstallButton.IsEnabled = true;
                     MessageLine.Content = "";
                 }
+                if (RichDescFrame != null)
+                {
+                    if (!String.IsNullOrEmpty(plugin.RichDescURL))
+                    {
+                            RichDescFrame.Source = new Uri(plugin.RichDescURL, UriKind.Absolute);
+                            RichDescFrame.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        RichDescFrame.Visibility = Visibility.Hidden;
+                    }
+                }
+                    
             }
+        }
+
+        private void RichDescFrame_NavigationFailed(object sender, System.Windows.Navigation.NavigationFailedEventArgs e)
+        {
+            Logger.ReportError("Navigation to Rich Description failed");
+            RichDescFrame.Visibility = Visibility.Hidden;
+            e.Handled = true;
         }
 
     }

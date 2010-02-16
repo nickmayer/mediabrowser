@@ -371,7 +371,17 @@ namespace MediaBrowser.Library {
                         Item modelItem = ItemFactory.Instance.Create(item);
                         modelItem.PhysicalParent = folderModel;
                         item.Parent = folder;
-                        foundNames.Add(creationTime, modelItem);
+                        if (item is Episode)
+                        {
+                            //add the season instead of the episode
+                            foundNames.Add(creationTime, folderModel);
+                            break; //and break the loop as we only need it once
+                        }
+                        else
+                        {
+
+                            foundNames.Add(creationTime, modelItem);
+                        }
                         if (foundNames.Count > maxSize)
                         {
                             foundNames.RemoveAt(0);

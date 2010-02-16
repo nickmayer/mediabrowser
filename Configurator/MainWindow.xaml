@@ -81,19 +81,19 @@
 
             <TabItem Header="plug-ins" x:Name="plugins" Foreground="#FF323232" FontSize="14" FontWeight="Normal">
                 <Grid DataContext="{DynamicResource PluginManager}" >
-                	<ListBox IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" Margin="21,27.38,0,62" Width="240" SelectionChanged="pluginList_SelectionChanged" x:Name="pluginList" DisplayMemberPath="Name" ItemsSource="{Binding Path=InstalledPlugins}" SelectedIndex="0" OverridesDefaultStyle="False"/>
+                	<ListBox IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" Margin="21,41.38,0,62" Width="240" SelectionChanged="pluginList_SelectionChanged" x:Name="pluginList" DisplayMemberPath="Name" ItemsSource="{Binding Path=InstalledPlugins}" SelectedIndex="0" OverridesDefaultStyle="False"/>
                     <TextBlock Margin="301,80.38,56,156" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
-                    <Label Margin="305,0,224,65" Content="Latest Version:" VerticalAlignment="Bottom" Height="26"/>
+                    <Label Margin="301,0,230,68" Content="Latest Version:" VerticalAlignment="Bottom" Height="26"/>
                     <Label HorizontalAlignment="Right" Margin="0,0,134,65" Width="90" Content="" Height="26" VerticalAlignment="Bottom" x:Name="latestPluginVersion"/>
-                    <Label Margin="305,0,231,100" VerticalAlignment="Bottom" Height="26" Content="Installed Version:"/>
+                    <Label Margin="297,0,231,100" VerticalAlignment="Bottom" Height="26" Content="Installed Version:"/>
                     <Label HorizontalAlignment="Right" Margin="0,0,134,98" VerticalAlignment="Bottom" Width="90" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="installedPluginVersion"/>
                     <Button Margin="0,0,46,66" VerticalAlignment="Bottom" Height="26" Content="Upgrade ..." Width="78" HorizontalAlignment="Right" Click="upgradePlugin_Click" x:Name="upgradePlugin" Visibility="Visible"/>
                     <Button Margin="0,0,46,100" VerticalAlignment="Bottom" Height="26" Content="Configure" Width="78" IsEnabled="{Binding Path=SelectedItem.IsConfigurable, ElementName=pluginList, Mode=Default}" HorizontalAlignment="Right" x:Name="configPlugin"  Click="configurePlugin_Click" Visibility="Visible"/>
-                    <Button HorizontalAlignment="Left" Margin="21,0,0,25" VerticalAlignment="Bottom" Width="69" Height="27" Content="Add" x:Name="addPlugin" Click="addPlugin_Click" />
+                    <Button HorizontalAlignment="Left" Margin="21,0,0,25" VerticalAlignment="Bottom" Width="116" Height="27" Content="More Plug-ins..." x:Name="addPlugin" Click="addPlugin_Click" />
                     <Button HorizontalAlignment="Left" Margin="182,0,0,25" VerticalAlignment="Bottom" Width="79" Height="27" Content="Remove" x:Name="removePlugin" Click="removePlugin_Click" />
                     <Label Margin="297,41.38,71,0" VerticalAlignment="Top" Height="30.62" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS" x:Name="pluginName"/>
 					<ProgressBar Grid.Row="1" VerticalAlignment="Bottom" Margin="8,0,8,8" x:Name="progress" Visibility="Hidden" Height="25"/>
-
+                    <Label Height="28" HorizontalAlignment="Left" Margin="21,8,0,0" Name="label6" VerticalAlignment="Top" Width="120">Installed Plug-ins:</Label>
                 </Grid>
             </TabItem>
 
