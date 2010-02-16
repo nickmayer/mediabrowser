@@ -454,6 +454,9 @@ namespace MediaBrowser.Library {
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folder;
+                            while (foundNames.ContainsKey(creationTime)) {
+                                creationTime = creationTime.AddMilliseconds(1);
+                            }
                             foundNames.Add(creationTime, modelItem);
                             if (foundNames.Count > maxSize)
                             {

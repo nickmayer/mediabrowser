@@ -471,13 +471,13 @@ namespace MediaBrowser
                     if (Config.EnableUpdates)
                     {
                         Updater update = new Updater(this);
-                        Async.Queue("Check For Updates", () => {
+                        Async.Queue(Async.STARTUP_QUEUE, () => {
                             System.Threading.Thread.Sleep(40000);
                             update.CheckForUpdate();
                     });
-                        Async.Queue("Check For Plugin Updates", () =>
+                        Async.Queue(Async.STARTUP_QUEUE, () =>
                         {
-                            System.Threading.Thread.Sleep(60000);
+                            System.Threading.Thread.Sleep(20000);
                             PluginUpdatesAvailable = update.PluginUpdatesAvailable();
                         });
                     }

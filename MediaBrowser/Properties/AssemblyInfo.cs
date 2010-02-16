@@ -10,7 +10,7 @@ using System;
 [assembly: AssemblyTitle("Media Browser")]
 [assembly: AssemblyDescription("Vista MCE Media Browser")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("GPL")]
+[assembly: AssemblyCompany("Media Browser")]
 [assembly: AssemblyProduct("Media Browser")]
 [assembly: AssemblyCopyright("Copyright ©  2009")]
 [assembly: AssemblyTrademark("")]

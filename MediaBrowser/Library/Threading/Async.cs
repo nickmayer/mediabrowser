@@ -10,6 +10,8 @@ namespace MediaBrowser.Library.Threading {
 
     public static class Async {
 
+        public const string STARTUP_QUEUE = "Startup Queue";
+
         class ThreadPool {
             List<Action> actions = new List<Action>();
             List<Thread> threads = new List<Thread>();
