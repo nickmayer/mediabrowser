@@ -912,6 +912,11 @@ namespace MediaBrowser
             session.GoToPage("resx://MediaBrowser/MediaBrowser.Resources/ParentalPINEntry", properties);
         }
 
+        public void OpenMCMLPage(string page, Dictionary<string, object> properties)
+        {
+            session.GoToPage(page, properties);
+        }
+
         public void Shuffle(Item item)
         {
             Folder folder = item.BaseItem as Folder;
