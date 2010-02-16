@@ -19,6 +19,10 @@ namespace MediaBrowser.Library.Playables
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -89,31 +93,33 @@ namespace MediaBrowser.Library.Playables
 
         private void MinimizeMCE(object player)
         {
-            Debug.WriteLine("minimizeMCE for external player");
-            //wait for external player to load and get foreground
-            int maxWait = 10000; //max wait time for ext player to load in ms
-            int waitCount = 0;
-            IntPtr mceWnd = FindWindow(null, "Windows Media Center");
+            Debug.WriteLine("minimizeMCE and then give focues to external player");
+            Process extPlayer = (Process)player;
 
-            while (GetForegroundWindow() == mceWnd)
-            {
-                Thread.Sleep(1000);
-                if ((waitCount+= 1000) >= maxWait)
-                {
-                    break;
-                }
-            }
-            
-            //now ext player is full screen, minimize MCE
+            //minimize MCE
+            IntPtr mceWnd = FindWindow(null, "Windows Media Center");
             WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
             GetWindowPlacement(mceWnd, ref wp);
             wp.showCmd = 2; // 1- Normal; 2 - Minimize; 3 - Maximize;
             SetWindowPlacement(mceWnd, ref wp);
-            ((Process)player).WaitForExit();
+
+            ThreadPool.QueueUserWorkItem(new WaitCallback(GiveFocusToExtPlayer), player);
+            extPlayer.WaitForExit();
+
             wp.showCmd = 1; // 1- Normal; 2 - Minimize; 3 - Maximize;
             SetWindowPlacement(mceWnd, ref wp);
-
+            SetForegroundWindow(mceWnd);
         }
+
+        private void GiveFocusToExtPlayer(object player)
+        {
+            //set external player to foreground
+            Process extPlayer = (Process)player;
+            extPlayer.Refresh();
+            extPlayer.WaitForInputIdle(5000); //give the external player 5 secs to show up and then minimize MCE
+            SetForegroundWindow(extPlayer.MainWindowHandle);
+        }
+
 
         public static bool CanPlay(Media media)
         {
