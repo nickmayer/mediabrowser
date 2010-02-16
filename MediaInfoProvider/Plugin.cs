@@ -9,16 +9,19 @@ using MediaBrowser.Library.Logging;
 namespace MediaInfoProvider {
     public class Plugin : BasePlugin {
 
+        internal const string PluginName = "MediaInfo Provider";
+        internal const string PluginDescription = "This plugin provides rich information about your media using the MediaInfo project."; 
+
         public override void Init(Kernel kernel) {
             kernel.MetadataProviderFactories.Add(MetadataProviderFactory.Get<MediaInfoProvider>()); 
         }
 
         public override string Name {
-            get { return "MediaInfo Provider"; }
+            get { return PluginName; }
         }
 
         public override string Description {
-            get { return "This plugin provides rich information about your media using the MediaInfo project."; }
+            get { return PluginDescription; }
         }
     }
 }
