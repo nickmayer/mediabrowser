@@ -38,7 +38,7 @@ namespace MediaBrowser
         public Size DefaultPosterSize = new Size() {Width=220, Height=330};
         public Size GridSpacing = new Size();
         public float MaximumAspectRatioDistortion = 0.2F;
-        public bool EnableTranscode360 = true;
+        public bool EnableTranscode360 = false;
         public string ExtenderNativeTypes = ".dvr-ms,.wmv";
         public bool ShowThemeBackground = false;
         public bool DimUnselectedPosters = true;
