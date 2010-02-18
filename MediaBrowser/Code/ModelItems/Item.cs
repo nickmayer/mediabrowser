@@ -462,6 +462,7 @@ namespace MediaBrowser.Library
                 primaryImage = null;
                 bannerImage = null;
                 primaryImageSmall = null;
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke( _=> this.FireAllPropertiesChanged());
             });
         }
 
