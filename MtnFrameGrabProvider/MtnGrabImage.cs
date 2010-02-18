@@ -36,12 +36,12 @@ namespace MtnFrameGrabProvider {
 
                 string tempFile = ""; //this will get filled in by the thumb grabber
 
-                //try to grab thumb 10% into the file - if we don't know runtime then default to 10 mins
-                int secondsIn = 600;
+                //try to grab thumb 10% into the file - if we don't know runtime then default to 5 mins
+                int secondsIn = 300;
                 Video videoItem = item as Video;
                 if (videoItem != null)
                 {
-                    if (videoItem.MediaInfo.RunTime > 0)
+                    if (videoItem.MediaInfo != null && videoItem.MediaInfo.RunTime > 0)
                     {
                         secondsIn = (Int32)((videoItem.MediaInfo.RunTime / 10)*60);
                     }
