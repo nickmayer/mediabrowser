@@ -16,7 +16,7 @@
         <Label Grid.RowSpan="2" Height="28" Margin="8,0,8,8" Name="MessageLine" VerticalAlignment="Bottom" FontWeight="Bold">Select a Plug-in to Add</Label>
 		<Label Margin="12,30,0,0" VerticalAlignment="Top" Height="31" Content="Choose a Plug-in from the list below:" HorizontalAlignment="Left" Width="213" FontSize="12" FontWeight="Normal" />
 		<Button Margin="0,0,138,24" Content="Install" Height="37" VerticalAlignment="Bottom" Click="InstallClick" Name="InstallButton" HorizontalAlignment="Right" Width="96" />
-        <Frame Margin="242,59,12,144" Name="RichDescFrame" IsTabStop="False" Padding="2" NavigationFailed="RichDescFrame_NavigationFailed" />
+        <Frame Margin="242,59,12,144" Name="RichDescFrame" IsTabStop="False" Padding="2" IsEnabled="False" NavigationFailed="RichDescFrame_NavigationFailed" />
 		<ListBox DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" Margin="18,59,0,30" Width="203" HorizontalAlignment="Left" Name="pluginList" DataContext="{DynamicResource PluginManager}" ItemsSource="{Binding Path=AvailablePlugins, Mode=Default}" SelectionChanged="pluginList_SelectionChanged" FontSize="12" />
 		<TextBlock Margin="279,98,40,126" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription" FontSize="14" />
 		<Label Margin="0,0,123,96" Content="Plug-in Version:" HorizontalAlignment="Right" Width="135" Height="29" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14" />

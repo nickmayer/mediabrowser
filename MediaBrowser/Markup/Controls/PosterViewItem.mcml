@@ -31,7 +31,7 @@
     <Locals>
       <Timer Name="AnimTimer" Interval="[AnimDelay]" Enabled="false" AutoRepeat="false"/>
       <BooleanChoice Name="InFocus" Value="false" />
-      <Size Name="GlowSize" Size="30,30" />
+      <Size Name="GlowSize" Size="40,40" />
     </Locals>
 
     <Rules>
@@ -60,7 +60,7 @@
           </Set>
           <Set Target="[GlowSize.Width]" Value="[Item.PreferredImageSmallSize.Height]" >
             <Transformer>
-              <MathTransformer DivideInt="8"/>
+              <MathTransformer DivideInt="5"/>
             </Transformer>
           </Set>
         </Actions>
@@ -281,9 +281,9 @@
 													<Graphic Visible="global://s:ShowWatchedMarkerBackgrounds" ColorFilter="color://s:FilterColor" Content="image://i:UnwatchedBase" MinimumSize="45,45" MaximumSize="45,45"  MaintainAspectRatio="true" Layout="Center" ></Graphic>
 												</Children>
 											</Panel>
-                      <Panel  Margins="2,2,0,0" Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha=".85" Name="UnwatchedGlowPanel" MaximumSize="[GlowSize]" Visible="[Application.Config.ShowUnwatchedIndicator]" >
+                      <Panel  Margins="2,2,0,0" Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha=".90" Name="UnwatchedGlowPanel" MaximumSize="[GlowSize]" Visible="[Application.Config.ShowUnwatchedIndicator]" >
                         <LayoutInput>
-                          <AnchorLayoutInput Left="Parent,0,-9" Top="Parent,0,-9"/>
+                          <AnchorLayoutInput Left="Parent,0,-15" Top="Parent,0,-15"/>
                         </LayoutInput>
                         <Children>
                           <Graphic Name="UnwatchedGlow" Content="image://i:Starburst"  Layout="Center" >

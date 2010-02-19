@@ -35,6 +35,7 @@ namespace MtnFrameGrabProvider {
                 }
                 return null;
             });
+            Logger.ReportInfo(Name + " (version " + Version + ") Loaded.");
         }
 
         public override string Name {
