@@ -37,6 +37,20 @@ namespace MediaBrowser.Library.Threading {
             }
 
             public void Queue(Action action, bool urgent) {
+                Queue(action, urgent, 0);
+            }
+
+            public void Queue(Action action, bool urgent, int delay) {
+
+                if (delay > 0) {
+                    Timer t = null;
+                    t = new Timer(_ =>
+                    {
+                        Queue(action, urgent, 0);
+                        t.Dispose();
+                    }, null, delay, Timeout.Infinite);
+                    return;
+                }
 
                 lock (threads) {
                     // we are spinning up too many threads
@@ -105,11 +119,19 @@ namespace MediaBrowser.Library.Threading {
             Queue(uniqueId, action, null);
         }
 
+        public static void Queue(string uniqueId, Action action, int delay) {
+            Queue(uniqueId, action, null,false, delay);
+        }
+
         public static void Queue(string uniqueId, Action action, Action done) {
             Queue(uniqueId, action, done, false);
         }
 
         public static void Queue(string uniqueId, Action action, Action done, bool urgent) {
+            Queue(uniqueId, action, done, urgent, 0);
+        }
+
+        public static void Queue(string uniqueId, Action action, Action done, bool urgent, int delay) {
 
             Debug.Assert(uniqueId != null);
             Debug.Assert(action != null);
@@ -125,7 +147,7 @@ namespace MediaBrowser.Library.Threading {
                 if (done != null) done();
             };
 
-            GetThreadPool(uniqueId).Queue(workItem, urgent);
+            GetThreadPool(uniqueId).Queue(workItem, urgent, delay);
         }
 
         private static ThreadPool GetThreadPool(string uniqueId) {

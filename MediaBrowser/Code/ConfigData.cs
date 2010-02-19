@@ -121,6 +121,9 @@ namespace MediaBrowser
 
         public bool ShowUnwatchedIndicator = false;
 
+        [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
+        public bool CacheAllImagesInMemory = true;
+
         public List<string> PluginSources = new List<string>() {"http://www.mediabrowser.tv/plugins/plugin_info.xml"};
 
         public class ExternalPlayer

@@ -93,13 +93,12 @@ namespace MediaBrowser {
                 //pause
 
                 Async.Queue("Playback Pauser",() => {
-                    Thread.Sleep(2000);
                     Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
                         mce.MediaExperience.Transport.PlayRate = 1;
                         mce.MediaExperience.Transport.PlayRate = 2;
                     
                     });
-                });
+                }, 2000);
 
                 
             }

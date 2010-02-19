@@ -472,28 +472,24 @@ namespace MediaBrowser
                     {
                         Updater update = new Updater(this);
                         Async.Queue(Async.STARTUP_QUEUE, () => {
-                            System.Threading.Thread.Sleep(40000);
                             update.CheckForUpdate();
-                    });
+                        }, 40000);
                         Async.Queue(Async.STARTUP_QUEUE, () =>
                         {
-                            System.Threading.Thread.Sleep(20000);
                             PluginUpdatesAvailable = update.PluginUpdatesAvailable();
-                        });
+                        }, 60000);
                     }
 
                     Async.Queue("Full Refresh", () =>
                     {
-                        // wait a while so it does not impact us on startup
-                        System.Threading.Thread.Sleep(20000);
                         using (new Profiler("Full Library Refresh"))
                         {
                             try
                             {
                                 //refresh the root folder children in case we changed sort order
-                                foreach (BaseItem child in this.RootFolder.Children)
+                                foreach (var child in this.RootFolderModel.Children)
                                 {
-                                    child.RefreshMetadata(MetadataRefreshOptions.Force);
+                                    child.RefreshMetadata();
                                 }
                                 FullRefresh(this.RootFolder);
                             }
@@ -503,7 +499,7 @@ namespace MediaBrowser
                                 Debug.Assert(false, "Full refresh thread should never crash!");
                             }
                         }
-                    });
+                    }, 20 * 1000);
 
                     //check for alternate entry point
                     this.entryPointPath = EntryPointResolver.EntryPointPath;

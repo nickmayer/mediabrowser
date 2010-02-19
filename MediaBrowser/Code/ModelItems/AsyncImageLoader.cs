@@ -27,6 +27,8 @@ namespace MediaBrowser.Code.ModelItems {
         Microsoft.MediaCenter.UI.Size size;
         bool doneProcessing = false;
         object sync = new object();
+        LibraryImage localImage;
+        string localPath;
 
         public Microsoft.MediaCenter.UI.Size Size {
             get {
@@ -106,7 +108,7 @@ namespace MediaBrowser.Code.ModelItems {
 
         private void LoadImageImpl(Loader loader) {
 
-            var localImage = source();
+            localImage = source();
 
             // if the image is invalid it may be null.
             if (localImage != null) {
@@ -119,7 +121,7 @@ namespace MediaBrowser.Code.ModelItems {
                     }
                 } else {
 
-                    FetchImage(localImage);
+                    FetchImage();
                     doneProcessing = true;
                 }
             } else {
@@ -127,9 +129,9 @@ namespace MediaBrowser.Code.ModelItems {
             }
         }
 
-        private void FetchImage(LibraryImage localImage) {
+        private void FetchImage() {
             bool sizeIsSet = Size != null && Size.Height > 0 && Size.Width > 0;
-            string localPath = localImage.GetLocalImagePath();
+            localPath = localImage.GetLocalImagePath();
             if (sizeIsSet) {
                 localPath = localImage.GetLocalImagePath(Size.Width, Size.Height);
             }
@@ -141,14 +143,19 @@ namespace MediaBrowser.Code.ModelItems {
             var bytes = File.ReadAllBytes(localPath);
             MemoryStream imageStream = new MemoryStream(bytes);
             imageStream.Position = 0;
-            
-            Image newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
+
+            Image newImage = null;
+            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory) {
+                newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
+            }
 
             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
             {
 
                 Logger.ReportVerbose("Loading image : " + localPath);
-                // Image newImage = new Image("file://" + localPath);
+                if (newImage == null) {
+                    newImage = new Image("file://" + localPath);
+                }
 
                 lock (this) {
                     image = newImage;

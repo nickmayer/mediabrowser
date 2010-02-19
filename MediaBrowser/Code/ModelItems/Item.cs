@@ -253,9 +253,8 @@ namespace MediaBrowser.Library
                     if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
                     Async.Queue("Resume state updater", () =>
                     {
-                        Thread.Sleep(10000); //we have to wait for playstate object to be created before we can...
-                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
-                    });
+                       Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
+                    }, 10 * 1000);
                 }
             }
             catch (Exception)
