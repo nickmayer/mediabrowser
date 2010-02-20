@@ -96,5 +96,17 @@ namespace Configurator {
             e.Handled = true;
         }
 
+        private void RichDescFrame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            if (pluginList.SelectedItem != null)
+            {
+                IPlugin plugin = pluginList.SelectedItem as IPlugin;
+                if (e.Uri != new Uri(plugin.RichDescURL, UriKind.Absolute))
+                {
+                    e.Cancel = true; //don't allow navigating away from our main page
+                }
+            }
+        }
+
     }
 }
