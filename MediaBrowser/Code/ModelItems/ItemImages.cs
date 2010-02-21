@@ -205,23 +205,26 @@ namespace MediaBrowser.Library
         {
             get
             {
-                
-                if (baseItem.PrimaryImagePath != null)
-                {
+
+                if (baseItem.PrimaryImagePath != null) {
                     EnsurePrimaryImageIsSet();
 
                     if (primaryImage.IsLoaded &&
                         preferredImageSmallSize != null &&
                         (preferredImageSmallSize.Width > 0 ||
                         preferredImageSmallSize.Height > 0)) {
-                        
+
                         if (primaryImageSmall == null) {
                             LoadSmallPrimaryImage();
                         }
                     }
+
+                    return primaryImageSmall != null ? primaryImageSmall.Image : null;
+                } else {
+                    return DefaultImage;
                 }
 
-                return primaryImageSmall != null ? primaryImageSmall.Image : DefaultImage;
+              
             }
         }
 

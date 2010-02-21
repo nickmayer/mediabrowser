@@ -122,7 +122,6 @@ namespace MediaBrowser.Code.ModelItems {
                 } else {
 
                     FetchImage();
-                    doneProcessing = true;
                 }
             } else {
                 doneProcessing = true;
@@ -162,6 +161,7 @@ namespace MediaBrowser.Code.ModelItems {
                     if (!sizeIsSet) {
                         size = new Size(localImage.Width, localImage.Height);
                     }
+                    doneProcessing = true;
                 }
 
                 IsLoaded = true;
