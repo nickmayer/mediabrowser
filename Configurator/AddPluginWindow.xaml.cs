@@ -77,7 +77,7 @@ namespace Configurator {
                 {
                     if (!String.IsNullOrEmpty(plugin.RichDescURL))
                     {
-                            RichDescFrame.Source = new Uri(plugin.RichDescURL, UriKind.Absolute);
+                            RichDescFrame.Navigate(new Uri(plugin.RichDescURL, UriKind.Absolute));
                             RichDescFrame.Visibility = Visibility.Visible;
                     }
                     else
@@ -91,7 +91,7 @@ namespace Configurator {
 
         private void RichDescFrame_NavigationFailed(object sender, System.Windows.Navigation.NavigationFailedEventArgs e)
         {
-            Logger.ReportError("Navigation to Rich Description failed");
+            Logger.ReportError("Navigation to Rich Description failed.  Error: "+e.Exception.Message);
             RichDescFrame.Visibility = Visibility.Hidden;
             e.Handled = true;
         }
@@ -103,10 +103,12 @@ namespace Configurator {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 if (e.Uri != new Uri(plugin.RichDescURL, UriKind.Absolute))
                 {
+                    MessageLine.Content = "Cannot Follow Links";
                     e.Cancel = true; //don't allow navigating away from our main page
                 }
             }
         }
+
 
     }
 }
