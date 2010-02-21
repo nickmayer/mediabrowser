@@ -24,6 +24,6 @@
 		<Label Margin="259,59,26,0" VerticalAlignment="Top" Height="30.62" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS" x:Name="pluginName"/>
 		<ProgressBar Grid.Row="1" Margin="8,0,8,8" x:Name="progress" Visibility="Hidden"/><Button Height="37" HorizontalAlignment="Right" Margin="0,0,26,24" Name="btnDone" Click="btnDone_Click" IsCancel="True" VerticalAlignment="Bottom" Width="95">Done</Button><Label Margin="0,0,99,76" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="159" FontWeight="Bold" FontSize="14">Required MB Version:</Label>
         <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="0,0,32,74" Name="reqdMBVersion" HorizontalAlignment="Right" Width="61" Height="29" VerticalAlignment="Bottom" FontSize="14" />
-        <WebBrowser Name="RichDescFrame" Margin="237,59,26,131"  Navigating="RichDescFrame_Navigating" />
+        <WebBrowser Name="RichDescFrame" Margin="237,59,26,131"  Navigating="RichDescFrame_Navigating" LoadCompleted="RichDescFrame_LoadCompleted"/>
     </Grid>
 </Window>
