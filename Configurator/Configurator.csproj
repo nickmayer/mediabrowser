@@ -54,6 +54,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MediaBrowser, Version=2.2.2.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MediaBrowser\bin\Release\MediaBrowser.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.MediaCenter, Version=6.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\VistaDlls\Microsoft.MediaCenter.dll</HintPath>
@@ -73,6 +77,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -80,6 +85,9 @@
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Page Include="AddPluginSourceWindow.xaml">
@@ -246,10 +254,14 @@
     <SplashScreen Include="Images\configsplash.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
-      <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
-      <Name>MediaBrowser</Name>
-    </ProjectReference>
+    <COMReference Include="MSHTML">
+      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
+      <VersionMajor>4</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
