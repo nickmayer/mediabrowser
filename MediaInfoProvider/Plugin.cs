@@ -23,5 +23,19 @@ namespace MediaInfoProvider {
         public override string Description {
             get { return PluginDescription; }
         }
+        public override System.Version RequiredMBVersion
+        {
+            get
+            {
+                return new System.Version(2, 2, 2, 0);
+            }
+        }
+        public override System.Version TestedMBVersion
+        {
+            get
+            {
+                return new System.Version(2, 2, 2, 0);
+            }
+        }
     }
 }

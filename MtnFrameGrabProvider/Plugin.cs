@@ -46,7 +46,22 @@ namespace MtnFrameGrabProvider {
             get { return PluginDescription; }
         }
 
-        public static void EnsureMtnIsExtracted() {
+        public override System.Version RequiredMBVersion
+        {
+            get
+            {
+                return new System.Version(2, 2, 1, 0);
+            }
+        }
+        public override System.Version TestedMBVersion
+        {
+            get
+            {
+                return new System.Version(2, 2, 2, 0);
+            }
+        }
+        public static void EnsureMtnIsExtracted()
+        {
            
             if (!Directory.Exists(MtnPath)) {
                 Directory.CreateDirectory(MtnPath);
