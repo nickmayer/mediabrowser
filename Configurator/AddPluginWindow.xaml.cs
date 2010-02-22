@@ -28,6 +28,7 @@ namespace Configurator {
             InitializeComponent();
             progress.Minimum = 0;
             progress.Maximum = 100;
+            pluginList_SelectionChanged(null, null); //make sure first description loads
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
