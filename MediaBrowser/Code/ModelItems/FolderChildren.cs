@@ -262,8 +262,12 @@ namespace MediaBrowser.Code.ModelItems {
                 calcAspect = i => i.PrimaryImage != null ? i.PrimaryImage.Aspect : 0;
             }
 
-            var aspects = this.folder
-                .Children
+            IList<BaseItem> childrenCopy;
+            lock (this) {
+                childrenCopy = this.currentChildren;
+            }
+
+            var aspects = childrenCopy
                 .Select(i =>
                 {
                     float aspect = 0;
