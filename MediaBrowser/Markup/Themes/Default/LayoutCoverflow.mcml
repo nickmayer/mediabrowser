@@ -508,7 +508,11 @@
       <Condition Source="[SelectRepeaterIndex.Value]" ConditionOp="LessThan" SourceValue="[ItemIndex.Value]" Target="[Main.Rotation]" Value="[LRotate]" />
       <Condition Source="[SelectRepeaterIndex.Value]" ConditionOp="GreaterThan" SourceValue="[ItemIndex.Value]" Target="[Main.Rotation]" Value="[RRotate]" />
 
-      <Binding Source="[Item.IsHD]" Target="[HDIndicator.Visible]" />
+      <Binding Source="[Item.IsHD]" Target="[HDIndicator.Visible]"  ConditionLogicalOp="And"  >
+        <Conditions>
+          <Equality Source="[Application.Config.ShowHDIndicatorOnPosters]" Value="true" />
+        </Conditions>
+      </Binding>
       <Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="720" Target="[HDImage.Content]" Value="image://i:HDLogo720" />
       <Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="1080" Target="[HDImage.Content]" Value="image://i:HDLogo1080" />
 
