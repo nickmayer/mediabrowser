@@ -108,8 +108,8 @@ namespace Configurator
             {
 
                 RefreshEntryPoints(false);
-
                 ValidateMBAppDataFolderPermissions();
+
 
                 //wait for plugins to get loaded and then go see if we have updates
                 while (!PluginManager.Instance.PluginsLoaded) { }
@@ -153,16 +153,22 @@ namespace Configurator
                     "\n\nNo other permissions will be altered.\n\nIf you click 'No', no permissions will be altered but MediaBrowser may not function correctly.";
                 if (MessageBox.Show(folderSecurityQuestion, "Folder permissions", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    //hide our main window and throw up a quick dialog to tell user what is going on
-                    this.Visibility = Visibility.Hidden;
-                    waitWin = new PermissionDialog();
-                    waitWin.Show();
-                    Async.Queue("Configurator Permissions Set", () =>
-                        {
-                            SetDirectoryAccess(folder, windowsAccount, fileSystemRights, AccessControlType.Allow);
-                        }, () => { this.Dispatcher.Invoke(new doneProcess(permissionsDone)); });
+                    object[] args = new object[3] {folder, windowsAccount, fileSystemRights };
+                    this.Dispatcher.Invoke(new SetAccessProcess(setAccess),args);
                 }
             }
+        }
+
+        public delegate void SetAccessProcess(DirectoryInfo folder, string account,FileSystemRights fsRights);
+        public void setAccess(DirectoryInfo folder, string account, FileSystemRights fsRights)
+        {
+            //hide our main window and throw up a quick dialog to tell user what is going on
+            this.Visibility = Visibility.Hidden;
+            waitWin = new PermissionDialog();
+            waitWin.Show();
+            Async.Queue("Set Directory Permissions", () => {
+                SetDirectoryAccess(folder, account, fsRights, AccessControlType.Allow);
+            }, () => { this.Dispatcher.Invoke(new doneProcess(permissionsDone)); });
         }
 
         public delegate void doneProcess();
