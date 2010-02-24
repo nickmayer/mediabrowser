@@ -289,7 +289,8 @@
 
 
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
-    <CustomAction Id="StartAppOnExit" FileKey="Configurator.exe" ExeCommand="" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />
+    <CustomAction Id="StartAppOnExit" BinaryKey="WixCA" DllEntry="WixShellExec" Execute="immediate" Return="check" Impersonate="yes"/>
+    <Property Id="WixShellExecTarget" Value="[#Configurator.exe]"/>
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Configure initial settings" />
     <UI>
       <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="StartAppOnExit">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
