@@ -144,6 +144,7 @@ namespace MediaBrowser.Library.Plugins
             window.Height = grid.Height + 60;
             window.Width = grid.Width + 40;
 
+            window.Owner = System.Windows.Application.Current.MainWindow;
             return window.ShowDialog();
         }
 
