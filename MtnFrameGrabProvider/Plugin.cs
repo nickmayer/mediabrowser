@@ -15,12 +15,23 @@ namespace MtnFrameGrabProvider {
     public class Plugin : BasePlugin {
 
         internal const string PluginName = "High Quality Thumbnails";
-        internal const string PluginDescription = "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net"; 
+        internal const string PluginDescription = "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net";
 
+        static Plugin() {
+            try { 
+                MtnPath = Path.Combine(ApplicationPaths.AppPluginPath, "mtn");
+            } catch (Exception) {
+                // mono workaround 
+                MtnPath = "temp";
+            }
+            MtnExe = Path.Combine(MtnPath, "mtn.exe");
+            FrameGrabsPath = Path.Combine(MtnPath, "FrameGrabs");
+           
+        }
 
-        public static readonly string MtnPath = Path.Combine(ApplicationPaths.AppPluginPath, "mtn");
-        public static readonly string MtnExe = Path.Combine(MtnPath, "mtn.exe");
-        public static readonly string FrameGrabsPath = Path.Combine(MtnPath, "FrameGrabs");
+        public static readonly string MtnPath;
+        public static readonly string MtnExe;
+        public static readonly string FrameGrabsPath;
 
         public override void Init(Kernel kernel) {
 
