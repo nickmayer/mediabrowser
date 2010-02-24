@@ -117,13 +117,12 @@ namespace Configurator {
 
         private void RichDescFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            //The ref to mshtml.dll is causing problems in 32bit Vista - commenting out for now
-            //mshtml.HTMLDocumentClass doc = (mshtml.HTMLDocumentClass)RichDescFrame.Document;
-            //if (doc.body.innerHTML.Contains("404:"))
-            //{
-            //    Logger.ReportError("Rich Description Not Found.");
-            //    RichDescFrame.Visibility = Visibility.Hidden;
-            //}            
+            mshtml.HTMLDocumentClass doc = (mshtml.HTMLDocumentClass)RichDescFrame.Document;
+            if (doc.body.innerHTML.Contains("404:"))
+            {
+                Logger.ReportError("Rich Description Not Found.");
+                RichDescFrame.Visibility = Visibility.Hidden;
+            }            
         }
 
 
