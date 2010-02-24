@@ -58,9 +58,9 @@ namespace Configurator
 
         private void Initialize() {
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
-            config = Kernel.Instance.ConfigData;
             
             InitializeComponent();
+            config = Kernel.Instance.ConfigData;
             LoadComboBoxes();
 
 
