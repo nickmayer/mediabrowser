@@ -1395,7 +1395,7 @@ sortorder: {2}
         private void addPlugin_Click(object sender, RoutedEventArgs e) {
             AddPluginWindow window = new AddPluginWindow();
             window.Owner = this;
-            window.Top = this.Top - 50;
+            window.Top = this.Top - 20;
             window.Left = this.Left + 50;
             window.ShowDialog();
             Async.Queue("Refresh after plugin add", () =>
