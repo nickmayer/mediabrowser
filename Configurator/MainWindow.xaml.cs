@@ -564,7 +564,7 @@ sortorder: {2}
 
         private void updateFolderSort(int start)
         {
-            if (folderList.Items != null && folderList.Items.Count > start)
+            if (folderList.Items != null && (folderList.Items.Count*10) > start)
             {
                 //update the sortorder in the list starting with the specified index (we just removed or moved something)
                 for (int i = start; i < folderList.Items.Count*10; i = i + 10)
@@ -905,7 +905,7 @@ sortorder: {2}
             //move the current item down in the list
             VirtualFolder vf = (VirtualFolder)folderList.SelectedItem;
             int current = folderList.SelectedIndex*10;
-            if (vf != null && current < folderList.Items.Count-1)
+            if (vf != null && folderList.SelectedIndex < folderList.Items.Count-1)
             {
                 //remove from current location
                 folderList.Items.RemoveAt(current/10);
