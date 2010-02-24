@@ -58,9 +58,9 @@ namespace Configurator
 
         private void Initialize() {
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
-            config = Kernel.Instance.ConfigData;
             
             InitializeComponent();
+            config = Kernel.Instance.ConfigData;
             LoadComboBoxes();
 
 
@@ -108,8 +108,8 @@ namespace Configurator
             {
 
                 RefreshEntryPoints(false);
-
                 ValidateMBAppDataFolderPermissions();
+
 
                 //wait for plugins to get loaded and then go see if we have updates
                 while (!PluginManager.Instance.PluginsLoaded) { }
@@ -153,16 +153,22 @@ namespace Configurator
                     "\n\nNo other permissions will be altered.\n\nIf you click 'No', no permissions will be altered but MediaBrowser may not function correctly.";
                 if (MessageBox.Show(folderSecurityQuestion, "Folder permissions", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    //hide our main window and throw up a quick dialog to tell user what is going on
-                    this.Visibility = Visibility.Hidden;
-                    waitWin = new PermissionDialog();
-                    waitWin.Show();
-                    Async.Queue("Configurator Permissions Set", () =>
-                        {
-                            SetDirectoryAccess(folder, windowsAccount, fileSystemRights, AccessControlType.Allow);
-                        }, () => { this.Dispatcher.Invoke(new doneProcess(permissionsDone)); });
+                    object[] args = new object[3] {folder, windowsAccount, fileSystemRights };
+                    this.Dispatcher.Invoke(new SetAccessProcess(setAccess),args);
                 }
             }
+        }
+
+        public delegate void SetAccessProcess(DirectoryInfo folder, string account,FileSystemRights fsRights);
+        public void setAccess(DirectoryInfo folder, string account, FileSystemRights fsRights)
+        {
+            //hide our main window and throw up a quick dialog to tell user what is going on
+            this.Visibility = Visibility.Hidden;
+            waitWin = new PermissionDialog();
+            waitWin.Show();
+            Async.Queue("Set Directory Permissions", () => {
+                SetDirectoryAccess(folder, account, fsRights, AccessControlType.Allow);
+            }, () => { this.Dispatcher.Invoke(new doneProcess(permissionsDone)); });
         }
 
         public delegate void doneProcess();
@@ -558,7 +564,7 @@ sortorder: {2}
 
         private void updateFolderSort(int start)
         {
-            if (folderList.Items != null && folderList.Items.Count > start)
+            if (folderList.Items != null && (folderList.Items.Count*10) > start)
             {
                 //update the sortorder in the list starting with the specified index (we just removed or moved something)
                 for (int i = start; i < folderList.Items.Count*10; i = i + 10)
@@ -899,7 +905,7 @@ sortorder: {2}
             //move the current item down in the list
             VirtualFolder vf = (VirtualFolder)folderList.SelectedItem;
             int current = folderList.SelectedIndex*10;
-            if (vf != null && current < folderList.Items.Count-1)
+            if (vf != null && folderList.SelectedIndex < folderList.Items.Count-1)
             {
                 //remove from current location
                 folderList.Items.RemoveAt(current/10);
@@ -1389,7 +1395,8 @@ sortorder: {2}
         private void addPlugin_Click(object sender, RoutedEventArgs e) {
             AddPluginWindow window = new AddPluginWindow();
             window.Owner = this;
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.Top = this.Top - 20;
+            window.Left = this.Left + 50;
             window.ShowDialog();
             Async.Queue("Refresh after plugin add", () =>
             {

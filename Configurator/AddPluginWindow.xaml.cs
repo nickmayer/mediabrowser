@@ -38,6 +38,7 @@ namespace Configurator {
 
         private void InstallClick(object sender, RoutedEventArgs e) {
             InstallButton.IsEnabled = false;
+            btnDone.IsEnabled = false;
             this.progress.Visibility = Visibility.Visible;
             PluginInstaller p = new PluginInstaller();
             callBack done = new callBack(InstallFinished);
@@ -50,7 +51,11 @@ namespace Configurator {
         public void InstallFinished()
         {
             //called when the install is finished - we want to close
-            this.Close();
+            //don't close anymore - leave open for another plugin
+            //this.Close();
+            InstallButton.IsEnabled = true;
+            btnDone.IsEnabled = true;
+            this.progress.Visibility = Visibility.Hidden;
         }
 
         private void btnDone_Click(object sender, RoutedEventArgs e)

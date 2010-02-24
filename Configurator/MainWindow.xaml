@@ -199,7 +199,7 @@
                             <ComboBox Margin="24,101,66,78" Name="ddlOptionMaxAllowedRating" SelectionChanged="ddlOptionMaxAllowedRating_SelectionChanged" />
                             <Label Margin="22,73.64,93,0" Name="label2" Height="28.14" VerticalAlignment="Top">Max Allowed Rating</Label>
                             <Label Height="28" Margin="22,0,81,44" Name="label7" VerticalAlignment="Bottom">Unlock Period (hours)</Label>
-                            <Slider Height="22" Margin="22,0,0,16" Name="slUnlockPeriod" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" Minimum="1" Maximum="24" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Value ="1" ValueChanged="slUnlockPeriod_ValueChanged" />
+                            <Slider Height="22" Margin="22,0,0,16" Name="slUnlockPeriod" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" Minimum="1" Maximum="24" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="slUnlockPeriod_ValueChanged" />
                             <TextBlock Height="32" Margin="0,0,66,6" Name="txtOptionUnlockPeriod" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="47" Text="{Binding ElementName=slUnlockPeriod,Path=Value}" />
                         </Grid>
                     </GroupBox>
