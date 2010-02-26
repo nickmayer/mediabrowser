@@ -9,46 +9,31 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities;
 
 namespace FrameGrabProvider {
-    class GrabImage : FilesystemProcessedImage {
+    class GrabImage : FilesystemImage {
 
-        public GrabImage(BaseItem parentItem)
-        {
-            this.item = parentItem;
+        protected override bool ImageOutOfDate(DateTime date) {
+            return false;
         }
 
-        protected override string LocalFilename {
+        protected override Image OriginalImage {
             get {
-                return System.IO.Path.Combine(cachePath, Id.ToString() + ".png");
-            }
-        }
-
-        public override string GetLocalImagePath() {
-            lock (Lock) {
-                if (File.Exists(LocalFilename)) {
-                    return LocalFilename;
-                }
-
-                // path without grab://
                 string video = this.Path.Substring(7);
 
                 Logger.ReportInfo("Trying to extract thumbnail for " + video);
 
-                if (ThumbCreator.CreateThumb(video, LocalFilename, 0.2)) {
-                    if (File.Exists(LocalFilename))
-                    {
+                string localFilename = System.IO.Path.GetTempFileName() + ".png";
+
+                if (ThumbCreator.CreateThumb(video, localFilename, 0.2)) {
+                    if (File.Exists(localFilename)) {
                         //load image and pass to processor
-                        Image img = Image.FromFile(LocalFilename);
-                        img = ProcessImage(img);
-                        img.Save(LocalFilename);
+                        return Image.FromFile(localFilename);
                     }
-                    return LocalFilename;
-                } else {
-                    Logger.ReportWarning("Failed to grab thumbnail for " + video);
-                    return null;
-                }
-
+                } 
+                
+                Logger.ReportWarning("Failed to grab thumbnail for " + video);
+                return null;
             }
-
         }
+
     }
 }

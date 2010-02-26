@@ -20,7 +20,7 @@ namespace FrameGrabProvider {
             kernel.ImageResolvers.Add((path,canBeProcessed, item) =>
             {
                 if (path.ToLower().StartsWith("grab")) {
-                    return new GrabImage(item); 
+                    return new GrabImage(); 
                 }
                 return null;
             });

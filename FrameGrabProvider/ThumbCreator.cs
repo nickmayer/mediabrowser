@@ -16,6 +16,7 @@ namespace FrameGrabProvider
         static readonly Guid videoType = new
                   System.Guid("73646976-0000-0010-8000-00AA00389B71");
 
+
         public static bool CreateThumb(string videoFilename, string thumbFilename, double positionPercent)
         {
             Logger.ReportInfo("Creating thumb for " + videoFilename);
