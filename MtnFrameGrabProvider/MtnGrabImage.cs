@@ -9,27 +9,15 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities;
 
 namespace MtnFrameGrabProvider {
-    class GrabImage : FilesystemProcessedImage {
+    class GrabImage : FilesystemImage {
 
-        public GrabImage(BaseItem parentItem)
-        {
-            this.item = parentItem;
+        protected override bool ImageOutOfDate(DateTime date) {
+            return false;
         }
 
-        protected override string LocalFilename
-        {
+        protected override Image OriginalImage {
             get {
-                return System.IO.Path.Combine(cachePath, Id.ToString() + ".jpg");
-            }
-        }
 
-        public override string GetLocalImagePath() {
-            lock (Lock) {
-                if (File.Exists(LocalFilename)) {
-                    return LocalFilename;
-                }
-
-                // path without mtngrab://
                 string video = this.Path.Substring(10);
 
                 Logger.ReportInfo("Trying to extract mtn thumbnail for " + video);
@@ -39,37 +27,26 @@ namespace MtnFrameGrabProvider {
                 //try to grab thumb 10% into the file - if we don't know runtime then default to 5 mins
                 int secondsIn = 300;
                 Video videoItem = item as Video;
-                if (videoItem != null)
-                {
-                    if (videoItem.MediaInfo != null && videoItem.MediaInfo.RunTime > 0)
-                    {
-                        secondsIn = (Int32)((videoItem.MediaInfo.RunTime / 10)*60);
+                if (videoItem != null) {
+                    if (videoItem.MediaInfo != null && videoItem.MediaInfo.RunTime > 0) {
+                        secondsIn = (Int32)((videoItem.MediaInfo.RunTime / 10) * 60);
                     }
                 }
 
                 if (ThumbCreator.CreateThumb(video, ref tempFile, secondsIn)) {
-                    if (File.Exists(tempFile))
-                    {
+                    if (File.Exists(tempFile)) {
                         //load image and pass to processor
-                        Image img = Image.FromFile(tempFile);
-                        img = ProcessImage(img);
-                        img.Save(LocalFilename);
-                        return LocalFilename;
-                    }
-                    else
-                    {
+                        return Image.FromFile(tempFile);
+                    } else {
                         Logger.ReportError("Unable to process thumb image for " + video);
-                        this.Corrupt = true;
                         return null;
                     }
                 } else {
                     Logger.ReportWarning("Failed to grab mtn thumbnail for " + video);
-                    this.Corrupt = true;
                     return null;
                 }
-
             }
-
         }
+
     }
 }

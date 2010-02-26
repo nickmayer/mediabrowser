@@ -42,7 +42,7 @@ namespace MtnFrameGrabProvider {
             kernel.ImageResolvers.Add((path,canBeProcessed,item) =>
             {
                 if (path.ToLower().StartsWith("mtn")) {
-                    return new GrabImage(item);
+                    return new GrabImage();
                 }
                 return null;
             });
@@ -61,14 +61,14 @@ namespace MtnFrameGrabProvider {
         {
             get
             {
-                return new System.Version(2, 2, 1, 0);
+                return new System.Version(2, 2, 3, 0);
             }
         }
         public override System.Version TestedMBVersion
         {
             get
             {
-                return new System.Version(2, 2, 2, 0);
+                return new System.Version(2, 2, 3, 0);
             }
         }
         public static void EnsureMtnIsExtracted()

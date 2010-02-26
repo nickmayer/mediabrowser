@@ -16,7 +16,7 @@ using MediaBrowser.Library.Threading;
 namespace MediaBrowser.Library.ImageManagement {
     public abstract class LibraryImage {
 
-        BaseItem item;
+        protected BaseItem item;
         bool canBeProcessed; 
 
         /// <summary>
