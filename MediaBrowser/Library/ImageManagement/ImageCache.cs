@@ -288,8 +288,28 @@ namespace MediaBrowser.Library.ImageManagement {
                 try {
                     image.Save(info.Path);
                 } catch {
-                    imageSet.PrimaryImage = null;
-                    throw;
+
+                    try { File.Delete(info.Path); } 
+                    catch { 
+                        //cleanup 
+                    }
+
+                    // weird bug, some images on tvdb will not save as jpegs 
+                    try {
+                        info.ImageFormat = ImageFormat.Png;
+                        image.Save(info.Path, ImageFormat.Png);
+                    } 
+                    catch {
+
+                        try { File.Delete(info.Path); } catch {
+                            //cleanup 
+                        }
+
+                        // give up   
+                        imageSet.PrimaryImage = null;
+                        throw;
+                    }
+                    
                 }
                 return info.Path;
             }
