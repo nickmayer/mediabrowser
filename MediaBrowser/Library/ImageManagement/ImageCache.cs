@@ -297,13 +297,17 @@ namespace MediaBrowser.Library.ImageManagement {
         }
 
         private static void DeleteImageSet(ImageSet imageSet) {
-            if (imageSet.PrimaryImage != null) {
-                File.Delete(imageSet.PrimaryImage.Path);
+            try {
+                if (imageSet.PrimaryImage != null) {
+                    File.Delete(imageSet.PrimaryImage.Path);
+                }
+                foreach (var resized in imageSet.ResizedImages) {
+                    File.Delete(resized.Path);
+                }
+            } finally {
+                imageSet.ResizedImages = new List<ImageInfo>();
+                imageSet.PrimaryImage = null;
             }
-            foreach (var resized in imageSet.ResizedImages) {
-                File.Delete(resized.Path);
-            }
-            imageSet.ResizedImages = new List<ImageInfo>();
         }
 
         private ImageSet GetOrCreateImageSet(Guid id) {
