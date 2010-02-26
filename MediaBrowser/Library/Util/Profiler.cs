@@ -14,8 +14,8 @@ namespace MediaBrowser.Util
             watch.Start();
             func();
             watch.Stop();
-            Console.Write(description);
-            Console.WriteLine(" Time Elapsed {0} ms", watch.ElapsedMilliseconds);
+            Trace.Write(description);
+            Trace.WriteLine(string.Format(" Time Elapsed {0} ms", watch.ElapsedMilliseconds));
         }
 
         string caller;

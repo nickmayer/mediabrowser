@@ -156,7 +156,6 @@
     <Compile Include="Library\ImageManagement\LibraryImage.cs" />
     <Compile Include="Library\ImageManagement\FilesystemImage.cs" />
     <Compile Include="Library\ImageManagement\RemoteImage.cs" />
-    <Compile Include="Library\ImageManagement\ResourceImage.cs" />
     <Compile Include="Library\Interfaces\IMediaLocationFactory.cs" />
     <Compile Include="Library\Interfaces\IMetadataProvider.cs" />
     <Compile Include="Library\Interop\FindFileApis.cs" />
@@ -628,8 +627,8 @@
     </Compile>
     <Compile Include="Library\EntryPoint\EntryPointResolver.cs" />
     <Compile Include="Library\Filesystem\MBDirectoryWatcher.cs" />
-    <Compile Include="Library\ImageManagement\FilesystemProcessedImage.cs" />
-    <Compile Include="Library\ImageManagement\RemoteProcessedImage.cs" />
+    <None Include="Library\ImageManagement\FilesystemProcessedImage.cs" />
+    <Compile Include="Library\ImageManagement\ImageCache.cs" />
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
     <Compile Include="Library\Localization\BaseStrings.cs" />
     <Compile Include="Library\Localization\LocalizedStrings.cs" />
@@ -648,7 +647,7 @@
       <DependentUpon>BaseItemFactory.cs</DependentUpon>
     </Compile>
     <Compile Include="Library\Factories\BaseItemFactory.cs" />
-    <Compile Include="Library\ImageManagement\ProxyCachedRemoteImage.cs" />
+    <None Include="Library\ImageManagement\ProxyCachedRemoteImage.cs" />
     <Compile Include="Library\Localization\LocalizedStringData.cs" />
     <Compile Include="Library\Logging\Logger.cs" />
     <Compile Include="Library\ParentalControl.cs" />

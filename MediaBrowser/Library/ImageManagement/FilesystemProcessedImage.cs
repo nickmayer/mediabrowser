@@ -35,9 +35,6 @@ namespace MediaBrowser.Library.ImageManagement
 
         protected override Image ProcessImage(Image rootImage)
         {
-            //testing
-            //Logger.ReportInfo("Processing local image " + LocalFilename + " for " + item.Name);
-            //if we have an image processor, call it
             if (Kernel.Instance.ImageProcessor != null)
             {
                 return Kernel.Instance.ImageProcessor(rootImage, item);

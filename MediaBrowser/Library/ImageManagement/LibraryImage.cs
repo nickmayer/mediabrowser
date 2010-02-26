@@ -10,193 +10,158 @@ using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities;
+using System.Drawing;
+using MediaBrowser.Library.Threading;
 
 namespace MediaBrowser.Library.ImageManagement {
     public abstract class LibraryImage {
 
-        static Dictionary<Guid, object> FileLocks = new Dictionary<Guid, object>();
-
-        protected static string cachePath = ApplicationPaths.AppImagePath;
+        BaseItem item;
+        bool canBeProcessed; 
 
         /// <summary>
         /// The raw path of this image including http:// or grab:// 
         /// </summary>
         public string Path { get; set; }
 
-        public bool Corrupt { protected set; get; } 
-
-        protected int width = -1;
-        protected int height = -1;
-
-        protected Guid Id { get { return Path.GetMD5(); } }
-
-
-        public virtual void Init() {
-            
-        }
-
-
         /// <summary>
-        /// Write lock for a particular file in the cache
+        /// The image is not valid, bad url or file 
         /// </summary>
-        protected object Lock {
-            get {
-                lock (FileLocks) {
-                    object obj;
-                    if (!FileLocks.TryGetValue(Id, out obj)) {
-                        obj = new object();
-                        FileLocks[Id] = obj;
+        public bool Corrupt { private set; get; }
+
+        Guid Id { get { return Path.GetMD5(); } }
+
+        public virtual void Init(bool canBeProcessed, BaseItem item) {
+            this.item = item;
+            this.canBeProcessed = canBeProcessed;
+        }
+       
+
+        bool loaded = false;
+        private void EnsureLoaded() {
+            if (loaded) return;
+
+            try {
+                if (!loaded) {
+                    var info = ImageCache.Instance.GetPrimaryImage(Id);
+                    if (info == null) {
+                        ImageCache.Instance.CacheImage(Id, ProcessImage(OriginalImage));
                     }
-                    return obj;
+                    info = ImageCache.Instance.GetPrimaryImage(Id);
+                    if (info != null) {
+                        _width = info.Width;
+                        _height = info.Height;
+                    } else {
+                        Corrupt = true;
+                    }
+
+                    Async.Queue("Validate Image Thread", () => {
+                        if (info != null) {
+                            if (ImageOutOfDate(info.Date)) {
+                                ClearLocalImages();
+                            }
+                        } 
+                    });
+
                 }
+            } catch (Exception e) {
+                Logger.ReportException("Failed to deal with image: " + Path, e);
+                Corrupt = true;
+            } finally {
+                loaded = true;
             }
         }
 
+        protected virtual bool CacheOriginalImage {
+            get {
+                return true;
+            }
+        } 
+
+        protected abstract Image OriginalImage {
+            get;
+        }
+
+        protected virtual bool ImageOutOfDate(DateTime data) {
+            return false;
+        }
 
         /// <summary>
         /// Will ensure a local copy is cached and return the path to the caller
         /// </summary>
         /// <returns></returns>
-        public abstract string GetLocalImagePath();
-
-        protected string ConvertRemotePathToLocal(string remotePath)
-        {
-            string localPath  = remotePath;
-
-            if (localPath.ToLower().Contains("http://"))
-                localPath = localPath.Replace("http://", "");
-
-            localPath = System.IO.Path.Combine(cachePath,localPath.Replace('/', '\\'));
-
-            return localPath;
-            
+        public string GetLocalImagePath() {
+            EnsureLoaded();
+            return ImageCache.Instance.GetImagePath(Id);
         }
 
-        protected virtual string LocalFilename {
+        public string GetLocalImagePath(int width, int height) {
+            EnsureLoaded();
+            return ImageCache.Instance.GetImagePath(Id, width, height);
+        }
+
+
+        int _width = -1;
+        int _height = -1;
+        public int Width { 
             get {
-                return System.IO.Path.Combine(cachePath, Id.ToString() + System.IO.Path.GetExtension(Path));
+                EnsureLoaded();
+                return _width;
+            } 
+        }
+       
+        public int Height { 
+            get {
+                EnsureLoaded();
+                return _height; 
+            } 
+        }
+
+        public float Aspect {
+            get {
+                return ((float)Height) / (float)Width;;
             }
         }
+
 
         /// <summary>
         /// Will return true if the image is cached locally. 
         /// </summary>
         public bool IsCached {
             get {
-                return File.Exists(LocalFilename);
+                return ImageCache.Instance.GetImagePath(Id) != null;
             }
         } 
 
-        public int Width { 
-            get { 
-                EnsureImageSizeInitialized(); 
-                return width; 
-            } 
-        }
-       
-        public int Height { 
-            get { 
-                EnsureImageSizeInitialized(); 
-                return height; 
-            } 
-        }
-
-        public float Aspect {
-            get {
-                EnsureImageSizeInitialized();
-                return ((float)Height) / (float)Width;;
-            }
-        }
-
         // will clear all local copies
-        public void ClearLocalImages() { 
-            lock(Lock){
-                foreach (var item in Directory.GetFiles(cachePath,Id.ToString() + "*"))
-	            {
-                    File.Delete(item);
-	            }  
-            }
+        public void ClearLocalImages() {
+            ImageCache.Instance.ClearCache(Id);
+            loaded = false;
         }
 
-        public virtual void EnsureImageSizeInitialized() {
-            if ( (width < 0 || height < 0) && !Corrupt) {
-                try {
-                    var file = GetLocalImagePath();
-                    if (file != null)
-                    {
-                        using (var image = System.Drawing.Bitmap.FromFile(file))
-                        {
-                            width = image.Width;
-                            height = image.Height;
-                        }
-                    }
-                    else
-                    {
-                        Logger.ReportWarning("Image path is null - maybe couldn't grab thumbnail...");
-                    }
-                } catch (OutOfMemoryException) {
-                    // we have a corrupt image. Memory should be fine
-                    Corrupt = true;
-                    Logger.ReportWarning("You have a corrupt image in your collection, clean that up sir. " + Path);
-                } catch (Exception e) {
-                    Logger.ReportWarning("Something weird is happening ensuring image is loaded!" + e.Message+"," + e.StackTrace + Path);
-                    throw;
-                }
-            }
-        }
 
-        /// <summary>
-        /// Will ensure a local copy is cached and return the path to the caller
-        /// </summary>
-        /// <param name="width">required height</param>
-        /// <param name="height">required width</param>
-        /// <returns>local path</returns>
-        /// <remarks>if width or height is -1 it will return a default size</remarks>
-        public string GetLocalImagePath(int width, int height) {
-            lock (Lock) {
-                string localFile = GetLocalImagePath();
-                string postfix = "." + width.ToString() + "x" + height.ToString();
-                string resizedImagePath = System.IO.Path.Combine(cachePath,
-                    Id.ToString() + postfix + ".png");
-
-                if (File.Exists(resizedImagePath)) {
-                    return resizedImagePath;
-                }
-
-                ResizeImage(localFile, resizedImagePath, width, height);
-                return resizedImagePath;
-            }
-        }
-
-        protected void ResizeImage(string source, string destination, int width, int height) {
-            using (System.Drawing.Bitmap bmp = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromFile(source))
-            using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height)) 
-            using (System.Drawing.Graphics graphic = System.Drawing.Graphics.FromImage(newBmp))
-            {
-                        
-                graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                graphic.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-
-                graphic.DrawImage(bmp, 0, 0, width, height);
-
-                MemoryStream ms = new MemoryStream();
-                newBmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-
-                using (var fs = ProtectedFileStream.OpenExclusiveWriter(destination))
-                {
-                	BinaryWriter bw = new BinaryWriter(fs);
-                    bw.Write(ms.ToArray());
-                }
-            }             
-        }
-        protected virtual System.Drawing.Image ProcessImage(System.Drawing.Image image)
+       
+        System.Drawing.Image ProcessImage(System.Drawing.Image image)
         {
-            return image;
-
+            if (canBeProcessed && Kernel.Instance.ImageProcessor != null) {
+                return Kernel.Instance.ImageProcessor(image, item);
+            } else {
+                return image;
+            }
         }
 
+        /*
+        protected string ConvertRemotePathToLocal(string remotePath) {
+            string localPath = remotePath;
+
+            if (localPath.ToLower().Contains("http://"))
+                localPath = localPath.Replace("http://", "");
+
+            localPath = System.IO.Path.Combine(cachePath, localPath.Replace('/', '\\'));
+
+            return localPath;
+
+        }*/
 
     }
 }

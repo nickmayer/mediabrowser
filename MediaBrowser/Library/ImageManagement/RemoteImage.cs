@@ -7,15 +7,19 @@ using MediaBrowser.Library.Filesystem;
 using System.Net;
 using System.Diagnostics;
 using MediaBrowser.Library.Logging;
+using System.Drawing;
 
 namespace MediaBrowser.Library.ImageManagement {
     public class RemoteImage : LibraryImage {
 
-        private void DownloadImage() {
-            DownloadImage(false);
+
+        protected override System.Drawing.Image OriginalImage {
+            get {
+                return DownloadUsingRetry();
+            }
         }
 
-        internal void DownloadImage(bool createProxyCache) {
+        internal Image DownloadImage() {
             Logger.ReportInfo("Fetching image: " + Path);
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(Path);
             req.Timeout = 60000;
@@ -31,56 +35,21 @@ namespace MediaBrowser.Library.ImageManagement {
                 ms.Flush();
                 ms.Seek(0, SeekOrigin.Begin);
 
-                this.CacheImage(ms);
-
-                //cache like proxy
-                if (createProxyCache) {
-                    try
-                    {
-                        using (var stream = ProtectedFileStream.OpenExclusiveWriter(ConvertRemotePathToLocal(Path)))
-                        {
-                            stream.Write(ms.ToArray(), 0, (int)ms.Length);
-                            stream.Close();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.ReportException("Failed to create proxy cache item: ", e);
-                    }
-                }
+                return Image.FromStream(ms);
             }
         }
 
-        protected virtual void CacheImage(MemoryStream ms)
-        {
-            using (var stream = ProtectedFileStream.OpenExclusiveWriter(LocalFilename)) {
-                stream.Write(ms.ToArray(), 0, (int)ms.Length);
-            }
-        }
 
-        public override string GetLocalImagePath() {
-            lock (Lock) {
-                string localProxyPath = ConvertRemotePathToLocal(Path);
-                if (File.Exists(LocalFilename)) {                   
-                    return LocalFilename;
-                }
-
-                bool success = DownloadUsingRetry();
-                return success?LocalFilename:null;
-            }
-        }
-
-        internal bool DownloadUsingRetry()
+        internal Image DownloadUsingRetry()
         {
             int attempt = 0;
-            bool success = false;
+            Image image = null;
             while (attempt < 2)
             {
                 try
                 {
                     attempt++;
-                    DownloadImage();
-                    success = true;
+                    image = DownloadImage();
                     break;
                 }
                 catch (Exception e)
@@ -88,7 +57,7 @@ namespace MediaBrowser.Library.ImageManagement {
                     Logger.ReportException("Failed to download image: " + Path, e);
                 }
             }
-            return success;
+            return image;
         }
     }
 }

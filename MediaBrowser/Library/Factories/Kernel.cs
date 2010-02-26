@@ -156,13 +156,7 @@ namespace MediaBrowser.Library {
             return new List<ImageResolver>() {
                 (path, canBeProcessed, item) =>  { 
                     if (path != null && path.ToLower().StartsWith("http")) {
-                        if (enableProxyLikeCaching)
-                            return new ProxyCachedRemoteImage();
-                        else
-                            if (canBeProcessed)
-                                return new RemoteProcessedImage(item);
-                            else
-                                return new RemoteImage();
+                        return new RemoteImage();
                     }
                     return null;
                 }
@@ -381,9 +375,8 @@ namespace MediaBrowser.Library {
 
         public Dictionary<string, ViewTheme> AvailableThemes = new Dictionary<string, ViewTheme>()
             {
-                {"Default", new ViewTheme()},
-                //{"Diamond", new ViewTheme("Diamond", "resx://MediaBrowser/MediaBrowser.Resources/PageDiamond#PageDiamond", "resx://MediaBrowser/MediaBrowser.Resources/DiamondMovieView#DiamondMovieView")},
-             };
+                {"Default", new ViewTheme()}        
+            };
 
         //method for external entities (plug-ins) to add a new theme - only support replacing detail areas for now...
         public void AddTheme(string name, string pageArea, string detailArea)

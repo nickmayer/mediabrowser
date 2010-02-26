@@ -95,6 +95,7 @@
     <Compile Include="TestVodCast.cs" />
     <Compile Include="Unit\TestAsync.cs" />
     <Compile Include="Unit\TestDelayedWeakRef.cs" />
+    <Compile Include="Unit\TestImageCache.cs" />
     <Compile Include="Unit\TestKernel.cs" />
     <Compile Include="Unit\TestSorting.cs" />
     <Compile Include="Unit\TestSqliteRepository.cs" />

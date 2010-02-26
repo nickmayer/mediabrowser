@@ -77,17 +77,12 @@ namespace MediaBrowser.Library.Factories {
                     }
 
                     if (image == null) {
-                        if (canBeProcessed)
-                            image = new FilesystemProcessedImage(item);
-                        else
-                            image = new FilesystemImage();
+                       image = new FilesystemImage();
                     }
 
                     image.Path = path;
-                    image.Init();
+                    image.Init(canBeProcessed, item);
 
-                    // this will trigger a download and a resize
-                    // image.EnsureImageSizeInitialized();
                 } catch (Exception ex) {
                     Logger.ReportException("Failed to load image: " + path + " ", ex);
                     image = null;
