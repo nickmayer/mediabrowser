@@ -121,9 +121,31 @@ namespace MediaBrowser.Library.ImageManagement {
                 try {
                     AddToCache(item);
                 } catch (Exception e) {
-                    Logger.ReportException("Failed to deal with image: " + item.Path + " please delete it manually", e);
+                    Logger.ReportException("Failed to deal with image: " + item.Path + "  Trying to delete", e);
+                    try {
+                        File.Delete(item.Path);
+                    } catch (Exception ex){
+                        Logger.ReportException("Failed to deal with image: " + item.Path + "  you will have to delete it manually", ex);
+                    }
                 }
             }
+
+            // Shrink the lib, get rid of old resized images
+            foreach (var item in imageInfoCache.Values) {
+                for (int i = item.ResizedImages.Count - 1; i >= 0; i--) {
+                    var current = item.ResizedImages[i];
+                    if (current.Date < DateTime.UtcNow.AddDays(-60)) {
+                        try {
+                            File.Delete(current.Path);
+                            item.ResizedImages.RemoveAt(i);
+                        } catch (Exception ex) {
+                            Logger.ReportException("Failed to delete stale image: " + current.Path + "  you will have to delete it manually", ex);
+                        }
+                    }
+
+                }
+            }
+
         }
 
         private void AddToCache(IMediaLocation item) {
@@ -263,7 +285,12 @@ namespace MediaBrowser.Library.ImageManagement {
                 info.ImageFormat = image.RawFormat;
                 info.Date = DateTime.UtcNow;
                 imageSet.PrimaryImage = info;
-                image.Save(info.Path);
+                try {
+                    image.Save(info.Path);
+                } catch {
+                    imageSet.PrimaryImage = null;
+                    throw;
+                }
                 return info.Path;
             }
             

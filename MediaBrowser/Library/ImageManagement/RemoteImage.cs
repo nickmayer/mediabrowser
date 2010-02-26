@@ -8,6 +8,7 @@ using System.Net;
 using System.Diagnostics;
 using MediaBrowser.Library.Logging;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace MediaBrowser.Library.ImageManagement {
     public class RemoteImage : LibraryImage {
@@ -15,7 +16,8 @@ namespace MediaBrowser.Library.ImageManagement {
 
         protected override System.Drawing.Image OriginalImage {
             get {
-                return DownloadUsingRetry();
+                var image = DownloadUsingRetry();
+                return image; 
             }
         }
 
@@ -23,8 +25,8 @@ namespace MediaBrowser.Library.ImageManagement {
             Logger.ReportInfo("Fetching image: " + Path);
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(Path);
             req.Timeout = 60000;
-            using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
-            using (MemoryStream ms = new MemoryStream()) {
+            using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse()) {
+                MemoryStream ms = new MemoryStream();
                 Stream r = resp.GetResponseStream();
                 int read = 1;
                 byte[] buffer = new byte[10000];
