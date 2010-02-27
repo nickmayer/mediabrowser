@@ -132,8 +132,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     n = banners.SelectSingleNode("//Banner[BannerType='fanart']");
                     if (n != null) {
                         n = n.SelectSingleNode("./BannerPath");
-                        if (n != null)
+                        if (n != null && series.BackdropImage == null) {
                             series.BackdropImagePath = TVUtils.BannerUrl + n.InnerText;
+                        }
 
                     }
                 }

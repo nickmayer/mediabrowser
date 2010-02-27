@@ -87,8 +87,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     n = banners.SelectSingleNode("//Banner[BannerType='fanart'][Season='" + seasonNumber.ToString() + "']");
                     if (n != null) {
                         n = n.SelectSingleNode("./BannerPath");
-                        if (n != null)
+                        if (n != null && Item.BackdropImagePath == null) {
                             Item.BackdropImagePath = TVUtils.BannerUrl + n.InnerText;
+                        }
                     } else {
                         // not necessarily accurate but will give a different bit of art to each season
                         XmlNodeList lst = banners.SelectNodes("//Banner[BannerType='fanart']");
@@ -96,8 +97,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                             int num = seasonNumber % lst.Count;
                             n = lst[num];
                             n = n.SelectSingleNode("./BannerPath");
-                            if (n != null)
+                            if (n != null && Item.BackdropImagePath == null) {
                                 Item.BackdropImagePath = TVUtils.BannerUrl + n.InnerText;
+                            }
                         }
                     }
 
