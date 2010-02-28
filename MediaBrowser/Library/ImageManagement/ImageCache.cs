@@ -132,9 +132,17 @@ namespace MediaBrowser.Library.ImageManagement {
 
             // Shrink the lib, get rid of old resized images
             foreach (var item in imageInfoCache.Values) {
+
+                if (item.PrimaryImage == null) {
+                    DeleteImageSet(item);
+                    continue;
+                } 
+
+                item.ResizedImages = item.ResizedImages.OrderBy(_ => _.Date.Ticks).ToList();
                 for (int i = item.ResizedImages.Count - 1; i >= 0; i--) {
                     var current = item.ResizedImages[i];
-                    if (current.Date < DateTime.UtcNow.AddDays(-60)) {
+                    // only keep 4 resizes. 
+                    if (current.Date < DateTime.UtcNow.AddDays(-60) || item.ResizedImages.Count > 4) {
                         try {
                             File.Delete(current.Path);
                             item.ResizedImages.RemoveAt(i);
