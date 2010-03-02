@@ -76,6 +76,7 @@ namespace MediaBrowser {
         public virtual void PlayDVD(string path) {
             PlayPath(path);
             lastWasDVD = true;
+            returnedToApp = false;
         }
 
 
@@ -300,7 +301,8 @@ namespace MediaBrowser {
         void TransportPropertyChanged(IPropertyObject sender, string property) {
             // protect against really agressive calls
             var diff = (DateTime.Now - lastCall).TotalMilliseconds;
-            if (diff < 1000 && diff >= 0) {
+            // play state is critical otherwise stop hack for win 7 will not work.
+            if (diff < 1000 && diff >= 0 && property != "PlayState") {
                 return;
             }
 
@@ -343,7 +345,31 @@ namespace MediaBrowser {
                     (state == Microsoft.MediaCenter.PlayState.Playing) || 
                     (state == Microsoft.MediaCenter.PlayState.Paused));
             }
+
+
+             if (IsWindows7) {
+                 if (lastWasDVD && !returnedToApp && state == PlayState.Stopped) {
+                     Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                     {
+                         AddInHost.Current.ApplicationContext.ReturnToApplication();
+                     });
+                     returnedToApp = true;
+                 }
+             }
         }
+
+        static bool? isWindows7;
+        private static bool IsWindows7 {
+            get {
+                if (!isWindows7.HasValue) {
+                    var version = System.Environment.OSVersion.Version;
+                    isWindows7 = version.Major == 6 && version.Minor == 1;
+                }
+                return isWindows7.Value;
+            }
+        }
+
+        bool returnedToApp = true;
 
         private void PlayStateChanged() {
             FirePropertyChanged("PlayState");
