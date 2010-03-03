@@ -84,7 +84,7 @@
                 	<ListBox IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" Margin="21,41.38,0,62" Width="240" SelectionChanged="pluginList_SelectionChanged" x:Name="pluginList" DisplayMemberPath="Name" ItemsSource="{Binding Path=InstalledPlugins}" SelectedIndex="0" OverridesDefaultStyle="False"/>
                     <TextBlock Margin="301,80.38,56,156" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
                     <Label Margin="301,0,230,68" Content="Latest Version:" VerticalAlignment="Bottom" Height="26"/>
-                    <Label HorizontalAlignment="Right" Margin="0,0,134,65" Width="90" Content="" Height="26" VerticalAlignment="Bottom" x:Name="latestPluginVersion"/>
+                    <Label HorizontalAlignment="Right" Margin="0,0,134,65" Width="90" Height="26" VerticalAlignment="Bottom" x:Name="latestPluginVersion" Content="{Binding Path=SelectedItem.LatestVersion}"/>
                     <Label Margin="297,0,231,100" VerticalAlignment="Bottom" Height="26" Content="Installed Version:"/>
                     <Label HorizontalAlignment="Right" Margin="0,0,134,98" VerticalAlignment="Bottom" Width="90" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="installedPluginVersion"/>
                     <Button Margin="0,0,46,66" VerticalAlignment="Bottom" Height="26" Content="Upgrade ..." Width="78" HorizontalAlignment="Right" Click="upgradePlugin_Click" x:Name="upgradePlugin" Visibility="Visible"/>
