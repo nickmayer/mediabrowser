@@ -1470,6 +1470,11 @@ sortorder: {2}
             {
                 ddlFolderRating.IsEnabled = true;
                 ddlFolderRating.SelectedItem = curFolder.CustomRating;
+                if (!String.IsNullOrEmpty(curFolder.CustomRating))
+                    btnDelFolderRating.IsEnabled = true;
+                else
+                    btnDelFolderRating.IsEnabled = false;
+
             }
         }
 
@@ -1485,9 +1490,25 @@ sortorder: {2}
                     {
                         curFolder.CustomRating = ddlFolderRating.SelectedValue.ToString();
                         if (curFolder.CustomRating != null)
+                        {
                             curFolder.SaveXML();
+                            btnDelFolderRating.IsEnabled = true;
+                        }
                     }
                 }
+            }
+        }
+
+        private void btnDelFolderRating_Click(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem curItem = (TreeViewItem)tvwLibraryFolders.SelectedItem;
+            LibraryFolder curFolder = (LibraryFolder)curItem.Header;
+            if (curFolder != null)
+            {
+                curFolder.CustomRating = null;
+                ddlFolderRating.SelectedItem = null;
+                curFolder.DeleteXML();
+                btnDelFolderRating.IsEnabled = false;
             }
         }
 

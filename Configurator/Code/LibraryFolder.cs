@@ -60,6 +60,21 @@ namespace Configurator.Code
             SaveXML(xmlName);
         }
 
+        public void DeleteXML()
+        {
+            try
+            {
+                if (File.Exists(xmlName))
+                {
+                    File.Delete(xmlName);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Unable to delete folder.xml");
+            }
+        }
+
         public void SaveXML(string file)
         {
             XmlNode title;
