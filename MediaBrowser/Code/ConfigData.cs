@@ -27,6 +27,8 @@ namespace MediaBrowser
         public bool EnableLocalTrailerSupport = true; 
         [Comment(@"If you enable this, make sure System.Data.SQLite.DLL is copied to c:\program data\mediabrowser, make sure you install the right version there is a x32 and x64")]
         public bool EnableExperimentalSqliteSupport = false;
+        [Comment(@"If you enable this MB will watch for changes in your file system and update the UI as it happens, may not work properly with SMB shares")]
+        public bool EnableDirectoryWatchers = true;
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;

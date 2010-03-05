@@ -97,7 +97,7 @@ namespace MediaBrowser.Library {
 
                 // create filewatchers for each of our top-level folders (only if we are in MediaCenter, though)
                 bool isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
-                if (isMC) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
+                if (isMC && config.EnableDirectoryWatchers) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
                 {
                     foreach (BaseItem item in kernel.RootFolder.Children)
                     {
