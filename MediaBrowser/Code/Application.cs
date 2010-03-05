@@ -486,12 +486,18 @@ namespace MediaBrowser
                         {
                             try
                             {
-                                //refresh the root folder children in case we changed sort order
-                                foreach (var child in this.RootFolderModel.Children)
-                                {
-                                    child.RefreshMetadata();
+                                // entry points
+                                if (!(this.RootFolderModel == null)) {
+                                    //refresh the root folder children in case we changed sort order
+                                    foreach (var child in this.RootFolderModel.Children) {
+                                        child.RefreshMetadata();
+                                    }
                                 }
-                                FullRefresh(this.RootFolder);
+                                if (IsInEntryPoint) {
+                                    FullRefresh(this.RootFolderModel.Folder);
+                                } else {
+                                    FullRefresh(this.RootFolder);
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -504,7 +510,7 @@ namespace MediaBrowser
                     //check for alternate entry point
                     this.entryPointPath = EntryPointResolver.EntryPointPath;
 
-                    if (!String.IsNullOrEmpty(this.EntryPointPath))
+                    if (IsInEntryPoint)
                     {
                         //add in a fake breadcrumb so they will show properly
                         session.AddBreadcrumb("DIRECTENTRY");
@@ -519,7 +525,8 @@ namespace MediaBrowser
                     {
                         try
                         {
-                            Navigate((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath)));                            
+                            this.RootFolderModel = (MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath));
+                            Navigate(this.RootFolderModel);                            
                         }
                         catch (Exception ex)
                         {
@@ -534,7 +541,14 @@ namespace MediaBrowser
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser encountered a critical error and had to shut down: " + e.ToString() + " " + e.StackTrace.ToString(), "Critical Error", DialogButtons.Ok, 60, true);
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
-        }              
+        }
+
+
+        bool IsInEntryPoint {
+            get {
+                return !String.IsNullOrEmpty(this.EntryPointPath); 
+            }
+        }
 
         void FullRefresh(Folder folder)
         {

@@ -192,7 +192,7 @@ namespace MediaBrowser.Library.Filesystem
             //Refresh whatever folder we are currently viewing plus all parents up the tree
             FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
             aFolder.RefreshUI();
-            while (aFolder != Application.CurrentInstance.RootFolderModel)
+            while (aFolder != Application.CurrentInstance.RootFolderModel && aFolder.PhysicalParent != null)
             {
                 aFolder = aFolder.PhysicalParent;
                 aFolder.RefreshUI();
