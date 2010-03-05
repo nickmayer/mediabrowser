@@ -294,7 +294,9 @@ namespace MediaBrowser.Library.ImageManagement {
                 info.Date = DateTime.UtcNow;
                 imageSet.PrimaryImage = info;
                 try {
-                    image.Save(info.Path);
+                    string tempFile = System.IO.Path.GetTempFileName();
+                    image.Save(tempFile);
+                    System.IO.File.Move(tempFile, info.Path);  
                 } catch {
 
                     try { File.Delete(info.Path); } 
