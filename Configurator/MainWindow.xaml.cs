@@ -361,6 +361,7 @@ namespace Configurator
             cbxOptionIndexing.IsChecked = config.RememberIndexing;
             cbxOptionDimPoster.IsChecked = config.DimUnselectedPosters;
             cbxOptionHideFrame.IsChecked = config.HideFocusFrame;
+            cbxOptionAutoEnter.IsChecked = config.AutoEnterSingleDirs;
 
             cbxOptionUnwatchedCount.IsChecked      = config.ShowUnwatchedCount;
             cbxOptionUnwatchedOnFolder.IsChecked   = config.ShowWatchedTickOnFolders;
@@ -1217,6 +1218,12 @@ sortorder: {2}
             config.UnlockOnPinEntry = (bool)cbxOptionAutoUnlock.IsChecked;
             SaveConfig();
         }
+        private void cbxOptionAutoEnter_Click(object sender, RoutedEventArgs e)
+        {
+            config.AutoEnterSingleDirs = (bool)cbxOptionAutoEnter.IsChecked;
+            SaveConfig();
+        }
+
 
         #endregion
 
@@ -1278,11 +1285,10 @@ sortorder: {2}
 
         private void slUnlockPeriod_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            //for some reason null check won't work on this slider value... -ebr
             try
             {
 
-                if (slUnlockPeriod.Value != null)
+                if (slUnlockPeriod != null)
                 {
                     config.ParentalUnlockPeriod = (int)slUnlockPeriod.Value;
                 }
