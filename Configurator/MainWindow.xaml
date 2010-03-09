@@ -124,14 +124,15 @@
             <TabItem Header="display" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" >
                 <Grid >
 
-                    <GroupBox Header="General Display Settings" HorizontalAlignment="Left" Margin="9,14,0,198" Name="groupBox1" Width="287">
+                    <GroupBox Header="General Display Settings" HorizontalAlignment="Left" Margin="9,14,0,177" Name="groupBox1" Width="287">
                         <Grid>
                             <CheckBox Height="18" Margin="25,10,0,0" Name="cbxOptionClock" ToolTip="Display time clock within Media Browser" VerticalAlignment="Top" Click="cbxOptionClock_Click" HorizontalAlignment="Left" Width="103">Display Clock</CheckBox>
                             <CheckBox Margin="25,34,76,0" Name="cbxOptionTransparent" ToolTip="Enable transparent background" Click="cbxOptionTransparent_Click" Height="18" VerticalAlignment="Top">Transparent Background</CheckBox>
                             <CheckBox Margin="25,58,76,0" Name="cbxOptionDimPoster" ToolTip="Dim unselected items" Click="cbxOptionDimPoster_Click" Height="18" VerticalAlignment="Top">Dim Unselected Posters</CheckBox>
-                            <CheckBox Margin="25,82,62,66" Name="cbxOptionIndexing" ToolTip="Remember indexed filter settings for each folder" Click="cbxOptionIndexing_Click">Remember Folder Indexing</CheckBox>
-                            <CheckBox Margin="25,0,51,41" Name="cbxOptionAspectRatio" ToolTip="Stretch folder image to fill display area" Height="19" VerticalAlignment="Bottom" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
-                            <CheckBox Height="21" Margin="25,0,116,14" Name="cbxOptionHideFrame" ToolTip="Hide focus frame around posters." VerticalAlignment="Bottom" Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
+                            <CheckBox Margin="25,82,62,78" Name="cbxOptionIndexing" ToolTip="Remember indexed filter settings for each folder" Click="cbxOptionIndexing_Click">Remember Folder Indexing</CheckBox>
+                            <CheckBox Margin="25,0,51,62" Name="cbxOptionAspectRatio" ToolTip="Stretch folder image to fill display area" Height="19" VerticalAlignment="Bottom" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
+                            <CheckBox Height="21" Margin="25,0,116,35" Name="cbxOptionHideFrame" ToolTip="Hide focus frame around posters." VerticalAlignment="Bottom" Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
+                            <CheckBox Height="20" Margin="25,0,29,9" Name="cbxOptionAutoEnter" VerticalAlignment="Bottom" Click="cbxOptionAutoEnter_Click" ToolTip="Automatically bypass an item with only one folder in it and continue to the contents of that folder." >Auto Enter Single Folder Items</CheckBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Media Tracking" HorizontalAlignment="Right" Margin="0,14,20,0" Name="groupBox2" Width="287" Height="157.38" VerticalAlignment="Top">

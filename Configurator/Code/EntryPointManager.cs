@@ -448,7 +448,7 @@ namespace Configurator.Code
                 {
                     throw new Exception("RegKeyPath is null for item " + regItem.Name + ".");
                 }
-                if (regItem.Name == String.Empty || regItem.type == null)
+                if (regItem.Name == String.Empty)
                 {
                     throw new Exception("One or more of the values in " + regItem.Name + " are incomplete.");
                 }
