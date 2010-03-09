@@ -70,11 +70,10 @@
       
       <Changed Source="[Item.HaveWatched]">
         <Conditions>
-          <Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
-          <Equality Source="[Application.Config.ShowWatchedTickOnFolders]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[Application.Config.ShowWatchTickInPosterView]" ConditionOp="Equals" Value="true" />
         </Conditions>
         <Actions>
-          <Set Target="[TickPanel.Visible]" Value="true" />
+          <Set Target="[TickPanel.Visible]" Value="[Item.HaveWatched]" />
         </Actions>
       </Changed>
 			<Changed Source="[Application.Config.ShowWatchedTickOnFolders]" InitialEvaluate="true">
@@ -258,7 +257,7 @@
 											<AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
 										</Layout>
 										<Children>
-											<Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha="0.8" Name="TickIndicatorPanel" Visible="[Item.HaveWatched]" MaximumSize="32,32" Margins="5,5,0,0">
+											<Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha="0.8" Name="TickIndicatorPanel" Visible="[Application.Config.ShowWatchTickInPosterView]" MaximumSize="32,32" Margins="5,5,0,0">
 												<LayoutInput>
 													<AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
 												</LayoutInput>
