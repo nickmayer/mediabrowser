@@ -110,6 +110,7 @@ namespace MediaBrowser.Code.ModelItems {
             int retries = 0;   
             while (retries++ < 4 && localImage == null) {
                 localImage = source();
+                if (localImage != null) break;
                 // during aggressive metadata updates - images may be blank
                 Thread.Sleep(100 * retries); 
             }
