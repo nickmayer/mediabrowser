@@ -516,9 +516,17 @@
       <Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="720" Target="[HDImage.Content]" Value="image://i:HDLogo720" />
       <Condition Source="[Item.HDType]" ConditionOp="Equals" SourceValue="1080" Target="[HDImage.Content]" Value="image://i:HDLogo1080" />
 
-      <Binding Source="[Item.HaveWatched]" Target="[TickPanel.Visible]" />
       <Binding Source="[Item.UnwatchedCountString]" Target="[UnwatchedCount.Content]" />
       <Binding Source="[Item.ShowUnwatched]" Target="[UnwatchedIndicator.Visible]" />
+
+      <Changed Source="[Item.HaveWatched]">
+        <Conditions>
+          <Equality Source="[Application.Config.ShowWatchTickInPosterView]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TickPanel.Visible]" Value="[Item.HaveWatched]" />
+        </Actions>
+      </Changed>
 
       <Changed Source="[Application.Config.ShowWatchedTickOnFolders]" InitialEvaluate="true">
         <Conditions>
@@ -608,7 +616,7 @@
                   <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
                 </Layout>
                 <Children>
-                  <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha="0.8" Name="TickIndicatorPanel" Visible="[Item.HaveWatched]" MaximumSize="32,32" Margins="5,5,0,0">
+                  <Panel  Scale="1,1,1" Padding="0,0,0,0" Layout="Center" Alpha="0.8" Name="TickIndicatorPanel" Visible="[Application.Config.ShowWatchTickInPosterView]" MaximumSize="32,32" Margins="5,5,0,0">
                     <LayoutInput>
                       <AnchorLayoutInput Horizontal="Near" Vertical="Near" />
                     </LayoutInput>

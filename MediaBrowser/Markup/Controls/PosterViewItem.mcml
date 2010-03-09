@@ -41,7 +41,6 @@
       <Binding Source="[ImageSize.Value]" Target="[Item.PreferredImageSmallSize]" />
       <Binding Source="[ShowLabels.Value]" Target="[BelowLabelPanel.Visible]" />
 			<Binding Source="[Item.PreferredImageSmall]" Target="[BoxArt.Content]"/>
-			<Binding Source="[Item.HaveWatched]" Target="[TickPanel.Visible]" />
 			<Binding Source="[Item.UnwatchedCountString]" Target="[UnwatchedCount.Content]" />
 			<Binding Source="[Item.ShowUnwatched]" Target="[UnwatchedIndicator.Visible]" />
 			<Binding Source="[Item.Name]" Target="[BelowLabelPanel.Content]" />
