@@ -12,9 +12,27 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities;
 using System.Drawing;
 using MediaBrowser.Library.Threading;
+using System.Diagnostics;
 
 namespace MediaBrowser.Library.ImageManagement {
     public abstract class LibraryImage {
+
+        static Dictionary<Guid, object> _locks = new Dictionary<Guid, object>();
+
+        private object Lock {
+            get {
+                lock (_locks) {
+                    object lck;
+                    Guid id = Id;
+                    if (!_locks.TryGetValue(id, out lck)) {
+                        lck = new object(); 
+                        _locks[id] = lck; 
+                    }
+                    return lck;
+                }
+            }
+        }
+
 
         protected BaseItem item;
         bool canBeProcessed; 
@@ -40,35 +58,42 @@ namespace MediaBrowser.Library.ImageManagement {
         bool loaded = false;
         private void EnsureLoaded() {
             if (loaded) return;
-
-            try {
-                if (!loaded) {
-                    var info = ImageCache.Instance.GetPrimaryImage(Id);
-                    if (info == null) {
-                        ImageCache.Instance.CacheImage(Id, ProcessImage(OriginalImage));
-                    }
-                    info = ImageCache.Instance.GetPrimaryImage(Id);
-                    if (info != null) {
-                        _width = info.Width;
-                        _height = info.Height;
-                    } else {
-                        Corrupt = true;
-                    }
-
-                    Async.Queue("Validate Image Thread", () => {
-                        if (info != null) {
-                            if (ImageOutOfDate(info.Date)) {
-                                ClearLocalImages();
+            lock (Lock) {
+                try {
+                    if (!loaded) {
+                        var info = ImageCache.Instance.GetPrimaryImage(Id);
+                        if (info == null) {
+                            var image = OriginalImage;
+                            if (image == null) {
+                                Corrupt = true;
+                                return;
                             }
-                        } 
-                    });
+                            ImageCache.Instance.CacheImage(Id, ProcessImage(image));
+                        }
+                        info = ImageCache.Instance.GetPrimaryImage(Id);
+                        if (info != null) {
+                            _width = info.Width;
+                            _height = info.Height;
+                        } else {
+                            Corrupt = true;
+                        }
 
+                        Async.Queue("Validate Image Thread", () =>
+                        {
+                            if (info != null) {
+                                if (ImageOutOfDate(info.Date)) {
+                                    ClearLocalImages();
+                                }
+                            }
+                        });
+
+                    }
+                } catch (Exception e) {
+                    Logger.ReportException("Failed to deal with image: " + Path, e);
+                    Corrupt = true;
+                } finally {
+                    loaded = true;
                 }
-            } catch (Exception e) {
-                Logger.ReportException("Failed to deal with image: " + Path, e);
-                Corrupt = true;
-            } finally {
-                loaded = true;
             }
         }
 
@@ -92,12 +117,14 @@ namespace MediaBrowser.Library.ImageManagement {
         /// <returns></returns>
         public string GetLocalImagePath() {
             EnsureLoaded();
-            return ImageCache.Instance.GetImagePath(Id);
+            string path = ImageCache.Instance.GetImagePath(Id);
+            return path;
         }
 
         public string GetLocalImagePath(int width, int height) {
             EnsureLoaded();
-            return ImageCache.Instance.GetImagePath(Id, width, height);
+            string path = ImageCache.Instance.GetImagePath(Id, width, height);
+            return path;
         }
 
 

@@ -13,10 +13,15 @@ using System.Drawing.Imaging;
 namespace MediaBrowser.Library.ImageManagement {
     public class RemoteImage : LibraryImage {
 
+        const int MIN_WIDTH = 10; 
+        const int MIN_HEIGHT = 10; 
 
         protected override System.Drawing.Image OriginalImage {
             get {
                 var image = DownloadUsingRetry();
+                if (image != null && (image.Width < MIN_WIDTH || image.Height < MIN_HEIGHT)) {
+                    image = null;
+                }
                 return image; 
             }
         }

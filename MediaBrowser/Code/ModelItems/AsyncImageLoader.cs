@@ -12,6 +12,7 @@ using MediaBrowser.Library;
 using MediaBrowser.Library.ImageManagement;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Filesystem;
 
 namespace MediaBrowser.Code.ModelItems {
     class AsyncImageLoader {
@@ -68,7 +69,6 @@ namespace MediaBrowser.Code.ModelItems {
                         } else {
                             ImageLoadingProcessors.Inject(() => LoadImage(Loader.NormalLoader));
                         }
-
                         queued = true;
                     }
 
@@ -107,8 +107,12 @@ namespace MediaBrowser.Code.ModelItems {
 
 
         private void LoadImageImpl(Loader loader) {
-
-            localImage = source();
+            int retries = 0;   
+            while (retries++ < 4 && localImage == null) {
+                localImage = source();
+                // during aggressive metadata updates - images may be blank
+                Thread.Sleep(100 * retries); 
+            }
 
             // if the image is invalid it may be null.
             if (localImage != null) {
@@ -136,15 +140,28 @@ namespace MediaBrowser.Code.ModelItems {
             }
 
             if (localImage.Corrupt) {
+                doneProcessing = true;
+                IsLoaded = true;
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                {
+                    if (afterLoad != null) {
+                        afterLoad();
+                    }
+                });
                 return;
             }
 
-            var bytes = File.ReadAllBytes(localPath);
-            MemoryStream imageStream = new MemoryStream(bytes);
-            imageStream.Position = 0;
+          
 
             Image newImage = null;
             if (Kernel.Instance.ConfigData.CacheAllImagesInMemory) {
+                byte[] bytes;
+                lock (ProtectedFileStream.GetLock(localPath)) {
+                    bytes = File.ReadAllBytes(localPath);
+                }
+
+                MemoryStream imageStream = new MemoryStream(bytes);
+                imageStream.Position = 0;
                 newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
             }
 

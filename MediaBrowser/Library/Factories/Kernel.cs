@@ -230,7 +230,11 @@ namespace MediaBrowser.Library {
                 string sqliteDll = Path.Combine(ApplicationPaths.AppConfigPath, "system.data.sqlite.dll");
                 if (File.Exists(sqliteDll)) {
                     try {
-                        repository = new SafeItemRepository( SqliteItemRepository.GetRepository(sqliteDb, sqliteDll) );
+                        repository = new SafeItemRepository( 
+                            new MemoizingRepository(
+                                SqliteItemRepository.GetRepository(sqliteDb, sqliteDll) 
+                            )
+                         );
                     } catch (Exception e) {
                         Logger.ReportException("Failed to init sqlite!", e);
                         repository = null;

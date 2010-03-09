@@ -17,7 +17,8 @@ namespace MediaBrowser.Library.Entities {
 
         public Person Person {
             get {
-                return Person.GetPerson(Name);
+                var person = Person.GetPerson(Name);
+                return person;
             }
         }
 

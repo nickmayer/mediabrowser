@@ -126,8 +126,8 @@ namespace MediaBrowser.Library.Persistance {
             connection = new SQLiteConnection("Data Source=" + dbPath);
             connection.Open();
 
-            string[] queries = {"create table provider_data (guid, data)",
-                                "create index idx_provider on provider_data(guid)",
+            string[] queries = {"create table provider_data (guid, full_name, data)",
+                                "create unique index idx_provider on provider_data(guid, full_name)",
                                 "create table items (guid primary key, data)",
                                 "create table children (guid, child)", 
                                 "create unique index idx_children on children(guid, child)",
@@ -371,24 +371,26 @@ namespace MediaBrowser.Library.Persistance {
             lock (providers) {
                 providerCopy = providers.ToArray();
             }
+            lock (delayedCommands) {
+                var cmd = connection.CreateCommand();
 
-            var cmd = connection.CreateCommand();
-
-            cmd.CommandText = "delete from provider_data where guid = @guid";
-            cmd.AddParam("@guid", guid);
-            QueueCommand(cmd);
-
-            foreach (var provider in providerCopy) {
-                cmd = connection.CreateCommand();
-                cmd.CommandText = "insert into provider_data (guid, data) values (@guid, @data)";
+                cmd.CommandText = "delete from provider_data where guid = @guid";
                 cmd.AddParam("@guid", guid);
-                var dataParam = cmd.AddParam("@data");
+                QueueCommand(cmd);
+
+                foreach (var provider in providerCopy) {
+                    cmd = connection.CreateCommand();
+                    cmd.CommandText = "insert into provider_data (guid, full_name, data) values (@guid, @full_name, @data)";
+                    cmd.AddParam("@guid", guid);
+                    cmd.AddParam("@full_name", provider.GetType().FullName);
+                    var dataParam = cmd.AddParam("@data");
 
 
-                using (var ms = new MemoryStream()) {
-                    Serializer.Serialize(ms, (object)provider);
-                    dataParam.Value = ms.ToArray();
-                    QueueCommand(cmd);
+                    using (var ms = new MemoryStream()) {
+                        Serializer.Serialize(ms, (object)provider);
+                        dataParam.Value = ms.ToArray();
+                        QueueCommand(cmd);
+                    }
                 }
             }
         }

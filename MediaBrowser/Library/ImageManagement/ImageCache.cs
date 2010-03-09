@@ -239,11 +239,13 @@ namespace MediaBrowser.Library.ImageManagement {
         public string GetImagePath(Guid id, int width, int height) {
             ImageSet set = GetImageSet(id);
             if (set != null && set.PrimaryImage != null) {
-                var image = set.ResizedImages.FirstOrDefault(info => info.Width == width && info.Height == height);
-                if (image != null) {
-                    return image.Path;
-                } else {
-                    return ResizeImage(id, width, height).Path;
+                lock (set) {
+                    var image = set.ResizedImages.FirstOrDefault(info => info.Width == width && info.Height == height);
+                    if (image != null) {
+                        return image.Path;
+                    } else {
+                        return ResizeImage(set, width, height).Path;
+                    }
                 }
             }
 
@@ -294,9 +296,9 @@ namespace MediaBrowser.Library.ImageManagement {
                 info.Date = DateTime.UtcNow;
                 imageSet.PrimaryImage = info;
                 try {
-                    string tempFile = System.IO.Path.GetTempFileName();
-                    image.Save(tempFile);
-                    System.IO.File.Move(tempFile, info.Path);  
+                    using (var fs = ProtectedFileStream.OpenExclusiveWriter(info.Path)) {
+                        image.Save(fs, info.ImageFormat);
+                    }
                 } catch {
 
                     try { File.Delete(info.Path); } 
@@ -368,9 +370,7 @@ namespace MediaBrowser.Library.ImageManagement {
         }
 
 
-        private ImageInfo ResizeImage(Guid id, int width, int height) {
-            var set = GetImageSet(id);
-
+        private ImageInfo ResizeImage(ImageSet set, int width, int height) {
             lock (set) {
                 ImageInfo info = new ImageInfo(set);
                 info.Width = width;
