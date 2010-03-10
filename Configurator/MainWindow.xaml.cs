@@ -856,7 +856,7 @@ sortorder: {2}
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
                 if (v != null)
                 {
-                    if (v > plugin.Version)
+                    if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version)
                     {
                         upgradePlugin.IsEnabled = true;
                     }
