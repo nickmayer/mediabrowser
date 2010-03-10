@@ -22,8 +22,8 @@ using DvrmsMetadataProvider;
 [assembly: Guid("09a243b4-7489-470f-97c0-de673c5a8412")]
 
 
-[assembly: AssemblyFileVersion("1.0.3.0")]
-[assembly: AssemblyVersion("1.0.3.0")]
+[assembly: AssemblyFileVersion("1.0.4.0")]
+[assembly: AssemblyVersion("1.0.4.0")]
 
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]
