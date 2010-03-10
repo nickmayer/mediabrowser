@@ -773,6 +773,7 @@ namespace MediaBrowser
             properties["Folder"] = folder;
             properties["ThemeConfig"] = CurrentTheme.Config;
             CurrentFolder = folder; //store our current folder
+            CurrentItem = null; //blank this out in case it was messed with in the last screen
             if (folder.IsRoot)
                 RootFolderModel = folder; //store the root as well
 

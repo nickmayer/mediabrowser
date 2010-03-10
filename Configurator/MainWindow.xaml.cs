@@ -132,7 +132,7 @@ namespace Configurator
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
                 if (v != null)
                 {
-                    if (v > plugin.Version) return true;
+                    if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version) return true;
                 }
             }
             return false;
@@ -856,7 +856,7 @@ sortorder: {2}
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
                 if (v != null)
                 {
-                    if (v > plugin.Version)
+                    if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version)
                     {
                         upgradePlugin.IsEnabled = true;
                     }
