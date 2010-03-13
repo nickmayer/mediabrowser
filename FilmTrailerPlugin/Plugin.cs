@@ -59,7 +59,7 @@ namespace FilmTrailerPlugin {
         {
             get
             {
-                return new System.Version(2, 2, 2, 0);
+                return new System.Version(2, 2, 3, 0);
             }
         }
     }

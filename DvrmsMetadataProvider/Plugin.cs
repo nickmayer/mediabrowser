@@ -22,5 +22,16 @@ namespace DvrmsMetadataProvider {
         public override string Description {
             get { return PluginDescription; }
         }
+
+        public override System.Version RequiredMBVersion {
+            get {
+                return new System.Version(2, 2, 1, 0);
+            }
+        }
+        public override System.Version TestedMBVersion {
+            get {
+                return new System.Version(2, 2, 3, 0);
+            }
+        }
     }
 }

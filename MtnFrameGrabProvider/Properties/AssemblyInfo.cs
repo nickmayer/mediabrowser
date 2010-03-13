@@ -24,7 +24,7 @@ using MtnFrameGrabProvider;
 
 
 
-[assembly: AssemblyFileVersion("1.0.3.0")]
-[assembly: AssemblyVersion("1.0.3.0")]
+[assembly: AssemblyFileVersion("1.0.4.0")]
+[assembly: AssemblyVersion("1.0.4.0")]
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]

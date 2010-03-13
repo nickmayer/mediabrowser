@@ -22,8 +22,8 @@ using FilmTrailerPlugin;
 [assembly: Guid("706ca073-7918-4fbf-9db1-166b7ef7699c")]
 
 
-[assembly: AssemblyFileVersion("1.0.5.0")]
-[assembly: AssemblyVersion("1.0.5.0")]
+[assembly: AssemblyFileVersion("1.0.6.0")]
+[assembly: AssemblyVersion("1.0.6.0")]
 
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]
