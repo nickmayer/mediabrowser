@@ -1408,8 +1408,11 @@ sortorder: {2}
         private void addPlugin_Click(object sender, RoutedEventArgs e) {
             AddPluginWindow window = new AddPluginWindow();
             window.Owner = this;
-            window.Top = this.Top - 20;
+            window.Top = 10;
             window.Left = this.Left + 50;
+            if (window.Left + window.Width > SystemParameters.WorkArea.Width) window.Left = SystemParameters.WorkArea.Width - window.Width - 5;
+            if (window.Left < 0) window.Left = 5;
+            if (SystemParameters.WorkArea.Height - 10 < (window.Height)) window.Height = SystemParameters.WorkArea.Height - 10;
             window.ShowDialog();
             Async.Queue("Refresh after plugin add", () =>
             {
