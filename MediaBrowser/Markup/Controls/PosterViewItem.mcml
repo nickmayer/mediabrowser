@@ -42,6 +42,7 @@
       <Binding Source="[ShowLabels.Value]" Target="[BelowLabelPanel.Visible]" />
 			<Binding Source="[Item.PreferredImageSmall]" Target="[BoxArt.Content]"/>
 			<Binding Source="[Item.UnwatchedCountString]" Target="[UnwatchedCount.Content]" />
+      <Binding Source="[Item.HaveWatched]" Target="[TickPanel.Visible]" />
 			<Binding Source="[Item.ShowUnwatched]" Target="[UnwatchedIndicator.Visible]" />
 			<Binding Source="[Item.Name]" Target="[BelowLabelPanel.Content]" />
 			<Binding Source="[Item.Name]" Target="[Label.Content]" />
@@ -72,7 +73,7 @@
           <Equality Source="[Application.Config.ShowWatchTickInPosterView]" ConditionOp="Equals" Value="true" />
         </Conditions>
         <Actions>
-          <Set Target="[TickPanel.Visible]" Value="[Item.HaveWatched]" />
+          <Set Target="[TickIndicatorPanel.Visible]" Value="[Application.Config.ShowWatchTickInPosterView]" />
         </Actions>
       </Changed>
 			<Changed Source="[Application.Config.ShowWatchedTickOnFolders]" InitialEvaluate="true">
@@ -89,7 +90,7 @@
 					<Equality Source="[Item.IsPlayable]" Value="true" />
 				</Conditions>
 				<Actions>
-					<Set Target="[TickIndicatorPanel.Visible]" Value="[Application.Config.ShowWatchTickInPosterView]" />
+					<Set Target="[TickIndicatorPanel.Visible]" Value="[Item.HaveWatched]" />
 				</Actions>
 			</Changed>
 
