@@ -33,7 +33,7 @@ namespace DvrmsMetadataProvider {
     public class DvrmsMetadataProvider : BaseMetadataProvider{
 
         public Show Show { get { return (Show)Item; } }
-        public bool IsDvrms { get { return Item.Path.ToLower().EndsWith(".dvr-ms"); } }
+        public bool IsDvrms { get { return Item.Path.ToLower().EndsWith(".dvr-ms") || Item.Path.ToLower().EndsWith(".wtv"); ; } }
 
         [Persist]
         DateTime updateDate = DateTime.MinValue;
