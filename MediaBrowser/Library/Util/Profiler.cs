@@ -9,7 +9,8 @@ namespace MediaBrowser.Util
     class Profiler : IDisposable
     {
 
-        public static void TimeAction(string description, Action func) {
+        public static void TimeAction(string description, Action func)
+        {
             var watch = new Stopwatch();
             watch.Start();
             func();
@@ -20,7 +21,7 @@ namespace MediaBrowser.Util
 
         string caller;
         string name;
-        Stopwatch stopwatch;  
+        Stopwatch stopwatch;
 
         public Profiler(string name)
         {
@@ -35,10 +36,10 @@ namespace MediaBrowser.Util
         public void Dispose()
         {
             stopwatch.Stop();
-            string message = string.Format("{1} took {2} seconds.",
-                caller, name, ((float)stopwatch.ElapsedMilliseconds/1000).ToString("F"));
-            Logger.ReportInfo( message);
-            Application.CurrentInstance.Information.AddInformationString(message); 
+            string message = string.Format(Application.CurrentInstance.StringData("ProfilerTimeProf"),
+                caller, name, ((float)stopwatch.ElapsedMilliseconds / 1000).ToString("F"));
+            Logger.ReportInfo(message);
+            Application.CurrentInstance.Information.AddInformationString(message);
         }
 
         #endregion

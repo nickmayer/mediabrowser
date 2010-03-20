@@ -8,14 +8,14 @@ using MediaBrowser.Code.ModelItems;
 
 namespace MediaBrowser.Library
 {
-   
+
 
     public class DisplayPreferences : BaseModelItem
     {
         private static readonly byte Version = 3;
 
         readonly Choice viewType = new Choice();
-        readonly BooleanChoice  showLabels;
+        readonly BooleanChoice showLabels;
         readonly BooleanChoice verticalScroll;
         readonly Choice sortOrders = new Choice();
         readonly Choice indexBy = new Choice();
@@ -24,18 +24,18 @@ namespace MediaBrowser.Library
         readonly BooleanChoice useBackdrop;
         private bool saveEnabled = true;
         SizeRef thumbConstraint = new SizeRef(Config.Instance.DefaultPosterSize);
-        
+
         public Guid Id { get; set; }
 
         public DisplayPreferences(Guid id)
         {
             this.Id = id;
-            
+
             ArrayList list = new ArrayList();
             foreach (ViewType v in Enum.GetValues(typeof(ViewType)))
                 list.Add(ViewTypeNames.GetName(v));
             viewType.Options = list;
-            
+
             this.viewType.Chosen = ViewTypeNames.GetName(Config.Instance.DefaultViewType);
 
             showLabels = new BooleanChoice();
@@ -57,14 +57,14 @@ namespace MediaBrowser.Library
             foreach (SortOrder v in Enum.GetValues(typeof(SortOrder)))
                 al.Add(SortOrderNames.GetName(v));
             sortOrders.Options = al;
-            
+
             al = new ArrayList();
             foreach (IndexType v in Enum.GetValues(typeof(IndexType)))
                 al.Add(IndexTypeNames.GetName(v));
             indexBy.Options = al;
-            
+
             sortOrders.ChosenChanged += new EventHandler(sortOrders_ChosenChanged);
-            indexBy.ChosenChanged += new EventHandler(indexBy_ChosenChanged);    
+            indexBy.ChosenChanged += new EventHandler(indexBy_ChosenChanged);
             viewType.ChosenChanged += new EventHandler(viewType_ChosenChanged);
             showLabels.ChosenChanged += new EventHandler(showLabels_ChosenChanged);
             verticalScroll.ChosenChanged += new EventHandler(verticalScroll_ChosenChanged);
@@ -72,25 +72,25 @@ namespace MediaBrowser.Library
             useCoverflow.ChosenChanged += new EventHandler(useCoverflow_ChosenChanged);
             useBackdrop.ChosenChanged += new EventHandler(useBackdrop_ChosenChanged);
             thumbConstraint.PropertyChanged += new PropertyChangedEventHandler(thumbConstraint_PropertyChanged);
-        }  
+        }
 
 
         void useCoverflow_ChosenChanged(object sender, EventArgs e)
         {
             Save();
         }
-     
+
         void useBanner_ChosenChanged(object sender, EventArgs e)
         {
             Save();
         }
-        
+
         void indexBy_ChosenChanged(object sender, EventArgs e)
         {
             FirePropertyChanged("IndexBy");
             Save();
         }
-        
+
         void thumbConstraint_PropertyChanged(IPropertyObject sender, string property)
         {
             Save();
@@ -111,20 +111,20 @@ namespace MediaBrowser.Library
             FirePropertyChanged("ViewTypeString");
             Save();
         }
-               
+
         void sortOrders_ChosenChanged(object sender, EventArgs e)
         {
             FirePropertyChanged("SortOrder");
             Save();
         }
-        
+
         void useBackdrop_ChosenChanged(object sender, EventArgs e)
         {
             Save();
         }
- 
-        
-        
+
+
+
         public void WriteToStream(BinaryWriter bw)
         {
             bw.Write(Version);
@@ -165,7 +165,7 @@ namespace MediaBrowser.Library
                 dp.IndexBy = IndexType.None;
             dp.useBanner.Value = br.ReadBoolean();
             dp.thumbConstraint.Value = new Size(br.ReadInt32(), br.ReadInt32());
-            
+
             if (version >= 2)
                 dp.useCoverflow.Value = br.ReadBoolean();
 
@@ -175,32 +175,40 @@ namespace MediaBrowser.Library
             dp.saveEnabled = true;
             return dp;
         }
-        
+
         public Choice SortOrders
         {
             get { return this.sortOrders; }
         }
-        
+
         public SortOrder SortOrder
         {
             get { return SortOrderNames.GetEnum(sortOrders.Chosen.ToString()); }
-            set 
-            { 
+            set
+            {
                 this.SortOrders.Chosen = SortOrderNames.GetName(value);
                 this.SortOrders.Default = this.SortOrders.Chosen;
             }
         }
-        
+
         public IndexType IndexBy
         {
             get { return IndexTypeNames.GetEnum(indexBy.Chosen.ToString()); }
-            set 
-            { 
+            set
+            {
                 this.IndexByChoice.Chosen = IndexTypeNames.GetName(value);
                 this.IndexByChoice.Default = this.IndexByChoice.Chosen;
             }
         }
-        
+
+        public string IndexByString
+        {
+            get
+            {
+                return IndexTypeNames.GetEnum((string)this.indexBy.Chosen).ToString();
+            }
+        }
+
         public Choice IndexByChoice
         {
             get { return this.indexBy; }
@@ -213,8 +221,10 @@ namespace MediaBrowser.Library
 
         public string ViewTypeString
         {
-            get {
-                return ViewTypeNames.GetEnum((string)this.viewType.Chosen).ToString(); }
+            get
+            {
+                return ViewTypeNames.GetEnum((string)this.viewType.Chosen).ToString();
+            }
         }
 
         public BooleanChoice ShowLabels
@@ -236,7 +246,7 @@ namespace MediaBrowser.Library
         {
             get { return this.useCoverflow; }
         }
-        
+
         public SizeRef ThumbConstraint
         {
             get
@@ -269,10 +279,10 @@ namespace MediaBrowser.Library
         {
             get { return this.useBackdrop; }
         }
-        
+
         internal void LoadDefaults()
         {
-            
+
         }
 
         private void Save()
@@ -301,7 +311,12 @@ namespace MediaBrowser.Library
 
     public class ViewTypeNames
     {
-        private static readonly string[] Names = { "Cover Flow","Detail", "Poster", "Thumb", "Thumb Strip"};
+        //private static readonly string[] Names = { "Cover Flow","Detail", "Poster", "Thumb", "Thumb Strip"};
+        private static readonly string[] Names = { Kernel.Instance.StringData.GetString("CoverFlowDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("DetailDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("PosterDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("ThumbDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("ThumbStripDispPref") };
 
         public static string GetName(ViewType type)
         {
@@ -316,7 +331,12 @@ namespace MediaBrowser.Library
 
     public class SortOrderNames
     {
-        private static readonly string[] Names = { "name", "date", "rating", "runtime", "unwatched", "year"};
+        private static readonly string[] Names = { Kernel.Instance.StringData.GetString("NameDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("DateDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("RatingDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("RuntimeDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("UnWatchedDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("YearDispPref") };
 
         public static string GetName(SortOrder order)
         {
@@ -331,7 +351,12 @@ namespace MediaBrowser.Library
 
     public class IndexTypeNames
     {
-        private static readonly string[] Names = { "none", "actor", "genre", "director","year", "studio" };
+        private static readonly string[] Names = { Kernel.Instance.StringData.GetString("NoneDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("ActorDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("GenreDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("DirectorDispPref"),
+                                                   Kernel.Instance.StringData.GetString("YearDispPref"), 
+                                                   Kernel.Instance.StringData.GetString("StudioDispPref") };
 
         public static string GetName(IndexType order)
         {

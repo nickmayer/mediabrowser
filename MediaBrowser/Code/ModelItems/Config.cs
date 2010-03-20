@@ -18,12 +18,13 @@ using MediaBrowser.Library.Plugins;
 
 namespace MediaBrowser
 {
-   
+
     public class Config : IModelItem
     {
         private ConfigData data;
 
-        public bool AlwaysShowDetailsPage {
+        public bool AlwaysShowDetailsPage
+        {
             get { return this.data.AlwaysShowDetailsPage; }
             set { if (this.data.AlwaysShowDetailsPage != value) { this.data.AlwaysShowDetailsPage = value; Save(); FirePropertyChanged("AlwaysShowDetailsPage"); } }
         }
@@ -33,7 +34,7 @@ namespace MediaBrowser
             get { return this.data.ParentalUnlockPeriod; }
             set { if (this.data.ParentalUnlockPeriod != value) { this.data.ParentalUnlockPeriod = value; Save(); FirePropertyChanged("ParentalUnlockPeriod"); } }
         }
- 
+
         public bool ParentalControlEnabled
         {
             get
@@ -114,10 +115,11 @@ namespace MediaBrowser
         }
 
         [Comment("Synchronize the view for similar folder types")]
-        public bool EnableSyncViews {
+        public bool EnableSyncViews
+        {
             get { return this.data.EnableSyncViews; }
             set { if (this.data.EnableSyncViews != value) { this.data.EnableSyncViews = value; Save(); FirePropertyChanged("EnableSyncViews"); } }
- 
+
         }
 
 
@@ -140,29 +142,36 @@ namespace MediaBrowser
         public string ImageByNameLocation
         {
             get { return this.data.ImageByNameLocation; }
-            set { if (this.data.ImageByNameLocation!= value) { this.data.ImageByNameLocation = value; Save(); FirePropertyChanged("ImageByNameLocation"); } }
+            set { if (this.data.ImageByNameLocation != value) { this.data.ImageByNameLocation = value; Save(); FirePropertyChanged("ImageByNameLocation"); } }
         }
 
         [Comment(@"Enables you to scan the display to cope with overscan issue, parameter should be of the for x,y,z scaling factors")]
         public Vector3 OverScanScaling
         {
             get { return this.data.OverScanScaling.ToMediaCenterVector3(); }
-            set { 
-                if (this.data.OverScanScaling.ToMediaCenterVector3() != value) { 
-                    this.data.OverScanScaling = MediaBrowser.Code.ShadowTypes.Vector3.FromMediaCenterVector3(value); 
-                    Save(); 
-                    FirePropertyChanged("OverScanScaling"); 
-                } 
+            set
+            {
+                if (this.data.OverScanScaling.ToMediaCenterVector3() != value)
+                {
+                    this.data.OverScanScaling = MediaBrowser.Code.ShadowTypes.Vector3.FromMediaCenterVector3(value);
+                    Save();
+                    FirePropertyChanged("OverScanScaling");
+                }
             }
         }
         [Comment("Defines padding to apply round the edge of the screen to cope with overscan issues")]
         public Inset OverScanPadding
         {
             get { return this.data.OverScanPadding.ToMediaCenterInset(); }
-            set { if (this.data.OverScanPadding.ToMediaCenterInset() != value) { 
-                this.data.OverScanPadding = MediaBrowser.Code.ShadowTypes.Inset.FromMediaCenterInset(value); 
-                Save(); 
-                FirePropertyChanged("OverScanPadding"); } }
+            set
+            {
+                if (this.data.OverScanPadding.ToMediaCenterInset() != value)
+                {
+                    this.data.OverScanPadding = MediaBrowser.Code.ShadowTypes.Inset.FromMediaCenterInset(value);
+                    Save();
+                    FirePropertyChanged("OverScanPadding");
+                }
+            }
         }
         [Comment(@"Enables the writing of trace log files in a production environment to assist with problem solving")]
         public bool EnableTraceLogging
@@ -173,15 +182,18 @@ namespace MediaBrowser
         [Comment(@"The default size of posters before change are made to the view settings")]
         public Size DefaultPosterSize
         {
-            get { 
-                return this.data.DefaultPosterSize.ToMediaCenterSize(); 
+            get
+            {
+                return this.data.DefaultPosterSize.ToMediaCenterSize();
             }
-            set { 
-                if (this.data.DefaultPosterSize.ToMediaCenterSize() != value) { 
-                    this.data.DefaultPosterSize = MediaBrowser.Code.ShadowTypes.Size.FromMediaCenterSize(value); 
-                    Save(); 
-                    FirePropertyChanged("DefaultPosterSize"); 
-                } 
+            set
+            {
+                if (this.data.DefaultPosterSize.ToMediaCenterSize() != value)
+                {
+                    this.data.DefaultPosterSize = MediaBrowser.Code.ShadowTypes.Size.FromMediaCenterSize(value);
+                    Save();
+                    FirePropertyChanged("DefaultPosterSize");
+                }
             }
         }
 
@@ -195,12 +207,14 @@ namespace MediaBrowser
         public Size GridSpacing
         {
             get { return this.data.GridSpacing.ToMediaCenterSize(); }
-            set { 
-                if (this.data.GridSpacing.ToMediaCenterSize() != value) { 
-                    this.data.GridSpacing = MediaBrowser.Code.ShadowTypes.Size.FromMediaCenterSize(value); 
-                    Save(); 
-                    FirePropertyChanged("GridSpacing"); 
-                } 
+            set
+            {
+                if (this.data.GridSpacing.ToMediaCenterSize() != value)
+                {
+                    this.data.GridSpacing = MediaBrowser.Code.ShadowTypes.Size.FromMediaCenterSize(value);
+                    Save();
+                    FirePropertyChanged("GridSpacing");
+                }
             }
         }
 
@@ -323,7 +337,9 @@ namespace MediaBrowser
         [Comment(@"Enables the showing of watched shows in a different color in the list view (Transparent disables it)")]
         public Colors ListViewWatchedColor
         {
-            get { return (Colors)(int)this.data.ListViewWatchedColor; 
+            get
+            {
+                return (Colors)(int)this.data.ListViewWatchedColor;
             }
             set { if ((int)this.data.ListViewWatchedColor != (int)value) { this.data.ListViewWatchedColor = (MediaBrowser.Code.ShadowTypes.Colors)(int)value; Save(); FirePropertyChanged("ListViewWatchedColor"); FirePropertyChanged("ListViewWatchedColorMcml"); } }
         }
@@ -417,7 +433,7 @@ namespace MediaBrowser
         [Comment("Changes the default view index for folders that have not yet been visited.\n\t[Detail|Poster|Thumb]")]
         public ViewType DefaultViewType
         {
-            get 
+            get
             {
                 try
                 {
@@ -453,7 +469,7 @@ namespace MediaBrowser
             get { return this.data.AllowInternetMetadataProviders; }
             set { if (this.data.AllowInternetMetadataProviders != value) { this.data.AllowInternetMetadataProviders = value; Save(); FirePropertyChanged("AllowInternetMetadataProviders"); } }
         }
-        
+
         public bool EnableFileWatching
         {
             get { return this.data.EnableFileWatching; }
@@ -555,17 +571,20 @@ namespace MediaBrowser
 
 
         [Comment(@"The name displayed in the top right when you first navigate into your library")]
-        public string InitialBreadcrumbName {
+        public string InitialBreadcrumbName
+        {
             get { return this.data.InitialBreadcrumbName; }
-            set {
-                    if (this.data.InitialBreadcrumbName != value) {
-                        this.data.InitialBreadcrumbName = value;
-                        Save();
-                        FirePropertyChanged("InitialBreadcrumbName");
-                    }
+            set
+            {
+                if (this.data.InitialBreadcrumbName != value)
+                {
+                    this.data.InitialBreadcrumbName = value;
+                    Save();
+                    FirePropertyChanged("InitialBreadcrumbName");
+                }
             }
         }
-    
+
         public bool ShowConfigButton
         {
             get { return this.data.ShowConfigButton; }
@@ -589,7 +608,8 @@ namespace MediaBrowser
         }
 
 
-        public string PodcastHome {
+        public string PodcastHome
+        {
             get { return this.data.PodcastHome; }
             set { if (this.data.PodcastHome != value) { this.data.PodcastHome = value; Save(); FirePropertyChanged("PodcastHome"); } }
         }
@@ -677,7 +697,7 @@ namespace MediaBrowser
             }
         }
 
-        
+
 
         private static Config _instance = new Config();
         public static Config Instance
@@ -694,15 +714,17 @@ namespace MediaBrowser
             isValid = Load();
         }
 
-        public bool IsValid {
-            get {
+        public bool IsValid
+        {
+            get
+            {
                 return isValid;
             }
         }
 
         private void Save()
         {
-            lock(this)
+            lock (this)
                 this.data.Save();
         }
 
@@ -736,7 +758,7 @@ namespace MediaBrowser
             catch (Exception ex)
             {
                 MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                DialogResult r = ev.Dialog(ex.Message + "\nReset to default?", "Error in configuration file", DialogButtons.Yes | DialogButtons.No, 600, true);
+                DialogResult r = ev.Dialog(ex.Message + "\n" + Application.CurrentInstance.StringData("ConfigErrorDial"), Application.CurrentInstance.StringData("ConfigErrorCapDial"), DialogButtons.Yes | DialogButtons.No, 600, true);
                 if (r == DialogResult.Yes)
                 {
                     this.data = new ConfigData();
@@ -750,29 +772,38 @@ namespace MediaBrowser
 
         #region IModelItem Members
 
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 throw new NotImplementedException();
             }
-            set {
-                throw new NotImplementedException();
-            }
-        }
-
-        public bool Selected {
-            get {
-                throw new NotImplementedException();
-            }
-            set {
+            set
+            {
                 throw new NotImplementedException();
             }
         }
 
-        public Guid UniqueId {
-            get {
+        public bool Selected
+        {
+            get
+            {
                 throw new NotImplementedException();
             }
-            set {
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Guid UniqueId
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
                 throw new NotImplementedException();
             }
         }
@@ -787,20 +818,25 @@ namespace MediaBrowser
 
         #region IModelItemOwner Members
 
-        protected void FirePropertyChanged(string property) {
-            if (PropertyChanged != null) {
+        protected void FirePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
                 PropertyChanged(this, property);
             }
         }
 
-        List<ModelItem> items = new List<ModelItem>(); 
+        List<ModelItem> items = new List<ModelItem>();
 
-        public void RegisterObject(ModelItem modelItem) {
+        public void RegisterObject(ModelItem modelItem)
+        {
             items.Add(modelItem);
         }
 
-        public void UnregisterObject(ModelItem modelItem) {
-            if (items.Exists((i) => i == modelItem)) {
+        public void UnregisterObject(ModelItem modelItem)
+        {
+            if (items.Exists((i) => i == modelItem))
+            {
                 // TODO : Invoke on the UI thread
                 modelItem.Dispose();
             }

@@ -24,7 +24,8 @@ namespace MediaBrowser.Library
     {
         static Item blank;
         static Dictionary<Type, ItemType> itemTypeMap;
-        static Item() {
+        static Item()
+        {
             itemTypeMap = new Dictionary<Type, ItemType>();
             itemTypeMap[typeof(Episode)] = ItemType.Episode;
             itemTypeMap[typeof(Movie)] = ItemType.Movie;
@@ -37,7 +38,7 @@ namespace MediaBrowser.Library
             item.Path = "";
             item.Name = "";
             blank.Assign(item);
-            
+
         }
 
         object loadMetadatLock = new object();
@@ -45,8 +46,8 @@ namespace MediaBrowser.Library
 
         PlayableItem playable;
         private PlaybackStatus playstate;
-        protected BaseItem baseItem; 
-        
+        protected BaseItem baseItem;
+
         protected int unwatchedCountCache = -1;
 
 
@@ -63,7 +64,7 @@ namespace MediaBrowser.Library
 
         #endregion
 
-        public BaseItem BaseItem { get { return baseItem;  } }
+        public BaseItem BaseItem { get { return baseItem; } }
 
         public FolderModel PhysicalParent { get; internal set; }
 
@@ -92,45 +93,56 @@ namespace MediaBrowser.Library
         {
             get
             {
-               return(baseItem is Video);
+                return (baseItem is Video);
             }
         }
 
         public bool IsNotVideo
         {
-            get {
+            get
+            {
                 bool isVideo = (baseItem is Video) || (baseItem is Movie);
                 return (baseItem is Folder) ? !((baseItem as Folder).HasVideoChildren) : !isVideo;
-            } 
+            }
         }
 
         // having this in Item and not in Folder helps us avoid lots of messy mcml 
-        public virtual bool ShowNewestItems {
-            get {
+        public virtual bool ShowNewestItems
+        {
+            get
+            {
                 return false;
             }
         }
 
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return BaseItem.Name;
             }
         }
 
-        public string LongName {
-            get {
+        public string LongName
+        {
+            get
+            {
                 return BaseItem.LongName;
             }
         }
 
-        public string Path {
-            get {
+        public string Path
+        {
+            get
+            {
                 return baseItem.Path;
             }
         }
 
-        public DateTime CreatedDate {
-            get {
+        public DateTime CreatedDate
+        {
+            get
+            {
                 return baseItem.DateCreated;
             }
         }
@@ -143,37 +155,47 @@ namespace MediaBrowser.Library
             }
         }
 
-        
-        public ItemType ItemType {
-            get {
+
+        public ItemType ItemType
+        {
+            get
+            {
                 ItemType type;
-                if (!itemTypeMap.TryGetValue(baseItem.GetType(), out type)) {
+                if (!itemTypeMap.TryGetValue(baseItem.GetType(), out type))
+                {
                     type = ItemType.None;
                 }
                 return type;
             }
         }
 
-        public string ItemTypeString {
-            get {
+        public string ItemTypeString
+        {
+            get
+            {
                 string[] items = BaseItem.GetType().ToString().Split('.');
                 return items[items.Length - 1];
             }
         }
 
-        public string MediaTypeString {
-            get {
+        public string MediaTypeString
+        {
+            get
+            {
                 string mediaType = "";
                 var video = baseItem as Video;
-                if (video != null) {
+                if (video != null)
+                {
                     mediaType = video.MediaType.ToString().ToLower();
                 }
                 return mediaType;
             }
         }
 
-        public bool IsRoot {
-            get {
+        public bool IsRoot
+        {
+            get
+            {
                 return baseItem.Id == Application.CurrentInstance.RootFolder.Id;
             }
         }
@@ -210,8 +232,10 @@ namespace MediaBrowser.Library
             }
         }
 
-        public bool SupportsMultiPlay {
-            get {
+        public bool SupportsMultiPlay
+        {
+            get
+            {
                 return baseItem is Folder;
             }
         }
@@ -242,25 +266,26 @@ namespace MediaBrowser.Library
         {
             try
             {
-                if (this.IsPlayable || this.IsFolder) {
+                if (this.IsPlayable || this.IsFolder)
+                {
 
                     if (PlayableItem.PlaybackController != Application.CurrentInstance.PlaybackController && PlayableItem.PlaybackController.RequiresExternalPage)
                     {
                         Application.CurrentInstance.OpenExternalPlaybackPage(this);
                     }
-                    this.PlayableItem.QueueItem = queue;                    
+                    this.PlayableItem.QueueItem = queue;
                     this.PlayableItem.Play(this.PlayState, resume);
                     if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
                     Async.Queue("Resume state updater", () =>
                     {
-                       Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
+                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
                     }, 10 * 1000);
                 }
             }
             catch (Exception)
             {
                 MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                ev.Dialog("There was a problem playing the content. Check location exists\n" + baseItem.Path, "Content Error", DialogButtons.Ok, 60, true);
+                ev.Dialog(Application.CurrentInstance.StringData("ContentErrorDial") + "\n" + baseItem.Path, Application.CurrentInstance.StringData("ContentErrorCapDial"), DialogButtons.Ok, 60, true);
             }
         }
 
@@ -275,17 +300,21 @@ namespace MediaBrowser.Library
             Play(false, true);
         }
 
-        public void Play() {
+        public void Play()
+        {
             Play(false);
         }
-        public void Resume() {
+        public void Resume()
+        {
             Play(true);
         }
 
-        public bool CanResume { 
-            get {
-                return PlayState==null?false:PlayState.CanResume;
-            } 
+        public bool CanResume
+        {
+            get
+            {
+                return PlayState == null ? false : PlayState.CanResume;
+            }
         }
         public string RecentDateString
         {
@@ -299,19 +328,20 @@ namespace MediaBrowser.Library
                         if (this.PlayState.PositionTicks > 0)
                         {
                             TimeSpan watchTime = new TimeSpan(this.PlayState.PositionTicks);
-                            watchTimeStr = " "+watchTime.TotalMinutes.ToString("F0")+" ";
+                            watchTimeStr = " " + watchTime.TotalMinutes.ToString("F0") + " ";
                             if (!String.IsNullOrEmpty(this.RunningTimeString))
                             {
-                                runTimeStr = "of " + RunningTimeString;
+                                runTimeStr = Kernel.Instance.StringData.GetString("OfEHS") + " " + RunningTimeString;
                             }
                             else
                             {
                                 runTimeStr = "mins"; //have watched time but not running time so tack on 'mins'
                             }
                         }
-                        return "Watched" + watchTimeStr + runTimeStr + " on " + LastPlayedString;
+                        return Kernel.Instance.StringData.GetString("WatchedEHS") + watchTimeStr + runTimeStr + " " +
+                            Kernel.Instance.StringData.GetString("OnEHS") + " " + LastPlayedString;
                     default:
-                        return "Added on "+CreatedDateString;
+                        return Kernel.Instance.StringData.GetString("AddedOnEHS") + " " + CreatedDateString;
                 }
             }
         }
@@ -319,8 +349,10 @@ namespace MediaBrowser.Library
         {
             FirePropertyChanged("QuickListItems");
         }
-        public string LastPlayedString {
-            get {
+        public string LastPlayedString
+        {
+            get
+            {
                 if (PlayState == null) return "";
                 return PlayState.LastPlayed == DateTime.MinValue ? "" : PlayState.LastPlayed.ToShortDateString();
             }
@@ -348,7 +380,8 @@ namespace MediaBrowser.Library
             }
         }
 
-        void PlaybackStatusPlayedChanged(object sender, EventArgs e) {
+        void PlaybackStatusPlayedChanged(object sender, EventArgs e)
+        {
             lock (watchLock)
                 unwatchedCountCache = -1;
             FirePropertyChanged("HaveWatched");
@@ -385,7 +418,7 @@ namespace MediaBrowser.Library
                 return (i == 0) ? "" : i.ToString();
             }
         }
-       
+
         public virtual int UnwatchedCount
         {
             get
@@ -394,7 +427,8 @@ namespace MediaBrowser.Library
                 if (baseItem is Video)
                 {
                     var video = baseItem as Video;
-                    if (video != null && !video.PlaybackStatus.WasPlayed) {
+                    if (video != null && !video.PlaybackStatus.WasPlayed)
+                    {
                         count = 1;
                     }
                 }
@@ -419,9 +453,12 @@ namespace MediaBrowser.Library
 
         internal virtual void SetWatched(bool value)
         {
-            if (IsPlayable) {
-                if (value != HaveWatched) {
-                    if (value && PlayState.PlayCount == 0) {
+            if (IsPlayable)
+            {
+                if (value != HaveWatched)
+                {
+                    if (value && PlayState.PlayCount == 0)
+                    {
                         PlayState.PlayCount = 1;
                         //remove ourselves from the unwatched list as well
                         if (this.PhysicalParent != null)
@@ -429,22 +466,24 @@ namespace MediaBrowser.Library
                             this.PhysicalParent.RemoveRecentlyUnwatched(this); //thought about asynch'ing this but its a list of 20 items...
                         }
                         //don't add to watched list as we didn't really watch it (and it might just clutter up the list)
-                        Application.CurrentInstance.Information.AddInformationString("Set Watched " + this.Name);
-                    } else {
+                        Application.CurrentInstance.Information.AddInformationString(string.Format(Application.CurrentInstance.StringData("SetWatchedProf"), this.Name));
+                    }
+                    else
+                    {
                         PlayState.PlayCount = 0;
                         //remove ourselves from the watched list as well
                         if (this.PhysicalParent != null)
                         {
                             this.PhysicalParent.RemoveNewlyWatched(this); //thought about asynch'ing this but its a list of 20 items...
                         }
-                        Application.CurrentInstance.Information.AddInformationString("Clear Watched " + this.Name);
+                        Application.CurrentInstance.Information.AddInformationString(string.Format(Application.CurrentInstance.StringData("ClearWatchedProf"), this.Name));
                     }
                     PlayState.Save();
                     lock (watchLock)
                         unwatchedCountCache = -1;
                 }
             }
-            
+
         }
 
         #endregion
@@ -454,22 +493,25 @@ namespace MediaBrowser.Library
 
         public void RefreshMetadata()
         {
-            Application.CurrentInstance.Information.AddInformationString("Refresh " + this.Name);
-            Async.Queue("UI Triggered Metadata Loader", () => { 
-                baseItem.RefreshMetadata(MetadataRefreshOptions.Force); 
+            Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshProf") + " " + this.Name);
+            Async.Queue("UI Triggered Metadata Loader", () =>
+            {
+                baseItem.RefreshMetadata(MetadataRefreshOptions.Force);
                 // force images to reload
                 primaryImage = null;
                 bannerImage = null;
                 primaryImageSmall = null;
-                Microsoft.MediaCenter.UI.Application.DeferredInvoke( _=> this.FireAllPropertiesChanged());
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });
         }
 
         #endregion
 
 
-        public bool IsPlayable {
-            get {
+        public bool IsPlayable
+        {
+            get
+            {
                 return baseItem is Media;
             }
         }
@@ -482,35 +524,40 @@ namespace MediaBrowser.Library
             }
         }
 
-        public FolderModel Season {
-            get {
+        public FolderModel Season
+        {
+            get
+            {
 
                 FolderModel season = null;
                 Episode episode = baseItem as Episode;
                 FolderModel parent = PhysicalParent;
 
-                    if (episode != null)
-                    {
-                       season = ItemFactory.Instance.Create(episode.Season) as FolderModel;
-                    }
+                if (episode != null)
+                {
+                    season = ItemFactory.Instance.Create(episode.Season) as FolderModel;
+                }
 
                 return season;
             }
         }
 
 
-        public FolderModel Series {
-            get {
+        public FolderModel Series
+        {
+            get
+            {
 
                 FolderModel series = null;
 
-                Episode episode = baseItem as Episode; 
+                Episode episode = baseItem as Episode;
                 Season season = baseItem as Season;
 
                 FolderModel parent = PhysicalParent;
                 FolderModel grandParent = null;
-                
-                if (parent != null) {
+
+                if (parent != null)
+                {
                     grandParent = PhysicalParent.PhysicalParent;
                 }
                 /*
@@ -518,19 +565,25 @@ namespace MediaBrowser.Library
                     series = parent;
                 }
                 */
-                if (series == null) {
+                if (series == null)
+                {
 
-                    if (episode != null) {
+                    if (episode != null)
+                    {
 
-                        if (grandParent != null && grandParent.baseItem is Series) {
+                        if (grandParent != null && grandParent.baseItem is Series)
+                        {
                             series = grandParent;
                         }
 
-                        if (series == null) {
+                        if (series == null)
+                        {
                             series = ItemFactory.Instance.Create(episode.Series) as FolderModel;
                         }
 
-                    } else if (series != null) {
+                    }
+                    else if (series != null)
+                    {
                         series = ItemFactory.Instance.Create(season.Parent) as FolderModel;
 
                     }
@@ -539,8 +592,10 @@ namespace MediaBrowser.Library
             }
         }
 
-        public string SeasonNumber {
-            get {
+        public string SeasonNumber
+        {
+            get
+            {
                 Episode episode = baseItem as Episode;
                 if (episode != null)
                 {
@@ -572,7 +627,8 @@ namespace MediaBrowser.Library
         }
 
         // this is a shortcut for MCML
-        public void ProcessCommand(RemoteCommand command) {
+        public void ProcessCommand(RemoteCommand command)
+        {
             PlayableItem.PlaybackController.ProcessCommand(command);
         }
 
@@ -584,15 +640,18 @@ namespace MediaBrowser.Library
             }
         }
 
-        internal PlayableItem PlayableItem {
-            get {
+        internal PlayableItem PlayableItem
+        {
+            get
+            {
                 if (!IsPlayable && !IsFolder) return null;
 
                 Media media = baseItem as Media;
 
                 if (media != null && playable == null)
                     lock (this)
-                        if (playable == null) {
+                        if (playable == null)
+                        {
                             playable = PlayableItemFactory.Instance.Create(media);
                         }
 
@@ -604,35 +663,44 @@ namespace MediaBrowser.Library
                     lock (this)
                         if (playable == null)
                         {
-                            playable = PlayableItemFactory.Instance.Create(folder);                            
+                            playable = PlayableItemFactory.Instance.Create(folder);
                         }
 
                 return playable;
             }
         }
 
-        public bool ContainsTrailers {
-            get {
+        public bool ContainsTrailers
+        {
+            get
+            {
                 var movie = BaseItem as Movie;
-                return (movie != null && movie.ContainsTrailers); 
+                return (movie != null && movie.ContainsTrailers);
             }
         }
 
-        public void PlayTrailers() { 
+        public void PlayTrailers()
+        {
             var movie = BaseItem as Movie;
-            if (movie.ContainsTrailers) {
+            if (movie.ContainsTrailers)
+            {
                 var trailerFiles = movie.TrailerFiles.ToArray();
                 string filename = null;
-                if (trailerFiles.Length == 1) {
-                    filename = trailerFiles[0];                
+                if (trailerFiles.Length == 1)
+                {
+                    filename = trailerFiles[0];
                 }
-                if (trailerFiles.Length > 1) {
+                if (trailerFiles.Length > 1)
+                {
                     filename = PlayableItem.CreateWPLPlaylist(BaseItem.Name, trailerFiles);
                 }
 
-                if (filename != null) {
-                    foreach (var controller in Kernel.Instance.PlaybackControllers) {
-                        if (controller.CanPlay(filename)) {
+                if (filename != null)
+                {
+                    foreach (var controller in Kernel.Instance.PlaybackControllers)
+                    {
+                        if (controller.CanPlay(filename))
+                        {
                             controller.PlayMedia(filename);
                             controller.GoToFullScreen();
                             break;

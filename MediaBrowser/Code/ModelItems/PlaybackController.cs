@@ -15,9 +15,11 @@ using MediaBrowser.Library.Threading;
 using System.Reflection;
 
 
-namespace MediaBrowser {
+namespace MediaBrowser
+{
 
-    public class PlaybackController : BaseModelItem, IPlaybackController {
+    public class PlaybackController : BaseModelItem, IPlaybackController
+    {
 
         volatile EventHandler<PlaybackStateEventArgs> progressHandler;
         Thread governatorThread;
@@ -25,11 +27,12 @@ namespace MediaBrowser {
         bool terminate = false;
 
         // dont allow multicast events 
-        public event EventHandler<PlaybackStateEventArgs> OnProgress { 
+        public event EventHandler<PlaybackStateEventArgs> OnProgress
+        {
             add
             {
                 progressHandler = value;
-            } 
+            }
             remove
             {
                 if (progressHandler == value)
@@ -48,7 +51,8 @@ namespace MediaBrowser {
         }
 
         // Default controller can play everything
-        public virtual bool CanPlay(string filename) {
+        public virtual bool CanPlay(string filename)
+        {
             return true;
         }
 
@@ -60,11 +64,12 @@ namespace MediaBrowser {
 
         // commands are not routed in this way ... 
         public virtual void ProcessCommand(RemoteCommand command)
-        { 
+        {
             // dont do anything (only plugins need to handle this)
         }
 
-        public PlaybackController() {
+        public PlaybackController()
+        {
             PlayState = PlayState.Undefined;
             governatorThread = new Thread(GovernatorThreadProc);
             governatorThread.IsBackground = true;
@@ -73,7 +78,8 @@ namespace MediaBrowser {
 
 
         bool lastWasDVD = true;
-        public virtual void PlayDVD(string path) {
+        public virtual void PlayDVD(string path)
+        {
             PlayPath(path);
             lastWasDVD = true;
             returnedToApp = false;
@@ -88,20 +94,23 @@ namespace MediaBrowser {
 
             // vista bug - stop play stop required so we automate it ...
             var version = System.Environment.OSVersion.Version;
-            if (version.Major == 6 && version.Minor == 0 && MediaBrowser.Library.Kernel.Instance.ConfigData.EnableVistaStopPlayStopHack) {
+            if (version.Major == 6 && version.Minor == 0 && MediaBrowser.Library.Kernel.Instance.ConfigData.EnableVistaStopPlayStopHack)
+            {
                 var mce = AddInHost.Current.MediaCenterEnvironment;
                 WaitForStream(mce);
                 //pause
 
-                Async.Queue("Playback Pauser",() => {
-                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => {
+                Async.Queue("Playback Pauser", () =>
+                {
+                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                    {
                         mce.MediaExperience.Transport.PlayRate = 1;
                         mce.MediaExperience.Transport.PlayRate = 2;
-                    
+
                     });
                 }, 2000);
 
-                
+
             }
         }
 
@@ -130,16 +139,19 @@ namespace MediaBrowser {
             mce.MediaExperience.Transport.Position = new TimeSpan(position);
         }
 
-        private static void WaitForStream(MediaCenterEnvironment mce) {
+        private static void WaitForStream(MediaCenterEnvironment mce)
+        {
             int i = 0;
-            while ((i++ < 15) && (mce.MediaExperience.Transport.PlayState != Microsoft.MediaCenter.PlayState.Playing)) {
+            while ((i++ < 15) && (mce.MediaExperience.Transport.PlayState != Microsoft.MediaCenter.PlayState.Playing))
+            {
                 // settng the position only works once it is playing and on fast multicore machines we can get here too quick!
                 Thread.Sleep(100);
             }
         }
 
 
-        private void PlayPath(string path) {
+        private void PlayPath(string path)
+        {
             PlayPath(path, Microsoft.MediaCenter.MediaType.Video, false);
         }
 
@@ -165,36 +177,43 @@ namespace MediaBrowser {
             var mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
 
             // great window 7 has bugs, lets see if we can work around them 
-            if (mce == null) {
+            if (mce == null)
+            {
                 System.Threading.Thread.Sleep(200);
                 mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
-                if (mce == null) {
-                    try {
+                if (mce == null)
+                {
+                    try
+                    {
                         var fi = AddInHost.Current.MediaCenterEnvironment.GetType()
                             .GetField("_checkedMediaExperience", BindingFlags.NonPublic | BindingFlags.Instance);
-                        if (fi != null) {
+                        if (fi != null)
+                        {
                             fi.SetValue(AddInHost.Current.MediaCenterEnvironment, false);
                             mce = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
                         }
-      
-                    } catch (Exception e) { 
+
+                    }
+                    catch (Exception e)
+                    {
                         // give up ... I do not know what to do 
                         Logger.ReportException("AddInHost.Current.MediaCenterEnvironment.MediaExperience is null", e);
                     }
-                
+
                 }
             }
 
-            if (mce != null) {
+            if (mce != null)
+            {
                 mce.GoToFullScreen();
-            } 
-            else 
+            }
+            else
             {
                 Logger.ReportError("AddInHost.Current.MediaCenterEnvironment.MediaExperience is null, we have no way to go full screen!");
-                
-              
-                
-                AddInHost.Current.MediaCenterEnvironment.Dialog("We can not maximize the window! This is a known bug with Windows 7 and TV Pack, you will have to restart Media Browser!", "", Microsoft.MediaCenter.DialogButtons.Ok, 0, true);
+
+
+
+                AddInHost.Current.MediaCenterEnvironment.Dialog(Application.CurrentInstance.StringData("CannotMaximizeDial"), "", Microsoft.MediaCenter.DialogButtons.Ok, 0, true);
             }
         }
 
@@ -222,64 +241,83 @@ namespace MediaBrowser {
         const int ForceRefreshMillisecs = 5000;
         private void GovernatorThreadProc()
         {
-            try {
-                while (!terminate) {
-                    lock (sync) {
+            try
+            {
+                while (!terminate)
+                {
+                    lock (sync)
+                    {
                         Monitor.Wait(sync, ForceRefreshMillisecs);
-                        if (!MediaBrowser.Library.Kernel.Instance.ConfigData.EnableResumeSupport) {
+                        if (!MediaBrowser.Library.Kernel.Instance.ConfigData.EnableResumeSupport)
+                        {
                             continue;
                         }
-                        if (terminate) {
+                        if (terminate)
+                        {
                             break;
                         }
-                        if (progressHandler != null) {
+                        if (progressHandler != null)
+                        {
                             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => AttachAndUpdateStatus());
                         }
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Logger.ReportException("Governator thread proc died!", e); 
+                Logger.ReportException("Governator thread proc died!", e);
             }
         }
 
         private void AttachAndUpdateStatus()
         {
-            try {
+            try
+            {
                 var transport = MediaTransport;
-                if (transport != null) {
-                    if (transport.PlayState != PlayState) {
+                if (transport != null)
+                {
+                    if (transport.PlayState != PlayState)
+                    {
                         ReAttach();
                     }
                     UpdateStatus();
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 // dont crash the background thread 
                 Logger.ReportException("FAIL: something is wrong with media experience!", e);
                 mediaTransport = null;
             }
         }
 
-        protected MediaExperience MediaExperience {
-            get {
+        protected MediaExperience MediaExperience
+        {
+            get
+            {
                 return AddInHost.Current.MediaCenterEnvironment.MediaExperience;
             }
         }
 
         private MediaTransport mediaTransport;
-        protected MediaTransport MediaTransport {
-            get {
+        protected MediaTransport MediaTransport
+        {
+            get
+            {
                 if (mediaTransport != null) return mediaTransport;
-                try {
+                try
+                {
                     MediaExperience experience;
-                    
+
                     experience = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
 
-                    if (experience != null) {
+                    if (experience != null)
+                    {
                         mediaTransport = experience.Transport;
                     }
-                } catch (InvalidOperationException e) { 
+                }
+                catch (InvalidOperationException e)
+                {
                     // well if we are inactive we are not allowed to get media experience ...
                     Logger.ReportException("EXCEPTION : ", e);
                 }
@@ -290,19 +328,22 @@ namespace MediaBrowser {
         protected virtual void ReAttach()
         {
             var transport = MediaTransport;
-            if (transport != null) {
+            if (transport != null)
+            {
                 transport.PropertyChanged -= new PropertyChangedEventHandler(TransportPropertyChanged);
-                transport.PropertyChanged += new PropertyChangedEventHandler(TransportPropertyChanged);  
+                transport.PropertyChanged += new PropertyChangedEventHandler(TransportPropertyChanged);
             }
         }
 
         DateTime lastCall = DateTime.Now;
 
-        void TransportPropertyChanged(IPropertyObject sender, string property) {
+        void TransportPropertyChanged(IPropertyObject sender, string property)
+        {
             // protect against really agressive calls
             var diff = (DateTime.Now - lastCall).TotalMilliseconds;
             // play state is critical otherwise stop hack for win 7 will not work.
-            if (diff < 1000 && diff >= 0 && property != "PlayState") {
+            if (diff < 1000 && diff >= 0 && property != "PlayState")
+            {
                 return;
             }
 
@@ -315,53 +356,65 @@ namespace MediaBrowser {
 
         long position;
         string title;
-        private void UpdateStatus() {
+        private void UpdateStatus()
+        {
             var transport = MediaTransport;
             PlayState state = PlayState.Undefined;
-            if (transport != null) {
+            if (transport != null)
+            {
                 state = transport.PlayState;
                 long position = transport.Position.Ticks;
                 string title = null;
-                try {
+                try
+                {
                     title = MediaExperience.MediaMetadata["Title"] as string;
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Logger.ReportException("Failed to get title on current media item!", e);
                 }
 
-                if (title != null && progressHandler != null && (this.title != title || this.position != position)) {
+                if (title != null && progressHandler != null && (this.title != title || this.position != position))
+                {
 
                     Logger.ReportVerbose("progressHandler was called with : position =" + position.ToString() + " title :" + title);
 
-                    progressHandler(this, new PlaybackStateEventArgs() {Position = position, Title = title});
+                    progressHandler(this, new PlaybackStateEventArgs() { Position = position, Title = title });
                     this.title = title;
                     this.position = position;
                 }
             }
 
-            if (state != PlayState) {
+            if (state != PlayState)
+            {
                 PlayState = state;
-                Microsoft.MediaCenter.UI.Application.DeferredInvoke( _ => PlayStateChanged());
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => PlayStateChanged());
                 Application.CurrentInstance.ShowNowPlaying = (
-                    (state == Microsoft.MediaCenter.PlayState.Playing) || 
+                    (state == Microsoft.MediaCenter.PlayState.Playing) ||
                     (state == Microsoft.MediaCenter.PlayState.Paused));
             }
 
 
-             if (IsWindows7) {
-                 if (lastWasDVD && !returnedToApp && state == PlayState.Stopped) {
-                     Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
-                     {
-                         AddInHost.Current.ApplicationContext.ReturnToApplication();
-                     });
-                     returnedToApp = true;
-                 }
-             }
+            if (IsWindows7)
+            {
+                if (lastWasDVD && !returnedToApp && state == PlayState.Stopped)
+                {
+                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                    {
+                        AddInHost.Current.ApplicationContext.ReturnToApplication();
+                    });
+                    returnedToApp = true;
+                }
+            }
         }
 
         static bool? isWindows7;
-        private static bool IsWindows7 {
-            get {
-                if (!isWindows7.HasValue) {
+        private static bool IsWindows7
+        {
+            get
+            {
+                if (!isWindows7.HasValue)
+                {
                     var version = System.Environment.OSVersion.Version;
                     isWindows7 = version.Major == 6 && version.Minor == 1;
                 }
@@ -371,7 +424,8 @@ namespace MediaBrowser {
 
         bool returnedToApp = true;
 
-        private void PlayStateChanged() {
+        private void PlayStateChanged()
+        {
             FirePropertyChanged("PlayState");
             FirePropertyChanged("IsPlaying");
             FirePropertyChanged("IsStopped");
@@ -381,20 +435,24 @@ namespace MediaBrowser {
         public virtual void Pause()
         {
             var transport = MediaTransport;
-            if (transport != null) {
+            if (transport != null)
+            {
                 transport.PlayRate = 1;
             }
         }
 
 
-        protected override void Dispose(bool isDisposing) {
+        protected override void Dispose(bool isDisposing)
+        {
 
             Logger.ReportInfo("Playback controller is being disposed");
 
-            if (isDisposing) {
-                lock (sync) {
+            if (isDisposing)
+            {
+                lock (sync)
+                {
                     terminate = true;
-                    Monitor.Pulse(sync); 
+                    Monitor.Pulse(sync);
                 }
             }
 

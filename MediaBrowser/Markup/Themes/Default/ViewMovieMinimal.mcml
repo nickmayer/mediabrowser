@@ -19,7 +19,7 @@
     xmlns:gb="resx://MediaBrowser/MediaBrowser.Resources/GenreButton"
     xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
     xmlns:pb="resx://MediaBrowser/MediaBrowser.Resources/PersonButton"
-    xmlns:db="resx://MediaBrowser/MediaBrowser.Resources/DirectorButton"  
+    xmlns:db="resx://MediaBrowser/MediaBrowser.Resources/DirectorButton"
     xmlns:me="Me"
     >
 
@@ -34,7 +34,6 @@
     </Properties>
 
     <Locals>
-
       <a:Clock Name="Clock"/>
       <Choice Name="Model">
         <Options>
@@ -47,11 +46,16 @@
           <cor:String String="Actors" />
         </Options>
       </Choice>
-      
+
       <Color Name="FilterColor" Color="color://s:FilterColor" />
     </Locals>
 
     <Rules>
+      <!--<Rule>
+        <Actions>
+          <Invoke ResultTarget="[Model.Value]" Target="[Application.StringData]" name="General" />
+        </Actions>
+      </Rule>-->
       <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true" ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Item.HasBackdropImage]" Value="true"/>
@@ -63,8 +67,8 @@
         </Actions>
       </Changed>
 
-      
-      <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" /> 
+
+      <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
       <Binding Source="[Item.Name]" Target="[TitleName.Content]" />
 
       <Binding Source="[Item.ProductionYearString]" Target="[ProductionYear.Content]" >
@@ -91,7 +95,7 @@
           <Set Target="[TimeText.Visible]" Value="true" />
           <Set Target="[TimeClip.Visible]" Value="true" />
         </Actions>
-      </Rule>      
+      </Rule>
 
       <Condition Source="[Item.Actors.Count]" ConditionOp="LessThan" SourceValue="1" Target="[ActorScroller.Visible]" Value="false" />
       <Condition Source="[Item.Actors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[Model]" Value="[ModelWithActors]" />
@@ -101,12 +105,12 @@
       <!-- Show and hide Selectors -->
       <Condition Source="[Model.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Info.Visible]" Value="true" />
       <Condition Source="[Model.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[ActorScroller.Visible]" Value="true" />
-      
+
     </Rules>
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
-        
+
         <Children>
 
           <!-- Movie Title -->
@@ -127,7 +131,7 @@
                   </Panel>
                 </Children>
               </Panel>
-              
+
             </Children>
           </Clip>
           <Clip Name="TitleClip" FadeSize="100" Orientation="Horizontal" ShowFar="false" FadeAmount="1" NearOffset="25" >
@@ -238,7 +242,7 @@
               <FormLayoutInput Top="Parent,0,-20" Left="Parent,0,-50" Bottom="Parent,1,10" Right="Parent,1,50" />
             </LayoutInput>
             <Children>
-                <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]"/>
+              <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]"/>
             </Children>
           </ColorFill>
 
@@ -266,7 +270,7 @@
       <Command Name="RefreshMovieCommand" />
       <Command Name="DeleteMovieCommand" />
       <Command Name="PlayTrailersCommand" />
-      <Command Name="NullCommand" />      
+      <Command Name="NullCommand" />
     </Locals>
 
     <Rules>
@@ -297,20 +301,20 @@
           <Invoke Target="[Item.RefreshMetadata]"/>
         </Actions>
       </Changed>
-            
+
       <Changed Source="[DeleteMovieCommand.Invoked]">
         <Actions>
           <Invoke Target="[Application.DeleteMediaItem]">
             <Item>
               <lib:Item Item="[Item]"/>
-            </Item>            
+            </Item>
           </Invoke>
         </Actions>
       </Changed>
 
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
-      <Rule ConditionLogicalOp="And">        
+      <Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Application.Config.Advanced_EnableDelete]" ConditionOp="Equals" Value="true" />
           <Equality Source="[Application.Config.EnableAdvancedCmds]" ConditionOp="Equals" Value="true" />
@@ -319,13 +323,25 @@
           <Set Target="[DeleteMovieButton.Visible]" Value="true" />
         </Actions>
       </Rule>
-      
+
+      <Rule>
+        <Actions>
+          <Invoke ResultTarget="[ResumeMovieButton.Text]" Target="[Application.StringData]" name="ResumeDetail" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[PlayMovieButton.Text]" Target="[Application.StringData]" name="PlayDetail" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[RefreshMovieButton.Text]" Target="[Application.StringData]" name="RefreshDetail" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[PlayTrailersButton.Text]" Target="[Application.StringData]" name="PlayTrailersDetail" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[CacheMovieButton.Text]" Target="[Application.StringData]" name="CacheDetail" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[DeleteMovieButton.Text]" Target="[Application.StringData]" name="DeleteDetail" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+
     </Rules>
-    
+
     <Content>
       <Panel Layout="Anchor">
         <Children>
-          
+
           <Panel Name="PlayPanel" Layout="Anchor">
             <LayoutInput>
               <FormLayoutInput Left="Parent,0,0" Top="Parent,0,0" />
@@ -334,17 +350,17 @@
               <ColorFill Content="Transparent" Layout="VerticalFlow"
                          Padding="0,10,100,10" Margins="20,0,0,0" Navigation="ContainHorizontal, RememberFocus" >
                 <Children>
-                  <ib:ImageButton Name="ResumeMovieButton" Text="Resume" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
-                  <ib:ImageButton Name="PlayMovieButton" Text="Play" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <ib:ImageButton Name="RefreshMovieButton" Text="Refresh" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <ib:ImageButton Name="PlayTrailersButton" Text="Play Trailer" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <ib:ImageButton Name="CacheMovieButton" Text="Cache 2 xml" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
-                  <ib:ImageButton Name="DeleteMovieButton" Text="Delete" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />                  
+                  <ib:ImageButton Name="ResumeMovieButton" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
+                  <ib:ImageButton Name="PlayMovieButton" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="RefreshMovieButton" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="PlayTrailersButton" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="CacheMovieButton" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
+                  <ib:ImageButton Name="DeleteMovieButton" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                 </Children>
               </ColorFill>
             </Children>
           </Panel>
-          
+
           <Clip Name="PlayClip" FadeSize="100" Orientation="Horizontal" ShowNear="false" FadeAmount="1" FarOffset="-25" >
             <LayoutInput>
               <AnchorLayoutInput Top="PlayPanel,0" Bottom="PlayPanel,1" Left="PlayPanel,0" Right="PlayPanel,1" />
@@ -373,7 +389,7 @@
       <Command Name="ScrollUpCommand" />
       <Command Name="ScrollDownCommand" />
 
-      <GridLayout Name="MyLayout" Orientation="Horizontal" Rows="0" 
+      <GridLayout Name="MyLayout" Orientation="Horizontal" Rows="0"
 							  AllowWrap="true" Spacing="0,5"  />
 
     </Locals>
@@ -436,7 +452,7 @@
         </Actions>
       </Rule>
 
-      </Rules>
+    </Rules>
     <Content>
       <!-- Cast (Actors) -->
       <Panel Name="MovieActors" Layout="Dock">
@@ -495,11 +511,11 @@
       <lib:ActorItemWrapper Name="aiw" ActorItemWrapper="$Required" />
       <Font Name="Font" Font="$Required"/>
     </Properties>
-    
+
     <Locals>
       <Command Name="NavigateToActorsCommand"/>
     </Locals>
-    
+
     <Rules>
       <Changed Source="[NavigateToActorsCommand.Invoked]">
         <Actions>
@@ -507,12 +523,12 @@
         </Actions>
       </Changed>
     </Rules>
-    
+
     <Content>
       <Panel Layout="HorizontalFlow" >
         <Children>
           <pb:PersonButton PersonItem="[aiw]" Color="color://s:FontColorMedium" Command="[NavigateToActorsCommand]" />
-         <!-- <sb:SimpleButton Text="[actor.DisplayName]" Font="[Font]" Command="[NavigateToActorsCommand]" Size="230,40" LeftAlign="true"  />
+          <!-- <sb:SimpleButton Text="[actor.DisplayName]" Font="[Font]" Command="[NavigateToActorsCommand]" Size="230,40" LeftAlign="true"  />
           <Text Name="ActorRole" Font="[Font]" Color="color://s:FontColorMedium" Content="[aiw.Actor.DisplayName]" MinimumSize="150,40" />-->
         </Children>
       </Panel>
@@ -552,6 +568,32 @@
       </Changed>
 
       <Binding Target="[MediaInfoPane.Visible]" Source="[Item.HasMediaInfo]" />
+
+      <Rule>
+        <Actions>
+          <Invoke ResultTarget="[IMDBText.Content]" Target="[Application.StringData]" name="IMDBRatingDetail" ExclusiveApply="false">
+            <Transformer>
+              <FormatTransformer ToUpper="true"/>
+            </Transformer>
+          </Invoke>
+          <Invoke ResultTarget="[OutOfText.Content]" Target="[Application.StringData]" name="OutOfDetail" ExclusiveApply="false">
+            <Transformer>
+              <FormatTransformer Format="{0} 10"/>
+            </Transformer>
+          </Invoke>
+          <Invoke ResultTarget="[DirectorText.Content]" Target="[Application.StringData]" name="DirectorDetail" ExclusiveApply="false">
+            <Transformer>
+              <FormatTransformer ToUpper="true"/>
+            </Transformer>
+          </Invoke>
+          <Invoke ResultTarget="[RuntimeText.Content]" Target="[Application.StringData]" name="RuntimeDetail" ExclusiveApply="false">
+            <Transformer>
+              <FormatTransformer ToUpper="true"/>
+            </Transformer>
+          </Invoke>
+        </Actions>
+      </Rule>
+
     </Rules>
     <Content>
       <Panel Margins="0,0,0,0" >
@@ -570,7 +612,7 @@
                 <Layout>
                   <FlowLayout Orientation="Horizontal" AllowWrap="true"  Spacing="25,0"  />
                 </Layout>
-                
+
                 <Divider>
                   <Text Content="●" Font="font://f:MM_GenreFont" Color="color://s:FontColorMedium" Alpha="0.6"  />
                 </Divider>
@@ -592,7 +634,7 @@
                   <Text Name="MediaInfo" Font="Arial, 12" Color="[ValueColor]" WordWrap="true" />
                 </Children>
               </Panel>
-              
+
             </Children>
             <Animations>
               <TransformAnimation Delay="0.3">
@@ -618,7 +660,7 @@
                   <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="10,0,0,0" MaximumSize="0,30"/>
                   <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
                 </Children>
-                
+
               </Panel>
 
               <Panel Name="IMDBRatingPanel" Visible="false">
@@ -626,15 +668,15 @@
                   <FlowLayout Orientation="Horizontal"/>
                 </Layout>
                 <Children>
-                  <Text Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" Content="IMDB RATING"  MinimumSize="140,0"/>
+                  <Text Name="IMDBText" Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" MinimumSize="140,0"/>
                   <Text Name="IMDBRating" Content="" Color="[ValueColor]" Font="font://f:MM_ItemFont"/>
-                  <Text Font="font://f:MM_ItemFont" Color="[ValueColor]" Content=" out of 10"/>
+                  <Text Name="OutOfText" Font="font://f:MM_ItemFont" Color="[ValueColor]"/>
                 </Children>
               </Panel>
 
               <Panel Name="DirectedByPanel" Layout="HorizontalFlow" Visible="false">
                 <Children>
-                  <Text Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" Content="DIRECTOR" MinimumSize="140,0"/>
+                  <Text Name="DirectorText" Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" MinimumSize="140,0"/>
                   <!--<Text Name="Director" Font="font://f:MM_ItemFont" WordWrap="true" MaximumLines="3" Color="[ValueColor]" Content="[Item.DirectorString]"/>-->
                   <Repeater Name="DirectorRepeater" Source="[Item.Directors]" Margins="0,0,0,0" MaximumSize="0,150" >
                     <Layout>
@@ -652,7 +694,7 @@
 													/>
                     </Content>
                   </Repeater>
-                
+
                 </Children>
               </Panel>
 
@@ -661,7 +703,7 @@
                   <FlowLayout Orientation="Horizontal"/>
                 </Layout>
                 <Children>
-                  <Text Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" Content="RUNTIME" MinimumSize="140,0"/>
+                  <Text Name="RuntimeText" Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" MinimumSize="140,0"/>
                   <Text Name="Runtime" Content="[Item.RunningTimeString]"
 										  Font="font://f:MM_ItemFont" Color="[ValueColor]" />
                 </Children>
@@ -704,7 +746,7 @@
           </Panel>
         </Children>
 
-        
+
       </Panel>
     </Content>
   </UI>

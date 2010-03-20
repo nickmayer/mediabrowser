@@ -18,7 +18,7 @@
     xmlns:pv="resx://MediaBrowser/MediaBrowser.Resources/Pivot"
     xmlns:pe="resx://MediaBrowser/MediaBrowser.Resources/PINEdit"
     xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
-    xmlns:pu="resx://MediaBrowser/MediaBrowser.Resources/PluginUpdateButton"  
+    xmlns:pu="resx://MediaBrowser/MediaBrowser.Resources/PluginUpdateButton"
 	  xmlns:me="Me"
 	  >
 
@@ -139,8 +139,10 @@
           <cor:String String="Media Options" />
           <cor:String String="Themes" />
           <cor:String String="Parental Control" />
-          --><!--<cor:String String="Other" />        
-          <cor:String String="Test" />--><!--
+          -->
+        <!--<cor:String String="Other" />        
+          <cor:String String="Test" />-->
+        <!--
         </Options>-->
       </Choice>
 
@@ -172,10 +174,14 @@
       </Choice>
       <Choice Name="ViewThemeModel" Options="[Application.AvailableThemeNames]">
         <!--<Options Source="">
-          --><!--<cor:String String="Classic" />--><!--
-          --><!--<cor:String String="Default" />
+          -->
+        <!--<cor:String String="Classic" />-->
+        <!--
+          -->
+        <!--<cor:String String="Default" />
           <cor:String String="Diamond" />
-          <cor:String String="Vanilla" />--><!--
+          <cor:String String="Vanilla" />-->
+        <!--
         </Options>-->
       </Choice>
       <BooleanChoice Name="ThemeLoaded" Value="false" />
@@ -225,13 +231,13 @@
           <Invoke Target="[Application.FinishInitialConfig]" />
         </Actions>
       </Changed>
-      <Changed Source="[Back.Invoked]">        
+      <Changed Source="[Back.Invoked]">
         <Conditions>
           <Equality Source="[Application.EntryPointPath]" Value="[Application.ConfigEntryPointVal]" />
         </Conditions>
         <Actions>
           <Invoke Target="[Application.Close]" />
-        </Actions>        
+        </Actions>
       </Changed>
       <Changed Source="[Back.Invoked]">
         <Conditions>
@@ -407,11 +413,11 @@
           <Set Target="[FullConfigNav.Visible]" Value="false" />
         </Actions>
       </Condition>
-      
-      
-      
 
-      <!-- Backdrop Visbile Bindings -->      
+
+
+
+      <!-- Backdrop Visbile Bindings -->
       <Binding Source="[Application.Config.ShowRootBackground]" Target="[BG_InitialFolder.Visible]" />
       <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
 
@@ -419,6 +425,93 @@
       <Binding Source="[ShowConfigButton.Value]" Target="[Config.ShowConfigButton]" />
       <Binding Source="[AlphaBlending.Value]" Target="[Config.AlphaBlending]" />
       <Binding Source="[Application.PluginUpdatesAvailable]" Target="[UpdateButton.Visible]" />
+
+      <Rule>
+        <Actions>
+          <Invoke ResultTarget="[Configuration.Content]" Target="[Application.StringData]" name="ConfigConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Version.Content]" Target="[Application.StringData]" name="VersionConfig" InvokePolicy="Synchronous" ExclusiveApply="false">
+            <Transformer>
+              <FormatTransformer Format="{0}: "/>
+            </Transformer>
+          </Invoke>
+          <Invoke ResultTarget="[GeneralInit.Text]" Target="[Application.StringData]" name="GeneralConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[TrackingInit.Text]" Target="[Application.StringData]" name="TrackingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AssumeWatchedInit.Label]" Target="[Application.StringData]" name="AssumeWatchedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[MetadataInit.Text]" Target="[Application.StringData]" name="MetadataConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AllowInternetInit.Label]" Target="[Application.StringData]" name="AllowInternetConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[UpdatesInit.Text]" Target="[Application.StringData]" name="UpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoUpdatesInit.Label]" Target="[Application.StringData]" name="AutoUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ContinueBtn.Text]" Target="[Application.StringData]" name="ContinueConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[BackBtn.Text]" Target="[Application.StringData]" name="ContinueConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ResetConfigBtn.Text]" Target="[Application.StringData]" name="ResetConfigBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ClearCacheBtn.Text]" Target="[Application.StringData]" name="ClearCacheBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[UnlockPCBtn.Text]" Target="[Application.StringData]" name="UnlockPCBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[General.Text]" Target="[Application.StringData]" name="GeneralConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Logging.Label]" Target="[Application.StringData]" name="LoggingConfig" InvokePolicy="Synchronous" ExclusiveApply="false">
+            <Transformer>
+              <FormatTransformer Format="{0}                   "/>
+            </Transformer>
+          </Invoke>
+          <Invoke ResultTarget="[Metadata.Text]" Target="[Application.StringData]" name="MetadataConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AllowInternet.Label]" Target="[Application.StringData]" name="AllowInternetConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Updates.Text]" Target="[Application.StringData]" name="UpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoUpdates.Label]" Target="[Application.StringData]" name="AutoUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[BetaUpdates.Label]" Target="[Application.StringData]" name="BetaUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Global.Text]" Target="[Application.StringData]" name="GlobalConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableEHS.Label]" Target="[Application.StringData]" name="EnableEHSConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowClockC.Label]" Target="[Application.StringData]" name="ShowClockConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[DimUnselectedPostersC.Label]" Target="[Application.StringData]" name="DimUnselectedPostersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[HideFocusFrameC.Label]" Target="[Application.StringData]" name="HideFocusFrameConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AlwaysShowDetailsPageC.Label]" Target="[Application.StringData]" name="AlwaysShowDetailsPageConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ExcludeRemoteContentInSearchC.Label]" Target="[Application.StringData]" name="ExcludeRemoteContentInSearchConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableMouseHookC.Label]" Target="[Application.StringData]" name="EnableMouseHookConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Views.Text]" Target="[Application.StringData]" name="ViewsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[GridSpacingC.Label]" Target="[Application.StringData]" name="GridSpacingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ThumbStripPosterWidthC.Label]" Target="[Application.StringData]" name="ThumbStripPosterWidthConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[BreadcrumbCountC.Label]" Target="[Application.StringData]" name="BreadcrumbCountConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowBackdropC.Label]" Target="[Application.StringData]" name="ShowBackdropConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowRootBackgroundC.Label]" Target="[Application.StringData]" name="ShowRootBackgroundConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowThemeBackgroundC.Label]" Target="[Application.StringData]" name="ShowThemeBackgroundConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowHDIndicatorOnPostersC.Label]" Target="[Application.StringData]" name="ShowHDIndicatorOnPostersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowRemoteIndicatorOnPostersC.Label]" Target="[Application.StringData]" name="ShowRemoteIndicatorOnPostersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableAdvancedCmdsC.Label]" Target="[Application.StringData]" name="EnableAdvancedCmdsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[MediaTracking.Text]" Target="[Application.StringData]" name="MediaTrackingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[RememberIndexingC.Label]" Target="[Application.StringData]" name="RememberIndexingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowUnwatchedCountC.Label]" Target="[Application.StringData]" name="ShowUnwatchedCountConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowWatchedTickOnFoldersC.Label]" Target="[Application.StringData]" name="ShowWatchedTickOnFoldersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowUnwatchedIndicatorC.Label]" Target="[Application.StringData]" name="ShowUnwatchedIndicatorConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowWatchTickInPosterViewC.Label]" Target="[Application.StringData]" name="ShowWatchTickInPosterViewConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableListViewTicksC.Label]" Target="[Application.StringData]" name="EnableListViewTicksConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[DefaultToFirstUnwatchedC.Label]" Target="[Application.StringData]" name="DefaultToFirstUnwatchedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[GeneralBehavior.Text]" Target="[Application.StringData]" name="GeneralBehaviorConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableNestedMovieFoldersC.Label]" Target="[Application.StringData]" name="EnableNestedMovieFoldersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoEnterSingleDirsC.Label]" Target="[Application.StringData]" name="AutoEnterSingleDirsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[MultipleFileBehavior.Text]" Target="[Application.StringData]" name="MultipleFileBehaviorConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableMoviePlaylistsC.Label]" Target="[Application.StringData]" name="EnableMoviePlaylistsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[MultipleFileSizeLimit.Label]" Target="[Application.StringData]" name="MultipleFileSizeLimitConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[MBTheme.Text]" Target="[Application.StringData]" name="MBThemeConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ViewThemeSpinner.Label]" Target="[Application.StringData]" name="ViewThemeSpinnerConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Spinner.Label]" Target="[Application.StringData]" name="SpinnerConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[FontThemeSpinner.Label]" Target="[Application.StringData]" name="FontThemeSpinnerConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[RequiresRestart.Text]" Target="[Application.StringData]" name="RequiresRestartConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ThemeSettings.Text]" Target="[Application.StringData]" name="ThemeSettingsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowConfigButtonC.Label]" Target="[Application.StringData]" name="ShowConfigButtonConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AlphaBlendingC.Label]" Target="[Application.StringData]" name="AlphaBlendingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <Invoke ResultTarget="[SecurityPIN.Label]" Target="[Application.StringData]" name="SecurityPINConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[PCUnlockedTxt.Content]" Target="[Application.StringData]" name="PCUnlockedTxtConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[RelockBtn.Text]" Target="[Application.StringData]" name="RelockBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnabledBtn.Label]" Target="[Application.StringData]" name="EnabledBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Ratings.Label]" Target="[Application.StringData]" name="RatingsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[BlockUnratedC.Label]" Target="[Application.StringData]" name="BlockUnratedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[HideProtectedC.Label]" Target="[Application.StringData]" name="HideProtectedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoUnlockC.Label]" Target="[Application.StringData]" name="AutoUnlockConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[UnlockPeriodC.Label]" Target="[Application.StringData]" name="UnlockPeriodConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[PINBtn.Text]" Target="[Application.StringData]" name="PINBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+        </Actions>
+      </Rule>
+
     </Rules>
 
     <Content>
@@ -431,7 +524,7 @@
                   <FormLayoutInput Right="Parent,1,-40" Top="Parent,0,10"  />
                 </LayoutInput>
                 <Children>
-                  <Text Content="Configuration" Font="font://f:CP_ConfigTitleFont" Color="color://s:FontColorDark">
+                  <Text Name="Configuration" Font="font://f:CP_ConfigTitleFont" Color="color://s:FontColorDark">
                   </Text>
                 </Children>
               </Clip>
@@ -440,7 +533,7 @@
                   <AnchorLayoutInput Top="Title,1,5" Right="Parent,1,-40"/>
                 </LayoutInput>
                 <Children>
-                  <Text Content="version: " Font="font://f:CP_VersionFont" Color="color://s:FontColorDark" />
+                  <Text Name="Version" Font="font://f:CP_VersionFont" Color="color://s:FontColorDark" />
                   <Text Content="[Application.AppVersion]" Font="font://f:CP_VersionFont" Color="color://s:FontColorDark"/>
                 </Children>
               </Panel>
@@ -461,16 +554,16 @@
                   <Graphic Name="InitialConfig" Content="image://me:50AlphaBg" Navigation="Column" Layout="VerticalFlow" MinimumSize="500,400" MaximumSize="500,0" Padding="[SMargin]">
 
                     <Children>
-                      <me:TextHeader Text="General" />
+                      <me:TextHeader Name="GeneralInit" Text="" />
 
-                      <me:TextHeader Text="Tracking" />
-                      <me:AssumeWatchedEdit Label="Assume Watched If Older Than" Config="[Application.Config]" FocusItem="[FocusItem]" Margins="[CMargin]" />
+                      <me:TextHeader Name="TrackingInit" Text="" />
+                      <me:AssumeWatchedEdit Name="AssumeWatchedInit" Label="" Config="[Application.Config]" FocusItem="[FocusItem]" Margins="[CMargin]" />
 
-                      <me:TextHeader Text="Metadata" />
-                      <cb:CheckBox Label="Allow Internet Based Providers" Checked="[AllowInternetMetadataProviders]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="MetadataInit" Text="" />
+                      <cb:CheckBox Name="AllowInternetInit" Label="" Checked="[AllowInternetMetadataProviders]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
 
-                      <me:TextHeader Text="Updates" />
-                      <cb:CheckBox Label="Automatic Updates" Checked="[EnableUpdates]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="UpdatesInit" Text="" />
+                      <cb:CheckBox Name="AutoUpdatesInit" Label="" Checked="[EnableUpdates]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
 
                     </Children>
                   </Graphic>
@@ -491,11 +584,11 @@
                   <FormLayoutInput Right="Parent,1,-40" Bottom="Parent,1,-40"  />
                 </LayoutInput>
                 <Children>
-                  <sb:SimpleButton  Name="ContinueBtn" Text="Continue" FocusItem="[FocusItem]"  Command="[Close]" Visible="false" Size="200,50" Font="font://f:CP_ButtonFont"/>
-                  <sb:SimpleButton FocusOrder="1" Name="BackBtn" Text="Continue" FocusItem="[FocusItem]"  Command="[Back]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
-                  <sb:SimpleButton Name="ResetConfigBtn" Text="Reset Defaults" FocusItem="[FocusItem]"  Command="[ResetConfig]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
-                  <sb:SimpleButton Name="ClearCacheBtn" Text="Clear Cache" FocusItem="[FocusItem]"  Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
-                  <sb:SimpleButton Name="UnlockPCBtn" Text="Unlock" FocusItem="[FocusItem]"  Command="[UnlockPC]" Size="200,50" Font="font://f:CP_ButtonFont" Visible="[Application.Config.ParentalControlEnabled]"/>
+                  <sb:SimpleButton  Name="ContinueBtn" Text="" FocusItem="[FocusItem]"  Command="[Close]" Visible="false" Size="200,50" Font="font://f:CP_ButtonFont"/>
+                  <sb:SimpleButton FocusOrder="1" Name="BackBtn" Text="" FocusItem="[FocusItem]"  Command="[Back]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
+                  <sb:SimpleButton Name="ResetConfigBtn" Text="" FocusItem="[FocusItem]"  Command="[ResetConfig]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
+                  <sb:SimpleButton Name="ClearCacheBtn" Text="" FocusItem="[FocusItem]"  Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
+                  <sb:SimpleButton Name="UnlockPCBtn" Text="" FocusItem="[FocusItem]"  Command="[UnlockPC]" Size="200,50" Font="font://f:CP_ButtonFont" Visible="[Application.Config.ParentalControlEnabled]"/>
 
                 </Children>
               </Panel>
@@ -533,45 +626,45 @@
                 <Children>
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="General" />
+                      <me:TextHeader Name="General" Text="" />
                       <!--leave the spaces in the following label - it allows focus to land on us first-->
-                      <cb:CheckBox Label="Logging                   " Checked="[EnableTraceLogging]" FocusItem="[FocusItem]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="Logging" Label="" Checked="[EnableTraceLogging]" FocusItem="[FocusItem]"  Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <!--
                   <te:TextEdit LabelSize="[LabelSize1]" Label="Initial Location" EditableText="[InitialFolder]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
 									-->
-                      <me:TextHeader Text="Metadata" />
-                      <cb:CheckBox Label="Enable Internet Providers" Checked="[AllowInternetMetadataProviders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <me:TextHeader Text="Updates" />
-                      <cb:CheckBox Label="Automatic Updates" Checked="[EnableUpdates]" Margins="[CMargin]" FocusItem="[FocusItem]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Beta Updates" Checked="[EnableBetas]" Margins="[CMargin]"  FocusItem="[FocusItem]"  Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="Metadata" Text="" />
+                      <cb:CheckBox Name="AllowInternet" Label="" Checked="[AllowInternetMetadataProviders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="Updates" Text="" />
+                      <cb:CheckBox Name="AutoUpdates" Label="" Checked="[EnableUpdates]" Margins="[CMargin]" FocusItem="[FocusItem]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="BetaUpdates" Label="" Checked="[EnableBetas]" Margins="[CMargin]"  FocusItem="[FocusItem]"  Font="font://f:CP_ConfigItemFont"/>
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="Global" />
-                      <cb:CheckBox Label="Enable EHS" Checked="[EnableRootPage]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>                      
-                      <cb:CheckBox Label="Show Clock" Checked="[ShowClock]" Margins="[CMargin]"  FocusItem="[FocusItem]" Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Dim Unselected Posters" Checked="[DimUnselectedPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Hide Focus Frame" Checked="[HideFocusFrame]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Always Show Details" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[AlwaysShowDetailsPage]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Exclude Remote Content In Searches" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ExcludeRemoteContentInSearch]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Enhanced Mouse Support" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableMouseHook]"  Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="Global" Text="" />
+                      <cb:CheckBox Name="EnableEHS" Label="" Checked="[EnableRootPage]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowClockC" Label="" Checked="[ShowClock]" Margins="[CMargin]"  FocusItem="[FocusItem]" Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="DimUnselectedPostersC" Label="" Checked="[DimUnselectedPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="HideFocusFrameC" Label="" Checked="[HideFocusFrame]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="AlwaysShowDetailsPageC" Label="" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[AlwaysShowDetailsPage]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ExcludeRemoteContentInSearchC" Label="" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ExcludeRemoteContentInSearch]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="EnableMouseHookC" Label="" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[EnableMouseHook]"  Font="font://f:CP_ConfigItemFont"/>
                     </Children>
                   </Panel>
 
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="Views" />
-                      <ss:SimpleSpinner  Label="Poster Grid Spacing" Model="[GridSpacing]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                      <ss:SimpleSpinner  Label="Thumb Width Split" Model="[ThumbStripPosterWidth]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                      <ss:SimpleSpinner  Label="Breadcrumb Count" Model="[BreadcrumbCount]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                      <cb:CheckBox Label="Show Fan Art on Views" Checked="[ShowBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Show Initial Folder Background" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowRootBackground]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Show Theme Background" Checked="[ShowThemeBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Show HD Overlay on Posters" Checked="[ShowHDIndicatorOnPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Show Icon on Remote Content" Checked="[ShowRemoteIndicatorOnPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="Views" Text="" />
+                      <ss:SimpleSpinner Name="GridSpacingC"  Label="" Model="[GridSpacing]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <ss:SimpleSpinner Name="ThumbStripPosterWidthC"  Label="" Model="[ThumbStripPosterWidth]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <ss:SimpleSpinner Name="BreadcrumbCountC" Label="" Model="[BreadcrumbCount]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <cb:CheckBox Name="ShowBackdropC" Label="" Checked="[ShowBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowRootBackgroundC" Label="" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowRootBackground]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowThemeBackgroundC" Label="" Checked="[ShowThemeBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowHDIndicatorOnPostersC" Label="" Checked="[ShowHDIndicatorOnPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowRemoteIndicatorOnPostersC" Label="" Checked="[ShowRemoteIndicatorOnPosters]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
 
-                      <cb:CheckBox Label="Enable Advanced Commands" Checked="[EnableAdvancedCmds]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
+                      <cb:CheckBox Name="EnableAdvancedCmdsC" Label="" Checked="[EnableAdvancedCmds]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
 
                     </Children>
                   </Panel>
@@ -584,24 +677,24 @@
                 <Children>
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="Media Tracking" />
-                      <cb:CheckBox Label="Remember Index-By State" Checked="[RememberIndexing]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Show Unwatched Count" Checked="[ShowUnwatchedCount]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Watched Indicator on Folders" Checked="[ShowWatchedTickOnFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Highlight Unwatched Items" Checked="[ShowUnwatchedIndicator]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Watched Indicator on Videos" Checked="[ShowWatchTickInPosterView]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Watched Indicator in Detail View" Checked="[EnableListViewTicks]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Default To First Unwatched Item" Checked="[DefaultToFirstUnwatched]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="MediaTracking" Text="" />
+                      <cb:CheckBox Name="RememberIndexingC" Label="" Checked="[RememberIndexing]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowUnwatchedCountC" Label="" Checked="[ShowUnwatchedCount]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowWatchedTickOnFoldersC" Label="" Checked="[ShowWatchedTickOnFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowUnwatchedIndicatorC" Label="" Checked="[ShowUnwatchedIndicator]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="ShowWatchTickInPosterViewC" Label="" Checked="[ShowWatchTickInPosterView]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="EnableListViewTicksC" Label="" Checked="[EnableListViewTicks]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="DefaultToFirstUnwatchedC" Label="" Checked="[DefaultToFirstUnwatched]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="General Behavior" />
-                      <cb:CheckBox Label="Allow Nested Movie Folders" Checked="[EnableNestedMovieFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="Auto Enter Single Folder Items" Checked="[AutoEnterSingleDirs]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <me:TextHeader Text="Multiple File Behavior" />
-                      <cb:CheckBox Label="Treat Multiple Files As Single Movie" Checked="[EnableMoviePlaylists]"  FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
-                      <ss:SimpleSpinner  Label="Multiple File Size Limit" Model="[PlaylistLimit]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                      <me:TextHeader Name="GeneralBehavior" Text="" />
+                      <cb:CheckBox Name="EnableNestedMovieFoldersC" Label="" Checked="[EnableNestedMovieFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="AutoEnterSingleDirsC" Label="" Checked="[AutoEnterSingleDirs]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <me:TextHeader Name="MultipleFileBehavior" Text="" />
+                      <cb:CheckBox Name="EnableMoviePlaylistsC" Label="" Checked="[EnableMoviePlaylists]"  FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <ss:SimpleSpinner Name="MultipleFileSizeLimit"  Label="" Model="[PlaylistLimit]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" Visible="false" >
@@ -623,19 +716,19 @@
                 <Children>
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="Media Browser Theme" />
-                      <st:SpinnerText Name="ViewThemeSpinner" Model="[ViewThemeModel]" FocusItem="[FocusItem]"  Label="Visual Theme" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[Config.ViewTheme]" />
-                      <st:SpinnerText Name="Spinner" Model="[ThemeModel]" FocusItem="[FocusItem]"  Label="Color Scheme * " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[ThemeInitial]" />
-                      <st:SpinnerText Name="FontThemeSpinner" Model="[FontThemeModel]" FocusItem="[FocusItem]"  Label="Font Size * " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[FontThemeModel.Chosen!cor:String]" />
-                      <me:TextLine Text="* Requires a restart to take effect." />
+                      <me:TextHeader Name="MBTheme" Text="" />
+                      <st:SpinnerText Name="ViewThemeSpinner" Model="[ViewThemeModel]" FocusItem="[FocusItem]"  Label="" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[Config.ViewTheme]" />
+                      <st:SpinnerText Name="Spinner" Model="[ThemeModel]" FocusItem="[FocusItem]"  Label="" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[ThemeInitial]" />
+                      <st:SpinnerText Name="FontThemeSpinner" Model="[FontThemeModel]" FocusItem="[FocusItem]"  Label="" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[FontThemeModel.Chosen!cor:String]" />
+                      <me:TextLine Name="RequiresRestart" Text="" />
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" >
                     <Children>
-                      <me:TextHeader Text="Theme Specific Settings" />
-                      <cb:CheckBox   Label="Show Config Button" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
-                      <ss:SimpleSpinner    Label="Alpha Blending" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />                      
-                       
+                      <me:TextHeader Name="ThemeSettings" Text="" />
+                      <cb:CheckBox Name="ShowConfigButtonC"  Label="" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
+                      <ss:SimpleSpinner  Name="AlphaBlendingC"  Label="" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />
+
                     </Children>
                   </Panel>
                 </Children>
@@ -649,7 +742,7 @@
                   <Panel Layout="VerticalFlow" >
                     <Children>
                       <!--<me:TextHeader Text="Parental Control" />-->
-                      <pe:PINEdit Label="Security PIN" EditableText="[PIN]" Border="image://i:PlainBorder" EndCommand="[PINEntered]" Margins="0,20,0,20" Font="font://f:CP_ConfigHeaderFont"/>
+                      <pe:PINEdit Name="SecurityPIN" Label="Security PIN" EditableText="[PIN]" Border="image://i:PlainBorder" EndCommand="[PINEntered]" Margins="0,20,0,20" Font="font://f:CP_ConfigHeaderFont"/>
                       <Panel Name="ParentalUnlockedPanel" Visible="false" Layout="VerticalFlow" >
                         <Children>
                           <Text Name="PCUnlockedTxt" Content="Parental Controls are Temporarily Unlocked.  You cannot change values unless you re-lock." MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
@@ -662,11 +755,11 @@
                           <cb:CheckBox Name="EnabledBtn" Label="Enable Parental Blocks" FocusItem="[FocusItem]" Checked="[Enabled]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
                           <st:SpinnerText Name="Ratings" Model="[RatingsStrings]" FocusItem="[FocusItem]"  Label="Max Allowed Rating " Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" Margins="[CMargin]" DefaultString="[InitialRating]" />
                           <Text Name="RatingsDesc" Content="" MinimumSize="450,90" MaximumSize="450,90" Margins="[CMargin]" Font="Segoe Media Center Bold,14" Color="color://s:FontColorLight" WordWrap="true" />
-                          <cb:CheckBox Label="Block Unrated Content" Checked="[BlockUnrated]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                          <cb:CheckBox Label="Hide Blocked Content" Checked="[HideProtected]" FocusItem="[FocusItem]"  Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                          <cb:CheckBox Label="Unlock on PIN Entry" Checked="[AutoUnlock]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                          <cb:CheckBox Name="BlockUnratedC" Label="Block Unrated Content" Checked="[BlockUnrated]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                          <cb:CheckBox Name="HideProtectedC" Label="Hide Blocked Content" Checked="[HideProtected]" FocusItem="[FocusItem]"  Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                          <cb:CheckBox Name="AutoUnlockC" Label="Unlock on PIN Entry" Checked="[AutoUnlock]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                           <!--<me:TextLine Text=" "/>-->
-                          <vm:IntSpin Label="Unlock Period (Hours)" Int="[UnlockPeriod]" Margins="[CMargin]"  />
+                          <vm:IntSpin Name="UnlockPeriodC" Label="Unlock Period (Hours)" Int="[UnlockPeriod]" Margins="[CMargin]"  />
                           <!--<me:TextLine Text=" "/>-->
                           <sb:SimpleButton Name="PINBtn" Text="Enter New PIN" FocusItem="[FocusItem]"  Command="[EnterPIN]" Size="175,40" Margins="[CMargin]" Visible="true" Color="color://s:FontColorMedium" Font="font://f:CP_ConfigItemFont"/>
                         </Children>
@@ -818,6 +911,6 @@
       <mc:ModelItem Name="ConfigObject" />
     </Properties>
   </UI>
-  
+
   <Image Name="50AlphaBg" Source="resx://MediaBrowser/MediaBrowser.Resources/BlackBtnAlpha50" NineGrid="10,10,10,10" />
 </Mcml>

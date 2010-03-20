@@ -23,13 +23,15 @@ namespace MediaBrowser.Library
     {
 
         IPlaybackController playbackController = Application.CurrentInstance.PlaybackController;
-        public IPlaybackController PlaybackController {
-            get {
+        public IPlaybackController PlaybackController
+        {
+            get
+            {
                 return playbackController;
             }
             set
             {
-            	playbackController = value;
+                playbackController = value;
             }
         }
 
@@ -57,7 +59,7 @@ namespace MediaBrowser.Library
             if (this is PlayableCollection && (this.PlayableItems == null || this.PlayableItems.Count() < 1))
             {
                 Microsoft.MediaCenter.MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                ev.Dialog("No Content that can be played in this context.", "Play", Microsoft.MediaCenter.DialogButtons.Ok, 500, true);
+                ev.Dialog(Application.CurrentInstance.StringData("NoContentDial"), Application.CurrentInstance.StringData("NoContentCapDial"), Microsoft.MediaCenter.DialogButtons.Ok, 500, true);
             }
             else
             {
@@ -69,7 +71,7 @@ namespace MediaBrowser.Library
         {
             try
             {
-                
+
                 if (!RunningOnExtender || !Config.Instance.EnableTranscode360 || Helper.IsExtenderNativeVideo(this.Filename))
                     PlayAndGoFullScreen(this.Filename);
                 else
@@ -86,14 +88,15 @@ namespace MediaBrowser.Library
                     }
                 }
 
-                if (resume) {
+                if (resume)
+                {
                     PlaybackController.Seek(PlayState.PositionTicks);
-                } 
-                 
+                }
+
             }
             catch (Exception ex)
             {
-                Logger.ReportException("Failed to play " + this.Filename,  ex);
+                Logger.ReportException("Failed to play " + this.Filename, ex);
             }
         }
 
@@ -118,7 +121,7 @@ namespace MediaBrowser.Library
 
         private void PlayAndGoFullScreen(string file)
         {
-            this.fileToPlay = file;                
+            this.fileToPlay = file;
             Play(file);
             if (!QueueItem)
                 PlaybackController.GoToFullScreen();
@@ -127,7 +130,8 @@ namespace MediaBrowser.Library
             PlaybackController.OnProgress += new EventHandler<PlaybackStateEventArgs>(PlaybackController_OnProgress);
         }
 
-        public virtual void Play(string file) {
+        public virtual void Play(string file)
+        {
             Logger.ReportInfo("About to play : " + file);
             if (QueueItem && this.PlayableItems != null && this.PlayableItems.Count() > 0)
                 PlaybackController.QueueMedia(this.PlayableItems);
@@ -135,17 +139,20 @@ namespace MediaBrowser.Library
                 PlaybackController.QueueMedia(file);
             else
                 PlaybackController.PlayMedia(file);
-        }         
+        }
 
-        void PlaybackController_OnProgress(object sender, PlaybackStateEventArgs e) {
-            if (!UpdatePosition(e.Title, e.Position)) {
+        void PlaybackController_OnProgress(object sender, PlaybackStateEventArgs e)
+        {
+            if (!UpdatePosition(e.Title, e.Position))
+            {
                 PlaybackController.OnProgress -= new EventHandler<PlaybackStateEventArgs>(PlaybackController_OnProgress);
             }
         }
 
         protected void MarkWatched()
         {
-            if (PlayState != null) {
+            if (PlayState != null)
+            {
                 PlayState.LastPlayed = DateTime.Now;
                 PlayState.PlayCount = PlayState.PlayCount + 1;
                 PlayState.Save();
@@ -156,7 +163,8 @@ namespace MediaBrowser.Library
         {
             Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
 
-            if (PlayState == null) {
+            if (PlayState == null)
+            {
                 return false;
             }
 
@@ -165,9 +173,10 @@ namespace MediaBrowser.Library
             {
                 PlayState.PositionTicks = positionTicks;
                 PlayState.Save();
-                return true; 
-            }  
-            else {
+                return true;
+            }
+            else
+            {
                 return false;
             }
         }
@@ -181,7 +190,8 @@ namespace MediaBrowser.Library
         }
 
 
-        public static string CreateWPLPlaylist(string name, IEnumerable<string> files) {
+        public static string CreateWPLPlaylist(string name, IEnumerable<string> files)
+        {
 
             // we need to filter out all invalid chars 
             name = new string(name
@@ -202,7 +212,8 @@ namespace MediaBrowser.Library
             xml.WriteStartElement("body");
             xml.WriteStartElement("seq");
 
-            foreach (string file in files) {
+            foreach (string file in files)
+            {
                 xml.WriteStartElement("media");
                 xml.WriteAttributeString("src", file);
                 xml.WriteEndElement();

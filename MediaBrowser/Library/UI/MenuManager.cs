@@ -9,7 +9,8 @@ namespace MediaBrowser.Library
 {
     public class MenuManager
     {
-        public MenuManager() {
+        public MenuManager()
+        {
             this.init();
         }
 
@@ -26,15 +27,15 @@ namespace MediaBrowser.Library
         private string watchedText(Item item)
         {
             if (item.HaveWatched)
-                return "Mark Unwatched";
-            else return "Mark Watched";
+                return Kernel.Instance.StringData.GetString("MarkUnwatchedCMenu");
+            else return Kernel.Instance.StringData.GetString("MarkWatchedCMenu");
         }
 
         private string playText(Item item)
         {
             if (item.BaseItem is Folder)
-                return "Play All";
-            else return "Play";
+                return Kernel.Instance.StringData.GetString("PlayAllCMenu");
+            else return Kernel.Instance.StringData.GetString("Play");
         }
 
         private void addDefaultMenuItems()
@@ -49,10 +50,10 @@ namespace MediaBrowser.Library
             allPlayables.AddRange(playableItems);
             allPlayables.AddRange(playableFolders);
 
-            Kernel.Instance.AddMenuItem(new ResumeMenuItem("Resume", "resx://MediaBrowser/MediaBrowser.Resources/IconResume", Application.CurrentInstance.Resume, new List<MenuType>() { MenuType.Item }),0);
-            Kernel.Instance.AddMenuItem(new MenuItem(playText, "resx://MediaBrowser/MediaBrowser.Resources/IconPlay", Application.CurrentInstance.Play, allPlayables, new List<MenuType>() { MenuType.Item, MenuType.Play }),1);
-            Kernel.Instance.AddMenuItem(new MenuItem("Shuffle Play", "resx://MediaBrowser/MediaBrowser.Resources/IconShuffle", Application.CurrentInstance.Shuffle, playableFolders, new List<MenuType>() { MenuType.Item, MenuType.Play }),2);
-            Kernel.Instance.AddMenuItem(new MenuItem(watchedText, "resx://MediaBrowser/MediaBrowser.Resources/Tick", toggleWatched, allPlayables, new List<MenuType>() { MenuType.Item }),3);
+            Kernel.Instance.AddMenuItem(new ResumeMenuItem(Kernel.Instance.StringData.GetString("Resume"), "resx://MediaBrowser/MediaBrowser.Resources/IconResume", Application.CurrentInstance.Resume, new List<MenuType>() { MenuType.Item }), 0);
+            Kernel.Instance.AddMenuItem(new MenuItem(playText, "resx://MediaBrowser/MediaBrowser.Resources/IconPlay", Application.CurrentInstance.Play, allPlayables, new List<MenuType>() { MenuType.Item, MenuType.Play }), 1);
+            Kernel.Instance.AddMenuItem(new MenuItem(Kernel.Instance.StringData.GetString("ShufflePlayCMenu"), "resx://MediaBrowser/MediaBrowser.Resources/IconShuffle", Application.CurrentInstance.Shuffle, playableFolders, new List<MenuType>() { MenuType.Item, MenuType.Play }), 2);
+            Kernel.Instance.AddMenuItem(new MenuItem(watchedText, "resx://MediaBrowser/MediaBrowser.Resources/Tick", toggleWatched, allPlayables, new List<MenuType>() { MenuType.Item }), 3);
         }
     }
 

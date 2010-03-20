@@ -37,7 +37,8 @@ namespace MediaBrowser
 #endif
 
             var config = GetConfig();
-            if (config == null) {
+            if (config == null)
+            {
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
                 return;
             }
@@ -50,29 +51,36 @@ namespace MediaBrowser
             }
             catch (Exception ex)
             {
-                host.MediaCenterEnvironment.Dialog(ex.Message, "Customisation Error", DialogButtons.Ok, 100, true);
+                host.MediaCenterEnvironment.Dialog(ex.Message, Application.CurrentInstance.StringData("CustomErrorDial"), DialogButtons.Ok, 100, true);
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
                 return;
             }
 
-            Kernel.Init(config); 
+            Kernel.Init(config);
 
             Application app = new Application(new MyHistoryOrientedPageSession(), host);
 
             app.GoToMenu();
         }
 
-        private static ConfigData GetConfig() {
+        private static ConfigData GetConfig()
+        {
             ConfigData config = null;
-            try {
+            try
+            {
                 config = ConfigData.FromFile(ApplicationPaths.ConfigFile);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                DialogResult r = ev.Dialog(ex.Message + "\nReset to default?", "Error in configuration file", DialogButtons.Yes | DialogButtons.No, 600, true);
-                if (r == DialogResult.Yes) {
+                DialogResult r = ev.Dialog(ex.Message + "\n" + Application.CurrentInstance.StringData("ConfigErrorDial"), Application.CurrentInstance.StringData("ConfigErrorCapDial"), DialogButtons.Yes | DialogButtons.No, 600, true);
+                if (r == DialogResult.Yes)
+                {
                     config = new ConfigData(ApplicationPaths.ConfigFile);
                     config.Save();
-                } else {
+                }
+                else
+                {
                     Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
 
                 }

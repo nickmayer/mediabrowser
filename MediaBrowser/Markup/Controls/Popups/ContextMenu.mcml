@@ -7,8 +7,8 @@
 	    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
 	    xmlns:cb="resx://MediaBrowser/MediaBrowser.Resources/CheckBox"
 	    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
-      xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"      
-		  xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu" 
+      xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
+		  xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu"
       xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
 	    xmlns:me="Me"
 	  >
@@ -36,115 +36,134 @@
   </UI>
 
   <UI Name="ActionMenu">
-      <Properties>        
-        <a:Application Name="Application" Application="$Required"/>
-        <Command Name="Close" Command="$Required"/>
-        <cor:String Name="MenuType" String="Context" />
-      </Properties>
-    
-      <Locals>
-        <ShortcutHandler Name="BackHandler"  Handle="true" Shortcut="Back" HandlerStage="Bubbled" Command="[Close]"/>
-        <cor:Int32 Name="ItemCount" Int32="0" />
-      </Locals>
-    
-      <Rules>
-        <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
-        <Default Target="[Input.KeyInteractive]" Value="true" />
-        <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
-        <Default Target="[Title.Content]" Value="Play Menu" >
-          <Conditions>
-            <Equality Source="[MenuType]" Value="Play" />
-          </Conditions>
-        </Default>
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <Command Name="Close" Command="$Required"/>
+      <cor:String Name="MenuType" String="Context" />
+    </Properties>
 
-        <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
-          <Conditions>
-            <Equality Source="[MenuType]" Value="Play" />
-          </Conditions>
-          <Actions>
-            <Set Target="[ListRepeater.Source]" Value="[Application.PlayMenu]" />
-            <Set Target="[ItemCount]" Value="[Application.PlayMenu.Count]" />
-          </Actions>
-        </Changed>
-        <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
-          <Conditions>
-            <Equality Source="[MenuType]" Value="Context" />
-          </Conditions>
-          <Actions>
-            <Set Target="[ListRepeater.Source]" Value="[Application.ContextMenu]" />
-            <Set Target="[ItemCount]" Value="[Application.ContextMenu.Count]" />
-          </Actions>
-        </Changed>
+    <Locals>
+      <ShortcutHandler Name="BackHandler"  Handle="true" Shortcut="Back" HandlerStage="Bubbled" Command="[Close]"/>
+      <cor:Int32 Name="ItemCount" Int32="0" />
+    </Locals>
 
-        <Changed Source="[ItemCount]"  InitialEvaluate="true">
-          <Conditions>
-            <Equality Source="[ItemCount]" Value="0" />
-          </Conditions>
-          <Actions>
-            <Set Target="[Empty.Visible]" Value="true" />
-          </Actions>
-        </Changed>
-        <Changed Source="[ItemCount]"  InitialEvaluate="true">
-          <Conditions>
-            <Equality Source="[ItemCount]" Value="0" ConditionOp="NotEquals" />
-          </Conditions>
-          <Actions>
-            <Set Target="[Empty.Visible]" Value="false" />
-          </Actions>
-        </Changed>
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+      <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[MenuType]" Value="Play" ConditionOp="NotEquals" />
+        </Conditions>
+        <Actions>
+          <Invoke ResultTarget="[Title.Content]" Target="[Application.StringData]" name="ItemMenuCMenu" ExclusiveApply="false" />
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[MenuType]" Value="Play" />
+        </Conditions>
+        <Actions>
+          <Invoke ResultTarget="[Title.Content]" Target="[Application.StringData]" name="PlayMenuCMenu" ExclusiveApply="false" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[MenuType]" Value="Play" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ListRepeater.Source]" Value="[Application.PlayMenu]" />
+          <Set Target="[ItemCount]" Value="[Application.PlayMenu.Count]" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[MenuType]" Value="Context" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ListRepeater.Source]" Value="[Application.ContextMenu]" />
+          <Set Target="[ItemCount]" Value="[Application.ContextMenu.Count]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ItemCount]"  InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[ItemCount]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Empty.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[ItemCount]"  InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[ItemCount]" Value="0" ConditionOp="NotEquals" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Empty.Visible]" Value="false" />
+        </Actions>
+      </Changed>
 
 
-        <Changed Source="[Input.DeepKeyFocus]" >
-          <Conditions>
-            <Equality Source="[Input.DeepKeyFocus]" Value="false" />
-          </Conditions>
-          <Actions>
-            <Invoke Target="[Close.Invoke]" />
-          </Actions>
-        </Changed>
+      <Changed Source="[Input.DeepKeyFocus]" >
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Close.Invoke]" />
+        </Actions>
+      </Changed>
 
-      </Rules>
-    
-      <Content>
-        <ColorFill Name="Main" Content="255,0,15,60"  Navigation="ContainAll,Group">
-          <Children>
-            <Graphic Content="image://i:ZoomPane"  SizingPolicy="SizeToChildren"
-                     MaintainAspectRatio="false" Padding="20,20,20,20" >
-              <Layout>
-                <FlowLayout Orientation="Vertical" ItemAlignment="Far"/>
-              </Layout>
-              <Children>
-                <Panel >
-                  <Layout>
-                    <FlowLayout Orientation="Vertical" ItemAlignment="Near"/>
-                  </Layout>
-                  <Children>
-                    <Text Name="Title" Content="Item Menu" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
-                    <ColorFill Content="DimGray" Alpha="0.8" Layout="Fill" MaximumSize="300,2" />
-                    <Text Content=" "/>
-                    <Text Name="Empty" Content="No Available Options" Font="font://f:MI_NotAvailableFont" Alpha=".7" Color="color://s:FontColorLight" Visible="false" />
-                    <Repeater Name="ListRepeater" Source="[Application.ContextMenu]" Layout="VerticalFlow" MinimumSize="200,50">
-                      <Content>
-                        <me:MenuItem option="[RepeatedItem!lib:MenuItem]" Close="[Close]" Font="font://f:MI_ButtonFont" Application="[Application]" />
-                      </Content>
-                    </Repeater>
-                  </Children>
-                </Panel>
-                <Panel >
-                  <Layout>
-                    <FlowLayout Orientation="Vertical" ItemAlignment="Fill"/>
-                  </Layout>
-                  <Children>
-                    <Text Content=" "/>
-                    <vm:BaseBtn LabelText="Close" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
-                  </Children>
-                </Panel>
-              </Children>
-            </Graphic>
-          </Children>
-        </ColorFill>
-      </Content>
-    </UI>
+      <Rule>
+        <Actions>
+          <Invoke ResultTarget="[CloseButton.LabelText]" Target="[Application.StringData]" name="CloseCMenu" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+
+    </Rules>
+
+    <Content>
+      <ColorFill Name="Main" Content="255,0,15,60"  Navigation="ContainAll,Group">
+        <Children>
+          <Graphic Content="image://i:ZoomPane"  SizingPolicy="SizeToChildren"
+                   MaintainAspectRatio="false" Padding="20,20,20,20" >
+            <Layout>
+              <FlowLayout Orientation="Vertical" ItemAlignment="Far"/>
+            </Layout>
+            <Children>
+              <Panel >
+                <Layout>
+                  <FlowLayout Orientation="Vertical" ItemAlignment="Near"/>
+                </Layout>
+                <Children>
+                  <Text Name="Title" Content="Item Menu" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
+                  <ColorFill Content="DimGray" Alpha="0.8" Layout="Fill" MaximumSize="300,2" />
+                  <Text Content=" "/>
+                  <Text Name="Empty" Content="No Available Options" Font="font://f:MI_NotAvailableFont" Alpha=".7" Color="color://s:FontColorLight" Visible="false" />
+                  <Repeater Name="ListRepeater" Source="[Application.ContextMenu]" Layout="VerticalFlow" MinimumSize="200,50">
+                    <Content>
+                      <me:MenuItem option="[RepeatedItem!lib:MenuItem]" Close="[Close]" Font="font://f:MI_ButtonFont" Application="[Application]" />
+                    </Content>
+                  </Repeater>
+                </Children>
+              </Panel>
+              <Panel >
+                <Layout>
+                  <FlowLayout Orientation="Vertical" ItemAlignment="Fill"/>
+                </Layout>
+                <Children>
+                  <Text Content=" "/>
+                  <vm:BaseBtn Name="CloseButton" LabelText="" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
+                </Children>
+              </Panel>
+            </Children>
+          </Graphic>
+        </Children>
+      </ColorFill>
+    </Content>
+  </UI>
   <UI Name="MenuItem">
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
@@ -190,4 +209,4 @@
     </Content>
   </UI>
 
-  </Mcml>
+</Mcml>

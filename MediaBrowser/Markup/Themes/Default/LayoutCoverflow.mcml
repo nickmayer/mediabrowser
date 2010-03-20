@@ -47,7 +47,7 @@
                  Target="[CFScroller.LayoutInput]" Value="[AnchorNormal]" />
       <Condition Source="[UseCustomAnchor]" ConditionOp="Equals" SourceValue="true"
                  Target="[CFScroller.LayoutInput]" Value="[AnchorCustom]" />
-      
+
       <Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
         <Conditions>
           <Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
@@ -108,7 +108,7 @@
             </LayoutInput>
             <Children>
               <ts:TitleSet Name="TitleSet" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" Layout="Scale" Font="font://f:CV_TitleFont" SubFont="font://f:CV_SubTitleFont"/>
-              <mi:MovieInfo Name="MovieInfo" Model="[SelectedItem]" ModelFast="[PreSelectedItem]"
+              <mi:MovieInfo Name="MovieInfo" Application="[Application]" Model="[SelectedItem]" ModelFast="[PreSelectedItem]"
 									DisplayGenres="false" DisplayDirector="false" DisplayWriter="false" DisplayMediaInfo="false" />
             </Children>
           </Panel>
@@ -125,13 +125,13 @@
           </Panel>
 
           <!-- Coverflow Scroller -->
-          <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">            
+          <me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]">
             <LayoutInput>
               <AnchorLayoutInput Horizontal="Fill" Top="Parent, 0" Bottom="Parent, 1, 125" />
             </LayoutInput>
           </me:CoverflowScroller>
 
-          
+
           <ColorFill Content="White" Alpha="0.1">
             <LayoutInput>
               <FormLayoutInput Left="Parent,0,-50" Top="Parent,0.5" Bottom="Parent,1" Right="Parent,1,50"/>
@@ -139,7 +139,7 @@
           </ColorFill>
 
 
-          
+
 
         </Children>
       </Panel>
@@ -159,7 +159,7 @@
       <ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true" HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
       <ScrollingData Name="SD" LockedAlignment="0.5" LockedPosition="0.5"/>
       <IntRangedValue Name="SelectRepeaterIndex"/>
-      <GridLayout Name="MyLayout" Orientation="Horizontal" AllowWrap="true" 
+      <GridLayout Name="MyLayout" Orientation="Horizontal" AllowWrap="true"
                   Spacing="-60,0" Repeat="WhenTooBig" RepeatGap="-60" Rows="1" MinorAlignment="Center" />
 
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
@@ -356,8 +356,8 @@
 											 Top="Parent,0.15" Bottom="Parent,.4" />
             </LayoutInput>
           </pp:PopupPlay>-->
-          
-          <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="-20" ScrollingData="[SD]" Navigation="RememberFocus" 
+
+          <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="-20" ScrollingData="[SD]" Navigation="RememberFocus"
                     Margins="0,-20,0,0" >
             <LayoutInput>
               <AnchorLayoutInput Horizontal="Fill"/>
@@ -441,9 +441,9 @@
       <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel1.MinimumSize]" />
       <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MaximumSize]" />
       <Binding Source="[ImageSize.Value]" Target="[ConstraintPanel2.MinimumSize]" />
-      <Binding Source="[ImageSize.Value]" Target="[BelowLabelPanel.MaximumSize]" />      
+      <Binding Source="[ImageSize.Value]" Target="[BelowLabelPanel.MaximumSize]" />
       <Binding Source="[ParentItem.DisplayPrefs.UseBanner.Value]" Target="[Item.PreferBanner]" />
-      
+
       <!-- Selected state, true if item last had focus -->
       <Condition Source="[ParentItem.SelectedChildIndex]" ConditionOp="Equals" SourceValue="[ItemIndex.SourceValue]">
         <Actions>
@@ -606,7 +606,7 @@
           <AnchorLayout SizeToVerticalChildren="true"/>
           <!--<FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="0,-5"/>-->
         </Layout>
-        <Children>          
+        <Children>
           <!-- Focus Outline-->
           <Graphic Name="FocusBg" Content="[BlankImage]" Padding="5,5,5,5" SizingPolicy="SizeToChildren" Layout="VerticalFlow">
             <Children>

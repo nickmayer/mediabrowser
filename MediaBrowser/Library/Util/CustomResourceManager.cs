@@ -44,7 +44,7 @@ namespace MediaBrowser.Library.Util
                     Logger.ReportInfo("Using custom fonts mcml");
                     if (!VerifyXmlResource(custom, Resources.FontsDefault))
                     {
-                        host.MediaCenterEnvironment.Dialog("CustomFonts.mcml as been patched with missing values", CUSTOM_FONTS_FILE, DialogButtons.Ok, 100, true);
+                        host.MediaCenterEnvironment.Dialog(Application.CurrentInstance.StringData("FontsMissingDial"), CUSTOM_FONTS_FILE, DialogButtons.Ok, 100, true);
                     }
                     File.Copy(custom, file);
                 }
@@ -88,7 +88,7 @@ namespace MediaBrowser.Library.Util
                     Logger.ReportInfo("Using custom styles mcml");
                     if (!VerifyXmlResource(custom, Resources.StylesDefault))
                     {
-                        host.MediaCenterEnvironment.Dialog(CUSTOM_STYLE_FILE + " has been patched with missing values", CUSTOM_STYLE_FILE, DialogButtons.Ok, 100, true);
+                        host.MediaCenterEnvironment.Dialog(string.Format(Application.CurrentInstance.StringData("StyleMissingDial"), CUSTOM_STYLE_FILE), CUSTOM_STYLE_FILE, DialogButtons.Ok, 100, true);
                     }
                     File.Copy(custom, file);
                 }
@@ -142,13 +142,13 @@ namespace MediaBrowser.Library.Util
         public static bool AppendFonts(string prefix, byte[] stdFontResource, byte[] smallFontResource)
         {
             string file = Path.Combine(ApplicationPaths.AppConfigPath, FONTS_FILE);
-            string custom = Path.Combine(ApplicationPaths.AppConfigPath, prefix+CUSTOM_FONTS_FILE);
+            string custom = Path.Combine(ApplicationPaths.AppConfigPath, prefix + CUSTOM_FONTS_FILE);
             if (File.Exists(custom))
             {
-                Logger.ReportInfo("Using custom fonts file: "+custom);
+                Logger.ReportInfo("Using custom fonts file: " + custom);
                 if (!VerifyXmlResource(custom, stdFontResource))
                 {
-                    Logger.ReportWarning(custom+" has been patched with missing values");
+                    Logger.ReportWarning(custom + " has been patched with missing values");
                 }
                 try
                 {

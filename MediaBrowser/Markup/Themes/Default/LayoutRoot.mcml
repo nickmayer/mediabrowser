@@ -24,7 +24,7 @@
     xmlns:pp="resx://MediaBrowser/MediaBrowser.Resources/PopupPlay"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
     xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
-     xmlns:hb="resx://MediaBrowser/MediaBrowser.Resources/HeaderButton" 
+     xmlns:hb="resx://MediaBrowser/MediaBrowser.Resources/HeaderButton"
       xmlns:me="Me"
 	  >
 
@@ -57,11 +57,11 @@
       <!--<Timer Name="BGTimer" Interval="100" Enabled="false"/>-->
       <Command Name="Configure" />
       <Command Name="CmdRecentItems" />
-      
+
       <!-- Item Panel Commands-->
       <Command Name="CmdRecentlyAdded" />
       <Command Name="CmdRecentlyWatched" />
-      
+
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="150" Enabled="true" />
@@ -89,24 +89,43 @@
           <cor:String String="recently watched" />
         </Options>
       </Choice>
-      
+
     </Locals>
 
     <Rules>
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
-            
+
       <Changed Source="[Application]" InitialEvaluate="true" >
         <Conditions>
           <Equality Source="[Application.RecentItemOption]" Value="watched"/>
         </Conditions>
         <Actions>
           <!--<Set Target="[RecentItems.ChosenIndex]" Value="1" />-->
-          <Set Target="[NPVTitle.Content]" Value="recently watched" />
-          <Set Target="[NPVTitle2.Content]" Value="recently watched" />
+          <!--<Set Target="[NPVTitle.Content]" Value="recently watched" />-->
+          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
         </Actions>
       </Changed>
+
+      <Changed Source="[Application]" InitialEvaluate="true" >
+        <Conditions>
+          <Equality Source="[Application.RecentItemOption]" Value="added"/>
+        </Conditions>
+        <Actions>
+          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS" InvokePolicy="Synchronous" ExclusiveApply="false" />
+        </Actions>
+      </Changed>
+
+      <Rule>
+        <Actions>
+          <Invoke ResultTarget="[AddedButton.Label]" Target="[Application.StringData]" name="AddedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[WatchedButton.Label]" Target="[Application.StringData]" name="WatchedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <!--<Default Value="[Added]" Target="[AddedButton.Label]"/>-->
 
       <!--Make sure initial focus is in the right place-->
       <Changed Source="[InitialFocusTimer.Tick]" >
@@ -133,8 +152,8 @@
       <!-- Backdrop Visbile Bindings -->
       <Binding Source="[Application.Config.ShowRootBackground]" Target="[BG_InitialFolder.Visible]" />
       <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
-      
-      
+
+
       <Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <!--These rules allow the user to move over the posters with the mouse without them scrolling away under them-->
@@ -166,21 +185,21 @@
         <Actions>
           <Invoke Target="[SelectedItem.RecentItemsChanged]" />
           <Set Target="[Application.RecentItemOption]" Value="added" />
-          
-          <Set Target="[NPVTitle.Content]" Value="recently added" />
-          <Set Target="[NPVTitle2.Content]" Value="recently added" />
+
+          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS" ExclusiveApply="false" InvokePolicy="Synchronous"/>
+          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS"  ExclusiveApply="false" InvokePolicy="Synchronous"/>
         </Actions>
       </Changed>
       <Changed Source="[CmdRecentlyWatched.Invoked]">
         <Actions>
           <Set Target="[Application.RecentItemOption]" Value="watched" />
           <Invoke Target="[SelectedItem.RecentItemsChanged]" />
-          <Set Target="[NPVTitle.Content]" Value="recently watched" />
-          <Set Target="[NPVTitle2.Content]" Value="recently watched" />
+          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" ExclusiveApply="false" InvokePolicy="Synchronous"/>
+          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" ExclusiveApply="false" InvokePolicy="Synchronous"/>
         </Actions>
       </Changed>
-      
-      
+
+
 
       <Changed Source="[RecentItems.ChosenIndex]" >
         <Actions>
@@ -271,7 +290,7 @@
           <IsType Source="[SelectedItem]" Type="lib:FolderModel"/>
         </Conditions>
         <Actions>
-          <Set Target="[RefocusViewTimer.Enabled]" Value="false" />          
+          <Set Target="[RefocusViewTimer.Enabled]" Value="false" />
           <Set Target="[RecentItemsPanel.Folder]" Value="[SelectedItem!lib:FolderModel]" />
           <Invoke Target="[ItemMenuPanel.NavigateInto]" />
         </Actions>
@@ -296,7 +315,7 @@
           <Invoke Target="[ItemMenuPanel.NavigateInto]" />
         </Actions>
       </Changed>
-      
+
 
       <!-- Typing Handler / Jump List -->
       <Changed Source="[Application]" InitialEvaluate="true">
@@ -381,7 +400,7 @@
                 </LayoutInput>
               </pp:PopupPlay>-->
 
-              
+
               <!-- Gradient Center Panel Borders -->
               <Panel>
                 <LayoutInput>
@@ -533,7 +552,7 @@
                   </Graphic>
                 </Children>
               </Panel>
-              
+
               <!-- Sorting Indicator -->
               <Panel Name="recentlyAdded">
                 <LayoutInput>
@@ -548,35 +567,35 @@
                       <FlowLayout Orientation="Horizontal" Spacing="10,0" />
                     </Layout>
                     <Children>
-                      <hb:HeaderButton Label="Added"
+                      <hb:HeaderButton Name="AddedButton" Label=""
                                   Command="[CmdRecentlyAdded]"
                                   BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
                                   />
-                      <hb:HeaderButton Label="Watched"
+                      <hb:HeaderButton Name="WatchedButton" Label=""
                                        Command="[CmdRecentlyWatched]"
                                        BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
                                   />
                     </Children>
                   </Panel>
-                  
+
                 </Children>
               </Panel>
-              
-                  <Panel Name="RecentText" Padding="8,0,8,-3" Layout="Anchor" >
+
+              <Panel Name="RecentText" Padding="8,0,8,-3" Layout="Anchor" >
+                <LayoutInput>
+                  <AnchorLayoutInput Right="RecentListPanel,1,10" Bottom="RecentListPanel,0,-4"/>
+                </LayoutInput>
+                <Children>
+                  <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
+                        Font="Segoe Media Center, 24" Margins="50,0,0,0" />
+                  <Text Name="NPVTitle2" Content="recently added" Color="Black"
+                        Font="Segoe Media Center, 24" Margins="50,0,0,0">
                     <LayoutInput>
-                      <AnchorLayoutInput Right="RecentListPanel,1,10" Bottom="RecentListPanel,0,-4"/>
+                      <AnchorLayoutInput Top="NPVTitle, 0, 2" Left="NPVTitle, 0, 2"/>
                     </LayoutInput>
-                    <Children>
-                      <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
-                            Font="Segoe Media Center, 24" Margins="50,0,0,0" />
-                      <Text Name="NPVTitle2" Content="recently added" Color="Black"
-                            Font="Segoe Media Center, 24" Margins="50,0,0,0">
-                        <LayoutInput>
-                          <AnchorLayoutInput Top="NPVTitle, 0, 2" Left="NPVTitle, 0, 2"/>
-                        </LayoutInput>
-                      </Text>
-                    </Children>
-                  </Panel>
+                  </Text>
+                </Children>
+              </Panel>
               <!-- These two ColorFills on either side of the scroller distract the mouse so it won't scroll when you go across screen -->
               <ColorFill MouseInteractive="true" Content="Transparent">
                 <LayoutInput>
@@ -588,8 +607,8 @@
                   <AnchorLayoutInput Left="RecentListPanel,1" Top="RecentListPanel,0" Right="Parent,1" Bottom="RecentListPanel,1"/>
                 </LayoutInput>
               </ColorFill>
-              
-              
+
+
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
@@ -799,6 +818,13 @@
       </Changed>
       <Binding Source="[ScrollingData.CurrentPage]" Target="[Pagination.Value]" />
       <Binding Source="[ScrollingData.TotalPages]" Target="[Pagination.MaxPages]" />
+      <Rule>
+        <Actions>
+          <Invoke Target="[Application.StringData]" name="NoItemsEHS" ResultTarget="[EmptyList.Content]"/>
+        </Actions>
+      </Rule>
+
+
     </Rules>
     <Content>
       <Panel>
@@ -830,7 +856,7 @@
               </Scroller>
             </Children>
           </Clip>
-          <Text Name="EmptyList" Content="No Items To Show" Font="Segoe Media Center, 24" Color="color://s:FontColorDark" Visible="false" >
+          <Text Name="EmptyList" Content="" Font="Segoe Media Center, 24" Color="color://s:FontColorDark" Visible="false" >
             <LayoutInput>
               <AnchorLayoutInput Bottom="Parent,1,-5"/>
             </LayoutInput>
@@ -866,7 +892,7 @@
 
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
-     <Binding Source="[Item.PrimaryImageSmall]" Target="[ItemPoster.Content]" /> 
+      <Binding Source="[Item.PrimaryImageSmall]" Target="[ItemPoster.Content]" />
       <Binding Source="[Item.LongName]" Target="[Txt1.Content]" />
       <Binding Source="[Item.RecentDateString]" Target="[Txt2.Content]" />
       <Binding Source="[Item.HaveWatched]" Target="[TickIndicator.Visible]" >
@@ -874,7 +900,7 @@
           <Equality Source="[Application.Config.ShowWatchTickInPosterView]" Value="true" />
         </Conditions>
       </Binding>
-      
+
       <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
 
       <Condition Source="[Index.Value]" ConditionOp="GreaterThan" SourceValue="[DisplayCount]" Target="[Bg.Alpha]" Value="0" />
@@ -913,7 +939,7 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3" 
+      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3"
                MinimumSize="[MinSize]" MaximumSize="[MinSize]" Margins="0,0,0,0">
         <Children>
           <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >

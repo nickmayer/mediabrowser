@@ -31,7 +31,7 @@ namespace MediaBrowser.Library
         private string customPIN { get; set; } //local storage for PIN to be checked against
         private List<Folder> enteredProtectedFolders;
         ParentalPromptCompletedCallback pinCallback;
-        
+
         //item and properties to operate upon after pin entered
         private Item anItem;
         protected bool resume;
@@ -57,7 +57,7 @@ namespace MediaBrowser.Library
             //check to see if this is run with clean or recently created cache
             string itemCache = Path.Combine(ApplicationPaths.AppCachePath, "items");
             DateTime recentTime = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddMinutes(-1)));  //if cache dir created less than a minute ago we must've just done it
-            if (!Directory.Exists(itemCache) || DateTime.Compare(Directory.GetCreationTime(itemCache), recentTime) > 0) 
+            if (!Directory.Exists(itemCache) || DateTime.Compare(Directory.GetCreationTime(itemCache), recentTime) > 0)
             {
                 if (Config.Instance.ParentalBlockUnrated)
                 {
@@ -117,7 +117,8 @@ namespace MediaBrowser.Library
             {
                 enteredProtectedFolders.Add(folder.Folder);
                 return true;
-            } else 
+            }
+            else
                 return false;
         }
 
@@ -172,7 +173,8 @@ namespace MediaBrowser.Library
             return;
         }
 
-        public void SwitchUnrated(bool block) {
+        public void SwitchUnrated(bool block)
+        {
             ratings.SwitchUnrated(block);
         }
 
@@ -188,8 +190,8 @@ namespace MediaBrowser.Library
                 customPIN = folder.BaseItem.CustomPIN; // use custom pin for this item
             else
                 customPIN = Config.Instance.ParentalPIN; // use global pin
-            Logger.ReportInfo("Request to open protected content "+folder.Name);
-            PromptForPin(pinCallback,"Please Enter PIN to View Protected Content");
+            Logger.ReportInfo("Request to open protected content " + folder.Name);
+            PromptForPin(pinCallback, Application.CurrentInstance.StringData("EnterPINToViewDial"));
         }
 
         public void NavPinEntered(bool pinCorrect)
@@ -204,7 +206,7 @@ namespace MediaBrowser.Library
             }
             else
             {
-                env.Dialog("Incorrect PIN Entered", "Content Protected", DialogButtons.Ok, 60, true);
+                env.Dialog(Application.CurrentInstance.StringData("IncorrectPINDial"), Application.CurrentInstance.StringData("ContentProtected"), DialogButtons.Ok, 60, true);
                 Logger.ReportInfo("PIN Incorrect attempting to open " + anItem.Name);
                 Application.CurrentInstance.BackOut(); //clear the PIN page
             }
@@ -222,7 +224,7 @@ namespace MediaBrowser.Library
             else
                 customPIN = Config.Instance.ParentalPIN; // use global pin
             Logger.ReportInfo("Request to shuffle protected content " + folder.Name);
-            PromptForPin(pinCallback, "Please Enter PIN to Play Protected Content");
+            PromptForPin(pinCallback, Application.CurrentInstance.StringData("EnterPINToPlayDial"));
         }
 
         public void ShufflePinEntered(bool pinCorrect)
@@ -238,7 +240,7 @@ namespace MediaBrowser.Library
             }
             else
             {
-                env.Dialog("Incorrect PIN Entered", "Content Protected", DialogButtons.Ok, 60, true);
+                env.Dialog(Application.CurrentInstance.StringData("IncorrectPINDial"), Application.CurrentInstance.StringData("ContentProtected"), DialogButtons.Ok, 60, true);
                 Logger.ReportInfo("PIN Incorrect attempting to shuffle play " + anItem.Name);
             }
         }
@@ -255,7 +257,7 @@ namespace MediaBrowser.Library
             else
                 customPIN = Config.Instance.ParentalPIN; // use global pin
             Logger.ReportInfo("Request to play protected content " + folder.Name);
-            PromptForPin(pinCallback, "Please Enter PIN to Play Protected Content");
+            PromptForPin(pinCallback, Application.CurrentInstance.StringData("EnterPINToPlayDial"));
         }
 
         public void UnwatchedPinEntered(bool pinCorrect)
@@ -271,11 +273,11 @@ namespace MediaBrowser.Library
             }
             else
             {
-                env.Dialog("Incorrect PIN Entered", "Content Protected", DialogButtons.Ok, 60, true);
+                env.Dialog(Application.CurrentInstance.StringData("IncorrectPINDial"), Application.CurrentInstance.StringData("ContentProtected"), DialogButtons.Ok, 60, true);
                 Logger.ReportInfo("PIN Incorrect attempting to play unwatched in " + anItem.Name);
             }
         }
-        public void PlayProtected(Item item, bool resume, bool queue) 
+        public void PlayProtected(Item item, bool resume, bool queue)
         {
             //save parameters where we can get at them after pin entry
             this.anItem = item;
@@ -289,7 +291,7 @@ namespace MediaBrowser.Library
             else
                 customPIN = Config.Instance.ParentalPIN; // use global pin
             Logger.ReportInfo("Request to play protected content");
-            PromptForPin(pinCallback,"Please Enter PIN to Play Protected Content");
+            PromptForPin(pinCallback, Application.CurrentInstance.StringData("EnterPINToPlayDial"));
         }
 
         public void PlayPinEntered(bool pinCorrect)
@@ -298,12 +300,12 @@ namespace MediaBrowser.Library
             MediaCenterEnvironment env = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
             if (pinCorrect)
             {
-                Logger.ReportInfo("Playing protected content "+anItem.Name);
+                Logger.ReportInfo("Playing protected content " + anItem.Name);
                 this.anItem.PlaySecure(resume, queue);
             }
             else
             {
-                env.Dialog("Incorrect PIN Entered", "Content Protected", DialogButtons.Ok, 60, true);
+                env.Dialog(Application.CurrentInstance.StringData("IncorrectPINDial"), Application.CurrentInstance.StringData("ContentProtected"), DialogButtons.Ok, 60, true);
                 Logger.ReportInfo("Pin Incorrect attempting to play " + anItem.Name);
             }
         }
@@ -315,7 +317,7 @@ namespace MediaBrowser.Library
             pinCallback = NewPinEntered;
             customPIN = Config.Instance.ParentalPIN; // use global pin
             Logger.ReportInfo("Request to change PIN");
-            PromptForPin(pinCallback, "Please Enter CURRENT PIN.");
+            PromptForPin(pinCallback, Application.CurrentInstance.StringData("EnterCurrentPINDial"));
         }
 
         public void NewPinEntered(bool pinCorrect)
@@ -329,7 +331,7 @@ namespace MediaBrowser.Library
             }
             else
             {
-                env.Dialog("Incorrect PIN Entered", "Cannot Change PIN", DialogButtons.Ok, 60, true);
+                env.Dialog(Application.CurrentInstance.StringData("IncorrectPINDial"), Application.CurrentInstance.StringData("CantChangePINDial"), DialogButtons.Ok, 60, true);
                 Logger.ReportInfo("PIN Incorrect attempting change PIN ");
             }
         }
@@ -340,7 +342,7 @@ namespace MediaBrowser.Library
             if (pinCorrect)
             {
                 unlockLibrary();
-                env.Dialog("Library Temporarily Unlocked.  Will Re-Lock in "+this.unlockPeriod.ToString()+" Hour(s) or on Application Re-Start", "Unlock", DialogButtons.Ok, 60, true);
+                env.Dialog(string.Format(Application.CurrentInstance.StringData("LibraryUnlockedDial"), this.unlockPeriod.ToString()), Application.CurrentInstance.StringData("LibraryUnlockedCapDial"), DialogButtons.Ok, 60, true);
                 Application.CurrentInstance.Back(); //clear PIN screen
                 if (Config.Instance.HideParentalDisAllowed)
                 {
@@ -352,7 +354,7 @@ namespace MediaBrowser.Library
             }
             else
             {
-                env.Dialog("Incorrect PIN Entered", "Unlock", DialogButtons.Ok, 60, true);
+                env.Dialog(Application.CurrentInstance.StringData("IncorrectPINDial"), Application.CurrentInstance.StringData("LibraryUnlockedCapDial"), DialogButtons.Ok, 60, true);
                 Application.CurrentInstance.Back(); //clear PIN screen
                 Logger.ReportInfo("PIN Incorrect attempting to unlock library.");
             }
@@ -364,7 +366,7 @@ namespace MediaBrowser.Library
             pinCallback = UnlockPinEntered;
             customPIN = Config.Instance.ParentalPIN; // use global pin
             Logger.ReportInfo("Request to unlock PC");
-            PromptForPin(pinCallback,"Please Enter PIN to Unlock Library");
+            PromptForPin(pinCallback, Application.CurrentInstance.StringData("EnterPINDial"));
         }
 
         private void unlockLibrary()
@@ -388,7 +390,7 @@ namespace MediaBrowser.Library
             else
                 Application.CurrentInstance.OpenSecurityPage(prompt);
         }
-                
+
 
         public void CustomPINEntered(string aPIN)
         {
@@ -398,7 +400,7 @@ namespace MediaBrowser.Library
                 gettingNewPIN = false;
                 Config.Instance.ParentalPIN = aPIN;
                 MediaCenterEnvironment env = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                env.Dialog("PIN Successfully Changed", "PIN Change", DialogButtons.Ok, 60, true);
+                env.Dialog(Application.CurrentInstance.StringData("PINChangedDial"), Application.CurrentInstance.StringData("PINChangedCapDial"), DialogButtons.Ok, 60, true);
                 Application.CurrentInstance.Back(); //clear PIN entry screen
             }
             else
@@ -408,7 +410,7 @@ namespace MediaBrowser.Library
                 {
                     //also unlock the library
                     unlockLibrary();
-                    Application.CurrentInstance.Information.AddInformationString("Library Temporarily UnLocked. Will Re-Lock in "+this.unlockPeriod.ToString()+" Hour(s)"); //and display a message
+                    Application.CurrentInstance.Information.AddInformationString(string.Format(Application.CurrentInstance.StringData("LibraryUnLockedProf"), this.unlockPeriod.ToString())); //and display a message
                 }
             }
 
@@ -427,7 +429,7 @@ namespace MediaBrowser.Library
                 //if (Application.CurrentInstance.RootFolderModel != null)
                 //    Application.CurrentInstance.RootFolderModel.RefreshUI();
             }
-            Application.CurrentInstance.Information.AddInformationString("Library Re-Locked"); //and display a message
+            Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("LibraryReLockedProf")); //and display a message
             //env.Dialog("Library Has Been Re-Locked for Parental Control.", "Unlock Time Expired", DialogButtons.Ok, 60, true);
         }
 

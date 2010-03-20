@@ -23,7 +23,8 @@ namespace MediaBrowser
 
         public Information()
         {
-            AddInformation(new InfomationItem("Welcome to Media Browser.", 2));
+            //AddInformation(new InfomationItem("Welcome to Media Browser.", 2)); 
+            AddInformation(new InfomationItem(Library.Kernel.Instance.StringData.GetString("WelcomeProf"), 2));
             Begin();
         }
 
@@ -34,13 +35,15 @@ namespace MediaBrowser
 
         public string DisplayText
         {
-            get { 
-                return _displayText; 
+            get
+            {
+                return _displayText;
             }
-            set { 
-                _displayText = value; 
+            set
+            {
+                _displayText = value;
                 // Im a little worried about this line, if we somehow execue off the UI thread then its messed
-                FirePropertyChanged("DisplayText"); 
+                FirePropertyChanged("DisplayText");
             }
         }
 
@@ -49,20 +52,23 @@ namespace MediaBrowser
         #region methods
         public void AddInformation(InfomationItem info)
         {
-            lock (informationItems) {
+            lock (informationItems)
+            {
                 informationItems.Add(info);
             }
         }
         public void AddInformationString(string info)
         {
-            lock (informationItems) {
+            lock (informationItems)
+            {
                 informationItems.Add(new InfomationItem(info));
             }
         }
 
         private void Begin()
         {
-            lock (informationItems) {
+            lock (informationItems)
+            {
                 if (informationItems.Count > 0)
                     DisplayItem();
             }

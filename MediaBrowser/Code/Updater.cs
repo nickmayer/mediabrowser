@@ -52,7 +52,7 @@ namespace MediaBrowser.Util
         private string remoteFile;
         private string localFile;
         private System.Version newVersion;
-        
+
         // This should be replaced with the real location of the version info XML.
         private const string infoURL = "http://www.mediabrowser.tv/mbinfo.xml";
 
@@ -69,11 +69,11 @@ namespace MediaBrowser.Util
 
                 if (appRef.Config.EnableBetas)
                 {
-                    node = doc.SelectSingleNode("/Config/Beta"); 
+                    node = doc.SelectSingleNode("/Config/Beta");
                 }
                 else
                 {
-                    node = doc.SelectSingleNode("/Config/Release"); 
+                    node = doc.SelectSingleNode("/Config/Release");
                 }
 
                 newVersion = new System.Version(node.Attributes["version"].Value);
@@ -85,7 +85,7 @@ namespace MediaBrowser.Util
                     if (Application.MediaCenterEnvironment.Capabilities.ContainsKey("Console"))
                     {
                         // Prompt them if they want to update.
-                        DialogResult reply = Application.DisplayDialog("Do you wish to update Media Browser now?  (Requires you to grant permissions and a restart of Media Browser)", "Update Available", (DialogButtons)12 /* Yes, No */, 10);
+                        DialogResult reply = Application.DisplayDialog(Application.CurrentInstance.StringData("UpdateMBDial"), Application.CurrentInstance.StringData("UpdateMBCapDial"), (DialogButtons)12 /* Yes, No */, 10);
                         if (reply == DialogResult.Yes)
                         {
                             // If they want it, download in the background and prompt when done.
@@ -96,7 +96,7 @@ namespace MediaBrowser.Util
                     {
                         // Let the user know about the update, but do nothing as we can't install from 
                         // an extender.
-                        DialogResult reply = Application.DisplayDialog("There is an update available for Media Browser.  Please update Media Browser next time you are at your MediaCenter PC.", "Update Available", (DialogButtons)1 /* OK */, 10);
+                        DialogResult reply = Application.DisplayDialog(Application.CurrentInstance.StringData("UpdateMBExtDial"), Application.CurrentInstance.StringData("UpdateMBCapDial"), (DialogButtons)1 /* OK */, 10);
                     }
                 }
             }
@@ -174,8 +174,8 @@ namespace MediaBrowser.Util
             else
             {
                 // Otherwise let them know the download didn't work and they should just keep using VB.
-                DialogResult reply = Application.DisplayDialog("Media Browser will operate normally and prompt you again the next time you load it.", 
-                    "Update Download Failed", DialogButtons.Ok, 10);
+                DialogResult reply = Application.DisplayDialog(Application.CurrentInstance.StringData("DLUpdateFailDial"),
+                    Application.CurrentInstance.StringData("DLUpdateFailCapDial"), DialogButtons.Ok, 10);
             }
         }
 
@@ -183,9 +183,9 @@ namespace MediaBrowser.Util
         public void DownloadComplete()
         {
             // Let them know we will be closing VB then restarting it.
-            DialogResult reply = Application.DisplayDialog("Media Browser must now exit to apply the update.  It will restart automatically when it is done", 
-                "Update Downloaded", DialogButtons.Ok, 10);
-            
+            DialogResult reply = Application.DisplayDialog(Application.CurrentInstance.StringData("UpdateSuccessDial"),
+                Application.CurrentInstance.StringData("UpdateSuccessCapDial"), DialogButtons.Ok, 10);
+
             // put together a batch file to execute the installer in silent mode and restart VB.
             string updateBat = "msiexec.exe /qb /i \"" + localFile + "\"\n";
             string windir = Environment.GetEnvironmentVariable("windir");
@@ -225,13 +225,13 @@ namespace MediaBrowser.Util
                     if (found.Version > plugin.Version)
                     {
                         //newer one available - alert and set our bool
-                        Application.CurrentInstance.Information.AddInformationString("An update is available for plug-in " + plugin.Name);
+                        Application.CurrentInstance.Information.AddInformationString(string.Format(Application.CurrentInstance.StringData("PluginUpdateProf"), plugin.Name));
                         Logger.ReportInfo("Plugin " + plugin.Name + " (version " + plugin.Version + ") has update to Version " + found.Version + " Available.");
                         updatesAvailable = true;
                     }
                 }
             }
-            if (!updatesAvailable) Application.CurrentInstance.Information.AddInformationString("No Plugin Updates Currently Available.");
+            if (!updatesAvailable) Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("NoPluginUpdateProf"));
             return updatesAvailable;
         }
 

@@ -25,13 +25,14 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.UI;
 using MediaBrowser.Library.Input;
+using MediaBrowser.Library.Localization;
 
 
 namespace MediaBrowser
 {
 
     public class Application : ModelItem, IDisposable
-    {        
+    {
         public Config Config
         {
             get
@@ -43,6 +44,11 @@ namespace MediaBrowser
         public static Application CurrentInstance
         {
             get { return singleApplicationInstance; }
+        }
+
+        public string StringData(string name)
+        {
+            return Kernel.Instance.StringData.GetString(name);
         }
 
         private static Application singleApplicationInstance;
@@ -88,7 +94,7 @@ namespace MediaBrowser
             }
         }
 
-        public Choice ConfigModel {get; set;}
+        public Choice ConfigModel { get; set; }
 
         public string CurrentConfigPanel
         {
@@ -124,9 +130,12 @@ namespace MediaBrowser
         {
             get
             {
-                if (AvailableThemes.ContainsKey(Config.Instance.ViewTheme)) {
+                if (AvailableThemes.ContainsKey(Config.Instance.ViewTheme))
+                {
                     return AvailableThemes[Config.Instance.ViewTheme];
-                } else { //old or bogus theme - return default so we don't crash
+                }
+                else
+                { //old or bogus theme - return default so we don't crash
                     //and set the config so config page doesn't crash
                     Config.Instance.ViewTheme = "Default";
                     return AvailableThemes["Default"];
@@ -200,7 +209,7 @@ namespace MediaBrowser
             set { navigatingForward = value; }
         }
 
-        
+
         private string entryPointPath = string.Empty;
 
         public string EntryPointPath
@@ -311,7 +320,7 @@ namespace MediaBrowser
             Logger.ReportInfo("Application has broken MediaCenterEnvironment, possibly due to 5 minutes of idle while running under system with TVPack installed.\n Application will now close.");
             Logger.ReportInfo("Attempting to use reflection that sometimes works to show a dialog box");
             // for some reason using reflection still works
-            Application.DialogBoxViaReflection("Application will now close due to broken MediaCenterEnvironment object, possibly due to 5 minutes of idle time and/or running with TVPack installed.");
+            Application.DialogBoxViaReflection(CurrentInstance.StringData("BrokenEnvironmentDial"));
             Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
         }
 
@@ -381,7 +390,7 @@ namespace MediaBrowser
         public void FinishInitialConfig()
         {
             MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-            ev.Dialog("Initial configuration is complete, please restart Media Browser", "Restart", DialogButtons.Ok, 60, true);
+            ev.Dialog(CurrentInstance.StringData("InitialConfigDial"), CurrentInstance.StringData("Restart"), DialogButtons.Ok, 60, true);
             Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
 
         }
@@ -390,19 +399,19 @@ namespace MediaBrowser
         {
             // Setup variables
             MediaCenterEnvironment mce = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-            var msg = "Are you sure you wish to delete this media item?";
-            var caption = "Delete Confirmation";
+            var msg = CurrentInstance.StringData("DeleteMediaDial");
+            var caption = CurrentInstance.StringData("DeleteMediaCapDial");
 
             // Present dialog
             DialogResult dr = mce.Dialog(msg, caption, DialogButtons.No | DialogButtons.Yes, 0, true);
 
             if (dr == DialogResult.No)
             {
-                mce.Dialog("Item NOT Deleted.", "Delete Cancelled by User", DialogButtons.Ok, 0, true);
+                mce.Dialog(CurrentInstance.StringData("NotDeletedDial"), CurrentInstance.StringData("NotDeletedCapDial"), DialogButtons.Ok, 0, true);
                 return;
             }
 
-            if (dr == DialogResult.Yes && this.Config.Advanced_EnableDelete == true 
+            if (dr == DialogResult.Yes && this.Config.Advanced_EnableDelete == true
                 && this.Config.EnableAdvancedCmds == true)
             {
                 Item parent = Item.PhysicalParent;
@@ -413,27 +422,27 @@ namespace MediaBrowser
                 {
                     if (Directory.Exists(path))
                     {
-                        Directory.Delete(path, true);                        
+                        Directory.Delete(path, true);
                     }
                     else if (File.Exists(path))
                     {
                         File.Delete(path);
-                    }                    
+                    }
                 }
                 catch (IOException)
                 {
-                    mce.Dialog("The selected media item cannot be deleted due to an invalid path. Or you may not have sufficient access rights to perform this command.", "Delete Failed", DialogButtons.Ok, 0, true);
+                    mce.Dialog(CurrentInstance.StringData("NotDelInvalidPathDial"), CurrentInstance.StringData("DelFailedDial"), DialogButtons.Ok, 0, true);
                 }
                 catch (Exception)
                 {
-                    mce.Dialog("The selected media item cannot be deleted due to an unknown error.", "Delete Failed", DialogButtons.Ok, 0, true);
+                    mce.Dialog(CurrentInstance.StringData("NotDelUnknownDial"), CurrentInstance.StringData("DelFailedDial"), DialogButtons.Ok, 0, true);
                 }
                 DeleteNavigationHelper(parent);
                 this.Information.AddInformation(new InfomationItem("Deleted media item: " + name, 2));
                 this.Information.AddInformation(new InfomationItem("Deleted path: " + path, 2));
             }
             else
-                mce.Dialog("The selected media item cannot be deleted due to its Item-Type or you have not enabled this feature in the configuration file.", "Delete Failed", DialogButtons.Ok, 0, true);
+                mce.Dialog(CurrentInstance.StringData("NotDelTypeDial"), CurrentInstance.StringData("DelFailedDial"), DialogButtons.Ok, 0, true);
         }
 
 
@@ -455,14 +464,14 @@ namespace MediaBrowser
 
         // Entry point for the app
         public void GoToMenu()
-        { 
+        {
             try
             {
                 if (Config.IsFirstRun)
                 {
                     OpenConfiguration(false);
                     MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                    ev.Dialog("As this is the first time you have run Media Browser please setup the inital configuration", "Configure", DialogButtons.Ok, 60, true);
+                    ev.Dialog(CurrentInstance.StringData("FirstTimeDial"), CurrentInstance.StringData("FirstTimeCapDial"), DialogButtons.Ok, 60, true);
                 }
                 else
                 {
@@ -471,7 +480,8 @@ namespace MediaBrowser
                     if (Config.EnableUpdates)
                     {
                         Updater update = new Updater(this);
-                        Async.Queue(Async.STARTUP_QUEUE, () => {
+                        Async.Queue(Async.STARTUP_QUEUE, () =>
+                        {
                             update.CheckForUpdate();
                         }, 40000);
                         Async.Queue(Async.STARTUP_QUEUE, () =>
@@ -482,20 +492,25 @@ namespace MediaBrowser
 
                     Async.Queue("Full Refresh", () =>
                     {
-                        using (new Profiler("Full Library Refresh"))
+                        using (new Profiler(CurrentInstance.StringData("FullRefreshProf")))
                         {
                             try
                             {
                                 // entry points
-                                if (!(this.RootFolderModel == null)) {
+                                if (!(this.RootFolderModel == null))
+                                {
                                     //refresh the root folder children in case we changed sort order
-                                    foreach (var child in this.RootFolderModel.Children) {
+                                    foreach (var child in this.RootFolderModel.Children)
+                                    {
                                         child.RefreshMetadata();
                                     }
                                 }
-                                if (IsInEntryPoint) {
+                                if (IsInEntryPoint)
+                                {
                                     FullRefresh(this.RootFolderModel.Folder);
-                                } else {
+                                }
+                                else
+                                {
                                     FullRefresh(this.RootFolder);
                                 }
                             }
@@ -526,11 +541,11 @@ namespace MediaBrowser
                         try
                         {
                             this.RootFolderModel = (MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath));
-                            Navigate(this.RootFolderModel);                            
+                            Navigate(this.RootFolderModel);
                         }
                         catch (Exception ex)
                         {
-                            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser could not launch directly into " + this.EntryPointPath + ". " + ex.ToString() + " " + ex.StackTrace.ToString(), "Entrypoint Error", DialogButtons.Ok, 30, true);
+                            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentInstance.StringData("EntryPointErrorDial") + this.EntryPointPath + ". " + ex.ToString() + " " + ex.StackTrace.ToString(), CurrentInstance.StringData("EntryPointErrorCapDial"), DialogButtons.Ok, 30, true);
                             Close();
                         }
                     }
@@ -538,15 +553,17 @@ namespace MediaBrowser
             }
             catch (Exception e)
             {
-                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog("Media Browser encountered a critical error and had to shut down: " + e.ToString() + " " + e.StackTrace.ToString(), "Critical Error", DialogButtons.Ok, 60, true);
+                Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentInstance.StringData("CriticalErrorDial") + e.ToString() + " " + e.StackTrace.ToString(), CurrentInstance.StringData("CriticalErrorCapDial"), DialogButtons.Ok, 60, true);
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
         }
 
 
-        bool IsInEntryPoint {
-            get {
-                return !String.IsNullOrEmpty(this.EntryPointPath); 
+        bool IsInEntryPoint
+        {
+            get
+            {
+                return !String.IsNullOrEmpty(this.EntryPointPath);
             }
         }
 
@@ -554,7 +571,7 @@ namespace MediaBrowser
         {
             folder.RefreshMetadata();
 
-            using (new Profiler("Full Library Validation"))
+            using (new Profiler(CurrentInstance.StringData("FullValidationProf")))
             {
                 RunActionRecursively(folder, item =>
                 {
@@ -563,12 +580,12 @@ namespace MediaBrowser
                 });
             }
 
-            using (new Profiler("Fast Metadata refresh"))
+            using (new Profiler(CurrentInstance.StringData("FastRefreshProf")))
             {
                 RunActionRecursively(folder, item => item.RefreshMetadata(MetadataRefreshOptions.FastOnly));
             }
 
-            using (new Profiler("Slow Metadata refresh"))
+            using (new Profiler(CurrentInstance.StringData("SlowRefresh")))
             {
                 RunActionRecursively(folder, item => item.RefreshMetadata(MetadataRefreshOptions.Default));
             }
@@ -620,10 +637,13 @@ namespace MediaBrowser
         }
 
 
-        public string NowPlayingText {
-            get {
+        public string NowPlayingText
+        {
+            get
+            {
                 string showName = "";
-                try {
+                try
+                {
 
                     string name = null;
 
@@ -657,11 +677,14 @@ namespace MediaBrowser
 
                     // playlist fix {filename without extension)({playlist name})
                     int lastParan = showName.LastIndexOf('(');
-                    if (lastParan > 0) {
-                        showName = showName.Substring(lastParan+1, showName.Length - (lastParan + 2)).Trim();
+                    if (lastParan > 0)
+                    {
+                        showName = showName.Substring(lastParan + 1, showName.Length - (lastParan + 2)).Trim();
                     }
 
-                } catch(Exception e) {
+                }
+                catch (Exception e)
+                {
                     showName = "Unknown";
                     Logger.ReportException("Something strange happend while getting media name, please report to community.mediabrowser.tv", e);
                     // never crash here
@@ -688,8 +711,8 @@ namespace MediaBrowser
         void mouseActiveHooker_MouseActive(IsMouseActiveHooker m, MouseActiveEventArgs e)
         {
             this.IsMouseActive = e.MouseActive;
-        } 
- 
+        }
+
         public string BreadCrumbs
         {
             get
@@ -701,17 +724,17 @@ namespace MediaBrowser
         public void ClearCache()
         {
             MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-            DialogResult r = ev.Dialog("Are you sure you wish to clear the cache?\nThis will erase all cached and downloaded information and images.", "Clear Cache", DialogButtons.Yes | DialogButtons.No, 60, true);
+            DialogResult r = ev.Dialog(CurrentInstance.StringData("ClearCacheDial"), CurrentInstance.StringData("ClearCacheCapDial"), DialogButtons.Yes | DialogButtons.No, 60, true);
             if (r == DialogResult.Yes)
             {
                 bool ok = Kernel.Instance.ItemRepository.ClearEntireCache();
                 if (!ok)
                 {
-                    ev.Dialog("An error occured during the clearing of the cache, you may wish to manually clear it from " + ApplicationPaths.AppCachePath + " before restarting Media Browser", "Error", DialogButtons.Ok, 60, true);
+                    ev.Dialog(string.Format(CurrentInstance.StringData("ClearCacheErrorDial"), ApplicationPaths.AppCachePath), CurrentInstance.StringData("ErrorDial"), DialogButtons.Ok, 60, true);
                 }
                 else
                 {
-                    ev.Dialog("Please restart Media Browser", "Cache Cleared", DialogButtons.Ok, 60, true);
+                    ev.Dialog(CurrentInstance.StringData("RestartMBDial"), CurrentInstance.StringData("CacheClearedDial"), DialogButtons.Ok, 60, true);
                 }
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
@@ -720,11 +743,11 @@ namespace MediaBrowser
         public void ResetConfig()
         {
             MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-            DialogResult r = ev.Dialog("Are you sure you wish to reset all configuration to defaults?", "Reset Configuration", DialogButtons.Yes | DialogButtons.No, 60, true);
+            DialogResult r = ev.Dialog(CurrentInstance.StringData("ResetConfigDial"), CurrentInstance.StringData("ResetConfigCapDial"), DialogButtons.Yes | DialogButtons.No, 60, true);
             if (r == DialogResult.Yes)
             {
                 Config.Instance.Reset();
-                ev.Dialog("Please restart Media Browser", "Configuration Reset", DialogButtons.Ok, 60, true);
+                ev.Dialog(CurrentInstance.StringData("RestartMBDial"), CurrentInstance.StringData("ConfigResetDial"), DialogButtons.Ok, 60, true);
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
         }
@@ -856,7 +879,7 @@ namespace MediaBrowser
 
             if (item.BaseItem is Show)
             {
-                if ((item.HasDataForDetailPage && item.BaseItem is Movie) || 
+                if ((item.HasDataForDetailPage && item.BaseItem is Movie) ||
                     this.Config.AlwaysShowDetailsPage)
                 {
                     // go to details screen 
@@ -869,7 +892,7 @@ namespace MediaBrowser
                 }
             }
 
-       
+
             MediaBrowser.Library.FolderModel folder = item as MediaBrowser.Library.FolderModel;
             if (folder != null)
             {
@@ -1127,7 +1150,7 @@ namespace MediaBrowser
             }
         }
 
-        
+
         public string MainBackdrop
         {
             get
