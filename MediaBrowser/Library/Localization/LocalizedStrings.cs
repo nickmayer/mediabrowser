@@ -45,5 +45,24 @@ namespace MediaBrowser.Library.Localization
             return str; 
         }
 
+        public string GetKey(string str)
+        {
+            string key = "";
+
+            //search our data elements until we find it
+            foreach (object stringData in data)
+            {
+                foreach (var field in stringData.GetType().GetFields())
+                {
+                    if (field != null)
+                    {
+                        key = (field.GetValue(stringData) as string) ?? "";
+                        if (str == key) return field.Name;
+                    }
+                }
+            }
+            return "";
+        }
+
     }
 }

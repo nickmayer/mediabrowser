@@ -436,16 +436,16 @@
           </Invoke>
           <Invoke ResultTarget="[GeneralInit.Text]" Target="[Application.StringData]" name="GeneralConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[TrackingInit.Text]" Target="[Application.StringData]" name="TrackingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AssumeWatchedInit.Label]" Target="[Application.StringData]" name="AssumeWatchedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AssumeWatchedInit.Label]" Target="[Application.StringData]" name="AssumeWatchedIfOlderThanConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[MetadataInit.Text]" Target="[Application.StringData]" name="MetadataConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AllowInternetInit.Label]" Target="[Application.StringData]" name="AllowInternetConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AllowInternetInit.Label]" Target="[Application.StringData]" name="EnableInternetProvidersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[UpdatesInit.Text]" Target="[Application.StringData]" name="UpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AutoUpdatesInit.Label]" Target="[Application.StringData]" name="AutoUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoUpdatesInit.Label]" Target="[Application.StringData]" name="AutomaticUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ContinueBtn.Text]" Target="[Application.StringData]" name="ContinueConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[BackBtn.Text]" Target="[Application.StringData]" name="ContinueConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ResetConfigBtn.Text]" Target="[Application.StringData]" name="ResetConfigBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ClearCacheBtn.Text]" Target="[Application.StringData]" name="ClearCacheBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[UnlockPCBtn.Text]" Target="[Application.StringData]" name="UnlockPCBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ResetConfigBtn.Text]" Target="[Application.StringData]" name="ResetDefaultsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ClearCacheBtn.Text]" Target="[Application.StringData]" name="ClearCacheConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[UnlockPCBtn.Text]" Target="[Application.StringData]" name="UnlockConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[General.Text]" Target="[Application.StringData]" name="GeneralConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[Logging.Label]" Target="[Application.StringData]" name="LoggingConfig" InvokePolicy="Synchronous" ExclusiveApply="false">
             <Transformer>
@@ -453,61 +453,60 @@
             </Transformer>
           </Invoke>
           <Invoke ResultTarget="[Metadata.Text]" Target="[Application.StringData]" name="MetadataConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AllowInternet.Label]" Target="[Application.StringData]" name="AllowInternetConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AllowInternet.Label]" Target="[Application.StringData]" name="EnableInternetProvidersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[Updates.Text]" Target="[Application.StringData]" name="UpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AutoUpdates.Label]" Target="[Application.StringData]" name="AutoUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoUpdates.Label]" Target="[Application.StringData]" name="AutomaticUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[BetaUpdates.Label]" Target="[Application.StringData]" name="BetaUpdatesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[Global.Text]" Target="[Application.StringData]" name="GlobalConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[EnableEHS.Label]" Target="[Application.StringData]" name="EnableEHSConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ShowClockC.Label]" Target="[Application.StringData]" name="ShowClockConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[DimUnselectedPostersC.Label]" Target="[Application.StringData]" name="DimUnselectedPostersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[HideFocusFrameC.Label]" Target="[Application.StringData]" name="HideFocusFrameConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AlwaysShowDetailsPageC.Label]" Target="[Application.StringData]" name="AlwaysShowDetailsPageConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ExcludeRemoteContentInSearchC.Label]" Target="[Application.StringData]" name="ExcludeRemoteContentInSearchConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[EnableMouseHookC.Label]" Target="[Application.StringData]" name="EnableMouseHookConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AlwaysShowDetailsPageC.Label]" Target="[Application.StringData]" name="AlwaysShowDetailsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ExcludeRemoteContentInSearchC.Label]" Target="[Application.StringData]" name="ExcludeRemoteContentInSearchesConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableMouseHookC.Label]" Target="[Application.StringData]" name="EnhancedMouseSupportConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[Views.Text]" Target="[Application.StringData]" name="ViewsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[GridSpacingC.Label]" Target="[Application.StringData]" name="GridSpacingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ThumbStripPosterWidthC.Label]" Target="[Application.StringData]" name="ThumbStripPosterWidthConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[GridSpacingC.Label]" Target="[Application.StringData]" name="PosterGridSpacingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ThumbStripPosterWidthC.Label]" Target="[Application.StringData]" name="ThumbWidthSplitConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[BreadcrumbCountC.Label]" Target="[Application.StringData]" name="BreadcrumbCountConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowBackdropC.Label]" Target="[Application.StringData]" name="ShowBackdropConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowRootBackgroundC.Label]" Target="[Application.StringData]" name="ShowRootBackgroundConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowBackdropC.Label]" Target="[Application.StringData]" name="ShowFanArtonViewsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowRootBackgroundC.Label]" Target="[Application.StringData]" name="ShowInitialFolderBackgroundConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ShowThemeBackgroundC.Label]" Target="[Application.StringData]" name="ShowThemeBackgroundConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowHDIndicatorOnPostersC.Label]" Target="[Application.StringData]" name="ShowHDIndicatorOnPostersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowRemoteIndicatorOnPostersC.Label]" Target="[Application.StringData]" name="ShowRemoteIndicatorOnPostersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowHDIndicatorOnPostersC.Label]" Target="[Application.StringData]" name="ShowHDOverlayonPostersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowRemoteIndicatorOnPostersC.Label]" Target="[Application.StringData]" name="ShowIcononRemoteContentConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[EnableAdvancedCmdsC.Label]" Target="[Application.StringData]" name="EnableAdvancedCmdsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[MediaTracking.Text]" Target="[Application.StringData]" name="MediaTrackingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[RememberIndexingC.Label]" Target="[Application.StringData]" name="RememberIndexingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[RememberIndexingC.Label]" Target="[Application.StringData]" name="RememberIndexByStateConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ShowUnwatchedCountC.Label]" Target="[Application.StringData]" name="ShowUnwatchedCountConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowWatchedTickOnFoldersC.Label]" Target="[Application.StringData]" name="ShowWatchedTickOnFoldersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowUnwatchedIndicatorC.Label]" Target="[Application.StringData]" name="ShowUnwatchedIndicatorConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowWatchTickInPosterViewC.Label]" Target="[Application.StringData]" name="ShowWatchTickInPosterViewConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[EnableListViewTicksC.Label]" Target="[Application.StringData]" name="EnableListViewTicksConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[DefaultToFirstUnwatchedC.Label]" Target="[Application.StringData]" name="DefaultToFirstUnwatchedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowWatchedTickOnFoldersC.Label]" Target="[Application.StringData]" name="WatchedIndicatoronFoldersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowUnwatchedIndicatorC.Label]" Target="[Application.StringData]" name="HighlightUnwatchedItemsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ShowWatchTickInPosterViewC.Label]" Target="[Application.StringData]" name="WatchedIndicatoronVideosConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableListViewTicksC.Label]" Target="[Application.StringData]" name="WatchedIndicatorinDetailViewConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[DefaultToFirstUnwatchedC.Label]" Target="[Application.StringData]" name="DefaultToFirstUnwatchedItemConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[GeneralBehavior.Text]" Target="[Application.StringData]" name="GeneralBehaviorConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[EnableNestedMovieFoldersC.Label]" Target="[Application.StringData]" name="EnableNestedMovieFoldersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AutoEnterSingleDirsC.Label]" Target="[Application.StringData]" name="AutoEnterSingleDirsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableNestedMovieFoldersC.Label]" Target="[Application.StringData]" name="AllowNestedMovieFoldersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoEnterSingleDirsC.Label]" Target="[Application.StringData]" name="AutoEnterSingleFolderItemsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[MultipleFileBehavior.Text]" Target="[Application.StringData]" name="MultipleFileBehaviorConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[EnableMoviePlaylistsC.Label]" Target="[Application.StringData]" name="EnableMoviePlaylistsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnableMoviePlaylistsC.Label]" Target="[Application.StringData]" name="TreatMultipleFilesAsSingleMovieConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[MultipleFileSizeLimit.Label]" Target="[Application.StringData]" name="MultipleFileSizeLimitConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[MBTheme.Text]" Target="[Application.StringData]" name="MBThemeConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ViewThemeSpinner.Label]" Target="[Application.StringData]" name="ViewThemeSpinnerConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[Spinner.Label]" Target="[Application.StringData]" name="SpinnerConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[FontThemeSpinner.Label]" Target="[Application.StringData]" name="FontThemeSpinnerConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[ViewThemeSpinner.Label]" Target="[Application.StringData]" name="VisualThemeConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Spinner.Label]" Target="[Application.StringData]" name="ColorSchemeConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[FontThemeSpinner.Label]" Target="[Application.StringData]" name="FontSizeConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[RequiresRestart.Text]" Target="[Application.StringData]" name="RequiresRestartConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ThemeSettings.Text]" Target="[Application.StringData]" name="ThemeSettingsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ShowConfigButtonC.Label]" Target="[Application.StringData]" name="ShowConfigButtonConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[AlphaBlendingC.Label]" Target="[Application.StringData]" name="AlphaBlendingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-
           <Invoke ResultTarget="[SecurityPIN.Label]" Target="[Application.StringData]" name="SecurityPINConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[PCUnlockedTxt.Content]" Target="[Application.StringData]" name="PCUnlockedTxtConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[RelockBtn.Text]" Target="[Application.StringData]" name="RelockBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[EnabledBtn.Label]" Target="[Application.StringData]" name="EnabledBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[Ratings.Label]" Target="[Application.StringData]" name="RatingsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[BlockUnratedC.Label]" Target="[Application.StringData]" name="BlockUnratedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[HideProtectedC.Label]" Target="[Application.StringData]" name="HideProtectedConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AutoUnlockC.Label]" Target="[Application.StringData]" name="AutoUnlockConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[UnlockPeriodC.Label]" Target="[Application.StringData]" name="UnlockPeriodConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[PINBtn.Text]" Target="[Application.StringData]" name="PINBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[EnabledBtn.Label]" Target="[Application.StringData]" name="EnableParentalBlocksConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[Ratings.Label]" Target="[Application.StringData]" name="MaxAllowedRatingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[BlockUnratedC.Label]" Target="[Application.StringData]" name="BlockUnratedContentConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[HideProtectedC.Label]" Target="[Application.StringData]" name="HideBlockedContentConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[AutoUnlockC.Label]" Target="[Application.StringData]" name="UnlockonPINEntryConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[UnlockPeriodC.Label]" Target="[Application.StringData]" name="UnlockPeriodHoursConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[PINBtn.Text]" Target="[Application.StringData]" name="EnterNewPINConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
 
         </Actions>
       </Rule>

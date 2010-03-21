@@ -48,7 +48,7 @@ namespace MediaBrowser
 
         public string StringData(string name)
         {
-            return Kernel.Instance.StringData.GetString(name);
+            return Kernel.Instance.GetString(name);
         }
 
         private static Application singleApplicationInstance;
@@ -1106,13 +1106,12 @@ namespace MediaBrowser
         public string DescString(string name)
         {
             //get the description string for "name" out of our string data object
-            //but first clean it up
-            name = name.Replace(" ", "");
-            name = name.Replace("-", "");
-            name = name.Replace("*", "");
-            name = name.Replace("(", "");
-            name = name.Replace(")", "");
-            return Kernel.Instance.StringData.GetString(name + "Desc");
+            string key = Kernel.Instance.StringData.GetKey(name.Trim());
+            if (key.EndsWith("Config"))
+            {
+                return Kernel.Instance.StringData.GetString(key.Remove(key.LastIndexOf("Config")) + "Desc");
+            }
+            return "";
         }
 
         public static void DisplayDialog(string message, string caption)

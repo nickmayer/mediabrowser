@@ -348,6 +348,11 @@ namespace MediaBrowser.Library {
 
         }
 
+        public string GetString(string name)
+        {
+            return this.StringData.GetString(name);
+        }
+
         public bool ParentalAllowed(Item item)
         {
             return this.ParentalControls.Allowed(item);
