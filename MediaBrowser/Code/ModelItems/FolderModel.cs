@@ -515,6 +515,12 @@ namespace MediaBrowser.Library {
             folderChildren = folderChildren.Clone();
             folderChildren.ListenForChanges();
 
+            //force the recent lists to re-build
+            this.newestItems = null;
+            this.recentUnwatchedItems = null;
+            this.recentWatchedItems = null;
+            RecentItemsChanged();
+
             FirePropertyChanged("Children");
             FirePropertyChanged("SelectedChildIndex");
             lock (watchLock)
