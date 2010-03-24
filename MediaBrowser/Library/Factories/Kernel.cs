@@ -517,5 +517,164 @@ namespace MediaBrowser.Library {
             if (pi != null) Plugins.Remove(pi); //we were updating
             Plugins.Add(plugin);
         }
+
+        public void InstallPlugin(string path, bool globalTarget,
+                MediaBrowser.Library.Network.WebDownload.PluginInstallUpdateCB updateCB,
+                MediaBrowser.Library.Network.WebDownload.PluginInstallFinishCB doneCB,
+                MediaBrowser.Library.Network.WebDownload.PluginInstallErrorCB errorCB) {
+            string target;
+            if (globalTarget) {
+                //install to ehome for now - can change this to GAC if figure out how...
+                target = Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", Path.GetFileName(path)));
+                //and put our pointer file in "plugins"
+                File.Create(Path.Combine(ApplicationPaths.AppPluginPath, Path.ChangeExtension(Path.GetFileName(path), ".pgn")));
+            }
+            else {
+                target = Path.Combine(ApplicationPaths.AppPluginPath, Path.GetFileName(path));
+            }
+
+            if (path.ToLower().StartsWith("http")) {
+                // Initialise Async Web Request
+                int BUFFER_SIZE = 1024;
+                Uri fileURI = new Uri(path);
+
+                WebRequest request = WebRequest.Create(fileURI);
+                Network.WebDownload.State requestState = new Network.WebDownload.State(BUFFER_SIZE, target);
+                requestState.request = request;
+                requestState.fileURI = fileURI;
+                requestState.progCB = updateCB;
+                requestState.doneCB = doneCB;
+                requestState.errorCB = errorCB;
+
+                IAsyncResult result = (IAsyncResult)request.BeginGetResponse(new AsyncCallback(ResponseCallback), requestState);
+
+                //*OLD Syncronous code
+                //using (var response = request.GetResponse()) {
+                //    using (var stream = response.GetResponseStream()) {
+                //       File.WriteAllBytes(target, stream.ReadAllBytes());
+                //    }
+                //}
+            }
+            else {
+                File.Copy(path, target);
+                InitialisePlugin(target);
+            }
+
+            // Moved code to InitialisePlugin()
+            //Function needs to be called at end of Async dl process as well
+        }
+
+        private void InitialisePlugin(string target) {
+            var plugin = Plugin.FromFile(target, true);
+            plugin.Init(this);
+            IPlugin pi = Plugins.Find(p => p.Filename == plugin.Filename);
+            if (pi != null) Plugins.Remove(pi); //we were updating
+            Plugins.Add(plugin);
+
+        }
+
+        /// <summary>
+        /// Main response callback, invoked once we have first Response packet from
+        /// server.  This is where we initiate the actual file transfer, reading from
+        /// a stream.
+        /// </summary>
+        /// <param name="asyncResult"></param>
+        private void ResponseCallback(IAsyncResult asyncResult) {
+            // Will be either HttpWebRequestState or FtpWebRequestState
+            Network.WebDownload.State requestState = ((Network.WebDownload.State)(asyncResult.AsyncState));
+
+            try {
+                WebRequest req = requestState.request;
+                string statusDescr = "";
+                string contentLength = "";
+
+                // HTTP 
+                if (requestState.fileURI.Scheme == Uri.UriSchemeHttp) {
+                    HttpWebResponse resp = ((HttpWebResponse)(req.EndGetResponse(asyncResult)));
+                    requestState.response = resp;
+                    statusDescr = resp.StatusDescription;
+                    requestState.totalBytes = requestState.response.ContentLength;
+                    contentLength = requestState.response.ContentLength.ToString();   // # bytes
+                }
+                else {
+                    throw new ApplicationException("Unexpected URI");
+                }
+
+                // Get this info back to the GUI -- max # bytes, so we can do progress bar
+                if (statusDescr != "") {
+                    //TODO: Enable Callbacks to GUI
+                    //requestState.respInfoCB(statusDescr, contentLength);
+                }
+
+                // Set up a stream, for reading response data into it
+                Stream responseStream = requestState.response.GetResponseStream();
+                requestState.streamResponse = responseStream;
+
+                // Begin reading contents of the response data
+                IAsyncResult ar = responseStream.BeginRead(requestState.bufferRead, 0, requestState.bufferRead.Length, new AsyncCallback(ReadCallback), requestState);
+
+                return;
+            }
+            catch (WebException ex) {
+                //Callback to GUI to report an error has occured.
+                requestState.errorCB(ex);
+            }
+        }
+
+        /// <summary>
+        /// Main callback invoked in response to the Stream.BeginRead method, when we have some data.
+        /// </summary>
+        private void ReadCallback(IAsyncResult asyncResult) {
+            // Will be either HttpWebRequestState or FtpWebRequestState
+            Network.WebDownload.State requestState = ((Network.WebDownload.State)(asyncResult.AsyncState));
+
+            try {
+                Stream responseStream = requestState.streamResponse;
+
+                // Get results of read operation
+                int bytesRead = responseStream.EndRead(asyncResult);
+
+                // Got some data, need to read more
+                if (bytesRead > 0) {
+                    // Save Data
+                    // TODO: Feels wrong having this here, should it be in the ResponseStatus class?
+                    requestState.downloadDest.Write(requestState.bufferRead, 0, bytesRead);
+
+                    // Report some progress, including total # bytes read, % complete, and transfer rate
+                    requestState.bytesRead += bytesRead;
+                    double percentComplete = ((double)requestState.bytesRead / (double)requestState.totalBytes) * 100.0f;
+
+                    // Note: bytesRead/totalMS is in bytes/ms.  Convert to kb/sec.
+                    TimeSpan totalTime = DateTime.Now - requestState.transferStart;
+                    double kbPerSec = (requestState.bytesRead * 1000.0f) / (totalTime.TotalMilliseconds * 1024.0f);
+
+                    //Callback to GUI to update progress
+                    requestState.progCB(percentComplete);
+
+                    // Kick off another read
+                    IAsyncResult ar = responseStream.BeginRead(requestState.bufferRead, 0, requestState.bufferRead.Length, new AsyncCallback(ReadCallback), requestState);
+                    return;
+                }
+
+                // EndRead returned 0, so no more data to be read
+                else {
+                    responseStream.Close();
+                    requestState.response.Close();
+                    requestState.downloadDest.Flush();
+                    requestState.downloadDest.Close();
+
+                    //Callback to GUI to report download has completed
+                    requestState.doneCB();
+
+                    // Initialise the Plugin
+                    InitialisePlugin(requestState.downloadDest.Name);
+                }
+            }
+            catch (WebException ex) {
+                //Callback to GUI to report an error has occured.
+                requestState.errorCB(ex);
+            }
+        }
+
     }
 }

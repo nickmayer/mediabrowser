@@ -72,36 +72,67 @@ namespace Configurator.Code {
             } 
         } 
 
-        public void InstallPlugin(IPlugin plugin) {
-            if (plugin.TestedMBVersion < Kernel.Instance.Version)
-            {
+        //public void InstallPlugin(IPlugin plugin) {
+        //    if (plugin.TestedMBVersion < Kernel.Instance.Version)
+        //    {
+        //        var dlgResult = MessageBox.Show("Warning - " + plugin.Name + " has not been tested with your version of MediaBrowser. \n\nInstall anyway?", "Version not Tested", MessageBoxButton.YesNo);
+        //        if (dlgResult == MessageBoxResult.No) return;
+        //    }
+
+        //    if (plugin is RemotePlugin) {
+        //        try
+        //        {
+        //            Kernel.Instance.InstallPlugin((plugin as RemotePlugin).BaseUrl + "\\" + plugin.Filename, plugin.InstallGlobally);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message,"Install Error");
+        //        }
+        //    } else {
+        //        var local = plugin as Plugin;
+        //        Debug.Assert(plugin != null);
+        //        try
+        //        {
+        //            Kernel.Instance.InstallPlugin(local.Filename, plugin.InstallGlobally);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message, "Install Error");
+        //        }
+        //    }
+
+        //    RefreshInstalledPlugins(); 
+        //}
+
+        public void InstallPlugin(IPlugin plugin,
+          MediaBrowser.Library.Network.WebDownload.PluginInstallUpdateCB updateCB,
+          MediaBrowser.Library.Network.WebDownload.PluginInstallFinishCB doneCB,
+          MediaBrowser.Library.Network.WebDownload.PluginInstallErrorCB errorCB) {
+            if (plugin.TestedMBVersion < Kernel.Instance.Version) {
                 var dlgResult = MessageBox.Show("Warning - " + plugin.Name + " has not been tested with your version of MediaBrowser. \n\nInstall anyway?", "Version not Tested", MessageBoxButton.YesNo);
                 if (dlgResult == MessageBoxResult.No) return;
             }
 
             if (plugin is RemotePlugin) {
-                try
-                {
-                    Kernel.Instance.InstallPlugin((plugin as RemotePlugin).BaseUrl + "\\" + plugin.Filename, plugin.InstallGlobally);
+                try {
+                    Kernel.Instance.InstallPlugin((plugin as RemotePlugin).BaseUrl + "\\" + plugin.Filename, plugin.InstallGlobally, updateCB, doneCB, errorCB);
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message,"Install Error");
+                catch (Exception ex) {
+                    MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message, "Install Error");
                 }
-            } else {
+            }
+            else {
                 var local = plugin as Plugin;
                 Debug.Assert(plugin != null);
-                try
-                {
-                    Kernel.Instance.InstallPlugin(local.Filename, plugin.InstallGlobally);
+                try {
+                    Kernel.Instance.InstallPlugin(local.Filename, plugin.InstallGlobally, null, null, null);
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message, "Install Error");
                 }
             }
 
-            RefreshInstalledPlugins(); 
+            RefreshInstalledPlugins();
         }
 
         private void RefreshInstalledPlugins() {
