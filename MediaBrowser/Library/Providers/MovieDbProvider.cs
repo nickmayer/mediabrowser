@@ -92,9 +92,10 @@ namespace MediaBrowser.Library.Providers
             string id = AttemptFindId(name, year, out matchedName, out possibles);
             if (id == null)
             {
-                // try with dot turned to space
+                // try with dot and _ turned to space
                 name = name.Replace(".", " ");
                 name = name.Replace("  ", " ");
+                name = name.Replace("_", " ");
                 matchedName = null;
                 possibles = null;
                 return AttemptFindId(name, year, out matchedName, out possibles);
