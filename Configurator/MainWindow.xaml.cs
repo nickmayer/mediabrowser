@@ -541,7 +541,7 @@ namespace Configurator
         {
             int sortorder = 0;
             if (folderList.Items != null)
-                sortorder = folderList.Items.Count;
+                sortorder = folderList.Items.Count*10;
             var imagePath = FindImage(dir);
             string vf = string.Format(
 @"
