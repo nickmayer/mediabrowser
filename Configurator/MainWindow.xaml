@@ -43,7 +43,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TabControl Margin="12,67,12,12" x:Name="tabControl1" Background="{x:Null}">
+        <TabControl Margin="12,67,12,12" x:Name="tabControl1" Background="{x:Null}" SelectionChanged="tabControl1_SelectionChanged">
             <TabItem Header="media collection" FontSize="14" FontWeight="Normal" Foreground="#FF323232">
                 <Grid>
                     <ListBox HorizontalAlignment="Left" Margin="20,40,0,59" x:Name="folderList" Width="269" SelectionChanged="folderList_SelectionChanged" FontSize="14" />
@@ -218,7 +218,7 @@
                 <Grid>
                     <TreeView Margin="35,56,321,52" Name="tvwLibraryFolders" SelectedValuePath="MPAARating" SelectedItemChanged="tvwLibraryFolders_SelectedItemChanged"/>
                     <Label Height="28" HorizontalAlignment="Left" Margin="35,22,0,0" Name="label4" VerticalAlignment="Top" Width="120">Library Folders</Label>
-                    <Button Height="32" HorizontalAlignment="Left" Margin="35,0,0,14" Click="btnFolderTree_Click" Name="btnFolderTree" VerticalAlignment="Bottom" Width="102">Load Folders</Button>
+                    <Button Height="32" HorizontalAlignment="Left" Margin="35,0,0,14" Click="btnFolderTree_Click" Name="btnFolderTree" VerticalAlignment="Bottom" Width="102">Refresh Folders</Button>
                     <ComboBox Height="25" HorizontalAlignment="Right" Margin="0,138,151,0" IsEnabled="False" SelectionChanged="ddlFolderRating_SelectionChanged" Name="ddlFolderRating" VerticalAlignment="Top" Width="113" />
                     <Label Height="28" HorizontalAlignment="Right" Margin="0,104,144,0" Name="label5" VerticalAlignment="Top" Width="120">Folder Rating</Label>
                     <TextBox Height="79" HorizontalAlignment="Left" Text="Please Load Library Folders" Margin="87,117,0,0" Name="txtLibFolderLoad" VerticalAlignment="Top" Width="185" IsReadOnly="True" BorderThickness="0" Foreground="Gray" />

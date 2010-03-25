@@ -1528,6 +1528,21 @@ sortorder: {2}
             }
         }
 
+        private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            // Any SelectionChanged event from any controls contained in the TabControl will bubble up and be handled by this event.
+            // We are only interested in events related to the Tab selection changing so ignore evertthing else.
+            if (e.OriginalSource.ToString().Contains("Controls.Tab")) {
+                TabControl tabControl = (sender as TabControl);
+
+                if (tabControl.SelectedItem != null) {
+                    TabItem tab = (tabControl.SelectedItem as TabItem);
+                    if (tab.Name == "folderSecurityTab") {
+                        InitFolderTree();
+                    }
+                }
+            }
+        }
+
     }
     #region FormatParser Class
     class FormatParser
