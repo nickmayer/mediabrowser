@@ -226,6 +226,19 @@
                     <Button Height="25" Margin="0,138,56,0" Name="btnDelFolderRating" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" IsEnabled="False" Click="btnDelFolderRating_Click" >Remove</Button>
                 </Grid>
             </TabItem>
+            <TabItem Header="cache" Name="cacheTab" FontSize="14" Visibility="Collapsed">
+                <Grid>
+                    <CheckBox Height="26" HorizontalAlignment="Left" Margin="43,14,0,0" Name="cbxItemCache" VerticalAlignment="Top" Width="120" Click="cbxCache_Click" IsChecked="True">Items</CheckBox>
+                    <TextBox Height="49" Margin="52,38,56,0" Name="textBox1" VerticalAlignment="Top" TextWrapping="Wrap" Focusable="False" ToolTip="Clears the Items, Children and ProviderData directories" Cursor="Arrow">This option will clear out the stored information about all of the items in your library collection - causing them to be re-built from either local or remote metadata</TextBox>
+                    <CheckBox Height="24" HorizontalAlignment="Left" Margin="43,93,0,0" Name="cbxImageCache" VerticalAlignment="Top" Width="120" Click="cbxCache_Click">Images</CheckBox>
+                    <TextBox Margin="52,117,56,0" Name="textBox2" TextWrapping="Wrap" Height="63" VerticalAlignment="Top" Focusable="False" ToolTip="Clears the ImageCache directory" Cursor="Arrow">This option will clear out all stored images - causing them to be re-built from local or remote images which will re-download (if necessary) and apply processing if you have an image processing plug-in.</TextBox>
+                    <CheckBox HorizontalAlignment="Left" Margin="43,186,0,0" Name="cbxPlaystateCache" Width="120" Height="23.76" VerticalAlignment="Top" Click="cbxCache_Click">Play State</CheckBox>
+                    <TextBox Margin="52,206.76,56,0" Name="textBox3" TextWrapping="Wrap" Focusable="False" ToolTip="Clears the PlayState directory" Cursor="Arrow" Height="45" VerticalAlignment="Top">This option will clear all stored information about the videos you have played.  This is not recommended unless you deliberately want to re-set this information.</TextBox>
+                    <CheckBox Height="27" HorizontalAlignment="Left" Margin="43,257.76,0,0" Name="cbxDisplayCache" VerticalAlignment="Top" Width="139" Click="cbxCache_Click">Display Preferences</CheckBox>
+                    <TextBox Height="49" Margin="52,280.76,56,0" Name="textBox4" TextWrapping="Wrap" VerticalAlignment="Top" Focusable="False" ToolTip="Clears the Display directory" Cursor="Arrow">This option will clear all view, sort and index preferences. Again, not recommended unless you deliberately want to start from scratch.</TextBox>
+                    <Button Height="39" HorizontalAlignment="Right" Margin="0,0,56,14" Name="btnClearCache" VerticalAlignment="Bottom" Width="228" FontSize="14" Click="btnClearCache_Click">Clear Selected Cache Information</Button>
+                </Grid>
+            </TabItem>
         </TabControl>
         <Label HorizontalAlignment="Right" Margin="0,0,12,0" x:Name="lblHeader" Width="183" FontSize="28" Background="{x:Null}" Content="mediabrowser" RenderTransformOrigin="0.5,0.5" Height="43" VerticalAlignment="Top">
             <Label.RenderTransform>
