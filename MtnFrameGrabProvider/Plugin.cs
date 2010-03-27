@@ -16,6 +16,7 @@ namespace MtnFrameGrabProvider {
 
         internal const string PluginName = "High Quality Thumbnails";
         internal const string PluginDescription = "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net";
+        public static PluginConfiguration<PluginOptions> PluginOptions { get; set; }
 
         static Plugin() {
             try { 
@@ -34,6 +35,8 @@ namespace MtnFrameGrabProvider {
         public static readonly string FrameGrabsPath;
 
         public override void Init(Kernel kernel) {
+            PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
+            PluginOptions.Load();
 
             EnsureMtnIsExtracted();
 
@@ -49,7 +52,24 @@ namespace MtnFrameGrabProvider {
             Logger.ReportInfo(Name + " (version " + Version + ") Loaded.");
         }
 
-        public override string Name {
+        public override bool IsConfigurable
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override IPluginConfiguration PluginConfiguration
+        {
+            get
+            {
+                return PluginOptions;
+            }
+        }
+
+        public override string Name
+        {
             get { return PluginName; }
         }
 
