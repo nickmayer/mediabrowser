@@ -30,22 +30,16 @@ namespace MediaBrowser.Library.Network.WebDownload
     {
         public int bytesRead;           // # bytes read during current transfer
         public long totalBytes;		    // Total bytes to read
-        public double progIncrement;	// delta % for each buffer read
         public Stream streamResponse;	// Stream to read from 
         public byte[] bufferRead;	    // Buffer to read data into
         public FileStream downloadDest; // FileStream to write downloaded Data to
         public Uri fileURI;		        // Uri of object being downloaded
-        public string FTPMethod;	    // What was the previous FTP command?  (e.g. get file size vs. download)
-        public DateTime transferStart;  // Used for tracking xfr rate
-
         
         // Callbacks for response packet info & progress
         public PluginInstallUpdateCB progCB;
         public PluginInstallFinishCB doneCB;
         public PluginInstallErrorCB errorCB;
 
-        //public ResponseInfoDelegate respInfoCB;
-        
         private HttpWebRequest _request;
         public WebRequest request
         {
