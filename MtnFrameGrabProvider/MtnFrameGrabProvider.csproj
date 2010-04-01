@@ -52,6 +52,7 @@
     <Compile Include="FrameGrabProvider.cs" />
     <Compile Include="MtnGrabImage.cs" />
     <Compile Include="Plugin.cs" />
+    <Compile Include="PluginOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharpZipLib\Checksums\Adler32.cs" />
     <Compile Include="SharpZipLib\Checksums\CRC32.cs" />
