@@ -65,7 +65,7 @@ namespace MediaBrowser.Library.Providers
             string id;
             string matchedName;
             string[] possibles;
-            id = FindId(Item.Name, out matchedName, out possibles);
+            id = FindId(Item.Name, ((Movie)Item).ProductionYear ,out matchedName, out possibles);
             if (id != null)
             {
                 Item.Name = matchedName;
@@ -73,7 +73,7 @@ namespace MediaBrowser.Library.Providers
             }
         }
 
-        public static string FindId(string name, out string matchedName, out string[] possibles)
+        public static string FindId(string name, int? productionYear , out string matchedName, out string[] possibles)
         {
             string year = null;
             foreach (Regex re in nameMatches)
@@ -88,6 +88,11 @@ namespace MediaBrowser.Library.Providers
             }
             if (year == "")
                 year = null;
+
+            if (year == null && productionYear != null) {
+                year = productionYear.ToString();
+            }
+
             Logger.ReportInfo("MovieDbProvider: Finding id for movie data: " + name);
             string id = AttemptFindId(name, year, out matchedName, out possibles);
             if (id == null)
