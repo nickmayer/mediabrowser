@@ -237,31 +237,24 @@ namespace Configurator
 
         public void InitFolderTree()
         {
-
-            txtLibFolderLoad.Text = "Loading...";
-            txtLibFolderLoad.Visibility = Visibility.Visible;
             tvwLibraryFolders.BeginInit();
             tvwLibraryFolders.Items.Clear();
             tabControl1.Cursor = Cursors.Wait;
             string[] vfs = Directory.GetFiles(ApplicationPaths.AppInitialDirPath,"*.vf");
             foreach (string vfName in vfs)
             {
+                TreeViewItem dummyNode = new TreeViewItem();
+                dummyNode.Header = "fake!!for%^%MB";
+
                 TreeViewItem aNode = new TreeViewItem();
                 LibraryFolder aFolder = new LibraryFolder(vfName);
                 aNode.Header = aFolder;
+                aNode.Items.Add(dummyNode);
+                
                 tvwLibraryFolders.Items.Add(aNode);
-                VirtualFolder vf = new VirtualFolder(vfName);
-                foreach (string folder in vf.Folders)
-                {
-                    getLibrarySubDirectories(folder, aNode);
-                }
-
             }
             tvwLibraryFolders.EndInit();
-            txtLibFolderLoad.Visibility = Visibility.Hidden;
             tabControl1.Cursor = Cursors.Arrow;
-
-
         }
 
         private void getLibrarySubDirectories(string dir, TreeViewItem parent)
@@ -282,10 +275,19 @@ namespace Configurator
                 //only want directories that don't directly contain movies in our tree...
                 if (!containsMedia(subdir))
                 {
-                    TreeViewItem aNode = new TreeViewItem();
-                    LibraryFolder aFolder = new LibraryFolder(subdir);
-                    aNode.Header = aFolder;
-                    parent.Items.Add(aNode);
+                    TreeViewItem aNode; // = new TreeViewItem();
+                    //LibraryFolder aFolder = new LibraryFolder(subdir);
+                    //aNode.Header = aFolder;
+                    
+                    // Throw back up to main thread to add to TreeView
+                    // (System.Windows.Forms.MethodInvoker)(() => { aNode = addLibraryFolderNode(parent, subdir); }));
+                    AddLibraryFolderCB addNode = new AddLibraryFolderCB(addLibraryFolderNode);
+
+                    Object returnType;
+                    returnType = Dispatcher.Invoke(addNode, DispatcherPriority.Background, parent, subdir);
+
+                    aNode = (TreeViewItem)returnType;
+
                     getLibrarySubDirectories(subdir, aNode);
                 }
             }
@@ -302,6 +304,7 @@ namespace Configurator
                 && Directory.GetFiles(path, "*.IFO").Length == 0
                 && Directory.GetFiles(path, "*.VOB").Length == 0
                 && Directory.GetFiles(path, "*.avi").Length == 0
+                && Directory.GetFiles(path, "*.mpg").Length == 0
                 && Directory.GetFiles(path, "*.mp3").Length == 0
                 && Directory.GetFiles(path, "*.mp4").Length == 0
                 && Directory.GetFiles(path, "*.mkv").Length == 0
@@ -1537,13 +1540,59 @@ sortorder: {2}
                 if (tabControl.SelectedItem != null) {
                     TabItem tab = (tabControl.SelectedItem as TabItem);
                     if (tab.Name == "folderSecurityTab") {
+                        // Initialise the Folder list by populating the top level items based on the .vf files
                         InitFolderTree();
                     }
                 }
             }
         }
 
+        private void tvwLibraryFolders_ItemExpanded(object sender, RoutedEventArgs e) {
+            TreeViewItem item = e.OriginalSource as TreeViewItem;
+            if (item != null) {
+                //TODO: should we use the magic string or is their a better way to test this?
+                if (item.Items.Count == 1 && (item.Items[0] as TreeViewItem).Header == "fake!!for%^%MB") {
+                    tvwLibraryFolders.Cursor = Cursors.Wait;
+                    item.Items.Clear();
+
+                    LibraryFolder aFolder = item.Header as LibraryFolder;
+                    VirtualFolder vf = new VirtualFolder(aFolder.FullPath);
+
+                    Async.Queue("LibraryFoldersExpand", () => {
+                        foreach (string folder in vf.Folders) {
+                            getLibrarySubDirectories(folder, item);
+                        }
+                    }, () => {
+                        Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() => {
+                            tvwLibraryFolders.Cursor = Cursors.Hand;
+                        }));
+                    });
+                    
+                }
+            }
+        }
+
+        TreeViewItem addLibraryFolderNode(TreeViewItem parent, string dir) {
+            if (parent.Dispatcher.CheckAccess()) {
+
+                TreeViewItem aNode = new TreeViewItem();
+                LibraryFolder aFolder = new LibraryFolder(dir);
+                aNode.Header = aFolder;
+
+                parent.Items.Add(aNode);
+
+                return aNode;
+            }
+            else {
+                parent.Dispatcher.Invoke(new AddLibraryFolderCB(this.addLibraryFolderNode), parent, dir);
+                return null;
+            }
+        }
+
+        private delegate TreeViewItem AddLibraryFolderCB(TreeViewItem parent, string dir);
+
     }
+
     #region FormatParser Class
     class FormatParser
     {

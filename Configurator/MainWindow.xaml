@@ -216,12 +216,11 @@
             </TabItem>
             <TabItem Header="folder security" Name="folderSecurityTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed">
                 <Grid>
-                    <TreeView Margin="35,56,321,52" Name="tvwLibraryFolders" SelectedValuePath="MPAARating" SelectedItemChanged="tvwLibraryFolders_SelectedItemChanged"/>
+                    <TreeView Margin="35,56,321,52" Name="tvwLibraryFolders" SelectedValuePath="MPAARating" SelectedItemChanged="tvwLibraryFolders_SelectedItemChanged" TreeViewItem.Expanded="tvwLibraryFolders_ItemExpanded"/>
                     <Label Height="28" HorizontalAlignment="Left" Margin="35,22,0,0" Name="label4" VerticalAlignment="Top" Width="120">Library Folders</Label>
                     <Button Height="32" HorizontalAlignment="Left" Margin="35,0,0,14" Click="btnFolderTree_Click" Name="btnFolderTree" VerticalAlignment="Bottom" Width="102">Refresh Folders</Button>
                     <ComboBox Height="25" HorizontalAlignment="Right" Margin="0,138,151,0" IsEnabled="False" SelectionChanged="ddlFolderRating_SelectionChanged" Name="ddlFolderRating" VerticalAlignment="Top" Width="113" />
                     <Label Height="28" HorizontalAlignment="Right" Margin="0,104,144,0" Name="label5" VerticalAlignment="Top" Width="120">Folder Rating</Label>
-                    <TextBox Height="79" HorizontalAlignment="Left" Text="Please Load Library Folders" Margin="87,117,0,0" Name="txtLibFolderLoad" VerticalAlignment="Top" Width="185" IsReadOnly="True" BorderThickness="0" Foreground="Gray" />
                     <TextBlock HorizontalAlignment="Right" Margin="0,199,24,52" Text="To set up folders to respond to Parental Controls, select a folder in the list and give it a valid rating.  A Rating of 'CS' will always require a PIN if Parental Control is enabled." Name="textBlock1" Width="268" TextWrapping="WrapWithOverflow" />
                     <Button Height="25" Margin="0,138,56,0" Name="btnDelFolderRating" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" IsEnabled="False" Click="btnDelFolderRating_Click" >Remove</Button>
                 </Grid>
