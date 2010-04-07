@@ -305,6 +305,7 @@ namespace Configurator
                 && Directory.GetFiles(path, "*.VOB").Length == 0
                 && Directory.GetFiles(path, "*.avi").Length == 0
                 && Directory.GetFiles(path, "*.mpg").Length == 0
+                && Directory.GetFiles(path, "*.mpeg").Length == 0
                 && Directory.GetFiles(path, "*.mp3").Length == 0
                 && Directory.GetFiles(path, "*.mp4").Length == 0
                 && Directory.GetFiles(path, "*.mkv").Length == 0
@@ -1591,9 +1592,7 @@ sortorder: {2}
 
         private delegate TreeViewItem AddLibraryFolderCB(TreeViewItem parent, string dir);
 
-    }
-
-   
+       
 
 //Code From C
         private void btnClearCache_Click(object sender, RoutedEventArgs e)
@@ -1689,11 +1688,8 @@ sortorder: {2}
         private void cbxCache_Click(object sender, RoutedEventArgs e)
         {
             btnClearCache.IsEnabled = cbxItemCache.IsChecked.Value | cbxImageCache.IsChecked.Value | cbxDisplayCache.IsChecked.Value | cbxPlaystateCache.IsChecked.Value;
-	}
+	    }
     }
-
-
-
 
     #region FormatParser Class
     class FormatParser
