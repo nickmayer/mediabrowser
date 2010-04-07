@@ -544,7 +544,7 @@ namespace Configurator
         {
             int sortorder = 0;
             if (folderList.Items != null)
-                sortorder = folderList.Items.Count;
+                sortorder = folderList.Items.Count*10;
             var imagePath = FindImage(dir);
             string vf = string.Format(
 @"
@@ -1305,13 +1305,13 @@ sortorder: {2}
         private void hdrBasic_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrBasic);
-            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = folderSecurityTab.Visibility = parentalControlTab.Visibility = Visibility.Collapsed;
+            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = folderSecurityTab.Visibility = parentalControlTab.Visibility = Visibility.Collapsed;
         }
 
         private void hdrAdvanced_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrAdvanced);
-            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = folderSecurityTab.Visibility = parentalControlTab.Visibility = Visibility.Visible;
+            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = folderSecurityTab.Visibility = parentalControlTab.Visibility = Visibility.Visible;
         }
 
         private void ClearHeaders()
@@ -1530,7 +1530,7 @@ sortorder: {2}
                 btnDelFolderRating.IsEnabled = false;
             }
         }
-
+//Code from B
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             // Any SelectionChanged event from any controls contained in the TabControl will bubble up and be handled by this event.
             // We are only interested in events related to the Tab selection changing so ignore evertthing else.
@@ -1592,6 +1592,108 @@ sortorder: {2}
         private delegate TreeViewItem AddLibraryFolderCB(TreeViewItem parent, string dir);
 
     }
+
+   
+
+//Code From C
+        private void btnClearCache_Click(object sender, RoutedEventArgs e)
+        {
+            bool error = false;
+            //clear selected cache folders
+            if (cbxItemCache.IsChecked.Value) {
+                try
+                {
+                    this.Cursor = Cursors.Wait;
+                    Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"), true);
+                    Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"), true);
+                    Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"), true);
+                    File.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "cache.db"));
+
+                    //recreate the directories
+                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"));
+                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"));
+                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error trying to delete items cache.", ex);
+                    error = true;
+                }
+                finally
+                {
+                    this.Cursor = Cursors.Arrow;
+                }
+            }
+
+            if (cbxImageCache.IsChecked.Value)
+            {
+                try
+                {
+                    Directory.Delete(ApplicationPaths.AppImagePath,true);
+                    Directory.CreateDirectory(ApplicationPaths.AppImagePath);
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error trying to delete image cache.", ex);
+                    error = true;
+                }
+            }
+
+            if (cbxPlaystateCache.IsChecked.Value)
+            {
+                try
+                {
+                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate")))
+                    {
+                        string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate"));
+                        foreach (string file in files)
+                        {
+                            File.Delete(file);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error trying to delete playstate cache.", ex);
+                    error = true;
+                }
+            }
+
+            if (cbxDisplayCache.IsChecked.Value)
+            {
+                try
+                {
+                    string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "display"));
+                    foreach (string file in files) {
+                        File.Delete(file);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error trying to delete display cache.", ex);
+                    error = true;
+                }
+            }
+
+            if (error)
+            {
+                MessageBox.Show("Unable to clear cache.  If MediaBrowser is running, please close it and try again.  Check log for details.", "Error");
+            }
+            else
+            {
+                MessageBox.Show("Selected Cache Areas Cleared Succcessfully.", "Cache Clear");
+            }
+        }
+
+        private void cbxCache_Click(object sender, RoutedEventArgs e)
+        {
+            btnClearCache.IsEnabled = cbxItemCache.IsChecked.Value | cbxImageCache.IsChecked.Value | cbxDisplayCache.IsChecked.Value | cbxPlaystateCache.IsChecked.Value;
+	}
+    }
+
+
+
 
     #region FormatParser Class
     class FormatParser

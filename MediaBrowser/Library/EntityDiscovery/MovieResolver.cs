@@ -151,7 +151,7 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
         private IEnumerable<IMediaLocation> ChildVideos(IFolderMediaLocation location) {
 
-            if (location.ContainsChild(FolderResolver.IGNORE_FOLDER)) yield break;
+            if (location.ContainsChild(FolderResolver.IGNORE_FOLDER) || location.ContainsChild("mymovies.xml")) yield break;
 
             foreach (var child in location.Children) {
 

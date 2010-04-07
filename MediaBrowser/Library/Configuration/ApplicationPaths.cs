@@ -20,7 +20,8 @@ namespace MediaBrowser.Library.Configuration {
                     { "AppRSSPath",          "AppConfigPath",    "RSS"},
                     { "AppLogPath",          "AppConfigPath",    "Logs"},
                     { "DefaultPodcastPath", "AppConfigPath", "Podcasts"    },
-                    { "AppLocalizationPath","AppConfigPath", "Localization" }
+                    { "AppLocalizationPath","AppConfigPath", "Localization" },
+                    { "PluginConfigPath", "AppPluginPath", "Configurations"}
             };
 
 
@@ -89,6 +90,15 @@ namespace MediaBrowser.Library.Configuration {
                 return pathMap["AppCachePath"];
             }
         }
+
+        public static string PluginConfigPath
+        {
+            get
+            {
+                return pathMap["PluginConfigPath"];
+            }
+        }
+
 
 
         public static string AutoPlaylistPath {

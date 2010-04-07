@@ -29,6 +29,10 @@ namespace MediaBrowser
         public bool EnableExperimentalSqliteSupport = false;
         [Comment(@"If you enable this MB will watch for changes in your file system and update the UI as it happens, may not work properly with SMB shares")]
         public bool EnableDirectoryWatchers = true;
+
+        [Comment(@"If set to true when sorting by unwatched the unwatched folders will be sorted by name")]
+        public bool SortUnwatchedByName = false;
+        
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;

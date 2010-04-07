@@ -329,8 +329,9 @@ namespace MediaBrowser.Library {
                 });
 
                 var siw = items
-                    .Select(s => new StudioItemWrapper(s, this.PhysicalParent))
-                    .OrderBy(x => x.Studio.Name);
+                    .Select(s => new StudioItemWrapper(s, this.PhysicalParent));
+                    // http://community.mediabrowser.tv/permalinks/1356/studio-icons-in-name-order
+                    // .OrderBy(x => x.Studio.Name);
 
 
                 if (items.Count > 0) {
