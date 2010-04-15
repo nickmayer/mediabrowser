@@ -630,14 +630,14 @@
                       <me:TextLine Text="* Requires a restart to take effect." />
                     </Children>
                   </Panel>
-                  <Panel Layout="VerticalFlow" >
+                  <!--<Panel Layout="VerticalFlow" >
                     <Children>
                       <me:TextHeader Text="Theme Specific Settings" />
                       <cb:CheckBox   Label="Show Config Button" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
                       <ss:SimpleSpinner    Label="Alpha Blending" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />                      
                        
                     </Children>
-                  </Panel>
+                  </Panel>-->
                 </Children>
               </Graphic>
 
