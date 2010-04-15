@@ -90,7 +90,7 @@
 					<Equality Source="[Item.IsPlayable]" Value="true" />
 				</Conditions>
 				<Actions>
-					<Set Target="[TickIndicatorPanel.Visible]" Value="[Item.HaveWatched]" />
+					<Set Target="[TickIndicatorPanel.Visible]" Value="[Application.Config.ShowWatchTickInPosterView]" />
 				</Actions>
 			</Changed>
 
