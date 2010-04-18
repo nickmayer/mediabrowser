@@ -95,7 +95,27 @@ namespace MediaBrowser.Library.Providers
                     if (File.Exists(back))
                         Item.SecondaryImagePath = back;
                 }
-               
+
+
+                if (movie.DisplayMediaType == null)
+                {
+                    movie.DisplayMediaType = doc.SafeGetString("Title/Type");
+                    switch (movie.DisplayMediaType.ToLower())
+                    {
+                        case "blu-ray":
+                            movie.DisplayMediaType = MediaType.BluRay.ToString();
+                            break;
+                        case "dvd":
+                            movie.DisplayMediaType = MediaType.DVD.ToString();
+                            break;
+                        case "hd-dvd":
+                            movie.DisplayMediaType = MediaType.HDDVD.ToString();
+                            break;
+                        default:
+                            movie.DisplayMediaType = null;
+                            break;
+                    }
+                }
 
                 if (movie.RunningTime == null)
                 {

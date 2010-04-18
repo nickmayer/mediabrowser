@@ -163,12 +163,20 @@ namespace MediaBrowser.Library
 
         public string MediaTypeString {
             get {
-                string mediaType = "";
-                var video = baseItem as Video;
-                if (video != null) {
-                    mediaType = video.MediaType.ToString().ToLower();
+                if (this.BaseItem.DisplayMediaType != null)
+                {
+                    return this.BaseItem.DisplayMediaType;
                 }
-                return mediaType;
+                else
+                {
+                    string mediaType = "";
+                    var video = baseItem as Video;
+                    if (video != null)
+                    {
+                        mediaType = video.MediaType.ToString().ToLower();
+                    }
+                    return mediaType;
+                }
             }
         }
 
