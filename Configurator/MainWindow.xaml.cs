@@ -62,7 +62,7 @@ namespace Configurator
             InitializeComponent();
             config = Kernel.Instance.ConfigData;
             LoadComboBoxes();
-
+            lblVersion.Content = "Version " + Kernel.Instance.Version;
 
             infoPanel.Visibility = Visibility.Hidden;
             infoPlayerPanel.Visibility = Visibility.Hidden;
