@@ -36,7 +36,7 @@
       <a:Config Name="Config" Config="[Application.Config]"/>
       <Command Name="Close" />
       <Command Name="Back"/>
-      <Command Name="ClearCache" />
+      <!--<Command Name="ClearCache" />-->
       <Command Name="ResetConfig" />
       <Command Name="EnterPIN" />
       <Command Name="UnlockPC" />
@@ -241,11 +241,11 @@
           <Invoke Target="[Application.Back]" />
         </Actions>
       </Changed>
-      <Changed Source="[ClearCache.Invoked]">
+      <!--<Changed Source="[ClearCache.Invoked]">
         <Actions>
           <Invoke Target="[Application.ClearCache]" />
         </Actions>
-      </Changed>
+      </Changed>-->
       <Changed Source="[ResetConfig.Invoked]">
         <Actions>
           <Invoke Target="[Application.ResetConfig]" />
@@ -323,7 +323,7 @@
           <Set Target="[ContinueBtn.Visible]" Value="true"/>
           <Set Target="[BackBtn.Visible]" Value="false"/>
           <Set Target="[Config.IsFirstRun]" Value="false" />
-          <Set Target="[ClearCacheBtn.Visible]" Value="false"/>
+          <!--<Set Target="[ClearCacheBtn.Visible]" Value="false"/>-->
           <Set Target="[ResetConfigBtn.Visible]" Value="false"/>
         </Actions>
       </Condition>
@@ -494,7 +494,7 @@
                   <sb:SimpleButton  Name="ContinueBtn" Text="Continue" FocusItem="[FocusItem]"  Command="[Close]" Visible="false" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton FocusOrder="1" Name="BackBtn" Text="Continue" FocusItem="[FocusItem]"  Command="[Back]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton Name="ResetConfigBtn" Text="Reset Defaults" FocusItem="[FocusItem]"  Command="[ResetConfig]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
-                  <sb:SimpleButton Name="ClearCacheBtn" Text="Clear Cache" FocusItem="[FocusItem]"  Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
+                  <!--<sb:SimpleButton Name="ClearCacheBtn" Text="Clear Cache" FocusItem="[FocusItem]"  Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>-->
                   <sb:SimpleButton Name="UnlockPCBtn" Text="Unlock" FocusItem="[FocusItem]"  Command="[UnlockPC]" Size="200,50" Font="font://f:CP_ButtonFont" Visible="[Application.Config.ParentalControlEnabled]"/>
 
                 </Children>

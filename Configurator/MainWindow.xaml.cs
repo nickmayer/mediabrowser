@@ -1536,9 +1536,12 @@ sortorder: {2}
                 try
                 {
                     this.Cursor = Cursors.Wait;
-                    Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"), true);
-                    Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"), true);
-                    Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"), true);
+                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items")))
+                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"), true);
+                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children")))
+                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"), true);
+                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata")))
+                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"), true);
                     File.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "cache.db"));
 
                     //recreate the directories
