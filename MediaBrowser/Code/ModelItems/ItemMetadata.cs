@@ -46,7 +46,7 @@ namespace MediaBrowser.Library {
 
         public int HDType {
             get {
-                if ((this.MediaInfo.Width >= 1920) || (this.MediaInfo.Height >= 1080))
+                if ((this.MediaInfo.Width >= 1900) || (this.MediaInfo.Height >= 1050))
                     return 1080;
                 else if (IsHD)
                     return 720;
