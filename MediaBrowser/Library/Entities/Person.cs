@@ -39,6 +39,18 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public override string SortName
+        {
+            get
+            {
+                return Name;
+            }
+            set
+            {
+                base.SortName = value;
+            }
+        }
+
         public Person(Guid id, string name) {
             this.name = name;
             this.Id = id;
