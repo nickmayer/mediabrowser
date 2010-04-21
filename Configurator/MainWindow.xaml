@@ -242,6 +242,7 @@
                     <CheckBox Height="27" HorizontalAlignment="Left" Margin="43,257.76,0,0" Name="cbxDisplayCache" VerticalAlignment="Top" Width="139" Click="cbxCache_Click">Display Preferences</CheckBox>
                     <TextBox Height="49" Margin="52,280.76,56,0" Name="textBox4" TextWrapping="Wrap" VerticalAlignment="Top" Focusable="False" ToolTip="Clears the Display directory" Cursor="Arrow">This option will clear all view, sort and index preferences. Again, not recommended unless you deliberately want to start from scratch.</TextBox>
                     <Button Height="39" HorizontalAlignment="Right" Margin="0,0,56,14" Name="btnClearCache" VerticalAlignment="Bottom" Width="228" FontSize="14" Click="btnClearCache_Click">Clear Selected Cache Information</Button>
+                    <Label Height="28" Margin="43,0,304,15.493" Name="label8" VerticalAlignment="Bottom" FontSize="10">* Ensure Media Browser is closed before clearing the cache</Label>
                 </Grid>
             </TabItem>
         </TabControl>
