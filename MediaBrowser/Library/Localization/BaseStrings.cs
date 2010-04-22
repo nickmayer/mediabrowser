@@ -49,8 +49,8 @@ namespace MediaBrowser.Library.Localization
         public string VisualThemeDesc = "The Basic Presentation Style for MediaBrowser Screens.";
         public string ColorSchemeDesc = "The Style of Colors for Backgrounds, etc.  Won't Take Effect Until MediaBrowser is Restarted.";
         public string FontSizeDesc = "The Size of the Fonts to Use in MediaBrowser.  Won't Take Effect Until MediaBrowser is Restarted.";
-        public string ShowConfigButtonDesc = "Show the config button on all screens. [VANILLA ONLY]";
-        public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable. [VANILLA ONLY]";
+        public string ShowConfigButtonDesc = "Show the config button on all screens.";
+        public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable.";
         public string AlwaysShowDetailsDesc = "Always display the details page for media.";
         public string StartDetailsPageinMiniModeDesc = "Default Media Details Page to Mini-Mode. [DIAMOND ONLY]";
         public string SecurityPINDesc = "The 4-Digit Code For Access to Parental Controlled Items.";
