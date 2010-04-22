@@ -126,6 +126,7 @@ namespace MediaBrowser
         public bool ExcludeRemoteContentInSearch = true;
 
         public bool ShowUnwatchedIndicator = false;
+        public bool PNGTakesPrecedence = false;
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = true;

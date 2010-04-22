@@ -71,11 +71,20 @@ namespace MediaBrowser.Library.Providers
 
         private string FindImage(string name)
         {
-            string file = Path.Combine(Location, name + ".jpg");
+            string primaryExt = ".jpg";
+            string secondaryExt = ".png";
+
+            if (Application.CurrentInstance.Config.PNGTakesPrecedence)
+            {
+                primaryExt = ".png";
+                secondaryExt = ".jpg";
+            }
+
+            string file = Path.Combine(Location, name + primaryExt);
             if (File.Exists(file))
                 return file;
 
-            file = Path.Combine(Location, name + ".png");
+            file = Path.Combine(Location, name + secondaryExt);
             if (File.Exists(file))
                 return file;
 
@@ -88,10 +97,10 @@ namespace MediaBrowser.Library.Providers
                 if (dir != null && filename_without_extension != null)
                 {
                     file = Path.Combine(dir, filename_without_extension);
-                    if (File.Exists(file + ".jpg"))
-                        return file + ".jpg";
-                    if (File.Exists(file + ".png"))
-                        return file + ".png";
+                    if (File.Exists(file + primaryExt))
+                        return file + primaryExt;
+                    if (File.Exists(file + secondaryExt))
+                        return file + secondaryExt;
                 }
             }
             return null;

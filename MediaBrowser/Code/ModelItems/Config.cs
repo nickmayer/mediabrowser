@@ -645,6 +645,13 @@ namespace MediaBrowser
             get { return this.data.PluginSources; }
             set { if (this.data.PluginSources != value) { this.data.PluginSources = value; Save(); FirePropertyChanged("PluginSources"); } }
         }
+        
+        public bool PNGTakesPrecedence
+        {
+            get { return this.data.PNGTakesPrecedence; }
+            set { if (this.data.PNGTakesPrecedence != value) { this.data.PNGTakesPrecedence = value; Save(); FirePropertyChanged("PNGTakesPrecedence"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;
