@@ -135,7 +135,11 @@ namespace MediaBrowser.Library.EntityDiscovery {
             }
 
             if (volumes.Count > 0 && isoCount == 0) {
-                if (volumes.Count <= maxVideosPerMovie) {
+                //try to determine that this is a folder with a multi-part movie and not just a folder with only a few
+                //movies of a video type. For this to be a multi-part movie, not only will we have multiple volumes
+                //but those volumes should be the ONLY children we have.  If not, it's probably just a video file type
+                //movies amongst a larger collection of other movies.
+                if (volumes.Count <= maxVideosPerMovie && folder.Children.Count == volumes.Count) {
                     //figure out media type from file extension (first one will win...)
                     mediaType = volumes[0].GetVideoMediaType();
                     isMovie = true;
