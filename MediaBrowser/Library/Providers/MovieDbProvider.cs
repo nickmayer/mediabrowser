@@ -227,6 +227,7 @@ namespace MediaBrowser.Library.Providers
 
                 movie.RunningTime = doc.SafeGetInt32("//movie/runtime");
 
+                movie.MpaaRating = doc.SafeGetString("//movie/certification");
 
                 movie.Directors = null;
                 foreach (XmlNode n in doc.SelectNodes("//people/person[@job='director']/name"))
