@@ -35,7 +35,7 @@ namespace MediaBrowser.Library.Localization
         public string MediaOptionsDesc = "Media Related Configuration Items.";
         public string ThemesDesc = "Select the Visual Presentation Style of MediaBrowser.";
         public string ParentalControlDesc = "Parental Control Configuration.  Requires PIN to Access.";
-        public string RememberIndexByStateDesc = "Remember Folder Indexing.  e.g. If a Folder is Indexed by Genre, It Will Stay Indexed Each Time It is Entered.";
+        public string RememberFolderIndexingDesc = "Remember Folder Indexing.  e.g. If a Folder is Indexed by Genre, It Will Stay Indexed Each Time It is Entered.";
         public string ShowUnwatchedCountDesc = "Show the Number of Unwatched Items in a Folder on the Folder Poster.";
         public string WatchedIndicatoronFoldersDesc = "Show an Indicator if All Items Inside a Folder Have Been Watched.";
         public string WatchedIndicatoronVideosDesc = "Show an Indicator if a Show Has Been Marked Watched.";
