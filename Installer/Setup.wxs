@@ -59,6 +59,9 @@
         <Directory Id="MBFolder" Name="MediaBrowser">
           <Directory Id="PluginsFolder" Name="Plugins">
           </Directory>
+          <Directory Id="CacheFolder" Name="cache">
+            <Directory Id="CacheItemsFolder" Name="items" />
+          </Directory>
         </Directory>
       </Directory>
 		</Directory>
@@ -104,13 +107,26 @@
     </DirectoryRef>
 
     <!--This is some clean up code for version 2.2.2 - we need to remove the old framegrab plugins or they will cause all kinds of problems-->
-    <DirectoryRef Id="PluginsFolder">
+    <!--<DirectoryRef Id="PluginsFolder">
       <Component Id="RemPlugins" Guid="ACEB6DE6-B16C-4a5c-AF6B-1DD9DE41332A" >
         <RemoveFile Id="RemFramePlugin" Name="*FrameGrabProvider.dll" On="install" />
       </Component>
+    </DirectoryRef>-->
+
+    <!--This is some clean up code for version 2.2.4 - we need to clear the cache as we modified the item structure-->
+    <DirectoryRef Id="CacheItemsFolder">
+      <Component Id="ClearCache" Guid="676D589A-0E33-477e-A5CA-298F9BE03927" >
+        <RemoveFile Id="RemItemsCache" Name="*.*" On="install" />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="CacheFolder">
+      <Component Id="ClearCacheDB" Guid="34E19004-53BF-4a27-A75A-1AC9CC310379" >
+        <RemoveFile Id="RemCacheDB" Name="cache.db" On="install" />
+      </Component>
     </DirectoryRef>
 
-		<!-- This is a list of features that are installed as a part of this product. In this case, there is -->
+
+    <!-- This is a list of features that are installed as a part of this product. In this case, there is -->
 		<!-- only one feature. Each feature contains a list of components that it will install. Features can -->
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
 		<Feature Id="APPROOTFEATURE" Title="MediaBrowser" Level="1">
@@ -121,7 +137,9 @@
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Registration7.xml" />
-      <ComponentRef Id="RemPlugins" />
+      <!--<ComponentRef Id="RemPlugins" />-->
+      <ComponentRef Id="ClearCache" />
+      <ComponentRef Id="ClearCacheDB" />
     </Feature>
     
 
