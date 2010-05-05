@@ -131,13 +131,12 @@
 
                     <GroupBox Header="General Display Settings" HorizontalAlignment="Left" Margin="9,14,0,177" Name="groupBox1" Width="287">
                         <Grid>
-                            <CheckBox Height="18" Margin="25,10,0,0" Name="cbxOptionClock" ToolTip="Display time clock within Media Browser" VerticalAlignment="Top" Click="cbxOptionClock_Click" HorizontalAlignment="Left" Width="103">Show Clock</CheckBox>
-                            <CheckBox Margin="25,34,76,0" Name="cbxOptionTransparent" ToolTip="Enable transparent background" Click="cbxOptionTransparent_Click" Height="18" VerticalAlignment="Top">Transparent Background</CheckBox>
-                            <CheckBox Margin="25,58,76,0" Name="cbxOptionDimPoster" ToolTip="Dim unselected items" Click="cbxOptionDimPoster_Click" Height="18" VerticalAlignment="Top">Dim Unselected Posters</CheckBox>
-                            <CheckBox Margin="25,82,62,78" Name="cbxOptionIndexing" ToolTip="Remember indexed filter settings for each folder" Click="cbxOptionIndexing_Click">Remember Folder Indexing</CheckBox>
-                            <CheckBox Margin="25,0,51,62" Name="cbxOptionAspectRatio" ToolTip="Stretch folder image to fill display area" Height="19" VerticalAlignment="Bottom" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
-                            <CheckBox Height="21" Margin="25,0,116,35" Name="cbxOptionHideFrame" ToolTip="Hide focus frame around posters." VerticalAlignment="Bottom" Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
-                            <CheckBox Height="20" Margin="25,0,29,9" Name="cbxOptionAutoEnter" VerticalAlignment="Bottom" Click="cbxOptionAutoEnter_Click" ToolTip="Automatically bypass an item with only one folder in it and continue to the contents of that folder." >Auto Enter Single Folder Items</CheckBox>
+                            <CheckBox Height="18" Margin="25,16,0,0" Name="cbxOptionClock" ToolTip="Display time clock within Media Browser" VerticalAlignment="Top" Click="cbxOptionClock_Click" HorizontalAlignment="Left" Width="103">Show Clock</CheckBox>
+                            <CheckBox Margin="25,40,76,0" Name="cbxOptionDimPoster" ToolTip="Dim unselected items" Click="cbxOptionDimPoster_Click" Height="18" VerticalAlignment="Top">Dim Unselected Posters</CheckBox>
+                            <CheckBox Margin="25,64,62,0" Name="cbxOptionIndexing" ToolTip="Remember indexed filter settings for each folder" Click="cbxOptionIndexing_Click" Height="27.14" VerticalAlignment="Top">Remember Folder Indexing</CheckBox>
+                            <CheckBox Margin="25,88,51,80" Name="cbxOptionAspectRatio" ToolTip="Stretch folder image to fill display area" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
+                            <CheckBox Height="21" Margin="25,0,116,53" Name="cbxOptionHideFrame" ToolTip="Hide focus frame around posters." VerticalAlignment="Bottom" Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
+                            <CheckBox Height="20" Margin="25,0,29,27" Name="cbxOptionAutoEnter" VerticalAlignment="Bottom" Click="cbxOptionAutoEnter_Click" ToolTip="Automatically bypass an item with only one folder in it and continue to the contents of that folder." >Auto Enter Single Folder Items</CheckBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Media Tracking" HorizontalAlignment="Right" Margin="0,14,20,0" Name="groupBox2" Width="287" Height="157.38" VerticalAlignment="Top">
@@ -157,7 +156,7 @@
                             <Label Margin="20,32,135,64" ToolTip="Change the color scheme of a theme">Color Scheme</Label>
                             <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,0,11,41" Name="ddlOptionThemeFont" VerticalAlignment="Bottom" Width="120" SelectionChanged="ddlOptionThemeFont_SelectionChanged" ToolTip="Font size displayed within Media Browser" />
                             <Label Margin="20,63,135,33" ToolTip="Font size displayed within Media Browser">Font Size</Label>
-
+                            <CheckBox Margin="24,0,59,9" Name="cbxOptionTransparent" ToolTip="Enable transparent background" Click="cbxOptionTransparent_Click" Height="18" VerticalAlignment="Bottom">Show Theme Background</CheckBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Enhanced Home Screen" HorizontalAlignment="Right" Margin="0,0,20,12" Name="groupBox4" Width="287" Height="177" VerticalAlignment="Bottom">
