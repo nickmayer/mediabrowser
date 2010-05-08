@@ -55,6 +55,7 @@ namespace Configurator {
             //this.Close();
             InstallButton.IsEnabled = true;
             btnDone.IsEnabled = true;
+            this.progress.Value = 0;
             this.progress.Visibility = Visibility.Hidden;
         }
 

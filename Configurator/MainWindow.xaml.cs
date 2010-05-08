@@ -244,7 +244,7 @@ namespace Configurator
             foreach (string vfName in vfs)
             {
                 TreeViewItem dummyNode = new TreeViewItem();
-                dummyNode.Header = "fake!!for%^%MB";
+                dummyNode.Header = new DummyTreeItem();
 
                 TreeViewItem aNode = new TreeViewItem();
                 LibraryFolder aFolder = new LibraryFolder(vfName);
@@ -937,6 +937,7 @@ sortorder: {2}
         {
             //called when the upgrade process finishes - we just hide progress bar and re-enable
             this.IsEnabled = true;
+            progress.Value = 0;
             progress.Visibility = Visibility.Hidden;
         }
 
@@ -1531,7 +1532,7 @@ sortorder: {2}
                 btnDelFolderRating.IsEnabled = false;
             }
         }
-//Code from B
+
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             // Any SelectionChanged event from any controls contained in the TabControl will bubble up and be handled by this event.
             // We are only interested in events related to the Tab selection changing so ignore evertthing else.
@@ -1551,8 +1552,7 @@ sortorder: {2}
         private void tvwLibraryFolders_ItemExpanded(object sender, RoutedEventArgs e) {
             TreeViewItem item = e.OriginalSource as TreeViewItem;
             if (item != null) {
-                //TODO: should we use the magic string or is their a better way to test this?
-                if (item.Items.Count == 1 && (item.Items[0] as TreeViewItem).Header == "fake!!for%^%MB") {
+                if ((item.Items.Count == 1) && (((TreeViewItem)item.Items[0]).Header is DummyTreeItem)) {
                     tvwLibraryFolders.Cursor = Cursors.Wait;
                     item.Items.Clear();
 
@@ -1568,9 +1568,8 @@ sortorder: {2}
                             tvwLibraryFolders.Cursor = Cursors.Hand;
                         }));
                     });
-                    
+                    }
                 }
-            }
         }
 
         TreeViewItem addLibraryFolderNode(TreeViewItem parent, string dir) {
@@ -1592,9 +1591,6 @@ sortorder: {2}
 
         private delegate TreeViewItem AddLibraryFolderCB(TreeViewItem parent, string dir);
 
-       
-
-//Code From C
         private void btnClearCache_Click(object sender, RoutedEventArgs e)
         {
             bool error = false;
@@ -1733,4 +1729,10 @@ sortorder: {2}
 
     }
     #endregion
+
+    #region DummyTreeItem Class
+    class DummyTreeItem {
+    }
+    #endregion
+
 }
