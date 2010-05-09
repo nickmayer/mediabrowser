@@ -36,6 +36,15 @@ namespace TestMediaBrowser
         }
 
         [Test]
+        public void TestThatTheYearIsRespected() {
+            string matchedName;
+            string[] possibles;
+            var id = MovieDbProvider.AttemptFindId("Star Wars", "1922", out matchedName, out possibles);
+
+            Assert.AreEqual(id, null);
+        }
+
+        [Test]
         public void TestCorrectMovieTitleIsFetched() 
         { 
             string matchedName; 
@@ -60,7 +69,7 @@ namespace TestMediaBrowser
                     string match;
                     string name = Helper.RemoveCommentsFromName(Path.GetFileName(line));
                     string[] possibles;
-                    string id=MovieDbProvider.FindId(name, out match, out possibles);
+                    string id=MovieDbProvider.FindId(name, null ,out match, out possibles);
                     count++;
                     if (match == null)
                     {
@@ -93,8 +102,18 @@ namespace TestMediaBrowser
             string name = "Flight of the Phoenix (2004)";
             string match;
             string[] possibles;
-            MovieDbProvider.FindId(name, out match, out possibles);
+            MovieDbProvider.FindId(name, null, out match, out possibles);
             Assert.IsNotNull(match);
+        }
+
+        [Test]
+        public void TestSpecificMovieMatchFails() {
+            string name = "Flight of the Phoenix";
+            string match;
+            string[] possibles;
+            var id = MovieDbProvider.FindId(name, 1977, out match, out possibles);
+            Assert.IsNull(match);
+            Assert.IsNull(id);
         }
 
         [Test]
@@ -102,7 +121,7 @@ namespace TestMediaBrowser
             string name = "Rocky [The awesome movie]";
             string match;
             string[] possibles;
-            MovieDbProvider.FindId(name, out match, out possibles);
+            MovieDbProvider.FindId(name, null, out match, out possibles);
             Assert.IsNotNull(match);
         }
     }

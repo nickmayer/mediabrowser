@@ -13,6 +13,24 @@ namespace TestMediaBrowser {
     [TestFixture]
     public class TestEntityResolution {
 
+
+        [Test]
+        public void TestNestedMoviesAreAlwaysTreatedAsBoxSets() {
+            var resolver = CreateResolver();
+            var movie = MockFolderMediaLocation.CreateMockLocation(@"
+|Star Wars
+ |part 1
+  a.avi
+  mymovies.xml
+ |part 2
+  b.avi
+  mymovies.xml
+");
+            
+            Assert.AreEqual(resolver.ResolveType(movie), typeof(Folder));
+
+        }
+
         [Test]
         public void TestNothingIsTruncatedWithDots() {
             var resolver = CreateResolver();

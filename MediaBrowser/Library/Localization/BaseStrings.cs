@@ -35,7 +35,7 @@ namespace MediaBrowser.Library.Localization
         public string MediaOptionsDesc = "Media Related Configuration Items.";
         public string ThemesDesc = "Select the Visual Presentation Style of MediaBrowser.";
         public string ParentalControlDesc = "Parental Control Configuration.  Requires PIN to Access.";
-        public string RememberIndexByStateDesc = "Remember Folder Indexing.  e.g. If a Folder is Indexed by Genre, It Will Stay Indexed Each Time It is Entered.";
+        public string RememberFolderIndexingDesc = "Remember Folder Indexing.  e.g. If a Folder is Indexed by Genre, It Will Stay Indexed Each Time It is Entered.";
         public string ShowUnwatchedCountDesc = "Show the Number of Unwatched Items in a Folder on the Folder Poster.";
         public string WatchedIndicatoronFoldersDesc = "Show an Indicator if All Items Inside a Folder Have Been Watched.";
         public string WatchedIndicatoronVideosDesc = "Show an Indicator if a Show Has Been Marked Watched.";
@@ -49,8 +49,8 @@ namespace MediaBrowser.Library.Localization
         public string VisualThemeDesc = "The Basic Presentation Style for MediaBrowser Screens.";
         public string ColorSchemeDesc = "The Style of Colors for Backgrounds, etc.  Won't Take Effect Until MediaBrowser is Restarted.";
         public string FontSizeDesc = "The Size of the Fonts to Use in MediaBrowser.  Won't Take Effect Until MediaBrowser is Restarted.";
-        public string ShowConfigButtonDesc = "Show the config button on all screens. [VANILLA ONLY]";
-        public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable. [VANILLA ONLY]";
+        public string ShowConfigButtonDesc = "Show the config button on all screens.";
+        public string AlphaBlendingDesc = "The Level of Transparency to Use Behind Text Areas to Make Them More Readable.";
         public string AlwaysShowDetailsDesc = "Always display the details page for media.";
         public string StartDetailsPageinMiniModeDesc = "Default Media Details Page to Mini-Mode. [DIAMOND ONLY]";
         public string SecurityPINDesc = "The 4-Digit Code For Access to Parental Controlled Items.";

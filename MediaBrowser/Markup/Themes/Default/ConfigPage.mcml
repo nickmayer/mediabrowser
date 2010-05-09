@@ -36,7 +36,7 @@
       <a:Config Name="Config" Config="[Application.Config]"/>
       <Command Name="Close" />
       <Command Name="Back"/>
-      <Command Name="ClearCache" />
+      <!--<Command Name="ClearCache" />-->
       <Command Name="ResetConfig" />
       <Command Name="EnterPIN" />
       <Command Name="UnlockPC" />
@@ -247,11 +247,11 @@
           <Invoke Target="[Application.Back]" />
         </Actions>
       </Changed>
-      <Changed Source="[ClearCache.Invoked]">
+      <!--<Changed Source="[ClearCache.Invoked]">
         <Actions>
           <Invoke Target="[Application.ClearCache]" />
         </Actions>
-      </Changed>
+      </Changed>-->
       <Changed Source="[ResetConfig.Invoked]">
         <Actions>
           <Invoke Target="[Application.ResetConfig]" />
@@ -329,7 +329,7 @@
           <Set Target="[ContinueBtn.Visible]" Value="true"/>
           <Set Target="[BackBtn.Visible]" Value="false"/>
           <Set Target="[Config.IsFirstRun]" Value="false" />
-          <Set Target="[ClearCacheBtn.Visible]" Value="false"/>
+          <!--<Set Target="[ClearCacheBtn.Visible]" Value="false"/>-->
           <Set Target="[ResetConfigBtn.Visible]" Value="false"/>
         </Actions>
       </Condition>
@@ -586,7 +586,7 @@
                   <sb:SimpleButton  Name="ContinueBtn" Text="" FocusItem="[FocusItem]"  Command="[Close]" Visible="false" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton FocusOrder="1" Name="BackBtn" Text="" FocusItem="[FocusItem]"  Command="[Back]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton Name="ResetConfigBtn" Text="" FocusItem="[FocusItem]"  Command="[ResetConfig]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
-                  <sb:SimpleButton Name="ClearCacheBtn" Text="" FocusItem="[FocusItem]"  Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
+                  <!--<sb:SimpleButton Name="ClearCacheBtn" Text="Clear Cache" FocusItem="[FocusItem]"  Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>-->
                   <sb:SimpleButton Name="UnlockPCBtn" Text="" FocusItem="[FocusItem]"  Command="[UnlockPC]" Size="200,50" Font="font://f:CP_ButtonFont" Visible="[Application.Config.ParentalControlEnabled]"/>
 
                 </Children>
@@ -677,7 +677,7 @@
                   <Panel Layout="VerticalFlow" >
                     <Children>
                       <me:TextHeader Name="MediaTracking" Text="" />
-                      <cb:CheckBox Name="RememberIndexingC" Label="" Checked="[RememberIndexing]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="Remember Folder Indexing" Checked="[RememberIndexing]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Name="ShowUnwatchedCountC" Label="" Checked="[ShowUnwatchedCount]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Name="ShowWatchedTickOnFoldersC" Label="" Checked="[ShowWatchedTickOnFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Name="ShowUnwatchedIndicatorC" Label="" Checked="[ShowUnwatchedIndicator]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
@@ -722,14 +722,14 @@
                       <me:TextLine Name="RequiresRestart" Text="" />
                     </Children>
                   </Panel>
-                  <Panel Layout="VerticalFlow" >
+                  <!--<Panel Layout="VerticalFlow" >
                     <Children>
                       <me:TextHeader Name="ThemeSettings" Text="" />
                       <cb:CheckBox Name="ShowConfigButtonC"  Label="" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
                       <ss:SimpleSpinner  Name="AlphaBlendingC"  Label="" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />
 
                     </Children>
-                  </Panel>
+                  </Panel>-->
                 </Children>
               </Graphic>
 

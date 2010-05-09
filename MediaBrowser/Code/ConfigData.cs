@@ -29,6 +29,10 @@ namespace MediaBrowser
         public bool EnableExperimentalSqliteSupport = false;
         [Comment(@"If you enable this MB will watch for changes in your file system and update the UI as it happens, may not work properly with SMB shares")]
         public bool EnableDirectoryWatchers = true;
+
+        [Comment(@"If set to true when sorting by unwatched the unwatched folders will be sorted by name")]
+        public bool SortUnwatchedByName = false;
+        
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;
@@ -122,6 +126,7 @@ namespace MediaBrowser
         public bool ExcludeRemoteContentInSearch = true;
 
         public bool ShowUnwatchedIndicator = false;
+        public bool PNGTakesPrecedence = false;
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = true;
