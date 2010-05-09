@@ -78,7 +78,10 @@ namespace Configurator.Code {
           MediaBrowser.Library.Network.WebDownload.PluginInstallErrorCB errorCB) {
             if (plugin.TestedMBVersion < Kernel.Instance.Version) {
                 var dlgResult = MessageBox.Show("Warning - " + plugin.Name + " has not been tested with your version of MediaBrowser. \n\nInstall anyway?", "Version not Tested", MessageBoxButton.YesNo);
-                if (dlgResult == MessageBoxResult.No) return;
+                if (dlgResult == MessageBoxResult.No) {
+                    doneCB();
+                    return;
+                }
             }
 
             if (plugin is RemotePlugin) {
@@ -87,6 +90,7 @@ namespace Configurator.Code {
                 }
                 catch (Exception ex) {
                     MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message, "Install Error");
+                    doneCB();
                 }
             }
             else {
@@ -97,6 +101,7 @@ namespace Configurator.Code {
                 }
                 catch (Exception ex) {
                     MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message, "Install Error");
+                    doneCB();
                 }
             }
 

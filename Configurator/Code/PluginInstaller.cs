@@ -72,44 +72,5 @@ namespace Configurator.Code
                 m_progress.Dispatcher.Invoke(new MediaBrowser.Library.Network.WebDownload.PluginInstallErrorCB(this.PluginInstallError), ex);
             }
         }
-
-        //public void InstallPlugin(IPlugin plugin, System.Windows.Controls.ProgressBar progress, Window window, Delegate done)
-        //{
-        //    if (plugin != null)
-        //    {
-        //        progress.Visibility = Visibility.Visible;
-        //        FakeProgress(progress, window);
-        //        Async.Queue("Plugin Installer", () =>
-        //        {
-        //            PluginManager.Instance.InstallPlugin(plugin);
-        //        },
-        //        () =>
-        //        {
-        //            StopFakeProgress();
-        //            window.Dispatcher.Invoke(DispatcherPriority.Background, done);
-        //        });
-        //    }
-        //}
-        //
-        //private void StopFakeProgress()
-        //{
-        //    done.Set();
-        //    while (!exited.WaitOne()) ;
-        //}
-        //
-        //private void FakeProgress(System.Windows.Controls.ProgressBar progress, Window window)
-        //{
-        //    Async.Queue("Fake progress for download", () =>
-        //    {
-        //        int i = 0;
-        //        while (!done.WaitOne(500, false))
-        //        {
-        //            i += 10;
-        //            i = i % 100;
-        //            window.Dispatcher.Invoke(DispatcherPriority.Background, (MethodInvoker)(() => { progress.Value = i; }));
-        //        }
-        //        exited.Set();
-        //    });
-        //}
     }
 }
