@@ -179,6 +179,8 @@ namespace MediaBrowser.Library
         }
 
         public string MediaTypeString
+        {
+            get {
                 if (this.BaseItem.DisplayMediaType != null)
                 {
                     return this.BaseItem.DisplayMediaType;

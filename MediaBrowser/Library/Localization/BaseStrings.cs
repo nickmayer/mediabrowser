@@ -110,7 +110,7 @@ namespace MediaBrowser.Library.Localization
         public string ShowIcononRemoteContentConfig = "Show Icon on Remote Content";
         public string EnableAdvancedCmdsConfig = "Enable Advanced Commands";
         public string MediaTrackingConfig = "Media Tracking";
-        public string RememberIndexByStateConfig = "Remember Index-By State";
+        public string RememberFolderIndexingConfig = "Remember Folder Indexing";
         public string ShowUnwatchedCountConfig = "Show Unwatched Count";
         public string WatchedIndicatoronFoldersConfig = "Watched Indicator on Folders";
         public string HighlightUnwatchedItemsConfig = "Highlight Unwatched Items";

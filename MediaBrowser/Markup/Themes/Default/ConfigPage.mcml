@@ -444,7 +444,6 @@
           <Invoke ResultTarget="[ContinueBtn.Text]" Target="[Application.StringData]" name="ContinueConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[BackBtn.Text]" Target="[Application.StringData]" name="ContinueConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ResetConfigBtn.Text]" Target="[Application.StringData]" name="ResetDefaultsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ClearCacheBtn.Text]" Target="[Application.StringData]" name="ClearCacheConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[UnlockPCBtn.Text]" Target="[Application.StringData]" name="UnlockConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[General.Text]" Target="[Application.StringData]" name="GeneralConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[Logging.Label]" Target="[Application.StringData]" name="LoggingConfig" InvokePolicy="Synchronous" ExclusiveApply="false">
@@ -476,7 +475,7 @@
           <Invoke ResultTarget="[ShowRemoteIndicatorOnPostersC.Label]" Target="[Application.StringData]" name="ShowIcononRemoteContentConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[EnableAdvancedCmdsC.Label]" Target="[Application.StringData]" name="EnableAdvancedCmdsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[MediaTracking.Text]" Target="[Application.StringData]" name="MediaTrackingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[RememberIndexingC.Label]" Target="[Application.StringData]" name="RememberIndexByStateConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke ResultTarget="[RememberIndexingC.Label]" Target="[Application.StringData]" name="RememberFolderIndexingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ShowUnwatchedCountC.Label]" Target="[Application.StringData]" name="ShowUnwatchedCountConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ShowWatchedTickOnFoldersC.Label]" Target="[Application.StringData]" name="WatchedIndicatoronFoldersConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[ShowUnwatchedIndicatorC.Label]" Target="[Application.StringData]" name="HighlightUnwatchedItemsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
@@ -494,9 +493,6 @@
           <Invoke ResultTarget="[Spinner.Label]" Target="[Application.StringData]" name="ColorSchemeConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[FontThemeSpinner.Label]" Target="[Application.StringData]" name="FontSizeConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[RequiresRestart.Text]" Target="[Application.StringData]" name="RequiresRestartConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ThemeSettings.Text]" Target="[Application.StringData]" name="ThemeSettingsConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[ShowConfigButtonC.Label]" Target="[Application.StringData]" name="ShowConfigButtonConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[AlphaBlendingC.Label]" Target="[Application.StringData]" name="AlphaBlendingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[SecurityPIN.Label]" Target="[Application.StringData]" name="SecurityPINConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[PCUnlockedTxt.Content]" Target="[Application.StringData]" name="PCUnlockedTxtConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[RelockBtn.Text]" Target="[Application.StringData]" name="RelockBtnConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
@@ -677,7 +673,7 @@
                   <Panel Layout="VerticalFlow" >
                     <Children>
                       <me:TextHeader Name="MediaTracking" Text="" />
-                      <cb:CheckBox Label="Remember Folder Indexing" Checked="[RememberIndexing]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Name="RememberIndexingC" Label="" Checked="[RememberIndexing]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Name="ShowUnwatchedCountC" Label="" Checked="[ShowUnwatchedCount]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Name="ShowWatchedTickOnFoldersC" Label="" Checked="[ShowWatchedTickOnFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Name="ShowUnwatchedIndicatorC" Label="" Checked="[ShowUnwatchedIndicator]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
@@ -722,14 +718,6 @@
                       <me:TextLine Name="RequiresRestart" Text="" />
                     </Children>
                   </Panel>
-                  <!--<Panel Layout="VerticalFlow" >
-                    <Children>
-                      <me:TextHeader Name="ThemeSettings" Text="" />
-                      <cb:CheckBox Name="ShowConfigButtonC"  Label="" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowConfigButton]"  Font="font://f:CP_ConfigItemFont"/>
-                      <ss:SimpleSpinner  Name="AlphaBlendingC"  Label="" Model="[AlphaBlending]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont" />
-
-                    </Children>
-                  </Panel>-->
                 </Children>
               </Graphic>
 
