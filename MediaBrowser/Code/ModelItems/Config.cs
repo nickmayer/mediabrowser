@@ -672,6 +672,18 @@ namespace MediaBrowser
             set { if (this.data.PNGTakesPrecedence != value) { this.data.PNGTakesPrecedence = value; Save(); FirePropertyChanged("PNGTakesPrecedence"); } }
         }
 
+        public bool RandomizeBackdrops
+        {
+            get { return this.data.RandomizeBackdrops; }
+            set { if (this.data.RandomizeBackdrops != value) { this.data.RandomizeBackdrops = value; Save(); FirePropertyChanged("RandomizeBackdrops"); } }
+        }
+
+        public bool RotateBackdrops
+        {
+            get { return this.data.RotateBackdrops; }
+            set { if (this.data.RotateBackdrops != value) { this.data.RotateBackdrops = value; Save(); FirePropertyChanged("RotateBackdrops"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;

@@ -83,14 +83,51 @@ namespace MediaBrowser.Library
                     }
                 }
 
-                if (backdropImage == null)
+                if (backdropImage == null)  
                 {
-                    backdropImage = new AsyncImageLoader(
-                        () => baseItem.BackdropImage,
-                        null,
-                        () => this.FirePropertyChanged("BackdropImage"));
-                    backdropImage.LowPriority = true;
+                    if (Config.Instance.RandomizeBackdrops)
+                    {
+                        getRandomBackdropImage();
+                    }
+                    else
+                    {
+                       getPrimaryBackdropImage(); 
+                    }
                 }
+                if (backdropImage != null) //may not have had time to fill this in yet - if not, a propertychanged event will fire it again
+                {
+                    return backdropImage.Image;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        private void getPrimaryBackdropImage()
+        {
+            backdropImage = new AsyncImageLoader(
+                () => baseItem.BackdropImage,
+                null,
+                () => this.FirePropertyChanged("BackdropImage"));
+            backdropImage.LowPriority = true;
+        }
+
+        private void getRandomBackdropImage()
+        {
+            backdropImage = new AsyncImageLoader(
+                () => baseItem.BackdropImages[randomizer.Next(baseItem.BackdropImages.Count)],
+                null,
+                () => this.FirePropertyChanged("BackdropImage"));
+            backdropImage.LowPriority = true;
+        }
+
+        public Image PrimaryBackdropImage
+        {
+            get
+            {
+                getPrimaryBackdropImage();
                 return backdropImage.Image;
             }
         }
@@ -130,16 +167,16 @@ namespace MediaBrowser.Library
                     {
                         // this is really subtle, we need to capture the image otherwise they will all be the same
                         var captureImage = image;
-                        var backdropImage = new AsyncImageLoader(
+                        var asyncImage = new AsyncImageLoader(
                              () => captureImage,
                              null,
                              () => this.FirePropertiesChanged("BackdropImages", "BackdropImage"));
 
                         lock (backdropImages)
                         {
-                            backdropImages.Add(backdropImage);
+                            backdropImages.Add(asyncImage);
                             // trigger a load
-                            var ignore = backdropImage.Image;
+                            var ignore = asyncImage.Image;
                         }
                     }
                 });
@@ -147,8 +184,11 @@ namespace MediaBrowser.Library
         }
 
         int backdropImageIndex = 0;
+        Random randomizer = new Random();
         public void GetNextBackDropImage()
         {
+            if (!Config.Instance.RotateBackdrops) return; // only do this if we want to rotate
+
             backdropImageIndex++;
             EnsureAllBackdropsAreLoaded();
             var images = new List<AsyncImageLoader>();
@@ -159,7 +199,15 @@ namespace MediaBrowser.Library
 
             if (images != null && images.Count > 0)
             {
-                backdropImageIndex = backdropImageIndex % images.Count;
+                if (Config.Instance.RandomizeBackdrops)
+                {
+                    backdropImageIndex = randomizer.Next(images.Count);
+                }
+                else
+                {
+
+                    backdropImageIndex = backdropImageIndex % images.Count;
+                }
                 if (images[backdropImageIndex].Image != null)
                 {
                     backdropImage = images[backdropImageIndex];
