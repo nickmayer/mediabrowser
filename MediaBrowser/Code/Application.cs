@@ -51,6 +51,14 @@ namespace MediaBrowser
             return Kernel.Instance.GetString(name);
         }
 
+        public PropertySet LocalStrings //used to access our localized strings from mcml
+        {
+            get
+            {
+                return Kernel.Instance.LocalStrings;
+            }
+        }
+
         private static Application singleApplicationInstance;
         private MyHistoryOrientedPageSession session;
         private static object syncObj = new object();
@@ -1103,15 +1111,29 @@ namespace MediaBrowser
             //back up the app to the root page - used when library re-locks itself
             while (session.BackPage()) { };
         }
+
         public string DescString(string name)
         {
             //get the description string for "name" out of our string data object
+            //we need to translate the content of our item to the field name so that the
+            //description field name can be the same across languages
             string key = Kernel.Instance.StringData.GetKey(name.Trim());
-            if (key.EndsWith("Config"))
+            if (string.IsNullOrEmpty(key))
             {
-                return Kernel.Instance.StringData.GetString(key.Remove(key.LastIndexOf("Config")) + "Desc");
+                //probably a string file that has not been updated
+                key = name;
+                key = key.Replace(" ", "");
+                key = key.Replace("*", "");
+                key = key.Replace(")", "");
+                key = key.Replace(")", "");
+                key = key.Replace("-", "");
             }
-            return "";
+            return Kernel.Instance.StringData.GetString(key.Trim() + "Desc");
+            //if (key.EndsWith("Config"))
+            //{
+            //    return Kernel.Instance.StringData.GetString(key.Remove(key.LastIndexOf("Config")) + "Desc");
+            //}
+            //return "";
         }
 
         public static void DisplayDialog(string message, string caption)

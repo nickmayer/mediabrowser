@@ -33,27 +33,6 @@ namespace MediaBrowser.Library.Localization
         {
         }
 
-        public string GetString(string key)
-        {
-            if (usAsXML == null)
-            {
-                usAsXML = new XmlDocument();
-                usAsXML.Load(FileName);
-            }
-            try
-            {
-                string typeStr = this.GetType().ToString();
-                typeStr = typeStr.Substring(typeStr.LastIndexOf(".") + 1); //just want the last bit
-                return usAsXML.SafeGetString( typeStr + "/" + key) ?? "";
-            }
-            catch
-            {
-                //not there - just return emptystring
-                return "";
-            }
-        }
-
-
         public static string GetFileName()
         {
             return GetFileName("");
