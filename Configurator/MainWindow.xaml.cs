@@ -237,31 +237,24 @@ namespace Configurator
 
         public void InitFolderTree()
         {
-
-            txtLibFolderLoad.Text = "Loading...";
-            txtLibFolderLoad.Visibility = Visibility.Visible;
             tvwLibraryFolders.BeginInit();
             tvwLibraryFolders.Items.Clear();
             tabControl1.Cursor = Cursors.Wait;
             string[] vfs = Directory.GetFiles(ApplicationPaths.AppInitialDirPath,"*.vf");
             foreach (string vfName in vfs)
             {
+                TreeViewItem dummyNode = new TreeViewItem();
+                dummyNode.Header = new DummyTreeItem();
+
                 TreeViewItem aNode = new TreeViewItem();
                 LibraryFolder aFolder = new LibraryFolder(vfName);
                 aNode.Header = aFolder;
+                aNode.Items.Add(dummyNode);
+                
                 tvwLibraryFolders.Items.Add(aNode);
-                VirtualFolder vf = new VirtualFolder(vfName);
-                foreach (string folder in vf.Folders)
-                {
-                    getLibrarySubDirectories(folder, aNode);
-                }
-
             }
             tvwLibraryFolders.EndInit();
-            txtLibFolderLoad.Visibility = Visibility.Hidden;
             tabControl1.Cursor = Cursors.Arrow;
-
-
         }
 
         private void getLibrarySubDirectories(string dir, TreeViewItem parent)
@@ -282,10 +275,19 @@ namespace Configurator
                 //only want directories that don't directly contain movies in our tree...
                 if (!containsMedia(subdir))
                 {
-                    TreeViewItem aNode = new TreeViewItem();
-                    LibraryFolder aFolder = new LibraryFolder(subdir);
-                    aNode.Header = aFolder;
-                    parent.Items.Add(aNode);
+                    TreeViewItem aNode; // = new TreeViewItem();
+                    //LibraryFolder aFolder = new LibraryFolder(subdir);
+                    //aNode.Header = aFolder;
+                    
+                    // Throw back up to main thread to add to TreeView
+                    // (System.Windows.Forms.MethodInvoker)(() => { aNode = addLibraryFolderNode(parent, subdir); }));
+                    AddLibraryFolderCB addNode = new AddLibraryFolderCB(addLibraryFolderNode);
+
+                    Object returnType;
+                    returnType = Dispatcher.Invoke(addNode, DispatcherPriority.Background, parent, subdir);
+
+                    aNode = (TreeViewItem)returnType;
+
                     getLibrarySubDirectories(subdir, aNode);
                 }
             }
@@ -302,6 +304,8 @@ namespace Configurator
                 && Directory.GetFiles(path, "*.IFO").Length == 0
                 && Directory.GetFiles(path, "*.VOB").Length == 0
                 && Directory.GetFiles(path, "*.avi").Length == 0
+                && Directory.GetFiles(path, "*.mpg").Length == 0
+                && Directory.GetFiles(path, "*.mpeg").Length == 0
                 && Directory.GetFiles(path, "*.mp3").Length == 0
                 && Directory.GetFiles(path, "*.mp4").Length == 0
                 && Directory.GetFiles(path, "*.mkv").Length == 0
@@ -933,6 +937,7 @@ sortorder: {2}
         {
             //called when the upgrade process finishes - we just hide progress bar and re-enable
             this.IsEnabled = true;
+            progress.Value = 0;
             progress.Visibility = Visibility.Hidden;
         }
 
@@ -1528,6 +1533,64 @@ sortorder: {2}
             }
         }
 
+        private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            // Any SelectionChanged event from any controls contained in the TabControl will bubble up and be handled by this event.
+            // We are only interested in events related to the Tab selection changing so ignore evertthing else.
+            if (e.OriginalSource.ToString().Contains("Controls.Tab")) {
+                TabControl tabControl = (sender as TabControl);
+
+                if (tabControl.SelectedItem != null) {
+                    TabItem tab = (tabControl.SelectedItem as TabItem);
+                    if (tab.Name == "folderSecurityTab") {
+                        // Initialise the Folder list by populating the top level items based on the .vf files
+                        InitFolderTree();
+                    }
+                }
+            }
+        }
+
+        private void tvwLibraryFolders_ItemExpanded(object sender, RoutedEventArgs e) {
+            TreeViewItem item = e.OriginalSource as TreeViewItem;
+            if (item != null) {
+                if ((item.Items.Count == 1) && (((TreeViewItem)item.Items[0]).Header is DummyTreeItem)) {
+                    tvwLibraryFolders.Cursor = Cursors.Wait;
+                    item.Items.Clear();
+
+                    LibraryFolder aFolder = item.Header as LibraryFolder;
+                    VirtualFolder vf = new VirtualFolder(aFolder.FullPath);
+
+                    Async.Queue("LibraryFoldersExpand", () => {
+                        foreach (string folder in vf.Folders) {
+                            getLibrarySubDirectories(folder, item);
+                        }
+                    }, () => {
+                        Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() => {
+                            tvwLibraryFolders.Cursor = Cursors.Hand;
+                        }));
+                    });
+                    }
+                }
+        }
+
+        TreeViewItem addLibraryFolderNode(TreeViewItem parent, string dir) {
+            if (parent.Dispatcher.CheckAccess()) {
+
+                TreeViewItem aNode = new TreeViewItem();
+                LibraryFolder aFolder = new LibraryFolder(dir);
+                aNode.Header = aFolder;
+
+                parent.Items.Add(aNode);
+
+                return aNode;
+            }
+            else {
+                parent.Dispatcher.Invoke(new AddLibraryFolderCB(this.addLibraryFolderNode), parent, dir);
+                return null;
+            }
+        }
+
+        private delegate TreeViewItem AddLibraryFolderCB(TreeViewItem parent, string dir);
+
         private void btnClearCache_Click(object sender, RoutedEventArgs e)
         {
             bool error = false;
@@ -1624,10 +1687,9 @@ sortorder: {2}
         private void cbxCache_Click(object sender, RoutedEventArgs e)
         {
             btnClearCache.IsEnabled = cbxItemCache.IsChecked.Value | cbxImageCache.IsChecked.Value | cbxDisplayCache.IsChecked.Value | cbxPlaystateCache.IsChecked.Value;
-
-        }
-
+	    }
     }
+
     #region FormatParser Class
     class FormatParser
     {
@@ -1670,4 +1732,10 @@ sortorder: {2}
 
     }
     #endregion
+
+    #region DummyTreeItem Class
+    class DummyTreeItem {
+    }
+    #endregion
+
 }
