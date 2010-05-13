@@ -632,6 +632,7 @@
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
     <Compile Include="Library\Localization\BaseStrings.cs" />
     <Compile Include="Library\Localization\LocalizedStrings.cs" />
+    <Compile Include="Library\Network\WebDownload.cs" />
     <Compile Include="Library\Persistance\AbstractMember.cs" />
     <Compile Include="Library\Persistance\MemoizingRepository.cs" />
     <Compile Include="Library\Persistance\XmlSettings.cs" />

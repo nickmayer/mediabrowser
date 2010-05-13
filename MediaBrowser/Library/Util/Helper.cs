@@ -335,7 +335,7 @@ namespace MediaBrowser.LibraryManagement
                     attempt++;
                     try {
                         WebRequest req = HttpWebRequest.Create(url);
-                        req.Timeout = 60000;
+                        req.Timeout = 15000;
 
                         using (WebResponse resp = req.GetResponse())
                             try {
