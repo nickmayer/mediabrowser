@@ -428,12 +428,12 @@
 
       <Rule>
         <Actions>
-          <Invoke ResultTarget="[Configuration.Content]" Target="[Application.StringData]" name="ConfigConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke ResultTarget="[Configuration.Content]" Target="[Application.StringData]" name="ConfigConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[Version.Content]" Target="[Application.StringData]" name="VersionConfig" InvokePolicy="Synchronous" ExclusiveApply="false">
             <Transformer>
               <FormatTransformer Format="{0}: "/>
             </Transformer>
-          </Invoke>
+          </Invoke>-->
           <Invoke ResultTarget="[GeneralInit.Text]" Target="[Application.StringData]" name="GeneralConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[TrackingInit.Text]" Target="[Application.StringData]" name="TrackingConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke ResultTarget="[AssumeWatchedInit.Label]" Target="[Application.StringData]" name="AssumeWatchedIfOlderThanConfig" InvokePolicy="Synchronous" ExclusiveApply="false"/>
@@ -519,7 +519,7 @@
                   <FormLayoutInput Right="Parent,1,-40" Top="Parent,0,10"  />
                 </LayoutInput>
                 <Children>
-                  <Text Name="Configuration" Font="font://f:CP_ConfigTitleFont" Color="color://s:FontColorDark">
+                  <Text Name="Configuration" Content="[Application.LocalStrings.#ConfigConfig!cor:String]" Font="font://f:CP_ConfigTitleFont" Color="color://s:FontColorDark">
                   </Text>
                 </Children>
               </Clip>
@@ -528,7 +528,7 @@
                   <AnchorLayoutInput Top="Title,1,5" Right="Parent,1,-40"/>
                 </LayoutInput>
                 <Children>
-                  <Text Name="Version" Font="font://f:CP_VersionFont" Color="color://s:FontColorDark" />
+                  <Text Name="Version" Content="[Application.LocalStrings.#VersionConfig!cor:String]" Font="font://f:CP_VersionFont" Color="color://s:FontColorDark" />
                   <Text Content="[Application.AppVersion]" Font="font://f:CP_VersionFont" Color="color://s:FontColorDark"/>
                 </Children>
               </Panel>
