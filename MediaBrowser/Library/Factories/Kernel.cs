@@ -536,10 +536,18 @@ namespace MediaBrowser.Library {
 
         private void InitialisePlugin(string target) {
             var plugin = Plugin.FromFile(target, true);
-            plugin.Init(this);
+
+            try {
+                plugin.Init(this);
+            } catch (InvalidCastException e) { 
+                // this happens if the assembly with the exact same version is loaded 
+                // AND the Init process tries to use types defined in its assembly 
+                throw new PluginAlreadyLoadedException("Failed to init plugin as its already loaded", e);
+            }
             IPlugin pi = Plugins.Find(p => p.Filename == plugin.Filename);
             if (pi != null) Plugins.Remove(pi); //we were updating
             Plugins.Add(plugin);
+           
 
         }
 
@@ -628,7 +636,10 @@ namespace MediaBrowser.Library {
                     // Initialise the Plugin
                     InitialisePlugin(requestState.downloadDest.Name);
                 }
-            }
+            } 
+            catch (PluginAlreadyLoadedException) {
+                Logger.ReportWarning("Attempting to install a plugin that is already loaded: " + requestState.fileURI);
+            } 
             catch (WebException ex) {
                 //Callback to GUI to report an error has occured.
                 if (requestState.errorCB != null) {
@@ -637,5 +648,16 @@ namespace MediaBrowser.Library {
             }
         }
 
+    }
+
+    [global::System.Serializable]
+    public class PluginAlreadyLoadedException : Exception {
+        public PluginAlreadyLoadedException() { }
+        public PluginAlreadyLoadedException(string message) : base(message) { }
+        public PluginAlreadyLoadedException(string message, Exception inner) : base(message, inner) { }
+        protected PluginAlreadyLoadedException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
     }
 }
