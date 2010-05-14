@@ -148,8 +148,8 @@ namespace MediaBrowser.Library.Persistance {
                                 "create table items (guid primary key, data)",
                                 "create table children (guid, child)", 
                                 "create unique index idx_children on children(guid, child)",
-                                @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll, 
-                                       sort_order, index_by, use_banner, thumb_constraint_width, thumb_constraint_height, use_coverflow, use_backdrop )" 
+                               // @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll 
+                               //        sort_order, index_by, use_banner, thumb_constraint_width, thumb_constraint_height, use_coverflow, use_backdrop )" 
                                 //,   "create table play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)"
                                };
 
@@ -254,73 +254,13 @@ namespace MediaBrowser.Library.Persistance {
             return children.Count == 0 ? null : children;
         }
 
-
-       
-
         public DisplayPreferences RetrieveDisplayPreferences(Guid id) {
-
-            // this is coupled to tightly with media center .... 
-
-            DisplayPreferences prefs = null;
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = @"select view_type, show_labels, vertical_scroll, 
-                                    sort_order, index_by, use_banner, thumb_constraint_width, 
-                                    thumb_constraint_height, use_coverflow, use_backdrop from display_prefs where guid = @guid";
-            cmd.AddParam("@guid", id);
-
-            using (var reader = cmd.ExecuteReader()) {
-                if (reader.Read()) {
-                    prefs = new DisplayPreferences(id);
-
-                    prefs.ViewType.Chosen = ViewTypeNames.GetName((ViewType)Enum.Parse(typeof(ViewType), reader.GetString(0)));
-                    prefs.ShowLabels.Value = reader.GetBoolean(1);
-                    prefs.VerticalScroll.Value = reader.GetBoolean(2);
-                    prefs.SortOrder = (SortOrder)Enum.Parse(typeof(SortOrder), reader.GetString(3));
-
-
-                    prefs.IndexBy = (IndexType)Enum.Parse(typeof(IndexType), reader.GetString(4));
-                    if (!Config.Instance.RememberIndexing)
-                        prefs.IndexBy = IndexType.None;
-
-                    prefs.UseBanner.Value = reader.GetBoolean(5);
-                    prefs.ThumbConstraint.Value = new Microsoft.MediaCenter.UI.Size(reader.GetInt32(6), reader.GetInt32(7));
-
-                    prefs.UseCoverflow.Value = reader.GetBoolean(8);
-                    prefs.UseBackdrop.Value = reader.GetBoolean(9);
-
-                }
-            }
-            return prefs;
-
+            return itemRepo.RetrieveDisplayPreferences(id);
         }
 
 
         public void SaveDisplayPreferences(DisplayPreferences prefs) {
-
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = @"replace into display_prefs (
-                                    guid, view_type, show_labels, vertical_scroll, 
-                                    sort_order, index_by, use_banner, thumb_constraint_width, 
-                                    thumb_constraint_height, use_coverflow, use_backdrop) 
-                                values (@guid, @view_type, @show_labels, @vertical_scroll, 
-                                    @sort_order, @index_by, @use_banner, @thumb_constraint_width, 
-                                    @thumb_constraint_height, @use_coverflow, @use_backdrop)";
-
-
-            cmd.AddParam("@guid", prefs.Id);
-            cmd.AddParam("@view_type", ViewTypeNames.GetEnum((string)prefs.ViewType.Chosen).ToString());
-            cmd.AddParam("@show_labels", prefs.ShowLabels.Value);
-            cmd.AddParam("@vertical_scroll", prefs.VerticalScroll.Value);
-            cmd.AddParam("@sort_order", prefs.SortOrder.ToString());
-            cmd.AddParam("@index_by", prefs.IndexBy.ToString());
-            cmd.AddParam("@use_banner", prefs.UseBanner.Value);
-            cmd.AddParam("@thumb_constraint_width", prefs.ThumbConstraint.Value.Width);
-            cmd.AddParam("@thumb_constraint_height", prefs.ThumbConstraint.Value.Height);
-            cmd.AddParam("@use_coverflow", prefs.UseCoverflow.Value);
-            cmd.AddParam("@use_backdrop", prefs.UseBackdrop.Value);
-
-
-            QueueCommand(cmd);
+            itemRepo.SaveDisplayPreferences(prefs);
         }
 
         public BaseItem RetrieveItem(Guid id) {

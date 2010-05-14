@@ -32,9 +32,6 @@ namespace MediaBrowser.Library {
 
         FileBasedDictionary<PlaybackStatus> playbackStatus;
 
-
-        
-
         #region IItemCacheProvider Members
 
         public void SaveChildren(Guid id, IEnumerable<Guid> children) {

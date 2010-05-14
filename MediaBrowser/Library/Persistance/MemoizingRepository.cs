@@ -71,27 +71,19 @@ namespace MediaBrowser.Library.Persistance {
         // Do not memoize these calls, as they are shared.
         public PlaybackStatus RetrievePlayState(Guid id) {
             return repository.RetrievePlayState(id); 
-            //return Memoize(id, playState, repository.RetrievePlayState);
         }
 
         public void SavePlayState(PlaybackStatus playState) {
             repository.SavePlayState(playState);
-            /*
-            lock (this.playState) {
-                this.playState[playState.Id] = playState;
-            }
-             */
+
         }
 
         public DisplayPreferences RetrieveDisplayPreferences(Guid id) {
-            return Memoize(id, displayPrefs, repository.RetrieveDisplayPreferences); 
+            return repository.RetrieveDisplayPreferences(id);
         }
 
         public void SaveDisplayPreferences(DisplayPreferences prefs) {
             repository.SaveDisplayPreferences(prefs);
-            lock (this.displayPrefs) {
-                this.displayPrefs[prefs.Id] = prefs;
-            }
         }
 
         public bool ClearEntireCache() {
