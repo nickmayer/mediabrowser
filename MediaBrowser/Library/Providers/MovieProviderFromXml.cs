@@ -99,7 +99,7 @@ namespace MediaBrowser.Library.Providers
 
                 if (movie.DisplayMediaType == null)
                 {
-                    movie.DisplayMediaType = doc.SafeGetString("Title/Type");
+                    movie.DisplayMediaType = doc.SafeGetString("Title/Type","");
                     switch (movie.DisplayMediaType.ToLower())
                     {
                         case "blu-ray":

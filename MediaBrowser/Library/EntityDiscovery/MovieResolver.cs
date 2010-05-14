@@ -63,6 +63,30 @@ namespace MediaBrowser.Library.EntityDiscovery {
             
         }
 
+        private MediaType? GetSpecialMediaType(string pathUpper) {
+
+            MediaType? mediaType = null;
+
+            if (pathUpper.EndsWith("VIDEO_TS") || pathUpper.EndsWith(".VOB")) {
+                mediaType = MediaType.DVD;
+            }
+
+            else if (pathUpper.EndsWith("HVDVD_TS")) {
+                mediaType = MediaType.HDDVD;
+            }
+
+            else if (pathUpper.EndsWith("BDMV")) {
+                mediaType = MediaType.BluRay;
+
+            }
+
+            else if (Helper.IsIso(pathUpper)) {
+                mediaType = MediaType.ISO;
+            }
+
+            return mediaType;
+        }
+
         private void DetectFolderWhichIsMovie(IFolderMediaLocation folder, out bool isMovie, out MediaType mediaType, out List<IMediaLocation> volumes) {
             int isoCount = 0;
             var childFolders = new List<IFolderMediaLocation>();
@@ -74,34 +98,19 @@ namespace MediaBrowser.Library.EntityDiscovery {
             foreach (var child in folder.Children) {
                 var pathUpper = child.Path.ToUpper();
 
-                if (pathUpper.EndsWith("VIDEO_TS") || pathUpper.EndsWith(".VOB")) {
-                    isMovie = true;
-                    mediaType = MediaType.DVD;
-                    break;
-                }
-
-                if (pathUpper.EndsWith("HVDVD_TS")) {
-                    isMovie = true;
-                    mediaType = MediaType.HDDVD;
-                    break;
-                }
-
-                if (pathUpper.EndsWith("BDMV")) {
-                    isMovie = true;
-                    mediaType = MediaType.BluRay;
-                    break;
-                }
-
-                if (child.IsIso()) {
-                    mediaType = MediaType.ISO;
-                    isoCount++;
-                    if (isoCount > 1) {
+                var tmpMediaType = GetSpecialMediaType(pathUpper);
+                // DVD/ BD or ISO
+                if (tmpMediaType != null) {
+                    mediaType = tmpMediaType.Value;
+                    if (tmpMediaType.Value == MediaType.ISO) {
+                        isoCount++;
+                        if (isoCount > 1) {
+                            break;
+                        }
+                    } else {
+                        isMovie = true;
                         break;
                     }
-                }
-
-                if (pathUpper.EndsWith("NOAUTOPLAYLIST")) {
-                    break;
                 }
 
                 var childFolder = child as IFolderMediaLocation;
@@ -126,20 +135,26 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
             if (searchForVideosRecursively && isoCount == 0) {
 
-                int currentCount = volumes.Count;
-
-                volumes.AddRange(childFolders
+                foreach (var location in childFolders
                     .Select(child => ChildVideos(child))
-                    .SelectMany(x => x)
-                    .Take((maxVideosPerMovie - currentCount) + 1));
+                    .SelectMany(x => x)) {
+
+                    // this should be refactored, but I prefer this to throwing exceptions 
+                    if (location == null) {
+                        // get out of here, recursive BD / DVD / ETC found 
+                        return;
+                    } else { 
+                        // another video found
+                        volumes.Add(location);
+                        if (volumes.Count > maxVideosPerMovie) break;
+                    }
+                }
+
             }
 
             if (volumes.Count > 0 && isoCount == 0) {
-                //try to determine that this is a folder with a multi-part movie and not just a folder with only a few
-                //movies of a video type. For this to be a multi-part movie, not only will we have multiple volumes
-                //but those volumes should be the ONLY children we have.  If not, it's probably just a video file type
-                //movies amongst a larger collection of other movies.
-                if (volumes.Count <= maxVideosPerMovie && folder.Children.Count == volumes.Count) {
+
+                if (volumes.Count <= maxVideosPerMovie) {
                     //figure out media type from file extension (first one will win...)
                     mediaType = volumes[0].GetVideoMediaType();
                     isMovie = true;
@@ -155,9 +170,16 @@ namespace MediaBrowser.Library.EntityDiscovery {
 
         private IEnumerable<IMediaLocation> ChildVideos(IFolderMediaLocation location) {
 
-            if (location.ContainsChild(FolderResolver.IGNORE_FOLDER) || location.ContainsChild("mymovies.xml")) yield break;
+            if (location.ContainsChild(FolderResolver.IGNORE_FOLDER) ) yield break;
+
+            if (location.ContainsChild("mymovies.xml")) yield return null;
 
             foreach (var child in location.Children) {
+
+                // nested DVD or BD
+                if (GetSpecialMediaType(child.Path.ToUpper()) != null) {
+                    yield return null;
+                }
 
                 if (child.IsHidden()) continue;
 
@@ -166,6 +188,12 @@ namespace MediaBrowser.Library.EntityDiscovery {
                 }
                 var folder = child as IFolderMediaLocation;
                 if (folder != null) {
+
+                    if (enableTrailerSupport &&
+                       folder.Name.ToUpper() == TrailersPath) {
+                        continue;
+                    }
+
                     foreach (var grandChild in ChildVideos(folder)) {
                         yield return grandChild;  
                     } 

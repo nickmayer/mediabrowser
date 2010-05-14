@@ -385,8 +385,6 @@ namespace MediaBrowser.Library {
         public void FindRecentWatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
         {
             DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
-            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
-            folderModel.PhysicalParent = this;
             foreach (var item in folder.Children)
             {
                 // skip folders
@@ -405,6 +403,8 @@ namespace MediaBrowser.Library {
                         DateTime watchedTime = i.PlaybackStatus.LastPlayed;
                         if (i.PlaybackStatus.PlayCount > 0 && DateTime.Compare(watchedTime, daysAgo) > 0)
                         {
+                            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+                            folderModel.PhysicalParent = this;
                             //only get ones watched within last 60 days
                             while (foundNames.ContainsKey(watchedTime))
                             {
@@ -430,8 +430,6 @@ namespace MediaBrowser.Library {
         public void FindRecentUnwatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
         {
             DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
-            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
-            folderModel.PhysicalParent = this;
             foreach (var item in folder.Children)
             {
                 // skip folders
@@ -450,6 +448,8 @@ namespace MediaBrowser.Library {
                         Video i = item as Video;
                         if (i.PlaybackStatus.WasPlayed == false)
                         {
+                            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+                            folderModel.PhysicalParent = this;
                             DateTime creationTime = item.DateCreated;
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;

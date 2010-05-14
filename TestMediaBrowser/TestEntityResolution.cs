@@ -13,6 +13,65 @@ namespace TestMediaBrowser {
     [TestFixture]
     public class TestEntityResolution {
 
+        [Test]
+        public void TestMixedBluRayAndAvi() {
+            var resolver = CreateResolver();
+            var movie = MockFolderMediaLocation.CreateMockLocation(@"
+|Star Wars Trilogy
+ rubbish.bla
+ |Volume 1
+  |BDMV
+   MOVIEOBJ.BDM
+ |Volume 2
+  a.avi
+ |Volume 3
+  b.avi
+");
+
+            Assert.AreEqual(typeof(Folder), resolver.ResolveType(movie));
+            Assert.AreEqual(typeof(Movie), resolver.ResolveType(movie.Children[1]));
+            Assert.AreEqual(typeof(Movie), resolver.ResolveType(movie.Children[2]));
+            Assert.AreEqual(typeof(Movie), resolver.ResolveType(movie.Children[3]));
+        }
+
+        [Test]
+        public void TestMixedIsoAndAvi() {
+            var resolver = CreateResolver();
+            var movie = MockFolderMediaLocation.CreateMockLocation(@"
+|Star Wars Trilogy
+ rubbish.bla
+ |Volume 1
+  a.iso
+ |Volume 2
+  a.avi
+ |Volume 3
+  b.avi
+");
+
+            Assert.AreEqual(resolver.ResolveType(movie), typeof(Folder));
+            Assert.AreEqual(resolver.ResolveType(movie.Children[1]), typeof(Movie));
+            Assert.AreEqual(resolver.ResolveType(movie.Children[2]), typeof(Movie));
+            Assert.AreEqual(resolver.ResolveType(movie.Children[3]), typeof(Movie));
+        }
+
+
+        [Test]
+        public void TestRubbishFilesToNotKillResolution() {
+            var resolver = CreateResolver();
+            var movie = MockFolderMediaLocation.CreateMockLocation(@"
+|Star Wars
+ rubbish.bla
+ bla.jpg
+ folder.jpg
+ |part 1
+  a.avi
+ |part 2
+  b.avi
+");
+
+            Assert.AreEqual(resolver.ResolveType(movie), typeof(Movie));
+        }
+
 
         [Test]
         public void TestNestedMoviesAreAlwaysTreatedAsBoxSets() {
