@@ -74,6 +74,8 @@ namespace MediaBrowser.Library.Localization
         public string ShowIcononRemoteContentConfigDesc = "Show an indicator on items from the web in Poster Views.";
         public string ExcludeRemoteContentInSearchesConfigDesc = "Don't show content from the web when searching entire library.";
         public string HighlightUnwatchedItemsConfigDesc = "Show a Highlight on Un-watched Content.";
+        public string RandomizeBackdropConfigDesc = "Select random fan art from the available ones.";
+        public string RotateBackdropConfigDesc = "Show all available fan art in a sequence (can be random).";
 
         //Config Panel
         public string ConfigConfig = "Configuration";
@@ -144,6 +146,8 @@ namespace MediaBrowser.Library.Localization
         public string UnlockonPINEntryConfig = "Unlock on PIN Entry";
         public string UnlockPeriodHoursConfig = "Unlock Period (Hours)";
         public string EnterNewPINConfig = "Enter New PIN";
+        public string RandomizeBackdropConfig = "Randomize";
+        public string RotateBackdropConfig = "Rotate";
 
 
 

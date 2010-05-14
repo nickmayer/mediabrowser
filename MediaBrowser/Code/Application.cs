@@ -1118,11 +1118,6 @@ namespace MediaBrowser
                 key = key.Replace("-", "");
             }
             return Kernel.Instance.StringData.GetString(key.Trim() + "Desc");
-            //if (key.EndsWith("Config"))
-            //{
-            //    return Kernel.Instance.StringData.GetString(key.Remove(key.LastIndexOf("Config")) + "Desc");
-            //}
-            //return "";
         }
 
         public static void DisplayDialog(string message, string caption)
