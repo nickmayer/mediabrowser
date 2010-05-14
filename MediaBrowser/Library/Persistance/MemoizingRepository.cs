@@ -6,6 +6,7 @@ using MediaBrowser.Library.Interfaces;
 using MediaBrowser.Library.Entities;
 
 namespace MediaBrowser.Library.Persistance {
+
     public class MemoizingRepository : IItemRepository {
 
         IItemRepository repository;
@@ -67,15 +68,19 @@ namespace MediaBrowser.Library.Persistance {
             return Memoize(id, children, repository.RetrieveChildren);
         }
 
+        // Do not memoize these calls, as they are shared.
         public PlaybackStatus RetrievePlayState(Guid id) {
-            return Memoize(id, playState, repository.RetrievePlayState);
+            return repository.RetrievePlayState(id); 
+            //return Memoize(id, playState, repository.RetrievePlayState);
         }
 
         public void SavePlayState(PlaybackStatus playState) {
             repository.SavePlayState(playState);
+            /*
             lock (this.playState) {
                 this.playState[playState.Id] = playState;
             }
+             */
         }
 
         public DisplayPreferences RetrieveDisplayPreferences(Guid id) {
