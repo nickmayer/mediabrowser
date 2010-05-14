@@ -103,29 +103,10 @@
         </Conditions>
         <Actions>
           <!--<Set Target="[RecentItems.ChosenIndex]" Value="1" />-->
-          <!--<Set Target="[NPVTitle.Content]" Value="recently watched" />-->
-          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
+          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
         </Actions>
       </Changed>
-
-      <Changed Source="[Application]" InitialEvaluate="true" >
-        <Conditions>
-          <Equality Source="[Application.RecentItemOption]" Value="added"/>
-        </Conditions>
-        <Actions>
-          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS" InvokePolicy="Synchronous" ExclusiveApply="false" />
-        </Actions>
-      </Changed>
-
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[AddedButton.Label]" Target="[Application.StringData]" name="AddedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[WatchedButton.Label]" Target="[Application.StringData]" name="WatchedEHS" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-        </Actions>
-      </Rule>
-      <!--<Default Value="[Added]" Target="[AddedButton.Label]"/>-->
 
       <!--Make sure initial focus is in the right place-->
       <Changed Source="[InitialFocusTimer.Tick]" >
@@ -185,17 +166,16 @@
         <Actions>
           <Invoke Target="[SelectedItem.RecentItemsChanged]" />
           <Set Target="[Application.RecentItemOption]" Value="added" />
-
-          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS" ExclusiveApply="false" InvokePolicy="Synchronous"/>
-          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyAddedEHS"  ExclusiveApply="false" InvokePolicy="Synchronous"/>
+          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
+          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
         </Actions>
       </Changed>
       <Changed Source="[CmdRecentlyWatched.Invoked]">
         <Actions>
           <Set Target="[Application.RecentItemOption]" Value="watched" />
           <Invoke Target="[SelectedItem.RecentItemsChanged]" />
-          <Invoke ResultTarget="[NPVTitle.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" ExclusiveApply="false" InvokePolicy="Synchronous"/>
-          <Invoke ResultTarget="[NPVTitle2.Content]" Target="[Application.StringData]" name="RecentlyWatchedEHS" ExclusiveApply="false" InvokePolicy="Synchronous"/>
+          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
+          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
         </Actions>
       </Changed>
 
@@ -567,11 +547,11 @@
                       <FlowLayout Orientation="Horizontal" Spacing="10,0" />
                     </Layout>
                     <Children>
-                      <hb:HeaderButton Name="AddedButton" Label=""
+                      <hb:HeaderButton Label="[Application.LocalStrings.#AddedEHS!cor:String]"
                                   Command="[CmdRecentlyAdded]"
                                   BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
                                   />
-                      <hb:HeaderButton Name="WatchedButton" Label=""
+                      <hb:HeaderButton Label="[Application.LocalStrings.#WatchedEHS!cor:String]"
                                        Command="[CmdRecentlyWatched]"
                                        BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
                                   />
@@ -818,12 +798,6 @@
       </Changed>
       <Binding Source="[ScrollingData.CurrentPage]" Target="[Pagination.Value]" />
       <Binding Source="[ScrollingData.TotalPages]" Target="[Pagination.MaxPages]" />
-      <Rule>
-        <Actions>
-          <Invoke Target="[Application.StringData]" name="NoItemsEHS" ResultTarget="[EmptyList.Content]"/>
-        </Actions>
-      </Rule>
-
 
     </Rules>
     <Content>
@@ -856,7 +830,7 @@
               </Scroller>
             </Children>
           </Clip>
-          <Text Name="EmptyList" Content="" Font="Segoe Media Center, 24" Color="color://s:FontColorDark" Visible="false" >
+          <Text Name="EmptyList" Content="[Application.LocalStrings.#NoItemsEHS!cor:String]" Font="Segoe Media Center, 24" Color="color://s:FontColorDark" Visible="false" >
             <LayoutInput>
               <AnchorLayoutInput Bottom="Parent,1,-5"/>
             </LayoutInput>
