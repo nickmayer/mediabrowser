@@ -58,6 +58,8 @@ namespace MediaBrowser.Library.Threading {
                     if (maxThreads > threads.Count) {
                         Thread t = new Thread(new ThreadStart(ThreadProc));
                         t.IsBackground = true;
+                        // dont affect the UI.
+                        t.Priority = ThreadPriority.Lowest;
                         t.Name = "Worker thread for " + name;
                         t.Start();
                         threads.Add(t);

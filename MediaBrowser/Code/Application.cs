@@ -51,7 +51,7 @@ namespace MediaBrowser
             return Kernel.Instance.GetString(name);
         }
 
-        public PropertySet LocalStrings //used to access our localized strings from mcml
+        public MBPropertySet LocalStrings //used to access our localized strings from mcml
         {
             get
             {
@@ -504,21 +504,10 @@ namespace MediaBrowser
                         {
                             try
                             {
-                                // entry points
-                                if (!(this.RootFolderModel == null))
+                               
+                                if (!IsInEntryPoint)
                                 {
-                                    //refresh the root folder children in case we changed sort order
-                                    foreach (var child in this.RootFolderModel.Children)
-                                    {
-                                        child.RefreshMetadata();
-                                    }
-                                }
-                                if (IsInEntryPoint)
-                                {
-                                    FullRefresh(this.RootFolderModel.Folder);
-                                }
-                                else
-                                {
+                                    // only refresh for the root entry, this will help speed things up
                                     FullRefresh(this.RootFolder);
                                 }
                             }
