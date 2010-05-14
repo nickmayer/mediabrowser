@@ -10,15 +10,20 @@ using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Logging;
 using Microsoft.MediaCenter.UI;
+using System.Collections;
 
 
 namespace MediaBrowser.Library.Localization
 {
+    public class MBPropertySet : System.Collections.Hashtable {
+      
+    }
+
     public class LocalizedStrings
     {
         private List<object> data = new List<object>();
-        public PropertySet LocalStrings = new PropertySet();
-        private PropertySet localStringsReverse = new PropertySet();
+        public MBPropertySet LocalStrings = new MBPropertySet();
+        private MBPropertySet localStringsReverse = new MBPropertySet();
 
 
         public LocalizedStrings()
@@ -37,8 +42,8 @@ namespace MediaBrowser.Library.Localization
                 {
                     try
                     {
-                        LocalStrings.Entries.Add(field.Name, field.GetValue(stringData) as string);
-                        localStringsReverse.Entries.Add(field.GetValue(stringData) as string, field.Name);
+                        LocalStrings[field.Name] = field.GetValue(stringData) as string;
+                        localStringsReverse[field.GetValue(stringData)as string] = field.Name;
                     }
                     catch (Exception ex)
                     {

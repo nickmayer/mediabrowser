@@ -106,14 +106,18 @@ namespace MediaBrowser.Library.Persistance {
 
         internal static Type GetCachedType(string typeName) {
             Type type;
-            if (!typeMap.TryGetValue(typeName, out type)) {
-                type = AppDomain
-                    .CurrentDomain
-                    .GetAssemblies()
-                    .Select(a => a.GetType(typeName, false))
-                    .Where(t => t != null)
-                    .FirstOrDefault();
-                if (type != null) typeMap[typeName] = type;
+            // tip for the reader: Dictonary gets will go in to a tail spin
+            //   if you do not lock
+            lock (typeMap) {
+                if (!typeMap.TryGetValue(typeName, out type)) {
+                    type = AppDomain
+                        .CurrentDomain
+                        .GetAssemblies()
+                        .Select(a => a.GetType(typeName, false))
+                        .Where(t => t != null)
+                        .FirstOrDefault();
+                    if (type != null) typeMap[typeName] = type;
+                }
             }
             return type;
         }

@@ -347,7 +347,7 @@ namespace MediaBrowser.Library {
             }
 
         }
-        public PropertySet LocalStrings
+        public MBPropertySet LocalStrings
         {
             get
             {
