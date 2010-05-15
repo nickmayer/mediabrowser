@@ -85,8 +85,8 @@
 
       <Choice Name="RecentItems">
         <Options>
-          <cor:String String="recently added" />
-          <cor:String String="recently watched" />
+          <cor:String String="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
         </Options>
       </Choice>
 
@@ -566,9 +566,9 @@
                   <AnchorLayoutInput Right="RecentListPanel,1,10" Bottom="RecentListPanel,0,-4"/>
                 </LayoutInput>
                 <Children>
-                  <Text Name="NPVTitle" Content="recently added" Color="color://s:FontColorMedium"
+                  <Text Name="NPVTitle" Content="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" Color="color://s:FontColorMedium"
                         Font="Segoe Media Center, 24" Margins="50,0,0,0" />
-                  <Text Name="NPVTitle2" Content="recently added" Color="Black"
+                  <Text Name="NPVTitle2" Content="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" Color="Black"
                         Font="Segoe Media Center, 24" Margins="50,0,0,0">
                     <LayoutInput>
                       <AnchorLayoutInput Top="NPVTitle, 0, 2" Left="NPVTitle, 0, 2"/>
