@@ -105,10 +105,9 @@ namespace Configurator.Code {
                 }
             }
 
-            RefreshInstalledPlugins();
         }
 
-        private void RefreshInstalledPlugins() {
+        public void RefreshInstalledPlugins() {
 
             if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread) {
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,(System.Windows.Forms.MethodInvoker)RefreshInstalledPlugins);

@@ -1422,6 +1422,7 @@ sortorder: {2}
             Async.Queue("Refresh after plugin add", () =>
             {
                 RefreshEntryPoints(true);
+                PluginManager.Instance.RefreshInstalledPlugins(); //refresh list
             });
             RefreshThemes();
         }

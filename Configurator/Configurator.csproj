@@ -54,6 +54,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MediaBrowser, Version=2.2.4.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MediaBrowser\bin\Release\MediaBrowser.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.MediaCenter, Version=6.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\VistaDlls\Microsoft.MediaCenter.dll</HintPath>
@@ -258,12 +262,6 @@
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
-      <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
-      <Name>MediaBrowser</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
