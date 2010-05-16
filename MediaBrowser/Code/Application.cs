@@ -567,7 +567,7 @@ namespace MediaBrowser
 
         void FullRefresh(Folder folder)
         {
-            folder.RefreshMetadata();
+            folder.RefreshMetadata(MetadataRefreshOptions.Force); //make sure everything including images is refreshed
 
             using (new Profiler(CurrentInstance.StringData("FullValidationProf")))
             {
