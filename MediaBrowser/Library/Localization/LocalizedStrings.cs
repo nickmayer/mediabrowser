@@ -57,13 +57,13 @@ namespace MediaBrowser.Library.Localization
         public string GetString(string key)
         {
             //return the string from our propertyset
-            return LocalStrings[key] as string;
+            return LocalStrings[key] as string ?? "";
         }
 
         public string GetKey(string str)
         {
             //return the key from our reverse-lookup dictionary
-            return localStringsReverse[str] as string;
+            return localStringsReverse[str] as string ?? "";
         }
 
     }
