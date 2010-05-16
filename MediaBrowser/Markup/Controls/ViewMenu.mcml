@@ -110,11 +110,6 @@
         </Actions>
       </Condition>
 
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[Label.Content]" Target="[Application.StringData]" name="ViewDispPref" ExclusiveApply="false"/>
-        </Actions>
-      </Rule>
     </Rules>
     <Content>
       <Graphic Name="BoxImage" Content="[Image]" SizingPolicy="SizeToChildren" Padding="15,2,15,2">
@@ -122,7 +117,7 @@
           <Panel Layout="HorizontalFlow">
             <Children>
               <Graphic Content="image://i:Lines" Margins="0,9,5,0" MaximumSize="15,15"></Graphic>
-              <Text Name="Label" Color="color://s:FontColorDark" Font="[Font]"/>
+              <Text Name="Label" Content="[Application.LocalStrings.#ViewDispPref!cor:String]" Color="color://s:FontColorDark" Font="[Font]"/>
             </Children>
           </Panel>
         </Children>
@@ -175,17 +170,6 @@
           <Invoke Target="[Prefs.DecreaseThumbSize]"/>
         </Actions>
       </Changed>
-
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[ShowLabels.Label]" Target="[Application.StringData]" name="ShowLabelsDispPref" InvokePolicy="Synchronous" ExclusiveApply="false" />
-          <Invoke ResultTarget="[VerticalScroll.Label]" Target="[Application.StringData]" name="VerticalScrollDispPref" InvokePolicy="Synchronous" ExclusiveApply="false" />
-          <Invoke ResultTarget="[UseBanner.Label]" Target="[Application.StringData]" name="UseBannersDispPref" InvokePolicy="Synchronous" ExclusiveApply="false" />
-          <Invoke ResultTarget="[UseCoverflow.Label]" Target="[Application.StringData]" name="UseCoverflowDispPref" InvokePolicy="Synchronous" ExclusiveApply="false" />
-          <Invoke ResultTarget="[ThumbSizeText.Content]" Target="[Application.StringData]" name="ThumbSizeDispPref" InvokePolicy="Synchronous" ExclusiveApply="false" />
-          <Invoke ResultTarget="[CloseButton.LabelText]" Target="[Application.StringData]" name="CloseCMenu" InvokePolicy="Synchronous" ExclusiveApply="false" />
-        </Actions>
-      </Rule>
     </Rules>
     <Content>
       <ColorFill Name="Main" Content="color://s:PanelBackground"  Navigation="ContainAll,Group" Padding="-3,-3,-3,-3">
@@ -201,16 +185,16 @@
                 </Layout>
                 <Children>
                   <rg:RadioGroup Model="[Prefs.ViewType]" Font="font://f:VM_ConfigItemFont" />
-                  <cb:CheckBox Name="ShowLabels" Checked="[Prefs.ShowLabels]" Label=""  Font="font://f:VM_ConfigItemFont"/>
-                  <cb:CheckBox Name="VerticalScroll" Checked="[Prefs.VerticalScroll]" Label=""  Font="font://f:VM_ConfigItemFont"/>
-                  <cb:CheckBox Name="UseBanner" Checked="[Prefs.UseBanner]" Label=""  Font="font://f:VM_ConfigItemFont"/>
-                  <cb:CheckBox Name="UseCoverflow" Checked="[Prefs.UseCoverflow]" Label=""  Font="font://f:VM_ConfigItemFont"/>
+                  <cb:CheckBox Name="ShowLabels" Label="[Application.LocalStrings.#ShowLabelsDispPref!cor:String]" Checked="[Prefs.ShowLabels]" Font="font://f:VM_ConfigItemFont"/>
+                  <cb:CheckBox Name="VerticalScroll" Label="[Application.LocalStrings.#VerticalScrollDispPref!cor:String]" Checked="[Prefs.VerticalScroll]" Font="font://f:VM_ConfigItemFont"/>
+                  <cb:CheckBox Name="UseBanner" Label="[Application.LocalStrings.#UseBannersDispPref!cor:String]" Checked="[Prefs.UseBanner]" Font="font://f:VM_ConfigItemFont"/>
+                  <cb:CheckBox Name="UseCoverflow" Label="[Application.LocalStrings.#UseCoverflowDispPref!cor:String]" Checked="[Prefs.UseCoverflow]" Font="font://f:VM_ConfigItemFont"/>
                   <Panel Name="ThumbSize" >
                     <Layout>
                       <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
                     </Layout>
                     <Children>
-                      <Text Name="ThumbSizeText" Color="color://s:FontColorMedium" Font="font://f:VM_ConfigItemFont"/>
+                      <Text Content="[Application.LocalStrings.#ThumbSizeDispPref!cor:String]" Color="color://s:FontColorMedium" Font="font://f:VM_ConfigItemFont"/>
                       <me:ImageBtn Focused="image://i:DecrementFocus" NonFocused="image://i:DecrementNoFocus" Command="[Decrease]"/>
                       <me:ImageBtn Focused="image://i:IncrementFocus" NonFocused="image://i:IncrementNoFocus" Command="[Increase]"/>
                     </Children>
@@ -223,7 +207,7 @@
                   <FlowLayout Orientation="Vertical" ItemAlignment="Fill"/>
                 </Layout>
                 <Children>
-                  <me:BaseBtn Name="CloseButton" LabelText="" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
+                  <me:BaseBtn LabelText="[Application.LocalStrings.#CloseCMenu!cor:String]" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
                 </Children>
               </Panel>
             </Children>
@@ -393,11 +377,6 @@
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[CloseButton.LabelText]" Target="[Application.StringData]" name="CloseCMenu" InvokePolicy="Synchronous"/>
-        </Actions>
-      </Rule>
     </Rules>
     <Content>
       <ColorFill Name="Main" Content="color://s:PanelBackground"  Navigation="ContainAll,Group" Padding="-3,-3,-3,-3">
@@ -420,7 +399,7 @@
                   <FlowLayout Orientation="Vertical" ItemAlignment="Fill"/>
                 </Layout>
                 <Children>
-                  <me:BaseBtn Name="CloseButton" LabelText="" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
+                  <me:BaseBtn LabelText="[Application.LocalStrings.#CloseCMenu!cor:String]" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
                 </Children>
               </Panel>
             </Children>

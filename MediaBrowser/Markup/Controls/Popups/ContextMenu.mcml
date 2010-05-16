@@ -52,23 +52,11 @@
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
 
-      <Rule>
-        <Conditions>
-          <Equality Source="[MenuType]" Value="Play" ConditionOp="NotEquals" />
-        </Conditions>
-        <Actions>
-          <Invoke ResultTarget="[Title.Content]" Target="[Application.StringData]" name="ItemMenuCMenu" ExclusiveApply="false" />
-        </Actions>
-      </Rule>
-
-      <Rule>
+      <Default Target="[Title.Content]" Value="[Application.LocalStrings.#PlayMenuCMenu!cor:String]" >
         <Conditions>
           <Equality Source="[MenuType]" Value="Play" />
         </Conditions>
-        <Actions>
-          <Invoke ResultTarget="[Title.Content]" Target="[Application.StringData]" name="PlayMenuCMenu" ExclusiveApply="false" />
-        </Actions>
-      </Rule>
+      </Default>
 
       <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
         <Conditions>
@@ -115,13 +103,6 @@
           <Invoke Target="[Close.Invoke]" />
         </Actions>
       </Changed>
-
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[CloseButton.LabelText]" Target="[Application.StringData]" name="CloseCMenu" InvokePolicy="Synchronous"/>
-        </Actions>
-      </Rule>
-
     </Rules>
 
     <Content>
@@ -138,7 +119,7 @@
                   <FlowLayout Orientation="Vertical" ItemAlignment="Near"/>
                 </Layout>
                 <Children>
-                  <Text Name="Title" Content="Item Menu" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
+                  <Text Name="Title" Content="[Application.LocalStrings.#ItemMenuCMenu!cor:String]" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
                   <ColorFill Content="DimGray" Alpha="0.8" Layout="Fill" MaximumSize="300,2" />
                   <Text Content=" "/>
                   <Text Name="Empty" Content="No Available Options" Font="font://f:MI_NotAvailableFont" Alpha=".7" Color="color://s:FontColorLight" Visible="false" />
@@ -155,7 +136,7 @@
                 </Layout>
                 <Children>
                   <Text Content=" "/>
-                  <vm:BaseBtn Name="CloseButton" LabelText="" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
+                  <vm:BaseBtn LabelText="[Application.LocalStrings.#CloseCMenu!cor:String]" Command="[Close]" Font="font://f:VM_ConfigItemFont" />
                 </Children>
               </Panel>
             </Children>

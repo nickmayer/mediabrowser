@@ -17,17 +17,12 @@
     <Rules>
       <Binding Source="[Item.DirectorString]" Target="[Director.Content]"/>
       <Condition Source="[Item.Directors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[DirectedByPanel.Visible]" Value="true"  />
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[DirectedByText.Content]" Target="[Application.StringData]" name="DirectedByDetail"/>
-        </Actions>
-      </Rule>
     </Rules>
 
     <Content>
       <Panel Name="DirectedByPanel" Layout="HorizontalFlow" Visible="false">
         <Children>
-          <Text Name="DirectedByText" Font="[TitleFont]" Color="color://s:FontColorLight" />
+          <Text Content="[Application.LocalStrings.#DirectedByText!cor:String]" Font="[TitleFont]" Color="color://s:FontColorLight" />
           <Text Name="Director" Font="[Font]" WordWrap="true" Color="color://s:FontColorLight" Content="[Item.DirectorString]"/>
         </Children>
       </Panel>

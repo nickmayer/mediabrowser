@@ -37,13 +37,13 @@
       <a:Clock Name="Clock"/>
       <Choice Name="Model">
         <Options>
-          <cor:String String="General" />
+          <cor:String String="[Application.LocalStrings.#GeneralDetail!cor:String]" />
         </Options>
       </Choice>
       <Choice Name="ModelWithActors">
         <Options>
-          <cor:String String="General" />
-          <cor:String String="Actors" />
+          <cor:String String="[Application.LocalStrings.#GeneralDetail!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#ActorsDetail!cor:String]" />
         </Options>
       </Choice>
 
@@ -51,11 +51,6 @@
     </Locals>
 
     <Rules>
-      <!--<Rule>
-        <Actions>
-          <Invoke ResultTarget="[Model.Value]" Target="[Application.StringData]" name="General" />
-        </Actions>
-      </Rule>-->
       <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true" ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[Item.HasBackdropImage]" Value="true"/>
@@ -323,19 +318,6 @@
           <Set Target="[DeleteMovieButton.Visible]" Value="true" />
         </Actions>
       </Rule>
-
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[ResumeMovieButton.Text]" Target="[Application.StringData]" name="ResumeDetail" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[PlayMovieButton.Text]" Target="[Application.StringData]" name="PlayDetail" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[RefreshMovieButton.Text]" Target="[Application.StringData]" name="RefreshDetail" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[PlayTrailersButton.Text]" Target="[Application.StringData]" name="PlayTrailersDetail" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[CacheMovieButton.Text]" Target="[Application.StringData]" name="CacheDetail" ExclusiveApply="false"/>
-          <Invoke ResultTarget="[DeleteMovieButton.Text]" Target="[Application.StringData]" name="DeleteDetail" ExclusiveApply="false"/>
-        </Actions>
-      </Rule>
-
-
     </Rules>
 
     <Content>
@@ -350,12 +332,12 @@
               <ColorFill Content="Transparent" Layout="VerticalFlow"
                          Padding="0,10,100,10" Margins="20,0,0,0" Navigation="ContainHorizontal, RememberFocus" >
                 <Children>
-                  <ib:ImageButton Name="ResumeMovieButton" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
-                  <ib:ImageButton Name="PlayMovieButton" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <ib:ImageButton Name="RefreshMovieButton" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <ib:ImageButton Name="PlayTrailersButton" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <ib:ImageButton Name="CacheMovieButton" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
-                  <ib:ImageButton Name="DeleteMovieButton" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
+                  <ib:ImageButton Name="ResumeMovieButton" Text="[Application.LocalStrings.#ResumeDetail!cor:String]" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
+                  <ib:ImageButton Name="PlayMovieButton" Text="[Application.LocalStrings.#PlayDetail!cor:String]" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="RefreshMovieButton" Text="[Application.LocalStrings.#RefreshDetail!cor:String]" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="PlayTrailersButton" Text="[Application.LocalStrings.#PlayTrailersDetail!cor:String]" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="CacheMovieButton" Text="[Application.LocalStrings.#CacheDetail!cor:String]" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
+                  <ib:ImageButton Name="DeleteMovieButton" Text="[Application.LocalStrings.#DeleteDetail!cor:String]" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                 </Children>
               </ColorFill>
             </Children>
@@ -569,30 +551,26 @@
 
       <Binding Target="[MediaInfoPane.Visible]" Source="[Item.HasMediaInfo]" />
 
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[IMDBText.Content]" Target="[Application.StringData]" name="IMDBRatingDetail" ExclusiveApply="false">
-            <Transformer>
-              <FormatTransformer ToUpper="true"/>
-            </Transformer>
-          </Invoke>
-          <Invoke ResultTarget="[OutOfText.Content]" Target="[Application.StringData]" name="OutOfDetail" ExclusiveApply="false">
-            <Transformer>
-              <FormatTransformer Format="{0} 10"/>
-            </Transformer>
-          </Invoke>
-          <Invoke ResultTarget="[DirectorText.Content]" Target="[Application.StringData]" name="DirectorDetail" ExclusiveApply="false">
-            <Transformer>
-              <FormatTransformer ToUpper="true"/>
-            </Transformer>
-          </Invoke>
-          <Invoke ResultTarget="[RuntimeText.Content]" Target="[Application.StringData]" name="RuntimeDetail" ExclusiveApply="false">
-            <Transformer>
-              <FormatTransformer ToUpper="true"/>
-            </Transformer>
-          </Invoke>
-        </Actions>
-      </Rule>
+      <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]">
+        <Transformer>
+          <FormatTransformer ToUpper="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[OutOfText.Content]" Source="[Application.LocalStrings.#OutOfDetail!cor:String]">
+        <Transformer>
+          <FormatTransformer Format="{0} 10"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[DirectorText.Content]" Source="[Application.LocalStrings.#DirectorDetail!cor:String]">
+        <Transformer>
+          <FormatTransformer ToUpper="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[RuntimeText.Content]" Source="[Application.LocalStrings.#RuntimeDetail!cor:String]">
+        <Transformer>
+          <FormatTransformer ToUpper="true"/>
+        </Transformer>
+      </Binding>
 
     </Rules>
     <Content>
@@ -671,6 +649,7 @@
                   <Text Name="IMDBText" Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" MinimumSize="140,0"/>
                   <Text Name="IMDBRating" Content="" Color="[ValueColor]" Font="font://f:MM_ItemFont"/>
                   <Text Name="OutOfText" Font="font://f:MM_ItemFont" Color="[ValueColor]"/>
+                  
                 </Children>
               </Panel>
 
