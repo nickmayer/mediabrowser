@@ -222,7 +222,7 @@ namespace MediaBrowser.Util
                 IPlugin found = availablePlugins.Find(remote => remote.Name == plugin.Name);
                 if (found != null)
                 {
-                    if (found.Version > plugin.Version)
+                    if (found.Version > plugin.Version && found.RequiredMBVersion <= Kernel.Instance.Version)
                     {
                         //newer one available - alert and set our bool
                         Application.CurrentInstance.Information.AddInformationString(string.Format(Application.CurrentInstance.StringData("PluginUpdateProf"), plugin.Name));
