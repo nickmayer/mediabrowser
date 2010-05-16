@@ -59,9 +59,9 @@
         <Directory Id="MBFolder" Name="MediaBrowser">
           <Directory Id="PluginsFolder" Name="Plugins">
           </Directory>
-          <Directory Id="CacheFolder" Name="cache">
+          <!--<Directory Id="CacheFolder" Name="cache">
             <Directory Id="CacheItemsFolder" Name="items" />
-          </Directory>
+          </Directory>-->
         </Directory>
       </Directory>
 		</Directory>
@@ -114,7 +114,7 @@
     </DirectoryRef>-->
 
     <!--This is some clean up code for version 2.2.4 - we need to clear the cache as we modified the item structure-->
-    <DirectoryRef Id="CacheItemsFolder">
+    <!--<DirectoryRef Id="CacheItemsFolder">
       <Component Id="ClearCache" Guid="676D589A-0E33-477e-A5CA-298F9BE03927" >
         <RemoveFile Id="RemItemsCache" Name="*.*" On="install" />
       </Component>
@@ -123,7 +123,7 @@
       <Component Id="ClearCacheDB" Guid="34E19004-53BF-4a27-A75A-1AC9CC310379" >
         <RemoveFile Id="RemCacheDB" Name="cache.db" On="install" />
       </Component>
-    </DirectoryRef>
+    </DirectoryRef>-->
 
 
     <!-- This is a list of features that are installed as a part of this product. In this case, there is -->
@@ -138,8 +138,8 @@
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Registration7.xml" />
       <!--<ComponentRef Id="RemPlugins" />-->
-      <ComponentRef Id="ClearCache" />
-      <ComponentRef Id="ClearCacheDB" />
+      <!--<ComponentRef Id="ClearCache" />-->
+      <!--<ComponentRef Id="ClearCacheDB" />-->
     </Feature>
     
 
