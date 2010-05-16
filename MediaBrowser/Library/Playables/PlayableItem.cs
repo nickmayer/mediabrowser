@@ -59,7 +59,7 @@ namespace MediaBrowser.Library
             if (this is PlayableCollection && (this.PlayableItems == null || this.PlayableItems.Count() < 1))
             {
                 Microsoft.MediaCenter.MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                ev.Dialog(Application.CurrentInstance.StringData("NoContentDial"), Application.CurrentInstance.StringData("NoContentCapDial"), Microsoft.MediaCenter.DialogButtons.Ok, 500, true);
+                ev.Dialog(Application.CurrentInstance.StringData("NoContentDial"), Application.CurrentInstance.StringData("Playstr"), Microsoft.MediaCenter.DialogButtons.Ok, 500, true);
             }
             else
             {
