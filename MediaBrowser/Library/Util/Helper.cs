@@ -338,22 +338,34 @@ namespace MediaBrowser.LibraryManagement
                         req.Timeout = 15000;
 
                         using (WebResponse resp = req.GetResponse())
-                            try {
-                                using (Stream s = resp.GetResponseStream()) {
+                            try
+                            {
+                                using (StreamReader reader = new StreamReader(resp.GetResponseStream()))
+                                {
                                     XmlDocument doc = new XmlDocument();
                                     // this makes it a bit easier to debug.
-                                    string payload = new StreamReader(s).ReadToEnd();
+                                    string payload = reader.ReadToEnd();
                                     doc.LoadXml(payload);
                                     return doc;
                                 }
-                            } finally {
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.ReportException("Error getting xml from plugin source",ex);
+                            }
+                            finally
+                            {
                                 resp.Close();
+                                GC.Collect();  //forcing a collection here appears to solve the issue with timeouts on secondary sources
+                                               //which probably means there is another issue here, but I cannot find it - tried closing
+                                               //everything, 'using' clauses and this is the only thing that seems to work. -ebr
                             }
                     } catch (WebException ex) {
                         Logger.ReportWarning("Error requesting: " + url + "\n" + ex.ToString());
                     } catch (IOException ex) {
                         Logger.ReportWarning("Error requesting: " + url + "\n" + ex.ToString());
                     }
+                        
                 }
             } catch (Exception ex) {
                 Logger.ReportWarning("Failed to fetch url: " + url + "\n" + ex.ToString());
