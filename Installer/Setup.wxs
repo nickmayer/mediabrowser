@@ -77,13 +77,6 @@
         <!-- Create the Help & Support startmenu subfolder-->
         <CreateFolder Directory="ApplicationHelpAndSupportFolder"/>
         <!-- Create the default startmenu shortcuts-->
-        <!--<Shortcut Id="MediaBrower"
-                  Name="Media Browser"
-                  Description="Media Browser"
-                  Target="[EhomeFolder]ehshell.exe"
-                  Arguments="/nostartupanimation /entrypoint:{CE32C570-4BEC-4aeb-AD1D-CF47B91DE0B2}\{FC9ABCCC-36CB-47ac-8BAB-03E8EF5F6F22}"
-                  WorkingDirectory="EhomeFolder"/>
-                  -->
         <Shortcut Id="ConfigurationWizard"
                   Name="Media Browser Configuration Wizard"
                   Description="Media Browser Configuration Wizard"
@@ -384,18 +377,19 @@
 		<!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
 		<!-- included in the WixUIExtension with a custom file.                                              -->
 		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
-    <WixVariable Id="WiXUIBannerBmp" Value="Images\banner.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp" />
+    <WixVariable Id="WiXUIBannerBmp" Value="Images\header.bmp" Overridable="no"/>
+    <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp" Overridable="no"/>
     
     <!-- These properties may be modified in the user interface -->
     <!-- <Property Id="OPTIONALDESKTOPSHORTCUT"></Property> non-declaration is indication of null value -->
     <!-- <Property Id="OPTIONALSTARTMENUSHORTCUT"></Property> non-declaration is indication of null value -->
     <!-- <Property Id="OPTIONALSTARTUPSHORTCUT"></Property> non-declaration is indication of null value -->
-    
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="If you like Media Browser, please consider making a donation!" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Configure initial settings" />
     <CustomAction Id="StartAppOnExit" BinaryKey="WixCA" DllEntry="WixShellExec" Execute="immediate" Return="check" Impersonate="yes"/>
     <Property Id="WixShellExecTarget" Value="[#Configurator.exe]"/>
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Configure initial settings" />
     <UI>
       <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="StartAppOnExit">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
     </UI>

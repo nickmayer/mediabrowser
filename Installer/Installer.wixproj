@@ -43,7 +43,7 @@
     <Compile Include="Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\banner.bmp" />
+    <Content Include="Images\header.bmp" />
     <Content Include="Images\dialog.bmp" />
     <Content Include="License.rtf" />
     <Content Include="mbinfo.xml" />
