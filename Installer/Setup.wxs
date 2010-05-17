@@ -71,6 +71,9 @@
       </Directory>
 		</Directory>
 
+    <!-- For some reason we need to set the Icon Id to an exe, otherwise the .ico file cannot be used for shortcuts. -->
+    <Icon Id="MediaBrowserIcon.exe" SourceFile="MediaBrowserIcon.ico"/>
+    
     <!-- These are the default shortcuts that will be created in the Start Menu during installation-->
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="DefaultShortcuts" Guid="C68522A1-03ED-4416-8326-F1375212ACB0">
@@ -115,7 +118,9 @@
                   Description="Media Browser"
                   Target="[EhomeFolder]ehshell.exe"
                   Arguments="/nostartupanimation /entrypoint:{CE32C570-4BEC-4aeb-AD1D-CF47B91DE0B2}\{FC9ABCCC-36CB-47ac-8BAB-03E8EF5F6F22}"
-                  WorkingDirectory="EhomeFolder"/>
+                  WorkingDirectory="EhomeFolder"
+                  Icon="MediaBrowserIcon.exe"
+                  IconIndex="0"/>
         <RegistryValue Root="HKCU" Key="Software\GPL\MediaBrowser" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
@@ -129,7 +134,9 @@
                   Description="Media Browser"
                   Target="[EhomeFolder]ehshell.exe"
                   Arguments="/nostartupanimation /entrypoint:{CE32C570-4BEC-4aeb-AD1D-CF47B91DE0B2}\{FC9ABCCC-36CB-47ac-8BAB-03E8EF5F6F22}"
-                  WorkingDirectory="EhomeFolder"/>
+                  WorkingDirectory="EhomeFolder"
+                  Icon="MediaBrowserIcon.exe"
+                  IconIndex="0"/>
         <RegistryValue Root="HKCU" Key="Software\GPL\MediaBrowser" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
         </Component>
     </DirectoryRef>
@@ -143,7 +150,9 @@
                   Description="Media Browser"
                   Target="[EhomeFolder]ehshell.exe"
                   Arguments="/nostartupanimation /entrypoint:{CE32C570-4BEC-4aeb-AD1D-CF47B91DE0B2}\{FC9ABCCC-36CB-47ac-8BAB-03E8EF5F6F22}"
-                  WorkingDirectory="EhomeFolder"/>
+                  WorkingDirectory="EhomeFolder"
+                  Icon="MediaBrowserIcon.exe"
+                  IconIndex="0"/>
         <RegistryValue Root="HKCU" Key="Software\GPL\MediaBrowser" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
@@ -173,6 +182,9 @@
 			</Component>
       <Component Id="ApplicationInactive.png" Guid="B555C4A3-415F-47a7-8565-C994A03F49C6" DiskId="1">
         <File Id="ApplicationInactive.png" Name="ApplicationInactive.png" Source="..\MediaBrowser\Images\ApplicationInactive.png" Checksum="no" />
+      </Component>
+      <Component Id="MediaBrowserIcon.ico" Guid="25C6DD59-8881-42b4-B302-A616F747C99E" DiskId="1">
+        <File Id="MediaBrowserIcon.ico" Name="MediaBrowserIcon.ico" Source="MediaBrowserIcon.ico" Checksum="no" />
       </Component>
     </DirectoryRef>
 
@@ -204,12 +216,13 @@
       <ComponentRef Id="MediaBrowser.dll" />
 			<ComponentRef Id="Application.png" />
       <ComponentRef Id="ApplicationInactive.png" />
+      <ComponentRef Id="Registration.xml" />
+      <ComponentRef Id="Registration7.xml" />
+      <ComponentRef Id="MediaBrowserIcon.ico" />
       <ComponentRef Id="DefaultShortcuts" />
       <ComponentRef Id="OptionalStartmenuFolderShortcut" />
       <ComponentRef Id="OptionalDesktopFolderShortcut" />
       <ComponentRef Id="OptionalStartupFolderShortcut" />
-      <ComponentRef Id="Registration.xml" />
-      <ComponentRef Id="Registration7.xml" />
       <!--<ComponentRef Id="RemPlugins" />-->
       <!--<ComponentRef Id="ClearCache" />-->
       <!--<ComponentRef Id="ClearCacheDB" />-->
@@ -330,8 +343,9 @@
 		<!-- this product is installed on the system.                                                        -->
 		<Property Id="ARPHELPLINK" Value="!(loc.Property_ArpHelpLink)" />
 		<Property Id="ARPURLINFOABOUT" Value="!(loc.Property_ArpUrlInfoAbout)" />
+    <Property Id="ARPPRODUCTICON" Value="MediaBrowserIcon.exe" />
 
-		<!-- This property defines the ALLUSERS property to be 1, which indicates that this product will be  -->
+    <!-- This property defines the ALLUSERS property to be 1, which indicates that this product will be  -->
 		<!-- installed per-machine instead of per-user.                                                      -->
 		<Property Id="ALLUSERS">
 			<![CDATA[1]]>
@@ -372,29 +386,122 @@
 		<!-- page to allow changing the installation path, an installation confirmation page, a progress     -->
 		<!-- page and a completion page. Other dialog sets are available in the WiX toolset and are          -->
 		<!-- described in more detail in the WiX documentation.                                              -->
+    
+    <!-- We're using our own custom installation dialogs-->
     <UIRef Id="MediaBrowserWixUI_InstallDir"/>
     
 		<!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
 		<!-- included in the WixUIExtension with a custom file.                                              -->
 		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
-    <WixVariable Id="WiXUIBannerBmp" Value="Images\header.bmp" Overridable="no"/>
-    <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp" Overridable="no"/>
+    <WixVariable Id="WixUIBannerBmp" Value="Images\header.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp"/>
     
     <!-- These properties may be modified in the user interface -->
-    <!-- <Property Id="OPTIONALDESKTOPSHORTCUT"></Property> non-declaration is indication of null value -->
-    <!-- <Property Id="OPTIONALSTARTMENUSHORTCUT"></Property> non-declaration is indication of null value -->
-    <!-- <Property Id="OPTIONALSTARTUPSHORTCUT"></Property> non-declaration is indication of null value -->
-
-    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="If you like Media Browser, please consider making a donation!" />
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Configure initial settings" />
+    <!-- <Property Id="OPTIONALDESKTOPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
+    <!-- <Property Id="OPTIONALSTARTMENUSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
+    <!-- <Property Id="OPTIONALSTARTUPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
+    <Property Id="LAUNCHAPPONEXIT">1</Property>
+    
+    <!-- CustomAction to condtionally launch the configurator after the setup finishes -->
     <CustomAction Id="StartAppOnExit" BinaryKey="WixCA" DllEntry="WixShellExec" Execute="immediate" Return="check" Impersonate="yes"/>
     <Property Id="WixShellExecTarget" Value="[#Configurator.exe]"/>
-    <UI>
-      <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="StartAppOnExit">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+    
+    <!-- Custom Installation dialogs start here -->
+    <UIRef Id="WixUI_Common" />
+    <UI Id="MediaBrowserWixUI_InstallDir">
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="InstallDir" />
+      <Property Id="ARPNOMODIFY" Value="1" />
+
+      <DialogRef Id="BrowseDlg" />
+      <DialogRef Id="DiskCostDlg" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+
+      <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+
+      <Publish Dialog="MediaBrowserExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+      <Publish Dialog="MediaBrowserExitDialog" Control="Finish" Order="1" Event="DoAction" Value="StartAppOnExit">LAUNCHAPPONEXIT</Publish>
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+
+      <Publish Dialog="LicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="MediaBrowserInstallDirDlg">LicenseAccepted = "1"</Publish>
+
+      <Publish Dialog="MediaBrowserInstallDirDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+      <Publish Dialog="MediaBrowserInstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="MediaBrowserInstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
+      <Publish Dialog="MediaBrowserInstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+      <Publish Dialog="MediaBrowserInstallDirDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+      <Publish Dialog="MediaBrowserInstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="MediaBrowserInstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MediaBrowserInstallDirDlg" Order="1">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed</Publish>
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+      <Dialog Id="MediaBrowserInstallDirDlg" Width="370" Height="270" Title="!(loc.InstallDirDlg_Title)">
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgDescription)" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgTitle)" />
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+
+        <Control Id="FolderLabel" Type="Text" X="20" Y="60" Width="290" Height="20" NoPrefix="yes" Text="!(loc.InstallDirDlgFolderLabel)" />
+        <Control Id="Folder" Type="PathEdit" X="20" Y="90" Width="260" Height="18" Property="WIXUI_INSTALLDIR" Indirect="yes" />
+        <Control Id="ChangeFolder" Type="PushButton" X="284" Y="90" Width="56" Height="17" Text="!(loc.InstallDirDlgChange)" />
+
+        <Control Id="DesktopShortcutCheckBox" Type="CheckBox" X="40" Y="120" Width="290" Height="17" Property="OPTIONALDESKTOPSHORTCUT" CheckBoxValue="0" Text="Create a shortcut for Media Browser on the desktop." />
+        <Control Id="StartmenuShortcutCheckBox" Type="CheckBox" X="40" Y="140" Width="290" Height="17" Property="OPTIONALSTARTMENUSHORTCUT" CheckBoxValue="0" Text="Create a shortcut for Media Browser in the start menu." />
+
+        <Control Id="UserText1" Type="Text" X="20" Y="180" Width="330" Height="20" Text="Optionally, you can automatically launch Media Browser at startup:" />
+        <Control Id="StartupShortcutCheckBox" Type="CheckBox" X="40" Y="200" Width="290" Height="17" Property="OPTIONALSTARTUPSHORTCUT" CheckBoxValue="0" Text="Yes, launch Media Browser automatically (current user only)." />
+      </Dialog>
+
+      <Dialog Id="MediaBrowserExitDialog" Width="370" Height="270" Title="!(loc.ExitDialog_Title)">
+        <Control Id="Finish" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Cancel="yes" Text="!(loc.WixUIFinish)" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUICancel)" />
+        <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" TabSkip="no" Text="!(loc.ExitDialogBitmap)" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUIBack)" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="Description" Type="Text" X="135" Y="70" Width="225" Height="40" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogDescription)" />
+        <Control Id="UserText2" Type="Text" X="135" Y="90" Width="225" Height="60" Transparent="yes" Text="If you like Media Browser, please consider making a donation!" />
+        <Control Id="UserText3" Type="Text" X="135" Y="110" Width="225" Height="60" Transparent="yes" Text="http://www.mediabrowser.tv/donate!" />
+        <Control Id="Title" Type="Text" X="135" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogTitle)" />
+        <Control Id="LaunchCheckBox" Type="CheckBox" X="15" Y="243" Width="140" Height="17" Property="LAUNCHAPPONEXIT" Hidden="yes" CheckBoxValue="1" Text="Configure initial settings">
+          <Condition Action="show">NOT Installed</Condition>
+        </Control>
+      </Dialog>
+
+      <InstallUISequence>
+        <Show Dialog="MediaBrowserExitDialog" OnExit="success" />
+      </InstallUISequence>
+
+      <AdminUISequence>
+        <Show Dialog="MediaBrowserExitDialog" OnExit="success" />
+      </AdminUISequence>
     </UI>
-   
-  
-  
   </Product>
 </Wix>

@@ -37,9 +37,6 @@
 	</Target>
   	-->
   <ItemGroup>
-    <Compile Include="MediaBrowserExitDialog.wxs" />
-    <Compile Include="MediaBrowserInstallDirDlg.wxs" />
-    <Compile Include="MediaBrowserWixUI_InstallDir.wxs" />
     <Compile Include="Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +44,7 @@
     <Content Include="Images\dialog.bmp" />
     <Content Include="License.rtf" />
     <Content Include="mbinfo.xml" />
+    <Content Include="MediaBrowserIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Setup-en-us.wxl" />
