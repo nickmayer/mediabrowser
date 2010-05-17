@@ -114,6 +114,18 @@ namespace MediaBrowser
             set { if (this.data.IsFirstRun != value) { this.data.IsFirstRun = value; Save(); FirePropertyChanged("HasBeenConfigured"); } }
         }
 
+        public bool CacheAllImagesInMemory
+        {
+            get { return this.data.CacheAllImagesInMemory; }
+            set { if (this.data.CacheAllImagesInMemory != value) { this.data.CacheAllImagesInMemory = value; Save(); FirePropertyChanged("CacheAllImagesInMemory"); } }
+        }
+
+        [Comment(@"The current version of MB - will be the last version te first time we run so we can do something")]
+        public string MBVersion
+        {
+            get { return this.data.MBVersion; }
+            set { if (this.data.MBVersion != value) { this.data.MBVersion = value; Save(); FirePropertyChanged("MBVersion"); } }
+        }
         [Comment("Synchronize the view for similar folder types")]
         public bool EnableSyncViews
         {

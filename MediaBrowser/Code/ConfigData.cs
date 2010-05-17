@@ -21,6 +21,8 @@ namespace MediaBrowser
     public class ConfigData
     {
 
+        [Comment(@"The version is used to determine if this is the first time a particular version has been run")]
+        public string MBVersion = "2.2.3.0";
         [Comment(@"By default we track a videos position to support resume, this can be disabled by setting this for diagnostic purposes")]
         public bool EnableResumeSupport = true; 
         [Comment(@"Any folder named trailers will be ignored and treated a folder containing trailers")]
@@ -132,7 +134,7 @@ namespace MediaBrowser
         public bool RotateBackdrops = true;
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
-        public bool CacheAllImagesInMemory = true;
+        public bool CacheAllImagesInMemory = false;
 
         public List<string> PluginSources = new List<string>() {"http://www.mediabrowser.tv/plugins/plugin_info.xml"};
 

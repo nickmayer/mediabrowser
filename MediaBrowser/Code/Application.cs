@@ -483,6 +483,16 @@ namespace MediaBrowser
                 }
                 else
                 {
+                    //Check to see if this is the first time this version is run
+                    string currentVersion = Kernel.Instance.Version.ToString();
+                    if (Config.MBVersion != currentVersion )
+                    {
+                        //first time with this version - run routine
+                        Logger.ReportInfo("First run for version " + currentVersion);
+                        FirstRunForVersion(currentVersion);
+                        //and update
+                        Config.MBVersion = currentVersion;
+                    }
                     // We check config here instead of in the Updater class because the Config class 
                     // CANNOT be instantiated outside of the application thread.
                     if (Config.EnableUpdates)
@@ -555,7 +565,17 @@ namespace MediaBrowser
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
         }
-
+        void FirstRunForVersion(string thisVersion)
+        {
+            switch (thisVersion)
+            {
+                case "2.2.4.0":
+                    //set cacheAllImages to "false" - user can change it back if they wish or are directed to
+                    Config.CacheAllImagesInMemory = false;
+                    //anything else...?
+                    break;
+            }
+        }
 
         bool IsInEntryPoint
         {
