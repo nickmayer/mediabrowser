@@ -2,8 +2,8 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "2.2.3.0" ?>
-<?define Property_ProductCode = "EBD3F4EE-0A12-4beb-96BF-08C6E258DC2C" ?>
+<?define Property_ProductVersion = "2.2.4.0" ?>
+<?define Property_ProductCode = "EB9956D3-1B9C-44ef-9C8F-ED90F7EEC1AA" ?>
 <?define Property_UpgradeCode = "1AA59629-46C2-42d5-AD06-534A20F68296" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
@@ -64,9 +64,9 @@
         <Directory Id="MBFolder" Name="MediaBrowser">
           <Directory Id="PluginsFolder" Name="Plugins">
           </Directory>
-          <Directory Id="CacheFolder" Name="cache">
+          <!--<Directory Id="CacheFolder" Name="cache">
             <Directory Id="CacheItemsFolder" Name="items" />
-          </Directory>
+          </Directory>-->
         </Directory>
       </Directory>
 		</Directory>
@@ -191,7 +191,7 @@
     </DirectoryRef>-->
 
     <!--This is some clean up code for version 2.2.4 - we need to clear the cache as we modified the item structure-->
-    <DirectoryRef Id="CacheItemsFolder">
+    <!--<DirectoryRef Id="CacheItemsFolder">
       <Component Id="ClearCache" Guid="676D589A-0E33-477e-A5CA-298F9BE03927" >
         <RemoveFile Id="RemItemsCache" Name="*.*" On="install" />
       </Component>
@@ -200,7 +200,7 @@
       <Component Id="ClearCacheDB" Guid="34E19004-53BF-4a27-A75A-1AC9CC310379" >
         <RemoveFile Id="RemCacheDB" Name="cache.db" On="install" />
       </Component>
-    </DirectoryRef>
+    </DirectoryRef>-->
 
 
     <!-- This is a list of features that are installed as a part of this product. In this case, there is -->
@@ -218,8 +218,8 @@
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Registration7.xml" />
       <!--<ComponentRef Id="RemPlugins" />-->
-      <ComponentRef Id="ClearCache" />
-      <ComponentRef Id="ClearCacheDB" />
+      <!--<ComponentRef Id="ClearCache" />-->
+      <!--<ComponentRef Id="ClearCacheDB" />-->
     </Feature>
     
 

@@ -398,7 +398,7 @@ namespace MediaBrowser
         public void FinishInitialConfig()
         {
             MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-            ev.Dialog(CurrentInstance.StringData("InitialConfigDial"), CurrentInstance.StringData("Restart"), DialogButtons.Ok, 60, true);
+            ev.Dialog(CurrentInstance.StringData("InitialConfigDial"), CurrentInstance.StringData("Restartstr"), DialogButtons.Ok, 60, true);
             Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
 
         }
@@ -727,7 +727,7 @@ namespace MediaBrowser
                 bool ok = Kernel.Instance.ItemRepository.ClearEntireCache();
                 if (!ok)
                 {
-                    ev.Dialog(string.Format(CurrentInstance.StringData("ClearCacheErrorDial"), ApplicationPaths.AppCachePath), CurrentInstance.StringData("ErrorDial"), DialogButtons.Ok, 60, true);
+                    ev.Dialog(string.Format(CurrentInstance.StringData("ClearCacheErrorDial"), ApplicationPaths.AppCachePath), CurrentInstance.StringData("Errorstr"), DialogButtons.Ok, 60, true);
                 }
                 else
                 {

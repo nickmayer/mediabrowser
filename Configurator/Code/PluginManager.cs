@@ -69,7 +69,7 @@ namespace Configurator.Code {
                 {
                     Logger.ReportException("Cannot add plugin latest version. Probably two references to same plugin.", e);
                 }
-            } 
+            }
         } 
 
         public void InstallPlugin(IPlugin plugin,

@@ -214,7 +214,6 @@ namespace MediaBrowser.Library.Localization
         //Dialog boxes
         public string BrokenEnvironmentDial = "Application will now close due to broken MediaCenterEnvironment object, possibly due to 5 minutes of idle time and/or running with TVPack installed.";
         public string InitialConfigDial = "Initial configuration is complete, please restart Media Browser";
-        public string RestartDial = "Restart";
         public string DeleteMediaDial = "Are you sure you wish to delete this media item?";
         public string DeleteMediaCapDial = "Delete Confirmation";
         public string NotDeletedDial = "Item NOT Deleted.";
@@ -230,7 +229,6 @@ namespace MediaBrowser.Library.Localization
         public string CriticalErrorDial = "Media Browser encountered a critical error and had to shut down: ";
         public string CriticalErrorCapDial = "Critical Error";
         public string ClearCacheErrorDial = "An error occured during the clearing of the cache, you may wish to manually clear it from {0} before restarting Media Browser";
-        public string ErrorDial = "Error";
         public string RestartMBDial = "Please restart Media Browser";
         public string ClearCacheDial = "Are you sure you wish to clear the cache?\nThis will erase all cached and downloaded information and images.";
         public string ClearCacheCapDial = "Clear Cache";
@@ -263,9 +261,13 @@ namespace MediaBrowser.Library.Localization
         public string EnterCurrentPINDial = "Please Enter CURRENT PIN.";
         public string EnterPINDial = "Please Enter PIN to Unlock Library";
         public string NoContentDial = "No Content that can be played in this context.";
-        public string NoContentCapDial = "Play";
         public string FontsMissingDial = "CustomFonts.mcml as been patched with missing values";
         public string StyleMissingDial = "{0} has been patched with missing values";
+
+        //Generic
+        public string Restartstr = "Restart";
+        public string Errorstr = "Error";
+        public string Playstr = "Play";
 
         //Profiler
         public string WelcomeProf = "Welcome to Media Browser.";

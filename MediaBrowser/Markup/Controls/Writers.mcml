@@ -19,17 +19,12 @@
     <Rules>
       <Binding Source="[Item.WritersString]" Target="[Writers.Content]"/>
       <Condition Source="[Item.Writers.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[MainPanel.Visible]" Value="true"  />
-      <Rule>
-        <Actions>
-          <Invoke ResultTarget="[WritersText.Content]" Target="[Application.StringData]" name="WrittenByDetail"/>
-        </Actions>
-      </Rule>
     </Rules>
 
     <Content>
       <Panel Name="MainPanel" Layout="HorizontalFlow"  Visible="false">
         <Children>
-          <Text Name="WritersText" Font="[TitleFont]" Color="color://s:FontColorLight" />
+          <Text Content="[Application.LocalStrings.#WrittenByDetail!cor:String]" Font="[TitleFont]" Color="color://s:FontColorLight" />
           <Text Name="Writers" Font="[Font]" WordWrap="true" Color="color://s:FontColorLight" Content="[Item.DirectorString]"/>
         </Children>
       </Panel>
