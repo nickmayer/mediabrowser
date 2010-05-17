@@ -37,9 +37,14 @@
 	</Target>
   	-->
   <ItemGroup>
+    <Compile Include="MediaBrowserExitDialog.wxs" />
+    <Compile Include="MediaBrowserInstallDirDlg.wxs" />
+    <Compile Include="MediaBrowserWixUI_InstallDir.wxs" />
     <Compile Include="Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\banner.bmp" />
+    <Content Include="Images\dialog.bmp" />
     <Content Include="License.rtf" />
     <Content Include="mbinfo.xml" />
   </ItemGroup>
@@ -59,5 +64,8 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images" />
   </ItemGroup>
 </Project>
