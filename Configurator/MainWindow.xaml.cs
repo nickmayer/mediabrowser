@@ -153,12 +153,8 @@ namespace Configurator
             
 
             if (!ValidateFolderPermissions(windowsAccount, fileSystemRights, folder))
-            {               
-                String folderSecurityQuestion = "Your folder permission are not set correctly for MediaBrowser.  "+
-                    "Would you like to set these permissions properly?\n\nIf you click 'Yes', here's what we'll do:"+
-                    "\n\nThe Group 'Users' will be given full access to ONLY the private program data directory for MediaBrowser."+
-                    "\n\nNo other permissions will be altered.\n\nIf you click 'No', no permissions will be altered but MediaBrowser may not function correctly.";
-                if (MessageBox.Show(folderSecurityQuestion, "Folder permissions", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                // removed popup question - just going to confuse the user and we *have* to do this if its not right -ebr
                 {
                     object[] args = new object[3] {folder, windowsAccount, fileSystemRights };
                     this.Dispatcher.Invoke(new SetAccessProcess(setAccess),args);
