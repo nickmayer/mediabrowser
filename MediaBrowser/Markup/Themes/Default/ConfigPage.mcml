@@ -560,7 +560,7 @@
                       <cb:CheckBox Label="[Application.LocalStrings.#EnableInternetProvidersConfig!cor:String]" Checked="[AllowInternetMetadataProviders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <me:TextHeader Text="[Application.LocalStrings.#UpdatesConfig!cor:String]" />
                       <cb:CheckBox Label="[Application.LocalStrings.#AutomaticUpdatesConfig!cor:String]" Checked="[EnableUpdates]" Margins="[CMargin]" FocusItem="[FocusItem]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="[Application.LocalStrings.#BetaUpdatesConfig!cor:String]" Checked="[EnableBetas]" Margins="[CMargin]"  FocusItem="[FocusItem]"  Font="font://f:CP_ConfigItemFont"/>
+                      <!--<cb:CheckBox Label="[Application.LocalStrings.#BetaUpdatesConfig!cor:String]" Checked="[EnableBetas]" Margins="[CMargin]"  FocusItem="[FocusItem]"  Font="font://f:CP_ConfigItemFont"/>-->
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" >
