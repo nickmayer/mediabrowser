@@ -39,6 +39,7 @@ namespace Configurator {
         private void InstallClick(object sender, RoutedEventArgs e) {
             InstallButton.IsEnabled = false;
             btnDone.IsEnabled = false;
+            pluginList.IsEnabled = false;
             this.progress.Visibility = Visibility.Visible;
             PluginInstaller p = new PluginInstaller();
             callBack done = new callBack(InstallFinished);
@@ -55,6 +56,7 @@ namespace Configurator {
             //this.Close();
             InstallButton.IsEnabled = true;
             btnDone.IsEnabled = true;
+            pluginList.IsEnabled = true;
             this.progress.Value = 0;
             this.progress.Visibility = Visibility.Hidden;
         }
