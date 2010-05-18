@@ -933,6 +933,7 @@ sortorder: {2}
         {
             //called when the upgrade process finishes - we just hide progress bar and re-enable
             this.IsEnabled = true;
+            PluginManager.Instance.RefreshInstalledPlugins(); //refresh list
             progress.Value = 0;
             progress.Visibility = Visibility.Hidden;
         }
