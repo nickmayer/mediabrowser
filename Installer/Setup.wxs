@@ -488,7 +488,7 @@
         <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
         <Control Id="Description" Type="Text" X="135" Y="70" Width="225" Height="40" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogDescription)" />
         <Control Id="UserText2" Type="Text" X="135" Y="90" Width="225" Height="60" Transparent="yes" Text="If you like Media Browser, please consider making a donation!" />
-        <Control Id="UserText3" Type="Text" X="135" Y="110" Width="225" Height="60" Transparent="yes" Text="http://www.mediabrowser.tv/donate!" />
+        <Control Id="UserText3" Type="Text" X="135" Y="110" Width="225" Height="60" Transparent="yes" Text="http://www.mediabrowser.tv/donate" />
         <Control Id="Title" Type="Text" X="135" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogTitle)" />
         <Control Id="LaunchCheckBox" Type="CheckBox" X="15" Y="243" Width="140" Height="17" Property="LAUNCHAPPONEXIT" Hidden="yes" CheckBoxValue="1" Text="Configure initial settings">
           <Condition Action="show">NOT Installed</Condition>
