@@ -40,8 +40,11 @@
     <Compile Include="Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\header.bmp" />
+    <Content Include="Images\dialog.bmp" />
     <Content Include="License.rtf" />
     <Content Include="mbinfo.xml" />
+    <Content Include="MediaBrowserIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Setup-en-us.wxl" />
@@ -59,5 +62,8 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images" />
   </ItemGroup>
 </Project>

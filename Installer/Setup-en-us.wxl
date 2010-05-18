@@ -6,8 +6,8 @@
 	<String Id="LaunchCondition_WrongOSVersion">[ProductName] can only be installed on Microsoft Windows Vista Home Premium or Ultimate Edition.</String>
   <String Id="LaunchCondition_WrongDotNetFramework">media browser requires .Net framework version 3.5 or Above! To install Google ".Net 3.5" and follow the top link.</String>
 
-	<String Id="Property_ArpHelpLink">http://msdn.microsoft.com/mce/</String>
-	<String Id="Property_ArpUrlInfoAbout">http://msdn.microsoft.com/mce/</String>
+	<String Id="Property_ArpHelpLink">http://community.mediabrowser.tv/topics?category_id=5</String>
+	<String Id="Property_ArpUrlInfoAbout">http://community.mediabrowser.tv</String>
 	<String Id="Property_ProductLanguage">1033</String>
 	<String Id="Property_ProductName">Media Browser</String>
 	<String Id="Property_CompanyName">Media Browser</String>
