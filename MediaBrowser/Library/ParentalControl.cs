@@ -327,7 +327,7 @@ namespace MediaBrowser.Library
             {
                 Logger.ReportInfo("Entering New PIN");
                 gettingNewPIN = true; //set flag
-                Application.CurrentInstance.OpenSecurityPage("Please Enter NEW PIN (exactly 4 digits).");
+                Application.CurrentInstance.OpenSecurityPage(Application.CurrentInstance.StringData("EnterNewPINDial"));
             }
             else
             {

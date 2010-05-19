@@ -259,6 +259,7 @@ namespace MediaBrowser.Library.Localization
         public string EnterPINToViewDial = "Please Enter PIN to View Protected Content";
         public string EnterPINToPlayDial = "Please Enter PIN to Play Protected Content";
         public string EnterCurrentPINDial = "Please Enter CURRENT PIN.";
+        public string EnterNewPINDial = "Please Enter NEW PIN (exactly 4 digits).";
         public string EnterPINDial = "Please Enter PIN to Unlock Library";
         public string NoContentDial = "No Content that can be played in this context.";
         public string FontsMissingDial = "CustomFonts.mcml as been patched with missing values";

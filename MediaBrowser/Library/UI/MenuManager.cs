@@ -35,7 +35,7 @@ namespace MediaBrowser.Library
         {
             if (item.BaseItem is Folder)
                 return Kernel.Instance.StringData.GetString("PlayAllCMenu");
-            else return Kernel.Instance.StringData.GetString("Play");
+            else return Kernel.Instance.StringData.GetString("Playstr");
         }
 
         private void addDefaultMenuItems()
