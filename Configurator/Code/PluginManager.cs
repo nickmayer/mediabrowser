@@ -76,13 +76,14 @@ namespace Configurator.Code {
           MediaBrowser.Library.Network.WebDownload.PluginInstallUpdateCB updateCB,
           MediaBrowser.Library.Network.WebDownload.PluginInstallFinishCB doneCB,
           MediaBrowser.Library.Network.WebDownload.PluginInstallErrorCB errorCB) {
-            if (plugin.TestedMBVersion < Kernel.Instance.Version) {
-                var dlgResult = MessageBox.Show("Warning - " + plugin.Name + " has not been tested with your version of MediaBrowser. \n\nInstall anyway?", "Version not Tested", MessageBoxButton.YesNo);
-                if (dlgResult == MessageBoxResult.No) {
-                    doneCB();
-                    return;
-                }
-            }
+            //taking this check out for now - it's just too cumbersome to have to re-compile all plug-ins to change this -ebr
+            //if (plugin.TestedMBVersion < Kernel.Instance.Version) {
+            //    var dlgResult = MessageBox.Show("Warning - " + plugin.Name + " has not been tested with your version of MediaBrowser. \n\nInstall anyway?", "Version not Tested", MessageBoxButton.YesNo);
+            //    if (dlgResult == MessageBoxResult.No) {
+            //        doneCB();
+            //        return;
+            //    }
+            //}
 
             if (plugin is RemotePlugin) {
                 try {
