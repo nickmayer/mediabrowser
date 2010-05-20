@@ -2,17 +2,25 @@
 <WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
 
 	<String Id="LaunchCondition_AdminPrivs">You must have Administrative rights on this machine to install [ProductName].</String>
-	<String Id="LaunchCondition_LaterVersion">A later version of [ProductName] is already installed.</String>
-	<String Id="LaunchCondition_WrongOSVersion">[ProductName] can only be installed on Microsoft Windows Vista Home Premium or Ultimate Edition.</String>
-  <String Id="LaunchCondition_WrongDotNetFramework">media browser requires .Net framework version 3.5 or Above! To install Google ".Net 3.5" and follow the top link.</String>
+	<String Id="LaunchCondition_NewerVersion">A newer version of [ProductName] is already installed.</String>
+	<String Id="LaunchCondition_WrongOSVersion">[ProductName] can only be installed on Microsoft Windows Vista (Home Premium or Ultimate Edition) or Windows 7 (Home Premium, Professional or Ultimate Edition).</String>
+  <String Id="LaunchCondition_WrongDotNetFramework">[ProductName] requires that .NET Framework version 3.5 or above is installed.</String>
 
 	<String Id="Property_ArpHelpLink">http://community.mediabrowser.tv/topics?category_id=5</String>
 	<String Id="Property_ArpUrlInfoAbout">http://community.mediabrowser.tv</String>
+  <String Id="Property_ArpUrlUpdateInfo">http://www.mediabrowser.tv/download</String>
 	<String Id="Property_ProductLanguage">1033</String>
 	<String Id="Property_ProductName">Media Browser</String>
 	<String Id="Property_CompanyName">Media Browser</String>
 
-	<String Id="Package_Description">Media Browser for Vista MCE</String>
-	<String Id="Package_Comments">This Installer database contains the logic and data required to install Media Browser for Vista MCE.</String>
+	<String Id="Package_Description">[ProductName] for Windows Media Center</String>
+	<String Id="Package_Comments">This Installer database contains the logic and data required to install [ProductName].</String>
 
+  <String Id="Dialog_CreateDesktopShortcut">Create a shortcut for [ProductName] on the desktop.</String>
+  <String Id="Dialog_CreateStartMenuShortcut">Create a shortcut for [ProductName] in the start menu.</String>
+  <String Id="Dialog_CreateQuickLaunchShortcut">Create a shortcut for [ProductName] on the Quick Launch Toolbar (current user only).</String>
+  <String Id="Dialog_OptionalLaunchAtStartup">Optionally, you can automatically launch [ProductName] at startup:</String>
+  <String Id="Dialog_CreateStartupShortcut">Yes, launch [ProductName] automatically (applies to all users).</String>
+  <String Id="Dialog_MakeDonation">If you like [ProductName], please consider making a donation!</String>
+  <String Id="Dialog_DonationUrl">http://www.mediabrowser.tv/donate</String>
 </WixLocalization>
