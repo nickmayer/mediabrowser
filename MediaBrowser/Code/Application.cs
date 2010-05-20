@@ -509,26 +509,32 @@ namespace MediaBrowser
                         }, 60000);
                     }
 
-                    Async.Queue("Full Refresh", () =>
+                    //kick off full refresh if interval has passed
+                    if (Config.LastFullRefresh < DateTime.Now.AddHours(-(Config.FullRefreshInterval)))
                     {
-                        using (new Profiler(CurrentInstance.StringData("FullRefreshProf")))
+                        Async.Queue("Full Refresh", () =>
                         {
-                            try
+                            using (new Profiler(CurrentInstance.StringData("FullRefreshProf")))
                             {
-                               
-                                if (!IsInEntryPoint)
+                                try
                                 {
-                                    // only refresh for the root entry, this will help speed things up
-                                    FullRefresh(this.RootFolder);
+
+                                    if (!IsInEntryPoint)
+                                    {
+                                        // only refresh for the root entry, this will help speed things up
+                                        FullRefresh(this.RootFolder);
+                                        Config.LastFullRefresh = DateTime.Now;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.ReportException("Failed to refresh library! ", ex);
+                                    Debug.Assert(false, "Full refresh thread should never crash!");
                                 }
                             }
-                            catch (Exception ex)
-                            {
-                                Logger.ReportException("Failed to refresh library! ", ex);
-                                Debug.Assert(false, "Full refresh thread should never crash!");
-                            }
-                        }
-                    }, 20 * 1000);
+                        }, 20 * 1000);
+                    }
+                    else Logger.ReportInfo("Not Refreshing Library.  Interval of "+Config.FullRefreshInterval+"hrs has not passed.  Last Refresh: "+Config.LastFullRefresh);
 
                     //check for alternate entry point
                     this.entryPointPath = EntryPointResolver.EntryPointPath;
@@ -585,8 +591,15 @@ namespace MediaBrowser
             }
         }
 
+        public void FullRefresh()
+        {
+            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentInstance.StringData("ManualRefreshDial"),"", DialogButtons.Ok, 7, false);
+            Async.Queue(CurrentInstance.StringData("Manual Full Refresh"), () => FullRefresh(RootFolder));
+        }
+
         void FullRefresh(Folder folder)
         {
+            Information.AddInformationString("Please be patient while we upate your library...");
             folder.RefreshMetadata(MetadataRefreshOptions.FastOnly); 
 
             using (new Profiler(CurrentInstance.StringData("FullValidationProf")))
@@ -607,6 +620,8 @@ namespace MediaBrowser
             {
                 RunActionRecursively(folder, item => item.RefreshMetadata(MetadataRefreshOptions.Default));
             }
+
+            Information.AddInformationString("Library update complete.  Thank you for using MediaBrowser.");
         }
 
         void RunActionRecursively(Folder folder, Action<BaseItem> action)

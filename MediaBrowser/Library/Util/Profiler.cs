@@ -39,7 +39,8 @@ namespace MediaBrowser.Util
             string message = string.Format(Application.CurrentInstance.StringData("ProfilerTimeProf"),
                 caller, name, ((float)stopwatch.ElapsedMilliseconds / 1000).ToString("F"));
             Logger.ReportInfo(message);
-            Application.CurrentInstance.Information.AddInformationString(message);
+            //Take out the messages to the UI for now -ebr
+            //Application.CurrentInstance.Information.AddInformationString(message);
         }
 
         #endregion

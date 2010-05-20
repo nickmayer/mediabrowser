@@ -696,6 +696,18 @@ namespace MediaBrowser
             set { if (this.data.RotateBackdrops != value) { this.data.RotateBackdrops = value; Save(); FirePropertyChanged("RotateBackdrops"); } }
         }
 
+        public int FullRefreshInterval
+        {
+            get { return this.data.FullRefreshInterval; }
+            set { if (this.data.FullRefreshInterval != value) { this.data.FullRefreshInterval = value; Save(); FirePropertyChanged("FullRefreshInterval"); } }
+        }
+
+        public DateTime LastFullRefresh
+        {
+            get { return  DateTime.Parse(this.data.LastFullRefresh); }
+            set { if (this.data.LastFullRefresh != value.ToString()) { this.data.LastFullRefresh = value.ToString(); Save(); FirePropertyChanged("LastFullRefresh"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;

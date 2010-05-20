@@ -36,7 +36,7 @@
       <a:Config Name="Config" Config="[Application.Config]"/>
       <Command Name="Close" />
       <Command Name="Back"/>
-      <!--<Command Name="ClearCache" />-->
+      <Command Name="FullRefresh" />
       <Command Name="ResetConfig" />
       <Command Name="EnterPIN" />
       <Command Name="UnlockPC" />
@@ -249,11 +249,11 @@
           <Invoke Target="[Application.Back]" />
         </Actions>
       </Changed>
-      <!--<Changed Source="[ClearCache.Invoked]">
+      <Changed Source="[FullRefresh.Invoked]">
         <Actions>
-          <Invoke Target="[Application.ClearCache]" />
+          <Invoke Target="[Application.FullRefresh]" />
         </Actions>
-      </Changed>-->
+      </Changed>
       <Changed Source="[ResetConfig.Invoked]">
         <Actions>
           <Invoke Target="[Application.ResetConfig]" />
@@ -511,7 +511,7 @@
                   <sb:SimpleButton  Name="ContinueBtn" Text="[Application.LocalStrings.#ContinueConfig!cor:String]" FocusItem="[FocusItem]"  Command="[Close]" Visible="false" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton FocusOrder="1" Name="BackBtn" Text="[Application.LocalStrings.#ContinueConfig!cor:String]" FocusItem="[FocusItem]"  Command="[Back]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton Name="ResetConfigBtn" Text="[Application.LocalStrings.#ResetDefaultsConfig!cor:String]" FocusItem="[FocusItem]"  Command="[ResetConfig]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
-                  <!--<sb:SimpleButton Name="ClearCacheBtn" Text="Clear Cache" FocusItem="[FocusItem]"  Command="[ClearCache]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>-->
+                  <sb:SimpleButton Name="UpdateLibraryBtn" Text="[Application.LocalStrings.#UpdateLibraryConfig!cor:String]" FocusItem="[FocusItem]"  Command="[FullRefresh]" Visible="true" Size="200,50" Font="font://f:CP_ButtonFont"/>
                   <sb:SimpleButton Name="UnlockPCBtn" Text="[Application.LocalStrings.#UnlockConfig!cor:String]" FocusItem="[FocusItem]"  Command="[UnlockPC]" Size="200,50" Font="font://f:CP_ButtonFont" Visible="[Application.Config.ParentalControlEnabled]"/>
 
                 </Children>

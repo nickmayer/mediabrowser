@@ -136,7 +136,13 @@ namespace MediaBrowser
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 
-        public List<string> PluginSources = new List<string>() {"http://www.mediabrowser.tv/plugins/plugin_info.xml"};
+        [Comment("The frequency at which we will force a full refresh of the library (in hours)")]
+        public int FullRefreshInterval = 24;
+
+        [Comment("The last time a full refresh was done.")]
+        public string LastFullRefresh = "2010-05-01";
+
+        public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/plugin_info.xml" };
 
         public class ExternalPlayer
         {

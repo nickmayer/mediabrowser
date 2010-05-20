@@ -76,6 +76,7 @@ namespace MediaBrowser.Library.Localization
         public string HighlightUnwatchedItemsConfigDesc = "Show a Highlight on Un-watched Content.";
         public string RandomizeBackdropConfigDesc = "Select random fan art from the available ones.";
         public string RotateBackdropConfigDesc = "Show all available fan art in a sequence (can be random).";
+        public string UpdateLibraryConfigDesc = "Update information on the items in your library.";
 
         //Config Panel
         public string ConfigConfig = "Configuration";
@@ -148,6 +149,7 @@ namespace MediaBrowser.Library.Localization
         public string EnterNewPINConfig = "Enter New PIN";
         public string RandomizeBackdropConfig = "Randomize";
         public string RotateBackdropConfig = "Rotate";
+        public string UpdateLibraryConfig = "Update Library";
 
 
 
@@ -264,6 +266,7 @@ namespace MediaBrowser.Library.Localization
         public string NoContentDial = "No Content that can be played in this context.";
         public string FontsMissingDial = "CustomFonts.mcml as been patched with missing values";
         public string StyleMissingDial = "{0} has been patched with missing values";
+        public string ManualRefreshDial = "Library Update Started.  Will proceed in the background.";
 
         //Generic
         public string Restartstr = "Restart";
