@@ -704,8 +704,8 @@ namespace MediaBrowser
 
         public DateTime LastFullRefresh
         {
-            get { return  DateTime.Parse(this.data.LastFullRefresh); }
-            set { if (this.data.LastFullRefresh != value.ToString()) { this.data.LastFullRefresh = value.ToString(); Save(); FirePropertyChanged("LastFullRefresh"); } }
+            get { return this.data.LastFullRefresh;  }
+            set { if (this.data.LastFullRefresh != value) { this.data.LastFullRefresh = value; Save(); FirePropertyChanged("LastFullRefresh"); } }
         }
 
         /* End of app specific settings*/
