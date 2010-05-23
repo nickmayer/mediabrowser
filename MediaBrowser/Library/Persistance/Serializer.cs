@@ -10,21 +10,39 @@ using System.Linq.Expressions;
 
 namespace MediaBrowser.Library.Persistance {
 
+
     public class Serializer {
         static Dictionary<string, Type> typeMap = new Dictionary<string, Type>();
         static Dictionary<Type, Serializer> serializers = new Dictionary<Type, Serializer>();
 
+        static Dictionary<Type, bool> skipValidatingSize = new Dictionary<Type, bool>();
+
+        private static bool SkipValidatingSize(Type t) {
+            lock (skipValidatingSize) {
+                bool rval;
+                if (skipValidatingSize.TryGetValue(t, out rval)) {
+                    return rval; 
+                }
+
+                var skipValidation = t.GetCustomAttributes(typeof(SkipSerializationValidationAttribute), true);
+                skipValidatingSize[t] = skipValidation != null && skipValidation.Length == 1;
+                return skipValidatingSize[t];
+            }
+        }
+
         private static Serializer GetSerializer(Type type)
         {
             Serializer serializer;
-            if (!serializers.TryGetValue(type, out serializer)) {
-                Type baked = typeof(GenericSerializer<>).MakeGenericType(type);
+            lock (serializers) {
+                if (!serializers.TryGetValue(type, out serializer)) {
+                    Type baked = typeof(GenericSerializer<>).MakeGenericType(type);
 
-                object persistables = baked.GetProperty("Persistables", BindingFlags.NonPublic | BindingFlags.Static).GetGetMethod(true).Invoke(null, null); 
-               
-                serializer = new Serializer((IEnumerable<Persistable>)persistables,type);
+                    object persistables = baked.GetProperty("Persistables", BindingFlags.NonPublic | BindingFlags.Static).GetGetMethod(true).Invoke(null, null);
 
-                serializers[type] = serializer;
+                    serializer = new Serializer((IEnumerable<Persistable>)persistables, type);
+
+                    serializers[type] = serializer;
+                }
             }
             return serializer;
         }
@@ -47,6 +65,7 @@ namespace MediaBrowser.Library.Persistance {
             Type type = obj.GetType();
 
             bw.Write(type.FullName);
+            long startPos = bw.BaseStream.Position;
 
             MethodInfo method;
             // Build in versioning data here... 
@@ -65,7 +84,11 @@ namespace MediaBrowser.Library.Persistance {
                 }
             }
 
-          
+            // write the length so we can validate. 
+            if (!SkipValidatingSize(type)) {
+                bw.Write(bw.BaseStream.Position - startPos);
+            }
+
         }
 
         public static T Deserialize<T>(Stream stream) where T : class, new() {
@@ -80,6 +103,8 @@ namespace MediaBrowser.Library.Persistance {
         /// <returns></returns>
         public static T Deserialize<T>(BinaryReader reader) where T : class, new() { 
             Type type = GetCachedType(reader.ReadString());
+
+            long startPos = reader.BaseStream.Position;
 
             T deserialized;
 
@@ -99,6 +124,13 @@ namespace MediaBrowser.Library.Persistance {
                     deserialized = (T)Serializer.GetSerializer(type).DeserializeInternal(reader);
                 }
             }
+
+            if (!SkipValidatingSize(type)) {
+                if ((reader.BaseStream.Position - startPos) != reader.ReadInt64()) {
+                    // its corrupt 
+                    throw new SerializationException("Corrupt item in cache");
+                }
+            } 
 
             return deserialized;
         } 

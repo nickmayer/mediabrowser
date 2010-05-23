@@ -83,7 +83,6 @@ namespace MediaBrowser.Library.Persistance {
             for (int i = 0; i < persistables.Length; i++) {
                 persistables[i].Serialize(bw, data);
             }
-            //writer(data, bw);
         }
 
         public static T Deserialize(Stream stream) {

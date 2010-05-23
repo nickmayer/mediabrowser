@@ -6,6 +6,8 @@ using MediaBrowser.Code.ModelItems;
 using MediaBrowser.Library.Persistance;
 
 namespace MediaBrowser.Library.Entities {
+
+    [SkipSerializationValidation]
     public class PlaybackStatus : IPersistableChangeNotifiable {
 
         public event EventHandler<EventArgs> WasPlayedChanged;
