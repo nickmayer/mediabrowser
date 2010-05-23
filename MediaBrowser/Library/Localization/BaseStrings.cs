@@ -16,7 +16,8 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0010";
+        const string VERSION = "1.0011";
+        const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
 
@@ -301,8 +302,9 @@ namespace MediaBrowser.Library.Localization
 
             Logger.ReportInfo("Using String Data from " + file);
 
-            if (VERSION != s.Version)
+            if (VERSION != s.Version && Path.GetFileName(file).ToLower() == ENFILE)
             {
+                //only re-save the english version as that is the one defined internally
                 File.Delete(file);
                 s = new BaseStrings();
                 settings = XmlSettings<BaseStrings>.Bind(s, file);
