@@ -600,7 +600,7 @@ namespace MediaBrowser
         void FullRefresh(Folder folder)
         {
             Information.AddInformationString(CurrentInstance.StringData("FullRefreshMsg"));
-            folder.RefreshMetadata(MetadataRefreshOptions.FastOnly); 
+            folder.RefreshMetadata(MetadataRefreshOptions.Force); 
 
             using (new Profiler(CurrentInstance.StringData("FullValidationProf")))
             {
