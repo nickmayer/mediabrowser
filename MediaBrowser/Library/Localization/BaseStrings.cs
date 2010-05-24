@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0011";
+        const string VERSION = "1.0012";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -288,6 +288,10 @@ namespace MediaBrowser.Library.Localization
         public string NoPluginUpdateProf = "No Plugin Updates Currently Available.";
         public string LibraryUnLockedProf = "Library Temporarily UnLocked. Will Re-Lock in {0} Hour(s)";
         public string LibraryReLockedProf = "Library Re-Locked";
+
+        //Messages
+        public string FullRefreshMsg = "Please be patient while we update your library...";
+        public string FullRefreshFinishedMsg = "Library update complete.  Thank you for using MediaBrowser.";
 
 
 

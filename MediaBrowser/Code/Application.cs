@@ -599,7 +599,7 @@ namespace MediaBrowser
 
         void FullRefresh(Folder folder)
         {
-            Information.AddInformationString("Please be patient while we upate your library...");
+            Information.AddInformationString(CurrentInstance.StringData("FullRefreshMsg"));
             folder.RefreshMetadata(MetadataRefreshOptions.FastOnly); 
 
             using (new Profiler(CurrentInstance.StringData("FullValidationProf")))
@@ -621,7 +621,7 @@ namespace MediaBrowser
                 RunActionRecursively(folder, item => item.RefreshMetadata(MetadataRefreshOptions.Default));
             }
 
-            Information.AddInformationString("Library update complete.  Thank you for using MediaBrowser.");
+            Information.AddInformationString(CurrentInstance.StringData("FullRefreshFinishedMsg"));
         }
 
         void RunActionRecursively(Folder folder, Action<BaseItem> action)
