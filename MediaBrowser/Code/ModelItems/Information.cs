@@ -47,6 +47,19 @@ namespace MediaBrowser
             }
         }
 
+        bool _majorActivity = false;
+        public bool MajorActivity
+        {
+            get
+            {
+                return _majorActivity;
+            }
+            set
+            {
+                _majorActivity = value;
+                FirePropertyChanged("MajorActivity");
+            }
+        }
         #endregion
 
         #region methods

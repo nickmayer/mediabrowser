@@ -599,6 +599,7 @@ namespace MediaBrowser
 
         void FullRefresh(Folder folder)
         {
+            Information.MajorActivity = true;
             Information.AddInformationString(CurrentInstance.StringData("FullRefreshMsg"));
             folder.RefreshMetadata(MetadataRefreshOptions.Force); 
 
@@ -622,6 +623,7 @@ namespace MediaBrowser
             }
 
             Information.AddInformationString(CurrentInstance.StringData("FullRefreshFinishedMsg"));
+            Information.MajorActivity = false;
         }
 
         void RunActionRecursively(Folder folder, Action<BaseItem> action)

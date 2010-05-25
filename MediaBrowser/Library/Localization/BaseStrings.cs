@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0012";
+        const string VERSION = "1.0013";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -275,7 +275,7 @@ namespace MediaBrowser.Library.Localization
         public string Playstr = "Play";
 
         //Profiler
-        public string WelcomeProf = "Welcome to Media Browser.";
+        public string WelcomeProf = "Welcome to Media Browser";
         public string ProfilerTimeProf = "{1} took {2} seconds.";
         public string RefreshProf = "Refresh";
         public string SetWatchedProf = "Set Watched {0}";
@@ -290,8 +290,8 @@ namespace MediaBrowser.Library.Localization
         public string LibraryReLockedProf = "Library Re-Locked";
 
         //Messages
-        public string FullRefreshMsg = "Please be patient while we update your library...";
-        public string FullRefreshFinishedMsg = "Library update complete.  Thank you for using MediaBrowser.";
+        public string FullRefreshMsg = "Updating Media Library...";
+        public string FullRefreshFinishedMsg = "Library update complete";
 
 
 

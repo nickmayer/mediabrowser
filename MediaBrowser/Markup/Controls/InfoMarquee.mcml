@@ -1,5 +1,6 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:gb="resx://MediaBrowser/MediaBrowser.Resources/PluginUpdateButton"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
     xmlns:me="Me"
@@ -13,27 +14,50 @@
     </Properties>
 
     <Rules>
-      <Binding Source="[Application.Information.DisplayText]" Target="[InfoPanelDisplay.Content]"  />      
+      <Binding Source="[Application.Information.DisplayText]" Target="[InfoPanelDisplay.Content]"  />
+      <Binding Source="[Application.Information.MajorActivity]" Target="[ActivityInd.Visible]"  />
     </Rules>
 
     <Content>
-      <Text Name="InfoPanelDisplay" Font="font://f:P_ClockFont"  Color="[Color]">
-        <Animations>
-          <Animation Type="ContentChangeShow">
-            <Keyframes>
-              <AlphaKeyframe Time="0" Value="0"/>
-              <AlphaKeyframe Time="0.4" Value="0"/>
-              <AlphaKeyframe Time=".8" Value="1"/>
-            </Keyframes>
-          </Animation>
-          <Animation Type="ContentChangeHide">
-            <Keyframes>
-              <AlphaKeyframe Time="0" Value="1"/>
-              <AlphaKeyframe Time="0.4" Value="0"/>
-            </Keyframes>
-          </Animation>
-        </Animations>
-      </Text>
+      <Panel Layout="HorizontalFlow" >
+        <Children>
+          <gb:GreenBallIndicator Name="ActivityInd" MaximumSize="30,30" Padding="5,5,5,5" Visible="false">
+            <Animations>
+              <Animation Type="Show">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="0"/>
+                  <AlphaKeyframe Time="0.4" Value="0"/>
+                  <AlphaKeyframe Time=".8" Value="1"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="Hide">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="1"/>
+                  <AlphaKeyframe Time="0.6" Value="0"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+            
+          </gb:GreenBallIndicator>
+          <Text Name="InfoPanelDisplay" Font="font://f:P_ClockFont"  Color="[Color]">
+            <Animations>
+              <Animation Type="ContentChangeShow">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="0"/>
+                  <AlphaKeyframe Time="0.4" Value="0"/>
+                  <AlphaKeyframe Time=".8" Value="1"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="ContentChangeHide">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="1"/>
+                  <AlphaKeyframe Time="0.4" Value="0"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </Text>
+        </Children>
+      </Panel>
     </Content>
   </UI>
 
