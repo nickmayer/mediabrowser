@@ -130,9 +130,10 @@ namespace Configurator
             foreach (IPlugin plugin in Kernel.Instance.Plugins)
             {
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
+                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
                 if (v != null)
                 {
-                    if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version) return true;
+                    if (v > plugin.Version && rv <= Kernel.Instance.Version) return true;
                 }
             }
             return false;
@@ -854,9 +855,10 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
+                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0,0,0,0);
                 if (v != null)
                 {
-                    if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version)
+                    if (v > plugin.Version && rv <= Kernel.Instance.Version)
                     {
                         upgradePlugin.IsEnabled = true;
                     }

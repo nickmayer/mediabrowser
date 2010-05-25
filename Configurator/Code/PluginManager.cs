@@ -36,6 +36,7 @@ namespace Configurator.Code {
         PluginSourceCollection sources = PluginSourceCollection.Instance;
 
         Dictionary<string, System.Version> latestVersions = new Dictionary<string, System.Version>();
+        Dictionary<string, System.Version> requiredVersions = new Dictionary<string, System.Version>();
 
         public PluginManager() {
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
@@ -57,6 +58,7 @@ namespace Configurator.Code {
 
             availablePlugins.Clear();
             latestVersions.Clear();
+            requiredVersions.Clear();
 
             foreach (var plugin in sources.AvailablePlugins) {
                 availablePlugins.Add(plugin);
@@ -64,6 +66,7 @@ namespace Configurator.Code {
                 {
                     //this could blow if we have two references to the same plugin...
                     latestVersions.Add(plugin.Name + System.IO.Path.GetFileName(plugin.Filename), plugin.Version);
+                    requiredVersions.Add(plugin.Name + System.IO.Path.GetFileName(plugin.Filename), plugin.RequiredMBVersion);
                 }
                 catch (Exception e)
                 {
@@ -134,6 +137,13 @@ namespace Configurator.Code {
         public System.Version GetLatestVersion(IPlugin plugin) {
             System.Version version;
             latestVersions.TryGetValue(plugin.Name+plugin.Filename, out version);
+            return version;
+        }
+
+        public System.Version GetRequiredVersion(IPlugin plugin)
+        {
+            System.Version version;
+            requiredVersions.TryGetValue(plugin.Name + plugin.Filename, out version);
             return version;
         } 
 
