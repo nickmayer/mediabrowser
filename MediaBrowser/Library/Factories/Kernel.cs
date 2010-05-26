@@ -635,13 +635,13 @@ namespace MediaBrowser.Library {
                     requestState.downloadDest.Flush();
                     requestState.downloadDest.Close();
 
+                    // Initialise the Plugin
+                    InitialisePlugin(requestState.downloadDest.Name);
+
                     //Callback to GUI to report download has completed
                     if (requestState.doneCB != null) {
                         requestState.doneCB();
                     }
-
-                    // Initialise the Plugin
-                    InitialisePlugin(requestState.downloadDest.Name);
                 }
             } 
             catch (PluginAlreadyLoadedException) {
