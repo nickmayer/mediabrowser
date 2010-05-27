@@ -197,7 +197,7 @@ namespace MediaBrowser.Library
                 images.AddRange(backdropImages);
             }
 
-            if (images != null && images.Count > 0)
+            if (images != null && images.Count > 1)
             {
                 if (Config.Instance.RandomizeBackdrops)
                 {
