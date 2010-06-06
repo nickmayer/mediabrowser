@@ -17,6 +17,9 @@ namespace MediaBrowser.Library {
         ISO,
         PlayList, 
         DVRMS,
-        Wmv
+        Wmv,
+        Mov,
+        Flv,
+        Ogg
     }
 }

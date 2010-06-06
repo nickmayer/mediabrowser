@@ -24,6 +24,12 @@ namespace MediaBrowser.Library {
                 return MediaType.PlayList;
             if (path.EndsWith(".ts") || path.EndsWith(".m2ts"))
                 return MediaType.TS;
+            if (path.EndsWith(".mov"))
+                return MediaType.Mov;
+            if (path.EndsWith(".flv"))
+                return MediaType.Flv;
+            if (path.EndsWith(".ogv"))
+                return MediaType.Ogg;
             if (path.Contains("bdmv"))
                 return MediaType.BluRay;
             if (path.Contains("hvdvd_ts"))
