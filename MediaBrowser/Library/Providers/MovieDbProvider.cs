@@ -114,7 +114,6 @@ namespace MediaBrowser.Library.Providers
 
             string id = null;
             string url = string.Format(search, UrlEncode(name), ApiKey);
-            Logger.ReportInfo(url);
             XmlDocument doc = Helper.Fetch(url);
             List<string> possibleTitles = new List<string>();
             if (doc != null)
@@ -209,7 +208,6 @@ namespace MediaBrowser.Library.Providers
 
             string url = string.Format(getInfo, id, ApiKey);
             XmlDocument doc = Helper.Fetch(url);
-            Logger.ReportInfo(url);
             if (doc != null)
             {
                 moviedbId = id;
