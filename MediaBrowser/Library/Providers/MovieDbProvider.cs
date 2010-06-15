@@ -339,14 +339,22 @@ namespace MediaBrowser.Library.Providers
             ret.Add("Fantasy Film", "Fantasy");
             ret.Add("Historical Film", "History");
             ret.Add("Horror Film", "Horror");
-            ret.Add("Musical Film", "Musical ");
+            ret.Add("Musical Film", "Musical");
             ret.Add("Mystery", "Mystery");
             ret.Add("Mystery Film", "Mystery");
             ret.Add("Road Movie", "Road Movie");
             ret.Add("Science Fiction Film", "Sci-Fi");
+            ret.Add("Science Fiction", "Sci-Fi");
             ret.Add("Thriller", "Thriller");
             ret.Add("Thriller Film", "Thriller");
-            ret.Add("Western", "Western ");
+            ret.Add("Western", "Western");
+            ret.Add("Music", "Music");
+            ret.Add("Sport", "Sport");
+            ret.Add("War", "War");
+            ret.Add("Short", "Short");
+            ret.Add("Biography", "Biography");
+            ret.Add("Film-Noir", "Film-Noir");
+            ret.Add("Game-Show", "Game-Show");
 
             return ret;
         }
