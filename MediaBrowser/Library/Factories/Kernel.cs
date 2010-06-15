@@ -97,20 +97,24 @@ namespace MediaBrowser.Library {
 
                 // create filewatchers for each of our top-level folders (only if we are in MediaCenter, though)
                 bool isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
-                if (isMC && config.EnableDirectoryWatchers) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
+                using (new Profiler("Creating File Watchers"))
                 {
-                    foreach (BaseItem item in kernel.RootFolder.Children)
+                    if (isMC && config.EnableDirectoryWatchers) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
                     {
-                        Folder folder = item as Folder;
-                        if (folder != null)
+                        foreach (BaseItem item in kernel.RootFolder.Children)
                         {
-                            folder.directoryWatcher = new MBDirectoryWatcher(folder, false);
+                            Folder folder = item as Folder;
+                            if (folder != null)
+                            {
+                                folder.directoryWatcher = new MBDirectoryWatcher(folder, false);
+                            }
                         }
-                    }
 
-                    // create a watcher for the startup folder too - and watch all changes there
-                    kernel.RootFolder.directoryWatcher = new MBDirectoryWatcher(kernel.RootFolder, true);
+                        // create a watcher for the startup folder too - and watch all changes there
+                        kernel.RootFolder.directoryWatcher = new MBDirectoryWatcher(kernel.RootFolder, true);
+                    }
                 }
+
 
                 // add the podcast home
                 var podcastHome = kernel.GetItem<Folder>(kernel.ConfigData.PodcastHome);
@@ -278,17 +282,23 @@ namespace MediaBrowser.Library {
             // create a mouseActiveHooker for us to know if the mouse is active on our window (used to handle mouse scrolling control)
             // we will wire it to an event on application
             kernel.MouseActiveHooker = new IsMouseActiveHooker();
+            using (new Profiler("Plugin Loading and Init"))
+            {
+                kernel.Plugins = DefaultPlugins((loadDirective & KernelLoadDirective.ShadowPlugins) == KernelLoadDirective.ShadowPlugins);
 
-            kernel.Plugins = DefaultPlugins((loadDirective & KernelLoadDirective.ShadowPlugins) == KernelLoadDirective.ShadowPlugins);
-
-            // initialize our plugins (maybe we should add a kernel.init ? )
-            // The ToList enables us to remove stuff from the list if there is a failure
-            foreach (var plugin in kernel.Plugins.ToList()) {
-                try {
-                    plugin.Init(kernel);
-                } catch (Exception e) {
-                    Logger.ReportException("Failed to initialize Plugin : " + plugin.Name, e);
-                    kernel.Plugins.Remove(plugin);
+                // initialize our plugins (maybe we should add a kernel.init ? )
+                // The ToList enables us to remove stuff from the list if there is a failure
+                foreach (var plugin in kernel.Plugins.ToList())
+                {
+                    try
+                    {
+                        plugin.Init(kernel);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Failed to initialize Plugin : " + plugin.Name, e);
+                        kernel.Plugins.Remove(plugin);
+                    }
                 }
             }
             return kernel;

@@ -55,12 +55,16 @@ namespace MediaBrowser
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
                 return;
             }
+            using (new MediaBrowser.Util.Profiler("Total Kernel Init"))
+            {
+                Kernel.Init(config);
+            }
+            using (new MediaBrowser.Util.Profiler("Application Init"))
+            {
+                Application app = new Application(new MyHistoryOrientedPageSession(), host);
 
-            Kernel.Init(config);
-
-            Application app = new Application(new MyHistoryOrientedPageSession(), host);
-
-            app.GoToMenu();
+                app.GoToMenu();
+            }
         }
 
         private static ConfigData GetConfig()
