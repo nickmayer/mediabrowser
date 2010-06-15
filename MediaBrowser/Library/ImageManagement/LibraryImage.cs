@@ -80,8 +80,10 @@ namespace MediaBrowser.Library.ImageManagement {
 
                         Async.Queue("Validate Image Thread", () =>
                         {
-                            if (info != null) {
-                                if (ImageOutOfDate(info.Date)) {
+                            if (info != null)
+                            {
+                                if (ImageOutOfDate(info.Date))
+                                {
                                     ClearLocalImages();
                                 }
                             }
