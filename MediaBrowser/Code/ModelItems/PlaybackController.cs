@@ -347,7 +347,7 @@ namespace MediaBrowser
                 return;
             }
 
-            Logger.ReportVerbose("TransportPropertyChanged was called with property = " + property);
+            //Logger.ReportVerbose("TransportPropertyChanged was called with property = " + property);
 
             lastCall = DateTime.Now;
             UpdateStatus();
@@ -377,7 +377,7 @@ namespace MediaBrowser
                 if (title != null && progressHandler != null && (this.title != title || this.position != position))
                 {
 
-                    Logger.ReportVerbose("progressHandler was called with : position =" + position.ToString() + " title :" + title);
+                    //Logger.ReportVerbose("progressHandler was called with : position =" + position.ToString() + " title :" + title);
 
                     progressHandler(this, new PlaybackStateEventArgs() { Position = position, Title = title });
                     this.title = title;
