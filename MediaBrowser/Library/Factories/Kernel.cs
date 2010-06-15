@@ -22,6 +22,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Net;
 using MediaBrowser.Util;
+using MediaBrowser.Library.Threading;
 using Microsoft.MediaCenter.UI;
 
 namespace MediaBrowser.Library {
@@ -97,9 +98,9 @@ namespace MediaBrowser.Library {
 
                 // create filewatchers for each of our top-level folders (only if we are in MediaCenter, though)
                 bool isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
-                using (new Profiler("Creating File Watchers"))
+                if (isMC && config.EnableDirectoryWatchers) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
                 {
-                    if (isMC && config.EnableDirectoryWatchers) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
+                    Async.Queue("Create Filewatchers", () =>
                     {
                         foreach (BaseItem item in kernel.RootFolder.Children)
                         {
@@ -112,7 +113,7 @@ namespace MediaBrowser.Library {
 
                         // create a watcher for the startup folder too - and watch all changes there
                         kernel.RootFolder.directoryWatcher = new MBDirectoryWatcher(kernel.RootFolder, true);
-                    }
+                    });
                 }
 
 
