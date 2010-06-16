@@ -69,6 +69,9 @@ namespace MediaBrowser.Library.Extensions {
                 case ".mp4":
                 case ".m4v":
                     return MediaType.Mp4;
+                case ".dvr-ms":
+                case ".wtv":
+                    return MediaType.DVRMS;
                 default:
                     return MediaType.Unknown;
             }
