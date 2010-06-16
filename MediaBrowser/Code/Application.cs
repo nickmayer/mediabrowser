@@ -522,7 +522,7 @@ namespace MediaBrowser
                                     if (!IsInEntryPoint)
                                     {
                                         // only refresh for the root entry, this will help speed things up
-                                        FullRefresh(this.RootFolder);
+                                        FullRefresh(this.RootFolder, MetadataRefreshOptions.Default);
                                         Config.LastFullRefresh = DateTime.Now;
                                     }
                                 }
@@ -594,14 +594,14 @@ namespace MediaBrowser
         public void FullRefresh()
         {
             Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentInstance.StringData("ManualRefreshDial"),"", DialogButtons.Ok, 7, false);
-            Async.Queue(CurrentInstance.StringData("Manual Full Refresh"), () => FullRefresh(RootFolder));
+            Async.Queue(CurrentInstance.StringData("Manual Full Refresh"), () => FullRefresh(RootFolder, MetadataRefreshOptions.Force));
         }
 
-        void FullRefresh(Folder folder)
+        void FullRefresh(Folder folder, MetadataRefreshOptions options)
         {
             Information.MajorActivity = true;
             Information.AddInformationString(CurrentInstance.StringData("FullRefreshMsg"));
-            folder.RefreshMetadata(MetadataRefreshOptions.Force); 
+            folder.RefreshMetadata(options);
 
             using (new Profiler(CurrentInstance.StringData("FullValidationProf")))
             {
