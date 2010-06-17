@@ -463,7 +463,7 @@ namespace Configurator
 
             folderList.Items.Clear();
 
-            SortedList<string, VirtualFolder> vfs = new SortedList<string, VirtualFolder>();
+            List<VirtualFolder> vfs = new List<VirtualFolder>();
             int i = 0; //use this to fill in sortorder if not there
 
             foreach (var filename in Directory.GetFiles(config.InitialFolder))
@@ -481,7 +481,7 @@ namespace Configurator
                             vf.SortName = i.ToString("D3");
                             vf.Save();
                         }
-                        vfs.Add(vf.SortName, vf);
+                        vfs.Add(vf);
                         i = i + 10;
                     }
                     //else
@@ -497,8 +497,11 @@ namespace Configurator
                     // TODO : alert about dodgy VFs and delete them
                 }
             }
+
+            vfs.Sort((a,b) => a.SortName.CompareTo(b.SortName));
+
             //now add our items in sorted order
-            foreach (VirtualFolder v in vfs.Values)
+            foreach (VirtualFolder v in vfs)
                 folderList.Items.Add(v);
         }
 
