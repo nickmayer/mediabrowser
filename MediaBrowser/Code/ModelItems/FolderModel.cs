@@ -614,6 +614,36 @@ namespace MediaBrowser.Library {
             }
         }
 
+        public Item NextChild
+        {
+            get
+            {
+                //we don't use the public property because we want to roll around the list instead of going to unselected
+                selectedchildIndex++;
+                if (selectedchildIndex >= Children.Count)
+                {
+                    selectedchildIndex = 0;
+                }
+                SelectedChildChanged();
+                return Children[SelectedChildIndex];
+            }
+        }
+
+        public Item PrevChild
+        {
+            get
+            {
+                //we don't use the public property because we want to roll around the list instead of going to unselected
+                selectedchildIndex--;
+                if (selectedchildIndex < 0)
+                {
+                    selectedchildIndex = Children.Count;
+                }
+                SelectedChildChanged();
+                return Children[SelectedChildIndex];
+            }
+        }
+
         private void SelectedChildChanged() {
             FirePropertyChanged("SelectedChildIndex");
             FirePropertyChanged("SelectedChild");
