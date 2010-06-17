@@ -64,8 +64,7 @@ namespace Configurator
             LoadComboBoxes();
             lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.Version;
 //infoPanel
-            infoPanel.Visibility = Visibility.Hidden;
-            infoPlayerPanel.Visibility = Visibility.Hidden;
+            infoPanel.Visibility = infoPlayerPanel.Visibility = pluginPanel.Visibility = Visibility.Hidden;
 
             // first time the wizard has run 
             if (config.InitialFolder != ApplicationPaths.AppInitialDirPath) {
@@ -94,7 +93,8 @@ namespace Configurator
                 // someone bodged up the config
             }
 
-            daemonToolsLocation.Content = config.DaemonToolsLocation;
+            //daemonToolsLocation.Content = config.DaemonToolsLocation; /// old
+            daemonToolsLocation.Text = config.DaemonToolsLocation;
 
 
             RefreshExtenderFormats();
@@ -843,7 +843,10 @@ sortorder: {2}
                 {
                     folderImage.Source = null;
                 }
+                //enable the rename, delete, up and down buttons if a media collection is selected.
+                btnRename.IsEnabled = btnRemoveFolder.IsEnabled = btnUp.IsEnabled = btnDn.IsEnabled = true;
 
+                //show the infoPanel
                 infoPanel.Visibility = Visibility.Visible;
             }
         }
@@ -854,6 +857,12 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
+
+                //enable the remove button if a plugin is selected.
+                removePlugin.IsEnabled = true;
+
+                //show the pluginPanel
+                pluginPanel.Visibility = Visibility.Visible;
                 if (v != null)
                 {
                     if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version)
@@ -871,7 +880,6 @@ sortorder: {2}
                     latestPluginVersion.Content = "Unknown";
                     upgradePlugin.IsEnabled = false;
                 }
-                removePlugin.IsEnabled = true;
             }
         }
 
@@ -981,7 +989,8 @@ sortorder: {2}
             if (result == true)
             {
                 config.DaemonToolsLocation = dialog.FileName;
-                daemonToolsLocation.Content = config.DaemonToolsLocation;
+                //daemonToolsLocation.Content = config.DaemonToolsLocation;
+                daemonToolsLocation.Text = config.DaemonToolsLocation;
                 SaveConfig();
             }
         }
@@ -1094,12 +1103,14 @@ sortorder: {2}
                     txtPlayerCommand.Text = mediaPlayer.Command;
                     lblPlayerArgs.Text = mediaPlayer.Args;
                     infoPlayerPanel.Visibility = Visibility.Visible;
+                    btnRemovePlayer.IsEnabled = true;
                 }
                 else
                 {
                     txtPlayerCommand.Text = string.Empty;
                     lblPlayerArgs.Text = string.Empty;
                     infoPlayerPanel.Visibility = Visibility.Hidden;
+                    btnRemovePlayer.IsEnabled = false;
                 }
             }
         }
@@ -1369,6 +1380,9 @@ sortorder: {2}
                 podcastUrl.Text = vodcast.Url;
                 podcastName.Content = vodcast.Name;
                 podcastDescription.Text = vodcast.Overview;
+
+                //enable the rename and delete buttons if a podcast is selected.
+                renamePodcast.IsEnabled = removePodcast.IsEnabled = true;
             }
         }
 

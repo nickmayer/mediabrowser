@@ -43,8 +43,8 @@
                 <Grid>
                     <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="folderList" Width="260" SelectionChanged="folderList_SelectionChanged" FontSize="14" />
                     <Button Height="32" HorizontalAlignment="Left" Margin="20,0,0,20" x:Name="btnAddFolder" VerticalAlignment="Bottom" Width="80" Click="btnAddFolder_Click" FontSize="14" ToolTip="Add a new media collection" Content="Add"/>
-                    <Button Height="32" HorizontalAlignment="Left" Margin="200,0,0,20" x:Name="btnRemoveFolder" VerticalAlignment="Bottom" Width="80" Click="btnRemoveFolder_Click" FontSize="14" ToolTip="Remove media collection" Content="Remove"/>
-                    <Button Height="32" HorizontalAlignment="Left" Margin="110,0,0,20" x:Name="btnRename" VerticalAlignment="Bottom" Width="80" Click="btnRename_Click" ToolTip="Rename media collection" Content="Rename" FontSize="14" />
+                    <Button Height="32" HorizontalAlignment="Left" Margin="200,0,0,20" x:Name="btnRemoveFolder" VerticalAlignment="Bottom" Width="80" Click="btnRemoveFolder_Click" FontSize="14" ToolTip="Remove media collection" Content="Remove" IsEnabled="False"/>
+                    <Button Height="32" HorizontalAlignment="Left" Margin="110,0,0,20" x:Name="btnRename" VerticalAlignment="Bottom" Width="80" Click="btnRename_Click" ToolTip="Rename media collection" Content="Rename" FontSize="14" IsEnabled="False" />
                     <Grid Margin="385,0,20,20" x:Name="infoPanel">
                         <ListBox Height="115" x:Name="internalFolder" FontSize="14" Margin="0,0,0,40" VerticalAlignment="Bottom" ToolTip="All folder locations for the selected media collection are shown here" />
                         <Button Height="32" x:Name="btnAddSubFolder" Click="btnAddSubFolder_Click" FontSize="14" ToolTip="Add another folder inside your media collection" Content="Add" Margin="0,0,90,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="80" />
@@ -57,8 +57,8 @@
                     </Grid>
                     <Label Height="34" HorizontalAlignment="Left" Margin="20,6,0,0" x:Name="lblStep1" VerticalAlignment="Top" Width="34" Foreground="#FFA8A8A8" Opacity="1" Content="❶"/>
                     <Label Height="34" HorizontalAlignment="Left" Margin="54,6,0,0" x:Name="lblStep1b" VerticalAlignment="Top" Width="226" Foreground="#FF030303" Content="Add your media"/>
-                    <Button Height="28" HorizontalAlignment="Left" Margin="290,45,0,0" Name="btnUp" VerticalAlignment="Top" Width="85" Click="btnUp_Click">move up</Button>
-                    <Button Height="28" HorizontalAlignment="Left" Margin="290,83,0,0" Name="btnDn" VerticalAlignment="Top" Width="85" Click="btnDn_Click">move down</Button>
+                    <Button Height="28" HorizontalAlignment="Left" Margin="290,45,0,0" Name="btnUp" IsEnabled="False" VerticalAlignment="Top" Width="85" Click="btnUp_Click">move up</Button>
+                    <Button Height="28" HorizontalAlignment="Left" Margin="290,83,0,0" Name="btnDn" IsEnabled="False" VerticalAlignment="Top" Width="85" Click="btnDn_Click">move down</Button>
                 </Grid>
             </TabItem>
             <TabItem Header="podcasts" x:Name="podcastsTab" FontSize="14" IsSelected="True">
@@ -67,30 +67,32 @@
                     <Label Height="34" HorizontalAlignment="Left" Margin="54,6,0,0" x:Name="lblPodcastStep1b" VerticalAlignment="Top" Width="226" Foreground="#FF030303" Content="Add your podcasts"/>
                     <ListBox IsSynchronizedWithCurrentItem="True" Margin="20,45,0,60" x:Name="podcastList" DisplayMemberPath="Name" HorizontalAlignment="Left" Width="260" SelectionChanged="podcastList_SelectionChanged"/>
                     <Button HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Add" x:Name="addPodcast" Click="addPodcast_Click" ToolTip="Add a video RSS feed" />
-                    <Button HorizontalAlignment="Left" Margin="200,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Remove" x:Name="removePodcast" Click="removePodcast_Click" ToolTip="Remove selected video RSS feed" />
-                    <Button Margin="110,0,0,20" VerticalAlignment="Bottom" Height="32" Content="Rename" x:Name="renamePodcast" HorizontalAlignment="Left" Width="80" Click="renamePodcast_Click" ToolTip="Rename video RSS feed display name" />
+                    <Button HorizontalAlignment="Left" Margin="200,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Remove" x:Name="removePodcast" Click="removePodcast_Click" ToolTip="Remove selected video RSS feed" IsEnabled="False" />
+                    <Button Margin="110,0,0,20" VerticalAlignment="Bottom" Height="32" Content="Rename" x:Name="renamePodcast" HorizontalAlignment="Left" Width="80" Click="renamePodcast_Click" ToolTip="Rename video RSS feed display name" IsEnabled="False" />
                     <TextBlock Text="http://somepodcast.com/podcast.rss" d:LayoutOverrides="HorizontalAlignment, Height" x:Name="podcastUrl" VerticalAlignment="Bottom" Margin="300,0,20,57.76" FontSize="12" Height="52.24" TextWrapping="Wrap" />
-                    <Label Margin="300,45,0,0" Height="30.62" Name="podcastName" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS">The Cook and the Chef</Label>
-                    <TextBlock Text="This is the podcast description..." Margin="300,80.38,20,130" Name="podcastDescription" TextWrapping="Wrap" />
+                    <Label Margin="300,10,20,0" Height="35" Name="podcastName" VerticalAlignment="Top" FontWeight="Normal" FontSize="20" FontFamily="Trebuchet MS">The Cook and the Chef</Label>
+                    <TextBlock Text="This is the podcast description..." Margin="300,45,20,130" Name="podcastDescription" TextWrapping="Wrap" />
                 </Grid>
             </TabItem>
 
 
             <TabItem Header="plug-ins" x:Name="plugins" Foreground="#FF323232" FontSize="14" FontWeight="Normal" IsSelected="True">
                 <Grid DataContext="{DynamicResource PluginManager}" >
-                	<ListBox IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" Margin="20,45,0,60" Width="260" SelectionChanged="pluginList_SelectionChanged" x:Name="pluginList" DisplayMemberPath="Name" ItemsSource="{Binding Path=InstalledPlugins}" SelectedIndex="0" OverridesDefaultStyle="False" />
-                    <TextBlock Margin="300,80,20,140" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
-                    <Label Margin="0,0,230,60" Content="Latest Version:" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="32" HorizontalContentAlignment="Right" />
-                    <Label HorizontalAlignment="Right" Margin="0,0,133,60" Width="90" Height="32" VerticalAlignment="Bottom" x:Name="latestPluginVersion" Content="{Binding Path=SelectedItem.LatestVersion}"/>
-                    <Label Margin="0,0,230,102" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="32" Content="Installed Version:" HorizontalContentAlignment="Right" />
-                    <Label HorizontalAlignment="Right" Margin="0,0,133,102" VerticalAlignment="Bottom" Width="90" Height="32" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="installedPluginVersion"/>
-                    <Button Margin="0,0,20,60" VerticalAlignment="Bottom" Height="32" Content="Upgrade" Width="80" HorizontalAlignment="Right" Click="upgradePlugin_Click" x:Name="upgradePlugin" Visibility="Visible"/>
-                    <Button Margin="0,0,20,102" VerticalAlignment="Bottom" Height="32" Content="Configure" Width="80" IsEnabled="{Binding Path=SelectedItem.IsConfigurable, ElementName=pluginList, Mode=Default}" HorizontalAlignment="Right" x:Name="configPlugin"  Click="configurePlugin_Click" Visibility="Visible"/>
-                    <Button HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Bottom" Width="125" Height="32" Content="More Plug-ins..." x:Name="addPlugin" Click="addPlugin_Click" />
-                    <Button HorizontalAlignment="Left" Margin="200,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Remove" x:Name="removePlugin" Click="removePlugin_Click" Visibility="Visible" />
-                    <Label Margin="300,45,20,0" VerticalAlignment="Top" Height="30" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS" x:Name="pluginName"/>
-					<ProgressBar VerticalAlignment="Bottom" Margin="300,0,20,20" x:Name="progress" Visibility="Hidden" Height="32"/>
                     <Label Height="34" HorizontalAlignment="Left" Margin="20,6,0,0" Name="label6" VerticalAlignment="Top" Width="260">Installed Plug-ins:</Label>
+                    <ListBox IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" Margin="20,45,0,60" Width="260" SelectionChanged="pluginList_SelectionChanged" x:Name="pluginList" DisplayMemberPath="Name" ItemsSource="{Binding Path=InstalledPlugins}" OverridesDefaultStyle="False" /> <!-- SelectedIndex="0" -->
+                    <Button HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Bottom" Width="125" Height="32" Content="More Plug-ins..." x:Name="addPlugin" Click="addPlugin_Click" />
+                    <Button HorizontalAlignment="Left" Margin="200,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Remove" x:Name="removePlugin" Click="removePlugin_Click" Visibility="Visible" IsEnabled="False" />
+                    <Grid Margin="300,0,20,20" x:Name="pluginPanel">
+                        <Label Margin="0,10,0,0" VerticalAlignment="Top" Height="35" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="20" FontFamily="Trebuchet MS" x:Name="pluginName"/>
+                        <TextBlock Margin="0,45,0,120" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
+                        <Label Margin="0,0,210,40" Content="Latest Version:" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="32" HorizontalContentAlignment="Right" />
+                        <Label HorizontalAlignment="Right" Margin="0,0,113,40" Width="90" Height="32" VerticalAlignment="Bottom" x:Name="latestPluginVersion" Content="{Binding Path=SelectedItem.LatestVersion}"/>
+                        <Label Margin="0,0,210,82" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="32" Content="Installed Version:" HorizontalContentAlignment="Right" />
+                        <Label HorizontalAlignment="Right" Margin="0,0,113,82" VerticalAlignment="Bottom" Width="90" Height="32" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="installedPluginVersion"/>
+                        <Button Margin="0,0,00,40" VerticalAlignment="Bottom" Height="32" Content="Upgrade" Width="80" HorizontalAlignment="Right" Click="upgradePlugin_Click" x:Name="upgradePlugin" Visibility="Visible"/>
+                        <Button Margin="0,0,00,82" VerticalAlignment="Bottom" Height="32" Content="Configure" Width="80" IsEnabled="{Binding Path=SelectedItem.IsConfigurable, ElementName=pluginList, Mode=Default}" HorizontalAlignment="Right" x:Name="configPlugin"  Click="configurePlugin_Click" Visibility="Visible"/>
+					    <ProgressBar VerticalAlignment="Bottom" Margin="0,0,0,0" x:Name="progress" Visibility="Hidden" Height="32"/>
+                    </Grid>
                 </Grid>
             </TabItem>
                 <TabItem Header="display" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsSelected="True">
@@ -184,18 +186,19 @@
                             <ListBox IsSynchronizedWithCurrentItem="True" Margin="10,75,10,50" x:Name="extenderFormats" />
                             <Label Margin="10,45,10,0" VerticalAlignment="Top" Height="28" Content="Extender formats" />
                             <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="80" Height="32" Content="Add" x:Name="addExtenderFormat" Click="addExtenderFormat_Click" FontSize="14" />
-                            <Button Margin="0,0,8.12,10" VerticalAlignment="Bottom" Height="32" Content="Remove" x:Name="removeExtenderFormat" Click="removeExtenderFormat_Click" FontSize="14" HorizontalAlignment="Right" Width="80" />
+                            <Button Margin="0,0,10,10" VerticalAlignment="Bottom" Height="32" Content="Remove" x:Name="removeExtenderFormat" Click="removeExtenderFormat_Click" FontSize="14" HorizontalAlignment="Right" Width="80" />
                             <CheckBox Margin="10,10,0,0" VerticalAlignment="Top" Height="22" Content="Enable Transcode360" x:Name="enableTranscode360" Click="enableTranscode360_Click" HorizontalAlignment="Left" Width="160" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="ISO Mounting Settings" Name="groupBox5" Margin="300,35,20,20" VerticalAlignment="Top" Height="160">
+                    <GroupBox Header="ISO Mounting Settings" Name="groupBox5" Margin="300,35,20,20" VerticalAlignment="Top" Height="180">
                         <Grid>
-                            <Label HorizontalAlignment="Left" Margin="10,70,0,0" Width="97" Content="Drive Letter:" Height="28" VerticalAlignment="Top" ToolTip="Enter drive for mounting tool to use" />
-                            <Label Margin="10,40,10,0" VerticalAlignment="Top" Height="28" Content="C:\DaemonTools\Somewhere\" x:Name="daemonToolsLocation" FontSize="12" />
+                            <Label Margin="10,90,10,0" Content="Drive Letter:" Height="28" VerticalAlignment="Top" ToolTip="Enter drive for mounting tool to use" />
+                            <TextBox Margin="10,45,10,0" Height="28" VerticalAlignment="Top" x:Name="daemonToolsLocation" IsReadOnly="True" />
+                            <!--<Label Margin="10,40,10,0" VerticalAlignment="Top" Height="28" Content="C:\DaemonTools\Somewhere\" x:Name="daemonToolsLocation" FontSize="12" />-->
                             <Label Margin="10,10,10,0" VerticalAlignment="Top" Height="28" Content="Path to ISO mounter:" />
-                            <Button Margin="260,10,10,0" HorizontalAlignment="Left" Content="Change Location..." x:Name="changeDaemonToolsLocation" Click="changeDaemonToolsLocation_Click" FontSize="14" ToolTip="Enter the location of your ISO mounting tool" Height="28" Width="130" VerticalAlignment="Top" />
-                            <ComboBox IsSynchronizedWithCurrentItem="True" Margin="260,70,0,0" x:Name="daemonToolsDrive" SelectionChanged="daemonToolsDrive_SelectionChanged" FontSize="14" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
-                            <CheckBox Margin="20,110,0,0" Content="Use Autoplay" x:Name="useAutoPlay" Click="useAutoPlay_Click" Height="22" VerticalAlignment="Top" />
+                            <Button Margin="0,10,10,0" HorizontalAlignment="Right" Content="Change Location..." x:Name="changeDaemonToolsLocation" Click="changeDaemonToolsLocation_Click" FontSize="14" ToolTip="Enter the location of your ISO mounting tool" Height="28" Width="130" VerticalAlignment="Top" />
+                            <ComboBox IsSynchronizedWithCurrentItem="True" Margin="0,90,10,0" x:Name="daemonToolsDrive" SelectionChanged="daemonToolsDrive_SelectionChanged" FontSize="14" Height="28" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" />
+                            <CheckBox Margin="10,130,0,0" Content="Use Autoplay" x:Name="useAutoPlay" Click="useAutoPlay_Click" Height="22" Width="110" VerticalAlignment="Top" HorizontalAlignment="Left" />
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -207,7 +210,7 @@
                 <Grid>
                     <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="lstExternalPlayers" Width="260" FontSize="14" Grid.ColumnSpan="2" SelectionChanged="lstExternalPlayers_SelectionChanged" ItemTemplate="{StaticResource EPStyle}" />
                     <Button Height="32" HorizontalAlignment="Left" Margin="20,0,0,20" x:Name="btnAddPlayer" VerticalAlignment="Bottom" Width="80" FontSize="14" ToolTip="Add a new media type for external playback" Content="Add" Click="btnAddPlayer_Click" Grid.ColumnSpan="2" />
-                    <Button Height="32" HorizontalAlignment="Left" Margin="200,0,0,20" x:Name="btnRemovePlayer" VerticalAlignment="Bottom" Width="80" FontSize="14" ToolTip="Remove media type" Content="Remove" Click="btnRemovePlayer_Click" />
+                    <Button Height="32" HorizontalAlignment="Left" Margin="200,0,0,20" x:Name="btnRemovePlayer" VerticalAlignment="Bottom" Width="80" FontSize="14" ToolTip="Remove media type" Content="Remove" Click="btnRemovePlayer_Click" IsEnabled="False"/>
                     <Grid Margin="300,0,20,20" x:Name="infoPlayerPanel">
                         <Label Margin="0,6,0,0" Height="34" Width="34" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="lblPlayerStep2" Foreground="#FFA8A8A8" Content="❷" FontSize="14" />
                         <Label Margin="34,6,0,0" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="lblPlayerStep2b" Foreground="#FF000000" Content="Configure external player" FontSize="14" />
