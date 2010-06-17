@@ -637,7 +637,7 @@ namespace MediaBrowser.Library {
                 selectedchildIndex--;
                 if (selectedchildIndex < 0)
                 {
-                    selectedchildIndex = Children.Count;
+                    selectedchildIndex = Children.Count - 1;
                 }
                 SelectedChildChanged();
                 return Children[SelectedChildIndex];
