@@ -19,6 +19,9 @@ namespace MediaBrowser.Library
             this.parent = parent;
         }
 
+        public StudioItemWrapper()
+        { }
+
         public Item Item
         {
             get

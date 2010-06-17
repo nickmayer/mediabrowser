@@ -24,6 +24,14 @@ namespace MediaBrowser.Library.ImageManagement {
 
         protected override bool ImageOutOfDate(DateTime date) {
             var info = new System.IO.FileInfo(Path);
+            //make sure we have valid date info because some systems seem to have troubles with this
+            DateTime now = DateTime.UtcNow;
+            if (info.CreationTimeUtc > now || info.LastWriteTimeUtc > now || info.CreationTimeUtc > info.LastWriteTimeUtc)
+            {
+                //something goofy with these dates...
+                MediaBrowser.Library.Logging.Logger.ReportInfo("Bad date info for image "+Path+". Create date: " + info.CreationTimeUtc + " Mod date: " + info.LastWriteTimeUtc);
+                return false;
+            }
             return date < Max(info.CreationTimeUtc, info.LastWriteTimeUtc);
         }
 

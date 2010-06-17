@@ -130,9 +130,10 @@ namespace Configurator
             foreach (IPlugin plugin in Kernel.Instance.Plugins)
             {
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
+                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
                 if (v != null)
                 {
-                    if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version) return true;
+                    if (v > plugin.Version && rv <= Kernel.Instance.Version) return true;
                 }
             }
             return false;
@@ -462,7 +463,7 @@ namespace Configurator
 
             folderList.Items.Clear();
 
-            SortedList<string, VirtualFolder> vfs = new SortedList<string, VirtualFolder>();
+            List<VirtualFolder> vfs = new List<VirtualFolder>();
             int i = 0; //use this to fill in sortorder if not there
 
             foreach (var filename in Directory.GetFiles(config.InitialFolder))
@@ -480,7 +481,7 @@ namespace Configurator
                             vf.SortName = i.ToString("D3");
                             vf.Save();
                         }
-                        vfs.Add(vf.SortName, vf);
+                        vfs.Add(vf);
                         i = i + 10;
                     }
                     //else
@@ -496,8 +497,11 @@ namespace Configurator
                     // TODO : alert about dodgy VFs and delete them
                 }
             }
+
+            vfs.Sort((a,b) => a.SortName.CompareTo(b.SortName));
+
             //now add our items in sorted order
-            foreach (VirtualFolder v in vfs.Values)
+            foreach (VirtualFolder v in vfs)
                 folderList.Items.Add(v);
         }
 
@@ -857,7 +861,7 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-
+                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0,0,0,0);
                 //enable the remove button if a plugin is selected.
                 removePlugin.IsEnabled = true;
 
@@ -865,7 +869,7 @@ sortorder: {2}
                 pluginPanel.Visibility = Visibility.Visible;
                 if (v != null)
                 {
-                    if (v > plugin.Version && plugin.RequiredMBVersion <= Kernel.Instance.Version)
+                    if (v > plugin.Version && rv <= Kernel.Instance.Version)
                     {
                         upgradePlugin.IsEnabled = true;
                     }
@@ -1637,6 +1641,9 @@ sortorder: {2}
                     Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"));
                     Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"));
                     Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
+                    //force MB to re-build library next time
+                    config.LastFullRefresh = DateTime.MinValue;
+                    config.Save();
 
                 }
                 catch (Exception ex)
@@ -1656,6 +1663,9 @@ sortorder: {2}
                 {
                     Directory.Delete(ApplicationPaths.AppImagePath,true);
                     Directory.CreateDirectory(ApplicationPaths.AppImagePath);
+                    //force MB to re-build library next time
+                    config.LastFullRefresh = DateTime.MinValue;
+                    config.Save();
                 }
                 catch (Exception ex)
                 {

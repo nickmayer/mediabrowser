@@ -19,8 +19,8 @@ namespace MediaBrowser.Library.Providers
     [SupportedType(typeof(Movie))]
     class MovieDbProvider : BaseMetadataProvider
     {
-        private static string search = @"http://api.themoviedb.org/2.0/Movie.search?title={0}&api_key={1}";
-        private static string getInfo = @"http://api.themoviedb.org/2.0/Movie.getInfo?id={0}&api_key={1}";
+        private static string search = @"http://api.themoviedb.org/2.1/Movie.search/en/xml/{1}/{0}";
+        private static string getInfo = @"http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/{1}/{0}";
         private static readonly string ApiKey = "f6bd687ffa63cd282b6ff2c6877f2669";
         static readonly Regex[] nameMatches = new Regex[] {
             new Regex(@"(?<name>.*)\((?<year>\d{4})\)"), // matches "My Movie (2001)" and gives us the name and the year
@@ -125,14 +125,14 @@ namespace MediaBrowser.Library.Providers
                     id = null;
                     List<string> titles = new List<string>();
                     string mainTitle = null;
-                    XmlNode n = node.SelectSingleNode("./title");
+                    XmlNode n = node.SelectSingleNode("./name");
                     if (n != null)
                     {
                         titles.Add(n.InnerText);
                         mainTitle = n.InnerText;
                     }
 
-                    var alt_titles = node.SelectNodes("./alternative_title");
+                    var alt_titles = node.SelectNodes("./alternative_name");
                     {
                         foreach (XmlNode title in alt_titles)
                         {
@@ -158,7 +158,7 @@ namespace MediaBrowser.Library.Providers
                             Logger.ReportInfo("Match " + matchedName + " for " + name);
                             if (year != null)
                             {
-                                string r = node.SafeGetString("release");
+                                string r = node.SafeGetString("released");
                                 if ((r != null) && r.Length >= 4)
                                 {
                                     int db;
@@ -215,13 +215,13 @@ namespace MediaBrowser.Library.Providers
                 //if (store.Name == null)
                 //    store.Name = doc.SafeGetString("//movie/title");
 
-                movie.Overview = doc.SafeGetString("//movie/short_overview");
+                movie.Overview = doc.SafeGetString("//movie/overview");
                 if (movie.Overview != null)
                     movie.Overview = movie.Overview.Replace("\n\n", "\n");
 
                 movie.ImdbRating = doc.SafeGetSingle("//movie/rating", -1, 10);
 
-                string release = doc.SafeGetString("//movie/release");
+                string release = doc.SafeGetString("//movie/released");
                 if (!string.IsNullOrEmpty(release))
                     movie.ProductionYear = Int32.Parse(release.Substring(0, 4));
 
@@ -230,7 +230,7 @@ namespace MediaBrowser.Library.Providers
                 movie.MpaaRating = doc.SafeGetString("//movie/certification");
 
                 movie.Directors = null;
-                foreach (XmlNode n in doc.SelectNodes("//people/person[@job='director']/name"))
+                foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Director']/name"))
                 {
                     if (movie.Directors == null)
                         movie.Directors = new List<string>();
@@ -240,7 +240,7 @@ namespace MediaBrowser.Library.Providers
                 }
 
                 movie.Writers = null;
-                foreach (XmlNode n in doc.SelectNodes("//people/person[@job='author']/name"))
+                foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Author']/name"))
                 {
                     if (movie.Writers == null)
                         movie.Writers = new List<string>();
@@ -251,28 +251,28 @@ namespace MediaBrowser.Library.Providers
 
 
                 movie.Actors = null;
-                foreach (XmlNode n in doc.SelectNodes("//people/person[@job='actor']"))
+                foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Actor']"))
                 {
                     if (movie.Actors == null)
                         movie.Actors = new List<Actor>();
-                    string name = n.SafeGetString("name");
-                    string role = n.SafeGetString("role");
+                    string name = n.SafeGetString("@name");
+                    string role = n.SafeGetString("@character");
                     if (!string.IsNullOrEmpty(name))
                         movie.Actors.Add(new Actor { Name = name, Role = role });
                 }
 
 
-                string img = doc.SafeGetString("//movie/poster[@size='original']");
+                string img = doc.SafeGetString("//movie/images/image[@type='poster' and @size='original']/@url");
                 if (img != null)
                     movie.PrimaryImagePath = img;
 
                 movie.BackdropImagePaths = new List<string>();
-                foreach (XmlNode n in doc.SelectNodes("//movie/backdrop[@size='original']"))
+                foreach (XmlNode n in doc.SelectNodes("//movie/images/image[@type='backdrop' and @size='original']/@url"))
                 {
                     movie.BackdropImagePaths.Add(n.InnerText);
                 }
 
-                XmlNodeList nodes = doc.SelectNodes("//category/name");
+                XmlNodeList nodes = doc.SelectNodes("//movie/categories/category[@type='genre']/@name");
                 List<string> genres = new List<string>();
                 foreach (XmlNode node in nodes)
                 {
@@ -330,29 +330,42 @@ namespace MediaBrowser.Library.Providers
             ret.Add("Animation Film", "Animation");
             ret.Add("Comedy Film", "Comedy");
             ret.Add("Crime Film", "Crime");
+            ret.Add("Children's Film", "Children");
             ret.Add("Disaster Film", "Disaster");
             ret.Add("Documentary Film", "Documentary");
             ret.Add("Drama Film", "Drama");
             ret.Add("Eastern", "Eastern");
             ret.Add("Environmental", "Environmental");
             ret.Add("Erotic Film", "Erotic");
+            ret.Add("Family Film", "Family");
             ret.Add("Fantasy Film", "Fantasy");
             ret.Add("Historical Film", "History");
             ret.Add("Horror Film", "Horror");
-            ret.Add("Musical Film", "Musical ");
+            ret.Add("Musical Film", "Musical");
             ret.Add("Mystery", "Mystery");
             ret.Add("Mystery Film", "Mystery");
+            ret.Add("Romance Film", "Romance");
             ret.Add("Road Movie", "Road Movie");
             ret.Add("Science Fiction Film", "Sci-Fi");
+            ret.Add("Science Fiction", "Sci-Fi");
             ret.Add("Thriller", "Thriller");
             ret.Add("Thriller Film", "Thriller");
-            ret.Add("Western", "Western ");
+            ret.Add("Western", "Western");
+            ret.Add("Music", "Music");
+            ret.Add("Sport", "Sport");
+            ret.Add("War", "War");
+            ret.Add("Short", "Short");
+            ret.Add("Biography", "Biography");
+            ret.Add("Film-Noir", "Film-Noir");
+            ret.Add("Game-Show", "Game-Show");
 
             return ret;
         }
 
         private string MapGenre(string g)
         {
+            if (genreMap.ContainsValue(g)) return g; //the new api has cleaned up most of these
+
             if (genreMap.ContainsKey(g))
                 return genreMap[g];
             else

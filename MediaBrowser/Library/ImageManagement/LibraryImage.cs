@@ -80,8 +80,10 @@ namespace MediaBrowser.Library.ImageManagement {
 
                         Async.Queue("Validate Image Thread", () =>
                         {
-                            if (info != null) {
-                                if (ImageOutOfDate(info.Date)) {
+                            if (info != null)
+                            {
+                                if (ImageOutOfDate(info.Date))
+                                {
                                     ClearLocalImages();
                                 }
                             }
@@ -118,12 +120,14 @@ namespace MediaBrowser.Library.ImageManagement {
         public string GetLocalImagePath() {
             EnsureLoaded();
             string path = ImageCache.Instance.GetImagePath(Id);
+            if (String.IsNullOrEmpty(path)) this.Corrupt = true;
             return path;
         }
 
         public string GetLocalImagePath(int width, int height) {
             EnsureLoaded();
             string path = ImageCache.Instance.GetImagePath(Id, width, height);
+            if (String.IsNullOrEmpty(path)) this.Corrupt = true;
             return path;
         }
 

@@ -112,6 +112,7 @@ namespace MediaBrowser.Code.ModelItems {
                 localImage = source();
                 if (localImage != null) break;
                 // during aggressive metadata updates - images may be blank
+                Logger.ReportInfo("Image source not available waiting..."); 
                 Thread.Sleep(100 * retries); 
             }
 
@@ -156,6 +157,7 @@ namespace MediaBrowser.Code.ModelItems {
 
             Image newImage = null;
             if (Kernel.Instance.ConfigData.CacheAllImagesInMemory) {
+                Logger.ReportVerbose("Loading image (cacheall true) : " + localPath);
                 byte[] bytes;
                 lock (ProtectedFileStream.GetLock(localPath)) {
                     bytes = File.ReadAllBytes(localPath);
@@ -169,8 +171,8 @@ namespace MediaBrowser.Code.ModelItems {
             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
             {
 
-                Logger.ReportVerbose("Loading image : " + localPath);
                 if (newImage == null) {
+                    Logger.ReportVerbose("Loading image : " + localPath);
                     newImage = new Image("file://" + localPath);
                 }
 

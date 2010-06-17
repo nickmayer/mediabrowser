@@ -36,7 +36,7 @@ namespace MediaBrowser.Util
         public void Dispose()
         {
             stopwatch.Stop();
-            string message = string.Format(Application.CurrentInstance.StringData("ProfilerTimeProf"),
+            string message = string.Format("{1} took {2} seconds.",
                 caller, name, ((float)stopwatch.ElapsedMilliseconds / 1000).ToString("F"));
             Logger.ReportInfo(message);
             //Take out the messages to the UI for now -ebr

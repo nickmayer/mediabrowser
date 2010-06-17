@@ -4,10 +4,6 @@
 
 	<UI Name="PluginUpdateButton">
 
-		<Locals>
-      <Command Name="UpdatePlugins" Description="^"/>
-		</Locals>
-
 
 		<Content>
       <Panel Name="MainPanel"  >
@@ -15,7 +11,7 @@
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="10,10"/>
         </Layout>
         <Children>
- 			    <me:GreenBallButton Command="[UpdatePlugins]" MaximumSize="40,40" />
+ 			    <me:GreenBallIndicator MaximumSize="40,40" />
           <Text Color="AntiqueWhite" Font="Segoe Media Center, 16" Content="Some of your plug-ins have updates available" />
         </Children>
       </Panel>
@@ -23,12 +19,10 @@
 
 	</UI>
   
-  <UI Name="GreenBallButton">
+  <UI Name="GreenBallIndicator">
 
     <Properties>
-
-      <!-- Command is a required parameter. -->
-      <ICommand Name="Command" ICommand="$Required"/>
+      <cor:String Name="LabelText" String="" />
 
       <!-- Label color and font properties. -->
       <Font Name="LabelFont" Font="Century Gothic,16"/>
@@ -38,50 +32,16 @@
 
     </Properties>
 
-    <Locals>
-
-      <!-- React to "click" input. -->
-      <ClickHandler Name="Clicker" Command="[Command]"/>
-
-    </Locals>
-
     <Rules>
       
-      <!-- make non-interactive for now -->
+      <!-- make non-interactive -->
       <Default Target="[Input.KeyInteractive]" Value="false" />
       
       <!-- The command description is displayed by the text box. A  -->
       <!-- binding is used in case the description changes at       -->
       <!-- runtime.                                                 -->
-      <Binding Source="[Command.Description]" Target="[LabelShadow.Content]"/>
-      <Binding Source="[Command.Description]" Target="[Label.Content]"/>
-
-      <!-- Clicking state and effects -->
-      <Condition Source="[Clicker.Clicking]" SourceValue="true">
-        <Actions>
-          <Set Target="[Label.Color]" Value="[LabelClicking]"/>
-        </Actions>
-      </Condition>
-
-      <!-- Mouse and key focused state and effects -->
-      <Rule ConditionLogicalOp="Or">
-        <Conditions>
-          <Equality Source="[Input.MouseFocus]" Value="true"/>
-          <Equality Source="[Input.KeyFocus]" Value="true"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[Label.Color]" Value="[LabelHover]"/>
-        </Actions>
-      </Rule>
-
-      <!-- Accessibility -->
-      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
-      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
-      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
-      <Binding Target="[Accessible.Name]"                 Source="[Command.Description]"/>
-      <Default Target="[Accessible.DefaultActionCommand]" Value="[Command]"/>
-      <Default Target="[Accessible.DefaultAction]"        Value="Press"/>
-      <Default Target="[Accessible.Role]"                 Value="PushButton"/>
+      <Binding Source="[LabelText]" Target="[LabelShadow.Content]"/>
+      <Binding Source="[LabelText]" Target="[Label.Content]"/>
 
     </Rules>
 
@@ -99,7 +59,7 @@
           </Text>
 
           <Graphic Name="GreenBallLight" Content="image://me:GreenBallLight"
-                   MouseInteractive="true">
+                   MouseInteractive="false">
             <Animations>
               <Animation Type="Idle" Loop="-1">
                 <Keyframes>

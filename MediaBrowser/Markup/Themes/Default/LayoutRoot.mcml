@@ -133,6 +133,7 @@
       <!-- Backdrop Visbile Bindings -->
       <Binding Source="[Application.Config.ShowRootBackground]" Target="[BG_InitialFolder.Visible]" />
       <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
+      <Binding Source="[Folder.BackdropImage]" Target="[MainBG.Image]" />
 
 
       <Condition Source="[SelectedItem.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />

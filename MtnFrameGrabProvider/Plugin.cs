@@ -88,7 +88,7 @@ namespace MtnFrameGrabProvider {
         {
             get
             {
-                return new System.Version(2, 2, 3, 0);
+                return new System.Version(2, 2, 4, 0);
             }
         }
         public static void EnsureMtnIsExtracted()

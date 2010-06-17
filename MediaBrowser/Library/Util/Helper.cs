@@ -85,6 +85,7 @@ namespace MediaBrowser.LibraryManagement
                 case ".mkv":
                 case ".divx":
                 case ".dvr-ms":
+                case ".wtv":
                 case ".ogm":
                     return true;
 
