@@ -61,7 +61,7 @@ namespace MediaBrowser.Library.Entities {
 
         public LibraryImage PrimaryImage {
             get {
-                if (this is Media || this is Folder)
+                if (this is Media || this is Folder || this is Person )
                     return GetImage(PrimaryImagePath, true);
                 else
                     return GetImage(PrimaryImagePath);
