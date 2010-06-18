@@ -1614,6 +1614,9 @@ sortorder: {2}
                     Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"));
                     Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"));
                     Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
+                    //force MB to re-build library next time
+                    config.LastFullRefresh = DateTime.MinValue;
+                    config.Save();
 
                 }
                 catch (Exception ex)
@@ -1633,6 +1636,9 @@ sortorder: {2}
                 {
                     Directory.Delete(ApplicationPaths.AppImagePath,true);
                     Directory.CreateDirectory(ApplicationPaths.AppImagePath);
+                    //force MB to re-build library next time
+                    config.LastFullRefresh = DateTime.MinValue;
+                    config.Save();
                 }
                 catch (Exception ex)
                 {
