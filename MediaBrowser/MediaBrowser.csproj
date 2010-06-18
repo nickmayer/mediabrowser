@@ -630,6 +630,7 @@
     <None Include="Library\ImageManagement\FilesystemProcessedImage.cs" />
     <Compile Include="Library\ImageManagement\ImageCache.cs" />
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
+    <Compile Include="Library\Interfaces\ITrailerProvider.cs" />
     <Compile Include="Library\Localization\BaseStrings.cs" />
     <Compile Include="Library\Localization\LocalizedStrings.cs" />
     <Compile Include="Library\Network\WebDownload.cs" />
@@ -661,6 +662,7 @@
     <Compile Include="Library\Plugins\PluginSourceCollection.cs" />
     <Compile Include="Library\Plugins\RemotePlugin.cs" />
     <Compile Include="Library\Providers\FolderProviderFromXml.cs" />
+    <Compile Include="Library\Providers\LocalTrailerProvider.cs" />
     <Compile Include="Library\Ratings.cs" />
     <Compile Include="Library\Threading\DelayedWeakReference.cs" />
     <Compile Include="Library\UI\ConfigPanel.cs" />

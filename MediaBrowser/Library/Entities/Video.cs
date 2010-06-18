@@ -103,7 +103,7 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-       protected static IEnumerable<string> GetChildVideos(IFolderMediaLocation location, string[] ignore) {
+       public static IEnumerable<string> GetChildVideos(IFolderMediaLocation location, string[] ignore) {
             if (location.Path.EndsWith("$RECYCLE.BIN")) yield break;
 
             foreach (var child in location.Children)

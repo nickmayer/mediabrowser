@@ -24,6 +24,7 @@ using System.Net;
 using MediaBrowser.Util;
 using MediaBrowser.Library.Threading;
 using Microsoft.MediaCenter.UI;
+using MediaBrowser.Library.Providers;
 
 namespace MediaBrowser.Library {
 
@@ -251,17 +252,18 @@ namespace MediaBrowser.Library {
                 repository = new SafeItemRepository(new ItemRepository());
             }
 
-           
+
             var kernel = new Kernel()
             {
-                PlaybackControllers = new List<IPlaybackController>(),
-                MetadataProviderFactories = MetadataProviderHelper.DefaultProviders(),
-                ConfigData = config,
-                StringData = new LocalizedStrings(),
-                ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),                
-                ItemRepository = repository,
-                MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory()
-            };
+             PlaybackControllers = new List<IPlaybackController>(),
+             MetadataProviderFactories = MetadataProviderHelper.DefaultProviders(),
+             ConfigData = config,
+             StringData = new LocalizedStrings(),
+             ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),
+             ItemRepository = repository,
+             MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory(),
+             TrailerProviders = new List<ITrailerProvider>() { new LocalTrailerProvider()}
+             };
 
             // kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
             kernel.PlaybackControllers.Add(new PlaybackController());
@@ -334,6 +336,8 @@ namespace MediaBrowser.Library {
             get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; }
         }
 
+
+        public List<ITrailerProvider> TrailerProviders{ get; set; }
         public AggregateFolder RootFolder { get; set; }
         public List<IPlugin> Plugins { get; set; }
         public List<IPlaybackController> PlaybackControllers { get; set; }
@@ -364,6 +368,19 @@ namespace MediaBrowser.Library {
             {
                 return StringData.LocalStrings;
             }
+        }
+
+        public IEnumerable<string> GetTrailers(Movie movie)
+        {
+            foreach (var trailerProvider in TrailerProviders)
+            {
+                var trailers = trailerProvider.GetTrailers(movie).ToList();
+                if (trailers.Count > 0)
+                {
+                    return trailers;
+                }
+            }
+            return new List<string>();
         }
 
         public string GetString(string name)
