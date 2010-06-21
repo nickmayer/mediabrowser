@@ -107,7 +107,7 @@
                                 <CheckBox Height="22" Margin="10,120,10,0" Name="cbxOptionAutoEnter" VerticalAlignment="Top" Click="cbxOptionAutoEnter_Click" ToolTip="Automatically bypass an item with only one folder in it and continue to the contents of that folder." >Auto Enter Single Folder Items</CheckBox>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Media Tracking" HorizontalAlignment="Left" Margin="300,35,0,0" Name="groupBox2" Width="270" Height="170" VerticalAlignment="Top">
+                        <GroupBox Header="Media Tracking" HorizontalAlignment="Left" Margin="20,210,0,0" Name="groupBox2" Height="150" Width="270" VerticalAlignment="Top">
                             <Grid>
                                 <CheckBox Margin="10,10,10,0" Name="cbxOptionUnwatchedCount" Content="Show Unwatched Count" Height="22" VerticalAlignment="Top" Click="cbxOptionUnwatchedCount_Click" ToolTip="Show unwatched counter on top of poster art" />
                                 <CheckBox Margin="10,32,10,0" Name="cbxOptionUnwatchedOnFolder" Content="Watched Indicator on Folders" Height="22" VerticalAlignment="Top" Click="cbxOptionUnwatchedOnFolder_Click" ToolTip="Display indicator for previously viewed folders" />
@@ -116,28 +116,34 @@
                                 <CheckBox Margin="10,98,10,0" Name="cbxOptionDefaultToUnwatched" Content="Default to First Unwatched Item" Click="cbxOptionDefaultToUnwatched_Click" Height="22" VerticalAlignment="Top" ToolTip="Automatically highlight the first unwatched item" />
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Theme Settings" Margin="20,210,0,20" Name="groupBox3" Width="270" HorizontalAlignment="Left">
+                        <GroupBox Header="Theme Settings" Margin="300,35,0,0" HorizontalAlignment="Left" Name="groupBox3" Height="125" Width="430" VerticalAlignment="Top">
                             <Grid>
-                                <ComboBox Height="28" HorizontalAlignment="Right" Margin="0,10,10,0" Name="ddlOptionViewTheme" VerticalAlignment="Top" Width="120" SelectionChanged="ddlOptionViewTheme_SelectionChanged" ToolTip="Visual theme of Media Browser" />
-                                <Label Height="28" Margin="10,10,135,0" VerticalAlignment="Top" ToolTip="Visual theme of Media Browser">Visual Theme</Label>
-                                <ComboBox Height="28" HorizontalAlignment="Right" Margin="0,50,10,0" Name="ddlOptionThemeColor" VerticalAlignment="Top" Width="120" SelectionChanged="ddlOptionThemeColor_SelectionChanged" ToolTip="Change the color scheme of a theme" />
-                                <Label Margin="10,50,135,0" VerticalAlignment="Top" ToolTip="Change the color scheme of a theme">Color Scheme</Label>
-                                <ComboBox Height="28" HorizontalAlignment="Right" Margin="0,90,10,0" Name="ddlOptionThemeFont" VerticalAlignment="Top" Width="120" SelectionChanged="ddlOptionThemeFont_SelectionChanged" ToolTip="Font size displayed within Media Browser" />
-                                <Label Margin="10,90,135,0" VerticalAlignment="Top" ToolTip="Font size displayed within Media Browser">Font Size</Label>
-                                <CheckBox Margin="10,130,10,0" Name="cbxOptionTransparent" ToolTip="Enable transparent background" Click="cbxOptionTransparent_Click" Height="22" VerticalAlignment="Top">Show Theme Background</CheckBox>
+                                <Label Height="28" Margin="10,5,0,0" Width="130" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="Visual theme of Media Browser">Visual Theme</Label>
+                                <Label Margin="150,5,35,0" Width="130" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Change the color scheme of a theme">Color Scheme</Label>
+                                <Label Margin="290,5,0,0" Width="130" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Font size displayed within Media Browser">Font Size</Label>
+                                <ComboBox Height="28" HorizontalAlignment="Left" Margin="10,32,10,0" Name="ddlOptionViewTheme" VerticalAlignment="Top" Width="130" SelectionChanged="ddlOptionViewTheme_SelectionChanged" ToolTip="Visual theme of Media Browser" />
+                                <ComboBox Height="28" HorizontalAlignment="Left" Margin="150,32,10,0" Name="ddlOptionThemeColor" VerticalAlignment="Top" Width="130" SelectionChanged="ddlOptionThemeColor_SelectionChanged" ToolTip="Change the color scheme of a theme" />
+                                <ComboBox Height="28" HorizontalAlignment="Left" Margin="290,32,10,0" Name="ddlOptionThemeFont" VerticalAlignment="Top" Width="118" SelectionChanged="ddlOptionThemeFont_SelectionChanged" ToolTip="Font size displayed within Media Browser" />
+                                <CheckBox Margin="10,76,10,0" Name="cbxOptionTransparent" ToolTip="Enable transparent background" Click="cbxOptionTransparent_Click" Height="22" VerticalAlignment="Top">Show Theme Background</CheckBox>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Enhanced Home Screen" HorizontalAlignment="Left" Margin="300,210,0,20" Name="groupBox4" Width="270">
+                        <GroupBox Header="Enhanced Home Screen" HorizontalAlignment="Left" Margin="300,165,0,0" VerticalAlignment="Top" Height="125" Name="groupBox4" Width="430">
                             <Grid>
                                 <CheckBox Height="22" Margin="10,10,0,0" Name="cbxRootPage" ToolTip="Enable the enhanced home screen" VerticalAlignment="Top" Click="cbxRootPage_Click">Enable Enhanced Home Screen</CheckBox>
-                                <Label Margin="10,50,130,0" Height="25" VerticalAlignment="Top" ToolTip="Yahoo! Weather location ID (e.g. UKXX0055)">Weather ID</Label>
-                                <Label Margin="10,90,130,0" ToolTip="Weather temperature unit" Height="25" VerticalAlignment="Top">Weather Unit</Label>
-                                <TextBox Margin="0,50,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="25" Width="120" Name="tbxWeatherID" />
-                                <ComboBox Margin="0,90,10,0" Name="ddlWeatherUnits" ToolTip="Change the color scheme of a theme" Height="28" Width="80" VerticalAlignment="Top" HorizontalAlignment="Right" />
-                                <Button Height="28" Margin="0,130,10,10" Name="btnWeatherID" HorizontalAlignment="Right" VerticalAlignment="Top" Click="btnWeatherID_Click" Width="80">Save</Button>
-                                <TextBlock Margin="10,130,100,0" Height="28" FontSize="12" VerticalAlignment="Top">
-                                    <Hyperlink NavigateUri="http://weather.yahoo.com/" RequestNavigate="HandleRequestNavigate">Yahoo! Weather ID Lookup</Hyperlink>
+                                <Grid Name="WeatherGrid">
+                                    <!--<Label Margin="10,32,0,0" Height="28" Width="130" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Yahoo! Weather location ID (e.g. UKXX0055)">Yahoo! Weather ID</Label>-->
+                                    <TextBlock Margin="10,32,0,0" Padding="5,5,5,5" Height="28" FontSize="14" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" ToolTip="Go to the Yahoo! Weather">
+                                        <Hyperlink NavigateUri="http://weather.yahoo.com/" RequestNavigate="HandleRequestNavigate">Yahoo! Weather ID</Hyperlink>
+                                    </TextBlock>
+                                    <Label Margin="150,31,0,0" HorizontalAlignment="Left" ToolTip="Weather temperature unit" Height="28" VerticalAlignment="Top">Weather Unit</Label>
+                                    <TextBox Margin="10,60,10,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Width="130" Name="tbxWeatherID" />
+                                    <ComboBox Margin="150,60,0,0" Name="ddlWeatherUnits" ToolTip="Change the color scheme of a theme" Height="28" Width="130" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                                    <Button Height="28" Margin="290,60,10,10" Name="btnWeatherID" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnWeatherID_Click" Width="55">Save</Button>
+                                </Grid>
+                                <TextBlock Margin="350,60,0,0" TextAlignment="Right" Padding="5,5,5,5" Height="28" FontSize="14" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55">
+                                    <Hyperlink NavigateUri="http://community.mediabrowser.tv/permalinks/1368/how-do-i-show-the-weather-on-supported-themes" RequestNavigate="HandleRequestNavigate">Help?</Hyperlink>
                                 </TextBlock>
+                                
                             </Grid>
                         </GroupBox>
                     </Grid>

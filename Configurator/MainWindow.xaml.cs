@@ -382,7 +382,7 @@ namespace Configurator
 
             tbxWeatherID.Text = config.YahooWeatherFeed;
             if (config.YahooWeatherUnit.ToLower() == "f")
-                ddlWeatherUnits.SelectedItem = "Farenheit";
+                ddlWeatherUnits.SelectedItem = "Fahrenheit";
             else
                 ddlWeatherUnits.SelectedItem = "Celsius";
 
@@ -432,7 +432,7 @@ namespace Configurator
             ddlOptionThemeFont.Items.Add("Small");
             // Weather Units
             ddlWeatherUnits.Items.Add("Celsius");
-            ddlWeatherUnits.Items.Add("Farenheit");
+            ddlWeatherUnits.Items.Add("Fahrenheit");
             // Parental Ratings
             ddlOptionMaxAllowedRating.ItemsSource = ratings.ToString();
             ddlFolderRating.ItemsSource = ratings.ToString();
@@ -1208,6 +1208,8 @@ sortorder: {2}
         }
         private void cbxRootPage_Click(object sender, RoutedEventArgs e)
         {
+            WeatherGrid.IsEnabled = (bool)cbxRootPage.IsChecked;
+
             config.EnableRootPage = (bool)cbxRootPage.IsChecked;
             SaveConfig();
         }
@@ -1357,7 +1359,7 @@ sortorder: {2}
 
         private void btnWeatherID_Click(object sender, RoutedEventArgs e)
         {
-            if (ddlWeatherUnits.SelectedItem.ToString() == "Farenheit")
+            if (ddlWeatherUnits.SelectedItem.ToString() == "Fahrenheit")
                 config.YahooWeatherUnit = "f";
             else
                 config.YahooWeatherUnit = "c";
