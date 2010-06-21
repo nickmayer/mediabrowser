@@ -1,0 +1,157 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	  xmlns:lpo="resx://Diamond/Diamond.Resources/LayoutPoster"
+	  xmlns:lth="resx://Diamond/Diamond.Resources/LayoutThumb"
+	  xmlns:lde="resx://Diamond/Diamond.Resources/LayoutDetails"
+	  xmlns:lcf="resx://Diamond/Diamond.Resources/LayoutCoverflow2"
+	  xmlns:lr="resx://Diamond/Diamond.Resources/LayoutRoot"
+	  xmlns:lts="resx://Diamond/Diamond.Resources/LayoutThumbStrip"
+	  xmlns:la="resx://Diamond/Diamond.Resources/LayoutAlbum"      
+      
+      >
+
+  <!--*****************************************************************************************************************
+  
+  This is an example of a page detail area selector.  To build your theme you must modify the individual mcml
+  files for your specific views OR change the references to existing/default views in MB.
+  
+  The project template should have generated references to and shell mcml for standard view UIs with the following naming convention:
+  
+    [projectname]LayoutPoster
+    [projectname]LayoutThumb
+    [projectname]LayoutDetails
+    [projectname]LayoutCoverflow
+    [projectname]LayoutThumbStrip
+    
+    
+  *********************************************************************************************************************-->
+  
+	<UI Name="PageDetailAreaDiamond">
+		<Properties>
+			<a:Application Name="Application" Application="$Required"/>
+			<lib:FolderModel Name="Folder" FolderModel="$Required"/>
+		</Properties>
+
+
+		<Rules>
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[Folder.IsRoot]" Value="true"/>
+          <Equality Source="[Application.Config.EnableRootPage]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LayoutRoot.Visible]" Value="true"/>
+          <Set Target="[DetailsView.Visible]" Value="false"/>
+          <Set Target="[PosterView.Visible]" Value="false"/>
+          <Set Target="[ThumbView.Visible]" Value="false"/>
+          <Set Target="[ThumbStripView.Visible]" Value="false"/>
+          <Set Target="[CoverFlow.Visible]" Value="false"/>
+          <Set Target="[AlbumArtist.Visible]" Value="false"/>
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[Folder.ItemTypeString]" Value="ArtistAlbum"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[DetailsView.Visible]" Value="false"/>
+          <Set Target="[PosterView.Visible]" Value="false"/>
+          <Set Target="[ThumbView.Visible]" Value="false"/>
+          <Set Target="[ThumbStripView.Visible]" Value="false"/>
+          <Set Target="[CoverFlow.Visible]" Value="false"/>
+          <Set Target="[AlbumArtist.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+      
+			<!--<Condition Source="[Input.DeepKeyFocus]" SourceValue="false" ConditionOp="Equals">
+				<Actions>
+					<Set Target="[MainPanel.Alpha]" Value="0.7" />
+				</Actions>
+			</Condition>
+
+			<Condition Source="[Input.DeepKeyFocus]" SourceValue="true" ConditionOp="Equals">
+				<Actions>
+					<Set Target="[MainPanel.Alpha]" Value="1" />
+				</Actions>
+			</Condition>-->
+
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Detail" Target="[DetailsView.Visible]" Value="true" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Detail" Target="[DetailsView.Visible]" Value="false" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[PosterView.Visible]" Value="true" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Poster" Target="[PosterView.Visible]" Value="false" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Thumb" Target="[ThumbView.Visible]" Value="true" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Thumb" Target="[ThumbView.Visible]" Value="false" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="ThumbStrip" Target="[ThumbStripView.Visible]" Value="true" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="ThumbStrip" Target="[ThumbStripView.Visible]" Value="false" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="CoverFlow" Target="[CoverFlow.Visible]" Value="true" />
+			<Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="CoverFlow" Target="[CoverFlow.Visible]" Value="false" />
+      <Condition Source="[Folder.ItemTypeString]" ConditionOp="NotEquals" SourceValue="ArtistAlbum" Target="[AlbumArtist.Visible]" Value="false" />
+
+
+		</Rules>
+
+		<Content>
+			<Panel Name="MainPanel" Layout="Form">
+				<Animations>
+					<Animation Name="AlphaAnimation" Type="Alpha">
+						<Keyframes>
+							<AlphaKeyframe Time="0.0"  RelativeTo="Current" Interpolation="EaseIn"/>
+							<AlphaKeyframe Time="0.1"  RelativeTo="Final"/>
+						</Keyframes>
+					</Animation>
+				</Animations>
+				<Children>
+
+          <!--  View Details-->
+          <lr:LayoutRoot Name="LayoutRoot" Folder="[Folder]" Application="[Application]" Visible="false"  >
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
+            </LayoutInput>
+          </lr:LayoutRoot>
+
+          <lde:DiamondLayoutDetails Name="DetailsView" Visible="false" Item="[Folder]" Application="[Application]" >
+						<LayoutInput>
+							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+						</LayoutInput>
+					</lde:DiamondLayoutDetails>
+
+					<lpo:DiamondLayoutPoster Name="PosterView" Visible="false" Application="[Application]" Folder="[Folder]"  >
+						<LayoutInput>
+							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1" />
+						</LayoutInput>
+					</lpo:DiamondLayoutPoster>
+
+					<lth:DiamondLayoutThumb Name="ThumbView" Visible="false" Folder="[Folder]" Application="[Application]" >
+						<LayoutInput>
+							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+						</LayoutInput>
+					</lth:DiamondLayoutThumb>
+
+          <lcf:DiamondLayoutCoverflow Name="CoverFlow" Visible="false" Folder="[Folder]" Application="[Application]"
+                               UseCustomAnchor="false">
+						<LayoutInput>
+							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+						</LayoutInput>
+					</lcf:DiamondLayoutCoverflow>
+
+					<lts:DiamondLayoutThumbStrip Name="ThumbStripView" Visible="false" Item="[Folder]" Application="[Application]" >
+						<LayoutInput>
+							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+						</LayoutInput>
+					</lts:DiamondLayoutThumbStrip>
+
+          <la:LayoutAlbum Name="AlbumArtist" Visible="false" Item="[Folder]" Application="[Application]">
+            <LayoutInput>
+              <FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+            </LayoutInput>
+          </la:LayoutAlbum>
+          
+				</Children>
+			</Panel>
+		</Content>
+	</UI>
+
+</Mcml>

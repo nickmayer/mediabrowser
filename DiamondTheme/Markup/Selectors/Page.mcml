@@ -1,0 +1,406 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor="assembly://MSCorLib/System"
+    xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+    xmlns:s="file://Styles_DoNotEdit.mcml"
+    xmlns:f="file://Fonts_DoNotEdit.mcml"
+    xmlns:di="resx://Diamond/Diamond.Resources/Images"
+    xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
+    xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
+    xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
+      
+    xmlns:in="resx://Diamond/Diamond.Resources/DiamondInfo"
+    xmlns:pda="resx://Diamond/Diamond.Resources/PageDetailArea"
+    xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
+    xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+      
+    xmlns:cm="resx://Diamond/Diamond.Resources/ContextMenu"
+      
+    xmlns:db="resx://Diamond/Diamond.Resources/DiamondBall"
+    xmlns:dfm="resx://Diamond/Diamond.Resources/DiamondFolderMenu"
+	  xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
+    xmlns:app="assembly://Diamond/Diamond"
+    xmlns:me="Me"
+      >
+
+
+  <UI Name="PageDiamond">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
+      <IntRangedValue Name="SortOrderIndex" MinValue ="0" MaxValue="999"/>
+      
+    </Properties>
+
+    <Locals>
+      <app:Config Name="ThemeConfig" />
+      
+      <TypingHandler Name="TypingHandler" HandlerStage="Bubbled" TypingPolicy="TripleTap" >
+        <EditableText>
+          <EditableText Value="" />
+        </EditableText>
+      </TypingHandler>
+
+      <cor:Boolean Name="CanPlay" Boolean="false" />
+      <BooleanChoice Name="TopBarHasFocus" Value="false" />
+      <BooleanChoice Name="DisplayMenuButtons" Value="false" />
+
+      <AnchorLayoutInput Name="LayoutTopBarShow" Top="Parent,0" Left="Parent,0" Right="Parent,1" Horizontal="Center" />
+      <AnchorLayoutInput Name="LayoutTopBarHide" Left="Parent,0" Top="Parent,0,-100" Right="Parent,1" Horizontal="Center" />
+
+      <!-- Navigate Timer to bypass view triggering -->
+      <Timer Name="DisplayMenuTimer" Interval="1000" AutoRepeat="false" Enabled="true"/>
+      <Timer Name="RefocusTimer" Interval="250" AutoRepeat="false" Enabled="false"/>
+      <Timer Name="HideFindAsYouType" Interval="3000" AutoRepeat="false"/>
+
+      <Command Name="CloseContextMenu" />
+      <Command Name="Popup" />
+      <Command Name="ClosePopupPlay" />
+      <Command Name="FolderMenuCmd"/>
+      <Command Name="ConfigMenuCmd"/>
+      <Command Name="CloseCommand" />
+    </Locals>
+
+    <Rules>
+
+      <!-- Should be invoked when the view changes -->
+      <Changed Source="[RefocusTimer.Tick]">
+        <Actions>
+          <Set Target="[RefocusTimer.Enabled]" Value="false" />
+          <Invoke Target="[DockBar.NavigateInto]" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Folder.DisplayPrefs.ViewType.Chosen]">
+        <Actions>
+          <Set Target="[RefocusTimer.Enabled]" Value="true" />
+          <Invoke Target="[RefocusTimer.Start]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[DisplayMenuTimer.Tick]">
+        <Actions>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[DisplayMenuButtons.Value]" Value="true" />
+          <Set Target="[RefocusTimer.Enabled]" Value="false" />
+        </Actions>
+      </Changed>
+
+      <!--<Rule>
+        <Conditions>
+          <Equality Source="[TopBarHasFocus.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TheTopBar.LayoutInput]" Value="[LayoutTopBarShow]" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[TopBarHasFocus.Value]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TheTopBar.LayoutInput]" Value="[LayoutTopBarHide]" />
+        </Actions>
+      </Rule>-->
+
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[Folder.IsRoot]" Value="true"/>
+          <Equality Source="[Application.Config.EnableRootPage]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <!--<Set Target="[TimePanel.Visible]" Value="false" /> -->
+          <Set Target="[ConfigButton.Visible]" Value="true" />
+          <Set Target="[FolderButton.Visible]" Value="false" />
+          <Set Target="[NowPlaying.Visible]" Value="false"/>
+          <Set Target="[Breadcrumbs.Visible]" Value="false"/>
+          <!--<Set Target="[PCButton.Visible]" Value="false"/>-->
+          <!--<Set Target="[BottomCenterInfoPanel.Visible]" Value="false"/>-->
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[Folder.IsRoot]" Value="true"/>
+          <Equality Source="[Application.Config.EnableRootPage]" Value="false"/>
+          <Equality Source="[DisplayMenuButtons.Value]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ConfigButton.Visible]" Value="true" />
+          <Set Target="[FolderButton.Visible]" Value="true" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[Folder.IsRoot]" Value="false"/>
+          <Equality Source="[DisplayMenuButtons.Value]" Value="true" />
+          <Equality Source="[Folder.ItemTypeString]" ConditionOp="NotEquals" Value="ArtistAlbum" />
+        </Conditions>
+        <Actions>
+          <Set Target="[FolderButton.Visible]" Value="true" />
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Modified Source="[Popup.Invoked]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
+          <Set Target="[FindAsYouTypePanel.Visible]" Value="false" />
+          <Set Target="[ContextMenu.Visible]" Value="true"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[CloseContextMenu.Invoked]" >
+        <Actions>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[ContextMenu.Visible]" Value="false" />
+          <Set Target="[FindAsYouTypePanel.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[TypingHandler.DisplayValue]">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="Equals" Value="*" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Popup.Invoke]" />
+        </Actions>
+      </Changed>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.DisplayPopupPlay]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[PopupPlay.Visible]" Value="true" />
+          <Invoke Target="[PopupPlay.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[ClosePopupPlay.Invoked]">
+        <Actions>
+          <Set Target="[Application.DisplayPopupPlay]" Value="false" />
+          <!--<PlaySound Sound="sound://sd:Miniselect" />-->
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+          <Set Target="[PopupPlay.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
+
+      <Changed Source="[FolderMenuCmd.Invoked]">
+        <Actions>
+          <Set Target="[DockBar.Visible]" Value="true" />
+          <Invoke Target="[DockBar.NavigateInto]"  />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ConfigMenuCmd.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.OpenConfiguration]" showFullOptions="true" />
+        </Actions>
+      </Changed>
+
+
+      <!--<Binding Source="[Folder.BannerImage]" Target="[BannerGraphic.Content]" />-->
+
+
+      <Binding Source="[FindAsYouType.Content]" Target="[ShadowLabel.Content]" />
+      <Binding Source="[TypingHandler.DisplayValue]" Target="[FindAsYouType.Content]" />
+      <Binding Source="[TypingHandler.DisplayValue]" Target="[Folder.TripleTapSelect]" />
+
+      <Changed Source="[TypingHandler.DisplayValue]">
+        <Conditions>
+          <Equality Source="[TypingHandler.DisplayValue]" ConditionOp="NotEquals" Value="" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[HideFindAsYouType.Start]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[HideFindAsYouType.Tick]">
+        <Actions>
+          <Set Target="[TypingHandler.EditableText.Value]" Value="" />
+        </Actions>
+      </Changed>
+
+      <Binding Source="[Application.ShowNowPlaying]" Target="[NowPlaying.Visible]" />
+      <Binding Source="[Application.Config.ShowRootBackground]" Target="[BG_InitialFolder.Visible]" />
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[Overlay.Visible]" />
+
+      <Binding Source="[Application.Information.MajorActivity]" Target="[ActivityInd.Visible]"  />
+      <!-- Close Options Menu -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[CloseCommand.Invoked]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[DockBar.Visible]" Value="false"/>
+          <Invoke Target="[ViewPanel.NavigateInto]"  />
+        </Actions>
+      </Rule>
+      
+      <!-- Extender Bindings -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Overlay.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+          <Set Target="[BG_InitialFolder.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[ThemeConfig.AutoExtenderLayout]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TimePanel.LayoutInput]" Value="global://dtb:LI_Time_Extender" />
+          <Set Target="[BottomCenterInfoPanel.LayoutInput]" Value="global://dtb:LI_Information_Extender" />
+          <Set Target="[Breadcrumbs.LayoutInput]" Value="global://me:LI_Breadcrumbs_Extender" />
+          <Set Target="[Cmds.LayoutInput]" Value="global://me:LI_CmdButtons_Extender" />
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form"  Navigation="RememberFocus">
+        <Children>
+          <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]" CenterPointPercent="0.5,0.5,0.5">
+            <Children>
+
+              <!-- Folder Config Menu -->
+              <dfm:DiamondFolderMenu Name="DockBar" Application="[Application]" Folder="[Folder]"
+                          Close="[CloseCommand]"  Prefs="[Folder.DisplayPrefs]"
+                          Visible="false"
+                          Navigation="ContainAll">
+                <Animations>
+                  <Animation Animation="animation://an:PageHide" />
+                  <Animation Animation="animation://an:PageShow" />
+                </Animations>
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0.5,-285" Right="Parent,.5,285" Top="Parent,0.1" Bottom="Parent, 0.9" />
+                </LayoutInput>
+              </dfm:DiamondFolderMenu>
+
+              <!-- High Level Command Buttons -->
+              <Panel Name="Cmds" LayoutInput="global://me:LI_CmdButtons">
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" Spacing="10,0"/>
+                </Layout>
+                <Children>
+                  <!-- Config Page Button -->
+                  <db:DiamondBall Name="ConfigButton" Command="[ConfigMenuCmd]" FocusOrder="1000"
+                                  Visible="false" Icon="image://di:ConfigImg" Size="40,40" />
+                  <!-- Folder Config Button -->
+                  <db:DiamondBall Name="FolderButton" Command="[FolderMenuCmd]" FocusOrder="1000"
+                                  Visible="false"  Size="40,40"/>
+                  <!-- PC Indicator Button -->
+                  <pci:PCIndicatorButton Name="PCButton" Application="[Application]" FocusOrder="1000"
+                                         FocusImage="resx://Diamond/Diamond.Resources/BallButtonLight"
+                                         BlankImage="resx://Diamond/Diamond.Resources/BallButtonDark"
+                                         >
+                    <Animations>
+                      <Animation Type="Show">
+                        <Keyframes>
+                          <AlphaKeyframe Time="0" Value="0" />
+                          <AlphaKeyframe Time="1" Value="1" />
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </pci:PCIndicatorButton>
+                </Children>
+              </Panel>
+
+
+              <!-- Time Panel -->
+              <dtb:DiamondTime Name="TimePanel" Application="[Application]" LayoutInput="global://dtb:LI_Time" />
+
+              <!--Banner / Breadcrumbs -->
+              <Panel Name="Breadcrumbs" LayoutInput="global://me:LI_Breadcrumbs">
+                <Children>
+                  <Panel Layout="Scale">
+                    <Children>
+                      <dtb:DiamondShadowText Text="[Application.BreadCrumbs]" Font="font://f:Diamond_Medium" Color="color://s:D_Normal"/>                      
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+              <!--Information Panel -->
+              <in:DiamondInfo Name="BottomCenterInfoPanel" Application="[Application]" LayoutInput="global://dtb:LI_Information" />
+
+              <!-- find in list panel - highest Z-Order -->
+              <Panel Name="FindAsYouTypePanel"  >
+                <LayoutInput>
+                  <FormLayoutInput Bottom="Parent,1,-30" Right="Parent,1,-30"/>
+                </LayoutInput>
+                <Layout>
+                  <FlowLayout ItemAlignment="Center"/>
+                </Layout>
+                <Children>
+                  <ColorFill Content="Transparent" Padding="8,0,8,-3" Layout="Anchor">
+                    <Children>
+                      <Text Name="FindAsYouType" Font="font://f:P_FindAsYouTypeFont" Content="" Color="color://s:FontColorMedium"  />
+                      <Text Name="ShadowLabel" Content="" Color="255, 0, 0, 0" Font="font://f:P_FindAsYouTypeFont">
+                        <LayoutInput>
+                          <AnchorLayoutInput Top="FindAsYouType, 0, 2" Left="FindAsYouType, 0, 2"/>
+                        </LayoutInput>
+                      </Text>
+                    </Children>
+                  </ColorFill>
+                </Children>
+              </Panel>
+
+              <!-- Context Menu -->
+              <cm:ContextMenu Name="ContextMenu" Application="[Application]" Close="[CloseContextMenu]" Visible="false" />
+
+              <!-- Play Menu -->
+              <cm:PlayMenu Name="PopupPlay" Application="[Application]" Close="[ClosePopupPlay]" Visible="false" />
+
+              <dtb:InfoWorkingHard Name="ActivityInd" Visible="false" LayoutInput="global://dtb:LI_InfoHardActivity" />
+              
+              <!--  View Details-->
+              <pda:PageDetailAreaDiamond FocusOrder="1" Name="ViewPanel" Folder="[Folder]"
+                                         Application="[Application]"
+                                         >
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,.0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
+                </LayoutInput>
+              </pda:PageDetailAreaDiamond>
+
+              <!-- Now Playing View -->
+              <np:NowPlayingViewport Name="NowPlaying" FocusOrder="10" Application="[Application]">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0,10" Bottom="Parent,1,20" />
+                </LayoutInput>
+              </np:NowPlayingViewport>
+
+              <!-- Initial Folder Backdrop -->
+              <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]"
+                                          Visible="[Application.Config.ShowRootBackground]"
+                                          LayoutInput="global://dtb:LI_Bg">
+              </bd:InitialFolderBackground>
+
+              <Graphic Name="Overlay" Content="resx://Diamond/Diamond.Resources/DiamondMainBG"
+                       LayoutInput="global://dtb:LI_Bg_Extender" />
+
+            </Children>
+          </Clip>
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+  <AnchorLayoutInput Name="LI_CmdButtons" Left="Parent,0,70" Top="Parent,0,10" Right="Parent, 0.5, -400" Horizontal="Center" />
+  <AnchorLayoutInput Name="LI_Breadcrumbs" Top="Parent, 0,40" Left="Parent, 0.5,-250" Right="Parent,.5,250" Horizontal="Center"  />
+
+  <AnchorLayoutInput Name="LI_CmdButtons_Extender" Left="Parent,0,70" Top="Parent,0,-10" Right="Parent, 0.5, -400" Horizontal="Center" />
+  <AnchorLayoutInput Name="LI_Breadcrumbs_Extender" Top="Parent, 0,20" Left="Parent, 0.5,-250" Right="Parent,.5,250" Horizontal="Center"  />
+
+</Mcml>

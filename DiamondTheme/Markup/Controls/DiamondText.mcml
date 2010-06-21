@@ -1,0 +1,257 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+    xmlns:f="file://Fonts_DoNotEdit.mcml"
+	  xmlns:i="resx://Diamond/Diamond.Resources/Images"
+	  xmlns:me="Me">
+
+  <UI Name="ScrollableText">
+    <Properties>
+      <cor:String Name="Text" String="" />
+      <Font Name="Font" Font="$Required"/>
+      <Color Name="Color" Color="color://s:D_Light"/>
+      <Color Name="FocusColor" Color="color://s:D_Normal"/>
+      <cor:Boolean Name="DisplayBG" Boolean="true" />
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="false" />
+      <ScrollingData Name="ScrollingData" ScrollStep="1" />
+
+      <Timer Name="ScrollText" Interval="100" AutoRepeat="true" Enabled="false" />
+      <Timer Name="Delay" Interval="8000" AutoRepeat="false" Enabled="true"/>
+      <Timer Name="EndDelay" Interval="8000" AutoRepeat="false" Enabled="false"/>
+      <cor:Single Name="ScrollTime" Single="10"></cor:Single>
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="false" />
+
+      <Changed Source="[Delay.Tick]">
+        <Actions>
+          <Invoke Target="[Delay.Stop]"></Invoke>
+          <Invoke Target="[ScrollText.Start]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ScrollText.Tick]">
+        <Conditions>
+          <Equality Source="[ScrollingData.CanScrollDown]" ConditionOp="Equals" Value="true"></Equality>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollDown]" ></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ScrollText.Tick]">
+        <Conditions>
+          <Equality Source="[ScrollingData.CanScrollDown]" ConditionOp="Equals" Value="false"></Equality>
+        </Conditions>
+        <Actions>
+          <Set Target="[testtext.Content]" Value="Wait at end"></Set>
+          <Invoke Target="[ScrollText.Stop]"></Invoke>
+          <Invoke Target="[EndDelay.Start]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[EndDelay.Tick]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]" ></Invoke>
+          <Invoke Target="[Delay.Start]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Text]" InitialEvaluate="true">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]" ></Invoke>
+          <Invoke Target="[Delay.Stop]"></Invoke>
+          <Invoke Target="[Delay.Start]"></Invoke>
+          <Invoke Target="[ScrollText.Stop]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Binding Source="[Text]" Target="[TextVal.Content]" />
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+
+      <Condition Source="[DisplayBG]" ConditionOp="Equals" SourceValue="true" Target="[MainPanel.Content]" Value="image://i:DiamondTopPanel" />
+    </Rules>
+
+    <Content>
+      <Panel Layout="Center" >
+        <Children>
+
+          <Panel>
+            <Children>
+              <Text Name="testtext" Color="0,255,200,200" Font="[Font]" WordWrap="true" Content="Waiting..." Padding="0,0,0,0"></Text>
+
+            </Children>
+          </Panel>
+          <Graphic Name="MainPanel" Content="image://i:BlankImage" Layout="Dock" Padding="5,5,5,5">
+            <Children>
+
+              <Scroller Name="AutoText" Orientation="Vertical" FadeSize="5"  ScrollingData="[ScrollingData]" >
+
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Fill" ContributesToHeight="true" Vertical="Fill" />
+                </LayoutInput>
+                <Children>
+
+                  <Text Name="TextVal" Color="[Color]" Font="[Font]" WordWrap="true" Content="[Text]"
+                        Padding="0,0,0,50">
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe RelativeTo="Current" Time="0"/>
+                          <PositionKeyframe RelativeTo="Final" Time="0.1"/>
+                        </Keyframes>
+                      </Animation>
+                      <Animation Type="Alpha">
+                        <Keyframes>
+                          <AlphaKeyframe RelativeTo="Current" Time="0"/>
+                          <AlphaKeyframe RelativeTo="Final" Time="0.4"/>
+                        </Keyframes>
+                      </Animation>
+
+                    </Animations>
+                  </Text>
+
+                </Children>
+              </Scroller>
+            </Children>
+          </Graphic>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+  <UI Name="DiamondText">
+
+    <Properties>
+      <cor:String Name="Text" String="" />
+      <Font Name="Font" Font="$Required"/>
+      <Color Name="Color" Color="color://s:D_Light"/>
+      <Color Name="FocusColor" Color="color://s:D_Normal"/>
+      <Inset Name="ImagePadding" Inset="0,0,0,0"/>
+      <Image Name="FocusImage" Image="image://i:BlankImage"/>
+      <cor:Boolean Name="DisplayBG" Boolean="true" />
+    </Properties>
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
+      <ScrollingData Name="ScrollingData" />
+      <Command Name="ScrollUpCommand" />
+      <Command Name="ScrollDownCommand" />
+    </Locals>
+
+    <Rules>
+
+      <Changed Source="[Text]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Text.Length]" ConditionOp="Equals" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Text]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Text.Length]" ConditionOp="NotEquals" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+
+      <Binding Source="[Text]" Target="[TextVal.Content]" />
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[TextVal.Color]" Value="[FocusColor]"/>
+
+
+
+      <Changed Source="[ScrollUpCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[ScrollDownCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollDown]"/>
+        </Actions>
+      </Changed>
+
+      <Binding Source="[ScrollingData.CurrentPage]" Target="[CurrentPage.Content]">
+        <Transformer>
+          <FormatTransformer Format="{0:F0}"/>
+        </Transformer>
+      </Binding>
+
+      <Binding Source="[ScrollingData.TotalPages]" Target="[TotalPages.Content]">
+        <Transformer>
+          <FormatTransformer Format=" | {0:F0}"/>
+        </Transformer>
+      </Binding>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[ScrollingData.TotalPages]" ConditionOp="LessThanOrEquals" Value="1" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ScrollInfo.Visible]" Value="false" />
+        </Actions>
+      </Rule>
+
+      <Condition Source="[DisplayBG]" ConditionOp="Equals" SourceValue="true" Target="[MainPanel.Content]" Value="image://i:DiamondTopPanel" />
+
+    </Rules>
+
+    <Content>
+      <Graphic Name="MainPanel" Content="image://i:BlankImage" Layout="Dock" Padding="5,5,5,5" >
+        <Children>
+          <Clip MouseInteractive="true" FadeSize="1" Orientation="Vertical">
+            <LayoutInput>
+              <DockLayoutInput Position="Client" Alignment="Near" />
+            </LayoutInput>
+            <Children>
+              <Scroller Orientation="Vertical" FadeSize="0"  ScrollingData="[ScrollingData]" >
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Fill" ContributesToHeight="true" Vertical="Near" />
+                </LayoutInput>
+                <Children>
+                  <Text Name="TextVal" Color="[Color]" Font="[Font]" WordWrap="true" Content="[Text]"
+                        Padding="0,0,0,50">
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" Value="0,0,0" RelativeTo="Current" Interpolation="Exp"/>
+                          <PositionKeyframe Time=".1" Value="0,0,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Text>
+
+                </Children>
+              </Scroller>
+            </Children>
+          </Clip>
+
+
+
+          <Panel Name="ScrollInfo" Visible="true" Layout="HorizontalFlow"  >
+            <LayoutInput>
+              <DockLayoutInput Position="Bottom" Alignment="Far" />
+            </LayoutInput>
+            <Children>
+              <Text Name="CurrentPage" Font="[Font]" Color="[Color]" />
+              <Text Name="TotalPages"  Font="[Font]" Color="[Color]" />
+            </Children>
+          </Panel>
+        </Children>
+      </Graphic>
+    </Content>
+  </UI>
+
+
+</Mcml>

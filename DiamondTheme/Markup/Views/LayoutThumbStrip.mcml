@@ -1,0 +1,132 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+	  xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	  xmlns:ps="resx://Diamond/Diamond.Resources/ThumbStripScroller"
+	  xmlns:i="resx://Diamond/Diamond.Resources/Images"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+	  xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
+	  xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
+    xmlns:mip="resx://Diamond/Diamond.Resources/DiamondMediaInfoPanel"
+    xmlns:app="assembly://Diamond/Diamond"
+      >
+
+
+
+  <UI Name="DiamondLayoutThumbStrip">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:FolderModel Name="Item" FolderModel="$Required"/>
+      <app:Config Name="ThemeConfig" />
+    </Properties>
+
+    <Locals>
+      <lib:Item Name="SelectedItem" Item="[Item.SelectedChild]" />
+
+      <cor:Int32 Name="CurrentItemIndex" Int32="0"/>
+      <BooleanChoice Name="Vertical" Value="false" />
+      <Timer Name="InfoTimer" AutoRepeat="false" Interval="400" Enabled="false"/>
+
+      <AnchorLayoutInput Name="BaseLayout" Bottom="Parent, 1,-100" Top="Parent,0,100"  Horizontal="Fill" />
+      <!-- Info Panel Layout -->
+      <AnchorLayoutInput Name="LayoutInfoPanel" Left="Parent,0.5,-400" Right="Parent,0.5,400" Bottom="Parent,.55" Top="Parent, 0, 95" />
+      <AnchorLayoutInput Name="LayoutInfoPanelBg" Left="Parent,0.5,-405" Right="Parent,0.5,405" Top="Parent,0,90" Bottom="Parent, .53,5" />
+    </Locals>
+
+    <Rules>
+      <!-- Backdrop-->
+      <Binding Target="[Backdrop.Image]" Source="[Item.SelectedChild.BackdropImage]" />
+      <Binding Target="[Backdrop.Item]" Source="[Item.SelectedChild]" />
+      <Binding Target="[Backdrop.Visible]"   Source="[Item.DisplayPrefs.UseBackdrop.Value]">
+        <Conditions>
+          <Equality Source="[Application.Config.ShowBackdrop]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+      </Binding>
+
+      <!--<Binding Target="[Application.CurrentItem]" Source="[Item.SelectedChild]"></Binding>-->
+
+      <Changed Source="[Item.SelectedChildIndex]" InitialEvaluate="true">
+        <Conditions>
+          <Equality ConditionOp="NotEquals" Source="[Item.SelectedChildIndex]" Value="-1"></Equality>
+        </Conditions>
+        <Actions>
+          <Set Target="[InfoTimer.Enabled]" Value="true"/>
+          <Invoke Target="[InfoTimer.Stop]" />
+          <Invoke Target="[InfoTimer.Start]" />
+        </Actions>
+      </Changed>
+      <Changed Source="[InfoTimer.Tick]">
+        <Actions>
+          <Set Target="[SelectedItem]" Value="[Item.SelectedChild]" />
+        </Actions>
+      </Changed>
+
+      <!-- Title Bindings -->
+      <Binding Source="[Item.SelectedChild]" Target="[TitleUI.Item]"/>
+
+      <!-- InfoBox Bindings -->
+      <Binding Source="[SelectedItem]" Target="[InfoBox.Item]" >
+        <Conditions>
+          <Equality Source="[ThemeConfig.InfoBoxThumbstrip]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+      </Binding>
+      <Binding Source="[ThemeConfig.InfoBoxCoverflow]" Target="[InfoBox.Visible]" />
+
+      <!-- Counter Bindings -->
+      <Binding Source="[Item.SelectedChildIndex]" Target="[Counter.List_Counter]" />
+      <Binding Source="[Item.Children.Count]" Target="[Counter.List_Total]" />
+
+      <!-- Extender Bindings -->
+      <Condition Source="[Application.RunningOnExtender]" ConditionOp="Equals" SourceValue="true" 
+                  Target="[Backdrop.LayoutInput]" Value="global://dtb:LI_Bg_Extender"/>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[ThemeConfig.AutoExtenderLayout]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TitleUI.LayoutInput]" Value="global://dtb:LI_Title_Extender" />
+          <Set Target="[Counter.LayoutInput]" Value="global://dtb:LI_ListCounter_Extender" />
+        </Actions>
+      </Rule>
+
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+
+          <!-- Title Details -->
+          <dtb:DiamondTitleUI Name="TitleUI" Item="[SelectedItem]" LayoutInput="global://dtb:LI_Title" />
+
+          <!-- InfoBox -->
+          <dtb:DiamondCommonInformation Name="InfoBox" Application="[Application]" Visible="[ThemeConfig.InfoBoxThumbstrip]"
+                                             Item="[SelectedItem]" MaximumSize="0,0" FullMode="false" DisableInput="true">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 1, -475" Right="Parent, 1, -25" Bottom="Focus, 0, -50" />
+            </LayoutInput>
+          </dtb:DiamondCommonInformation>
+
+
+
+          <!-- List Counter -->
+          <dtb:DiamondCounter Name="Counter" LayoutInput="global://dtb:LI_ListCounter" />
+
+          <ps:ThumbStripScroller Name="PosterItems"
+                                 Application="[Application]"
+                                 Folder="[Item]"
+                                 LayoutInput="[BaseLayout]">
+
+          </ps:ThumbStripScroller>
+
+          <!-- Backdrop -->
+          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]"
+                        Image="[Item.BackdropImage]" Item="[Item]"
+                        LayoutInput="global://dtb:LI_Bg"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>

@@ -1,0 +1,647 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+	  xmlns:i="resx://Diamond/Diamond.Resources/Images"
+	  xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
+	  xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
+    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
+	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
+	  xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
+	  xmlns:mp="resx://MediaBrowser/MediaBrowser.Resources/MPAARating"
+    xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+    xmlns:gb="resx://MediaBrowser/MediaBrowser.Resources/GenreButton"
+    
+    xmlns:pb="resx://Diamond/Diamond.Resources/PersonButton"
+    
+    xmlns:app="assembly://Diamond/Diamond"
+    xmlns:ta="resx://Diamond/Diamond.Resources/DiamondTab"
+    xmlns:mip="resx://Diamond/Diamond.Resources/DiamondMediaInfoPanel"
+    xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
+    xmlns:in="resx://Diamond/Diamond.Resources/DiamondInfo"
+    xmlns:dt="resx://Diamond/Diamond.Resources/DiamondText"
+	  xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
+      
+    xmlns:me="Me"
+    >
+
+  <!-- Movie Details Page -->
+  <UI Name="DiamondMovieView">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:Item Name="Item" Item="$Required"/>
+      <app:Config Name="ThemeConfig" />
+    </Properties>
+
+    <Locals>
+      <BooleanChoice Name="DisplayMax" Value="true" />
+
+      <Color Name="FilterColor" Color="color://s:D_FilterColor" />
+      <Color Name="AttributeColor" Color="color://s:D_Light" />
+      <Color Name="ValueColor" Color="color://s:D_Normal" />
+      <FormLayoutInput Name="FullBG" Left="Parent,0,5" Right="Parent,1,-5" Top="Parent,0.15,-15" Bottom="Parent,1,-75"/>
+      <FormLayoutInput Name="SmallBG" Left="Parent,0,5" Right="Parent,0,85" Top="Parent,0.15,-15" Bottom="Parent,0.15,325"/>
+
+      <!-- Selection Anchor-->
+      <AnchorLayoutInput Name="sVisible" Top="CommonInfoPanel,1,10" Left="Parent,0.48" Right="Parent,1,-30" Bottom="Parent, 1, -150" />
+      <AnchorLayoutInput Name="sHidden" Top="Parent,1" Left="Parent,1" Right="Parent,1,1" Bottom="Parent, 1,1" />
+
+      <Timer Name="NavTimer" AutoRepeat="false" Enabled="true" Interval="250"  />
+    </Locals>
+
+    <Rules>
+      <Default Target="[CmdButtons.DisplayMax.Value]" Value="true" />
+
+      <Changed Source="[NavTimer.Tick]">
+        <Conditions>
+          <Equality Source="[ThemeConfig.MiniMode]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[CmdButtons.DisplayMax.Value]" Value="false" />
+          <Set Target="[DisplayMax.Value]" Value="false" />
+        </Actions>
+      </Changed>
+
+      <Binding Source="[Item]" Target="[TitleUI.Item]"/>
+      <Binding Source="[Item.PreferredImage]" Target="[Preview.Content]" />
+      <Binding Source="[Item.PreferredImage]" Target="[MiniPoster.Content]" />
+      <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
+      <Binding Source="[CmdButtons.DisplayMax]" Target="[DisplayMax]" />
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
+      <Binding Source="[Application.ShowNowPlaying]" Target="[NowPlaying.Visible]" />
+      <Binding Source="[Application.Information.MajorActivity]" Target="[ActivityInd.Visible]"  />
+
+      <Changed Source="[DisplayMax.Value]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[PosterPanel.Visible]" Value="true" />
+          <Set Target="[CommonInfoPanel.Visible]" Value="true" />
+          <Set Target="[SelectionPanel.Visible]" Value="true" />
+          <Set Target="[DiamondBG.LayoutInput]" Value="[FullBG]" />
+          <Set Target="[SelectionPanel.LayoutInput]" Value="[sVisible]" />
+          <Set Target="[MiniDetails.Visible]" Value="false" />
+          <Set Target="[MediaInfoPanel.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[DisplayMax.Value]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectionPanel.LayoutInput]" Value="[sHidden]" />
+          <Set Target="[SelectionPanel.Visible]" Value="false" />
+          <Set Target="[PosterPanel.Visible]" Value="false" />
+          <Set Target="[CommonInfoPanel.Visible]" Value="false" />
+          <Set Target="[DiamondBG.LayoutInput]" Value="[SmallBG]" />
+          <Set Target="[MiniDetails.Visible]" Value="true" />
+          <Set Target="[MediaInfoPanel.Visible]" Value="false" />
+        </Actions>
+      </Changed>
+
+      <!-- Hide focus frame image -->
+      <Condition Source="[ThemeConfig.DisplayGlassOverlay]" ConditionOp="Equals" SourceValue="false">
+        <Actions>
+          <Set Target="[CoverOutline.Content]" Value="image://i:BlankImage" />
+          <Set Target="[Preview.Margins]" Value="0,0,0,0" />
+        </Actions>
+      </Condition>
+
+      <!-- Extender Bindings -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Backdrop.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+          <Set Target="[MainBG.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+          <Set Target="[BG_InitialFolder.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+        </Actions>
+      </Rule>
+      
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[ThemeConfig.AutoExtenderLayout]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TitleUI.LayoutInput]" Value="global://dtb:LI_Title_Extender" />
+          <Set Target="[TimePanel.LayoutInput]" Value="global://dtb:LI_Time_Extender"/>
+          <Set Target="[BottomCenterInfoPanel.LayoutInput]" Value="global://dtb:LI_Information_Extender" />
+        </Actions>
+      </Rule>
+      
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+          <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]" CenterPointPercent="0.5,0.5,0.5">
+            <Children>
+
+              <!-- Title Details -->
+              <dtb:DiamondTitleUI Name="TitleUI" MinSize="800,40" Item="[Item]" LayoutInput="global://dtb:LI_Title" />
+
+              <!-- Time Panel -->
+              <dtb:DiamondTime Name="TimePanel" Application="[Application]" LayoutInput="global://dtb:LI_Time" />
+
+              <!-- Now Playing View -->
+              <np:NowPlayingViewport Name="NowPlaying" FocusOrder="10" Application="[Application]">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0,10" Bottom="Parent,1,20" />
+                </LayoutInput>
+              </np:NowPlayingViewport>
+              
+              <!--Information Panel -->
+              <in:DiamondInfo Name="BottomCenterInfoPanel" Application="[Application]" LayoutInput="global://dtb:LI_Information" />
+
+              <!-- play/resume buttons-->
+              <me:CommandButtons Application="[Application]" Item="[Item]" FilterColor="[FilterColor]"
+                                 Name="CmdButtons" DisplayMax="[DisplayMax]" FocusOrder="0">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,25" Top="Parent,0.15" />
+                </LayoutInput>
+              </me:CommandButtons>
+
+              <me:SelectionPanel Name="SelectionPanel" Application="[Application]"
+                                 Item="[Item]" LayoutInput="[sVisible]" />
+
+              <!-- Column 2 (IMDB, Director, Rating, Runtime)-->
+              <dtb:DiamondCommonInformation Name="CommonInfoPanel" Application="[Application]" Item="[Item]">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0.48" Right="Parent,1,-30" Top="Parent,0.15,10"/>
+                </LayoutInput>
+              </dtb:DiamondCommonInformation>
+
+              <!-- Mini-mode display-->
+              <Graphic Name="MiniDetails" Visible="false" Content="image://i:DiamondListBg" Padding="10,10,10,10"
+                       SizingPolicy="SizeToConstraint">
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" Spacing="20,5" FillStrip="true"/>
+                </Layout>
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent,1, -75" Top="Parent, 1, -275" Left="Parent, 0, 10" Right="Parent,1,-10" Horizontal="Near" />
+                </LayoutInput>
+                <Children>
+                  <Panel MaximumSize="475,200">
+                    <Children>
+                      <dt:ScrollableText Name="OverviewMini" Text="[Item.Overview]" Font="font://f:Diamond_OverviewMini"/>
+                    </Children>
+                  </Panel>
+
+                  <dtb:DiamondCommonInformation Name="CommonInfoPanelMini" Application="[Application]"
+                                             Item="[Item]" MaximumSize="495,0" FullMode="false" />
+
+                  <Graphic MaintainAspectRatio="true" Name="MiniPoster" />
+                </Children>
+              </Graphic>
+
+              <dtb:InfoWorkingHard Name="ActivityInd" Visible="false" LayoutInput="global://dtb:LI_InfoHardActivity" />
+
+              <!-- Thumbnail Poster -->
+              <Graphic Name="PosterPanel" SizingPolicy="SizeToChildren" Layout="Anchor">
+                <LayoutInput>
+                  <AnchorLayoutInput Top="Parent,0.15,10" Left="Parent,0.17" Right="Parent, 0.47" Bottom="Parent, 1, -95" />
+                </LayoutInput>
+                <Children>
+                  <Graphic Name="CoverOutline" Content="image://i:PosterFrame">
+                    <LayoutInput>
+                      <AnchorLayoutInput Top="Preview,0" Bottom="Preview,1" Left="Preview,0" Right="Preview,1"/>
+                    </LayoutInput>
+                  </Graphic>
+                  <Graphic Name="Preview" MaintainAspectRatio="true" Margins="25,25,25,30" />
+                </Children>
+              </Graphic>
+
+              <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" >
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent, 1, -85" Right="Parent, 1, -20"/>
+                </LayoutInput>
+              </mip:MediaInfoPanel>
+
+
+              <Graphic Name="DiamondBG" Content="image://i:DiamondListBg">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0,5" Right="Parent,1,-5" Top="Parent,0.15,-15" Bottom="Parent,1,-75"/>
+                </LayoutInput>
+              </Graphic>
+
+              <!-- Movie Backdrop -->
+              <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" 
+                            Item="[Item]" LayoutInput="global://dtb:LI_Bg" />
+
+              <!-- Initial Folder Backdrop -->
+              <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]" Visible="[Application.Config.ShowRootBackground]" LayoutInput="global://dtb:LI_Bg" />
+
+              <!-- Main Background -->
+              <Graphic Name="MainBG" Content="resx://Diamond/Diamond.Resources/DiamondMainBG" LayoutInput="global://dtb:LI_Bg" />
+            </Children>
+          </Clip>
+
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+  <UI Name="CommandButtons">
+    <Properties>
+      <a:Application Name="Application" Application="$Required" />
+      <lib:Item Name="Item" Item="$Required"/>
+      <Color Name="FilterColor" Color="Black"/>
+      <cor:Single Name="Alpha" Single="1" />
+      <BooleanChoice Name="DisplayMax" BooleanChoice="$Required" />
+
+      <Size Name="Size" Size="175,45"/>
+      <Size Name="MinSize" Size="175,45"/>
+      <Font Name="Font" Font="font://f:Diamond_Large"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="PlayMovieCommand" />
+      <Command Name="ResumeMovieCommand" />
+      <Command Name="ToggleViewCommand" />
+      <Command Name="RefreshMovieCommand" />
+      <Command Name="DeleteMovieCommand" />
+      <Command Name="LocalTrailerCommand" />
+      <Command Name="NullCommand" />
+      <cor:Boolean Name="DisplayMini" Boolean="false" />
+    </Locals>
+
+    <Rules>
+      <Binding Source="[Item.CanResume]" Target="[ResumeMovieButton.Visible]" />
+      <Binding Source="[DisplayMax.Value]" Target="[DisplayMini]" >
+        <Transformer>
+          <BooleanTransformer Inverse="false"/>
+        </Transformer>
+      </Binding>
+
+      <Binding Source="[DisplayMini]" Target="[ResumeMovieButton.MaxMode]" />
+      <Binding Source="[DisplayMini]" Target="[PlayMovieButton.MaxMode]" />
+      <Binding Source="[DisplayMini]" Target="[TrailerButton.MaxMode]" />
+      <Binding Source="[DisplayMini]" Target="[ToggleViewButton.MaxMode]" />
+      <Binding Source="[DisplayMini]" Target="[RefreshMovieButton.MaxMode]" />
+      <Binding Source="[DisplayMini]" Target="[DeleteMovieButton.MaxMode]" />
+      <Binding Source="[DisplayMini]" Target="[CacheMovieButton.MaxMode]" />
+
+
+      <Condition Source="[Item.CanResume]" ConditionOp="Equals" SourceValue="false" Target="[ResumeMovieButton.Visible]" Value="false"/>
+
+      <Changed Source="[ToggleViewCommand.Invoked]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[DisplayMax.Value]" Value="false" />
+        </Actions>
+      </Changed>
+      <Changed Source="[ToggleViewCommand.Invoked]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[DisplayMax.Value]" Value="true" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[PlayMovieCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.Play]" item="[Item]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ResumeMovieCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.Resume]" item="[Item]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[RefreshMovieCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Item.RefreshMetadata]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[DeleteMovieCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.DeleteMediaItem]">
+            <Item>
+              <lib:Item Item="[Item]"/>
+            </Item>
+          </Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[LocalTrailerCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Item.PlayTrailers]"/>
+        </Actions>
+      </Changed>
+
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.Config.Advanced_EnableDelete]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[Application.Config.EnableAdvancedCmds]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[DeleteMovieButton.Visible]" Value="true" />
+        </Actions>
+      </Rule>
+
+      <Binding Source="[Item.ContainsTrailers]" Target="[TrailerButton.Visible]" />
+
+    </Rules>
+
+    <Content>
+      <Panel Layout="VerticalFlow" Padding="0,10,0,10" Navigation="RememberFocus" >
+        <Children>
+          <dtb:DiamondImageButton Name="ResumeMovieButton"  Text="RESUME"       Command="[ResumeMovieCommand]"  Icon="resx://Diamond/Diamond.Resources/IconResume"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]"/>
+          <dtb:DiamondImageButton Name="PlayMovieButton"    Text="PLAY"         Command="[PlayMovieCommand]"    Icon="resx://Diamond/Diamond.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]"/>
+          <dtb:DiamondImageButton Name="TrailerButton"      Text="TRAILER"      Command="[LocalTrailerCommand]" Icon="resx://Diamond/Diamond.Resources/IconTrailers" Size="[Size]"  MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="ToggleViewButton"   Text="DISPLAY"      Command="[ToggleViewCommand]"   Icon="resx://Diamond/Diamond.Resources/IconFloral"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH"      Command="[RefreshMovieCommand]" Icon="resx://Diamond/Diamond.Resources/IconRefresh" Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="CacheMovieButton"   Text="CACHE 2 XML"  Command="[NullCommand]"         Icon="resx://Diamond/Diamond.Resources/Lines"       Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="DeleteMovieButton"  Text="DELETE"       Command="[DeleteMovieCommand]"  Icon="resx://Diamond/Diamond.Resources/IconDelete"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+
+
+  <!-- Selector Items Panel-->
+  <UI Name="SelectionPanel">
+    <Properties>
+      <lib:Item Name="Item" Item="$Required"/>
+      <a:Application Name="Application" Application="$Required"/>
+      <Color Name="AttributeColor" Color="color://s:D_Light" />
+      <Color Name="ValueColor" Color="color://s:D_Normal" />
+      <Size Name="MinSize" Size="225,0"/>
+      <Font Name="TitleFont" Font="font://f:Diamond_Small"/>
+      <Font Name="ValueFont" Font="font://f:Diamond_Small_SemiBold"/>
+    </Properties>
+
+    <Locals>
+      <Choice Name="Model">
+        <Options>
+          <cor:String String="General" />
+          <cor:String String="Actors" />
+          <cor:String String="Media-Details" />
+        </Options>
+      </Choice>
+    </Locals>
+
+    <Rules>
+      <!-- Show and hide Selectors -->
+      <Condition Source="[Model.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[OverviewPanel.Visible]" Value="true" />
+      <Condition Source="[Model.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[ActorsPanel.Visible]" Value="true" />
+      <Condition Source="[Model.ChosenIndex]" SourceValue="2" ConditionOp="Equals" Target="[MediaDetailsPanel.Visible]" Value="true" />
+
+      <Binding Source="[Item.Overview]" Target="[Overview.Text]" />
+      <Condition Source="[Item.Actors.Count]" ConditionOp="LessThan" SourceValue="1" Target="[ActorsPanel.Visible]" Value="false" />
+      
+    </Rules>
+
+    <Content>
+      <Graphic Content="image://i:DiamondTopPanel" Padding="5,5,5,5">
+        <Layout>
+          <FlowLayout Orientation="Vertical" Spacing="10,10"/>
+        </Layout>
+        <Children>
+          <!-- Selector buttons-->
+          <Panel Name="SelectorPanel">
+            <Layout>
+              <AnchorLayout SizeToHorizontalChildren="true"/>
+            </Layout>
+            <Children>
+              <Panel>
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" ItemAlignment="Far"/>
+                </Layout>
+                <Children>
+                  <ta:DiamondTab Model="[Model]" Name="FullConfigNav" />
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+
+          <!-- Media Overview -->          
+          <Panel Name="OverviewPanel" Layout="VerticalFlow" Margins="0,0,0,0" Visible="false" >
+            <Children>              
+              <dt:ScrollableText Name="Overview" Text="[Item.Overview]" Font="font://f:Diamond_Overview" DisplayBG="false" />
+            </Children>
+          </Panel>
+
+          <!-- Actors -->
+          <Panel Name="ActorsPanel" Margins="0,0,0,0" Visible="false" >
+            <Children>
+              <me:ActorList Name="ActorScroller" Item="[Item]" Application="[Application]" Margins="0,10,0,0" />
+            </Children>
+          </Panel>
+
+          <Panel Name="MediaDetailsPanel" Margins="0,0,0,0" Visible="false" Layout="VerticalFlow">
+            <Children>
+             <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="LOCATION"
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.Path]" Color="[ValueColor]" Font="[ValueFont]"
+                        WordWrap="true" MaximumLines="2"/>
+                </Children>
+              </Panel>  
+
+            
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="VIDEO CODEC"
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.VideoCodecExtendedString]" Color="[ValueColor]" 
+                        Font="[ValueFont]"/>
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="VIDEO RESOLUTION"
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.VideoResolutionString]" Color="[ValueColor]" Font="[ValueFont]"/>
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="VIDEO FRAME RATE"
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.VideoFrameRateString]" Color="[ValueColor]" Font="[ValueFont]"/>
+                </Children>
+              </Panel>
+
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="AUDIO CODEC"
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.AudioCodecExtendedString]" Color="[ValueColor]" Font="[ValueFont]"/>
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="AUDIO STREAMS"
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.AudioStreamString]" Color="[ValueColor]" Font="[ValueFont]"/>
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="AUDIO CHANNELS" 
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.AudioChannelString]" Color="[ValueColor]" Font="[ValueFont]"/>
+                </Children>
+              </Panel>
+              
+              <Panel Layout="HorizontalFlow">
+                <Children>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="SUBTITLES"
+                        MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.SubtitleString]" Color="[ValueColor]" Font="[ValueFont]"/>
+                </Children>
+              </Panel>              
+              
+            </Children>
+          </Panel>
+
+
+        </Children>
+      </Graphic>
+
+    </Content>
+  </UI>
+
+  <!-- ActorList-->
+  <UI Name="ActorList">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:Item Name="Item" Item="$Required"/>
+    </Properties>
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandleMouseWheel="true" HandleHomeEndKeys="true" HandlePageKeys="true" HandlePageCommands="true"/>
+      <ScrollingData Name="ScrollingData" BeginPadding="5" EndPadding="5" />
+      <Command Name="ScrollUpCommand" />
+      <Command Name="ScrollDownCommand" />
+      <Font Name="Font" Font="font://f:Diamond_Medium" />
+      <Color Name="Color" Color="color://s:D_Dim"/>
+      <Color Name="FocusColor" Color="color://s:D_Normal"/>
+
+    </Locals>
+    <Rules>
+      <Binding Source="[Item.Actors]" Target="[ListRepeater.Source]" />
+
+      <!--<Binding Source="[ListRepeater.SelectedItem!lib:ActorItemWrapper.Actor.DisplayName]" Target="[PName.Content]" />
+      <Binding Source="[PersonItem.Actor.DisplayRole]" Target="[PRole.Content]" />-->
+      
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Changed Source="[ScrollUpCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[ScrollDownCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollDown]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[ScrollUpCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[ScrollDownCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollDown]"/>
+        </Actions>
+      </Changed>
+
+    </Rules>
+    <Content>
+      <!-- Cast (Actors) -->
+      <Panel Name="MovieActors">
+        <Children>
+          <Graphic Content="image://i:BlankImage" Name="ImagePanel" >
+            <Layout>
+              <FlowLayout Orientation="Vertical" StripAlignment="Near" />
+            </Layout>
+            <Children>
+              <Scroller Name="ActorScroller" FadeSize="5" ScrollingData="[ScrollingData]" 
+                        Orientation="Horizontal" Navigation="RememberFocus, ContainHorizontal">
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Fill" Vertical="Near"/>
+                </LayoutInput>
+
+                <Children>
+                  <Repeater Name="ListRepeater" Source="[Item.Actors]">
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal" Spacing="5,0"/>
+                    </Layout>
+                    <Content>
+                      <me:Actor aiw="[RepeatedItem!lib:ActorItemWrapper]" Font="font://f:Diamond_Small" Application="[Application]" />
+                    </Content>
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.25"/>
+                          <PositionKeyframe Time="0.65" RelativeTo="Final"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Repeater>
+                </Children>
+              </Scroller>
+
+              <!--<Text Name="PName" Font="[Font]" Color="[Color]" HorizontalAlignment="Center" MinimumSize="175,0" />
+              <Text Name="PRole" Font="[Font]" Color="[FocusColor]" HorizontalAlignment="Center" MinimumSize="175,0" />-->
+
+            </Children>
+          </Graphic>          
+        </Children>
+        
+      </Panel>
+    </Content>
+  </UI>
+
+  <!--Actor-->
+  <UI Name="Actor">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:ActorItemWrapper Name="aiw" ActorItemWrapper="$Required" />
+      <Font Name="Font" Font="$Required"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="NavigateToActorsCommand"/>
+    </Locals>
+
+    <Rules>
+      <Changed Source="[NavigateToActorsCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.Navigate]"  item="[aiw.Item]"/>
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <Panel Layout="HorizontalFlow" >
+        <Children>
+          <pb:PersonButton PersonItem="[aiw]" Color="color://s:FontColorMedium" Command="[NavigateToActorsCommand]" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <Image Name="ButtonLeftFocus" Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocus" NineGrid="7,7,7,7" />
+
+</Mcml>
+

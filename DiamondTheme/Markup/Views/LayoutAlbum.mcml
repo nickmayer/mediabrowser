@@ -1,0 +1,433 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+	  xmlns:i="resx://Diamond/Diamond.Resources/Images"
+	  xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
+	  xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
+    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
+	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
+	  xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
+	  xmlns:mp="resx://MediaBrowser/MediaBrowser.Resources/MPAARating"
+    xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+    xmlns:gb="resx://MediaBrowser/MediaBrowser.Resources/GenreButton"
+    
+    xmlns:pb="resx://Diamond/Diamond.Resources/PersonButton"
+    
+    xmlns:app="assembly://Diamond/Diamond"
+    xmlns:ta="resx://Diamond/Diamond.Resources/DiamondTab"
+    xmlns:mip="resx://Diamond/Diamond.Resources/DiamondMediaInfoPanel"
+    xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
+    xmlns:in="resx://Diamond/Diamond.Resources/DiamondInfo"
+    xmlns:dt="resx://Diamond/Diamond.Resources/DiamondText"
+	  xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
+    xmlns:lv="resx://Diamond/Diamond.Resources/DiamondListAlbum"
+      
+    xmlns:me="Me"
+    >
+
+  <!-- Movie Details Page -->
+  <UI Name="LayoutAlbum">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:FolderModel Name="Item" FolderModel="$Required"/>
+      <!--<lib:Item Name="Item" Item="$Required"/>-->
+      <app:Config Name="ThemeConfig" />
+    </Properties>
+
+    <Locals>
+      <BooleanChoice Name="DisplayMax" Value="true" />
+
+      <Color Name="FilterColor" Color="color://s:D_FilterColor" />
+      <Color Name="AttributeColor" Color="color://s:D_Light" />
+      <Color Name="ValueColor" Color="color://s:D_Normal" />
+
+      <!-- Background Anchor-->
+      <AnchorLayoutInput Name="FullBG" Left="Parent,0,5" Right="Parent,0,300" Top="Parent,0.15,-15" Bottom="Parent,0.15,200"/>
+      
+      <!-- Selection Anchor-->
+      <AnchorLayoutInput Name="sVisible" Top="Parent,0.15,-15" Left="Parent,0.55,5" Right="Parent,1,-30" Bottom="Parent, 1, -150" />
+      
+      <!-- Poster Anchor-->
+      <AnchorLayoutInput Name="posterAnchor" Left="Parent,0,15" Right="Parent,0,300" Top="Parent,0.15,210" Bottom="Parent, 1, -150"/>
+
+      <Timer Name="NavTimer" AutoRepeat="false" Enabled="true" Interval="250"  />
+    </Locals>
+
+    <Rules>
+      <!--<Default Target="[CmdButtons.DisplayMax.Value]" Value="true" />-->
+
+      <!--<Changed Source="[NavTimer.Tick]">
+        <Conditions>
+          <Equality Source="[ThemeConfig.MiniMode]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[CmdButtons.DisplayMax.Value]" Value="false" />
+          <Set Target="[DisplayMax.Value]" Value="false" />
+        </Actions>
+      </Changed>-->
+
+      <Binding Source="[Item]" Target="[TitleUI.Item]"/>
+      <Binding Source="[Item.PreferredImage]" Target="[Preview.Content]" />
+      <!--<Binding Source="[Item.PreferredImage]" Target="[MiniPoster.Content]" />-->
+      <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
+      <!--<Binding Source="[CmdButtons.DisplayMax]" Target="[DisplayMax]" />-->
+      <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
+      <Binding Source="[Application.ShowNowPlaying]" Target="[NowPlaying.Visible]" />
+
+      <!--<Changed Source="[DisplayMax.Value]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[PosterPanel.Visible]" Value="true" />
+          <Set Target="[CommonInfoPanel.Visible]" Value="true" />
+          <Set Target="[SelectionPanel.Visible]" Value="true" />
+          <Set Target="[DiamondBG.LayoutInput]" Value="[FullBG]" />
+          <Set Target="[SelectionPanel.LayoutInput]" Value="[sVisible]" />
+          <Set Target="[MiniDetails.Visible]" Value="false" />
+          <Set Target="[MediaInfoPanel.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[DisplayMax.Value]">
+        <Conditions>
+          <Equality Source="[DisplayMax.Value]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectionPanel.LayoutInput]" Value="[sHidden]" />
+          <Set Target="[SelectionPanel.Visible]" Value="false" />
+          <Set Target="[PosterPanel.Visible]" Value="false" />
+          <Set Target="[CommonInfoPanel.Visible]" Value="false" />
+          <Set Target="[DiamondBG.LayoutInput]" Value="[SmallBG]" />
+          <Set Target="[MiniDetails.Visible]" Value="true" />
+          <Set Target="[MediaInfoPanel.Visible]" Value="false" />
+        </Actions>
+      </Changed>-->
+
+      <!-- Hide focus frame image -->
+      <Condition Source="[ThemeConfig.DisplayGlassOverlay]" ConditionOp="Equals" SourceValue="false">
+        <Actions>
+          <Set Target="[CoverOutline.Content]" Value="image://i:BlankImage" />
+          <Set Target="[Preview.Margins]" Value="0,0,0,0" />
+        </Actions>
+      </Condition>
+
+      <!-- Extender Bindings -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Backdrop.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+          <Set Target="[MainBG.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+          <Set Target="[BG_InitialFolder.LayoutInput]" Value="global://dtb:LI_Bg_Extender" />
+        </Actions>
+      </Rule>
+      
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[ThemeConfig.AutoExtenderLayout]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TitleUI.LayoutInput]" Value="global://dtb:LI_Title_Extender" />
+          <Set Target="[TimePanel.LayoutInput]" Value="global://dtb:LI_Time_Extender"/>
+          <Set Target="[BottomCenterInfoPanel.LayoutInput]" Value="global://dtb:LI_Information_Extender" />
+        </Actions>
+      </Rule>
+      
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form" Navigation="RememberFocus">
+        <Children>
+          <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]" CenterPointPercent="0.5,0.5,0.5">
+            <Children>
+
+              <!-- Title Details -->
+              <dtb:DiamondTitleUI Name="TitleUI" MinSize="800,40" Item="[Item]" LayoutInput="global://dtb:LI_Title" />
+
+              <!-- Time Panel -->
+              <dtb:DiamondTime Name="TimePanel" Application="[Application]" LayoutInput="global://dtb:LI_Time" />
+
+              <!-- Now Playing View -->
+              <np:NowPlayingViewport Name="NowPlaying" FocusOrder="10" Application="[Application]">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0,10" Bottom="Parent,1,20" />
+                </LayoutInput>
+              </np:NowPlayingViewport>
+              
+              <!--Information Panel -->
+              <in:DiamondInfo Name="BottomCenterInfoPanel" Application="[Application]" LayoutInput="global://dtb:LI_Information" />
+
+              <!-- play/resume buttons-->
+              <me:CommandButtons Application="[Application]" Item="[Item]" FilterColor="[FilterColor]"
+                                 Name="CmdButtons" DisplayMax="[DisplayMax]" FocusOrder="0">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,25" Top="Parent,0.15" />
+                </LayoutInput>
+              </me:CommandButtons>
+
+              <!--<me:SelectionPanel Name="SelectionPanel" Application="[Application]"
+                                 Item="[Item]" LayoutInput="[sVisible]" />-->
+
+              <!-- Column 2 (IMDB, Director, Rating, Runtime)-->
+              <!--<dtb:DiamondCommonInformation Name="CommonInfoPanel" Application="[Application]" Item="[Item]">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0.48" Right="Parent,1,-30" Top="Parent,0.15,10"/>
+                </LayoutInput>
+              </dtb:DiamondCommonInformation>-->
+              <!--<me:AlbumInformation Name="CommonInfoPanel" Application="[Application]" Item="[Item]">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0.48" Right="Parent,1,-30" Top="Parent,0.15,10"/>
+                </LayoutInput>
+              </me:AlbumInformation>-->
+
+              <!-- Details List -->
+              <Graphic Name="ListPane" Content="image://i:DiamondListBg" Layout="VerticalFlow"
+                       Padding="20,20,20,20" LayoutInput="[sVisible]">
+                <Children>
+                  <Text Color="color://s:D_Normal" Font="font://f:Diamond_Large" Content="Track List" />
+                  <lv:DiamondListAlbum Visible="true" Application="[Application]" Folder="[Item]" Name="MyItems">
+                  </lv:DiamondListAlbum>
+                </Children>
+              </Graphic>
+
+              <!-- Thumbnail Poster -->
+              <Graphic Name="PosterPanel" SizingPolicy="SizeToChildren" Layout="Anchor" LayoutInput="[posterAnchor]">
+                <Children>
+                  <Graphic Name="CoverOutline" Content="image://i:PosterFrame">
+                    <LayoutInput>
+                      <AnchorLayoutInput Top="Preview,0" Bottom="Preview,1" Left="Preview,0" Right="Preview,1"/>
+                    </LayoutInput>
+                  </Graphic>
+                  <Graphic Name="Preview" MaintainAspectRatio="true" Margins="25,25,25,30" />
+                </Children>
+              </Graphic>
+
+              <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" >
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent, 1, -85" Right="Parent, 1, -20"/>
+                </LayoutInput>
+              </mip:MediaInfoPanel>
+
+
+              <Graphic Name="DiamondBG" Content="image://i:DiamondListBg" LayoutInput="[FullBG]" />
+
+              <!-- Movie Backdrop -->
+              <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" 
+                            Item="[Item]" LayoutInput="global://dtb:LI_Bg" />
+
+              <!-- Initial Folder Backdrop -->
+              <bd:InitialFolderBackground Name="BG_InitialFolder" Application="[Application]" Visible="[Application.Config.ShowRootBackground]" LayoutInput="global://dtb:LI_Bg" />
+
+              <!-- Main Background -->
+              <Graphic Name="MainBG" Content="resx://Diamond/Diamond.Resources/DiamondMainBG" LayoutInput="global://dtb:LI_Bg" />
+            </Children>
+          </Clip>
+
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+  <UI Name="CommandButtons">
+    <Properties>
+      <a:Application Name="Application" Application="$Required" />
+      <lib:Item Name="Item" Item="$Required"/>
+      <Color Name="FilterColor" Color="Black"/>
+      <cor:Single Name="Alpha" Single="1" />
+      <BooleanChoice Name="DisplayMax" BooleanChoice="$Required" />
+
+      <Size Name="Size" Size="250,45"/>
+      <Size Name="MinSize" Size="250,45"/>
+      <Font Name="Font" Font="font://f:Diamond_Large"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="PlayCommand" />
+      <Command Name="QueueCommand" />
+      <Command Name="ShuffleCommand" />
+      <Command Name="NullCommand" />
+      <cor:Boolean Name="Mode" Boolean="true" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Changed Source="[PlayCommand.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sd:Miniselect" />
+          <Invoke Target="[Application.Play]" item="[Item]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[QueueCommand.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sd:Miniselect" />
+          <Invoke Target="[Application.AddToQueue]" item="[Item]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ShuffleCommand.Invoked]">
+        <Actions>
+          <PlaySound Sound="sound://sd:Miniselect" />
+          <Invoke Target="[Application.Shuffle]" item="[Item]" />
+        </Actions>
+      </Changed>
+      
+    </Rules>
+
+    <Content>
+      <Panel Layout="VerticalFlow" Padding="0,10,0,10" Navigation="RememberFocus" >
+        <Children>
+          <dtb:DiamondImageButton Name="PlayAllButton"    Text="PLAY ALL"           Command="[PlayCommand]"    Icon="resx://Diamond/Diamond.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
+          <dtb:DiamondImageButton Name="QueueAlbumButton"    Text="QUEUE ALBUM"     Command="[QueueCommand]"    Icon="resx://Diamond/Diamond.Resources/IconAdd"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
+          <dtb:DiamondImageButton Name="ShuffleAlbumButton"    Text="SHUFFLE ALBUM" Command="[ShuffleCommand]"    Icon="resx://Diamond/Diamond.Resources/IconShuffle"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
+          
+          </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+  <!-- Common Information Panel -->
+  <UI Name="AlbumInformation">
+    <Properties>
+      <lib:Item Name="Item" Item="$Required"/>
+      <a:Application Name="Application" Application="$Required"/>
+      <Color Name="AttributeColor" Color="color://s:D_Light" />
+      <Color Name="ValueColor" Color="color://s:D_Normal" />
+      <Font Name="TitleFont" Font="font://f:Diamond_Small"/>
+      <Font Name="ValueFont" Font="font://f:Diamond_Small_SemiBold"/>
+      <cor:Boolean Name="FullMode" Boolean="true" />
+      <cor:Boolean Name="DisableInput" Boolean="false" />
+      <app:AppUtil Name="Utility" />
+      <app:Config Name="ThemeConfig" />
+    </Properties>
+    <Locals>
+      <Size Name="MinSize" Size="155,0"/>
+    </Locals>
+    <Rules>
+      <Default Target="[Input.Enabled]" Value="false">
+        <Conditions>
+          <Equality Source="[DisableInput]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+      </Default>
+      <!-- Common Info Panel-->
+      <!--<Binding Source="[Item.ImdbRatingString]" Target="[IMDBRating.Content]" />
+      <Binding Source="[Item.ImdbRating]" Target="[StarRating.Value]" />
+      <Binding Source="[Item.MpaaRating]" Target="[MPAARating.Value]" />
+      <Binding Source="[Item.Directors]" Target="[DirectorRepeater.Source]"/>
+      <Binding Source="[Item.RunningTimeString]" Target="[Runtime.Content]" />
+      <Binding Source="[Item.Genres]" Target="[GenreRepeater.Source]" />
+      <Binding Source="[Item.StudioItems]" Target="[StudioRepeater.Source]" />
+      <Binding Target="[FirstAired.Content]" Source="[Item.FirstAired]" />-->
+
+      <!--<Condition  Source="[Item.ItemTypeString]" ConditionOp="Equals" SourceValue="Season">
+        <Actions>
+          <Set Target="[EpisodeCount.Content]" Value="[Item!lib:FolderModel.Folder.Children.Count]">
+            <Transformer>
+              <FormatTransformer Format="{0}"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Condition>-->
+
+      <!-- Show and hide common panels -->
+      <!--<Condition Source="[Item.ImdbRating]" ConditionOp="GreaterThanOrEquals" SourceValue="0" Target="[IMDBRatingPanel.Visible]" Value="true"  />
+      <Condition Source="[Item.Directors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[DirectedByPanel.Visible]" Value="true"  />
+      <Condition Source="[Item.Genres.Count]" ConditionOp="LessThanOrEquals"  SourceValue="0"  Target="[GenrePanel.Visible]"      Value="false"/>
+      <Condition Source="[Item.Genres.Count]" ConditionOp="NotEquals"         SourceValue="0"  Target="[GenrePanel.Visible]"      Value="true"/>
+      <Condition Source="[Item.StudioItems.Count]" ConditionOp="LessThanOrEquals"  SourceValue="0"  Target="[StudioPanel.Visible]"      Value="false"/>
+      <Condition Source="[Item.StudioItems.Count]" ConditionOp="NotEquals"         SourceValue="0"  Target="[StudioPanel.Visible]"      Value="true"/>
+      <Condition Source="[Item.FirstAired]"   ConditionOp="NotEquals"            SourceValue=""    Target="[FirstAiredPanel.Visible]"  Value="true" />
+      <Condition Source="[Item.ItemTypeString]"   ConditionOp="Equals"            SourceValue="Season"    Target="[EpisodeCountPanel.Visible]"  Value="true" />-->
+
+      <!-- Set the background for the control. -->
+      <!--<Rule ConditionLogicalOp="Or" >
+        <Conditions>
+          <Equality Source="[GenrePanel.Visible]"       Value="true"/>
+          <Equality Source="[FirstAiredPanel.Visible]"       Value="true"/>
+          <Equality Source="[StudioPanel.Visible]"       Value="true"/>
+          <Equality Source="[DirectedByPanel.Visible]"       Value="true"/>
+          <Equality Source="[IMDBRatingPanel.Visible]"       Value="true"/>
+          <Equality Source="[Item.RunningTimeString]"  ConditionOp="NotEquals"     Value=""/>
+          <Equality Source="[EpisodeCountPanel.Visible]"       Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[CommonInfoPanel.Content]" Value="image://di:DiamondTopPanel" />
+        </Actions>
+      </Rule>-->
+
+      <!--<Rule>
+        <Conditions>
+          <Modified Source="[Item.RunningTimeString]" InitialEvaluate="true" />
+          <Equality Source="[ThemeConfig.DisplayEndTime]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Utility.CalculateEndTime]" runTime="[Item.RunningTimeString]"
+                  ResultTarget="[EstimateEndTime.Content]" >
+            <Transformer>
+              <FormatTransformer Format="{0}"/>
+            </Transformer>
+          </Invoke>
+        </Actions>
+      </Rule>
+      <Binding Source="[ThemeConfig.DisplayEndTime]" Target="[EstimateEndTime.Visible]" />-->
+
+    </Rules>
+    <Content>
+      <Graphic Name="CommonInfoPanel" Content="image://i:BlankImage" Layout="VerticalFlow" Margins="0,0,0,0"
+               Padding="15,15,15,15">
+        <Children>
+          <Panel Layout="Anchor">
+            <Children>
+
+              <Panel Name="rPanel">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="5,5" />
+                </Layout>
+                <LayoutInput>
+                  <AnchorLayoutInput Right="Parent, 1"/>
+                </LayoutInput>
+                <Children>
+
+                  <Text Name="a0" Content="Album Info"
+                           Font="[ValueFont]" Color="[ValueColor]" />
+                 <!--<Text Name="a1" Content="[Item.ArtistAlbumName]"
+                          Font="[ValueFont]" Color="[ValueColor]" />-->
+                  <Text Name="a2" Content=""
+                          Font="[ValueFont]" Color="[ValueColor]" />
+                   </Children>
+              </Panel>
+              
+
+                </Children>
+          </Panel>
+
+
+
+          <!--<Panel  Name="MediaInfoPane" Visible="false" >
+            <Layout>
+              <FlowLayout Orientation="Horizontal" AllowWrap="true" ItemAlignment="Near" StripAlignment="Near"/>
+            </Layout>
+            <Children>
+              <Text Font="[TitleFont]" Color="[AttributeColor]" Content="MEDIA INFO" Visible="[FullMode]" MinimumSize="[MinSize]"/>
+              <Text Name="MediaInfo" Font="font://f:Diamond_MediaInfo" Color="[ValueColor]" Margins="0,0,0,0" MaximumSize="0,100" />
+            </Children>
+          </Panel>-->
+
+        </Children>
+      </Graphic>
+    </Content>
+  </UI>
+
+  <Image Name="ButtonLeftFocus" Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocus" NineGrid="7,7,7,7" />
+
+</Mcml>
+

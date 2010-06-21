@@ -1,0 +1,19 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:me="Me"
+	  >
+  
+  <!-- Diamond Styles DEFAULT -->
+  <Color Name="D_Focus" Color="DodgerBlue"/>
+  <Color Name="D_Normal" Color="White"/>
+  <Color Name="D_Counter" Color="White"/>
+  <Color Name="D_Medium" Color="255, 147,212,250"/>
+  <Color Name="D_Dim" Color="Gray"/>
+
+  <Color Name="D_Info" Color="222,222,222"/>
+  <Color Name="D_Light" Color="190,190,190"/>
+  <Color Name="D_FilterColor" Color="0,0,0"/>
+
+  <Color Name="D_StudioFilterColor" Color="White"/>
+  
+</Mcml>
