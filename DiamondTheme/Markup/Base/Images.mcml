@@ -1,0 +1,88 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:me="Me">
+
+  <Image Name="BlankImage" Image="null"/>
+  
+  
+
+  <Image Name="Lines" Source="resx://Diamond/Diamond.Resources/IconLines"/>
+  <Image Name="ConfigImg" Source="resx://Diamond/Diamond.Resources/IconConfig"/>
+  <Image Name="SortImg" Source="resx://Diamond/Diamond.Resources/IconSort"/>
+  <Image Name="IndexImg" Source="resx://Diamond/Diamond.Resources/IconIndex"/>
+  <Image Name="ZoomPane" Source="resx://Diamond/Diamond.Resources/zoompane" NineGrid="4,4,4,4"/>
+
+  <Image Name="Folder" Source="resx://Diamond/Diamond.Resources/folder" NineGrid="15,25,10,10"/>
+  <Image Name="Tick" Source="resx://MediaBrowser/MediaBrowser.Resources/Tick" />
+  <Image Name="TickPoster" Source="resx://MediaBrowser/MediaBrowser.Resources/TickPoster" />
+  <Image Name="TickPosterBase" Source="resx://MediaBrowser/MediaBrowser.Resources/TickPosterBase" />
+  <Image Name="Unwatched" Source="resx://MediaBrowser/MediaBrowser.Resources/Unwatched" />
+  <Image Name="UnwatchedBase" Source="resx://MediaBrowser/MediaBrowser.Resources/UnwatchedBase" />
+  <Image Name="Starburst" Source="resx://MediaBrowser/MediaBrowser.Resources/Starburst"/>
+
+  <Image Name="StarFull" Source="resx://Diamond/Diamond.Resources/star_full" />
+  <Image Name="StarHalf" Source="resx://Diamond/Diamond.Resources/star_half" />
+  <Image Name="StarEmpty" Source="resx://Diamond/Diamond.Resources/star_empty" />
+  
+  
+  <!-- Diamond Images -->
+  <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/poster_frame" NineGrid="10,10,10,10" />
+
+  <Image Name="DiamondListBg" Source="resx://Diamond/Diamond.Resources/dia_list_bg" NineGrid="20,20,20,20" />
+  <Image Name="DiamondFolderMenuBg" Source="resx://Diamond/Diamond.Resources/dia_foldermenu" NineGrid="20,20,20,35" />
+  <Image Name="DiamondFolderButton" Source="resx://Diamond/Diamond.Resources/dia_folderbutton" NineGrid="10,10,10,10" />
+  <Image Name="DiamondListFocus" Source="resx://Diamond/Diamond.Resources/dia_list_focus" NineGrid="5,5,0,5" />
+  <Image Name="DiamondTopPanel" Source="resx://Diamond/Diamond.Resources/dia_TopPanel" NineGrid="10,10,10,10" />
+  <Image Name="DiamondMovieTitlePanel" Source="resx://Diamond/Diamond.Resources/dia_titlePanel" NineGrid="10,10,10,10" />
+  <Image Name="DiamondTimePanel" Source="resx://Diamond/Diamond.Resources/dia_timePanel" NineGrid="10,10,10,10" />
+  <Image Name="DiamondPagePanel" Source="resx://Diamond/Diamond.Resources/dia_pagePanel"  />
+  <Image Name="DiamondCounterPanel" Source="resx://Diamond/Diamond.Resources/dia_CounterPanel" NineGrid="10,10,10,10" />
+  <Image Name="DiamondDetailA" Source="resx://Diamond/Diamond.Resources/dia_detailA" NineGrid="10,10,10,10" />
+  <Image Name="DiamondDetailB" Source="resx://Diamond/Diamond.Resources/dia_detailB" NineGrid="15,15,15,15" />
+
+  <Image Name="DiamondCFArc" Source="resx://Diamond/Diamond.Resources/dia_cf_arc" />
+
+  <!-- Media Info Icons-->  
+  <!-- Ratio -->
+  <Image Name="Ratio_133" Source="resx://Diamond/Diamond.Resources/ratio_133" />
+  <Image Name="Ratio_166" Source="resx://Diamond/Diamond.Resources/ratio_166" />
+  <Image Name="Ratio_177" Source="resx://Diamond/Diamond.Resources/ratio_177" />
+  <Image Name="Ratio_178" Source="resx://Diamond/Diamond.Resources/ratio_178" />
+  <Image Name="Ratio_185" Source="resx://Diamond/Diamond.Resources/ratio_185" />
+  <Image Name="Ratio_220" Source="resx://Diamond/Diamond.Resources/ratio_220" />
+  <Image Name="Ratio_235" Source="resx://Diamond/Diamond.Resources/ratio_235" />
+  <Image Name="Ratio_239" Source="resx://Diamond/Diamond.Resources/ratio_239" />
+  <Image Name="Ratio_240" Source="resx://Diamond/Diamond.Resources/ratio_240" />
+  <!-- Codecs -->
+  <Image Name="Xvid" Source="resx://Diamond/Diamond.Resources/codec_xvid" />
+  <Image Name="Divx" Source="resx://Diamond/Diamond.Resources/codec_divx" />
+  <Image Name="Ac3" Source="resx://Diamond/Diamond.Resources/codec_ac3" />
+  <Image Name="Aac" Source="resx://Diamond/Diamond.Resources/codec_aac" />
+  <Image Name="Asf" Source="resx://Diamond/Diamond.Resources/codec_asf" />
+  <Image Name="MpegAudio" Source="resx://Diamond/Diamond.Resources/codec_mpegaudio" />
+  <Image Name="Dts" Source="resx://Diamond/Diamond.Resources/codec_dts" />
+  <Image Name="H264" Source="resx://Diamond/Diamond.Resources/codec_h264" />
+  <Image Name="Vc1" Source="resx://Diamond/Diamond.Resources/codec_vc1" />
+  <Image Name="Wmv" Source="resx://Diamond/Diamond.Resources/codec_wmv" />
+  <Image Name="Wma" Source="resx://Diamond/Diamond.Resources/codec_wma" />
+  <Image Name="Flac" Source="resx://Diamond/Diamond.Resources/codec_flac" />
+  <Image Name="Media_Bluray" Source="resx://Diamond/Diamond.Resources/media_bluray" />
+  <Image Name="Media_Hddvd" Source="resx://Diamond/Diamond.Resources/media_hddvd" />
+  <Image Name="Media_Dvd" Source="resx://Diamond/Diamond.Resources/media_dvd" />
+  <Image Name="Media_Mkv" Source="resx://Diamond/Diamond.Resources/media_mkv" />
+  <Image Name="Media_Avi" Source="resx://Diamond/Diamond.Resources/media_avi" />
+  <Image Name="HDType_1080" Source="resx://Diamond/Diamond.Resources/hdtype_1080" />
+  <Image Name="HDType_720" Source="resx://Diamond/Diamond.Resources/hdtype_720" />
+
+  <Image Name="HDLogo" Source="resx://Diamond/Diamond.Resources/HD" />
+  <Image Name="HDLogo1080" Source="resx://Diamond/Diamond.Resources/hd1080" />
+  <Image Name="HDLogo720" Source="resx://Diamond/Diamond.Resources/hd720" />
+  <!-- Studio / Network -->
+
+  <!--PC images-->
+  <Image Name="Lock" Source="resx://Diamond/Diamond.Resources/IconLock"/>
+  <Image Name="UnLock" Source="resx://Diamond/Diamond.Resources/IconUnLock"/>
+  <Image Name="BlockedCover" Source="resx://MediaBrowser/MediaBrowser.Resources/BlockedCover"/>
+  <Image Name="RatedCustom" Source="resx://MediaBrowser/MediaBrowser.Resources/Rated_Custom" />
+  <Image Name="PlainBorder" Source="resx://MediaBrowser/MediaBrowser.Resources/plainborder" />
+</Mcml>

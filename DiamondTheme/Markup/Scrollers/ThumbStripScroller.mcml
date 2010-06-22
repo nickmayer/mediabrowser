@@ -1,0 +1,216 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor="assembly://MSCorLib/System"
+    xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+    xmlns:fs="resx://Diamond/Diamond.Resources/FocusSelector"
+    xmlns:pvi="resx://Diamond/Diamond.Resources/PosterViewItem"
+    xmlns:ib="resx://Diamond/Diamond.Resources/ItemButton"
+    xmlns:pp="resx://MediaBrowser/MediaBrowser.Resources/PopupPlay"
+    xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+    xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+    xmlns:i="resx://Diamond/Diamond.Resources/Images"
+	  >
+
+  <UI Name="ThumbStripScroller">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
+    
+    
+      <cor:Boolean Name="InitialFocusSet" Boolean="false"/>
+      <Timer Name="CheckInitialFocus" AutoRepeat="false" Interval="20" Enabled="false"/>
+      <IntRangedValue Name="SelectRepeaterIndex"/>
+        <IntRangedValue Name="NavCount" Value="0" />
+    </Properties>
+
+    <Locals>
+
+      <cor:Int32 Name="InitialFocusIndex" Int32="[Folder.SelectedChildIndex]"/>
+      
+      <ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true" HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
+      <ScrollingData Name="SD" LockedAlignment="0.5" LockedPosition="0.5"/>
+      <GridLayout Name="MyLayout" Orientation="Horizontal" AllowWrap="true"
+                  Spacing="[Application.Config.GridSpacing]" Repeat="WhenTooBig"
+                  RepeatGap="[Application.Config.GridSpacing.Width]" Rows="1" MinorAlignment="Far" />
+
+      <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
+      <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
+      
+      <cor:Int32 Name="NormalKeyRepeat" Int32="20"/>
+      <!-- This must be less than anim delay -->
+      <cor:Int32 Name="FastKeyRepeat" Int32="10"/>
+      <cor:Int32 Name="AnimDelay" Int32="30" />
+      <!-- This must be greater than NormalKeyRepeat-->
+      <cor:Int32 Name="SpeedUpDelay" Int32="2"/>
+      <cor:Int32 Name="backFocus" Int32="[Folder.SelectedChildIndex]" />
+
+    </Locals>
+
+    <Rules>
+
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[SD]"/>
+      <Default Target="[SD.Repeater]" Value="[CoverRepeater]"/>
+      <Default Value="[MyLayout]" Target="[CoverRepeater.Layout]"/>
+      
+      <Rule>
+        <Conditions>
+          <Modified Source="[JumpForward.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SD.PageDown]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Modified Source="[JumpBack.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SD.PageUp]"/>
+        </Actions>
+      </Rule>
+
+      <Changed Source="[Application]" InitialEvaluate="true">
+        <Actions>
+          <Invoke Target="[Application.FixRepeatRate]" scroller="[Scroller]" val="[NormalKeyRepeat]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[NavCount.Value]">
+        <Conditions>
+          <Equality Source="[NavCount.Value]" ConditionOp="Equals" Value="[SpeedUpDelay]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Application.FixRepeatRate]" scroller="[Scroller]" val="[FastKeyRepeat]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[NavCount.Value]">
+        <Conditions>
+          <Equality Source="[NavCount.Value]" ConditionOp="Equals" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Application.FixRepeatRate]" scroller="[Scroller]" val="[NormalKeyRepeat]" />
+        </Actions>
+      </Changed>
+
+
+      <!-- Update cover repeater on items change. -->
+      <Changed Source="[Folder.Children]">
+        <Actions>
+          <Set Target="[CoverRepeater.Source]" Value="[Folder.Children]" />
+          <Set  Target="[Folder.SelectedChildIndex]" Value="-1"/>
+        </Actions>
+      </Changed>
+
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application]" InitialEvaluate="true"/>
+          <Equality Source="[Application.NavigatingForward]" Value="true"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[CoverRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And" >
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="false"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[CoverRepeater.NavigateIntoIndex]"  index="[backFocus]"/>
+        </Actions>
+      </Rule>
+
+      <Changed Source="[Folder.JILShift]">
+        <Actions>
+          <Invoke Target="[SD.Scroll]"  amount="[Folder.JILShift]"/>
+        </Actions>
+      </Changed>
+
+      <Rule>
+        <Conditions>
+          <Modified Source="[JumpForward.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SD.PageDown]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Modified Source="[JumpBack.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SD.PageUp]"/>
+        </Actions>
+      </Rule>
+
+
+      <!-- Cover width above 145px -->
+
+      <!-- Hide focus frame image -->
+      <Condition Source="[Application.Config.HideFocusFrame]" ConditionOp="Equals" SourceValue="true"
+                 Target="[FocusRect.FocusImage]" Value="image://i:BlankImage" />
+
+    </Rules>
+
+    <Content>
+      <!-- Coverflow Scroller -->
+      <Panel Name="Panel" Navigation="ContainHorizontal" Layout="Anchor" >
+        <Children>
+
+          <fs:FocusSelector Name="FocusRect" FocusImage="image://i:ZoomPane" Scaling="1.3,1.3,1.3" >
+            <LayoutInput>
+              <FormLayoutInput Left="Focus,0,-2" Right="Focus,1,2"
+											 Top="Focus,0,-2" Bottom="Focus,1,2"
+											 ContributesToHeight="false"
+											 ContributesToWidth="false"/>
+            </LayoutInput>
+          </fs:FocusSelector>
+
+          <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="-20" ScrollingData="[SD]"
+                    Prefetch="3" >
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Fill"  Bottom="Parent,1"/>
+            </LayoutInput>
+            <Children>
+              <Repeater Name="CoverRepeater" Source="[Folder.Children]" Layout="[MyLayout]"
+                        DiscardOffscreenVisuals="true" Navigation="FlowHorizontal">
+
+                <Content>
+                  <pvi:ThumbItem
+                        Application="[Application]"
+                        ParentItem="[Folder]"
+                        ItemIndex="[RepeatedItemIndex]"
+                        Item="[RepeatedItem!lib:Item]"
+                        SelectRepeaterIndex="[SelectRepeaterIndex]"
+                        ImageSize="[Folder.ActualThumbSize]"
+                        AnimDelay="[AnimDelay]" NavCount="[NavCount]"
+                        UnwatchedCountFont="font://f:CV_UnwatchedCountFont"
+                        ShowLabels="[Folder.DisplayPrefs.ShowLabels]"
+                        TopLabelFont="font://f:CV_PosterTopLabelFont"
+                        />
+                </Content>
+
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.25"/>
+                      <PositionKeyframe Time="0.65" RelativeTo="Final"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+              </Repeater>
+            </Children>
+          </Scroller>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+</Mcml>

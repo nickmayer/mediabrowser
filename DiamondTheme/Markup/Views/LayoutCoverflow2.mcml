@@ -1,0 +1,152 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+	  xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+    xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
+      
+    xmlns:fs="resx://Diamond/Diamond.Resources/FocusSelector"
+	  xmlns:i="resx://Diamond/Diamond.Resources/Images"
+    xmlns:pvi="resx://Diamond/Diamond.Resources/PosterViewItem"
+    xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
+	  xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
+    xmlns:app="assembly://Diamond/Diamond"
+      
+    xmlns:mi="resx://Diamond/Diamond.Resources/DiamondMediaInfoPanel"
+    xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
+    xmlns:cfs="resx://Diamond/Diamond.Resources/CoverflowScroller"
+    xmlns:me="Me"
+	  >
+  
+  <UI Name="DiamondLayoutCoverflow">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
+      <cor:Boolean Name="UseCustomAnchor" Boolean="false" />
+      <app:Config Name="ThemeConfig" />
+    </Properties>
+
+    <Locals>
+      <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
+      
+      <Timer Name="InfoTimer" AutoRepeat="false" Interval="400" Enabled="false"/>
+
+      <AnchorLayoutInput Name="AnchorNormal" Horizontal="Fill" Top="Parent,0.1"  Bottom="Parent,1,-100" />
+      <AnchorLayoutInput Name="AnchorCustom" Horizontal="Fill" Top="Parent, 0,-50" Bottom="Parent, 1" />
+    </Locals>
+
+    <Rules>
+      <!-- Current Item Bindings -->
+      <!--<Binding Target="[Application.CurrentItem]" Source="[Folder.SelectedChild]"></Binding>-->
+
+      <!-- Folder Child Changed -->
+      <Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
+        <Conditions>
+          <Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
+        </Conditions>
+        <Actions>
+          <Set Target="[InfoTimer.Enabled]" Value="true"/>
+          <Invoke Target="[InfoTimer.Stop]" />
+          <Invoke Target="[InfoTimer.Start]" />
+        </Actions>
+      </Changed>
+      <!-- InfoTimer Set Selected Item -->
+      <Changed Source="[InfoTimer.Tick]">
+        <Actions>
+          <Set Target="[SelectedItem]" Value="[Folder.SelectedChild]" />
+        </Actions>
+      </Changed>
+      
+      <!-- Title Bindings -->
+      <Binding Source="[Folder.SelectedChild]" Target="[TitleUI.Item]"/>
+      
+      <!-- InfoBox Bindings -->
+      <Binding Source="[SelectedItem]" Target="[InfoBox.Item]" >
+        <Conditions>
+          <Equality Source="[ThemeConfig.InfoBoxCoverflow]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+      </Binding>
+      <Binding Source="[ThemeConfig.InfoBoxCoverflow]" Target="[InfoBox.Visible]" />
+
+      <!-- Counter Bindings -->
+      <Binding Source="[Folder.SelectedChildIndex]" Target="[Counter.List_Counter]" />
+      <Binding Source="[Folder.Children.Count]" Target="[Counter.List_Total]" />      
+     
+      <!-- Backdrop Bindings -->
+      <Binding Source="[Folder.DisplayPrefs.UseBackdrop.Value]" Target="[Backdrop.Visible]">
+        <Conditions>
+          <Equality Source="[Application.Config.ShowBackdrop]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+      </Binding>
+      <Binding Target="[Backdrop.Image]" Source="[Folder.SelectedChild.BackdropImage]" />
+      <Binding Target="[Backdrop.Item]" Source="[Folder.SelectedChild]" />
+      
+
+      <!-- Layout Bindings -->
+      <Condition Source="[UseCustomAnchor]" ConditionOp="Equals" SourceValue="false"
+                 Target="[CFScroller.LayoutInput]" Value="[AnchorNormal]" />
+      <Condition Source="[UseCustomAnchor]" ConditionOp="Equals" SourceValue="true"
+                 Target="[CFScroller.LayoutInput]" Value="[AnchorCustom]" />
+      <!-- Extender Bindings -->
+      <Condition Source="[Application.RunningOnExtender]" ConditionOp="Equals" SourceValue="true"
+                  Target="[Backdrop.LayoutInput]" Value="global://dtb:LI_Bg_Extender"/>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[ThemeConfig.AutoExtenderLayout]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TitleUI.LayoutInput]" Value="global://dtb:LI_Title_Extender" />
+          <Set Target="[Counter.LayoutInput]" Value="global://dtb:LI_ListCounter_Extender" />
+        </Actions>
+      </Rule>
+      
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+
+          <!-- Title Details -->
+          <dtb:DiamondTitleUI Name="TitleUI" Item="[SelectedItem]" LayoutInput="global://dtb:LI_Title" />
+          <!-- List Counter -->
+          <dtb:DiamondCounter Name="Counter" LayoutInput="global://dtb:LI_ListCounter" />
+
+          <!-- InfoBox -->
+          <dtb:DiamondCommonInformation Name="InfoBox" Application="[Application]" Visible="[ThemeConfig.InfoBoxThumbstrip]"
+                                             Item="[SelectedItem]" MaximumSize="0,0" FullMode="false" DisableInput="true">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 1, -475" Right="Parent, 1, -25" Bottom="Focus, 0, -50" />
+            </LayoutInput>
+          </dtb:DiamondCommonInformation>
+          
+          
+          <!-- Coverflow Scroller -->
+          <cfs:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]"
+                                  LayoutInput="[AnchorNormal]" />
+          <!--<me:CoverflowScroller Name="CFScroller" Application="[Application]" Folder="[Folder]" />-->
+
+          <!-- Coverflow Arc -->
+          <!--<Graphic Name="ArcImg" Content="image://i:DiamondCFArc">
+            <LayoutInput>
+              <AnchorLayoutInput Bottom="Parent, 1, 30" Left="Parent, 0, -50"
+                                 Top="Parent, 1,-150" Right="Parent, 1, 50"/>
+            </LayoutInput>
+          </Graphic>-->
+
+          <!-- Backdrop -->
+          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]"
+                        Image="[Folder.BackdropImage]" Item="[Folder]"
+                        LayoutInput="global://dtb:LI_Bg"/>
+        </Children>
+      </Panel>
+
+    </Content>
+
+  </UI>
+
+
+  <Image Name="PosterFrame" Source="resx://MediaBrowser/MediaBrowser.Resources/poster_frame" NineGrid="10,10,10,10" />
+</Mcml>

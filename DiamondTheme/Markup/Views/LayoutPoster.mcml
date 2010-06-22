@@ -1,0 +1,138 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+	  xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	  xmlns:me="Me"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+    
+    xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
+	  xmlns:app="assembly://Diamond/Diamond"
+	  xmlns:ps="resx://Diamond/Diamond.Resources/PosterScroller"
+    xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
+  >
+
+  <Aggregate Source="resx://MediaBrowser/MediaBrowser.Resources/StarRating"/>
+
+  <UI Name="DiamondLayoutPoster">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
+      <app:Config Name="ThemeConfig" />
+    </Properties>
+
+    <Locals>
+      <FormLayoutInput Name="TitleLayout" Top="ItemPanel,1"  Left="Parent,0.2" Right="Parent,.89"/>
+      <MathTransformer Name="Add1" AddInt="1"/>
+      <FormLayoutInput Name="Posters_Many" Left="Parent,.0" Top="Parent,0,80" Bottom="Parent,1,-80" Right="Parent,1"/>
+      <FormLayoutInput Name="Posters_Few" Left="Parent,.0" Top="Parent,0,80" Bottom="Parent,1,-100" Right="Parent,1"/>
+
+      <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
+      <Timer Name="FullDetailsTimer" Interval="300" AutoRepeat="false"/>
+    </Locals>
+    <Rules>
+      <!-- Title and Year -->
+      <Binding Source="[SelectedItem]" Target="[TitleUI.Item]"/>
+      <!-- Counter Bindings -->
+      <Binding Source="[Folder.SelectedChildIndex]" Target="[Counter.List_Counter]" />
+      <Binding Source="[Folder.Children.Count]" Target="[Counter.List_Total]" />
+      <!-- Backdrop -->
+      <Binding Target="[Backdrop.Image]" Source="[SelectedItem.BackdropImage]" />
+      <Binding Target="[Backdrop.Item]" Source="[SelectedItem]" />
+      <Binding Target="[Backdrop.Visible]" Source="[Folder.DisplayPrefs.UseBackdrop.Value]">
+        <Conditions>
+          <Equality Source="[Application.Config.ShowBackdrop]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+      </Binding>
+
+
+      <Binding Source="[SelectedItem]" Target="[InfoBox.Item]" >
+        <Conditions>
+          <Equality Source="[ThemeConfig.InfoBoxPoster]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+      </Binding>
+      <Binding Source="[ThemeConfig.InfoBoxPoster]" Target="[InfoBox.Visible]" />
+      
+      <Rule>
+        <Conditions>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="10" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ItemPanel.LayoutInput]" Value="[Posters_Many]" />
+        </Actions>
+      </Rule>
+
+
+      <Changed Source="[Folder.SelectedChildIndex]" InitialEvaluate="true">
+        <Conditions>
+          <Equality ConditionOp="NotEquals" Source="[Folder.SelectedChildIndex]" Value="-1"></Equality>
+        </Conditions>
+        <Actions>
+          <Set Target="[FullDetailsTimer.Enabled]" Value="true" />
+          <Invoke Target="[FullDetailsTimer.Stop]" />
+          <Invoke Target="[FullDetailsTimer.Start]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[FullDetailsTimer.Tick]">
+        <Actions>
+          <Set Target="[SelectedItem]" Value="[Folder.SelectedChild]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[SelectedItem]">
+        <Actions>
+          <Set Target="[FullDetailsTimer.Enabled]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <!-- Extender Bindings -->
+      <Condition Source="[Application.RunningOnExtender]" ConditionOp="Equals" SourceValue="true"
+                  Target="[Backdrop.LayoutInput]" Value="global://dtb:LI_Bg_Extender"/>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.RunningOnExtender]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[ThemeConfig.AutoExtenderLayout]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TitleUI.LayoutInput]" Value="global://dtb:LI_Title_Extender" />
+          <Set Target="[Counter.LayoutInput]" Value="global://dtb:LI_ListCounter_Extender" />
+        </Actions>
+      </Rule>      
+    </Rules>
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+          <!-- Title Details -->
+          <dtb:DiamondTitleUI Name="TitleUI" Item="[Folder.SelectedChild]" LayoutInput="global://dtb:LI_Title" />
+
+          <!-- List Counter -->
+          <dtb:DiamondCounter Name="Counter" LayoutInput="global://dtb:LI_ListCounter" />
+
+          <!-- InfoBox -->
+          <dtb:DiamondCommonInformation Name="InfoBox" Application="[Application]" Visible="[ThemeConfig.InfoBoxPoster]"
+                                             Item="[SelectedItem]" MaximumSize="0,0" FullMode="false" DisableInput="true">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Focus, 1, 35" Right="Focus, 1, 485" Top="Focus, 0" />
+            </LayoutInput>
+          </dtb:DiamondCommonInformation>
+
+          <!-- Posert Scroller -->
+          <ps:PosterScroller Name="ItemPanel" Application="[Application]" Folder="[Folder]"
+                             TopLabelFont="font://f:PV_PosterTopLabelFont"
+                             LabelFont="font://f:PV_PosterLabelFont"
+                             CenterFocus="true"
+                             UnwatchedCountFont="font://f:PV_UnwatchedCountFont"
+                             LayoutInput="[Posters_Few]">
+          </ps:PosterScroller>
+
+          <!-- Backdrop -->
+          <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[SelectedItem.BackdropImage]" Item="[SelectedItem]" LayoutInput="global://dtb:LI_Bg"/>
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+</Mcml>

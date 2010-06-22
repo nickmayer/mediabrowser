@@ -41,16 +41,7 @@ namespace MediaBrowser.Library.Entities {
 
         public IEnumerable<string> TrailerFiles { 
             get {
-                var folder = MediaLocation as IFolderMediaLocation; 
-                if (folder != null && folder.ContainsChild(MovieResolver.TrailersPath)) {
-
-                    var trailers = folder.GetChild(MovieResolver.TrailersPath) as IFolderMediaLocation;
-                    if (trailers != null) {
-                        foreach (var path in GetChildVideos(trailers, new string[] { MovieResolver.TrailersPath })) {
-                            yield return path;
-                        }
-                    }
-                }
+                return Kernel.Instance.GetTrailers(this);
             }
         }
 

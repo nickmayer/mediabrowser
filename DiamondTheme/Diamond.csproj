@@ -1,0 +1,278 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E7FD3720-EBA8-4A14-8142-75A3A438C8EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Diamond</RootNamespace>
+    <AssemblyName>Diamond</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <AssemblyOriginatorKeyFile>Theme.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <FullyQualifiedOutputPath>$(MSBuildProjectDirectory)\bin\Debug</FullyQualifiedOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <FullyQualifiedOutputPath>$(MSBuildProjectDirectory)\bin\Release</FullyQualifiedOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <StartWorkingDirectory>$(windir)\eHome</StartWorkingDirectory>
+    <StartArguments>-load:"resx://Crystal/Crystal.Resources/Default" -assemblyredirect:"$(FullyQualifiedOutputPath)" -markupredirect:"resx://Crystal/Crystal.Resources/,file://$(MSBuildProjectDirectory)\Markup\,.mcml"</StartArguments>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(windir)\eHome\McmlPad.exe</StartProgram>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MediaBrowser, Version=2.2.4.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Code\A_MediaBrowser\MediaBrowser\bin\Release\MediaBrowser.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.MediaCenter, Version=6.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>VistaDlls\Microsoft.MediaCenter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.MediaCenter.UI, Version=6.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>VistaDlls\Microsoft.MediaCenter.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\AppUtil.cs" />
+    <Compile Include="Code\AreaOfInterestHelper.cs" />
+    <Compile Include="Code\Config.cs" />
+    <Compile Include="Code\ConfigData.cs" />
+    <Compile Include="Code\OnScreenHelp.cs" />
+    <Compile Include="Code\PrivateObjectReflector.cs" />
+    <Compile Include="MyStrings.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Diamond.pgn" />
+    <Content Include="Images\Buttons\BallButtonDark.png" />
+    <Content Include="Images\Buttons\BallButtonLight.png" />
+    <None Include="Images\Buttons\ButtonFocus.png" />
+    <Content Include="Images\Common\folder.png" />
+    <None Include="Images\Common\zoompane.png" />
+    <None Include="Images\Icons\IconAdd.png" />
+    <Content Include="Images\Icons\IconIndex.png" />
+    <Content Include="Images\Icons\IconLines.png" />
+    <Content Include="Images\Icons\IconLock.png" />
+    <Content Include="Images\Icons\IconSort.png" />
+    <Content Include="Images\Icons\IconUnLock.png" />
+    <Content Include="Images\Icons\IconGears.png" />
+    <None Include="Images\Icons\IconRT.png" />
+    <Content Include="Images\Icons\IconRemote.png" />
+    <Content Include="Images\MediaInfo\codec_aac.png" />
+    <Content Include="Images\MediaInfo\codec_ac3.png" />
+    <None Include="Images\MediaInfo\codec_asf.png" />
+    <Content Include="Images\MediaInfo\codec_divx.png" />
+    <None Include="Images\MediaInfo\codec_dts.png" />
+    <None Include="Images\MediaInfo\codec_h264.png" />
+    <None Include="Images\MediaInfo\codec_flac.png" />
+    <None Include="Images\MediaInfo\codec_dolby.png" />
+    <Content Include="Images\MediaInfo\codec_mpegaudio.png" />
+    <None Include="Images\MediaInfo\codec_vc1.png" />
+    <None Include="Images\MediaInfo\codec_wmv.png" />
+    <None Include="Images\MediaInfo\codec_wma.png" />
+    <Content Include="Images\MediaInfo\codec_xvid.png" />
+    <None Include="Images\MediaInfo\hdtype_1080.png" />
+    <None Include="Images\MediaInfo\hdtype_720.png" />
+    <Content Include="Images\MediaInfo\HD.png" />
+    <Content Include="Images\MediaInfo\hd1080.png" />
+    <Content Include="Images\MediaInfo\hd720.png" />
+    <Content Include="Images\MediaInfo\media_avi.png" />
+    <None Include="Images\MediaInfo\media_bluray.png" />
+    <None Include="Images\MediaInfo\media_mkv.png" />
+    <None Include="Images\MediaInfo\media_dvd.png" />
+    <None Include="Images\MediaInfo\media_hddvd.png" />
+    <Content Include="Images\MediaInfo\ratio_133.png" />
+    <Content Include="Images\MediaInfo\ratio_166.png" />
+    <Content Include="Images\MediaInfo\ratio_177.png" />
+    <Content Include="Images\MediaInfo\ratio_178.png" />
+    <Content Include="Images\MediaInfo\ratio_185.png" />
+    <Content Include="Images\MediaInfo\ratio_220.png" />
+    <Content Include="Images\MediaInfo\ratio_235.png" />
+    <Content Include="Images\MediaInfo\ratio_239.png" />
+    <Content Include="Images\MediaInfo\ratio_240.png" />
+    <Content Include="Images\Overlays\dia_cf_arc.png" />
+    <Content Include="Images\Panels\dia_CounterPanel.png" />
+    <Content Include="Images\Overlays\dia_detailA.png" />
+    <Content Include="Images\Overlays\dia_detailB.png" />
+    <Content Include="Images\Buttons\dia_folderbutton.png" />
+    <Content Include="Images\Panels\dia_foldermenu.png" />
+    <Content Include="Images\Overlays\dia_list_bg.png" />
+    <Content Include="Images\dia_list_focus.png" />
+    <None Include="Images\Panels\dia_infoPanel.png" />
+    <None Include="Images\Panels\dia_pagePanel.png" />
+    <Content Include="Images\Panels\dia_timePanel.png" />
+    <Content Include="Images\Panels\dia_titlePanel.png" />
+    <Content Include="Images\Panels\dia_TopPanel.png" />
+    <Content Include="Images\Icons\IconArrowDown.png" />
+    <Content Include="Images\Icons\IconArrowUp.png" />
+    <Content Include="Images\Icons\IconBanner.png" />
+    <Content Include="Images\Icons\IconConfig.png" />
+    <Content Include="Images\Icons\IconActors.png" />
+    <Content Include="Images\Icons\IconAdded.png" />
+    <Content Include="Images\Icons\IconDelete.png" />
+    <Content Include="Images\Icons\IconFloral.png" />
+    <Content Include="Images\Icons\IconLabels.png" />
+    <Content Include="Images\Icons\IconMusic.png" />
+    <Content Include="Images\Icons\IconPlay.png" />
+    <Content Include="Images\Icons\IconRefresh.png" />
+    <Content Include="Images\Icons\IconResume.png" />
+    <Content Include="Images\Icons\IconShuffle.png" />
+    <Content Include="Images\Icons\IconSummary.png" />
+    <Content Include="Images\Icons\IconTrailers.png" />
+    <Content Include="Images\Icons\IconVertical.png" />
+    <Content Include="Images\Icons\IconWatched.png" />
+    <Content Include="Images\Overlays\DiamondMainBG.png" />
+    <Content Include="Images\RectLight.png" />
+    <None Include="Images\Icons\Star\star_empty.png" />
+    <None Include="Images\Icons\Star\star_half.png" />
+    <None Include="Images\Icons\Star\star_full.png" />
+    <Content Include="Markup\Base\DiamondStylesDefault.mcml" />
+    <Content Include="Markup\Base\DiamondFontsDefault.mcml" />
+    <Content Include="Markup\Base\DiamondFontsSmall.mcml" />
+    <Content Include="Markup\Base\Images.mcml" />
+    <Content Include="Markup\ConfigPanel.mcml" />
+    <Content Include="Markup\Controls\Buttons\DiamondSpin.mcml" />
+    <Content Include="Markup\Controls\Buttons\ItemButton.mcml" />
+    <Content Include="Markup\Controls\Buttons\PersonButton.mcml" />
+    <Content Include="Markup\Controls\DiamondBackdrop.mcml" />
+    <Content Include="Markup\Controls\Menus\ContextMenu.mcml" />
+    <Content Include="Markup\Controls\StarRating.mcml" />
+    <Content Include="Markup\Controls\DiamondText.mcml" />
+    <Content Include="Markup\Controls\DiamondInfo.mcml" />
+    <Content Include="Markup\Controls\Buttons\DiamondBall.mcml" />
+    <Content Include="Markup\Controls\Menus\DiamondFolderMenu.mcml" />
+    <Content Include="Markup\Controls\Utility\FocusSelector.mcml" />
+    <Content Include="Markup\Scrollers\CoverflowScroller.mcml" />
+    <Content Include="Markup\Scrollers\DiamondListAlbum.mcml" />
+    <Content Include="Markup\Scrollers\DiamondListView.mcml" />
+    <Content Include="Markup\Controls\DiamondMediaInfoPanel.mcml" />
+    <Content Include="Markup\Controls\DiamondPagination.mcml" />
+    <Content Include="Markup\Controls\DiamondTab.mcml" />
+    <Content Include="Markup\Controls\DiamondToolBox.mcml" />
+    <Content Include="Markup\Controls\Weather.mcml" />
+    <Content Include="Markup\DetailMovieView.mcml" />
+    <Content Include="Markup\Scrollers\PosterScroller.mcml" />
+    <Content Include="Markup\Scrollers\ThumbStripScroller.mcml" />
+    <Content Include="Markup\Scrollers\PosterViewItem.mcml" />
+    <Content Include="Markup\Selectors\Page.mcml" />
+    <Content Include="Markup\Selectors\PageDetailArea.mcml" />
+    <Content Include="Markup\Views\LayoutCoverflow2.mcml" />
+    <Content Include="Markup\Views\LayoutAlbum.mcml" />
+    <Content Include="Markup\Views\LayoutCoverflow.mcml" />
+    <Content Include="Markup\Views\LayoutDetails.mcml" />
+    <Content Include="Markup\Views\LayoutPoster.mcml" />
+    <Content Include="Markup\Views\LayoutRoot.mcml" />
+    <Content Include="Markup\Views\LayoutThumb.mcml" />
+    <Content Include="Markup\Views\LayoutThumbStrip.mcml" />
+    <Content Include="VistaDlls\Microsoft.MediaCenter.dll" />
+    <Content Include="VistaDlls\Microsoft.MediaCenter.UI.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Theme.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>%25windir%25\eHome\McmlVerifier.exe -verbose -assemblyredirect:"$(FullyQualifiedOutputPath)" -directory:"$(ProjectDir)Markup"
+echo copy Diamond.dll to %25windir%25\eHome
+copy $(TargetPath) %25windir%25\eHome
+echo copy Diamond.pgn to C:\ProgramData\MediaBrowser\Plugins\
+copy $(ProjectDir)Diamond.pgn C:\ProgramData\MediaBrowser\Plugins\</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

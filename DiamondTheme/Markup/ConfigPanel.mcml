@@ -1,0 +1,89 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+    xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:app="assembly://Diamond/Diamond"
+	  xmlns:cb="resx://MediaBrowser/MediaBrowser.Resources/CheckBox"
+    xmlns:ss="resx://MediaBrowser/MediaBrowser.Resources/SimpleSpinner"
+	  xmlns:s="file://Styles_DoNotEdit.mcml"
+	  xmlns:f="file://Fonts_DoNotEdit.mcml"
+    xmlns:me="Me"
+>
+  <UI Name="ConfigPanel">
+
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <EditableText Name="FocusItem" />
+      <app:Config Name="Config" />
+    </Properties>
+    <Locals>      
+      <Inset Name="CMargin" Inset="25,0,0,0" />
+      <Font Name="Font" Font="font://f:Diamond_Small_SemiBold" />
+      <!-- CONFIG OPTIONS -->
+      <BooleanChoice Name="MiniMode" Value="[Config.MiniMode]" />
+      <BooleanChoice Name="DisplayEndTime" Value="[Config.DisplayEndTime]" />
+      <BooleanChoice Name="InfoBoxCoverflow" Value="[Config.InfoBoxCoverflow]" />
+      <BooleanChoice Name="InfoBoxThumbstrip" Value="[Config.InfoBoxThumbstrip]" />
+      <BooleanChoice Name="DisplayGlassOverlay" Value="[Config.DisplayGlassOverlay]" />
+      <BooleanChoice Name="InfoBoxPoster" Value="[Config.InfoBoxPoster]" />
+      <BooleanChoice Name="AutoExtenderLayout" Value="[Config.AutoExtenderLayout]" />
+      <BooleanChoice Name="DiamondDisplayWeather" Value="[Config.DiamondDisplayWeather]" />
+      <IntRangedValue Name="AlphaOpacity" Value="[Config.AlphaOpacity]" MaxValue="100" MinValue="0" Step="1"/>
+      <!-- END OF CONFIG OPTIONS -->
+    </Locals>
+    <Rules>
+      <!-- OPTION BINDINGS -->
+      <Binding Source="[MiniMode.Value]" Target="[Config.MiniMode]" />
+      <Binding Source="[DisplayEndTime.Value]" Target="[Config.DisplayEndTime]" />
+      <Binding Source="[InfoBoxCoverflow.Value]" Target="[Config.InfoBoxCoverflow]" />
+      <Binding Source="[InfoBoxThumbstrip.Value]" Target="[Config.InfoBoxThumbstrip]" />
+      <Binding Source="[InfoBoxPoster.Value]" Target="[Config.InfoBoxPoster]" />
+      <Binding Source="[DisplayGlassOverlay.Value]" Target="[Config.DisplayGlassOverlay]" />
+      <Binding Source="[AutoExtenderLayout.Value]" Target="[Config.AutoExtenderLayout]" />
+      <Binding Source="[DiamondDisplayWeather.Value]" Target="[Config.DiamondDisplayWeather]" />
+      <Binding Source="[AlphaOpacity.Value]" Target="[Config.AlphaOpacity]" />
+      <!-- END OF OPTION BINDINGS -->
+    </Rules>
+		<Content>
+      <Panel Layout="HorizontalFlow">
+        <Children>
+          <Panel Layout="VerticalFlow" MaximumSize="450,400">
+            <Children>
+              <me:TextHeader Text="Diamond Theme Options" />
+              <cb:CheckBox Label="Media Details in Mini Mode" Checked="[MiniMode]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="Display End Time" Checked="[DisplayEndTime]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="Display Glass Overlay" Checked="[DisplayGlassOverlay]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="Display Infobox in Coverflow Views" Checked="[InfoBoxCoverflow]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="Display Infobox in Thumbstrip Views" Checked="[InfoBoxThumbstrip]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="Display Infobox in Poster Views" Checked="[InfoBoxPoster]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              </Children>
+          </Panel>
+          <Panel Layout="VerticalFlow" MaximumSize="550,400">
+            <Children>
+              <me:TextHeader Text="Diamond Theme Options" />
+              <cb:CheckBox Label="Display Weather" Checked="[DiamondDisplayWeather]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="Extender Layout Enhancements" Checked="[AutoExtenderLayout]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]" />
+              <ss:SimpleSpinner Label="EHS Gradient Opacity" Model="[AlphaOpacity]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="[Font]" ValueFont="[Font]" />
+              <me:TextHeader Text="*Changes require a restart.*" />
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+      
+    </Content>
+
+	</UI>
+
+  <UI Name="TextHeader">
+    <Properties>
+      <cor:String Name="Text" String="$Required" />
+    </Properties>
+    <Locals>
+      <Color Name="Color" Color="color://s:FontColorLight" />
+      <Font Name="Font" Font="font://f:CP_ConfigHeaderFont" />
+      <Inset Name="Margin" Inset="10,15,10,10"/>
+    </Locals>
+    <Content>
+      <Text Color="[Color]" Content="[Text]" Font="[Font]" Margins="[Margin]" />
+    </Content>
+  </UI>
+</Mcml>
