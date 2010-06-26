@@ -38,8 +38,13 @@ namespace MediaBrowser.Library.Playables
             {
                 // Create the process start information.
                 Process process = new Process();
+                //virtualclonedrive
                 if (Config.Instance.DaemonToolsLocation.ToLower().EndsWith("vcdmount.exe"))
                     process.StartInfo.Arguments = "-mount \"" + path + "\"";
+                //alcohol120 or alcohol52
+                else if (Config.Instance.DaemonToolsLocation.ToLower().EndsWith("axcmd.exe"))
+                    process.StartInfo.Arguments = Config.Instance.DaemonToolsDrive + ":\\ /M:\"" + path + "\"";
+                //deamontools
                 else
                     process.StartInfo.Arguments = "-mount 0,\"" + path + "\"";
                 process.StartInfo.FileName = Config.Instance.DaemonToolsLocation;
@@ -59,8 +64,8 @@ namespace MediaBrowser.Library.Playables
             catch (Exception)
             {
                 // Display the error in this case, they might wonder why it didn't work.
-                Application.DisplayDialog("DaemonTools is not correctly configured.", "Could not load ISO");
-                throw (new Exception("Daemon tools is not configured correctly"));
+                Application.DisplayDialog("ISO Mounter is not correctly configured.", "Could not load ISO");
+                throw (new Exception("ISO Mounter is not configured correctly"));
             }
         }
 
