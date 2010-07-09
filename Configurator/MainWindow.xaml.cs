@@ -396,6 +396,9 @@ namespace Configurator
             slUnlockPeriod.Value = config.ParentalUnlockPeriod;
             txtPCPIN.Password = config.ParentalPIN;
 
+            //logging
+            cbxEnableLogging.IsChecked = config.EnableTraceLogging;
+
         }
 
         private void SaveConfig()
@@ -1726,6 +1729,24 @@ sortorder: {2}
         {
             btnClearCache.IsEnabled = cbxItemCache.IsChecked.Value | cbxImageCache.IsChecked.Value | cbxDisplayCache.IsChecked.Value | cbxPlaystateCache.IsChecked.Value;
 	    }
+
+        private void enableLogging_Click(object sender, RoutedEventArgs e)
+        {
+            config.EnableTraceLogging = (bool)cbxEnableLogging.IsChecked;
+            SaveConfig();
+        }
+
+        private void openLogsFolder_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("" + ApplicationPaths.AppLogPath + "");
+            }
+            catch
+            {
+                MessageBox.Show("We were unable to open the Logs folder:\n\n" + ApplicationPaths.AppLogPath + "\n\nMake sure the actual folder exists on the local disk.");
+            }
+        }
     }
 
     #region FormatParser Class
