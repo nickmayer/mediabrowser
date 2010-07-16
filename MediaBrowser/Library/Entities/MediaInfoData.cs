@@ -29,6 +29,8 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public int AudioChannelCount = 0;
         [Persist]
+        public string AudioProfile;
+        [Persist]
         public string Subtitles;
         [Persist]
         public string VideoFPS;
@@ -159,6 +161,14 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 return string.Format("{0} {1}kbps", this.AudioFormat, this.AudioBitRate / 1000);
+            }
+        }
+
+        public string AudioProfileString
+        {
+            get
+            {
+                return string.Format("{0}", this.AudioProfile);
             }
         }
         #endregion
