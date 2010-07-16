@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E7FD3720-EBA8-4A14-8142-75A3A438C8EA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -117,31 +117,78 @@
     <Content Include="Images\MediaInfo\codec_aac.png" />
     <Content Include="Images\MediaInfo\codec_ac3.png" />
     <None Include="Images\MediaInfo\codec_asf.png" />
+    <None Include="Images\MediaInfo\codec_DD51.png" />
+    <None Include="Images\MediaInfo\codec_DDPlus.png" />
+    <None Include="Images\MediaInfo\codec_DDPlus71.png" />
+    <None Include="Images\MediaInfo\codec_DDTrueHD.png" />
+    <None Include="Images\MediaInfo\codec_DDTrueHD71.png" />
+    <None Include="Images\MediaInfo\codec_DDPlus51.png" />
+    <None Include="Images\MediaInfo\codec_DDTrueHD51.png" />
     <Content Include="Images\MediaInfo\codec_divx.png" />
     <None Include="Images\MediaInfo\codec_dts.png" />
     <None Include="Images\MediaInfo\codec_h264.png" />
     <None Include="Images\MediaInfo\codec_flac.png" />
     <None Include="Images\MediaInfo\codec_dolby.png" />
+    <None Include="Images\MediaInfo\codec_h262.png" />
+    <None Include="Images\MediaInfo\codec_mpeg4visual.png" />
+    <None Include="Images\MediaInfo\codec_DTS_96_24.png" />
+    <None Include="Images\MediaInfo\codec_DTS_ES.png" />
+    <None Include="Images\MediaInfo\codec_DTS_HD_HRA.png" />
+    <None Include="Images\MediaInfo\codec_DTS_HD_MA.png" />
+    <None Include="Images\MediaInfo\codec_DTS_HD_MA_71.png" />
+    <None Include="Images\MediaInfo\codec_DTS_HD_MA_51.png" />
+    <None Include="Images\MediaInfo\codec_DTS_HD_HRA_71.png" />
+    <None Include="Images\MediaInfo\codec_DTS_HD_HRA_51.png" />
+    <None Include="Images\MediaInfo\codec_DTS_ES_61.png" />
+    <None Include="Images\MediaInfo\codec_DTS_ES_51.png" />
+    <None Include="Images\MediaInfo\codec_DTS_9624_51.png" />
+    <None Include="Images\MediaInfo\codec_DTS_DS.png" />
+    <None Include="Images\MediaInfo\codec_DTS_DS_51.png" />
+    <None Include="Images\MediaInfo\codec_mp3.png" />
+    <None Include="Images\MediaInfo\codec_flv.png" />
     <Content Include="Images\MediaInfo\codec_mpegaudio.png" />
     <None Include="Images\MediaInfo\codec_vc1.png" />
     <None Include="Images\MediaInfo\codec_wmv.png" />
     <None Include="Images\MediaInfo\codec_wma.png" />
+    <None Include="Images\MediaInfo\codec_vorbis.png" />
+    <None Include="Images\MediaInfo\codec_mpegvideo.png" />
+    <None Include="Images\MediaInfo\codec_WMV_HD.png" />
+    <None Include="Images\MediaInfo\codec_theora.png" />
+    <None Include="Images\MediaInfo\codec_ON2_VP6.png" />
+    <None Include="Images\MediaInfo\codec_ON2.png" />
     <Content Include="Images\MediaInfo\codec_xvid.png" />
     <None Include="Images\MediaInfo\hdtype_1080.png" />
     <None Include="Images\MediaInfo\hdtype_720.png" />
     <Content Include="Images\MediaInfo\HD.png" />
     <Content Include="Images\MediaInfo\hd1080.png" />
     <Content Include="Images\MediaInfo\hd720.png" />
+    <None Include="Images\MediaInfo\media_asf.png" />
     <Content Include="Images\MediaInfo\media_avi.png" />
     <None Include="Images\MediaInfo\media_bluray.png" />
     <None Include="Images\MediaInfo\media_mkv.png" />
     <None Include="Images\MediaInfo\media_dvd.png" />
     <None Include="Images\MediaInfo\media_hddvd.png" />
+    <None Include="Images\MediaInfo\media_mp4.png" />
+    <None Include="Images\MediaInfo\media_mov.png" />
+    <None Include="Images\MediaInfo\media_mpeg.png" />
+    <None Include="Images\MediaInfo\media_WMV.png" />
+    <None Include="Images\MediaInfo\media_ogg.png" />
+    <None Include="Images\MediaInfo\media_mpg.png" />
+    <None Include="Images\MediaInfo\media_flv.png" />
+    <None Include="Images\MediaInfo\media_iso.png" />
+    <None Include="Images\MediaInfo\media_m2ts.png" />
+    <None Include="Images\MediaInfo\media_ts.png" />
+    <None Include="Images\MediaInfo\media_dvrms.png" />
+    <None Include="Images\MediaInfo\media_wtv.png" />
     <Content Include="Images\MediaInfo\ratio_133.png" />
+    <None Include="Images\MediaInfo\ratio_150.png" />
+    <None Include="Images\MediaInfo\Ratio_137.png" />
+    <None Include="Images\MediaInfo\ratio_144.png" />
     <Content Include="Images\MediaInfo\ratio_166.png" />
     <Content Include="Images\MediaInfo\ratio_177.png" />
     <Content Include="Images\MediaInfo\ratio_178.png" />
     <Content Include="Images\MediaInfo\ratio_185.png" />
+    <None Include="Images\MediaInfo\ratio_200.png" />
     <Content Include="Images\MediaInfo\ratio_220.png" />
     <Content Include="Images\MediaInfo\ratio_235.png" />
     <Content Include="Images\MediaInfo\ratio_239.png" />
