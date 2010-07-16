@@ -60,6 +60,13 @@ namespace MediaBrowser.Library.Extensions {
             //figure out media type from file extension
             switch (location.Path.Substring(location.Path.Length - 4).ToLower())
             {
+                case ".asf":
+                    return MediaType.Asf;            
+                case ".mpg":
+                case ".mpeg":
+                    return MediaType.Mpg;
+                case ".mov":
+                    return MediaType.Mov;
                 case ".mkv":
                     return MediaType.Mkv;
                 case ".avi":
@@ -69,8 +76,14 @@ namespace MediaBrowser.Library.Extensions {
                 case ".mp4":
                 case ".m4v":
                     return MediaType.Mp4;
-                case ".dvr-ms":
+                case ".ogv":
+                    return MediaType.Ogv;
+                case ".f4v":
+                    return MediaType.F4v;
+                case ".flv":
+                    return MediaType.Flv;
                 case ".wtv":
+                case ".dvr-ms":
                     return MediaType.DVRMS;
                 default:
                     return MediaType.Unknown;

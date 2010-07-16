@@ -6,17 +6,22 @@ using System.Text;
 namespace MediaBrowser.Library {
     public enum MediaType { 
         Unknown, 
-        Mpg, 
-        Avi, 
+        Mpg,
+        Avi,
         Mkv,
         Mp4,
-        DVD, 
-        BluRay, 
+        DVD,
+        BluRay,
         HDDVD,
         TS,
         ISO,
-        PlayList, 
+        PlayList,
         DVRMS,
-        Wmv
+        Wmv,
+        Ogv,
+        Mov,
+        Asf,
+        F4v,
+        Flv
     }
 }
