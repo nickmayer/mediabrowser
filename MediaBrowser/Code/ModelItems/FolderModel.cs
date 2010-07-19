@@ -644,6 +644,38 @@ namespace MediaBrowser.Library {
             }
         }
 
+        public Item FirstChild
+        {
+            get
+            {
+                if (Children.Count > 0)
+                {
+                    SelectedChildIndex = 0;
+                    return SelectedChild;
+                }
+                else
+                {
+                    return Item.BlankItem;
+                }
+            }
+        }
+
+        public Item LastChild
+        {
+            get
+            {
+                if (Children.Count > 0)
+                {
+                    SelectedChildIndex = Children.Count - 1;
+                    return SelectedChild;
+                }
+                else
+                {
+                    return Item.BlankItem;
+                }
+            }
+        }
+                    
         private void SelectedChildChanged() {
             FirePropertyChanged("SelectedChildIndex");
             FirePropertyChanged("SelectedChild");
