@@ -140,7 +140,7 @@ namespace MediaBrowser
         public int FullRefreshInterval = 24;
 
         [Comment("The delay (in seconds) before we start validating library items. This allows sleeping drives and servers to come alive")]
-        public int ValidationDelay = 30;
+        public int ValidationDelay = 0;
 
         [Comment("The last time a full refresh was done.")]
         public DateTime LastFullRefresh =  DateTime.MinValue;
