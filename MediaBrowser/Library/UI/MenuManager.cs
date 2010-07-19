@@ -44,7 +44,7 @@ namespace MediaBrowser.Library
             List<Type> playableItems = new List<Type>() { typeof(Movie), typeof(Episode) };
             playableItems.AddRange(Kernel.Instance.ExternalPlayableItems);
             //and the folder-type queue options
-            List<Type> playableFolders = new List<Type>() { typeof(Folder), typeof(Series), typeof(Season) };
+            List<Type> playableFolders = new List<Type>() { typeof(Folder), typeof(Series), typeof(Season), typeof(Index) };
             playableFolders.AddRange(Kernel.Instance.ExternalPlayableFolders);
             List<Type> allPlayables = new List<Type>();
             allPlayables.AddRange(playableItems);

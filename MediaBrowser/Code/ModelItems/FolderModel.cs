@@ -625,7 +625,7 @@ namespace MediaBrowser.Library {
                     selectedchildIndex = 0;
                 }
                 SelectedChildChanged();
-                return Children[SelectedChildIndex];
+                return SelectedChild;
             }
         }
 
@@ -640,7 +640,7 @@ namespace MediaBrowser.Library {
                     selectedchildIndex = Children.Count - 1;
                 }
                 SelectedChildChanged();
-                return Children[SelectedChildIndex];
+                return SelectedChild;
             }
         }
 
