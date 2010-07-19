@@ -67,7 +67,7 @@ namespace MediaBrowser.Code.ModelItems {
         public static void VerifyChildren(FolderChildren children) {
 
             //wait just a bit before we verify - in case a server was asleep or something
-            Thread.Sleep(30000); //30 seconds
+            Thread.Sleep(Config.Instance.ValidationDelay*1000); //default is 30 seconds
 
             children.folder.ValidateChildren();
 
