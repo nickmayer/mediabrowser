@@ -293,7 +293,6 @@ namespace Configurator
         private bool containsMedia(string path)
         {
             if (!File.Exists(path + "\\series.xml")
-                && !File.Exists(path + "\\mymovies.xml")
                 && !Directory.Exists(path + "\\VIDEO_TS")
                 && !Directory.Exists(path + "\\BDMV")
                 && !Directory.Exists(path + "\\HVDVD_TS")
