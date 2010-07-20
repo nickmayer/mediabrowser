@@ -5,25 +5,23 @@
     x:Class="Configurator.AddPluginWindow"
     Title="Add Plugin" Height="710" Width="938" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" IsEnabled="True">
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="0.923*"/>
-			<RowDefinition Height="30"/>
-		</Grid.RowDefinitions>
-        <Menu x:Name="menua" Height="22" Margin="0,2,0,0" VerticalAlignment="Top" > 
+        <Menu x:Name="menua" Height="22" Margin="0,0,0,0" VerticalAlignment="Top" > 
 			<MenuItem Header="File">
 				<MenuItem Header="Sources..." Click="MenuItem_Click"/> 
 			</MenuItem>
 		</Menu>
-        <Label Grid.RowSpan="2" Height="28" Margin="8,0,8,8" Name="MessageLine" VerticalAlignment="Bottom" FontWeight="Bold">Select a Plug-in to Add</Label>
-		<Label Margin="12,30,0,0" VerticalAlignment="Top" Height="31" Content="Choose a Plug-in from the list below:" HorizontalAlignment="Left" Width="213" FontSize="12" FontWeight="Normal" />
-		<Button Margin="0,0,138,17" Content="Install" Height="37" VerticalAlignment="Bottom" Click="InstallClick" Name="InstallButton" HorizontalAlignment="Right" Width="96" />
-        <ListBox DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" Margin="18,59,0,12" Width="203" HorizontalAlignment="Left" Name="pluginList" DataContext="{DynamicResource PluginManager}" ItemsSource="{Binding Path=AvailablePlugins, Mode=Default}" SelectionChanged="pluginList_SelectionChanged" FontSize="12" />
+        <Label Height="28" Margin="500,0,20,60" Name="MessageLine" VerticalAlignment="Bottom" FontWeight="Bold">Select a Plug-in to Add</Label>
+		<Label Margin="20,35,0,0" VerticalAlignment="Top" Height="28" Content="Choose a Plug-in from the list below" HorizontalAlignment="Left" FontSize="12" />
+		<Button Margin="20,0,0,20" Content="Install" Height="32" VerticalAlignment="Bottom" Click="InstallClick" Name="InstallButton" HorizontalAlignment="Left" Width="90" />
+        <ListBox DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" Margin="20,65,0,60" Width="200" HorizontalAlignment="Left" Name="pluginList" DataContext="{DynamicResource PluginManager}" ItemsSource="{Binding Path=AvailablePlugins, Mode=Default}" SelectionChanged="pluginList_SelectionChanged" FontSize="12" />
 		<TextBlock Margin="279,98,40,126" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription" FontSize="14" />
-		<Label Margin="237,0,0,32" Content="Plug-in Version:" HorizontalAlignment="Left" Width="135" Height="29" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14" />
-		<Label Margin="402,0,452,32" VerticalAlignment="Bottom" Height="29" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="latestPluginVersion" FontSize="14" />
+		<Label Margin="240,0,0,90" Content="Plug-in Version:" HorizontalAlignment="Left" Width="160" Height="28" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14" />
+		<Label Margin="400,0,0,90" Width="80" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="28" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="latestPluginVersion" FontSize="14" />
 		<Label Margin="259,59,26,0" VerticalAlignment="Top" Height="30.62" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="18" FontFamily="Trebuchet MS" x:Name="pluginName"/>
-		<ProgressBar Grid.Row="1" Margin="8,0,8,8" x:Name="progress" Visibility="Hidden"/><Button Height="37" HorizontalAlignment="Right" Margin="0,0,26,17" Name="btnDone" Click="btnDone_Click" IsCancel="True" VerticalAlignment="Bottom" Width="95">Done</Button><Label Margin="237,0,0,12" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="159" FontWeight="Bold" FontSize="14">Required MB Version:</Label>
-        <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="402,0,453,10" Name="reqdMBVersion" Height="29" VerticalAlignment="Bottom" FontSize="14" />
-        <WebBrowser Name="RichDescFrame" Margin="237,30,26,84"  Navigating="RichDescFrame_Navigating" LoadCompleted="RichDescFrame_LoadCompleted"/>
+		<ProgressBar Margin="240,0,20,20" Height="32" VerticalAlignment="Bottom" x:Name="progress" Visibility="Hidden"/>
+        <Button Height="32" HorizontalAlignment="Left" Margin="130,0,0,20" Name="btnDone" Click="btnDone_Click" IsCancel="True" VerticalAlignment="Bottom" Width="90">Done</Button>
+        <Label Margin="240,0,0,60" Height="28" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" FontWeight="Bold" FontSize="14">Required MB Version:</Label>
+        <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="400,0,0,60" Width="80" Name="reqdMBVersion" Height="28" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="14" />
+        <WebBrowser Name="RichDescFrame" Margin="240,35,20,120"  Navigating="RichDescFrame_Navigating" LoadCompleted="RichDescFrame_LoadCompleted"/>
     </Grid>
 </Window>
