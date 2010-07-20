@@ -156,6 +156,8 @@
     <None Include="Images\MediaInfo\codec_theora.png" />
     <None Include="Images\MediaInfo\codec_ON2_VP6.png" />
     <None Include="Images\MediaInfo\codec_ON2.png" />
+    <None Include="Images\MediaInfo\codec_on2vp6.png" />
+    <None Include="Images\MediaInfo\codec_sorenson_h263.png" />
     <Content Include="Images\MediaInfo\codec_xvid.png" />
     <None Include="Images\MediaInfo\hdtype_1080.png" />
     <None Include="Images\MediaInfo\hdtype_720.png" />

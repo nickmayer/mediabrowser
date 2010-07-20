@@ -60,6 +60,13 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap BallButtonDark {
+            get {
+                object obj = ResourceManager.GetObject("BallButtonDark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap BallButtonLight {
             get {
                 object obj = ResourceManager.GetObject("BallButtonLight", resourceCulture);
@@ -298,9 +305,16 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_ON2 {
+        internal static System.Drawing.Bitmap codec_on2_vp6 {
             get {
-                object obj = ResourceManager.GetObject("codec_ON2", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_on2_vp6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_sorenson_h263 {
+            get {
+                object obj = ResourceManager.GetObject("codec_sorenson_h263", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

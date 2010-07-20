@@ -111,7 +111,8 @@
   <Image Name="DTS_DS" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS" />
   <Image Name="DTS_DS_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_51" />
   <Image Name="WMV_HD" Source="resx://Diamond/Diamond.Resources/codec_wmv_hd" />
-  <Image Name="ON2" Source="resx://Diamond/Diamond.Resources/codec_ON2" />
+  <Image Name="ON2_VP6" Source="resx://Diamond/Diamond.Resources/codec_on2_vp6" />
+  <Image Name="Sorenson_H263" Source="resx://Diamond/Diamond.Resources/codec_sorenson_h263" />
   
   <Image Name="Media_Mpeg" Source="resx://Diamond/Diamond.Resources/media_mpeg" />
   <Image Name="Media_Wmv" Source="resx://Diamond/Diamond.Resources/media_wmv" />

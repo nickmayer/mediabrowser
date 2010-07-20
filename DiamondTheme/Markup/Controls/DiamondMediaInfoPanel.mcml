@@ -78,7 +78,8 @@
       <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora" /> 
       <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegVideo" /> 
       <Condition Source="[VideoCodec]" SourceValue="mpeg-2 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H262" />
-      <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:ON2" />
+      <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:ON2_VP6" />
+      <Condition Source="[VideoCodec]" SourceValue="sorenson h263" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Sorenson_H263" />
 		</Rules>
 		<Content>
 			<Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
