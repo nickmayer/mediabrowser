@@ -462,9 +462,14 @@
 		<!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
 		<!-- included in the WixUIExtension with a custom file.                                              -->
 		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    
+    <!-- we have some custom images-->
     <WixVariable Id="WixUIBannerBmp" Value="Images\header.bmp"/>
     <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp"/>
-    
+
+    <!-- we don't want to see the popup dialog that checks for diskspace -->
+    <WixVariable Id="WixUICostingPopupOptOut" Value="1" Overridable="yes" />
+
     <!-- These properties may be modified in the user interface -->
     <!-- <Property Id="OPTIONALDESKTOPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
     <!-- <Property Id="OPTIONALSTARTMENUSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
