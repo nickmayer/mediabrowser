@@ -427,8 +427,7 @@
       <Condition Source="[MediaFormat]" SourceValue="avi" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Avi" />
       <Condition Source="[MediaFormat]" SourceValue="mp4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mp4" />
       <Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mpeg" />
-
-      <!--<Condition Source="[MediaFormat]" SourceValue="mpeg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mpeg" />-->
+      <Condition Source="[MediaFormat]" SourceValue="mpeg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mpeg" />
       
       <Condition Source="[MediaFormat]" SourceValue="wmv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Asf" />
       <Condition Source="[MediaFormat]" SourceValue="mov" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mov" />
@@ -445,7 +444,6 @@
       <Condition Source="[MediaFormat]" SourceValue="dvrms" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Dvrms" />
       <Condition Source="[MediaFormat]" SourceValue="3gp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp" />
       <Condition Source="[MediaFormat]" SourceValue="threegp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp" />
-      <!--<Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_2391" />-->
 
     </Rules>
 

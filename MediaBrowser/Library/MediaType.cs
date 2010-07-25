@@ -7,6 +7,7 @@ namespace MediaBrowser.Library {
     public enum MediaType { 
         Unknown, 
         Mpg,
+        Mpeg,
         Avi,
         Mkv,
         Mp4,

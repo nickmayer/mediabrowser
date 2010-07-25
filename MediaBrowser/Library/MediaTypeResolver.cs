@@ -14,6 +14,8 @@ namespace MediaBrowser.Library {
                 return MediaType.Avi;
             if (path.EndsWith(".mpg"))
                 return MediaType.Mpg;
+            if (path.EndsWith(".mpeg"))
+                return MediaType.Mpeg;
             if (path.EndsWith(".mkv"))
                 return MediaType.Mkv;
             if (path.EndsWith(".wmv"))
