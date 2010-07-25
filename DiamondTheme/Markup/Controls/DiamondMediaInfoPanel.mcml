@@ -15,6 +15,7 @@
       <Changed Source="[Item.MediaInfo]" InitialEvaluate="true">
         <Actions>
           <Set Target="[VideoCodec.Value]" Value="[Item.MediaInfo.VideoCodecString]"/>
+          <Set Target="[VideoCodec.HDValue]" Value="[Item.IsHD]"/>
           <Set Target="[AudioCodec.Value]" Value="[Item.MediaInfo.AudioCodecString]"/>
           <Set Target="[AudioCodec.Profile]" Value="[Item.MediaInfo.AudioProfileString]"/>
           <Set Target="[AudioCodec.Channel]" Value="[Item.MediaInfo.AudioChannelString]"/>
@@ -49,12 +50,15 @@
 	<UI Name="VideoCodec">
 		<Properties>
 			<cor:String Name="Value" String=""/>
+      <cor:Boolean Name="HDValue" Boolean="false"/>
 		</Properties>
 		<Locals>
 			<cor:String Name="VideoCodec" String="" />
+      <cor:Boolean Name="WMVHDValue" Boolean="false" />
 		</Locals>
     
 		<Rules>
+      <Binding Source="[HDValue]" Target="[WMVHDValue]" />
 			<Binding Source="[Value]" Target="[VideoCodec]">
         <Transformer>
           <FormatTransformer ToLower="true" />
@@ -73,6 +77,24 @@
       <Condition Source="[VideoCodec]" SourceValue="vc-1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vc1" />
       <Condition Source="[VideoCodec]" SourceValue="wmv1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
       <Condition Source="[VideoCodec]" SourceValue="wmv2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
+      <Rule>
+        <Conditions>
+          <Equality Source="[VideoCodec]" Value="wmv3"/>
+          <Equality Source="[WMVHDValue]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Image.Content]" Value="image://i:WMV_HD"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[VideoCodec]" Value="wvc1"/>
+          <Equality Source="[WMVHDValue]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Image.Content]" Value="image://i:WMV_HD"/>
+        </Actions>
+      </Rule>
       <Condition Source="[VideoCodec]" SourceValue="wmv3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
       <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />      
       <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora" /> 
@@ -410,6 +432,7 @@
       
       <Condition Source="[MediaFormat]" SourceValue="wmv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Asf" />
       <Condition Source="[MediaFormat]" SourceValue="mov" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mov" />
+      <Condition Source="[MediaFormat]" SourceValue="m4v" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mov" />
       <Condition Source="[MediaFormat]" SourceValue="ogv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Ogg" />
       <Condition Source="[MediaFormat]" SourceValue="asf" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Asf" />
       <Condition Source="[MediaFormat]" SourceValue="flv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Flv" />
@@ -420,6 +443,8 @@
       <Condition Source="[MediaFormat]" SourceValue="m2ts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_M2ts" />
       <Condition Source="[MediaFormat]" SourceValue="wtv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Wtv" /> 
       <Condition Source="[MediaFormat]" SourceValue="dvrms" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Dvrms" />
+      <Condition Source="[MediaFormat]" SourceValue="3gp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp" />
+      <Condition Source="[MediaFormat]" SourceValue="threegp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp" />
       <!--<Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_2391" />-->
 
     </Rules>

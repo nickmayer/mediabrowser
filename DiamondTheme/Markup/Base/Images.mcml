@@ -124,6 +124,7 @@
   <Image Name="Media_Ts" Source="resx://Diamond/Diamond.Resources/media_ts" />
   <Image Name="Media_Wtv" Source="resx://Diamond/Diamond.Resources/media_wtv" />
   <Image Name="Media_Dvrms" Source="resx://Diamond/Diamond.Resources/media_dvrms" />
+  <Image Name="Media_3gp" Source="resx://Diamond/Diamond.Resources/media_3gp" />
  
   <Image Name="HDLogo" Source="resx://Diamond/Diamond.Resources/HD" />
   <Image Name="HDLogo1080" Source="resx://Diamond/Diamond.Resources/hd1080" />

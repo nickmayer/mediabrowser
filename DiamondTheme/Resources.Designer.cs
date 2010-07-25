@@ -914,6 +914,13 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_3gp {
+            get {
+                object obj = ResourceManager.GetObject("media_3gp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_asf {
             get {
                 object obj = ResourceManager.GetObject("media_asf", resourceCulture);
