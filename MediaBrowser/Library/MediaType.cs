@@ -14,14 +14,18 @@ namespace MediaBrowser.Library {
         BluRay,
         HDDVD,
         TS,
+        M2TS,
         ISO,
         PlayList,
         DVRMS,
+        WTV,
         Wmv,
         Ogv,
         Mov,
         Asf,
         F4v,
-        Flv
+        Flv,
+        Threegp,
+        M4v,
     }
 }

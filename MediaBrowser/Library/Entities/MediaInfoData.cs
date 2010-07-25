@@ -41,7 +41,12 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 if (this != Empty)
-                    return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
+                {
+                    if (AudioProfile != "")
+                        return string.Format("{0}x{1}, {2} {3}kbps, {4} ({5}) {6}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
+                    else
+                        return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
+                }
                 else
                     return "";
             }
@@ -160,7 +165,10 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                return string.Format("{0} {1}kbps", this.AudioFormat, this.AudioBitRate / 1000);
+                if (AudioProfile != "")
+                    return string.Format("{0} ({1}) {2}kbps", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
+                else
+                    return string.Format("{0} {1}kbps", this.AudioFormat, this.AudioBitRate / 1000);
             }
         }
 
