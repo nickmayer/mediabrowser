@@ -7,6 +7,7 @@ namespace MediaBrowser.Library {
     public enum MediaType { 
         Unknown,
         Mpg,
+        Mpeg,
         Avi,
         Mkv,
         Mp4,
@@ -14,15 +15,18 @@ namespace MediaBrowser.Library {
         BluRay,
         HDDVD,
         TS,
+        M2TS,
         ISO,
         PlayList,
         DVRMS,
+        WTV,
         Wmv,
         Ogv,
         Mov,
         Asf,
         F4v,
         Flv,
-        G3p
+        Threegp,
+        M4v,
     }
 }

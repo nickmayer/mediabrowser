@@ -78,10 +78,10 @@
   <Image Name="H264" Source="resx://Diamond/Diamond.Resources/codec_h264" />
   <Image Name="Vc1" Source="resx://Diamond/Diamond.Resources/codec_vc1" />
   <Image Name="Wmv" Source="resx://Diamond/Diamond.Resources/codec_wmv" />
-  <Image Name="WMV_HD" Source="resx://Diamond/Diamond.Resources/codec_wmv_hd" /> 
+  <Image Name="Wmv_HD" Source="resx://Diamond/Diamond.Resources/codec_wmv_hd" /> 
   <Image Name="Wma" Source="resx://Diamond/Diamond.Resources/codec_wma" />
   <Image Name="Flac" Source="resx://Diamond/Diamond.Resources/codec_flac" />
-  <Image Name="ON2_VP6" Source="resx://Diamond/Diamond.Resources/codec_on2_vp6" />
+  <Image Name="On2_Vp6" Source="resx://Diamond/Diamond.Resources/codec_on2_vp6" />
   <Image Name="Sorenson_H263" Source="resx://Diamond/Diamond.Resources/codec_sorenson_h263" />  
   <Image Name="Vorbis" Source="resx://Diamond/Diamond.Resources/codec_vorbis" />
   <Image Name="Theora" Source="resx://Diamond/Diamond.Resources/codec_theora" />
