@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MediaBrowser.Library {
     public enum MediaType { 
-        Unknown, 
+        Unknown,
         Mpg,
         Mpeg,
         Avi,

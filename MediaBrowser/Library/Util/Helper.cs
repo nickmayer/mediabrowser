@@ -74,7 +74,7 @@ namespace MediaBrowser.LibraryManagement
                 case ".vob":
                 case ".bup":
                 case ".ifo":
-                    return false;       
+                    return false; 
                 case ".rmvb":
                 case ".mov":
                 case ".avi":
@@ -91,7 +91,8 @@ namespace MediaBrowser.LibraryManagement
                 case ".asf":
                 case ".m4v":
                 case ".flv":
-                case ".f4v":       
+                case ".f4v":
+                case ".3gp":
                     return true;
 
                 default:

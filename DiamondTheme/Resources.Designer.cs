@@ -102,9 +102,30 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD51 {
+        internal static System.Drawing.Bitmap codec_DD_10 {
             get {
-                object obj = ResourceManager.GetObject("codec_DD51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_DD_10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DD_20 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DD_20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DD_30 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DD_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DD_51 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DD_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,16 +137,30 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus51 {
+        internal static System.Drawing.Bitmap codec_DDPlus_50 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_DDPlus_50", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus71 {
+        internal static System.Drawing.Bitmap codec_DDPlus_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus71", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_DDPlus_51", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDPlus_61 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDPlus_61", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDPlus_71 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDPlus_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -137,16 +172,30 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD51 {
+        internal static System.Drawing.Bitmap codec_DDTrueHD_50 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_50", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD71 {
+        internal static System.Drawing.Bitmap codec_DDTrueHD_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD71", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_51", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDTrueHD_61 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_61", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDTrueHD_71 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -235,6 +284,13 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_61 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_61", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_HD_HRA_71 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_71", resourceCulture);
@@ -249,9 +305,30 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_40 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_50 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_HD_MA_51 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_HD_MA_51", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_61 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_61", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1089,6 +1166,13 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_143 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_143", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_144 {
             get {
                 object obj = ResourceManager.GetObject("ratio_144", resourceCulture);
@@ -1099,6 +1183,13 @@ namespace Diamond {
         internal static System.Drawing.Bitmap ratio_150 {
             get {
                 object obj = ResourceManager.GetObject("ratio_150", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_156 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_156", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1162,6 +1253,41 @@ namespace Diamond {
         internal static System.Drawing.Bitmap ratio_240 {
             get {
                 object obj = ResourceManager.GetObject("ratio_240", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_255 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_255", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_259 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_259", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_266 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_266", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_276 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_276", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_400 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_400", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
