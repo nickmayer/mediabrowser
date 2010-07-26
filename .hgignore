@@ -21,3 +21,9 @@ glob:MediaBrowser/MediaBrowser.vsmdi
 glob:MediaBrowser/Select
 glob:MediaBrowser.5.0.ReSharper.user
 glob:_ReSharper.MediaBrowser/*
+glob:MediaBrowser.sln.orig
+glob:DiamondTheme/Diamond.csproj.orig
+glob:DiamondTheme/Markup/Base/Images.mcml.orig
+glob:DiamondTheme/Markup/Controls/DiamondMediaInfoPanel.mcml.orig
+glob:DiamondTheme/Resources.Designer.cs.orig
+glob:DiamondTheme/Resources.resx.orig
