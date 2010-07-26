@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MediaBrowser.Library {
     public enum MediaType { 
-        Unknown, 
+        Unknown,
         Mpg,
         Avi,
         Mkv,
@@ -22,6 +22,7 @@ namespace MediaBrowser.Library {
         Mov,
         Asf,
         F4v,
-        Flv
+        Flv,
+        G3p
     }
 }

@@ -46,8 +46,10 @@
   <!-- Ratio -->
   <Image Name="Ratio_133" Source="resx://Diamond/Diamond.Resources/ratio_133" />
   <Image Name="Ratio_137" Source="resx://Diamond/Diamond.Resources/ratio_137" />
+  <Image Name="Ratio_143" Source="resx://Diamond/Diamond.Resources/ratio_143" />
   <Image Name="Ratio_144" Source="resx://Diamond/Diamond.Resources/ratio_144" />
   <Image Name="Ratio_150" Source="resx://Diamond/Diamond.Resources/ratio_150" />
+  <Image Name="Ratio_156" Source="resx://Diamond/Diamond.Resources/ratio_156" />
   <Image Name="Ratio_166" Source="resx://Diamond/Diamond.Resources/ratio_166" />
   <Image Name="Ratio_177" Source="resx://Diamond/Diamond.Resources/ratio_177" />
   <Image Name="Ratio_178" Source="resx://Diamond/Diamond.Resources/ratio_178" />
@@ -57,6 +59,11 @@
   <Image Name="Ratio_235" Source="resx://Diamond/Diamond.Resources/ratio_235" />
   <Image Name="Ratio_239" Source="resx://Diamond/Diamond.Resources/ratio_239" />
   <Image Name="Ratio_240" Source="resx://Diamond/Diamond.Resources/ratio_240" />
+  <Image Name="Ratio_255" Source="resx://Diamond/Diamond.Resources/ratio_255" />
+  <Image Name="Ratio_259" Source="resx://Diamond/Diamond.Resources/ratio_259" />
+  <Image Name="Ratio_266" Source="resx://Diamond/Diamond.Resources/ratio_266" />
+  <Image Name="Ratio_276" Source="resx://Diamond/Diamond.Resources/ratio_276" />
+  <Image Name="Ratio_400" Source="resx://Diamond/Diamond.Resources/ratio_400" />
   <!-- Codecs -->
   <Image Name="Xvid" Source="resx://Diamond/Diamond.Resources/codec_xvid" />
   <Image Name="Divx" Source="resx://Diamond/Diamond.Resources/codec_divx" />
@@ -67,52 +74,69 @@
   <Image Name="MpegAudio" Source="resx://Diamond/Diamond.Resources/codec_mpegaudio" />
   <Image Name="Mp3" Source="resx://Diamond/Diamond.Resources/codec_mp3" />
   <Image Name="Dts" Source="resx://Diamond/Diamond.Resources/codec_dts" />
+  <Image Name="H262" Source="resx://Diamond/Diamond.Resources/codec_h262" />
   <Image Name="H264" Source="resx://Diamond/Diamond.Resources/codec_h264" />
   <Image Name="Vc1" Source="resx://Diamond/Diamond.Resources/codec_vc1" />
   <Image Name="Wmv" Source="resx://Diamond/Diamond.Resources/codec_wmv" />
+  <Image Name="WMV_HD" Source="resx://Diamond/Diamond.Resources/codec_wmv_hd" /> 
   <Image Name="Wma" Source="resx://Diamond/Diamond.Resources/codec_wma" />
   <Image Name="Flac" Source="resx://Diamond/Diamond.Resources/codec_flac" />
+  <Image Name="ON2_VP6" Source="resx://Diamond/Diamond.Resources/codec_on2_vp6" />
+  <Image Name="Sorenson_H263" Source="resx://Diamond/Diamond.Resources/codec_sorenson_h263" />  
   <Image Name="Vorbis" Source="resx://Diamond/Diamond.Resources/codec_vorbis" />
   <Image Name="Theora" Source="resx://Diamond/Diamond.Resources/codec_theora" />
+  
+
+  <Image Name="DD_10" Source="resx://Diamond/Diamond.Resources/codec_DD_10" />
+  <Image Name="DD_20" Source="resx://Diamond/Diamond.Resources/codec_DD_20" />
+  <Image Name="DD_30" Source="resx://Diamond/Diamond.Resources/codec_DD_30" />
+  <Image Name="DD_51" Source="resx://Diamond/Diamond.Resources/codec_DD_51" />
+  
+  <Image Name="DDPlus" Source="resx://Diamond/Diamond.Resources/codec_DDPlus" />
+  <Image Name="DDPlus_50" Source="resx://Diamond/Diamond.Resources/codec_DDPlus_50" />
+  <Image Name="DDPlus_51" Source="resx://Diamond/Diamond.Resources/codec_DDPlus_51" />
+  <Image Name="DDPlus_61" Source="resx://Diamond/Diamond.Resources/codec_DDPlus_61" />
+  <Image Name="DDPlus_71" Source="resx://Diamond/Diamond.Resources/codec_DDPlus_71" />
+  
+  <Image Name="DDTrueHD" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD" />
+  <Image Name="DDTrueHD_50" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_50" />
+  <Image Name="DDTrueHD_51" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_51" />
+  <Image Name="DDTrueHD_61" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_61" />
+  <Image Name="DDTrueHD_71" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_71" />
+
+  <Image Name="DTS_DS" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS" />
+  <Image Name="DTS_DS_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_51" />
+
+  <Image Name="DTS_9624" Source="resx://Diamond/Diamond.Resources/codec_DTS_9624" />
+  <Image Name="DTS_9624_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_9624_51" /> 
+  
+  <Image Name="DTS_ES" Source="resx://Diamond/Diamond.Resources/codec_DTS_ES" />
+  <Image Name="DTS_ES_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_ES_51" />
+  <Image Name="DTS_ES_61" Source="resx://Diamond/Diamond.Resources/codec_DTS_ES_61" />
+
+  <Image Name="DTS_HD" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD" />
+  <Image Name="DTS_HD_HRA" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA" />  
+  <Image Name="DTS_HD_HRA_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA_51" />
+  <Image Name="DTS_HD_HRA_61" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA_61" />  
+  <Image Name="DTS_HD_HRA_71" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA_71" />
+
+  <Image Name="DTS_HD_MA" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA" />
+  <Image Name="DTS_HD_MA_30" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_30" />
+  <Image Name="DTS_HD_MA_40" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_40" /> 
+  <Image Name="DTS_HD_MA_50" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_50" />
+  <Image Name="DTS_HD_MA_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_51" />
+  <Image Name="DTS_HD_MA_61" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_61" />
+  <Image Name="DTS_HD_MA_71" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_71" />
+
+  <!-- Media -->
+
   <Image Name="Media_Bluray" Source="resx://Diamond/Diamond.Resources/media_bluray" />
   <Image Name="Media_Hddvd" Source="resx://Diamond/Diamond.Resources/media_hddvd" />
   <Image Name="Media_Dvd" Source="resx://Diamond/Diamond.Resources/media_dvd" />
   <Image Name="Media_Mkv" Source="resx://Diamond/Diamond.Resources/media_mkv" />
   <Image Name="Media_Avi" Source="resx://Diamond/Diamond.Resources/media_avi" />
   <Image Name="Media_Mp4" Source="resx://Diamond/Diamond.Resources/media_mp4" />
-  <Image Name="HDType_1080" Source="resx://Diamond/Diamond.Resources/hdtype_1080" />
-  <Image Name="HDType_720" Source="resx://Diamond/Diamond.Resources/hdtype_720" />
-  <Image Name="H262" Source="resx://Diamond/Diamond.Resources/codec_h262" />
   <Image Name="Media_Mov" Source="resx://Diamond/Diamond.Resources/media_mov" />
-
-  <Image Name="DD51" Source="resx://Diamond/Diamond.Resources/codec_DD51" />
-  <Image Name="DDPlus" Source="resx://Diamond/Diamond.Resources/codec_DDPlus" />
-  <Image Name="DDPlus71" Source="resx://Diamond/Diamond.Resources/codec_DDPlus71" />
-  <Image Name="DDTrueHD" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD" />
-  <Image Name="DDTrueHD71" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD71" />
-
-  <Image Name="DDPlus51" Source="resx://Diamond/Diamond.Resources/codec_DDPlus51" />
-  <Image Name="DDTrueHD51" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD51" />
-
-  <Image Name="DTS_9624" Source="resx://Diamond/Diamond.Resources/codec_DTS_9624" />
-  <Image Name="DTS_ES" Source="resx://Diamond/Diamond.Resources/codec_DTS_ES" />
-  <Image Name="DTS_HD_MA" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA" />
-  <Image Name="DTS_HD_HRA" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA" />
-
-  <Image Name="DTS_9624_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_9624_51" />
-  <Image Name="DTS_ES_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_ES_51" />
-  <Image Name="DTS_ES_61" Source="resx://Diamond/Diamond.Resources/codec_DTS_ES_61" />
-  <Image Name="DTS_HD" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD" />
-  <Image Name="DTS_HD_HRA_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA_51" />
-  <Image Name="DTS_HD_HRA_71" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA_71" />
-  <Image Name="DTS_HD_MA_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_51" />
-  <Image Name="DTS_HD_MA_71" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_71" />
-
-  <Image Name="DTS_DS" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS" />
-  <Image Name="DTS_DS_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_51" />
-  <Image Name="WMV_HD" Source="resx://Diamond/Diamond.Resources/codec_wmv_hd" />
-  <Image Name="ON2_VP6" Source="resx://Diamond/Diamond.Resources/codec_on2_vp6" />
-  <Image Name="Sorenson_H263" Source="resx://Diamond/Diamond.Resources/codec_sorenson_h263" />
   
   <Image Name="Media_Mpeg" Source="resx://Diamond/Diamond.Resources/media_mpeg" />
   <Image Name="Media_Wmv" Source="resx://Diamond/Diamond.Resources/media_wmv" />
@@ -124,10 +148,15 @@
   <Image Name="Media_Ts" Source="resx://Diamond/Diamond.Resources/media_ts" />
   <Image Name="Media_Wtv" Source="resx://Diamond/Diamond.Resources/media_wtv" />
   <Image Name="Media_Dvrms" Source="resx://Diamond/Diamond.Resources/media_dvrms" />
- 
+  <Image Name="Media_3gp" Source="resx://Diamond/Diamond.Resources/media_3gp" />
+  
+  <Image Name="HDType_1080" Source="resx://Diamond/Diamond.Resources/hdtype_1080" />
+  <Image Name="HDType_720" Source="resx://Diamond/Diamond.Resources/hdtype_720" />  
+  
   <Image Name="HDLogo" Source="resx://Diamond/Diamond.Resources/HD" />
   <Image Name="HDLogo1080" Source="resx://Diamond/Diamond.Resources/hd1080" />
-  <Image Name="HDLogo720" Source="resx://Diamond/Diamond.Resources/hd720" />
+  <Image Name="HDLogo720" Source="resx://Diamond/Diamond.Resources/hd720" />  
+  
   <!-- Studio / Network -->
 
   <!--PC images-->

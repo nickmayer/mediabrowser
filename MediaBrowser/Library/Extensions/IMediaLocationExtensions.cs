@@ -61,7 +61,9 @@ namespace MediaBrowser.Library.Extensions {
             switch (location.Path.Substring(location.Path.Length - 4).ToLower())
             {
                 case ".asf":
-                    return MediaType.Asf;            
+                    return MediaType.Asf;
+                case ".3gp":
+                    return MediaType.G3p;
                 case ".mpg":
                 case ".mpeg":
                     return MediaType.Mpg;
@@ -82,8 +84,8 @@ namespace MediaBrowser.Library.Extensions {
                     return MediaType.F4v;
                 case ".flv":
                     return MediaType.Flv;
-                case ".wtv":
                 case ".dvr-ms":
+                case ".wtv":                                              
                     return MediaType.DVRMS;
                 default:
                     return MediaType.Unknown;

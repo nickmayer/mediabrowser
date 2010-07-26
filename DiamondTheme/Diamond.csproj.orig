@@ -117,8 +117,13 @@
     <Content Include="Images\MediaInfo\codec_aac.png" />
     <Content Include="Images\MediaInfo\codec_ac3.png" />
     <None Include="Images\MediaInfo\codec_asf.png" />
+    <None Include="Images\MediaInfo\codec_DD51.png" />
     <None Include="Images\MediaInfo\codec_DDPlus.png" />
+    <None Include="Images\MediaInfo\codec_DDPlus71.png" />
     <None Include="Images\MediaInfo\codec_DDTrueHD.png" />
+    <None Include="Images\MediaInfo\codec_DDTrueHD71.png" />
+    <None Include="Images\MediaInfo\codec_DDPlus51.png" />
+    <None Include="Images\MediaInfo\codec_DDTrueHD51.png" />
     <None Include="Images\MediaInfo\codec_DD_10.png" />
     <None Include="Images\MediaInfo\codec_DD_51.png" />
     <None Include="Images\MediaInfo\codec_DDPlus_51.png" />
@@ -152,6 +157,7 @@
     <None Include="Images\MediaInfo\codec_DTS_DS.png" />
     <None Include="Images\MediaInfo\codec_DTS_DS_51.png" />
     <None Include="Images\MediaInfo\codec_mp3.png" />
+    <None Include="Images\MediaInfo\codec_flv.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_MA_61.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_MA_50.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_MA_30.png" />
@@ -166,6 +172,8 @@
     <None Include="Images\MediaInfo\codec_WMV_HD.png" />
     <None Include="Images\MediaInfo\codec_theora.png" />
     <None Include="Images\MediaInfo\codec_ON2_VP6.png" />
+    <None Include="Images\MediaInfo\codec_ON2.png" />
+    <None Include="Images\MediaInfo\codec_on2vp6.png" />
     <None Include="Images\MediaInfo\codec_sorenson_h263.png" />
     <Content Include="Images\MediaInfo\codec_xvid.png" />
     <None Include="Images\MediaInfo\hdtype_1080.png" />
@@ -185,6 +193,7 @@
     <None Include="Images\MediaInfo\media_mpeg.png" />
     <None Include="Images\MediaInfo\media_WMV.png" />
     <None Include="Images\MediaInfo\media_ogg.png" />
+    <None Include="Images\MediaInfo\media_mpg.png" />
     <None Include="Images\MediaInfo\media_flv.png" />
     <None Include="Images\MediaInfo\media_iso.png" />
     <None Include="Images\MediaInfo\media_m2ts.png" />
