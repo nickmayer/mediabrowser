@@ -27,6 +27,6 @@ namespace MediaBrowser.Library {
         F4v,
         Flv,
         Threegp,
-        M4v,
+        M4v
     }
 }
