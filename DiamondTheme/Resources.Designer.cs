@@ -88,9 +88,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_aac_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_aac_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_ac3 {
             get {
                 object obj = ResourceManager.GetObject("codec_ac3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_ac3_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_ac3_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -102,9 +116,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_asf_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_asf_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DD_10 {
             get {
                 object obj = ResourceManager.GetObject("codec_DD_10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DD_10_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DD_10_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,6 +144,13 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DD_20_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DD_20_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DD_30 {
             get {
                 object obj = ResourceManager.GetObject("codec_DD_30", resourceCulture);
@@ -123,9 +158,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DD_30_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DD_30_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DD_51 {
             get {
                 object obj = ResourceManager.GetObject("codec_DD_51", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DD_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DD_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -144,9 +193,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DDPlus_50_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDPlus_50_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DDPlus_51 {
             get {
                 object obj = ResourceManager.GetObject("codec_DDPlus_51", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDPlus_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDPlus_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -158,9 +221,30 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DDPlus_61_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDPlus_61_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DDPlus_71 {
             get {
                 object obj = ResourceManager.GetObject("codec_DDPlus_71", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDPlus_71_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDPlus_71_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDPlus_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDPlus_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -179,9 +263,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DDTrueHD_50_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_50_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DDTrueHD_51 {
             get {
                 object obj = ResourceManager.GetObject("codec_DDTrueHD_51", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDTrueHD_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,9 +291,30 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DDTrueHD_61_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_61_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DDTrueHD_71 {
             get {
                 object obj = ResourceManager.GetObject("codec_DDTrueHD_71", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDTrueHD_71_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_71_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DDTrueHD_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DDTrueHD_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -207,6 +326,13 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_divx_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_divx_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_dolby {
             get {
                 object obj = ResourceManager.GetObject("codec_dolby", resourceCulture);
@@ -214,9 +340,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_dolby_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_dolby_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_dts {
             get {
                 object obj = ResourceManager.GetObject("codec_dts", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_96_24_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_96_24_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -235,6 +375,27 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_9624_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_9624_51_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_9624_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_9624_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_dts_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_dts_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_DS {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_DS", resourceCulture);
@@ -245,6 +406,20 @@ namespace Diamond {
         internal static System.Drawing.Bitmap codec_DTS_DS_51 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_DS_51", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_DS_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_DS_51_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_DS_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_DS_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -263,9 +438,30 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_ES_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_ES_51_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_ES_61 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_ES_61", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_ES_61_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_ES_61_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_ES_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_ES_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -284,9 +480,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_51_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_HD_HRA_61 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_61", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_61_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_61_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -298,9 +508,30 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_71_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_71_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_HD_MA {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_HD_MA", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_30_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_30_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -312,9 +543,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_40_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_40_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_HD_MA_50 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_HD_MA_50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_50_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_50_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -326,9 +571,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_51_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_51_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_HD_MA_61 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_HD_MA_61", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_61_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_61_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -340,9 +599,30 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_71_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_71_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_HD_MA_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_flac {
             get {
                 object obj = ResourceManager.GetObject("codec_flac", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_flac_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_flac_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -354,9 +634,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_h262_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_h262_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_h264 {
             get {
                 object obj = ResourceManager.GetObject("codec_h264", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_h264_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_h264_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -368,9 +662,30 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_mp3_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_mp3_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_mpeg4visual_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_mpeg4visual_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_mpegaudio {
             get {
                 object obj = ResourceManager.GetObject("codec_mpegaudio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_mpegaudio_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_mpegaudio_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -382,9 +697,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_mpegvideo_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_mpegvideo_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_on2_vp6 {
             get {
                 object obj = ResourceManager.GetObject("codec_on2_vp6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_on2_vp6_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_on2_vp6_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -396,9 +725,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_sorenson_h263_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_sorenson_h263_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_theora {
             get {
                 object obj = ResourceManager.GetObject("codec_theora", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_theora_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_theora_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -410,9 +753,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_vc1_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_vc1_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_vorbis {
             get {
                 object obj = ResourceManager.GetObject("codec_vorbis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_vorbis_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_vorbis_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -424,9 +781,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_wma_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_wma_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_wmv {
             get {
                 object obj = ResourceManager.GetObject("codec_wmv", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_wmv_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_wmv_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -438,9 +809,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_wmv_hd_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_wmv_hd_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_xvid {
             get {
                 object obj = ResourceManager.GetObject("codec_xvid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_xvid_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_xvid_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -725,9 +1110,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap hdtype_1080_clr {
+            get {
+                object obj = ResourceManager.GetObject("hdtype_1080_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap hdtype_720 {
             get {
                 object obj = ResourceManager.GetObject("hdtype_720", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap hdtype_720_clr {
+            get {
+                object obj = ResourceManager.GetObject("hdtype_720_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -998,9 +1397,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_3gp_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_3gp_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_asf {
             get {
                 object obj = ResourceManager.GetObject("media_asf", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_asf_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_asf_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1012,9 +1425,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_avi_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_avi_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_bluray {
             get {
                 object obj = ResourceManager.GetObject("media_bluray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_bluray_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_bluray_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1026,9 +1453,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_dvd_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_dvd_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_dvrms {
             get {
                 object obj = ResourceManager.GetObject("media_dvrms", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_dvrms_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_dvrms_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1040,9 +1481,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_flv_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_flv_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_hddvd {
             get {
                 object obj = ResourceManager.GetObject("media_hddvd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_hddvd_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_hddvd_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1054,9 +1509,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_iso_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_iso_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_m2ts {
             get {
                 object obj = ResourceManager.GetObject("media_m2ts", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_m2ts_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_m2ts_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1068,9 +1537,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_mkv_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_mkv_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_mov {
             get {
                 object obj = ResourceManager.GetObject("media_mov", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_mov_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_mov_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1082,9 +1565,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_mp4_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_mp4_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_mpeg {
             get {
                 object obj = ResourceManager.GetObject("media_mpeg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_mpeg_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_mpeg_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1096,9 +1593,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_ogg_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_ogg_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_ts {
             get {
                 object obj = ResourceManager.GetObject("media_ts", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_ts_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_ts_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1110,9 +1621,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap media_wmv_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_wmv_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_wtv {
             get {
                 object obj = ResourceManager.GetObject("media_wtv", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap media_wtv_clr {
+            get {
+                object obj = ResourceManager.GetObject("media_wtv_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1159,9 +1684,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_133_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_133_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_137 {
             get {
                 object obj = ResourceManager.GetObject("ratio_137", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_137_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_137_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1173,9 +1712,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_143_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_143_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_144 {
             get {
                 object obj = ResourceManager.GetObject("ratio_144", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_144_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_144_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1187,9 +1740,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_150_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_150_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_156 {
             get {
                 object obj = ResourceManager.GetObject("ratio_156", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_156_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_156_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1201,9 +1768,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_166_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_166_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_177 {
             get {
                 object obj = ResourceManager.GetObject("ratio_177", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_177_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_177_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1215,9 +1796,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_178_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_178_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_185 {
             get {
                 object obj = ResourceManager.GetObject("ratio_185", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_185_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_185_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1229,9 +1824,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_200_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_200_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_220 {
             get {
                 object obj = ResourceManager.GetObject("ratio_220", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_220_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_220_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1243,9 +1852,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_235_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_235_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_239 {
             get {
                 object obj = ResourceManager.GetObject("ratio_239", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_239_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_239_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1257,9 +1880,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_240_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_240_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_255 {
             get {
                 object obj = ResourceManager.GetObject("ratio_255", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_255_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_255_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1271,9 +1908,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_259_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_259_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_266 {
             get {
                 object obj = ResourceManager.GetObject("ratio_266", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_266_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_266_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1285,9 +1936,23 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_276_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_276_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_400 {
             get {
                 object obj = ResourceManager.GetObject("ratio_400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_400_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_400_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
