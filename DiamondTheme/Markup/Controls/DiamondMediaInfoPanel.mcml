@@ -712,7 +712,7 @@
           <Set Target="[Image.Content]" Value="image://i:Mp3_clr"/>
         </Actions>
       </Rule>
-      <Condition Source="[AudioCodec]" SourceValue="mpeg audio" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
+      <Condition Source="[AudioCodec]" SourceValue="mpeg audio" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio_clr" />
 
       <!--Dolby Digital-->
       <Rule>

@@ -219,7 +219,7 @@
   <Image Name="DDTrueHD_61_clr" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_61_clr" />
   <Image Name="DDTrueHD_71_clr" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_71_clr" />
 
-  <Image Name="DTS_DS_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_DSv" />
+  <Image Name="DTS_DS_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_clr" />
   <Image Name="DTS_DS_51_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_51_clr" />
 
   <Image Name="DTS_9624_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_9624_clr" />
@@ -235,13 +235,13 @@
   <Image Name="DTS_HD_HRA_61_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA_61_clr" />
   <Image Name="DTS_HD_HRA_71_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_HRA_71_clr" />
 
-  <Image Name="DTS_HD_MA_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA" />
-  <Image Name="DTS_HD_MA_30_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_30" />
-  <Image Name="DTS_HD_MA_40_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_40" />
-  <Image Name="DTS_HD_MA_50_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_50" />
-  <Image Name="DTS_HD_MA_51_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_51" />
-  <Image Name="DTS_HD_MA_61_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_61" />
-  <Image Name="DTS_HD_MA_71_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_71" />
+  <Image Name="DTS_HD_MA_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_clr" />
+  <Image Name="DTS_HD_MA_30_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_30_clr" />
+  <Image Name="DTS_HD_MA_40_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_40_clr" />
+  <Image Name="DTS_HD_MA_50_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_50_clr" />
+  <Image Name="DTS_HD_MA_51_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_51_clr" />
+  <Image Name="DTS_HD_MA_61_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_61_clr" />
+  <Image Name="DTS_HD_MA_71_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_HD_MA_71_clr" />
 
   <!-- Media -->
 

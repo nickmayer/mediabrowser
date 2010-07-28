@@ -354,13 +354,6 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_96_24_clr {
-            get {
-                object obj = ResourceManager.GetObject("codec_DTS_96_24_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap codec_DTS_9624 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_9624", resourceCulture);
@@ -665,13 +658,6 @@ namespace Diamond {
         internal static System.Drawing.Bitmap codec_mp3_clr {
             get {
                 object obj = ResourceManager.GetObject("codec_mp3_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_mpeg4visual_clr {
-            get {
-                object obj = ResourceManager.GetObject("codec_mpeg4visual_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

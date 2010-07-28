@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E7FD3720-EBA8-4A14-8142-75A3A438C8EA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -137,8 +137,6 @@
     <None Include="Images\MediaInfo\codec_flac.png" />
     <None Include="Images\MediaInfo\codec_dolby.png" />
     <None Include="Images\MediaInfo\codec_h262.png" />
-    <None Include="Images\MediaInfo\codec_mpeg4visual.png" />
-    <None Include="Images\MediaInfo\codec_DTS_96_24.png" />
     <None Include="Images\MediaInfo\codec_DTS_ES.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_HRA.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_MA.png" />
@@ -157,6 +155,7 @@
     <None Include="Images\MediaInfo\codec_DTS_HD_MA_30.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_HRA_61.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_MA_40.png" />
+    <None Include="Images\MediaInfo\codec_DTS_9624.png" />
     <Content Include="Images\MediaInfo\codec_mpegaudio.png" />
     <None Include="Images\MediaInfo\codec_vc1.png" />
     <None Include="Images\MediaInfo\codec_wmv.png" />
@@ -189,7 +188,6 @@
     <None Include="Images\MediaInfo\colour\codec_DDTrueHD_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_divx_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_dolby_clr.png" />
-    <None Include="Images\MediaInfo\colour\codec_DTS_96_24_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_DTS_9624_51_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_DTS_9624_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_dts_clr.png" />
@@ -213,7 +211,6 @@
     <None Include="Images\MediaInfo\colour\codec_h262_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_h264_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_mp3_clr.png" />
-    <None Include="Images\MediaInfo\colour\codec_mpeg4visual_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_mpegaudio_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_mpegvideo_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_on2_vp6_clr.png" />
