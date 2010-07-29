@@ -662,6 +662,20 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_mpeg4visual {
+            get {
+                object obj = ResourceManager.GetObject("codec_mpeg4visual", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_mpeg4visual_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_mpeg4visual_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_mpegaudio {
             get {
                 object obj = ResourceManager.GetObject("codec_mpegaudio", resourceCulture);

@@ -156,16 +156,17 @@
     <None Include="Images\MediaInfo\codec_DTS_HD_HRA_61.png" />
     <None Include="Images\MediaInfo\codec_DTS_HD_MA_40.png" />
     <None Include="Images\MediaInfo\codec_DTS_9624.png" />
+    <None Include="Images\MediaInfo\codec_mpeg4visual.png" />
     <Content Include="Images\MediaInfo\codec_mpegaudio.png" />
     <None Include="Images\MediaInfo\codec_vc1.png" />
     <None Include="Images\MediaInfo\codec_wmv.png" />
     <None Include="Images\MediaInfo\codec_wma.png" />
     <None Include="Images\MediaInfo\codec_vorbis.png" />
     <None Include="Images\MediaInfo\codec_mpegvideo.png" />
-    <None Include="Images\MediaInfo\codec_WMV_HD.png" />
     <None Include="Images\MediaInfo\codec_theora.png" />
-    <None Include="Images\MediaInfo\codec_ON2_VP6.png" />
     <None Include="Images\MediaInfo\codec_sorenson_h263.png" />
+    <None Include="Images\MediaInfo\codec_wmv_hd.png" />
+    <None Include="Images\MediaInfo\codec_on2_vp6.png" />
     <Content Include="Images\MediaInfo\codec_xvid.png" />
     <None Include="Images\MediaInfo\hdtype_1080.png" />
     <None Include="Images\MediaInfo\hdtype_720.png" />
@@ -262,6 +263,7 @@
     <None Include="Images\MediaInfo\colour\ratio_266_clr.png" />
     <None Include="Images\MediaInfo\colour\ratio_276_clr.png" />
     <None Include="Images\MediaInfo\colour\ratio_400_clr.png" />
+    <None Include="Images\MediaInfo\colour\codec_mpeg4visual_clr.png" />
     <Content Include="Images\MediaInfo\HD.png" />
     <Content Include="Images\MediaInfo\hd1080.png" />
     <Content Include="Images\MediaInfo\hd720.png" />
@@ -275,7 +277,6 @@
     <None Include="Images\MediaInfo\media_mp4.png" />
     <None Include="Images\MediaInfo\media_mov.png" />
     <None Include="Images\MediaInfo\media_mpeg.png" />
-    <None Include="Images\MediaInfo\media_WMV.png" />
     <None Include="Images\MediaInfo\media_ogg.png" />
     <None Include="Images\MediaInfo\media_flv.png" />
     <None Include="Images\MediaInfo\media_iso.png" />
@@ -283,6 +284,7 @@
     <None Include="Images\MediaInfo\media_ts.png" />
     <None Include="Images\MediaInfo\media_dvrms.png" />
     <None Include="Images\MediaInfo\media_wtv.png" />
+    <None Include="Images\MediaInfo\media_wmv.png" />
     <Content Include="Images\MediaInfo\ratio_133.png" />
     <None Include="Images\MediaInfo\ratio_150.png" />
     <None Include="Images\MediaInfo\Ratio_137.png" />

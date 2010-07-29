@@ -142,7 +142,7 @@
       <Condition Source="[VideoCodec]" SourceValue="wmv3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
       <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
       <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora" /> 
-      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegVideo" /> 
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg4visual" /> 
       <Condition Source="[VideoCodec]" SourceValue="mpeg-2 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H262" />
       <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:On2_Vp6" />
       <Condition Source="[VideoCodec]" SourceValue="sorenson h263" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Sorenson_H263" />
@@ -665,7 +665,7 @@
       <Condition Source="[VideoCodec]" SourceValue="wmv3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv_clr" />
       <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv_clr" />
       <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora_clr" />
-      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegVideo_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg4visual_clr" />
       <Condition Source="[VideoCodec]" SourceValue="mpeg-2 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H262_clr" />
       <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:On2_Vp6_clr" />
       <Condition Source="[VideoCodec]" SourceValue="sorenson h263" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Sorenson_H263_clr" />
