@@ -1803,6 +1803,20 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap ratio_181 {
+            get {
+                object obj = ResourceManager.GetObject("ratio_181", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ratio_181_clr {
+            get {
+                object obj = ResourceManager.GetObject("ratio_181_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ratio_185 {
             get {
                 object obj = ResourceManager.GetObject("ratio_185", resourceCulture);

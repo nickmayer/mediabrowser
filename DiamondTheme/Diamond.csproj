@@ -264,6 +264,7 @@
     <None Include="Images\MediaInfo\colour\ratio_276_clr.png" />
     <None Include="Images\MediaInfo\colour\ratio_400_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_mpeg4visual_clr.png" />
+    <None Include="Images\MediaInfo\colour\ratio_181_clr.png" />
     <Content Include="Images\MediaInfo\HD.png" />
     <Content Include="Images\MediaInfo\hd1080.png" />
     <Content Include="Images\MediaInfo\hd720.png" />
@@ -294,6 +295,7 @@
     <Content Include="Images\MediaInfo\ratio_166.png" />
     <Content Include="Images\MediaInfo\ratio_177.png" />
     <Content Include="Images\MediaInfo\ratio_178.png" />
+    <None Include="Images\MediaInfo\ratio_181.png" />
     <Content Include="Images\MediaInfo\ratio_185.png" />
     <None Include="Images\MediaInfo\ratio_200.png" />
     <Content Include="Images\MediaInfo\ratio_220.png" />
