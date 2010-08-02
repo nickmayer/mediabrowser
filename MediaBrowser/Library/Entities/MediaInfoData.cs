@@ -42,10 +42,20 @@ namespace MediaBrowser.Library.Entities
             {
                 if (this != Empty)
                 {
-                    if (AudioProfile != "")
-                        return string.Format("{0}x{1}, {2} {3}kbps, {4} ({5}) {6}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
-                    else
-                        return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
+                    switch (this.AudioFormat.ToLower())
+                    {
+                        case "ac3":
+                        case "dts":
+                        case "mpeg audio":
+                            {
+                                if (this.AudioProfile != null && this.AudioProfile != "")
+                                    return string.Format("{0}x{1}, {2} {3}kbps, {4} {5} {6}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
+                                else
+                                    return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
+                            }
+                        default:
+                            return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
+                    }
                 }
                 else
                     return "";
