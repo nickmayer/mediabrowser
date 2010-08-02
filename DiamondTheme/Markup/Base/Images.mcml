@@ -53,6 +53,7 @@
   <Image Name="Ratio_166" Source="resx://Diamond/Diamond.Resources/ratio_166" />
   <Image Name="Ratio_177" Source="resx://Diamond/Diamond.Resources/ratio_177" />
   <Image Name="Ratio_178" Source="resx://Diamond/Diamond.Resources/ratio_178" />
+  <Image Name="Ratio_181" Source="resx://Diamond/Diamond.Resources/ratio_181" />
   <Image Name="Ratio_185" Source="resx://Diamond/Diamond.Resources/ratio_185" />
   <Image Name="Ratio_200" Source="resx://Diamond/Diamond.Resources/ratio_200" />
   <Image Name="Ratio_220" Source="resx://Diamond/Diamond.Resources/ratio_220" />
@@ -169,6 +170,7 @@
   <Image Name="Ratio_166_clr" Source="resx://Diamond/Diamond.Resources/ratio_166_clr" />
   <Image Name="Ratio_177_clr" Source="resx://Diamond/Diamond.Resources/ratio_177_clr" />
   <Image Name="Ratio_178_clr" Source="resx://Diamond/Diamond.Resources/ratio_178_clr" />
+  <Image Name="Ratio_181_clr" Source="resx://Diamond/Diamond.Resources/ratio_181_clr" />
   <Image Name="Ratio_185_clr" Source="resx://Diamond/Diamond.Resources/ratio_185_clr" />
   <Image Name="Ratio_200_clr" Source="resx://Diamond/Diamond.Resources/ratio_200_clr" />
   <Image Name="Ratio_220_clr" Source="resx://Diamond/Diamond.Resources/ratio_220_clr" />
