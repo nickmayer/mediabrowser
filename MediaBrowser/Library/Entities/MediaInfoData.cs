@@ -165,10 +165,20 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (AudioProfile != "")
-                    return string.Format("{0} ({1}) {2}kbps", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
-                else
-                    return string.Format("{0} {1}kbps", this.AudioFormat, this.AudioBitRate / 1000);
+                switch (this.AudioFormat.ToLower())
+                {
+                    case "ac3":
+                    case "dts":
+                    case "mpeg audio":
+                        {
+                            if (this.AudioProfile != null && this.AudioProfile != "")
+                                return string.Format("{0} {1} {2}kbps", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
+                            else
+                                return string.Format("{0} {1}kbps", this.AudioFormat, this.AudioBitRate / 1000);
+                        }
+                    default:
+                        return string.Format("{0} {1}kbps", this.AudioFormat, this.AudioBitRate / 1000);
+                }
             }
         }
 
@@ -176,7 +186,28 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                return string.Format("{0}", this.AudioProfile);
+                switch (this.AudioFormat.ToLower())
+                {
+                    case "ac3":
+                    case "dts":
+                    case "mpeg audio":
+                        {
+                            if (this.AudioProfile != null && this.AudioProfile != "")
+                                return string.Format("{0} {1}", this.AudioFormat, this.AudioProfile);
+                            else
+                                return this.AudioFormat;
+                        }
+                    default:
+                        return this.AudioFormat;
+                }
+            }
+        }
+
+        public string AudioCombinedString
+        {
+            get
+            {
+                return string.Format("{0} {1}", this.AudioProfileString, this.AudioChannelString);
             }
         }
         #endregion
