@@ -200,6 +200,8 @@
     <Condition Source="[AudioProfile]" SourceValue="ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ac3" />
 
     <!--Digital Theater Systems-->
+    <Condition Source="[AudioCombined]" SourceValue="dts 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_10" />
+    <Condition Source="[AudioCombined]" SourceValue="dts 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_20" />
     <Condition Source="[AudioCombined]" SourceValue="dts 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_51" />
     <Condition Source="[AudioCombined]" SourceValue="dts 96/24 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_9624_51" />
     <Condition Source="[AudioCombined]" SourceValue="dts es 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES_51" />
@@ -464,6 +466,8 @@
       <Condition Source="[AudioProfile]" SourceValue="ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ac3_clr" />
 
       <!--Digital Theater Systems-->
+      <Condition Source="[AudioCombined]" SourceValue="dts 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_10_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_20_clr" />
       <Condition Source="[AudioCombined]" SourceValue="dts 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_51_clr" />
       <Condition Source="[AudioCombined]" SourceValue="dts 96/24 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_9624_51_clr" />
       <Condition Source="[AudioCombined]" SourceValue="dts es 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES_51_clr" />

@@ -107,6 +107,8 @@
   <Image Name="DDTrueHD_71" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_71" />
 
   <Image Name="DTS_DS" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS" />
+  <Image Name="DTS_DS_10" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_10" />
+  <Image Name="DTS_DS_20" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_20" />
   <Image Name="DTS_DS_51" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_51" />
 
   <Image Name="DTS_9624" Source="resx://Diamond/Diamond.Resources/codec_DTS_9624" />
@@ -224,6 +226,8 @@
   <Image Name="DDTrueHD_71_clr" Source="resx://Diamond/Diamond.Resources/codec_DDTrueHD_71_clr" />
 
   <Image Name="DTS_DS_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_clr" />
+  <Image Name="DTS_DS_10_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_10_clr" />
+  <Image Name="DTS_DS_20_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_20_clr" />
   <Image Name="DTS_DS_51_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_DS_51_clr" />
 
   <Image Name="DTS_9624_clr" Source="resx://Diamond/Diamond.Resources/codec_DTS_9624_clr" />

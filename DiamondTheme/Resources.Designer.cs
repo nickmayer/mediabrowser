@@ -396,6 +396,34 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_DTS_DS_10 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_DS_10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_DS_10_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_DS_10_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_DS_20 {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_DS_20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_DTS_DS_20_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_DTS_DS_20_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_DTS_DS_51 {
             get {
                 object obj = ResourceManager.GetObject("codec_DTS_DS_51", resourceCulture);

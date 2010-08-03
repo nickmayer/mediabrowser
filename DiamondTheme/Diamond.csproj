@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E7FD3720-EBA8-4A14-8142-75A3A438C8EA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -157,6 +157,8 @@
     <None Include="Images\MediaInfo\codec_DTS_HD_MA_40.png" />
     <None Include="Images\MediaInfo\codec_DTS_9624.png" />
     <None Include="Images\MediaInfo\codec_mpeg4visual.png" />
+    <None Include="Images\MediaInfo\codec_DTS_DS_10.png" />
+    <None Include="Images\MediaInfo\codec_DTS_DS_20.png" />
     <Content Include="Images\MediaInfo\codec_mpegaudio.png" />
     <None Include="Images\MediaInfo\codec_vc1.png" />
     <None Include="Images\MediaInfo\codec_wmv.png" />
@@ -265,6 +267,8 @@
     <None Include="Images\MediaInfo\colour\ratio_400_clr.png" />
     <None Include="Images\MediaInfo\colour\codec_mpeg4visual_clr.png" />
     <None Include="Images\MediaInfo\colour\ratio_181_clr.png" />
+    <None Include="Images\MediaInfo\colour\codec_DTS_DS_10_clr.png" />
+    <None Include="Images\MediaInfo\colour\codec_DTS_DS_20_clr.png" />
     <Content Include="Images\MediaInfo\HD.png" />
     <Content Include="Images\MediaInfo\hd1080.png" />
     <Content Include="Images\MediaInfo\hd720.png" />
