@@ -30,6 +30,13 @@
       <Binding Target="[Writers.Item]" Source="[Model]"/>
       <Binding Target="[ProductionYear.Content]" Source="[Model.ProductionYearString]"/>
       <Binding Target="[MPAARating.Value]" Source="[Model.MpaaRating]"/>
+      
+      <!--Get localized text for First Aired-->
+      <Binding Source="[Application.LocalStrings.#FirstAiredDetail!cor:String]" Target="[FirstAiredText.Content]"/>
+      <!-- Bind First Aired Date and check if it has a value.-->
+      <Binding   Source="[Model.FirstAired]" Target="[FirstAired.Content]"/>
+      <Condition Source="[Model.FirstAired]" ConditionOp="NotEquals" SourceValue="" Target="[FirstAiredPanel.Visible]" Value="true" />
+      
       <Changed Source="[Model.MediaInfo]" InitialEvaluate="true">
         <Actions>
           <Set Target="[MediaInfo.Content]" Value="[Model.MediaInfo.CombinedInfo]"/>
@@ -43,6 +50,18 @@
           <FlowLayout Orientation="Vertical" Spacing="0,0" />
         </Layout>
         <Children>
+
+          <!-- First Aired Date Panel-->
+          <Panel Name="FirstAiredPanel" Visible="false">
+            <Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout>
+            <Children>
+              <Text Name="FirstAiredText" Font="font://f:TD_MI_FirstAiredTitleFont" Color="color://s:FontColorLight"/>
+              <Text Name="FirstAired" Content="[Model.FirstAired]" Font="font://f:TD_MI_FirstAiredFont" Color="color://s:FontColorLight" Margins="10,2,0,0" Padding="0,0,0,0"/>
+            </Children>
+          </Panel>
+          
           <Panel>
             <Layout>
               <FlowLayout Orientation="Horizontal" Spacing="10,0"/>

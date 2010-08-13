@@ -48,22 +48,19 @@
       </Choice>
 
       <Color Name="FilterColor" Color="color://s:FilterColor" />
+
+      <Command Name="NextItemCommand" />
+      <Command Name="PreviousItemCommand" />
+      
     </Locals>
 
     <Rules>
-      <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true" ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[Item.HasBackdropImage]" Value="true"/>
-          <Equality Source="[Item.ItemTypeString]" Value="Movie"/>
-        </Conditions>
-        <Actions>
-          <Set Value="false" Target="[Preview.Visible]"/>
-          <Set Target="[BackdropPanel.Alpha]" Value="1"/>
-        </Actions>
-      </Changed>
-
-
-      <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Image]" />
+            
+      <Binding Source="[Item]" Target="[CommandButtons.Item]" />
+      <Binding Source="[Item]" Target="[Info.Item]" />
+      <Binding Source="[Item]" Target="[ActorScroller.Item]" />
+      <Binding Source="[Item]" Target="[Backdrop.Item]" />
+      <Binding Source="[Item.PrimaryImage]" Target="[Preview.Content]" />
       <Binding Source="[Item.Name]" Target="[TitleName.Content]" />
 
       <Binding Source="[Item.ProductionYearString]" Target="[ProductionYear.Content]" >
@@ -82,6 +79,29 @@
           <Equality Source="[Application.Config.ShowClock]" ConditionOp="Equals" Value="true" />
         </Conditions>
       </Binding>
+
+      <Changed Source="[NextItemCommand.Invoked]">
+        <Actions>
+          <Set Target="[Item]" Value="[Item.PhysicalParent.NextChild]" />
+        </Actions>
+      </Changed>
+      <Changed Source="[PreviousItemCommand.Invoked]">
+        <Actions>
+          <Set Target="[Item]" Value="[Item.PhysicalParent.PrevChild]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Item.HasBackdropImage]" Value="true"/>
+          <Equality Source="[Item.ItemTypeString]" Value="Movie"/>
+        </Conditions>
+        <Actions>
+          <Set Value="false" Target="[Preview.Visible]"/>
+          <Set Target="[BackdropPanel.Alpha]" Value="1"/>
+        </Actions>
+      </Changed>
+      
       <Rule >
         <Conditions>
           <Equality Source="[Application.Config.ShowClock]" ConditionOp="Equals" Value="true" />
@@ -164,8 +184,13 @@
           </Clip>
 
           <!-- play/resume buttons-->
-          <me:CommandButtons Application="[Application]" Item="[Item]" FilterColor="[FilterColor]"
-                             Alpha="global://s:FilterAlpha">
+          <me:CommandButtons Application="[Application]"
+                             Name="CommandButtons"
+                             Item="[Item]" 
+                             FilterColor="[FilterColor]"
+                             Alpha="global://s:FilterAlpha"
+                             NextItemCommand="[NextItemCommand]"
+                             PreviousItemCommand="[PreviousItemCommand]">            
             <LayoutInput>
               <AnchorLayoutInput Left="Parent,0,0" Top="TitleText,1,10" />
             </LayoutInput>
@@ -242,7 +267,16 @@
           </ColorFill>
 
           <!-- Main Background -->
-          <Graphic Name="MainBG" Content="image://i:Background" Margins="-50,-20,-50,-20" Layout="Fill"/>
+          <Panel Name="MainBG" Layout="Fill" Margins="-50,-20,-150,-20" >
+            <Children>
+              <Clip FadeSize="360" Orientation="Vertical" FadeAmount="1" CenterPointPercent="0.5,0.5,0.5" FarOffset="50" NearOffset="50" >
+                <Children>
+                  <ColorFill Content="color://s:BackgroundColor1" Layout="Fill"/>
+                </Children>
+              </Clip>
+              <ColorFill Content="color://s:BackgroundColor2" Layout="Fill"/>
+            </Children>
+          </Panel>
 
         </Children>
       </ColorFill>
@@ -257,6 +291,8 @@
       <lib:Item Name="Item" Item="$Required"/>
       <Color Name="FilterColor" Color="Black"/>
       <cor:Single Name="Alpha" Single="1" />
+      <Command Name="NextItemCommand" Command="$Required" />
+      <Command Name="PreviousItemCommand" Command="$Required" />
     </Properties>
 
     <Locals>
@@ -269,6 +305,7 @@
     </Locals>
 
     <Rules>
+      <Binding Source="[Application.CurrentItem]" Target="[Item]" />
       <Binding Source="[Item.CanResume]" Target="[ResumeMovieButton.Visible]" />
       <Binding Source="[Item.ContainsTrailers]" Target="[PlayTrailersButton.Visible]" />
       <Condition Source="[Item.CanResume]" ConditionOp="Equals" SourceValue="false" Target="[ResumeMovieButton.Visible]" Value="false"/>
@@ -307,6 +344,18 @@
         </Actions>
       </Changed>
 
+      <!-- No Parent - Needed when entering the Details Page via the RAL -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Item.PhysicalParent.SelectedChildIndex]" ConditionOp="Equals" Value="-1" />
+        </Conditions>
+        <Actions>
+          <Set Target="[PreviousItemButton.Visible]" Value="false" />
+          <Set Target="[NextItemButton.Visible]" Value="false" />
+        </Actions>
+      </Rule>
+
+      
       <Default Target="[Input.KeyInteractive]" Value="true" />
 
       <Rule ConditionLogicalOp="And">
@@ -335,9 +384,11 @@
                   <ib:ImageButton Name="ResumeMovieButton" Text="[Application.LocalStrings.#ResumeDetail!cor:String]" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
                   <ib:ImageButton Name="PlayMovieButton" Text="[Application.LocalStrings.#PlayDetail!cor:String]" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <ib:ImageButton Name="RefreshMovieButton" Text="[Application.LocalStrings.#RefreshDetail!cor:String]" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
-                  <ib:ImageButton Name="PlayTrailersButton" Text="[Application.LocalStrings.#PlayTrailersDetail!cor:String]" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <ib:ImageButton Name="PlayTrailersButton" Text="[Application.LocalStrings.#PlayTrailersDetail!cor:String]" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <ib:ImageButton Name="CacheMovieButton" Text="[Application.LocalStrings.#CacheDetail!cor:String]" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                   <ib:ImageButton Name="DeleteMovieButton" Text="[Application.LocalStrings.#DeleteDetail!cor:String]" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
+                  <ib:ImageButton Name="NextItemButton" Text="[Application.LocalStrings.#NextItemDetail!cor:String]" Command="[NextItemCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconNext" Size="200,50" Font="font://f:MM_ButtonFont"/>
+                  <ib:ImageButton Name="PreviousItemButton" Text="[Application.LocalStrings.#PreviousItemDetail!cor:String]" Command="[PreviousItemCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPrevious" Size="200,50" Font="font://f:MM_ButtonFont"/>
                 </Children>
               </ColorFill>
             </Children>
@@ -551,26 +602,21 @@
 
       <Binding Target="[MediaInfoPane.Visible]" Source="[Item.HasMediaInfo]" />
 
-      <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]">
-        <Transformer>
-          <FormatTransformer ToUpper="true"/>
-        </Transformer>
-      </Binding>
+      <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]"/>
       <Binding Target="[OutOfText.Content]" Source="[Application.LocalStrings.#OutOfDetail!cor:String]">
         <Transformer>
           <FormatTransformer Format="{0} 10"/>
         </Transformer>
       </Binding>
-      <Binding Target="[DirectorText.Content]" Source="[Application.LocalStrings.#DirectorDetail!cor:String]">
-        <Transformer>
-          <FormatTransformer ToUpper="true"/>
-        </Transformer>
-      </Binding>
-      <Binding Target="[RuntimeText.Content]" Source="[Application.LocalStrings.#RuntimeDetail!cor:String]">
-        <Transformer>
-          <FormatTransformer ToUpper="true"/>
-        </Transformer>
-      </Binding>
+      <Binding Target="[DirectorText.Content]" Source="[Application.LocalStrings.#DirectorDetail!cor:String]"/>
+      <Binding Target="[RuntimeText.Content]" Source="[Application.LocalStrings.#RuntimeDetail!cor:String]"/>
+
+      <!--Get localized text for First Aired-->
+      <Binding Target="[FirstAiredText.Content]" Source="[Application.LocalStrings.#FirstAiredDetail!cor:String]"/>
+  
+      <!-- Add First Aired Date if available -->
+      <Binding   Source="[Item.FirstAired]"     Target="[FirstAired.Content]"/>
+      <Condition Source="[Item.FirstAired]"     ConditionOp="Equals"      SourceValue=""  Target="[FirstAiredPanel.Visible]"     Value="false"/>
 
     </Rules>
     <Content>
@@ -688,6 +734,16 @@
                 </Children>
               </Panel>
 
+              <Panel Name="FirstAiredPanel" >
+                <Layout>
+                  <FlowLayout Orientation="Horizontal"/>
+                </Layout>
+                <Children>
+                  <Text Name="FirstAiredText" Font="font://f:MM_FirstAiredTitleFont" Color="[ItemColor]" MinimumSize="140,0"/>
+                  <Text Name="FirstAired" Content="[Item.FirstAired]" Font="font://f:MM_FirstAiredFont" Color="[ValueColor]"/>
+                </Children>
+              </Panel>
+              
             </Children>
             <Animations>
               <TransformAnimation Delay="0.15">

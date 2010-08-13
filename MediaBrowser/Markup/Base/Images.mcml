@@ -46,6 +46,7 @@
 	<Image Name="RadioButtonOn" Source="resx://MediaBrowser/MediaBrowser.Resources/RadioButtonOn" />
 	<Image Name="RadioButtonOff" Source="resx://MediaBrowser/MediaBrowser.Resources/RadioButtonOff" />
 	<Image Name="ButtonLeftFocus"         Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocus"         NineGrid="7,7,7,7" />
+  <Image Name="ButtonLeftFocusBlack"    Source="resx://MediaBrowser/MediaBrowser.Resources/ButtonLeftFocusBlack"         NineGrid="7,7,7,7" />
 	<Image Name="BlankImage" Image="null"/>
 	
 	<Image Name="CheckBoxCheckedFocus"         Source="resx://MediaBrowser/MediaBrowser.Resources/CheckBoxCheckedFocus"  />
