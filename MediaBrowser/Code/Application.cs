@@ -428,6 +428,20 @@ namespace MediaBrowser
 
                 try
                 {
+					// check if we are running windows 7
+                    if ((Environment.OSVersion.Platform == PlatformID.Win32NT) && (Environment.OSVersion.Version.Major == 6)
+                        && (Environment.OSVersion.Version.Minor >= 1))
+                    {
+                        // we are running windows 7.  See if we are trying to delete the file we are currently playing
+                        if (NowPlayingText == Item.Name)
+                        {
+                            string DingFile = System.Environment.ExpandEnvironmentVariables("%WinDir%") + "\\Media\\Windows Ding.wav";
+
+                            // try and run the file regardless whether it exists or not.  Ideally we want it to play but if we can't find it, it will still put MC in a state that allows
+                            // us to delete the file we are trying to delete
+                            PlaybackController.PlayMedia(DingFile);
+                        }
+                    }
                     if (Directory.Exists(path))
                     {
                         Directory.Delete(path, true);
