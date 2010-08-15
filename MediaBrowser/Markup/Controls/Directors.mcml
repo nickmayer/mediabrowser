@@ -22,7 +22,7 @@
     <Content>
       <Panel Name="DirectedByPanel" Layout="HorizontalFlow" Visible="false">
         <Children>
-          <Text Content="[Application.LocalStrings.#DirectedByText!cor:String]" Font="[TitleFont]" Color="color://s:FontColorLight" />
+          <Text Content="[Application.LocalStrings.#DirectedByDetail!cor:String]" Font="[TitleFont]" Color="color://s:FontColorLight" />
           <Text Name="Director" Font="[Font]" WordWrap="true" Color="color://s:FontColorLight" Content="[Item.DirectorString]"/>
         </Children>
       </Panel>

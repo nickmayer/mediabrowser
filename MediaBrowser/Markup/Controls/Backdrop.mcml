@@ -96,6 +96,14 @@
     </Locals>
     
     <Rules>
+      
+      <!--Restart Timer when Item changes. Needed for Next/Prev functionality.-->
+      <Changed Source="[Item]">
+        <Actions>
+          <Set Target="[StartupTimer.Enabled]" Value="true"/>         
+        </Actions>
+      </Changed>
+      
       <Binding Source="[Item.BackdropImage]" Target="[Backdrop.Content]" />
 
       <Rule>

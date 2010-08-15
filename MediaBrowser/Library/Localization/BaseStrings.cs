@@ -186,6 +186,9 @@ namespace MediaBrowser.Library.Localization
         public string OutOfDetail = "out of";
         public string DirectorDetail = "Director";
         public string RuntimeDetail = "Runtime";
+        public string NextItemDetail = "Next";
+        public string PreviousItemDetail = "Previous";
+        public string FirstAiredDetail = "Aired on";
 
         public string DirectedByDetail = "Directed By: ";
         public string WrittenByDetail = "Written By: ";

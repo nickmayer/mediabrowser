@@ -125,7 +125,7 @@
 							 Content="image://me:ButtonLeftFocusOverlay"
 							 MinimumSize="[MinSize]"
 							 MaximumSize="[Size]"
-							 SizingPolicy="SizeToContent"
+							 SizingPolicy="SizeToConstraint"
 							 HorizontalAlignment="Fill"
 							 VerticalAlignment="Fill"
                    >

@@ -263,6 +263,8 @@
     <None Include="Images\Root\roottopw.png" />
     <None Include="Images\Root\rootscrollhilite.png" />
     <Content Include="Images\Icons\IconAdded.png" />
+    <None Include="Images\Icons\IconNext.png" />
+    <None Include="Images\Icons\IconPrevious.png" />
     <Content Include="Images\Icons\IconRemote.png" />
     <Content Include="Images\Icons\IconWatched.png" />
     <Content Include="Images\Lock.png" />
