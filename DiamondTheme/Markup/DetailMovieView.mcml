@@ -361,13 +361,13 @@
     <Content>
       <Panel Layout="VerticalFlow" Padding="0,10,0,10" Navigation="RememberFocus" >
         <Children>
-          <dtb:DiamondImageButton Name="ResumeMovieButton"  Text="RESUME"       Command="[ResumeMovieCommand]"  Icon="resx://Diamond/Diamond.Resources/IconResume"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]"/>
-          <dtb:DiamondImageButton Name="PlayMovieButton"    Text="PLAY"         Command="[PlayMovieCommand]"    Icon="resx://Diamond/Diamond.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]"/>
-          <dtb:DiamondImageButton Name="TrailerButton"      Text="TRAILER"      Command="[LocalTrailerCommand]" Icon="resx://Diamond/Diamond.Resources/IconTrailers" Size="[Size]"  MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
-          <dtb:DiamondImageButton Name="ToggleViewButton"   Text="DISPLAY"      Command="[ToggleViewCommand]"   Icon="resx://Diamond/Diamond.Resources/IconFloral"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]" />
-          <dtb:DiamondImageButton Name="RefreshMovieButton" Text="REFRESH"      Command="[RefreshMovieCommand]" Icon="resx://Diamond/Diamond.Resources/IconRefresh" Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]" />
-          <dtb:DiamondImageButton Name="CacheMovieButton"   Text="CACHE 2 XML"  Command="[NullCommand]"         Icon="resx://Diamond/Diamond.Resources/Lines"       Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
-          <dtb:DiamondImageButton Name="DeleteMovieButton"  Text="DELETE"       Command="[DeleteMovieCommand]"  Icon="resx://Diamond/Diamond.Resources/IconDelete"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="ResumeMovieButton"  Text="[Application.LocalStrings.#ResumeDetail!cor:String]"  Command="[ResumeMovieCommand]"  Icon="resx://Diamond/Diamond.Resources/IconResume"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]"/>
+          <dtb:DiamondImageButton Name="PlayMovieButton"    Text="[Application.LocalStrings.#PlayDetail!cor:String]" Command="[PlayMovieCommand]"    Icon="resx://Diamond/Diamond.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]"/>
+          <dtb:DiamondImageButton Name="TrailerButton"      Text="[Application.LocalStrings.#PlayTrailersDetail!cor:String]" Command="[LocalTrailerCommand]" Icon="resx://Diamond/Diamond.Resources/IconTrailers" Size="[Size]"  MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="ToggleViewButton"   Text="[Application.LocalStrings.#DisplayDetail!cor:String]"      Command="[ToggleViewCommand]"   Icon="resx://Diamond/Diamond.Resources/IconFloral"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="RefreshMovieButton" Text="[Application.LocalStrings.#RefreshDetail!cor:String]"      Command="[RefreshMovieCommand]" Icon="resx://Diamond/Diamond.Resources/IconRefresh" Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="CacheMovieButton"   Text="[Application.LocalStrings.#CacheDetail!cor:String]"  Command="[NullCommand]"         Icon="resx://Diamond/Diamond.Resources/Lines"       Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
+          <dtb:DiamondImageButton Name="DeleteMovieButton"  Text="[Application.LocalStrings.#DeleteDetail!cor:String]"       Command="[DeleteMovieCommand]"  Icon="resx://Diamond/Diamond.Resources/IconDelete"  Size="[Size]"   MinSize="[MinSize]" Font="[Font]" Visible="false" MaxMode="[DisplayMini]" />
         </Children>
       </Panel>
     </Content>
@@ -391,9 +391,9 @@
     <Locals>
       <Choice Name="Model">
         <Options>
-          <cor:String String="General" />
-          <cor:String String="Actors" />
-          <cor:String String="Media-Details" />
+          <cor:String String="[Application.LocalStrings.#GeneralDetail!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#ActorsDetail!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#MediaDetail!cor:String]" />
         </Options>
       </Choice>
     </Locals>
@@ -450,74 +450,57 @@
             <Children>
              <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="LOCATION"
-                        MinimumSize="[MinSize]"/>
-                  <Text Content="[Item.Path]" Color="[ValueColor]" Font="[ValueFont]"
-                        WordWrap="true" MaximumLines="2"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#LocationMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.Path]" Color="[ValueColor]" Font="[ValueFont]"                         WordWrap="true" MaximumLines="2"/>
                 </Children>
               </Panel>  
 
-            
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="VIDEO CODEC"
-                        MinimumSize="[MinSize]"/>
-                  <Text Content="[Item.MediaInfo.VideoCodecExtendedString]" Color="[ValueColor]" 
-                        Font="[ValueFont]"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]"  Content="[Application.LocalStrings.#VCodecMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
+                  <Text Content="[Item.MediaInfo.VideoCodecExtendedString]" Color="[ValueColor]"                          Font="[ValueFont]"/>
                 </Children>
               </Panel>
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="VIDEO RESOLUTION"
-                        MinimumSize="[MinSize]"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#VResMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
                   <Text Content="[Item.MediaInfo.VideoResolutionString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
               </Panel>
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="VIDEO FRAME RATE"
-                        MinimumSize="[MinSize]"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#VFrameRateMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
                   <Text Content="[Item.MediaInfo.VideoFrameRateString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
               </Panel>
-
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="AUDIO CODEC"
-                        MinimumSize="[MinSize]"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#ACodecMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
                   <Text Content="[Item.MediaInfo.AudioCodecExtendedString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
               </Panel>
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="AUDIO STREAMS"
-                        MinimumSize="[MinSize]"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#AStreamsMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
                   <Text Content="[Item.MediaInfo.AudioStreamString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
               </Panel>
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="AUDIO CHANNELS" 
-                        MinimumSize="[MinSize]"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#AChannelsMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
                   <Text Content="[Item.MediaInfo.AudioChannelString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
               </Panel>
-              
               <Panel Layout="HorizontalFlow">
                 <Children>
-                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="SUBTITLES"
-                        MinimumSize="[MinSize]"/>
+                  <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#SubtitlesMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
                   <Text Content="[Item.MediaInfo.SubtitleString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
-              </Panel>              
-              
+              </Panel>
             </Children>
           </Panel>
-
-
         </Children>
       </Graphic>
-
     </Content>
   </UI>
 

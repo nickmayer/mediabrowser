@@ -50,23 +50,23 @@
         <Children>
           <Panel Layout="VerticalFlow" MaximumSize="450,400">
             <Children>
-              <me:TextHeader Text="Diamond Theme Options" />
-              <cb:CheckBox Label="Media Details in Mini Mode" Checked="[MiniMode]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="Display End Time" Checked="[DisplayEndTime]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="Display Glass Overlay" Checked="[DisplayGlassOverlay]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="Display Infobox in Coverflow Views" Checked="[InfoBoxCoverflow]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="Display Infobox in Thumbstrip Views" Checked="[InfoBoxThumbstrip]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="Display Infobox in Poster Views" Checked="[InfoBoxPoster]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <me:TextHeader Text="[Application.LocalStrings.#DiamondOptions!cor:String]" />
+              <cb:CheckBox Label="[Application.LocalStrings.#MediaDetailsinMiniMode!cor:String]" Checked="[MiniMode]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayEndTime!cor:String]" Checked="[DisplayEndTime]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinCoverflowViews!cor:String]" Checked="[DisplayGlassOverlay]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinThumbstripViews!cor:String]" Checked="[InfoBoxCoverflow]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinPosterViews!cor:String]" Checked="[InfoBoxThumbstrip]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayGlassOverlay!cor:String]" Checked="[InfoBoxPoster]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="Display Colour MediaInfo Icons" Checked="[DiamondColorMediaInfo]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               </Children>
           </Panel>
           <Panel Layout="VerticalFlow" MaximumSize="550,400">
             <Children>
-              <me:TextHeader Text="Diamond Theme Options" />
-              <cb:CheckBox Label="Display Weather" Checked="[DiamondDisplayWeather]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="Extender Layout Enhancements" Checked="[AutoExtenderLayout]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]" />
-              <ss:SimpleSpinner Label="EHS Gradient Opacity" Model="[AlphaOpacity]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="[Font]" ValueFont="[Font]" />
-              <me:TextHeader Text="*Changes require a restart.*" />
+              <me:TextHeader Text="[Application.LocalStrings.#DiamondOptions!cor:String]" />
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayWeather!cor:String]" Checked="[DiamondDisplayWeather]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#ExtenderLayoutEnhancements!cor:String]" Checked="[AutoExtenderLayout]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]" />
+              <ss:SimpleSpinner Label="[Application.LocalStrings.#EHSGradientOpacity!cor:String]" Model="[AlphaOpacity]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="[Font]" ValueFont="[Font]" />
+              <me:TextHeader Text="[Application.LocalStrings.#RequireRestart!cor:String]" />
             </Children>
           </Panel>
         </Children>

@@ -52,7 +52,10 @@
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
-      <Default Target="[Title.Content]" Value="PLAY MENU" >
+      <Default Target="[Title.Content]" Value="[Application.LocalStrings.#PlayMenuCMenu!cor:String]" >
+        <Transformer>
+          <FormatTransformer ToUpper="true"/>
+        </Transformer>
         <Conditions>
           <Equality Source="[MenuType]" Value="Play" />
         </Conditions>
@@ -113,7 +116,7 @@
         <Children>
 
 
-          <Text Name="Title" Content="ITEM MENU" Color="color://s:D_Normal" Font="font://f:Diamond_Large" Margins="10,0,150,10" />
+          <Text Name="Title" Content="[Application.LocalStrings.#ItemMenuCMenu!cor:String.ToUpper]" Color="color://s:D_Normal" Font="font://f:Diamond_Large" Margins="10,0,150,10" />
 
           <Panel Layout="HorizontalFlow" Margins="10,0,0,0">
             <Children>

@@ -99,7 +99,7 @@ namespace Diamond
         {
             get
             {
-                return new System.Version(0, 3, 2, 1);
+                return new System.Version(0, 3, 3, 0);
             }
             set
             {
@@ -117,7 +117,7 @@ namespace Diamond
         {
             get
             {
-                return new System.Version(2,2,4,0);
+                return new System.Version(2,2,5,0);
             }
         }
 
@@ -128,7 +128,7 @@ namespace Diamond
         {
             get
             {
-                return new System.Version(2, 2, 4, 0);
+                return new System.Version(2, 2, 5, 0);
             }
         }
 

@@ -182,10 +182,8 @@
                 </LayoutInput>
                 <Children>
                   <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="5,0,0,0" MaximumSize="0,30"/>
-                  <Text Name="Runtime" Content="[Item.RunningTimeString]"
-                          Font="[ValueFont]" Color="[ValueColor]" />
-                  <Text Name="EstimateEndTime" Content=""
-                          Font="font://f:Diamond_Smaller" Color="[AttributeColor]" />
+                  <Text Name="Runtime" Content="[Item.RunningTimeString]"                           Font="[ValueFont]" Color="[ValueColor]" />
+                  <Text Name="EstimateEndTime" Content=""                           Font="font://f:Diamond_Smaller" Color="[AttributeColor]" />
                   <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
                 </Children>
               </Panel>
@@ -203,7 +201,7 @@
                       <FlowLayout Orientation="Horizontal" Spacing="5,5"/>
                     </Layout>
                     <Children>
-                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="IMDB RATING" Visible="[FullMode]" MinimumSize="[MinSize]"/>
+                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#IMDBRatingDetail!cor:String.ToUpper]" Visible="[FullMode]" MinimumSize="[MinSize]"/>
                       <Text Name="IMDBRating" Content="" Color="[ValueColor]" Font="[ValueFont]"/>
                       <Text Font="[ValueFont]" Color="[ValueColor]" Content="/ 10"/>
                       <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" />
@@ -215,7 +213,7 @@
                       <FlowLayout Orientation="Horizontal"/>
                     </Layout>
                     <Children>
-                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="GENRE"  Visible="[FullMode]" MinimumSize="[MinSize]"/>
+                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#GenreDetail!cor:String.ToUpper]" Visible="[FullMode]" MinimumSize="[MinSize]"/>
                       <Repeater Name="GenreRepeater" Source="[Item.Genres]"  Margins="0,0,0,0" MaximumSize="0,66" >
                         <Layout>
                           <FlowLayout Orientation="Horizontal" AllowWrap="true"  Spacing="25,0"  />
@@ -257,7 +255,7 @@
 
                   <Panel Name="StudioPanel" Layout="HorizontalFlow" Visible="false">
                     <Children>
-                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="STUDIO" Visible="false" MinimumSize="[MinSize]"/>
+                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#StudioDetail!cor:String.ToUpper]" Visible="false" MinimumSize="[MinSize]"/>
                       <Repeater Name="StudioRepeater" Source="[Item.StudioItems]" Margins="0,0,0,0" MaximumSize="0,0" >
                         <Layout>
                           <FlowLayout Orientation="Horizontal" AllowWrap="false"  Spacing="5,0"  />
@@ -274,7 +272,7 @@
                       <FlowLayout Orientation="Horizontal" Spacing="5,5"/>
                     </Layout>
                     <Children>
-                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="FIRST AIRED" Visible="[FullMode]" MinimumSize="[MinSize]"/>
+                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#FirstAiredDetail!cor:String.ToUpper]" Visible="[FullMode]" MinimumSize="[MinSize]"/>
                       <Text Name="FirstAired" Content="" Color="[ValueColor]" Font="[ValueFont]"/>
                     </Children>
                   </Panel>
@@ -284,7 +282,7 @@
                       <FlowLayout Orientation="Horizontal" Spacing="5,5"/>
                     </Layout>
                     <Children>
-                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="EPISODES" MinimumSize="[MinSize]"/>
+                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#EpisodesDetail!cor:String.ToUpper]" MinimumSize="[MinSize]"/>
                       <Text Name="EpisodeCount" Content="" Color="[ValueColor]" Font="[ValueFont]"/>
                     </Children>
                   </Panel>
@@ -413,7 +411,11 @@
       <Binding Source="[Command]" Target="[Clicker.Command]" />
       <Binding Source="[Command.Available]" Target="[Input.KeyInteractive]" />
       <Binding Source="[Font]" Target="[Label.Font]" />
-      <Binding Source="[Text]" Target="[Label.Content]" />
+      <Binding Source="[Text]" Target="[Label.Content]">
+        <Transformer>
+          <FormatTransformer ToUpper="true"/>
+        </Transformer>
+      </Binding>
       <Binding Source="[MaxMode]" Target="[Label.Visible]" />
 
 

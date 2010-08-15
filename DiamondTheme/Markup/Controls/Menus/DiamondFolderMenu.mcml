@@ -59,7 +59,7 @@
                Navigation="ContainAll" Layout="VerticalFlow">
         <Children>
 
-          <Text Content="FOLDER MENU" Color="color://s:D_Normal" Font="font://f:Diamond_Large" Margins="10,0,150,10" />
+          <Text Content="[Application.LocalStrings.#FolderMenuFM!cor:String.ToUpper]" Color="color://s:D_Normal" Font="font://f:Diamond_Large" Margins="10,0,150,10" />
           <Panel Layout="HorizontalFlow" Margins="10,0,0,0">
             <Children>
               <Scroller Orientation="Vertical" FadeSize="0"  ScrollingData="[SD]" Navigation="RememberFocus" Margins="0,0,0,25" >
@@ -69,15 +69,15 @@
                       <FlowLayout Orientation="Vertical" ItemAlignment="Center" Spacing="3,3"/>
                     </Layout>
                     <Children>
-                      <me:DockItem Choice="[Folder.DisplayPrefs.ViewType]"      DisplayStr="VIEW BY" Bullet="image://i:Lines" />
-                      <me:DockItem Choice="[Folder.DisplayPrefs.SortOrders]"    DisplayStr="SORT BY" Bullet="image://i:SortImg" />
-                      <me:DockItem Choice="[Folder.DisplayPrefs.IndexByChoice]" DisplayStr="INDEX BY" Bullet="image://i:IndexImg" />
-                      <me:DockButtonItem Name="IncreaseCovers" Command="[IncreaseCmd]"        DisplayStr="COVER SIZE"    DisplayStr2="increase" Bullet="image://me:IconUp"      BGColor="MidnightBlue"/>
-                      <me:DockButtonItem Name="DecreaseCovers" Command="[DecreaseCmd]"        DisplayStr="COVER SIZE"    DisplayStr2="decrease" Bullet="image://me:IconDown"    BGColor="MidnightBlue"/>
-                      <me:DockCheckItem Name="ShowBackdrop" Checked="[Prefs.UseBackdrop]"     DisplayStr="BACKDROP"       BGColor="50,50,50"/>
-                      <me:DockCheckItem Name="ShowLabels" Checked="[Prefs.ShowLabels]"        DisplayStr="TITLES"   Bullet="image://me:IconLabels"  BGColor="50,50,50"/>
-                      <me:DockCheckItem Name="VerticalScroll" Checked="[Prefs.VerticalScroll]" DisplayStr="VERTICAL SCROLL" Bullet="image://me:IconVertical" BGColor="50,50,50"/>
-                      <me:DockCheckItem Name="UseBanner" Checked="[Prefs.UseBanner]"          DisplayStr="BANNERS"  Bullet="image://me:IconBanner"      BGColor="50,50,50"/>
+                      <me:DockItem Choice="[Folder.DisplayPrefs.ViewType]"      DisplayStr="[Application.LocalStrings.#ViewByFM!cor:String.ToUpper]" Bullet="image://i:Lines" />
+                      <me:DockItem Choice="[Folder.DisplayPrefs.SortOrders]"    DisplayStr="[Application.LocalStrings.#SortByFM!cor:String.ToUpper]" Bullet="image://i:SortImg" />
+                      <me:DockItem Choice="[Folder.DisplayPrefs.IndexByChoice]" DisplayStr="[Application.LocalStrings.#IndexByFM!cor:String.ToUpper]" Bullet="image://i:IndexImg" />
+                      <me:DockButtonItem Name="IncreaseCovers" Command="[IncreaseCmd]"        DisplayStr="[Application.LocalStrings.#CoverSizeFM!cor:String.ToUpper]"    DisplayStr2="[Application.LocalStrings.#increaseFM!cor:String]" Bullet="image://me:IconUp"      BGColor="MidnightBlue"/>
+                      <me:DockButtonItem Name="DecreaseCovers" Command="[DecreaseCmd]"        DisplayStr="[Application.LocalStrings.#CoverSizeFM!cor:String.ToUpper]"    DisplayStr2="[Application.LocalStrings.#decreaseFM!cor:String]" Bullet="image://me:IconDown"    BGColor="MidnightBlue"/>
+                      <me:DockCheckItem Name="ShowBackdrop" Checked="[Prefs.UseBackdrop]"     DisplayStr="[Application.LocalStrings.#BackdropFM!cor:String.ToUpper]"       BGColor="50,50,50" Application="[Application]"/>
+                      <me:DockCheckItem Name="ShowLabels" Checked="[Prefs.ShowLabels]"        DisplayStr="[Application.LocalStrings.#TitlesFM!cor:String.ToUpper]"   Bullet="image://me:IconLabels"  BGColor="50,50,50" Application="[Application]"/>
+                      <me:DockCheckItem Name="VerticalScroll" Checked="[Prefs.VerticalScroll]" DisplayStr="[Application.LocalStrings.#VerticalScrollFM!cor:String.ToUpper]" Bullet="image://me:IconVertical" BGColor="50,50,50" Application="[Application]"/>
+                      <me:DockCheckItem Name="UseBanner" Checked="[Prefs.UseBanner]"          DisplayStr="[Application.LocalStrings.#BannersFM!cor:String.ToUpper]"  Bullet="image://me:IconBanner"      BGColor="50,50,50" Application="[Application]"/>
                     </Children>
                     <Animations>
                       <Animation Type="Move">
@@ -306,6 +306,7 @@
   <UI Name="DockCheckItem" BaseUI="me:DockItemBase">
     <Properties>
       <BooleanChoice Name="Checked" BooleanChoice="$Required" />
+      <a:Application Name="Application" Application="$Required"/>
     </Properties>
 
     <Rules>
@@ -319,8 +320,8 @@
         </Actions>
       </Changed>
 
-      <Condition Source="[Checked.Value]" ConditionOp="Equals" SourceValue="true" Target="[LabelValue.Content]" Value="enabled" />
-      <Condition Source="[Checked.Value]" ConditionOp="Equals" SourceValue="false" Target="[LabelValue.Content]" Value="disabled" />
+      <Condition Source="[Checked.Value]" ConditionOp="Equals" SourceValue="true" Target="[LabelValue.Content]" Value="[Application.LocalStrings.#enableFM!cor:String]" />
+      <Condition Source="[Checked.Value]" ConditionOp="Equals" SourceValue="false" Target="[LabelValue.Content]" Value="[Application.LocalStrings.#disableFM!cor:String]" />
     </Rules>
 
   </UI>
