@@ -1,6 +1,7 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
       xmlns:cor ="assembly://MSCorLib/System"
       xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+      xmlns:app="assembly://Diamond/Diamond"
       xmlns:i="resx://Diamond/Diamond.Resources/Images"
       xmlns:me = "Me"
       >
@@ -10,17 +11,60 @@
       <lib:Item Name="Item" Item="$Required"/>
       <Size Name="MaxIconSize" Size="0,65"/>
     </Properties>
+
+    <Locals>
+      <app:Config Name="ThemeConfig"/>
+    </Locals>
     
     <Rules>      
-      <Changed Source="[Item.MediaInfo]" InitialEvaluate="true">
+      <Changed Source="[Item.MediaInfo]" InitialEvaluate="true">        
         <Actions>
           <Set Target="[VideoCodec.Value]" Value="[Item.MediaInfo.VideoCodecString]"/>
-          <Set Target="[AudioCodec.Value]" Value="[Item.MediaInfo.AudioCodecString]"/>
+          <Set Target="[VideoCodec.HDValue]" Value="[Item.IsHD]"/>
+          <Set Target="[AudioCodec.Combined]" Value="[Item.MediaInfo.AudioCombinedString]"/>
+          <Set Target="[AudioCodec.Profile]" Value="[Item.MediaInfo.AudioProfileString]"/>
           <Set Target="[AspectRatio.Value]" Value="[Item.AspectRatioString]"/>
           <Set Target="[HDResolution.Value]" Value="[Item.HDType]"/>
           <Set Target="[MediaFormat.Value]" Value="[Item.MediaTypeString]"/>
+          <Set Target="[VideoCodecClr.Value]" Value="[Item.MediaInfo.VideoCodecString]"/>
+          <Set Target="[VideoCodecClr.HDValue]" Value="[Item.IsHD]"/>
+          <Set Target="[AudioCodecClr.Combined]" Value="[Item.MediaInfo.AudioCombinedString]"/>
+          <Set Target="[AudioCodecClr.Profile]" Value="[Item.MediaInfo.AudioProfileString]"/>
+          <Set Target="[AspectRatioClr.Value]" Value="[Item.AspectRatioString]"/>
+          <Set Target="[HDResolutionClr.Value]" Value="[Item.HDType]"/>
+          <Set Target="[MediaFormatClr.Value]" Value="[Item.MediaTypeString]"/>
         </Actions>
-      </Changed>      
+      </Changed>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[VideoCodec.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[AudioCodec.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[AspectRatio.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[HDResolution.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[MediaFormat.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[VideoCodecClr.Visible]"/>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[AudioCodecClr.Visible]"/>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[AspectRatioClr.Visible]"/>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[HDResolutionClr.Visible]"/>
+      <Binding Source="[ThemeConfig.DiamondColorMediaInfo]" Target="[MediaFormatClr.Visible]"/>
     </Rules>
     
     <Content>
@@ -30,30 +74,34 @@
         </Layout>
         <Children>
           <me:MediaFormat   Name="MediaFormat"  MaximumSize="[MaxIconSize]" />
-          <me:VideoCodec    Name="VideoCodec"   MaximumSize="[MaxIconSize]" />
-          
+          <me:VideoCodec    Name="VideoCodec"   MaximumSize="[MaxIconSize]" />          
           <me:HDResolution  Name="HDResolution" MaximumSize="[MaxIconSize]" />          
-          <me:AspectRatio   Name="AspectRatio"  MaximumSize="[MaxIconSize]" />
-          
+          <me:AspectRatio   Name="AspectRatio"  MaximumSize="[MaxIconSize]" />          
           <me:AudioCodec    Name="AudioCodec"   MaximumSize="[MaxIconSize]" />
-          
-         <!-- <Text Name="ItemType" Content="who knows?" Color="Yellow" />-->
+          <me:MediaFormatClr   Name="MediaFormatClr"  MaximumSize="[MaxIconSize]" />
+          <me:VideoCodecClr    Name="VideoCodecClr"   MaximumSize="[MaxIconSize]" />
+          <me:HDResolutionClr  Name="HDResolutionClr" MaximumSize="[MaxIconSize]" />
+          <me:AspectRatioClr   Name="AspectRatioClr"  MaximumSize="[MaxIconSize]" />
+          <me:AudioCodecClr    Name="AudioCodecClr"   MaximumSize="[MaxIconSize]" />
         </Children>
       </Panel>
     </Content>
   </UI>
-	
 
-	<UI Name="VideoCodec">
-		<Properties>
-			<cor:String Name="Value" String=""/>
-		</Properties>
-		<Locals>
-			<cor:String Name="VideoCodec" String="" />
-		</Locals>
-    
-		<Rules>
-			<Binding Source="[Value]" Target="[VideoCodec]">
+
+  <UI Name="VideoCodec">
+    <Properties>
+      <cor:String Name="Value" String=""/>
+      <cor:Boolean Name="HDValue" Boolean="false"/>
+    </Properties>
+    <Locals>
+      <cor:String Name="VideoCodec" String="" />
+      <cor:Boolean Name="WMVHDValue" Boolean="false" />
+    </Locals>
+
+    <Rules>
+      <Binding Source="[HDValue]" Target="[WMVHDValue]" />
+      <Binding Source="[Value]" Target="[VideoCodec]">
         <Transformer>
           <FormatTransformer ToLower="true" />
         </Transformer>
@@ -62,8 +110,8 @@
       <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
 
       <Condition Source="[VideoCodec]" SourceValue="asf" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Asf" />
-			<Condition Source="[VideoCodec]" SourceValue="xvid" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Xvid" />
-			<Condition Source="[VideoCodec]" SourceValue="divx 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx" />
+      <Condition Source="[VideoCodec]" SourceValue="xvid" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Xvid" />
+      <Condition Source="[VideoCodec]" SourceValue="divx 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx" />
       <Condition Source="[VideoCodec]" SourceValue="divx 4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx" />
       <Condition Source="[VideoCodec]" SourceValue="divx 3 low" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx" />
       <Condition Source="[VideoCodec]" SourceValue="h264" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H264" />
@@ -71,8 +119,31 @@
       <Condition Source="[VideoCodec]" SourceValue="vc-1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vc1" />
       <Condition Source="[VideoCodec]" SourceValue="wmv1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
       <Condition Source="[VideoCodec]" SourceValue="wmv2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
+      <Rule>
+        <Conditions>
+          <Equality Source="[VideoCodec]" Value="wmv3"/>
+          <Equality Source="[WMVHDValue]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Image.Content]" Value="image://i:Wmv_HD"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[VideoCodec]" Value="wvc1"/>
+          <Equality Source="[WMVHDValue]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Image.Content]" Value="image://i:Wmv_HD"/>
+        </Actions>
+      </Rule>
       <Condition Source="[VideoCodec]" SourceValue="wmv3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
-      <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />      
+      <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
+      <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora" /> 
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg4visual" /> 
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-2 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H262" />
+      <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:On2_Vp6" />
+      <Condition Source="[VideoCodec]" SourceValue="sorenson h263" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Sorenson_H263" />
 		</Rules>
 		<Content>
 			<Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
@@ -80,29 +151,83 @@
 	</UI>
 
   
-  <UI Name="AudioCodec">
-    <Properties>
-      <cor:String Name="Value" String=""/>
-    </Properties>
-    <Locals>
-      <cor:String Name="AudioCodec" String="" />
-    </Locals>
+<UI Name="AudioCodec">
+  <Properties>
+    <cor:String Name="Combined" String=""/>
+    <cor:String Name="Profile" String=""/>
+  </Properties>
+  <Locals>
+    <cor:String Name="AudioCombined" String="" />
+    <cor:String Name="AudioProfile" String="" />
+  </Locals>
 
-    <Rules>
-      <Binding Source="[Value]" Target="[AudioCodec]">
-        <Transformer>
-          <FormatTransformer ToLower="true" />
-        </Transformer>
-      </Binding>
+  <Rules>
+    <Binding Source="[Combined]" Target="[AudioCombined]">
+      <Transformer>
+        <FormatTransformer ToLower="true" />
+      </Transformer>
+    </Binding>
+    <Binding Source="[Profile]" Target="[AudioProfile]">
+      <Transformer>
+        <FormatTransformer ToLower="true" />
+      </Transformer>
+    </Binding>
 
-      <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
 
-      <Condition Source="[AudioCodec]" SourceValue="mpeg audio" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
-      <Condition Source="[AudioCodec]" SourceValue="ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ac3" />
-      <Condition Source="[AudioCodec]" SourceValue="aac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aac" />
-      <Condition Source="[AudioCodec]" SourceValue="dts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Dts" />
-      <Condition Source="[AudioCodec]" SourceValue="wma2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wma" />
-      <Condition Source="[AudioCodec]" SourceValue="flac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Flac" />
+    <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
+
+    <!--MPEG Audio-->
+    <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
+    <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
+    <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mp3" />
+
+    <!--Dolby Digital-->
+    <Condition Source="[AudioCombined]" SourceValue="e-ac-3 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_50" />
+    <Condition Source="[AudioCombined]" SourceValue="e-ac-3 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_51" />
+    <Condition Source="[AudioCombined]" SourceValue="e-ac-3 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_61" />
+    <Condition Source="[AudioCombined]" SourceValue="e-ac-3 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_71" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_50" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_51" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_61" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_71" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_10" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_20" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_30" />
+    <Condition Source="[AudioCombined]" SourceValue="ac-3 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_51" />
+    
+    <Condition Source="[AudioProfile]" SourceValue="e-ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus" />
+    <Condition Source="[AudioProfile]" SourceValue="ac3 truehd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus" />
+    <Condition Source="[AudioProfile]" SourceValue="ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ac3" />
+
+    <!--Digital Theater Systems-->
+    <Condition Source="[AudioCombined]" SourceValue="dts 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_10" />
+    <Condition Source="[AudioCombined]" SourceValue="dts 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_20" />
+    <Condition Source="[AudioCombined]" SourceValue="dts 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_51" />
+    <Condition Source="[AudioCombined]" SourceValue="dts 96/24 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_9624_51" />
+    <Condition Source="[AudioCombined]" SourceValue="dts es 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES_51" />
+    <Condition Source="[AudioCombined]" SourceValue="dts es 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES_61" />
+    <Condition Source="[AudioCombined]" SourceValue="dts hra 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA_51" />
+    <Condition Source="[AudioCombined]" SourceValue="dts hra 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA_61" />
+    <Condition Source="[AudioCombined]" SourceValue="dts hra 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA_71" />
+    <Condition Source="[AudioCombined]" SourceValue="dts ma 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_30" />
+    <Condition Source="[AudioCombined]" SourceValue="dts ma 4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_40" />
+    <Condition Source="[AudioCombined]" SourceValue="dts ma 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_50" />
+    <Condition Source="[AudioCombined]" SourceValue="dts ma 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_51" />
+    <Condition Source="[AudioCombined]" SourceValue="dts ma 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_61" />
+    <Condition Source="[AudioCombined]" SourceValue="dts ma 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_71" />
+    
+    <Condition Source="[AudioProfile]" SourceValue="dts 96/24" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_9624" />
+    <Condition Source="[AudioProfile]" SourceValue="dts es" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES" />
+    <Condition Source="[AudioProfile]" SourceValue="dts hra" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA" />
+    <Condition Source="[AudioProfile]" SourceValue="dts ma" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA" />
+    <Condition Source="[AudioProfile]" SourceValue="dts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Dts" />
+    
+    <Condition Source="[AudioProfile]" SourceValue="wma" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wma" />
+    <Condition Source="[AudioProfile]" SourceValue="wma2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wma" />
+    <Condition Source="[AudioProfile]" SourceValue="wma3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wma" />
+    <Condition Source="[AudioProfile]" SourceValue="aac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aac" />
+    <Condition Source="[AudioProfile]" SourceValue="flac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Flac" />
+    <Condition Source="[AudioProfile]" SourceValue="vorbis" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vorbis" />
     </Rules>
     <Content>
       <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
@@ -150,13 +275,31 @@
       <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
 
       <Condition Source="[AspectRatio]" SourceValue="4:3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133" />
-      <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166" />
+      <Condition Source="[AspectRatio]" SourceValue="1.33:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133" />
+      <Condition Source="[AspectRatio]" SourceValue="1.37:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_137" />
+      <Condition Source="[AspectRatio]" SourceValue="1.43:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_143" />
+      <Condition Source="[AspectRatio]" SourceValue="1.44:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_144" />
+      <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150" />
+      <Condition Source="[AspectRatio]" SourceValue="1.50:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150" />
+      <Condition Source="[AspectRatio]" SourceValue="1.56:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_156" />
+      <Condition Source="[AspectRatio]" SourceValue="1.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166" />
+      <Condition Source="[AspectRatio]" SourceValue="1.667:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166" />
       <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177" />
+      <Condition Source="[AspectRatio]" SourceValue="1.77:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177" />
       <Condition Source="[AspectRatio]" SourceValue="1.78:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_178" />
+      <Condition Source="[AspectRatio]" SourceValue="1.81:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_181" />
       <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_185" />
+      <Condition Source="[AspectRatio]" SourceValue="2.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_200" />
+      <Condition Source="[AspectRatio]" SourceValue="2.20:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_220" />
       <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_235" />
       <Condition Source="[AspectRatio]" SourceValue="2.39:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_239" />
-      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_240" />      
+      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_240" />
+      <Condition Source="[AspectRatio]" SourceValue="2.55:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_255" />
+      <Condition Source="[AspectRatio]" SourceValue="2.59:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_259" />
+      <Condition Source="[AspectRatio]" SourceValue="2.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_266" />
+      <Condition Source="[AspectRatio]" SourceValue="2.76:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_276" />
+      <Condition Source="[AspectRatio]" SourceValue="4:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400" />
+      <Condition Source="[AspectRatio]" SourceValue="4.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400" />      
 
     </Rules>
 
@@ -186,7 +329,290 @@
       <Condition Source="[MediaFormat]" SourceValue="dvd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Dvd" />
       <Condition Source="[MediaFormat]" SourceValue="mkv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mkv" />
       <Condition Source="[MediaFormat]" SourceValue="avi" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Avi" />
-      <!--<Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_2391" />-->
+      <Condition Source="[MediaFormat]" SourceValue="mp4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mp4" />
+      <Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mpeg" />
+      <Condition Source="[MediaFormat]" SourceValue="mpeg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mpeg" />      
+      <Condition Source="[MediaFormat]" SourceValue="wmv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Asf" />
+      <Condition Source="[MediaFormat]" SourceValue="mov" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mov" />
+      <Condition Source="[MediaFormat]" SourceValue="m4v" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mov" />
+      <Condition Source="[MediaFormat]" SourceValue="ogv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Ogg" />
+      <Condition Source="[MediaFormat]" SourceValue="asf" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Asf" />
+      <Condition Source="[MediaFormat]" SourceValue="flv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Flv" />
+      <Condition Source="[MediaFormat]" SourceValue="f4v" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Flv" />
+      <Condition Source="[MediaFormat]" SourceValue="iso" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Iso" />
+      <Condition Source="[MediaFormat]" SourceValue="3gp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp" />
+      <Condition Source="[MediaFormat]" SourceValue="threegp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp" />
+      
+      <Condition Source="[MediaFormat]" SourceValue="ts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Ts" />
+      <Condition Source="[MediaFormat]" SourceValue="m2ts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_M2ts" />
+      <Condition Source="[MediaFormat]" SourceValue="wtv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Wtv" /> 
+      <Condition Source="[MediaFormat]" SourceValue="dvrms" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Dvrms" />
+
+  </Rules>
+
+    <Content>
+      <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
+    </Content>
+  </UI>
+
+  <UI Name="VideoCodecClr">
+    <Properties>
+      <cor:String Name="Value" String=""/>
+      <cor:Boolean Name="HDValue" Boolean="false"/>
+    </Properties>
+    <Locals>
+      <cor:String Name="VideoCodec" String="" />
+      <cor:Boolean Name="WMVHDValue" Boolean="false" />
+    </Locals>
+
+    <Rules>
+      <Binding Source="[HDValue]" Target="[WMVHDValue]" />
+      <Binding Source="[Value]" Target="[VideoCodec]">
+        <Transformer>
+          <FormatTransformer ToLower="true" />
+        </Transformer>
+      </Binding>
+
+      <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
+
+      <Condition Source="[VideoCodec]" SourceValue="asf" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Asf_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="xvid" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Xvid_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="divx 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="divx 4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="divx 3 low" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Divx_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="h264" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H264_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="avc" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H264_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="vc-1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vc1_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="wmv1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="wmv2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv_clr" />
+      <Rule>
+        <Conditions>
+          <Equality Source="[VideoCodec]" Value="wmv3"/>
+          <Equality Source="[WMVHDValue]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Image.Content]" Value="image://i:Wmv_HD_clr"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[VideoCodec]" Value="wvc1"/>
+          <Equality Source="[WMVHDValue]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Image.Content]" Value="image://i:Wmv_HD_clr"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[VideoCodec]" SourceValue="wmv3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg4visual_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-2 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H262_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:On2_Vp6_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="sorenson h263" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Sorenson_H263_clr" />
+    </Rules>
+    <Content>
+      <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
+    </Content>
+  </UI>
+
+
+  <UI Name="AudioCodecClr">
+    <Properties>
+      <cor:String Name="Combined" String=""/>
+      <cor:String Name="Profile" String=""/>
+    </Properties>
+    <Locals>
+      <cor:String Name="AudioCombined" String="" />
+      <cor:String Name="AudioProfile" String="" />
+    </Locals>
+
+    <Rules>
+      <Binding Source="[Combined]" Target="[AudioCombined]">
+        <Transformer>
+          <FormatTransformer ToLower="true" />
+        </Transformer>
+      </Binding>
+      <Binding Source="[Profile]" Target="[AudioProfile]">
+        <Transformer>
+          <FormatTransformer ToLower="true" />
+        </Transformer>
+      </Binding>
+
+
+      <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
+
+      <!--MPEG Audio-->
+      <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mp3_clr" />
+
+      <!--Dolby Digital-->
+      <Condition Source="[AudioCombined]" SourceValue="e-ac-3 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_50_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="e-ac-3 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_51_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="e-ac-3 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_61_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="e-ac-3 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_71_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_50_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_51_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_61_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 truehd 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_71_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_10_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_20_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_30_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="ac-3 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_51_clr" />
+
+      <Condition Source="[AudioProfile]" SourceValue="e-ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="ac3 truehd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ac3_clr" />
+
+      <!--Digital Theater Systems-->
+      <Condition Source="[AudioCombined]" SourceValue="dts 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_10_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_20_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_51_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts 96/24 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_9624_51_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts es 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES_51_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts es 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES_61_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts hra 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA_51_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts hra 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA_61_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts hra 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA_71_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts ma 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_30_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts ma 4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_40_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts ma 5" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_50_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts ma 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_51_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts ma 7" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_61_clr" />
+      <Condition Source="[AudioCombined]" SourceValue="dts ma 8" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_71_clr" />
+
+      <Condition Source="[AudioProfile]" SourceValue="dts 96/24" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_9624_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="dts es" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_ES_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="dts hra" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_HRA_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="dts ma" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_HD_MA_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="dts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DTS_DS_clr" />
+      
+      <Condition Source="[AudioProfile]" SourceValue="wma" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wma_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="wma2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wma_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="wma3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wma_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="aac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aac_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="flac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Flac_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="vorbis" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vorbis_clr" />
+    </Rules>
+    <Content>
+      <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
+    </Content>
+  </UI>
+
+
+  <UI Name="HDResolutionClr">
+    <Properties>
+      <cor:Int32 Name="Value" Int32="0"/>
+    </Properties>
+    <Locals>
+      <cor:Int32 Name="HDValue" Int32="0" />
+    </Locals>
+    <Rules>
+      <Binding Source="[Value]" Target="[HDValue]" />
+
+      <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
+
+      <Condition Source="[HDValue]" ConditionOp="Equals" SourceValue="720" Target="[Image.Content]" Value="image://i:HDType_720_clr" />
+      <Condition Source="[HDValue]" ConditionOp="Equals" SourceValue="1080" Target="[Image.Content]" Value="image://i:HDType_1080_clr" />
+
+    </Rules>
+
+    <Content>
+      <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
+    </Content>
+  </UI>
+
+
+  <UI Name="AspectRatioClr">
+    <Properties>
+      <cor:String Name="Value" String=""/>
+    </Properties>
+    <Locals>
+      <cor:String Name="AspectRatio" String="" />
+    </Locals>
+    <Rules>
+      <Binding Source="[Value]" Target="[AspectRatio]">
+        <Transformer>
+          <FormatTransformer ToLower="true" />
+        </Transformer>
+      </Binding>
+
+      <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
+
+      <Condition Source="[AspectRatio]" SourceValue="4:3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.33:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.37:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_137_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.43:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_143_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.44:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_144_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.50:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.56:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_156_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.667:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.77:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.78:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_178_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.81:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_181_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_185_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_200_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.20:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_220_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_235_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.39:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_239_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_240_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.55:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_255_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.59:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_259_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_266_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.76:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_276_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="4:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="4.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400_clr" />
+
+    </Rules>
+
+    <Content>
+      <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
+    </Content>
+  </UI>
+
+  <UI Name="MediaFormatClr">
+    <Properties>
+      <cor:String Name="Value" String=""/>
+    </Properties>
+    <Locals>
+      <cor:String Name="MediaFormat" String="" />
+    </Locals>
+    <Rules>
+      <Binding Source="[Value]" Target="[MediaFormat]">
+        <Transformer>
+          <FormatTransformer ToLower="true" />
+        </Transformer>
+      </Binding>
+
+      <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
+
+      <Condition Source="[MediaFormat]" SourceValue="bluray" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Bluray_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="hddvd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Hddvd_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="dvd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Dvd_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="mkv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mkv_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="avi" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Avi_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="mp4" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mp4_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="mpg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mpeg_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="mpeg" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mpeg_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="wmv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Asf_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="mov" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mov_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="m4v" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Mov_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="ogv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Ogg_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="asf" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Asf_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="flv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Flv_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="f4v" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Flv_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="iso" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Iso_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="3gp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="threegp" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_3gp_clr" />
+
+      <Condition Source="[MediaFormat]" SourceValue="ts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Ts_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="m2ts" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_M2ts_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="wtv" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Wtv_clr" />
+      <Condition Source="[MediaFormat]" SourceValue="dvrms" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Media_Dvrms_clr" />
 
     </Rules>
 

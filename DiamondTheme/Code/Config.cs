@@ -161,6 +161,20 @@ namespace Diamond
             }
         }
 
+        public bool DiamondColorMediaInfo
+        {
+            get { return this.data.DiamondColorMediaInfo; }
+            set
+            {
+                if (this.data.DiamondColorMediaInfo != value)
+                {
+                    this.data.DiamondColorMediaInfo = value;
+                    Save();
+                    FirePropertyChanged("DiamondColorMediaInfo");
+                }
+            }
+        }
+
         public int AlphaOpacity
         {
             get { return this.data.AlphaOpacity; }

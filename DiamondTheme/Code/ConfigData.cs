@@ -31,6 +31,7 @@ namespace Diamond
         public int BackdropSwitchingDelay = 280;
 
         public bool DiamondDisplayWeather = false;
+        public bool DiamondColorMediaInfo = false;
         public int AlphaOpacity = 60;
 
         #region Load / Save Data

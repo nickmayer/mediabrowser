@@ -211,9 +211,6 @@
   <data name="RectLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\rectlight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BallButtonDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\buttons\ballbuttondark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="BallButtonLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\buttons\ballbuttonlight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -303,9 +300,6 @@
   </data>
   <data name="codec_ac3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\mediainfo\codec_ac3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="codec_asf" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\codec_asf.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="codec_divx" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\mediainfo\codec_divx.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -480,5 +474,503 @@
   </data>
   <data name="ButtonFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\Buttons\ButtonFocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_mp4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_mp4.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_150" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_150.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_137" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_137.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_144" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_144.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_vorbis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_vorbis.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_mpegvideo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_mpegvideo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_h262" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_h262.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_mov" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_mov.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDPlus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDTrueHD.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_ES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_ES.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_HRA.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_MA.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_mpeg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_mpeg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_9624_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_9624_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_ES_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_ES_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_ES_61" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_ES_61.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_HRA_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA_71" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_HRA_71.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_MA_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_71" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_MA_71.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_DS.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_DS_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_asf" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_asf.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_mp3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_mp3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_theora" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_theora.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_asf" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_asf.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_200" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_200.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_ogg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_ogg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_flv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_flv.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_iso" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_iso.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_m2ts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_m2ts.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_ts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_ts.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_dvrms" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_dvrms.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_wtv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_wtv.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_sorenson_h263" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_sorenson_h263.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BallButtonDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Buttons\BallButtonDark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_3gp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_3gp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_143" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_143.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_156" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_156.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_255" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_255.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_259" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_259.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_266" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_266.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_276" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_276.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_400" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_400.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_61" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_MA_61.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDPlus_50.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDPlus_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_61" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDPlus_61.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_71" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDPlus_71.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDTrueHD_50.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDTrueHD_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_61" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDTrueHD_61.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_71" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DDTrueHD_71.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DD_10.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DD_20.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DD_30.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DD_51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA_61" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_HRA_61.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_MA_40.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_HD_MA_50.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_aac_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_aac_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_ac3_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_ac3_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_asf_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_asf_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_50_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDPlus_50_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDPlus_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_61_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDPlus_61_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_71_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDPlus_71_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDPlus_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDPlus_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_50_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDTrueHD_50_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDTrueHD_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_61_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDTrueHD_61_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_71_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDTrueHD_71_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DDTrueHD_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DDTrueHD_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_10_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DD_10_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_20_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DD_20_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_30_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DD_30_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DD_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DD_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_divx_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_divx_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_dolby_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_dolby_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_9624_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_9624_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_9624_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_9624_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_dts_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_dts_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_DS_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_DS_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_ES_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_ES_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_ES_61_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_ES_61_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_ES_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_ES_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_HRA_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA_61_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_HRA_61_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA_71_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_HRA_71_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_HRA_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_HRA_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_30_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_MA_30_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_40_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_MA_40_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_50_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_MA_50_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_51_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_MA_51_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_61_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_MA_61_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_71_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_MA_71_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_HD_MA_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_HD_MA_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_flac_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_flac_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_h262_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_h262_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_h264_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_h264_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_mp3_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_mp3_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_mpegaudio_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_mpegaudio_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_mpegvideo_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_mpegvideo_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_on2_vp6_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_on2_vp6_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_sorenson_h263_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_sorenson_h263_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_theora_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_theora_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_vc1_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_vc1_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_vorbis_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_vorbis_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_wma_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_wma_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_wmv_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_wmv_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_wmv_hd_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_wmv_hd_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_xvid_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_xvid_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hdtype_1080_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\hdtype_1080_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hdtype_720_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\hdtype_720_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_3gp_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_3gp_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_asf_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_asf_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_avi_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_avi_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_bluray_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_bluray_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_dvd_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_dvd_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_dvrms_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_dvrms_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_flv_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_flv_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_hddvd_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_hddvd_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_iso_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_iso_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_m2ts_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_m2ts_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_mkv_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_mkv_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_mov_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_mov_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_mp4_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_mp4_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_mpeg_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_mpeg_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_ogg_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_ogg_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_ts_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_ts_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_wmv_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_wmv_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_wtv_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\media_wtv_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_133_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_133_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_137_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_137_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_143_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_143_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_144_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_144_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_150_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_150_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_156_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_156_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_166_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_166_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_177_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_177_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_178_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_178_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_185_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_185_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_200_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_200_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_220_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_220_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_235_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_235_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_239_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_239_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_240_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_240_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_255_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_255_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_259_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_259_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_266_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_266_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_276_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_276_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_400_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_400_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_9624" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_9624.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_wmv_hd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_wmv_hd.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_on2_vp6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_on2_vp6.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="media_wmv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_wmv.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_mpeg4visual" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_mpeg4visual.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_mpeg4visual_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_mpeg4visual_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_181" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\ratio_181.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratio_181_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\ratio_181_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_DS_10.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS_10_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_DS_10_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_DTS_DS_20.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_DTS_DS_20_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_DTS_DS_20_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

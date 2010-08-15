@@ -36,6 +36,7 @@ namespace Diamond
         public string DisplayGlassOverlayDesc = "Display diamond glass overlay on poster images.";
 
         public string DisplayWeatherDesc = "Display weather in diamond theme.";
+        public string DisplayColourMediaInfoIconsDesc = "Replaces monochrome mediainfo icons with colour mediainfo icons.";
         public string ExtenderLayoutEnhancementsDesc = "Use custom layout adjustments for use with extenders.";
 
         //public string ExtenderLayoutEnhancementsDesc = "Automatic layout edge enhancement for use with extenders. This may result in overscan (does not affect non-extender devices).";

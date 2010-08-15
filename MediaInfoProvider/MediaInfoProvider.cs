@@ -108,6 +108,7 @@ namespace MediaInfoProvider
                     RunTime = (runTime/60000),
                     AudioStreamCount = streamCount,
                     AudioChannelCount = audioChannels,
+                    AudioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile"),
                     VideoFPS = videoFrameRate,
                     Subtitles = subtitles                    
                 };
