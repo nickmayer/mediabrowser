@@ -22,7 +22,7 @@ namespace Diamond
     [Serializable]
     public class MyStrings : LocalizedStringData    
     {
-        private string version = "0.3.0.5"; //this is used to see if we have changed and need to re-save
+        private string version = "0.3.0.6"; //this is used to see if we have changed and need to re-save
 
         //these are our strings keyed by property name
         public string DiamondOptionsDesc = "Options for the Diamond Theme.";
@@ -38,6 +38,60 @@ namespace Diamond
         public string DisplayWeatherDesc = "Display weather in diamond theme.";
         public string DisplayColourMediaInfoIconsDesc = "Replaces monochrome mediainfo icons with colour mediainfo icons.";
         public string ExtenderLayoutEnhancementsDesc = "Use custom layout adjustments for use with extenders.";
+
+        //Diamond Config Panel
+        public string DiamondOptions = "Diamond Theme Options";
+        public string MediaDetailsinMiniMode = "Media Details in Mini Mode";
+        public string DisplayEndTime = "Display End Time";
+        public string DisplayInfoboxinCoverflowViews = "Display Glass Overlay";
+        public string DisplayInfoboxinThumbstripViews = "Display Infobox in Coverflow Views";
+        public string DisplayInfoboxinPosterViews = "Display Infobox in Thumbstrip Views";
+        public string DisplayGlassOverlay = "Display Infobox in Poster Views";
+        public string DisplayWeather = "Display Weather";
+        public string ExtenderLayoutEnhancements = "Extender Layout Enhancements";
+        public string EHSGradientOpacity = "EHS Gradient Opacity";
+        public string RequireRestart = "*Changes require a restart.*";
+
+        //EHS
+        public string RecentlyAddedUnwatchedEHS = "recently added unwatched";
+
+        //Movie Detail Page
+        public string DisplayDetail = "Display";
+        public string GenreDetail = "Genre";
+        public string StudioDetail = "Studio";
+        public string FirstAiredDetail = "First Aired";
+        public string EpisodesDetail = "Episodes";
+        public string MediaDetail = "Media-Details";
+
+        //Media details
+        public string LocationMedia = "Location";
+        public string VCodecMedia = "Video Codec";
+        public string VResMedia = "Video Resolution";
+        public string VFrameRateMedia = "Video Frame Rate";
+        public string ACodecMedia = "Audio Codec";
+        public string AStreamsMedia = "Audio Streams";
+        public string AChannelsMedia = "Audio Channels";
+        public string SubtitlesMedia = "Subtitles";
+
+        //FolderMenu
+        public string FolderMenuFM = "Folder Menu";
+        public string ViewByFM = "View By";
+        public string SortByFM = "Sort By";
+        public string IndexByFM = "Index By";
+        public string CoverSizeFM = "Cover Size";
+        public string BackdropFM = "Backdrop";
+        public string TitlesFM = "Titles";
+        public string VerticalScrollFM = "Vertical Scroll";
+        public string BannersFM = "Banners";
+        public string increaseFM = "increase";
+        public string decreaseFM = "decrease";
+        public string enableFM = "enable";
+        public string disableFM = "disable";
+
+        //Album
+        public string AlbumInfoAlb = "Album Info";
+        public string QueueAlb = "Queue Album";
+        public string ShuffleAlb = "Shuffle Album";
 
         //public string ExtenderLayoutEnhancementsDesc = "Automatic layout edge enhancement for use with extenders. This may result in overscan (does not affect non-extender devices).";
         MyStrings(string file)

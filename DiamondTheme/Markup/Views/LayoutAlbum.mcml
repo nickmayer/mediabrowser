@@ -285,9 +285,9 @@
     <Content>
       <Panel Layout="VerticalFlow" Padding="0,10,0,10" Navigation="RememberFocus" >
         <Children>
-          <dtb:DiamondImageButton Name="PlayAllButton"    Text="PLAY ALL"           Command="[PlayCommand]"    Icon="resx://Diamond/Diamond.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
-          <dtb:DiamondImageButton Name="QueueAlbumButton"    Text="QUEUE ALBUM"     Command="[QueueCommand]"    Icon="resx://Diamond/Diamond.Resources/IconAdd"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
-          <dtb:DiamondImageButton Name="ShuffleAlbumButton"    Text="SHUFFLE ALBUM" Command="[ShuffleCommand]"    Icon="resx://Diamond/Diamond.Resources/IconShuffle"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
+          <dtb:DiamondImageButton Name="PlayAllButton"    Text="[Application.LocalStrings.#PlayAllCMenu!cor:String.ToUpper]"           Command="[PlayCommand]"    Icon="resx://Diamond/Diamond.Resources/IconPlay"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
+          <dtb:DiamondImageButton Name="QueueAlbumButton"    Text="[Application.LocalStrings.#QueueAlb!cor:String.ToUpper]"     Command="[QueueCommand]"    Icon="resx://Diamond/Diamond.Resources/IconAdd"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
+          <dtb:DiamondImageButton Name="ShuffleAlbumButton"    Text="[Application.LocalStrings.#ShuffleAlb!cor:String.ToUpper]" Command="[ShuffleCommand]"    Icon="resx://Diamond/Diamond.Resources/IconShuffle"    Size="[Size]"   MinSize="[MinSize]" Font="[Font]" MaxMode="[Mode]"/>
           
           </Children>
       </Panel>
@@ -396,14 +396,10 @@
                   <AnchorLayoutInput Right="Parent, 1"/>
                 </LayoutInput>
                 <Children>
-
-                  <Text Name="a0" Content="Album Info"
-                           Font="[ValueFont]" Color="[ValueColor]" />
-                 <!--<Text Name="a1" Content="[Item.ArtistAlbumName]"
-                          Font="[ValueFont]" Color="[ValueColor]" />-->
-                  <Text Name="a2" Content=""
-                          Font="[ValueFont]" Color="[ValueColor]" />
-                   </Children>
+                  <Text Name="a0" Content="[Application.LocalStrings.#AlbumInfoAlb!cor:String]"                            Font="[ValueFont]" Color="[ValueColor]" />
+                  <!--<Text Name="a1" Content="[Item.ArtistAlbumName]"                           Font="[ValueFont]" Color="[ValueColor]" />-->
+                  <Text Name="a2" Content=""                           Font="[ValueFont]" Color="[ValueColor]" />
+                </Children>
               </Panel>
               
 

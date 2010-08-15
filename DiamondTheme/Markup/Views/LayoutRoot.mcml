@@ -78,9 +78,9 @@
 
       <Choice Name="RecentItemsDesc">
         <Options>
-          <cor:String String="recently added" />
-          <cor:String String="recently watched" />
-          <cor:String String="recently added unwatched" />
+          <cor:String String="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
         </Options>
       </Choice>
 
@@ -484,10 +484,8 @@
                       
                       <Panel Name="RecentText" Margins="5,0,0,0" Layout="Anchor" >
                         <Children>
-                          <Text Name="NPVTitle" Content="recently added" Color="color://s:D_Light"
-                                Font="font://f:Diamond_Title" />
-                          <Text Name="NPVTitle2" Content="recently added" Color="Black"
-                                Font="font://f:Diamond_Title" >
+                          <Text Name="NPVTitle" Content="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" Color="color://s:D_Light"                                 Font="font://f:Diamond_Title" />
+                          <Text Name="NPVTitle2" Content="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" Color="Black"                                 Font="font://f:Diamond_Title" >
                             <LayoutInput>
                               <AnchorLayoutInput Top="NPVTitle, 0, 2" Left="NPVTitle, 0, 2"/>
                             </LayoutInput>
@@ -704,7 +702,7 @@
           </Clip>
           <!-- Pagination -->
           <dp:DiamondPagination Name="Pagination" Value="3" Visible="true" />
-          <Text Name="EmptyList" Content="No Items To Show" Font="font://f:Diamond_Title" Color="color://s:D_Normal" Visible="false" >
+          <Text Name="EmptyList" Content="[Application.LocalStrings.#NoItemsEHS!cor:String]" Font="font://f:Diamond_Title" Color="color://s:D_Normal" Visible="false" >
             <LayoutInput>
               <AnchorLayoutInput Bottom="Parent,1,-5"/>
             </LayoutInput>
