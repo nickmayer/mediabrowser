@@ -66,8 +66,12 @@ namespace MediaBrowser.Code.ModelItems {
 
         public static void VerifyChildren(FolderChildren children) {
 
+            //if we are a top-level folder optionally
             //wait just a bit before we verify - in case a server was asleep or something
-            Thread.Sleep(Config.Instance.ValidationDelay*1000); //default is 30 seconds
+            if (Application.CurrentInstance.RootFolder.Children.Contains(children.folder))
+            {
+                Thread.Sleep(Config.Instance.ValidationDelay * 1000); //default is 0 seconds (no delay)
+            }
 
             children.folder.ValidateChildren();
 
