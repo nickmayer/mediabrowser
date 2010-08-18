@@ -618,6 +618,9 @@ namespace MediaBrowser.Library {
         {
             get
             {
+                if (selectedchildIndex < 0) {
+                    return Application.CurrentInstance.CurrentItem; //we have no selected child
+                }
                 //we don't use the public property because we want to roll around the list instead of going to unselected
                 selectedchildIndex++;
                 if (selectedchildIndex >= Children.Count)
@@ -633,6 +636,9 @@ namespace MediaBrowser.Library {
         {
             get
             {
+                if (selectedchildIndex < 0) {
+                    return Application.CurrentInstance.CurrentItem; //we have no selected child
+                }
                 //we don't use the public property because we want to roll around the list instead of going to unselected
                 selectedchildIndex--;
                 if (selectedchildIndex < 0)
