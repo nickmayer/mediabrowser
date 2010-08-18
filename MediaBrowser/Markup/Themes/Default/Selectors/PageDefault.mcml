@@ -73,6 +73,9 @@
       </Changed>-->
 
       <Changed Source="[RefocusItemListTimer.Tick]">
+        <Conditions>
+          <Equality Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" Value="Detail" />
+        </Conditions>
         <Actions>
           <Set Target="[RefocusItemListTimer.Enabled]" Value="false" />
           <Invoke Target="[ViewPanel.NavigateInto]" />
