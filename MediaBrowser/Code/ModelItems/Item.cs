@@ -14,6 +14,7 @@ using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Metadata;
 using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.LibraryManagement;
 using System.Linq;
 
 
@@ -195,6 +196,55 @@ namespace MediaBrowser.Library
                     }
                     return mediaType;
                 }
+            }
+        }
+
+        public Microsoft.MediaCenter.UI.Image MediaTypeImage
+        {
+            get
+            {
+                return Helper.GetMediaInfoImage("media_" + this.MediaTypeString);
+            }
+        }
+
+        public Microsoft.MediaCenter.UI.Image HDTypeImage
+        {
+            get
+            {
+                      
+                return Helper.GetMediaInfoImage("HDType_" + this.HDType.ToString());
+            }
+        }
+
+        public Microsoft.MediaCenter.UI.Image AspectRatioImage
+        {
+            get
+            {
+                string aspectImageName = "";
+
+                switch (AspectRatioString)
+                {
+                    //handle special cases
+                    case "4:3":
+                        aspectImageName = "133";
+                        break;
+                    case "3:2":
+                        aspectImageName = "150";
+                        break;
+                    case "16:9":
+                        aspectImageName = "177";
+                        break;
+                    case "4:1":
+                        aspectImageName = "400";
+                        break;
+                    default:
+                        //convert
+                        if (AspectRatioString.Length > 3)
+                            aspectImageName = AspectRatioString.Substring(0, 4).Replace(".", "");
+                        break;
+                }
+
+                return Helper.GetMediaInfoImage("Ratio_" + aspectImageName);
             }
         }
 

@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Security.Cryptography;
 using Microsoft.Win32;
 using System.Reflection;
-using System.Drawing;
+//using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using MediaBrowser.Library.Configuration;
+using Microsoft.MediaCenter.UI;
 
 
 namespace MediaBrowser.LibraryManagement
@@ -431,6 +434,47 @@ namespace MediaBrowser.LibraryManagement
                 // stay where we are 
                 result[1] = strSource;
             return result;
+        }
+
+        public static Microsoft.MediaCenter.UI.Image GetMediaInfoImage(string name)
+        {
+            name = name.ToLower();
+            string baseLocation = Config.Instance.ImageByNameLocation;
+            if ((baseLocation == null) || (baseLocation.Length == 0))
+                baseLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
+            baseLocation += "\\MediaInfo";
+
+            //we'll look first in a theme-specific folder if it exists
+            string themeLocation = Path.Combine(baseLocation, Config.Instance.ViewTheme);
+            string defaultLocation = Path.Combine(baseLocation, "all"); //don't use 'default' cuz that's the name of a theme...
+
+            string fileName = Path.Combine(themeLocation, name + ".png");
+            if (File.Exists(fileName))
+            {
+                return new Image("file://"+fileName);
+            }
+            else
+            {
+                fileName = Path.Combine(defaultLocation, name + ".png");
+                if (File.Exists(fileName))
+                {
+                    return new Image("file://" + fileName);
+                }
+                else
+                {
+                    //not there, get it from resources in the current theme
+                    //cheap way to grab a valid reference to the current themes resources...
+                    string resourceRef = Application.CurrentInstance.CurrentTheme.DetailPage.Substring(0,Application.CurrentInstance.CurrentTheme.DetailPage.LastIndexOf("/")+1);
+                    return new Image(resourceRef + name);
+                }
+            }
+        }
+
+        public static string FirstCap(string aStr)
+        {
+            string first = aStr.Substring(0, 1);
+            string theRest = aStr.Substring(1);
+            return first.ToUpper() + theRest.ToLower();
         }
        
     }
