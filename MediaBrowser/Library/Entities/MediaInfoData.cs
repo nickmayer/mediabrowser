@@ -236,7 +236,7 @@ namespace MediaBrowser.Library.Entities
             get {
                 if (AudioImageNames.ContainsKey(AudioCombinedString.ToLower())) return AudioImageNames[AudioCombinedString.ToLower()];
                 if (AudioImageNames.ContainsKey(AudioProfileString.ToLower())) return AudioImageNames[AudioProfileString.ToLower()];
-                return ""; //not found...
+                return AudioProfileString.ToLower(); //not found...
             }
         }
 

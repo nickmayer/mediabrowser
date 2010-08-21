@@ -241,6 +241,8 @@ namespace MediaBrowser.Library
                         //convert
                         if (AspectRatioString.Length > 3)
                             aspectImageName = AspectRatioString.Substring(0, 4).Replace(".", "");
+                        else
+                            aspectImageName = AspectRatioString.Replace(":", "-");
                         break;
                 }
 
