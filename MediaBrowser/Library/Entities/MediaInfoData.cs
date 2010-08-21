@@ -302,7 +302,7 @@ namespace MediaBrowser.Library.Entities
             {
                 switch (this.AudioFormat.ToLower())
                 {
-                    case "ac3":
+                    case "ac-3":
                     case "dts":
                     case "mpeg audio":
                         {
