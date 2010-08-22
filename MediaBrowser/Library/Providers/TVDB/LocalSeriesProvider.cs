@@ -105,13 +105,19 @@ namespace MediaBrowser.Library.Providers.TVDB {
             }
 
 
-            string ratingString = seriesNode.SafeGetString("Rating");
-            if (ratingString != null) {
-                float imdbRating;
-                if (float.TryParse(ratingString, out imdbRating)) {
-                    series.ImdbRating = imdbRating;
-                }
-            }
+            // this causes a problem on localized windows version with a comma seperator in regional options
+            // http://community.mediabrowser.tv/permalinks/3263/ratings-for-series-aren-t-calculated-properly-with-non-us-regional-settings
+            //string ratingString = seriesNode.SafeGetString("Rating",);
+            //if (ratingString != null) {
+            //    float imdbRating;
+            //    if (float.TryParse(ratingString, out imdbRating)) {
+            //        series.ImdbRating = imdbRating;
+            //    }
+            //}
+
+            //SafeGetSingle only works directly from metadataDoc
+            //temporary fix, should be handled better
+            series.ImdbRating = metadataDoc.SafeGetSingle("Series/Rating", (float)-1, 10);
 
             series.Status = seriesNode.SafeGetString("Status");
 
