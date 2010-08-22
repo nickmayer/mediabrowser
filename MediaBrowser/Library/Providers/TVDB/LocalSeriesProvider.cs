@@ -79,16 +79,6 @@ namespace MediaBrowser.Library.Providers.TVDB {
             Item.Overview = seriesNode.SafeGetString("Overview");
             Item.Name = seriesNode.SafeGetString("SeriesName");
 
-            //used for backwards compatibility. Will fetch actors stored in the <Actors> tag
-            string actors = seriesNode.SafeGetString("Actors");
-            if (actors != null) {
-
-                series.Actors = new List<Actor>();
-                foreach (string n in actors.Split('|')) {
-                    series.Actors.Add(new Actor { Name = n });
-                }
-            }
-
             //used for extended actor information. will fetch actors with roles stored in <Persons> tag
             foreach (XmlNode node in seriesNode.SelectNodes("Persons/Person[Type='Actor']"))
             {
@@ -106,6 +96,19 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 catch
                 {
                     // fall through i dont care, one less actor
+                }
+            }
+
+            //used for backwards compatibility. Will fetch actors stored in the <Actors> tag
+            string actors = seriesNode.SafeGetString("Actors");
+            if (actors != null)
+            {
+                if (series.Actors == null)
+                    series.Actors = new List<Actor>();
+
+                foreach (string n in actors.Split('|'))
+                {
+                    series.Actors.Add(new Actor { Name = n });
                 }
             }
 
