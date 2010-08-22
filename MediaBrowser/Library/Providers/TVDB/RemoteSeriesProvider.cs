@@ -18,6 +18,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
         private static readonly string rootUrl = "http://www.thetvdb.com/api/";
         private static readonly string seriesQuery = "GetSeries.php?seriesname={0}";
         private static readonly string seriesGet = "http://www.thetvdb.com/api/{0}/series/{1}/{2}.xml";
+        private static readonly string getActors = "http://www.thetvdb.com/api/{0}/series/{1}/actors.xml";
 
         [Persist]
         string seriesId;
@@ -93,15 +94,31 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         series.BannerImagePath = TVUtils.BannerUrl + n;
 
 
-                    string actors = doc.SafeGetString("//Actors");
-                    if (actors != null) {
-                        string[] a = actors.Trim('|').Split('|');
-                        if (a.Length > 0) {
-                            series.Actors = new List<Actor>();
-                            series.Actors.AddRange(
-                                a.Select(actor => new Actor { Name = actor }));
+                    string urlActors = string.Format(getActors, TVUtils.TVDBApiKey, seriesId);
+                    XmlDocument docActors = TVUtils.Fetch(urlActors);
+                    if (docActors != null)
+                    {
+                        series.Actors = null;
+                        foreach (XmlNode p in docActors.SelectNodes("Actors/Actor"))
+                        {
+                            if (series.Actors == null)
+                                series.Actors = new List<Actor>();
+                            string actorName = p.SafeGetString("Name");
+                            string actorRole = p.SafeGetString("Role");
+                            if (!string.IsNullOrEmpty(name))
+                                series.Actors.Add(new Actor { Name = actorName, Role = actorRole });
                         }
                     }
+
+                    //string actors = doc.SafeGetString("//Actors");
+                    //if (actors != null) {
+                    //    string[] a = actors.Trim('|').Split('|');
+                    //    if (a.Length > 0) {
+                    //        series.Actors = new List<Actor>();
+                    //        series.Actors.AddRange(
+                    //            a.Select(actor => new Actor { Name = actor }));
+                    //    }
+                    //}
 
                     series.MpaaRating = doc.SafeGetString("//ContentRating");
 
