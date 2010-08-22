@@ -268,6 +268,12 @@
     <Content Include="Images\Icons\IconRemote.png" />
     <Content Include="Images\Icons\IconWatched.png" />
     <Content Include="Images\Lock.png" />
+    <Content Include="Images\MediaInfo\aspect_177.png" />
+    <Content Include="Images\MediaInfo\aspect_185.png" />
+    <Content Include="Images\MediaInfo\aspect_239.png" />
+    <Content Include="Images\MediaInfo\aspect_133.png" />
+    <Content Include="Images\MediaInfo\aspect_150.png" />
+    <Content Include="Images\MediaInfo\aspect_240.png" />
     <Content Include="Images\MediaInfo\Diamond\d_aspect_169.png" />
     <Content Include="Images\MediaInfo\Diamond\d_aspect_1851.png" />
     <Content Include="Images\MediaInfo\Diamond\d_aspect_2391.png" />
