@@ -943,4 +943,22 @@
   <data name="IconPrevious" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\Icons\IconPrevious.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="aspect_133" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\aspect_133.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_150" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\aspect_150.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_177" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\aspect_177.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_185" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\aspect_185.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_239" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\aspect_239.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_240" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\mediainfo\aspect_240.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

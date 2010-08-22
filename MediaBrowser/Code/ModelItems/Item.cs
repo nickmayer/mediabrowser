@@ -246,7 +246,7 @@ namespace MediaBrowser.Library
                         break;
                 }
 
-                return Helper.GetMediaInfoImage("Ratio_" + aspectImageName);
+                return Helper.GetMediaInfoImage("Aspect_" + aspectImageName);
             }
         }
 

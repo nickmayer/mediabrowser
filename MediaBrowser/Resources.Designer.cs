@@ -403,9 +403,37 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap aspect_133 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_133", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_150 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_150", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap aspect_169 {
             get {
                 object obj = ResourceManager.GetObject("aspect_169", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_177 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_177", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_185 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_185", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -417,9 +445,23 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap aspect_239 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_239", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap aspect_2391 {
             get {
                 object obj = ResourceManager.GetObject("aspect_2391", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_240 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_240", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
