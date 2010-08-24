@@ -17,13 +17,13 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public int Width;
         [Persist]
-        public string VideoCodec;
+        public string VideoCodec = "";
         [Persist]
-        public string AudioFormat;
+        public string AudioFormat = "";
         [Persist]
-        public int VideoBitRate;
+        public int VideoBitRate = 0;
         [Persist]
-        public int AudioBitRate;
+        public int AudioBitRate = 0;
         [Persist]
         public int RunTime = 0;
         [Persist]
@@ -31,12 +31,43 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public int AudioChannelCount = 0;
         [Persist]
-        public string AudioProfile;
+        public string AudioProfile = "";
         [Persist]
         public string Subtitles;
         [Persist]
-        public string VideoFPS;
+        public string VideoFPS = "";
 
+        string SizeStr
+        {
+            get
+            {
+                if (Height > 0 && Height > 0)
+                    return Width + "x" + Height + ",";
+                else
+                    return "";
+            }
+        }
+        string VideoRateStr
+        {
+            get
+            {
+                if (VideoBitRate > 0)
+                    return (VideoBitRate / 1000).ToString() + "kbs,";
+                else
+                    return "";
+            }
+        }
+
+        string AudioRateStr
+        {
+            get
+            {
+                if (AudioBitRate > 0)
+                    return (AudioBitRate / 1000).ToString()+"kbs";
+                else
+                    return "";
+            }
+        }
 
         public string CombinedInfo
         {
@@ -44,20 +75,20 @@ namespace MediaBrowser.Library.Entities
             {
                 if (this != Empty)
                 {
-                    switch (this.AudioFormat.ToLower())
-                    {
-                        case "ac3":
-                        case "dts":
-                        case "mpeg audio":
-                            {
-                                if (this.AudioProfile != null && this.AudioProfile != "")
-                                    return string.Format("{0}x{1}, {2} {3}kbps, {4} {5} {6}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
-                                else
-                                    return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
-                            }
-                        default:
-                            return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
-                    }
+                    //switch (this.AudioFormat.ToLower())
+                    //{
+                    //    case "ac-3":
+                    //    case "dts":
+                    //    case "mpeg audio":
+                    //        {
+                    //            if (this.AudioProfile != null && this.AudioProfile != "")
+                    //                
+                    //            else
+                    //                return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
+                    //        }
+                    //    default:
+                            return string.Format("{0} {1} {2} {3} {4} {5}", this.SizeStr, this.VideoCodec, this.VideoRateStr, this.AudioFormat, this.AudioProfile, this.AudioRateStr);
+                    //}
                 }
                 else
                     return "";
