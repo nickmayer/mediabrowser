@@ -32,5 +32,8 @@
 	<Color Name="MirrorFilter" Color="White"/>
 	<cor:Single Name="MirrorAlpha" Single="0.4" />
 	<Color Name="DimPosterFilter" Color="150,150,150"/>
+
+  <!-- Watched Text Color Default -->
+  <Color Name="DefaultWatchedTextColor" Color="LightSlateGray" />
 	
 </Mcml>

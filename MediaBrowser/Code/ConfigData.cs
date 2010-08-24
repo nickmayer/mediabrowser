@@ -60,7 +60,7 @@ namespace MediaBrowser
         public string DaemonToolsDrive = "E";
         public bool EnableAlphanumericSorting = true;
         public bool EnableListViewTicks = false;
-        public Colors ListViewWatchedColor = Colors.LightSkyBlue;
+        public Colors ListViewWatchedColor = Colors.Transparent;
         public bool ShowUnwatchedCount = true;
         public bool ShowWatchedTickOnFolders = true;
         public bool ShowWatchTickInPosterView = true;

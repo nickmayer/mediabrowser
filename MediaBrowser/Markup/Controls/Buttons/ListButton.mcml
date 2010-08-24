@@ -30,6 +30,8 @@
 
 			<Inset Name="TextMargins" Inset="8,-2,8,2"/>
 			<cor:Boolean Name="CenterText" Boolean="false"/>
+      <Color Name="WatchedTextColor" Color="color://s:DefaultWatchedTextColor"/>
+      
 		</Locals>
 
 		<Rules>    
@@ -42,25 +44,53 @@
         </Transformer>
       </Binding>
 
+      <!-- The logic behind the value Transparent has changed. Transparent is now used as a default keyword to 
+           determine whether or not the user wants to override the WatchedTextColor. If the user wants to disable
+           watched text color altogether, they now use the color White (to match the current item text color) instead 
+           of specifying the value Transparent.
+      -->
       <Changed Source="[Item.HaveWatched]">
 				<Conditions>
 					<Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
-					<Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="NotEquals" Value="Transparent" />
+          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="NotEquals" Value="Transparent" />
 				</Conditions>
 				<Actions>
-					<Set Target="[Label.Color]" Value="[Application.Config.ListViewWatchedColorMcml]" />
+          <Set Target="[Label.Color]" Value="[Application.Config.ListViewWatchedColorMcml]" />
 				</Actions>
 			</Changed>
 
 			<Rule>
 				<Conditions>
 					<Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
-					<Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="NotEquals" Value="Transparent" />
+          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="NotEquals" Value="Transparent" />
 				</Conditions>
 				<Actions>
-					<Set Target="[Label.Color]" Value="[Application.Config.ListViewWatchedColorMcml]" />
+          <Set Target="[Label.Color]" Value="[Application.Config.ListViewWatchedColorMcml]" />
 				</Actions>
 			</Rule>
+
+      <!-- If color Transparent in Config, Default to color scheme specific WatchedTextColor -->
+      <Changed Source="[Item.HaveWatched]">
+        <Conditions>
+          <Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="Equals" Value="Transparent" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[WatchedTextColor]" />
+        </Actions>
+      </Changed>
+
+      <!-- If color Transparent in Config, Default to color scheme specific WatchedTextColor -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="Equals" Value="Transparent" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[WatchedTextColor]" />
+        </Actions>
+      </Rule>      
+      
 
 			<Binding Source="[Input.KeyFocus]" Target="[imgFocusOverlay.Visible]" />
 			<Default Target="[Input.KeyInteractive]" Value="true" />
