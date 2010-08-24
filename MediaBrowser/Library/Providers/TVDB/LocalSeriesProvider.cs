@@ -106,7 +106,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 if (series.Actors == null)
                     series.Actors = new List<Actor>();
 
-                foreach (string n in actors.Split('|'))
+                foreach (string n in actors.Trim('|').Split('|'))
                 {
                     series.Actors.Add(new Actor { Name = n });
                 }
