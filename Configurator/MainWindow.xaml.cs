@@ -1029,7 +1029,14 @@ sortorder: {2}
                     }
                 // If a player hasn't been configured then make it an available option to be added
                 if (!found)
-                    list.Add(item);
+                {
+                    if (item == MediaType.ISO)
+                    {
+                        // do nothing
+                    } else {
+                        list.Add(item);
+                    }
+                }
             }
 
             var form = new SelectMediaTypeForm(list);
