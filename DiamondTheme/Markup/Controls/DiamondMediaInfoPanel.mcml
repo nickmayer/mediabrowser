@@ -196,7 +196,7 @@
     <Condition Source="[AudioCombined]" SourceValue="ac-3 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_51" />
     
     <Condition Source="[AudioProfile]" SourceValue="e-ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus" />
-    <Condition Source="[AudioProfile]" SourceValue="ac3 truehd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus" />
+    <Condition Source="[AudioProfile]" SourceValue="ac-3 truehd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD" />
     <Condition Source="[AudioProfile]" SourceValue="ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ac3" />
 
     <!--Digital Theater Systems-->
@@ -462,7 +462,7 @@
       <Condition Source="[AudioCombined]" SourceValue="ac-3 6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DD_51_clr" />
 
       <Condition Source="[AudioProfile]" SourceValue="e-ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_clr" />
-      <Condition Source="[AudioProfile]" SourceValue="ac3 truehd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDPlus_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="ac-3 truehd" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:DDTrueHD_clr" />
       <Condition Source="[AudioProfile]" SourceValue="ac-3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ac3_clr" />
 
       <!--Digital Theater Systems-->

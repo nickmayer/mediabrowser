@@ -101,7 +101,7 @@ namespace MediaBrowser.Library.Entities
             {"divx 5","divx"},
             {"divx 4","divx"},
             {"divx 3 low","divx"},
-            {"avc ","H264"},
+            {"avc","H264"},
             {"vc-1","vc1"},
             {"wmv1","wmv"},
             {"wmv2","wmv"},
@@ -110,7 +110,7 @@ namespace MediaBrowser.Library.Entities
             {"wvc1","wmv"},
             {"wvc1hd","wmv_hd"},
             {"mpeg-4 visual","mpeg4visual"},
-            {"mpeg-2 video","H264"},
+            {"mpeg-2 video","H262"},
             {"on2 vp6","on2_vp6"},
             {"sorenson h263","sorenson_H263"},
         };
@@ -234,7 +234,7 @@ namespace MediaBrowser.Library.Entities
             {"ac-3 3","codec_DD_30"},
             {"ac-3 6","codec_DD_51"},
             {"e-ac-3","codec_DDPlus"},
-            {"ac-3 truehd","codec_DDPlus"},
+            {"ac-3 truehd","codec_DDTrueHD"},
             {"ac-3","codec_Ac3"},
             {"dts 1","codec_DTS_DS_10"},
             {"dts 2","codec_DTS_DS_20"},
@@ -312,7 +312,7 @@ namespace MediaBrowser.Library.Entities
             {
                 switch (this.AudioFormat.ToLower())
                 {
-                    case "ac3":
+                    case "ac-3":
                     case "dts":
                     case "mpeg audio":
                         {
