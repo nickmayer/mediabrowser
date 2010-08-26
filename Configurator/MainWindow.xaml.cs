@@ -850,7 +850,7 @@ sortorder: {2}
                     folderImage.Source = null;
                 }
                 //enable the rename, delete, up and down buttons if a media collection is selected.
-                btnRename.IsEnabled = btnRemoveFolder.IsEnabled = btnUp.IsEnabled = btnDn.IsEnabled = true;
+                btnRename.IsEnabled = btnRemoveFolder.IsEnabled = true;
 
                 //show the infoPanel
                 infoPanel.Visibility = Visibility.Visible;
