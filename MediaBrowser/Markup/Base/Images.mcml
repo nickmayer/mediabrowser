@@ -65,7 +65,7 @@
 	<Image Name="DecrementNoFocus"         Source="resx://MediaBrowser/MediaBrowser.Resources/DecrementNoFocus"  />
 
 	<Image Name="Underline" Source="resx://MediaBrowser/MediaBrowser.Resources/Underline" NineGrid="0,0,0,2"/>
-
+  <!--obsolete
   <Image Name="Xvid" Source="resx://MediaBrowser/MediaBrowser.Resources/codec_xvid" />
   <Image Name="Divx" Source="resx://MediaBrowser/MediaBrowser.Resources/codec_divx" />
   <Image Name="Ac3" Source="resx://MediaBrowser/MediaBrowser.Resources/codec_ac3" />
@@ -90,7 +90,7 @@
   <Image Name="Media_Mkv" Source="resx://MediaBrowser/MediaBrowser.Resources/media_mkv" />
 
   <Image Name="HDType_1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_1080" />
-  <Image Name="HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_720" />
+  <Image Name="HDType_720" Source="resx://MediaBrowser/MediaBrowser.Resources/hdtype_720" />-->
   <!-- Diamond Media Info Images-->
   <Image Name="d_Asf" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_asf" />
   <Image Name="d_Xvid" Source="resx://MediaBrowser/MediaBrowser.Resources/d_codec_xvid" />
