@@ -417,198 +417,198 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_10 {
+        internal static System.Drawing.Bitmap codec_dd_10 {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_10", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_10", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_10_clr {
+        internal static System.Drawing.Bitmap codec_dd_10_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_10_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_10_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_20 {
+        internal static System.Drawing.Bitmap codec_dd_20 {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_20", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_20_clr {
+        internal static System.Drawing.Bitmap codec_dd_20_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_20_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_20_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_30 {
+        internal static System.Drawing.Bitmap codec_dd_30 {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_30", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_30_clr {
+        internal static System.Drawing.Bitmap codec_dd_30_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_30_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_30_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_51 {
+        internal static System.Drawing.Bitmap codec_dd_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DD_51_clr {
+        internal static System.Drawing.Bitmap codec_dd_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DD_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dd_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus {
+        internal static System.Drawing.Bitmap codec_ddplus {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_50 {
+        internal static System.Drawing.Bitmap codec_ddplus_50 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_50", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_50", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_50_clr {
+        internal static System.Drawing.Bitmap codec_ddplus_50_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_50_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_50_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_51 {
+        internal static System.Drawing.Bitmap codec_ddplus_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_51_clr {
+        internal static System.Drawing.Bitmap codec_ddplus_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_61 {
+        internal static System.Drawing.Bitmap codec_ddplus_61 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_61", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_61", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_61_clr {
+        internal static System.Drawing.Bitmap codec_ddplus_61_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_61_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_61_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_71 {
+        internal static System.Drawing.Bitmap codec_ddplus_71 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_71", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_71_clr {
+        internal static System.Drawing.Bitmap codec_ddplus_71_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_71_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_71_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDPlus_clr {
+        internal static System.Drawing.Bitmap codec_ddplus_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDPlus_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddplus_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD {
+        internal static System.Drawing.Bitmap codec_ddtruehd {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_50 {
+        internal static System.Drawing.Bitmap codec_ddtruehd_50 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_50", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_50", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_50_clr {
+        internal static System.Drawing.Bitmap codec_ddtruehd_50_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_50_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_50_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_51 {
+        internal static System.Drawing.Bitmap codec_ddtruehd_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_51_clr {
+        internal static System.Drawing.Bitmap codec_ddtruehd_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_61 {
+        internal static System.Drawing.Bitmap codec_ddtruehd_61 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_61", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_61", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_61_clr {
+        internal static System.Drawing.Bitmap codec_ddtruehd_61_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_61_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_61_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_71 {
+        internal static System.Drawing.Bitmap codec_ddtruehd_71 {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_71", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_71_clr {
+        internal static System.Drawing.Bitmap codec_ddtruehd_71_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_71_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_71_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DDTrueHD_clr {
+        internal static System.Drawing.Bitmap codec_ddtruehd_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DDTrueHD_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_ddtruehd_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -634,30 +634,30 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_9624 {
+        internal static System.Drawing.Bitmap codec_dts_9624 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_9624", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_9624", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_9624_51 {
+        internal static System.Drawing.Bitmap codec_dts_9624_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_9624_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_9624_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_9624_51_clr {
+        internal static System.Drawing.Bitmap codec_dts_9624_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_9624_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_9624_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_9624_clr {
+        internal static System.Drawing.Bitmap codec_dts_9624_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_9624_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_9624_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -669,247 +669,254 @@ namespace Diamond {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS {
+        internal static System.Drawing.Bitmap codec_dts_ds {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS_10 {
+        internal static System.Drawing.Bitmap codec_dts_ds_10 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS_10", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds_10", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS_10_clr {
+        internal static System.Drawing.Bitmap codec_dts_ds_10_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS_10_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds_10_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS_20 {
+        internal static System.Drawing.Bitmap codec_dts_ds_20 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS_20", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS_20_clr {
+        internal static System.Drawing.Bitmap codec_dts_ds_20_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS_20_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds_20_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS_51 {
+        internal static System.Drawing.Bitmap codec_dts_ds_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS_51_clr {
+        internal static System.Drawing.Bitmap codec_dts_ds_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_DS_clr {
+        internal static System.Drawing.Bitmap codec_dts_ds_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_DS_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_ds_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_ES {
+        internal static System.Drawing.Bitmap codec_dts_es {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_ES", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_es", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_ES_51 {
+        internal static System.Drawing.Bitmap codec_dts_es_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_ES_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_es_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_ES_51_clr {
+        internal static System.Drawing.Bitmap codec_dts_es_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_ES_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_es_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_ES_61 {
+        internal static System.Drawing.Bitmap codec_dts_es_61 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_ES_61", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_es_61", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_ES_61_clr {
+        internal static System.Drawing.Bitmap codec_dts_es_61_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_ES_61_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_es_61_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_ES_clr {
+        internal static System.Drawing.Bitmap codec_dts_es_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_ES_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_es_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_51 {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_51_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_61 {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra_61 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_61", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra_61", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_61_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra_61_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_61_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra_61_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_71 {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra_71 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_71", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_71_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra_71_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_71_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra_71_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_HRA_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_hra_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_HRA_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_hra_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_30_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_30 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_30_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_40 {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_30_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_40", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_30_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_40_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_40 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_40_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_40", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_50 {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_40_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_50", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_40_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_50_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_50 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_50_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_50", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_51 {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_50_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_51", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_50_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_51_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_51 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_51_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_61 {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_51_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_61", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_51_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_61_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_61 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_61_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_61", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_71 {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_61_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_71", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_61_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_71_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_71 {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_71_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap codec_DTS_HD_MA_clr {
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_71_clr {
             get {
-                object obj = ResourceManager.GetObject("codec_DTS_HD_MA_clr", resourceCulture);
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_71_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_dts_hd_ma_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_dts_hd_ma_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
