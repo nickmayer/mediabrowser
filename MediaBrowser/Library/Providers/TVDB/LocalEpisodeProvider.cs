@@ -51,8 +51,29 @@ namespace MediaBrowser.Library.Providers.TVDB {
             metadataDoc.Load(metadataFile);
 
             var p = metadataDoc.SafeGetString("Item/filename");
-            if (p != null && p.Length > 0) {
+            if (p != null && p.Length > 0)
+            {
                 string image = System.IO.Path.Combine(metadataFolder, System.IO.Path.GetFileName(p));
+                if (File.Exists(image))
+                    Item.PrimaryImagePath = image;
+            }
+            else
+            {
+                string primaryExt = ".jpg";
+                string secondaryExt = ".png";
+
+                if (Application.CurrentInstance.Config.PNGTakesPrecedence)
+                {
+                    primaryExt = ".png";
+                    secondaryExt = ".jpg";
+                }
+
+                string file = Path.GetFileNameWithoutExtension(Item.Path);
+                string image = System.IO.Path.Combine(metadataFolder, file + primaryExt);
+                if (File.Exists(image))
+                    Item.PrimaryImagePath = image;
+                
+                image = System.IO.Path.Combine(metadataFolder, file + secondaryExt);
                 if (File.Exists(image))
                     Item.PrimaryImagePath = image;
             }
@@ -111,6 +132,5 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 return location;
             }
         }
-
     }
 }
