@@ -262,33 +262,6 @@
   <data name="dia_cf_arc" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\overlays\dia_cf_arc.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ratio_133" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_133.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_166" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_166.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_177" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_177.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_178" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_178.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_185" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_185.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_220" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_220.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_235" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_235.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_239" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_239.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_240" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\mediainfo\ratio_240.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="DiamondFontsDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\base\diamondfontsdefault.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -475,15 +448,6 @@
   <data name="media_mp4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\media_mp4.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ratio_150" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_150.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_137" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_137.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_144" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_144.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="codec_vorbis" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\codec_vorbis.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -553,9 +517,6 @@
   <data name="media_asf" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\media_asf.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ratio_200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_200.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="media_ogg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\media_ogg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -585,27 +546,6 @@
   </data>
   <data name="media_3gp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\media_3gp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_143" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_143.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_156" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_156.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_255" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_255.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_259" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_259.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_266" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_266.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_276" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_276.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_400" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_400.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="codec_DTS_HD_MA_61" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\codec_DTS_HD_MA_61.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -871,66 +811,6 @@
   <data name="media_wtv_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\colour\media_wtv_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ratio_133_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_133_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_137_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_137_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_143_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_143_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_144_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_144_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_150_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_150_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_156_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_156_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_166_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_166_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_177_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_177_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_178_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_178_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_185_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_185_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_200_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_200_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_220_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_220_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_235_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_235_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_239_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_239_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_240_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_240_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_255_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_255_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_259_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_259_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_266_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_266_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_276_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_276_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_400_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_400_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="codec_DTS_9624" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\codec_DTS_9624.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -949,12 +829,6 @@
   <data name="codec_mpeg4visual_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\colour\codec_mpeg4visual_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ratio_181" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\ratio_181.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratio_181_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\MediaInfo\colour\ratio_181_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="codec_DTS_DS_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\codec_DTS_DS_10.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -966,5 +840,137 @@
   </data>
   <data name="codec_DTS_DS_20_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\colour\codec_DTS_DS_20_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_133" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_133.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_133_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_133_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_137" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_137.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_137_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_137_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_143" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_143.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_143_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_143_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_144" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_144.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_144_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_144_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_150" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_150.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_150_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_150_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_156" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_156.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_156_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_156_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_166" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_166.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_166_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_166_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_177" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_177.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_177_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_177_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_178" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_178.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_178_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_178_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_181" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_181.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_181_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_181_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_185" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_185.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_185_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_185_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_200" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_200.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_200_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_200_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_220" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_220.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_220_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_220_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_235" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_235.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_235_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_235_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_239" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_239.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_239_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_239_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_240" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_240.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_240_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_240_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_255" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_255.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_255_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_255_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_259" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_259.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_259_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_259_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_266" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_266.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_266_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_266_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_276" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_276.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_276_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_276_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_400" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\aspect_400.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aspect_400_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\aspect_400_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_pcm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\codec_pcm.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="codec_pcm_clr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\colour\codec_pcm_clr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

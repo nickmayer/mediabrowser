@@ -60,6 +60,300 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap aspect_133 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_133", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_133_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_133_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_137 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_137", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_137_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_137_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_143 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_143", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_143_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_143_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_144 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_144", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_144_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_144_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_150 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_150", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_150_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_150_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_156 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_156", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_156_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_156_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_166 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_166", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_166_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_166_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_177 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_177", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_177_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_177_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_178 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_178", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_178_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_178_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_181 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_181", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_181_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_181_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_185 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_185", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_185_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_185_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_200 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_200_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_200_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_220 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_220", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_220_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_220_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_235 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_235", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_235_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_235_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_239 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_239", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_239_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_239_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_240 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_240", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_240_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_240_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_255 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_255", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_255_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_255_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_259 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_259", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_259_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_259_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_266 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_266", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_266_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_266_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_276 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_276", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_276_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_276_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_400 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap aspect_400_clr {
+            get {
+                object obj = ResourceManager.GetObject("aspect_400_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap BallButtonDark {
             get {
                 object obj = ResourceManager.GetObject("BallButtonDark", resourceCulture);
@@ -728,6 +1022,20 @@ namespace Diamond {
         internal static System.Drawing.Bitmap codec_on2_vp6_clr {
             get {
                 object obj = ResourceManager.GetObject("codec_on2_vp6_clr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_pcm {
+            get {
+                object obj = ResourceManager.GetObject("codec_pcm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap codec_pcm_clr {
+            get {
+                object obj = ResourceManager.GetObject("codec_pcm_clr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1688,300 +1996,6 @@ namespace Diamond {
             get {
                 object obj = ResourceManager.GetObject("PosterViewItem", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_133 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_133", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_133_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_133_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_137 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_137", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_137_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_137_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_143 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_143", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_143_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_143_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_144 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_144", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_144_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_144_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_150 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_150", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_150_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_150_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_156 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_156", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_156_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_156_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_166 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_166", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_166_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_166_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_177 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_177", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_177_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_177_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_178 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_178", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_178_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_178_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_181 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_181", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_181_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_181_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_185 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_185", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_185_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_185_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_200 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_200", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_200_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_200_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_220 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_220", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_220_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_220_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_235 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_235", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_235_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_235_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_239 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_239", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_239_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_239_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_240 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_240", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_240_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_240_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_255 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_255", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_255_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_255_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_259 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_259", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_259_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_259_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_266 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_266", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_266_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_266_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_276 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_276", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_276_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_276_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_400 {
-            get {
-                object obj = ResourceManager.GetObject("ratio_400", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ratio_400_clr {
-            get {
-                object obj = ResourceManager.GetObject("ratio_400_clr", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

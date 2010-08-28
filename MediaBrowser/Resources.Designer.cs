@@ -1047,6 +1047,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap codec_pcm {
+            get {
+                object obj = ResourceManager.GetObject("codec_pcm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap codec_sorenson_h263 {
             get {
                 object obj = ResourceManager.GetObject("codec_sorenson_h263", resourceCulture);
