@@ -228,6 +228,7 @@
     <Condition Source="[AudioProfile]" SourceValue="aac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aac" />
     <Condition Source="[AudioProfile]" SourceValue="flac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Flac" />
     <Condition Source="[AudioProfile]" SourceValue="vorbis" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vorbis" />
+    <Condition Source="[AudioProfile]" SourceValue="pcm" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Pcm" />
     </Rules>
     <Content>
       <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
@@ -274,32 +275,32 @@
 
       <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
 
-      <Condition Source="[AspectRatio]" SourceValue="4:3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133" />
-      <Condition Source="[AspectRatio]" SourceValue="1.33:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133" />
-      <Condition Source="[AspectRatio]" SourceValue="1.37:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_137" />
-      <Condition Source="[AspectRatio]" SourceValue="1.43:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_143" />
-      <Condition Source="[AspectRatio]" SourceValue="1.44:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_144" />
-      <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150" />
-      <Condition Source="[AspectRatio]" SourceValue="1.50:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150" />
-      <Condition Source="[AspectRatio]" SourceValue="1.56:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_156" />
-      <Condition Source="[AspectRatio]" SourceValue="1.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166" />
-      <Condition Source="[AspectRatio]" SourceValue="1.667:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166" />
-      <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177" />
-      <Condition Source="[AspectRatio]" SourceValue="1.77:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177" />
-      <Condition Source="[AspectRatio]" SourceValue="1.78:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_178" />
-      <Condition Source="[AspectRatio]" SourceValue="1.81:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_181" />
-      <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_185" />
-      <Condition Source="[AspectRatio]" SourceValue="2.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_200" />
-      <Condition Source="[AspectRatio]" SourceValue="2.20:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_220" />
-      <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_235" />
-      <Condition Source="[AspectRatio]" SourceValue="2.39:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_239" />
-      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_240" />
-      <Condition Source="[AspectRatio]" SourceValue="2.55:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_255" />
-      <Condition Source="[AspectRatio]" SourceValue="2.59:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_259" />
-      <Condition Source="[AspectRatio]" SourceValue="2.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_266" />
-      <Condition Source="[AspectRatio]" SourceValue="2.76:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_276" />
-      <Condition Source="[AspectRatio]" SourceValue="4:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400" />
-      <Condition Source="[AspectRatio]" SourceValue="4.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400" />      
+      <Condition Source="[AspectRatio]" SourceValue="4:3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_133" />
+      <Condition Source="[AspectRatio]" SourceValue="1.33:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_133" />
+      <Condition Source="[AspectRatio]" SourceValue="1.37:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_137" />
+      <Condition Source="[AspectRatio]" SourceValue="1.43:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_143" />
+      <Condition Source="[AspectRatio]" SourceValue="1.44:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_144" />
+      <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_150" />
+      <Condition Source="[AspectRatio]" SourceValue="1.50:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_150" />
+      <Condition Source="[AspectRatio]" SourceValue="1.56:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_156" />
+      <Condition Source="[AspectRatio]" SourceValue="1.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_166" />
+      <Condition Source="[AspectRatio]" SourceValue="1.667:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_166" />
+      <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_177" />
+      <Condition Source="[AspectRatio]" SourceValue="1.77:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_177" />
+      <Condition Source="[AspectRatio]" SourceValue="1.78:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_178" />
+      <Condition Source="[AspectRatio]" SourceValue="1.81:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_181" />
+      <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_185" />
+      <Condition Source="[AspectRatio]" SourceValue="2.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_200" />
+      <Condition Source="[AspectRatio]" SourceValue="2.20:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_220" />
+      <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_235" />
+      <Condition Source="[AspectRatio]" SourceValue="2.39:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_239" />
+      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_240" />
+      <Condition Source="[AspectRatio]" SourceValue="2.55:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_255" />
+      <Condition Source="[AspectRatio]" SourceValue="2.59:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_259" />
+      <Condition Source="[AspectRatio]" SourceValue="2.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_266" />
+      <Condition Source="[AspectRatio]" SourceValue="2.76:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_276" />
+      <Condition Source="[AspectRatio]" SourceValue="4:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_400" />
+      <Condition Source="[AspectRatio]" SourceValue="4.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_400" />      
 
     </Rules>
 
@@ -494,6 +495,7 @@
       <Condition Source="[AudioProfile]" SourceValue="aac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aac_clr" />
       <Condition Source="[AudioProfile]" SourceValue="flac" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Flac_clr" />
       <Condition Source="[AudioProfile]" SourceValue="vorbis" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Vorbis_clr" />
+      <Condition Source="[AudioProfile]" SourceValue="pcm" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Pcm_clr" />
     </Rules>
     <Content>
       <Graphic Name="Image" Visible="false" Content="image://i:BlankImage" SizingPolicy="SizeToContent" MaintainAspectRatio="true" />
@@ -540,32 +542,32 @@
 
       <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
 
-      <Condition Source="[AspectRatio]" SourceValue="4:3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.33:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_133_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.37:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_137_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.43:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_143_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.44:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_144_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.50:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_150_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.56:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_156_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.667:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_166_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.77:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_177_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.78:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_178_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.81:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_181_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_185_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_200_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.20:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_220_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_235_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.39:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_239_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_240_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.55:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_255_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.59:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_259_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_266_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="2.76:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_276_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="4:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400_clr" />
-      <Condition Source="[AspectRatio]" SourceValue="4.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Ratio_400_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="4:3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_133_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.33:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_133_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.37:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_137_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.43:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_143_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.44:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_144_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="3:2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_150_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.50:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_150_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.56:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_156_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_166_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.667:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_166_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="16:9" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_177_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.77:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_177_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.78:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_178_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.81:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_181_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="1.85:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_185_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_200_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.20:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_220_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.35:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_235_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.39:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_239_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.40:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_240_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.55:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_255_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.59:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_259_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.66:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_266_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="2.76:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_276_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="4:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_400_clr" />
+      <Condition Source="[AspectRatio]" SourceValue="4.00:1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Aspect_400_clr" />
 
     </Rules>
 
