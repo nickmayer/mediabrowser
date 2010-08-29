@@ -13,9 +13,9 @@ namespace MediaBrowser.Library.Entities
         public readonly static MediaInfoData Empty = new MediaInfoData { AudioFormat = "", VideoCodec = "" };
 
         [Persist]
-        public int Height;
+        public int Height = 0;
         [Persist]
-        public int Width;
+        public int Width = 0;
         [Persist]
         public string VideoCodec = "";
         [Persist]
@@ -33,7 +33,7 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public string AudioProfile = "";
         [Persist]
-        public string Subtitles;
+        public string Subtitles = "";
         [Persist]
         public string VideoFPS = "";
 
