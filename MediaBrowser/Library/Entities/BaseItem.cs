@@ -77,7 +77,7 @@ namespace MediaBrowser.Library.Entities {
         // banner images will fall back to parent
         public LibraryImage BannerImage {
             get {
-                return SearchParents<LibraryImage>(this, item => item.GetImage(item.BannerImagePath));
+                return SearchParents<LibraryImage>(this, item => item.GetImage(item.BannerImagePath, Config.Instance.ProcessBanners));
             }
         }
 

@@ -107,6 +107,11 @@ namespace MediaBrowser
             set { if (this.data.EnableRootPage != value) { this.data.EnableRootPage = value; Save(); FirePropertyChanged("EnableRootPage"); } }
         }
 
+        public bool ProcessBanners
+        {
+            get { return this.data.ProcessBanners; }
+            set { if (this.data.ProcessBanners != value) { this.data.ProcessBanners = value; Save(); FirePropertyChanged("ProcessBanners"); } }
+        }
 
         public bool IsFirstRun
         {
