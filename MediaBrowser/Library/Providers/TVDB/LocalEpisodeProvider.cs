@@ -71,11 +71,15 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 string file = Path.GetFileNameWithoutExtension(Item.Path);
                 string image = System.IO.Path.Combine(metadataFolder, file + primaryExt);
                 if (File.Exists(image))
+                {
                     Item.PrimaryImagePath = image;
-                
-                image = System.IO.Path.Combine(metadataFolder, file + secondaryExt);
-                if (File.Exists(image))
-                    Item.PrimaryImagePath = image;
+                }
+                else
+                {
+                    image = System.IO.Path.Combine(metadataFolder, file + secondaryExt);
+                    if (File.Exists(image))
+                        Item.PrimaryImagePath = image;
+                }
             }
 
 
