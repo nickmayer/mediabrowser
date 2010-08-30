@@ -63,8 +63,12 @@ namespace Configurator
             config = Kernel.Instance.ConfigData;
             LoadComboBoxes();
             lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.Version;
-//infoPanel
-            infoPanel.Visibility = infoPlayerPanel.Visibility = pluginPanel.Visibility = Visibility.Hidden;
+
+            //we're hiding the podcast and plugin detail panels until the user selects one
+            infoPlayerPanel.Visibility = pluginPanel.Visibility = Visibility.Hidden;
+
+            //we're showing, but disabling the media collection detail panel until the user selects one
+            infoPanel.IsEnabled = false;
 
             // first time the wizard has run 
             if (config.InitialFolder != ApplicationPaths.AppInitialDirPath) {
@@ -771,7 +775,7 @@ sortorder: {2}
                     File.Delete(virtualFolder.Path);
                     folderList.Items.Remove(virtualFolder);
                     updateFolderSort(current);
-                    infoPanel.Visibility = Visibility.Hidden;
+                    infoPanel.IsEnabled = false;
                     RefreshEntryPoints(false);
                 }
             }            
@@ -852,8 +856,8 @@ sortorder: {2}
                 //enable the rename, delete, up and down buttons if a media collection is selected.
                 btnRename.IsEnabled = btnRemoveFolder.IsEnabled = true;
 
-                //show the infoPanel
-                infoPanel.Visibility = Visibility.Visible;
+                //enable the infoPanel
+                infoPanel.IsEnabled = true;
             }
         }
 

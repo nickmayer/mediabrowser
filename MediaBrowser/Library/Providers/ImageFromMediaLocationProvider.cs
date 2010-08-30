@@ -82,11 +82,15 @@ namespace MediaBrowser.Library.Providers
 
             string file = Path.Combine(Location, name + primaryExt);
             if (File.Exists(file))
+            {
                 return file;
-
-            file = Path.Combine(Location, name + secondaryExt);
-            if (File.Exists(file))
-                return file;
+            }
+            else
+            {
+                file = Path.Combine(Location, name + secondaryExt);
+                if (File.Exists(file))
+                    return file;
+            }
 
             if (name == "folder") // we will also look for images that match by name in the same location for the primary image
             {

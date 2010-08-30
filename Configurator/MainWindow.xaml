@@ -73,7 +73,7 @@
         <TabControl Margin="10,90,10,10" x:Name="tabControl1" Background="{x:Null}" SelectionChanged="tabControl1_SelectionChanged" >
             <TabItem Header="media collection" x:Name="mediacollectionTab" FontSize="14" FontWeight="Normal" Foreground="#FF323232" IsSelected="True">
                 <Grid>
-                    <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="folderList" Width="260" SelectionChanged="folderList_SelectionChanged" FontSize="14" ItemTemplate="{StaticResource folderListTemplate}"/>
+                    <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="folderList" Width="260" SelectionChanged="folderList_SelectionChanged" FontSize="14" ItemTemplate="{StaticResource folderListTemplate}" SelectedIndex="0"/>
                         <Button Height="32" HorizontalAlignment="Left" Margin="20,0,0,20" x:Name="btnAddFolder" VerticalAlignment="Bottom" Width="80" Click="btnAddFolder_Click" FontSize="14" ToolTip="Add a new media collection" Content="Add"/>
                         <Button Height="32" HorizontalAlignment="Left" Margin="110,0,0,20" x:Name="btnRename" VerticalAlignment="Bottom" Width="80" Click="btnRename_Click" ToolTip="Rename media collection" Content="Rename" FontSize="14" IsEnabled="False" />
                         <Button Height="32" HorizontalAlignment="Left" Margin="200,0,0,20" x:Name="btnRemoveFolder" VerticalAlignment="Bottom" Width="80" Click="btnRemoveFolder_Click" FontSize="14" ToolTip="Remove media collection" Content="Remove" IsEnabled="False"/>
