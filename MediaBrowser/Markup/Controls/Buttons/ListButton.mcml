@@ -30,7 +30,7 @@
 
 			<Inset Name="TextMargins" Inset="8,-2,8,2"/>
 			<cor:Boolean Name="CenterText" Boolean="false"/>
-      <Color Name="WatchedTextColor" Color="color://s:DefaultWatchedTextColor"/>
+      <Color Name="WatchedTextColor" Color="color://s:ListViewWatchedTextColor"/>
       
 		</Locals>
 
@@ -44,36 +44,14 @@
         </Transformer>
       </Binding>
 
-      <!-- The logic behind the value Transparent has changed. Transparent is now used as a default keyword to 
-           determine whether or not the user wants to override the WatchedTextColor. If the user wants to disable
-           watched text color altogether, they now use the color White (to match the current item text color) instead 
-           of specifying the value Transparent.
+      
+      <!-- Use WatchedTextColor if enabled. Each color scheme has a default color in the appropriate styles.mcml file
+           the user can override this color via the CustomStyles.mcml support mechanism.
       -->
-      <Changed Source="[Item.HaveWatched]">
-				<Conditions>
-					<Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
-          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="NotEquals" Value="Transparent" />
-				</Conditions>
-				<Actions>
-          <Set Target="[Label.Color]" Value="[Application.Config.ListViewWatchedColorMcml]" />
-				</Actions>
-			</Changed>
-
-			<Rule>
-				<Conditions>
-					<Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
-          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="NotEquals" Value="Transparent" />
-				</Conditions>
-				<Actions>
-          <Set Target="[Label.Color]" Value="[Application.Config.ListViewWatchedColorMcml]" />
-				</Actions>
-			</Rule>
-
-      <!-- If color Transparent in Config, Default to color scheme specific WatchedTextColor -->
       <Changed Source="[Item.HaveWatched]">
         <Conditions>
           <Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
-          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="Equals" Value="Transparent" />
+          <Equality Source="[Application.Config.EnableListViewWatchedColor]" ConditionOp="Equals" Value="true" />
         </Conditions>
         <Actions>
           <Set Target="[Label.Color]" Value="[WatchedTextColor]" />
@@ -84,7 +62,7 @@
       <Rule>
         <Conditions>
           <Equality Source="[Item.HaveWatched]" ConditionOp="Equals" Value="true" />
-          <Equality Source="[Application.Config.ListViewWatchedColorMcml]" ConditionOp="Equals" Value="Transparent" />
+          <Equality Source="[Application.Config.EnableListViewWatchedColor]" ConditionOp="Equals" Value="true" />
         </Conditions>
         <Actions>
           <Set Target="[Label.Color]" Value="[WatchedTextColor]" />

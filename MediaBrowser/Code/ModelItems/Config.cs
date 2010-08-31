@@ -346,19 +346,16 @@ namespace MediaBrowser
             get { return this.data.EnableListViewTicks; }
             set { if (this.data.EnableListViewTicks != value) { this.data.EnableListViewTicks = value; Save(); FirePropertyChanged("EnableListViewTicks"); } }
         }
-        [Comment(@"Enables the showing of watched shows in a different color in the list view (Transparent disables it)")]
-        public Colors ListViewWatchedColor
+        [Comment(@"Enables the showing of watched shows in a different color in the list view.")]
+        public bool EnableListViewWatchedColor
         {
-            get
-            {
-                return (Colors)(int)this.data.ListViewWatchedColor;
-            }
-            set { if ((int)this.data.ListViewWatchedColor != (int)value) { this.data.ListViewWatchedColor = (MediaBrowser.Code.ShadowTypes.Colors)(int)value; Save(); FirePropertyChanged("ListViewWatchedColor"); FirePropertyChanged("ListViewWatchedColorMcml"); } }
+            get { return this.data.EnableListViewWatchedColor; }
+            set { if (this.data.EnableListViewWatchedColor != value) { this.data.EnableListViewWatchedColor = value; Save(); FirePropertyChanged("EnableListViewWatchedColor"); } }
         }
-        public Color ListViewWatchedColorMcml
-        {
-            get { return new Color(this.ListViewWatchedColor); }
-        }
+        //public Color ListViewWatchedColorMcml
+        //{
+        //    get { return new Color(this.ListViewWatchedColor); }
+        //}
 
         public bool ShowUnwatchedCount
         {

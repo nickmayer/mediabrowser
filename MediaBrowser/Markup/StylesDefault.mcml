@@ -34,6 +34,6 @@
 	<Color Name="DimPosterFilter" Color="150,150,150"/>
 
   <!-- Watched Text Color Default -->
-  <Color Name="DefaultWatchedTextColor" Color="LightSkyBlue" />
+  <Color Name="ListViewWatchedTextColor" Color="LightSkyBlue" />
 
 </Mcml>
