@@ -61,6 +61,7 @@ namespace MediaBrowser
         public bool EnableAlphanumericSorting = true;
         public bool EnableListViewTicks = false;
         public Colors ListViewWatchedColor = Colors.LightSkyBlue;
+        public bool EnableListViewWatchedColor = true;
         public bool ShowUnwatchedCount = true;
         public bool ShowWatchedTickOnFolders = true;
         public bool ShowWatchTickInPosterView = true;

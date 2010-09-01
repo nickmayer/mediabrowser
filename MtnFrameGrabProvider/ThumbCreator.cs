@@ -29,7 +29,7 @@ namespace MtnFrameGrabProvider {
             psi.WindowStyle = ProcessWindowStyle.Hidden;
             psi.CreateNoWindow = true;
             // see: http://moviethumbnail.sourceforge.net/usage.en.html
-            psi.Arguments = string.Format("\"{0}\" -P -c 1 -r 1 -b 0.80 -B {1} -i -t -D 8 -o .jpg -O {2}",
+            psi.Arguments = string.Format("\"{0}\" -P -c 1 -r 1 -B {1} -C 2 -i -t -z -D 8 -o .jpg -O {2}",
                 video, secondsFromStart, GetShortPath(Path.GetTempPath()));
             var process = Process.Start(psi);
             process.WaitForExit();
