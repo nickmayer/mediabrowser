@@ -445,28 +445,21 @@ namespace MediaBrowser.LibraryManagement
             baseLocation += "\\MediaInfo";
 
             //we'll look first in a theme-specific folder if it exists
-            string themeLocation = Path.Combine(baseLocation, Config.Instance.ViewTheme);
-            string defaultLocation = Path.Combine(baseLocation, "all"); //don't use 'default' cuz that's the name of a theme...
+            string ibnLocation = Path.Combine(baseLocation, Config.Instance.ViewTheme);
+            if (!Directory.Exists(ibnLocation)) //no theme-specific one - use default
+                ibnLocation = Path.Combine(baseLocation, "all"); //don't use 'default' cuz that's the name of a theme...
 
-            string fileName = Path.Combine(themeLocation, name + ".png");
+            string fileName = Path.Combine(ibnLocation, name + ".png");
             if (File.Exists(fileName))
             {
-                return new Image("file://"+fileName);
+                return new Image("file://" + fileName);
             }
             else
             {
-                fileName = Path.Combine(defaultLocation, name + ".png");
-                if (File.Exists(fileName))
-                {
-                    return new Image("file://" + fileName);
-                }
-                else
-                {
-                    //not there, get it from resources in the current theme
-                    //cheap way to grab a valid reference to the current themes resources...
-                    string resourceRef = Application.CurrentInstance.CurrentTheme.DetailPage.Substring(0,Application.CurrentInstance.CurrentTheme.DetailPage.LastIndexOf("/")+1);
-                    return new Image(resourceRef + name);
-                }
+                //not there, get it from resources in the current theme
+                //cheap way to grab a valid reference to the current themes resources...
+                string resourceRef = Application.CurrentInstance.CurrentTheme.PageArea.Substring(0, Application.CurrentInstance.CurrentTheme.PageArea.LastIndexOf("/") + 1);
+                return new Image(resourceRef + name);
             }
         }
 
