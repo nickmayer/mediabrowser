@@ -13,7 +13,7 @@
 	  xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
     xmlns:app="assembly://Diamond/Diamond"
       
-    xmlns:mi="resx://Diamond/Diamond.Resources/DiamondMediaInfoPanel"
+    xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
     xmlns:cfs="resx://Diamond/Diamond.Resources/CoverflowScroller"
     xmlns:me="Me"

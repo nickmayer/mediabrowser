@@ -13,7 +13,7 @@
     xmlns:lv="resx://Diamond/Diamond.Resources/DiamondListView"
     xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
     xmlns:dt="resx://Diamond/Diamond.Resources/DiamondText"
-    xmlns:mip="resx://Diamond/Diamond.Resources/DiamondMediaInfoPanel"
+    xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
     xmlns:bd="resx://Diamond/Diamond.Resources/DiamondBackdrop"
     xmlns:app="assembly://Diamond/Diamond"
     xmlns:me="Me">

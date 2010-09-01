@@ -18,7 +18,7 @@
     
     xmlns:app="assembly://Diamond/Diamond"
     xmlns:ta="resx://Diamond/Diamond.Resources/DiamondTab"
-    xmlns:mip="resx://Diamond/Diamond.Resources/DiamondMediaInfoPanel"
+    xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
     xmlns:dtb="resx://Diamond/Diamond.Resources/DiamondToolBox"
     xmlns:in="resx://Diamond/Diamond.Resources/DiamondInfo"
     xmlns:dt="resx://Diamond/Diamond.Resources/DiamondText"
