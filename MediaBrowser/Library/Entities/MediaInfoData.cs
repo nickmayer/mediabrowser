@@ -97,6 +97,7 @@ namespace MediaBrowser.Library.Entities
             {"wvc1","wmv"},
             {"wvc1hd","wmv_hd"},
             {"mpeg-4 visual","mpeg4visual"},
+            {"mpeg-1 video","mpeg1video"},
             {"mpeg-2 video","H262"},
             {"on2 vp6","on2_vp6"},
             {"sorenson h263","sorenson_H263"},
@@ -205,6 +206,7 @@ namespace MediaBrowser.Library.Entities
         #region Properties Audio
 
         protected static Dictionary<string, string> AudioImageNames = new Dictionary<string, string>() {
+            {"mpeg audio","MpegAudio"},
             {"mpeg audio layer 1","MpegAudio"},
             {"mpeg audio layer 2","MpegAudio"},
             {"mpeg audio layer 3","Mp3"},

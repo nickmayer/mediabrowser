@@ -311,6 +311,8 @@
     <None Include="Images\MediaInfo\colour\media_ts_clr.png" />
     <None Include="Images\MediaInfo\colour\media_wmv_clr.png" />
     <None Include="Images\MediaInfo\colour\media_wtv_clr.png" />
+    <None Include="Images\MediaInfo\colour\codec_mpeg1video_clr.png" />
+    <None Include="Images\MediaInfo\codec_mpeg1video.png" />
     <Content Include="Images\Overlays\dia_cf_arc.png" />
     <Content Include="Images\Panels\dia_CounterPanel.png" />
     <Content Include="Images\Overlays\dia_detailA.png" />

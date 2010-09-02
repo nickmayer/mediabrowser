@@ -78,6 +78,7 @@
   <Image Name="MpegAudio" Source="resx://Diamond/Diamond.Resources/codec_mpegaudio" />
   <Image Name="Mp3" Source="resx://Diamond/Diamond.Resources/codec_mp3" />
   <Image Name="Dts" Source="resx://Diamond/Diamond.Resources/codec_dts" />
+  <Image Name="Mpeg1video" Source="resx://Diamond/Diamond.Resources/codec_mpeg1video" />
   <Image Name="Mpeg4visual" Source="resx://Diamond/Diamond.Resources/codec_mpeg4visual" />
   <Image Name="H262" Source="resx://Diamond/Diamond.Resources/codec_h262" />  
   <Image Name="H264" Source="resx://Diamond/Diamond.Resources/codec_h264" />
@@ -198,6 +199,7 @@
   <Image Name="MpegAudio_clr" Source="resx://Diamond/Diamond.Resources/codec_mpegaudio_clr" />
   <Image Name="Mp3_clr" Source="resx://Diamond/Diamond.Resources/codec_mp3_clr" />
   <Image Name="Dts_clr" Source="resx://Diamond/Diamond.Resources/codec_dts_clr" />
+  <Image Name="Mpeg1video_clr" Source="resx://Diamond/Diamond.Resources/codec_mpeg1video_clr" />
   <Image Name="Mpeg4visual_clr" Source="resx://Diamond/Diamond.Resources/codec_mpeg4visual_clr" />
   <Image Name="H262_clr" Source="resx://Diamond/Diamond.Resources/codec_h262_clr" />
   <Image Name="H264_clr" Source="resx://Diamond/Diamond.Resources/codec_h264_clr" />

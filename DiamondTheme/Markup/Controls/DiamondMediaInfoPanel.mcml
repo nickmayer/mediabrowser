@@ -140,7 +140,8 @@
       <Condition Source="[VideoCodec]" SourceValue="wmv3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
       <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv" />
       <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora" /> 
-      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg4visual" /> 
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg4visual" />
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-1 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg1video" />
       <Condition Source="[VideoCodec]" SourceValue="mpeg-2 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H262" />
       <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:On2_Vp6" />
       <Condition Source="[VideoCodec]" SourceValue="sorenson h263" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Sorenson_H263" />
@@ -177,6 +178,7 @@
     <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
 
     <!--MPEG Audio-->
+    <Condition Source="[AudioProfile]" SourceValue="mpeg audio" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
     <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
     <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
     <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mp3" />
@@ -408,6 +410,7 @@
       <Condition Source="[VideoCodec]" SourceValue="wvc1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Wmv_clr" />
       <Condition Source="[VideoCodec]" SourceValue="theora" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Theora_clr" />
       <Condition Source="[VideoCodec]" SourceValue="mpeg-4 visual" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg4visual_clr" />
+      <Condition Source="[VideoCodec]" SourceValue="mpeg-1 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mpeg1video_clr" />
       <Condition Source="[VideoCodec]" SourceValue="mpeg-2 video" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:H262_clr" />
       <Condition Source="[VideoCodec]" SourceValue="on2 vp6" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:On2_Vp6_clr" />
       <Condition Source="[VideoCodec]" SourceValue="sorenson h263" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Sorenson_H263_clr" />
@@ -444,6 +447,7 @@
       <Condition Source="[Image.Content]" SourceValue="image://i:BlankImage" ConditionOp="NotEquals" Target="[Image.Visible]" Value="true" />
 
       <!--MPEG Audio-->
+      <Condition Source="[AudioProfile]" SourceValue="mpeg audio" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio" />
       <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 1" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio_clr" />
       <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 2" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:MpegAudio_clr" />
       <Condition Source="[AudioProfile]" SourceValue="mpeg audio layer 3" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:Mp3_clr" />
