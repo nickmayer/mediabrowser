@@ -95,7 +95,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
                     string s = doc.SafeGetString("//Network");
                     if ((s != null) && (s.Length > 0))
-                        series.Studios = new List<string>();
+                        series.Studios = new List<string>(s.Trim().Split('|'));
 
                     string urlActors = string.Format(getActors, TVUtils.TVDBApiKey, seriesId);
                     XmlDocument docActors = TVUtils.Fetch(urlActors);
