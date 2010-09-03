@@ -91,6 +91,7 @@ namespace MediaInfoProvider
         {
             Logger.ReportInfo("getting media info from " + location);
             MediaInfo mediaInfo = new MediaInfo();
+            mediaInfo.Option("ParseSpeed", "0.3");
             int i = mediaInfo.Open(location);
             MediaInfoData mediaInfoData = null;
             if (i != 0)
