@@ -266,6 +266,10 @@ namespace MediaBrowser.Library.Providers
                                 movie.MediaInfo.AudioFormat = "AC-3";
                                 movie.MediaInfo.AudioProfile = "TrueHD";
                                 break;
+                            case "MP2":
+                                movie.MediaInfo.AudioFormat = "MPEG AUDIO";
+                                movie.MediaInfo.AudioProfile = "Layer 2";
+                                break;
                             default:
                                 movie.MediaInfo.AudioFormat = audio;
                                 break;
@@ -274,7 +278,28 @@ namespace MediaBrowser.Library.Providers
                 }
                 if (movie.MediaInfo.AudioChannelCount == 0) movie.MediaInfo.AudioChannelCount = doc.SafeGetInt32("Title/MediaInfo/Audio/Channels");
                 if (movie.MediaInfo.AudioBitRate == 0) movie.MediaInfo.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
-                if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec)) movie.MediaInfo.VideoCodec = doc.SafeGetString("Title/MediaInfo/Video/Codec","");
+                if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec))
+                {
+                    string video = doc.SafeGetString("Title/MediaInfo/Video/Codec", "");
+                    if (video != "")
+                    {
+                        switch (video.ToLower())
+                        {
+                            case "mpeg-1":
+                                movie.MediaInfo.VideoCodec = "MPEG-1 Video";
+                                break;
+                            case "mpeg-2":
+                                movie.MediaInfo.VideoCodec = "MPEG-2 Video";
+                                break;
+                            case "h.264":
+                                movie.MediaInfo.VideoCodec = "AVC";
+                                break;
+                            default:
+                                movie.MediaInfo.VideoCodec = video;
+                                break;
+                        }
+                    }
+                }
                 if (movie.MediaInfo.VideoBitRate == 0) movie.MediaInfo.VideoBitRate = doc.SafeGetInt32("Title/MediaInfo/Video/BitRate");
                 if (movie.MediaInfo.Height == 0) movie.MediaInfo.Height = doc.SafeGetInt32("Title/MediaInfo/Video/Height");
                 if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
