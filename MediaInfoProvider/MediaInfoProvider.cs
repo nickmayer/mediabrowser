@@ -70,8 +70,11 @@ namespace MediaInfoProvider
             if (original == null) return acquired;
             if (original.AudioBitRate == 0) original.AudioBitRate = acquired.AudioBitRate;
             if (original.AudioChannelCount == 0) original.AudioChannelCount = acquired.AudioChannelCount;
-            if (original.AudioFormat == "") original.AudioFormat = acquired.AudioFormat;
-            if (original.AudioProfile == "") original.AudioProfile = acquired.AudioProfile;
+            if (original.AudioFormat == "")
+            {
+                original.AudioProfile = acquired.AudioProfile;
+                original.AudioFormat = acquired.AudioFormat;
+            }
             if (original.AudioStreamCount == 0) original.AudioStreamCount = acquired.AudioStreamCount;
             if (original.Height == 0) original.Height = acquired.Height;
             if (original.RunTime == 0) original.RunTime = acquired.RunTime;
