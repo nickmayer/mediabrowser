@@ -253,29 +253,32 @@ namespace MediaBrowser.Library.Providers
                 if (string.IsNullOrEmpty(movie.MediaInfo.AudioFormat))
                 {
                     //we need to decode metabrowser strings to format and profile
-                    string audio = doc.SafeGetString("Title/MediaInfo/Audio/Codec").ToLower();
-                    switch (audio)
+                    string audio = doc.SafeGetString("Title/MediaInfo/Audio/Codec","");
+                    if (audio != "")
                     {
-                        case "dts-hd ma":
-                            movie.MediaInfo.AudioFormat = "DTS";
-                            movie.MediaInfo.AudioProfile = "MA";
-                            break;
-                        case "truehd":
-                            movie.MediaInfo.AudioFormat = "AC-3";
-                            movie.MediaInfo.AudioProfile = "TrueHD";
-                            break;
-                        default:
-                            movie.MediaInfo.AudioFormat = audio;
-                            break;
+                        switch (audio.ToLower())
+                        {
+                            case "dts-hd ma":
+                                movie.MediaInfo.AudioFormat = "DTS";
+                                movie.MediaInfo.AudioProfile = "MA";
+                                break;
+                            case "truehd":
+                                movie.MediaInfo.AudioFormat = "AC-3";
+                                movie.MediaInfo.AudioProfile = "TrueHD";
+                                break;
+                            default:
+                                movie.MediaInfo.AudioFormat = audio;
+                                break;
+                        }
                     }
                 }
                 if (movie.MediaInfo.AudioChannelCount == 0) movie.MediaInfo.AudioChannelCount = doc.SafeGetInt32("Title/MediaInfo/Audio/Channels");
                 if (movie.MediaInfo.AudioBitRate == 0) movie.MediaInfo.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
-                if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec)) movie.MediaInfo.VideoCodec = doc.SafeGetString("Title/MediaInfo/Video/Codec");
+                if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec)) movie.MediaInfo.VideoCodec = doc.SafeGetString("Title/MediaInfo/Video/Codec","");
                 if (movie.MediaInfo.VideoBitRate == 0) movie.MediaInfo.VideoBitRate = doc.SafeGetInt32("Title/MediaInfo/Video/BitRate");
                 if (movie.MediaInfo.Height == 0) movie.MediaInfo.Height = doc.SafeGetInt32("Title/MediaInfo/Video/Height");
                 if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
-                if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate");
+                if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate","");
                 if (movie.MediaInfo.RunTime == 0) movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/MediaInfo/Video/Duration");
 
 

@@ -61,8 +61,26 @@ namespace MediaInfoProvider
 
             filename = FindVideoFile();
             if (filename != null) {
-                video.MediaInfo = GetMediaInfo(filename);
+                video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename));
             }
+        }
+
+        private MediaInfoData Merge(MediaInfoData original, MediaInfoData acquired)
+        {
+            if (original == null) return acquired;
+            if (original.AudioBitRate == 0) original.AudioBitRate = acquired.AudioBitRate;
+            if (original.AudioChannelCount == 0) original.AudioChannelCount = acquired.AudioChannelCount;
+            if (original.AudioFormat == "") original.AudioFormat = acquired.AudioFormat;
+            if (original.AudioProfile == "") original.AudioProfile = acquired.AudioProfile;
+            if (original.AudioStreamCount == 0) original.AudioStreamCount = acquired.AudioStreamCount;
+            if (original.Height == 0) original.Height = acquired.Height;
+            if (original.RunTime == 0) original.RunTime = acquired.RunTime;
+            if (original.Subtitles == "") original.Subtitles = acquired.Subtitles;
+            if (original.VideoBitRate == 0) original.VideoBitRate = acquired.VideoBitRate;
+            if (original.VideoCodec == "") original.VideoCodec = acquired.VideoCodec;
+            if (original.VideoFPS == "") original.VideoFPS = acquired.VideoFPS;
+            if (original.Width == 0) original.Width = acquired.Width;
+            return original;
         }
 
         private string FindVideoFile() {

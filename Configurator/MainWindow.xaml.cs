@@ -63,8 +63,12 @@ namespace Configurator
             config = Kernel.Instance.ConfigData;
             LoadComboBoxes();
             lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.Version;
-//infoPanel
-            infoPanel.Visibility = infoPlayerPanel.Visibility = pluginPanel.Visibility = Visibility.Hidden;
+
+            //we're hiding the podcast and plugin detail panels until the user selects one
+            infoPlayerPanel.Visibility = pluginPanel.Visibility = Visibility.Hidden;
+
+            //we're showing, but disabling the media collection detail panel until the user selects one
+            infoPanel.IsEnabled = false;
 
             // first time the wizard has run 
             if (config.InitialFolder != ApplicationPaths.AppInitialDirPath) {
@@ -771,7 +775,7 @@ sortorder: {2}
                     File.Delete(virtualFolder.Path);
                     folderList.Items.Remove(virtualFolder);
                     updateFolderSort(current);
-                    infoPanel.Visibility = Visibility.Hidden;
+                    infoPanel.IsEnabled = false;
                     RefreshEntryPoints(false);
                 }
             }            
@@ -850,10 +854,10 @@ sortorder: {2}
                     folderImage.Source = null;
                 }
                 //enable the rename, delete, up and down buttons if a media collection is selected.
-                btnRename.IsEnabled = btnRemoveFolder.IsEnabled = btnUp.IsEnabled = btnDn.IsEnabled = true;
+                btnRename.IsEnabled = btnRemoveFolder.IsEnabled = true;
 
-                //show the infoPanel
-                infoPanel.Visibility = Visibility.Visible;
+                //enable the infoPanel
+                infoPanel.IsEnabled = true;
             }
         }
 
@@ -1029,7 +1033,14 @@ sortorder: {2}
                     }
                 // If a player hasn't been configured then make it an available option to be added
                 if (!found)
-                    list.Add(item);
+                {
+                    if (item == MediaType.ISO)
+                    {
+                        // do nothing
+                    } else {
+                        list.Add(item);
+                    }
+                }
             }
 
             var form = new SelectMediaTypeForm(list);

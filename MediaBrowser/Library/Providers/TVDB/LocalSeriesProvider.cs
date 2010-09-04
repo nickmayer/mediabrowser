@@ -79,16 +79,38 @@ namespace MediaBrowser.Library.Providers.TVDB {
             Item.Overview = seriesNode.SafeGetString("Overview");
             Item.Name = seriesNode.SafeGetString("SeriesName");
 
+            //used for extended actor information. will fetch actors with roles stored in <Persons> tag
+            foreach (XmlNode node in seriesNode.SelectNodes("Persons/Person[Type='Actor']"))
+            {
+                try
+                {
+                    if (series.Actors == null)
+                        series.Actors = new List<Actor>();
 
-            string actors = seriesNode.SafeGetString("Actors");
-            if (actors != null) {
+                    var name = node.SelectSingleNode("Name").InnerText;
+                    var role = node.SafeGetString("Role", "");
+                    var actor = new Actor() { Name = name, Role = role };
 
-                series.Actors = new List<Actor>();
-                foreach (string n in actors.Split('|')) {
-                    series.Actors.Add(new Actor { Name = n });
+                    series.Actors.Add(actor);
+                }
+                catch
+                {
+                    // fall through i dont care, one less actor
                 }
             }
 
+            //used for backwards compatibility. Will fetch actors stored in the <Actors> tag
+            string actors = seriesNode.SafeGetString("Actors");
+            if (actors != null)
+            {
+                if (series.Actors == null)
+                    series.Actors = new List<Actor>();
+
+                foreach (string n in actors.Trim('|').Split('|'))
+                {
+                    series.Actors.Add(new Actor { Name = n });
+                }
+            }
 
             string genres = seriesNode.SafeGetString("Genre");
             if (genres != null)
@@ -105,13 +127,19 @@ namespace MediaBrowser.Library.Providers.TVDB {
             }
 
 
-            string ratingString = seriesNode.SafeGetString("Rating");
-            if (ratingString != null) {
-                float imdbRating;
-                if (float.TryParse(ratingString, out imdbRating)) {
-                    series.ImdbRating = imdbRating;
-                }
-            }
+            // this causes a problem on localized windows version with a comma seperator in regional options
+            // http://community.mediabrowser.tv/permalinks/3263/ratings-for-series-aren-t-calculated-properly-with-non-us-regional-settings
+            //string ratingString = seriesNode.SafeGetString("Rating",);
+            //if (ratingString != null) {
+            //    float imdbRating;
+            //    if (float.TryParse(ratingString, out imdbRating)) {
+            //        series.ImdbRating = imdbRating;
+            //    }
+            //}
+
+            //SafeGetSingle only works directly from metadataDoc
+            //temporary fix, should be handled better
+            series.ImdbRating = metadataDoc.SafeGetSingle("Series/Rating", (float)-1, 10);
 
             series.Status = seriesNode.SafeGetString("Status");
 

@@ -178,7 +178,24 @@ namespace MediaBrowser.Library
                 return items[items.Length - 1];
             }
         }
-
+        protected static Dictionary<string, string> MediaImageNames = new Dictionary<string, string>() {
+            {"f4v","flv"},
+            {"m4v","mov"},
+            {"mpg","mpeg"},
+            {"ogv","ogg"},
+            {"threegp","3gp"}
+        };
+        protected string MediaImageName
+        {
+            get
+            {
+                if (MediaImageNames.ContainsKey(MediaTypeString))
+                    return "media_" + MediaImageNames[MediaTypeString];
+                else
+                    return "media_" + MediaTypeString;
+            }
+        }
+                
         public string MediaTypeString
         {
             get {
@@ -203,7 +220,7 @@ namespace MediaBrowser.Library
         {
             get
             {
-                return Helper.GetMediaInfoImage("media_" + this.MediaTypeString);
+                return Helper.GetMediaInfoImage(MediaImageName);
             }
         }
 

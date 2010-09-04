@@ -93,7 +93,7 @@ namespace MediaBrowser.Library.Playables
 
         private void MinimizeMCE(object player)
         {
-            Debug.WriteLine("minimizeMCE and then give focues to external player");
+            Debug.WriteLine("minimizeMCE and then give focus to external player");
             Process extPlayer = (Process)player;
 
             //minimize MCE

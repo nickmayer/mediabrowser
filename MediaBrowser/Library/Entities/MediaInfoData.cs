@@ -13,17 +13,17 @@ namespace MediaBrowser.Library.Entities
         public readonly static MediaInfoData Empty = new MediaInfoData { AudioFormat = "", VideoCodec = "" };
 
         [Persist]
-        public int Height;
+        public int Height = 0;
         [Persist]
-        public int Width;
+        public int Width = 0;
         [Persist]
-        public string VideoCodec;
+        public string VideoCodec = "";
         [Persist]
-        public string AudioFormat;
+        public string AudioFormat = "";
         [Persist]
-        public int VideoBitRate;
+        public int VideoBitRate = 0;
         [Persist]
-        public int AudioBitRate;
+        public int AudioBitRate = 0;
         [Persist]
         public int RunTime = 0;
         [Persist]
@@ -31,12 +31,43 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public int AudioChannelCount = 0;
         [Persist]
-        public string AudioProfile;
+        public string AudioProfile = "";
         [Persist]
-        public string Subtitles;
+        public string Subtitles = "";
         [Persist]
-        public string VideoFPS;
+        public string VideoFPS = "";
 
+        string SizeStr
+        {
+            get
+            {
+                if (Height > 0 && Width > 0)
+                    return Width + "x" + Height + ",";
+                else
+                    return "";
+            }
+        }
+        string VideoRateStr
+        {
+            get
+            {
+                if (VideoBitRate > 0)
+                    return (VideoBitRate / 1000).ToString() + "kbs,";
+                else
+                    return "";
+            }
+        }
+
+        string AudioRateStr
+        {
+            get
+            {
+                if (AudioBitRate > 0)
+                    return (AudioBitRate / 1000).ToString()+"kbs";
+                else
+                    return "";
+            }
+        }
 
         public string CombinedInfo
         {
@@ -44,20 +75,7 @@ namespace MediaBrowser.Library.Entities
             {
                 if (this != Empty)
                 {
-                    switch (this.AudioFormat.ToLower())
-                    {
-                        case "ac3":
-                        case "dts":
-                        case "mpeg audio":
-                            {
-                                if (this.AudioProfile != null && this.AudioProfile != "")
-                                    return string.Format("{0}x{1}, {2} {3}kbps, {4} {5} {6}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000);
-                                else
-                                    return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
-                            }
-                        default:
-                            return string.Format("{0}x{1}, {2} {3}kbps, {4} {5}kbps", this.Width, this.Height, this.VideoCodec, this.VideoBitRate / 1000, this.AudioFormat, this.AudioBitRate / 1000);
-                    }
+                           return string.Format("{0} {1} {2} {3} {4} {5}", this.SizeStr, this.VideoCodec, this.VideoRateStr, this.AudioFormat, this.AudioProfile, this.AudioRateStr);
                 }
                 else
                     return "";
@@ -70,7 +88,7 @@ namespace MediaBrowser.Library.Entities
             {"divx 5","divx"},
             {"divx 4","divx"},
             {"divx 3 low","divx"},
-            {"avc ","H264"},
+            {"avc","H264"},
             {"vc-1","vc1"},
             {"wmv1","wmv"},
             {"wmv2","wmv"},
@@ -79,7 +97,7 @@ namespace MediaBrowser.Library.Entities
             {"wvc1","wmv"},
             {"wvc1hd","wmv_hd"},
             {"mpeg-4 visual","mpeg4visual"},
-            {"mpeg-2 video","H264"},
+            {"mpeg-2 video","H262"},
             {"on2 vp6","on2_vp6"},
             {"sorenson h263","sorenson_H263"},
         };
@@ -109,7 +127,7 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (this != Empty)
+                if (Height > 0 && Width > 0)
                     return string.Format("{0}x{1}", this.Width, this.Height);
                 else
                     return "";
@@ -187,56 +205,56 @@ namespace MediaBrowser.Library.Entities
         #region Properties Audio
 
         protected static Dictionary<string, string> AudioImageNames = new Dictionary<string, string>() {
-            {"mpeg audio layer 1","codec_MpegAudio"},
-            {"mpeg audio layer 2","codec_MpegAudio"},
-            {"mpeg audio layer 3","codec_Mp3"},
-            {"e-ac-3 5","codec_DDPlus_50"},
-            {"e-ac-3 6","codec_DDPlus_51"},
-            {"e-ac-3 7","codec_DDPlus_61"},
-            {"e-ac-3 8","codec_DDPlus_71"},
-            {"ac-3 truehd 5","codec_DDTrueHD_50"},
-            {"ac-3 truehd 6","codec_DDTrueHD_51"},
-            {"ac-3 truehd 7","codec_DDTrueHD_61"},
-            {"ac-3 truehd 8","codec_DDTrueHD_71"},
-            {"ac-3 1","codec_DD_10"},
-            {"ac-3 2","codec_DD_20"},
-            {"ac-3 3","codec_DD_30"},
-            {"ac-3 6","codec_DD_51"},
-            {"e-ac-3","codec_DDPlus"},
-            {"ac-3 truehd","codec_DDPlus"},
-            {"ac-3","codec_Ac3"},
-            {"dts 1","codec_DTS_DS_10"},
-            {"dts 2","codec_DTS_DS_20"},
-            {"dts 6","codec_DTS_DS_51"},
-            {"dts 96/24 6","codec_DTS_9624_51"},
-            {"dts es 6","codec_DTS_ES_51"},
-            {"dts es 7","codec_DTS_ES_61"},
-            {"dts hra 6","codec_DTS_HD_HRA_51"},
-            {"dts hra 7","codec_DTS_HD_HRA_61"},
-            {"dts hra 8","codec_DTS_HD_HRA_71"},
-            {"dts ma 3","codec_DTS_HD_MA_30"},
-            {"dts ma 4","codec_DTS_HD_MA_40"},
-            {"dts ma 5","codec_DTS_HD_MA_50"},
-            {"dts ma 6","codec_DTS_HD_MA_51"},
-            {"dts ma 7","codec_DTS_HD_MA_61"},
-            {"dts ma 8","codec_DTS_HD_MA_71"},
-            {"dts 96/24","codec_DTS_9624"},
-            {"dts es","codec_DTS_ES"},
-            {"dts hra","codec_DTS_HD_HRA"},
-            {"dts ma","codec_DTS_HD_MA"},
-            {"dts","codec_Dts"},
-            {"wma","codec_Wma"},
-            {"wma2","codec_Wma"},
-            {"wma3","codec_Wma"},
-            {"aac","codec_Aac"},
-            {"flac","codec_Flac"},
-            {"vorbis","codec_Vorbis"}
+            {"mpeg audio layer 1","MpegAudio"},
+            {"mpeg audio layer 2","MpegAudio"},
+            {"mpeg audio layer 3","Mp3"},
+            {"e-ac-3 5","DDPlus_50"},
+            {"e-ac-3 6","DDPlus_51"},
+            {"e-ac-3 7","DDPlus_61"},
+            {"e-ac-3 8","DDPlus_71"},
+            {"ac-3 truehd 5","DDTrueHD_50"},
+            {"ac-3 truehd 6","DDTrueHD_51"},
+            {"ac-3 truehd 7","DDTrueHD_61"},
+            {"ac-3 truehd 8","DDTrueHD_71"},
+            {"ac-3 1","DD_10"},
+            {"ac-3 2","DD_20"},
+            {"ac-3 3","DD_30"},
+            {"ac-3 6","DD_51"},
+            {"e-ac-3","DDPlus"},
+            {"ac-3 truehd","DDTrueHD"},
+            {"ac-3","Ac3"},
+            {"dts 1","DTS_DS_10"},
+            {"dts 2","DTS_DS_20"},
+            {"dts 6","DTS_DS_51"},
+            {"dts 96/24 6","DTS_9624_51"},
+            {"dts es 6","DTS_ES_51"},
+            {"dts es 7","DTS_ES_61"},
+            {"dts hra 6","DTS_HD_HRA_51"},
+            {"dts hra 7","DTS_HD_HRA_61"},
+            {"dts hra 8","DTS_HD_HRA_71"},
+            {"dts ma 3","DTS_HD_MA_30"},
+            {"dts ma 4","DTS_HD_MA_40"},
+            {"dts ma 5","DTS_HD_MA_50"},
+            {"dts ma 6","DTS_HD_MA_51"},
+            {"dts ma 7","DTS_HD_MA_61"},
+            {"dts ma 8","DTS_HD_MA_71"},
+            {"dts 96/24","DTS_9624"},
+            {"dts es","DTS_ES"},
+            {"dts hra","DTS_HD_HRA"},
+            {"dts ma","DTS_HD_MA"},
+            {"dts","Dts"},
+            {"wma","Wma"},
+            {"wma2","Wma"},
+            {"wma3","Wma"},
+            {"aac","Aac"},
+            {"flac","Flac"},
+            {"vorbis","Vorbis"}
         };
         protected string AudioImageName {
             get {
-                if (AudioImageNames.ContainsKey(AudioCombinedString.ToLower())) return AudioImageNames[AudioCombinedString.ToLower()];
-                if (AudioImageNames.ContainsKey(AudioProfileString.ToLower())) return AudioImageNames[AudioProfileString.ToLower()];
-                return AudioProfileString.ToLower(); //not found...
+                if (AudioImageNames.ContainsKey(AudioCombinedString.ToLower())) return "codec_"+AudioImageNames[AudioCombinedString.ToLower()];
+                if (AudioImageNames.ContainsKey(AudioProfileString.ToLower())) return "codec_"+AudioImageNames[AudioProfileString.ToLower()];
+                return "codec_"+AudioProfileString.ToLower(); //not found...
             }
         }
 
@@ -281,7 +299,7 @@ namespace MediaBrowser.Library.Entities
             {
                 switch (this.AudioFormat.ToLower())
                 {
-                    case "ac3":
+                    case "ac-3":
                     case "dts":
                     case "mpeg audio":
                         {

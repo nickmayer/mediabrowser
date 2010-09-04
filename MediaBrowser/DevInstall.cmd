@@ -1,9 +1,9 @@
 @ECHO OFF
 ECHO.
-ECHO.Usage: DevInstall.cmd [/u][/debug]
+ECHO Usage: DevInstall.cmd [/u][/debug]
 ECHO.
-ECHO.This script requires Administrative privileges to run properly.
-ECHO.Start > All Programs > Accessories> Right-Click Command Prompt > Select 'Run As Administrator'
+ECHO This script requires Administrative privileges to run properly.
+ECHO Start > All Programs > Accessories> Right-Click Command Prompt > Select 'Run As Administrator'
 ECHO.
  
 set CompanyName=MediaBrowser

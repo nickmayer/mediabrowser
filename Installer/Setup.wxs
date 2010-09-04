@@ -96,9 +96,9 @@
         <!-- Create the Help & Support startmenu subfolder-->
         <CreateFolder Directory="ApplicationHelpAndSupportFolder"/>
         <!-- Create the default startmenu shortcuts-->
-        <Shortcut Id="ConfigurationWizard"
-                  Name="Media Browser Configuration Wizard"
-                  Description="Media Browser Configuration Wizard"
+        <Shortcut Id="Configurator"
+                  Name="Media Browser Configurator"
+                  Description="Media Browser Configurator"
                   Target="[APPROOTDIRECTORY]Configurator.exe"
                   WorkingDirectory="APPROOTDIRECTORY"/>
         <util:InternetShortcut Id="MakeDonation"

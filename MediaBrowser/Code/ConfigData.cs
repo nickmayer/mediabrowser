@@ -61,6 +61,7 @@ namespace MediaBrowser
         public bool EnableAlphanumericSorting = true;
         public bool EnableListViewTicks = false;
         public Colors ListViewWatchedColor = Colors.LightSkyBlue;
+        public bool EnableListViewWatchedColor = true;
         public bool ShowUnwatchedCount = true;
         public bool ShowWatchedTickOnFolders = true;
         public bool ShowWatchTickInPosterView = true;
@@ -132,6 +133,8 @@ namespace MediaBrowser
 
         public bool RandomizeBackdrops = false;
         public bool RotateBackdrops = true;
+
+        public bool ProcessBanners = false; //hook to allow future processing of banners
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
