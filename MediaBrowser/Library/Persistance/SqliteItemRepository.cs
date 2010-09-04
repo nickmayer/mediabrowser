@@ -136,7 +136,12 @@ namespace MediaBrowser.Library.Persistance {
 
         private SqliteItemRepository(string dbPath) {
 
-            connection = new SQLiteConnection("Data Source=" + dbPath);
+            SQLiteConnectionStringBuilder connectionstr = new SQLiteConnectionStringBuilder();
+            connectionstr.PageSize = 4096;
+            connectionstr.CacheSize = 4096;
+            connectionstr.SyncMode = SynchronizationModes.Normal;
+            connectionstr.DataSource = dbPath;
+            connection = new SQLiteConnection(connectionstr.ConnectionString);
             connection.Open();
 
             itemRepo = new ItemRepository();
