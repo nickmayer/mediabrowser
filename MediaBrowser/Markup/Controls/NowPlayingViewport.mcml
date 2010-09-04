@@ -58,7 +58,7 @@
           <Panel Layout="HorizontalFlow" Margins="40,0,0,40" Visible="false" Name="TextNPV">
             <Children>
               <Text  Margins="0,5,0,0" Content="now playing: " Font="font://f:CP_ButtonFont"  Color="color://s:FontColorDark"/>
-              <sb:SimpleButton LeftAlign="true" Name="ShowName" Text="This is the show" Color="color://s:FontColorMedium" Command="[FullScreenCmd]"  Size="800,50" Font="font://f:CP_ButtonFont"/>
+              <sb:SimpleButton LeftAlign="true" Name="ShowName" Text="Video" Color="color://s:FontColorMedium" Command="[FullScreenCmd]"  Size="800,50" Font="font://f:CP_ButtonFont"/>
             </Children>
           </Panel>
         </Children>

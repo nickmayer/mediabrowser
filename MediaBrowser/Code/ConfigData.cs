@@ -34,7 +34,10 @@ namespace MediaBrowser
 
         [Comment(@"If set to true when sorting by unwatched the unwatched folders will be sorted by name")]
         public bool SortUnwatchedByName = false;
-        
+
+        [Comment("Show now playing for default mode as text")]
+        public bool ShowNowPlayingInText = false;
+
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;

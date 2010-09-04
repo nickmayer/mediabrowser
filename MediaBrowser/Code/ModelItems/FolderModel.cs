@@ -757,6 +757,7 @@ namespace MediaBrowser.Library {
                     this.displayPrefs.ShowLabels.PropertyChanged += new PropertyChangedEventHandler(ShowLabels_PropertyChanged);
                     this.displayPrefs.SortOrders.ChosenChanged += new EventHandler(SortOrders_ChosenChanged);
                     this.displayPrefs.IndexByChoice.ChosenChanged += new EventHandler(IndexByChoice_ChosenChanged);
+                    this.displayPrefs.ViewType.ChosenChanged += new EventHandler(ViewType_ChosenChanged);
                     this.displayPrefs.UseBanner.ChosenChanged += new EventHandler(UseBanner_ChosenChanged);
                     SortOrders_ChosenChanged(null, null);
                     ShowLabels_PropertyChanged(null, null);
@@ -769,6 +770,11 @@ namespace MediaBrowser.Library {
                 }
                 FirePropertyChanged("DisplayPrefs");
             }
+        }
+
+        void ViewType_ChosenChanged(object sender, EventArgs e)
+        {
+            var ignore = ShowNowPlayingInText;
         }
 
         void UseBanner_ChosenChanged(object sender, EventArgs e) {
@@ -874,6 +880,28 @@ namespace MediaBrowser.Library {
                 if (z > 1.9F)
                     z = 1.9F; // above this the navigation arrows start going in strange directions!
                 return new Vector3(z, z, 1);
+            }
+        }
+
+
+        BooleanChoice showNowPlayingInText;
+        public BooleanChoice ShowNowPlayingInText
+        {
+            get {
+                if (showNowPlayingInText == null)
+                {
+                    showNowPlayingInText = new BooleanChoice();
+                }
+                var enableText = new string[] {"Detail", "ThumbStrip", "CoverFlow"};
+                if (Kernel.Instance.ConfigData.ShowNowPlayingInText && enableText.Contains(DisplayPrefs.ViewTypeString))
+                {
+                    showNowPlayingInText.Value = true;
+                }
+                else
+                {
+                    showNowPlayingInText.Value = false;
+                }
+                return showNowPlayingInText;
             }
         }
 
