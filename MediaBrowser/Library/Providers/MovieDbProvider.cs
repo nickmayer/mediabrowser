@@ -229,6 +229,16 @@ namespace MediaBrowser.Library.Providers
 
                 movie.MpaaRating = doc.SafeGetString("//movie/certification");
 
+                movie.Studios = null;
+                foreach (XmlNode n in doc.SelectNodes("//studios/studio"))
+                {
+                    if (movie.Studios == null)
+                        movie.Studios = new List<string>();
+                    string name = n.SafeGetString("@name");
+                    if (!string.IsNullOrEmpty(name))
+                        movie.Studios.Add(name);
+                }
+
                 movie.Directors = null;
                 foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Director']/name"))
                 {
