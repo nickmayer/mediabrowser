@@ -251,6 +251,9 @@ namespace MediaBrowser.Library
                     case "16:9":
                         aspectImageName = "177";
                         break;
+                    case "2:1":
+                        aspectImageName = "200";
+                        break;
                     case "4:1":
                         aspectImageName = "400";
                         break;
