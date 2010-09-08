@@ -432,6 +432,17 @@ namespace MediaBrowser.Library {
         {
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea, config));
         }
+
+        //this list tells us which themes have their own icons in resources
+        private List<string> themesWithIcons = new List<string>();
+        public void AddInternalIconTheme(string theme)
+        {
+            if (!themesWithIcons.Contains(theme.ToLower())) themesWithIcons.Add(theme.ToLower());
+        }
+        public bool HasInternalIcons(string theme)
+        {
+            return themesWithIcons.Contains(theme.ToLower());
+        }
         private List<MenuItem> menuOptions = new List<MenuItem>();
         private List<Type> externalPlayableItems = new List<Type>();
         private List<Type> externalPlayableFolders = new List<Type>();

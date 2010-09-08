@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Drawing.Imaging;
 using System.Linq;
 using MediaBrowser.Library.Configuration;
+using MediaBrowser.Library;
 using Microsoft.MediaCenter.UI;
 
 
@@ -456,9 +457,17 @@ namespace MediaBrowser.LibraryManagement
             }
             else
             {
-                //not there, get it from resources in the current theme
-                //cheap way to grab a valid reference to the current themes resources...
-                string resourceRef = Application.CurrentInstance.CurrentTheme.PageArea.Substring(0, Application.CurrentInstance.CurrentTheme.PageArea.LastIndexOf("/") + 1);
+                //not there, get it from resources in default or the current theme
+                string resourceRef;
+                if (Kernel.Instance.HasInternalIcons(Config.Instance.ViewTheme))
+                {
+                    //cheap way to grab a valid reference to the current themes resources...
+                    resourceRef = Application.CurrentInstance.CurrentTheme.PageArea.Substring(0, Application.CurrentInstance.CurrentTheme.PageArea.LastIndexOf("/") + 1);
+                }
+                else
+                {
+                    resourceRef = "resx://MediaBrowser/MediaBrowser.Resources/";
+                }                    
                 return new Image(resourceRef + name);
             }
         }
