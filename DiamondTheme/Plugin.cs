@@ -48,6 +48,7 @@ namespace Diamond
                 {
                     config = new Config();
                     kernel.AddConfigPanel("Diamond Options", "resx://Diamond/Diamond.Resources/ConfigPanel#ConfigPanel", config);
+                    kernel.AddInternalIconTheme("Diamond"); //tells core that we want to use icons in our resource file
                     //Tell the log we loaded.
                     Logger.ReportInfo("Diamond Theme Loaded.");
                     //Thread t = new Thread(new ThreadStart(Display));
