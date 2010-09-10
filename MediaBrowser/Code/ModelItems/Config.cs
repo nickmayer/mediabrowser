@@ -628,7 +628,11 @@ namespace MediaBrowser
             get { return this.data.YahooWeatherUnit; }
             set { if (this.data.YahooWeatherUnit != value) { this.data.YahooWeatherUnit = value; Save(); FirePropertyChanged("YahooWeatherUnit"); } }
         }
-
+        public string SupporterKey
+        {
+            get { return this.data.SupporterKey; }
+            set { if (this.data.SupporterKey != value) { this.data.SupporterKey = value; Save(); FirePropertyChanged("SupporterKey"); } }
+        }
 
         public string PodcastHome
         {
