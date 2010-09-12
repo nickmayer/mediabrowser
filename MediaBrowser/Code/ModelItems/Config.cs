@@ -15,6 +15,7 @@ using Microsoft.MediaCenter;
 using System.Diagnostics;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Plugins;
+using MediaBrowser.Code;
 
 namespace MediaBrowser
 {
@@ -22,6 +23,19 @@ namespace MediaBrowser
     public class Config : IModelItem
     {
         private ConfigData data;
+        private KeyFile _keyFile;
+        private KeyFile keyFile //only want to create this file if we try to access it
+        {
+            get
+            {
+                if (_keyFile == null)
+                {
+                    _keyFile = new KeyFile(Path.Combine(ApplicationPaths.AppConfigPath, "MB.lic"));
+                }
+                return _keyFile;
+            }
+        }
+
 
         public bool AlwaysShowDetailsPage
         {
@@ -630,8 +644,8 @@ namespace MediaBrowser
         }
         public string SupporterKey
         {
-            get { return this.data.SupporterKey; }
-            set { if (this.data.SupporterKey != value) { this.data.SupporterKey = value; Save(); FirePropertyChanged("SupporterKey"); } }
+            get { return this.keyFile.SupporterKey; }
+            set { if (this.keyFile.SupporterKey != value) { this.keyFile.SupporterKey = value; this.keyFile.Save(); FirePropertyChanged("SupporterKey"); } }
         }
 
         public string PodcastHome

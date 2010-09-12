@@ -139,8 +139,6 @@ namespace MediaBrowser
 
         public bool ProcessBanners = false; //hook to allow future processing of banners
 
-        public string SupporterKey = "";
-
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 
