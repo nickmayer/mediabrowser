@@ -429,7 +429,7 @@ namespace MediaBrowser
                 try
                 {
                     //play something innocuous to be sure the file we are trying to delete is not in the now playing window
-                    string DingFile = System.Environment.ExpandEnvironmentVariables("%WinDir%") + "\\Media\\Windows Ding.wav";
+                    string DingFile = System.Environment.ExpandEnvironmentVariables("%WinDir%") + "\\Media\\Windows Recycle.wav";
 
                     // try and run the file regardless whether it exists or not.  Ideally we want it to play but if we can't find it, it will still put MC in a state that allows
                     // us to delete the file we are trying to delete
@@ -453,7 +453,6 @@ namespace MediaBrowser
                 }
                 DeleteNavigationHelper(parent);
                 this.Information.AddInformation(new InfomationItem("Deleted media item: " + name, 2));
-                this.Information.AddInformation(new InfomationItem("Deleted path: " + path, 2));
             }
             else
                 mce.Dialog(CurrentInstance.StringData("NotDelTypeDial"), CurrentInstance.StringData("DelFailedDial"), DialogButtons.Ok, 0, true);
