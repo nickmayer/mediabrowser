@@ -399,6 +399,9 @@ namespace Configurator
             slUnlockPeriod.Value = config.ParentalUnlockPeriod;
             txtPCPIN.Password = config.ParentalPIN;
 
+            //supporter key
+            tbxSupporterKey.Text = Config.Instance.SupporterKey;
+
             //logging
             cbxEnableLogging.IsChecked = config.EnableTraceLogging;
 
@@ -1755,6 +1758,14 @@ sortorder: {2}
             catch
             {
                 MessageBox.Show("We were unable to open the Logs folder:\n\n" + ApplicationPaths.AppLogPath + "\n\nMake sure the actual folder exists on the local disk.");
+            }
+        }
+
+        private void tbxSupporterKey_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //if (sender == tbxSupporterKey)
+            {
+                Config.Instance.SupporterKey = tbxSupporterKey.Text;
             }
         }
     }
