@@ -44,6 +44,8 @@ namespace MediaBrowser.Library {
                 return MediaType.Ogv;
             if (path.EndsWith(".m4v"))
                 return MediaType.M4v;
+            if (path.EndsWith(".asf"))
+                return MediaType.Asf;
             if (path.EndsWith(".3gp"))
                 return MediaType.Threegp;
             if (path.Contains("bdmv"))
