@@ -25,15 +25,15 @@ namespace MediaBrowser.Library {
             if (path.EndsWith(".pls"))
                 return MediaType.PlayList;
             if (path.EndsWith(".ts"))
-                return MediaType.TS;
+                return MediaType.Ts;
             if (path.EndsWith(".m2ts"))
-                return MediaType.M2TS;
+                return MediaType.M2ts;
             if (path.EndsWith(".mts"))
-                return MediaType.M2TS;
+                return MediaType.M2ts;
             if (path.EndsWith(".dvr-ms"))
-                return MediaType.DVRMS;
+                return MediaType.Dvrms;
             if (path.EndsWith(".wtv"))
-                return MediaType.WTV;
+                return MediaType.Wtv;
             if (path.EndsWith(".flv"))
                 return MediaType.Flv;
             if (path.EndsWith(".f4v"))
