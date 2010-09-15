@@ -1734,7 +1734,7 @@ sortorder: {2}
             }
             else
             {
-                MessageBox.Show("Selected Cache Areas Cleared Succcessfully.", "Cache Clear");
+                MessageBox.Show("Selected Cache Areas Cleared Successfully.", "Cache Clear");
             }
         }
 
