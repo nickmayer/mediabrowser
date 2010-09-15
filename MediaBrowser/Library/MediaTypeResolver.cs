@@ -26,6 +26,10 @@ namespace MediaBrowser.Library {
                 return MediaType.PlayList;
             if (path.EndsWith(".ts"))
                 return MediaType.TS;
+            if (path.EndsWith(".m2ts"))
+                return MediaType.M2TS;
+            if (path.EndsWith(".mts"))
+                return MediaType.M2TS;
             if (path.EndsWith(".dvr-ms"))
                 return MediaType.DVRMS;
             if (path.EndsWith(".wtv"))
@@ -40,6 +44,8 @@ namespace MediaBrowser.Library {
                 return MediaType.Ogv;
             if (path.EndsWith(".m4v"))
                 return MediaType.M4v;
+            if (path.EndsWith(".asf"))
+                return MediaType.Asf;
             if (path.EndsWith(".3gp"))
                 return MediaType.Threegp;
             if (path.Contains("bdmv"))
