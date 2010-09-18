@@ -15,6 +15,7 @@ namespace MediaBrowser.Library.UI
         protected string pageArea = "resx://MediaBrowser/MediaBrowser.Resources/PageDefault#Page";
         protected string detailArea = "resx://MediaBrowser/MediaBrowser.Resources/ViewMovieMinimal#ViewMovieMinimal";
         protected string rootLayout = "resx://MediaBrowser/MediaBrowser.Resources/LayoutRoot#LayoutRoot";
+        protected string status = "Unknown"; //can be used by themes to expire themselves
         protected ModelItem configObject;
 
         public ViewTheme()
@@ -95,6 +96,11 @@ namespace MediaBrowser.Library.UI
         {
             get { return rootLayout; }
             set { rootLayout = value; }
+        }
+        public string Status
+        {
+            get { return status; }
+            set { status = value; }
         }
         public ModelItem Config
         {

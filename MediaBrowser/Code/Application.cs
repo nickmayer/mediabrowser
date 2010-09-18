@@ -151,6 +151,23 @@ namespace MediaBrowser
             }
         }
 
+        public string CurrentThemeStatus
+        {
+            get
+            {
+                return CurrentTheme.Status;
+            }
+
+            set
+            {
+                if (CurrentTheme.Status != value)
+                {
+                    CurrentTheme.Status = value;
+                    FirePropertyChanged("CurrentThemeStatus");
+                }
+            }
+        }
+
         private Item currentItem;
 
         public Item CurrentItem
