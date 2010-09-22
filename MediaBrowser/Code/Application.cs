@@ -151,6 +151,28 @@ namespace MediaBrowser
             }
         }
 
+        public bool SetThemeStatus(string theme, string status)
+        {
+            if (AvailableThemes.ContainsKey(theme))
+            {
+                AvailableThemes[theme].Status = status;
+                FirePropertyChanged("CurrentThemeStatus");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public string CurrentThemeStatus
+        {
+            get
+            {
+                return CurrentTheme.Status;
+            }
+        }
+
         private Item currentItem;
 
         public Item CurrentItem
@@ -590,6 +612,7 @@ namespace MediaBrowser
                     break;
                 case "2.2.6.0":
                 case "2.2.7.0":
+                case "2.2.8.0":
                     //set validationDelay to "0" - user can change it back if they wish or are directed to
                     Config.ValidationDelay = 0;
                     break;
