@@ -583,6 +583,7 @@
     </Locals>
 
     <Rules>
+      <Binding Source="[Item]" Target="[MediaInfoPanel.Item]"  />
       <Binding Source="[Item.ImdbRatingString]" Target="[IMDBRating.Content]" />
       <Binding Source="[Item.ImdbRating]" Target="[StarRating.Value]" />
       <Binding Source="[Item.MpaaRating]" Target="[MPAARating.Value]" />
