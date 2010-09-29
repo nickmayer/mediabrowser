@@ -32,19 +32,23 @@ namespace MediaBrowser.Library.Providers.TVDB
 
         public override void Fetch()
         {
+            folderDate = new FileInfo(Item.Path).LastWriteTimeUtc;
             //all we need to do here is fill in season number
             Season season = Item as Season;
 
             if (season != null)
             {
-                string seasonNum = TVUtils.SeasonNumberFromFolderName(Item.Path);
-                int seasonNumber = Int32.Parse(seasonNum);
-
-                season.SeasonNumber = seasonNumber.ToString();
-
-                if (season.SeasonNumber == "0")
+                if (season.SeasonNumber == null)
                 {
-                    season.Name = "Specials";
+                    string seasonNum = TVUtils.SeasonNumberFromFolderName(Item.Path);
+                    int seasonNumber = Int32.Parse(seasonNum);
+
+                    season.SeasonNumber = seasonNumber.ToString();
+
+                    if (season.SeasonNumber == "0")
+                    {
+                        season.Name = "Specials";
+                    }
                 }
             }
         }
