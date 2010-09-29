@@ -613,6 +613,7 @@ namespace MediaBrowser
                 case "2.2.6.0":
                 case "2.2.7.0":
                 case "2.2.8.0":
+                case "2.2.9.0":
                     //set validationDelay to "0" - user can change it back if they wish or are directed to
                     Config.ValidationDelay = 0;
                     break;
