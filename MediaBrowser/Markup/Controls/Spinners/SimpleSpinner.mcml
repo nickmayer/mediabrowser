@@ -32,12 +32,18 @@
       <Binding Source="[Model.HasPreviousValue]" Target="[Previous.Available]"/>
 
       <Condition Source="[Model.HasPreviousValue]" ConditionOp="Equals" SourceValue="false">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true" />
+        </Conditions>
         <Actions>
           <Invoke Target="[btnNext.NavigateInto]" />
         </Actions>
       </Condition>
 
       <Condition Source="[Model.HasNextValue]" ConditionOp="Equals" SourceValue="false">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true" />
+        </Conditions>
         <Actions>
           <Invoke Target="[btnPrevious.NavigateInto]" />
         </Actions>
