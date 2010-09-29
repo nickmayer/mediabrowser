@@ -71,6 +71,30 @@ namespace WebProxy {
             this.cacheDir = cacheDir;
         }
 
+        public bool AlreadyRunning()
+        {
+            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                try
+                {
+                    socket.Connect(IPAddress.Loopback, port);
+                    socket.Disconnect(true);
+                    Logger.ReportInfo("MBTrailer Proxy already running on port "+port);
+                    return true;
+                }
+                catch (SocketException ex)
+                {
+                    if (ex.SocketErrorCode == SocketError.ConnectionRefused)
+                    {
+                        //not there
+                        return false;
+                    }
+                    // some other problem...
+                    return false;
+                }
+            }
+        }
+
 
         public void Start() {
             Debug.Assert(listenerThread == null);

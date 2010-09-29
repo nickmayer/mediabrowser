@@ -45,7 +45,19 @@ namespace MBTrailers {
                     }
                 }
 
-                proxy = new HttpProxy(cachePath, ProxyPort);
+                int port = ProxyPort;
+                proxy = new HttpProxy(cachePath, port);
+                while (proxy.AlreadyRunning() && port < ProxyPort + 10)
+                {
+                    //try a different port if already running
+                    port++;
+                    proxy = new HttpProxy(cachePath, port);
+                }
+                if (port >= ProxyPort + 10)
+                {
+                    Logger.ReportError("MBTrailers failed to start proxy server.");
+                    return;
+                }
                 proxy.Start();
 
                 trailers.RefreshProxy();
