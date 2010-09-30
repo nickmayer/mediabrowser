@@ -56,7 +56,7 @@ namespace MediaBrowser.Util
         const int UPDATE_CHECK_INTERVAL_DAYS = 2;
 
         // This should be replaced with the real location of the version info XML.
-        private const string infoURL = "http://www.mediabrowser.tv/mbinfo?key={0}";
+        private const string infoURL = "http://www.mediabrowser.tv/version-info.xml?key={0}";
 
         // Blocking call to check the XML file up in the cloud to see if we need an update.
         // This is really meant to be called as its own thread.
