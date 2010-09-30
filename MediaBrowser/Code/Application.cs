@@ -528,11 +528,11 @@ namespace MediaBrowser
                     if (Config.EnableUpdates)
                     {
                         Updater update = new Updater(this);
-                        //MB updater doesn't work and throws an error in the log - commenting out for now -ebr
-                        //Async.Queue(Async.STARTUP_QUEUE, () =>
-                        //{
-                        //    update.CheckForUpdate();
-                        //}, 40000);
+                        
+                        Async.Queue(Async.STARTUP_QUEUE, () =>
+                        {
+                            update.CheckForUpdate();
+                        }, 40000);
                         Async.Queue(Async.STARTUP_QUEUE, () =>
                         {
                             PluginUpdatesAvailable = update.PluginUpdatesAvailable();

@@ -53,17 +53,30 @@ namespace MediaBrowser.Util
         private string localFile;
         private System.Version newVersion;
 
+        const int UPDATE_CHECK_INTERVAL_DAYS = 2;
+
         // This should be replaced with the real location of the version info XML.
-        private const string infoURL = "http://www.mediabrowser.tv/mbinfo.xml";
+        private const string infoURL = "http://www.mediabrowser.tv/mbinfo?key={0}";
 
         // Blocking call to check the XML file up in the cloud to see if we need an update.
         // This is really meant to be called as its own thread.
         public void CheckForUpdate()
         {
+            if (string.IsNullOrEmpty(Config.Instance.SupporterKey))
+            {
+                return;
+            }
+
+            if ((DateTime.Now - Kernel.Instance.ConfigData.LastAutoUpdateCheck).TotalDays > 2)
+            {
+                Kernel.Instance.ConfigData.LastAutoUpdateCheck = DateTime.Now;
+                Kernel.Instance.ConfigData.Save();
+            }
+
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(new XmlTextReader(infoURL));
+                doc.Load(new XmlTextReader(string.Format(infoURL, Config.Instance.SupporterKey)));
 
                 XmlNode node;
 

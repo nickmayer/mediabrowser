@@ -38,6 +38,9 @@ namespace MediaBrowser
         [Comment("Show now playing for default mode as text")]
         public bool ShowNowPlayingInText = false;
 
+        [Comment("The date auto update last checked for a new version")]
+        public DateTime LastAutoUpdateCheck = DateTime.Today.AddYears(-1);
+
         public bool AlwaysShowDetailsPage = true;
         public bool EnableVistaStopPlayStopHack = true;
         public bool EnableRootPage = true;
