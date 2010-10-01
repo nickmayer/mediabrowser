@@ -125,7 +125,7 @@ namespace MediaBrowser.Library {
                 string runtime = "";
                 var show = baseItem as IShow;
                 if (show != null) {
-                    runtime = show.RunningTime==null ? this.MediaInfo.RuntimeString : show.RunningTime.ToString() + " mins";
+                    runtime = show.RunningTime==null ? this.MediaInfo.RuntimeString : show.RunningTime.ToString() + " " + Kernel.Instance.StringData.GetString("MinutesStr");
                 }
                 return runtime;
             }
