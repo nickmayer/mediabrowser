@@ -93,5 +93,13 @@ namespace MBTrailers {
             }
         }
 
+        public override Version TestedMBVersion
+        {
+            get
+            {
+                return new Version("2.2.9.0") ;
+            }
+        }
+
     }
 }
