@@ -41,7 +41,6 @@ namespace MBTrailers {
             }
         }
 
-        private string _name;
         public override string Name {
             get {
                 return Plugin.PluginOptions.Instance.MenuName;

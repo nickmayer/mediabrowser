@@ -13,7 +13,7 @@ namespace MBTrailers {
     public class Plugin : BasePlugin {
 
         internal const string PluginName = "Media Browser Trailers";
-        internal const string PluginDescription = "HD Trailers for MediaBrowser.";
+        internal const string PluginDescription = "HD Trailers for MediaBrowser.\n\nUnrestricted version is available to supporters.";
 
         internal const int ProxyPort = 8752;
 
