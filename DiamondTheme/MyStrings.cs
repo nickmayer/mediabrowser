@@ -10,6 +10,7 @@ using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Localization;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Persistance;
 
 //***************************************************************************************************
 //  This class is used to extend the string data used by MB.  It is localizable.
@@ -22,7 +23,7 @@ namespace Diamond
     [Serializable]
     public class MyStrings : LocalizedStringData    
     {
-        private string version = "0.3.0.6"; //this is used to see if we have changed and need to re-save
+        const string VERSION = "0.3.0.7"; //this is used to see if we have changed and need to re-save
 
         //these are our strings keyed by property name
         public string DiamondOptionsDesc = "Options for the Diamond Theme.";
@@ -43,10 +44,10 @@ namespace Diamond
         public string DiamondOptions = "Diamond Theme Options";
         public string MediaDetailsinMiniMode = "Media Details in Mini Mode";
         public string DisplayEndTime = "Display End Time";
-        public string DisplayInfoboxinCoverflowViews = "Display Glass Overlay";
-        public string DisplayInfoboxinThumbstripViews = "Display Infobox in Coverflow Views";
-        public string DisplayInfoboxinPosterViews = "Display Infobox in Thumbstrip Views";
-        public string DisplayGlassOverlay = "Display Infobox in Poster Views";
+        public string DisplayInfoboxinCoverflowViews = "Display Infobox in Coverflow Views";
+        public string DisplayInfoboxinThumbstripViews = "Display Infobox in Thumbstrip Views";
+        public string DisplayInfoboxinPosterViews = "Display Infobox in Poster Views";
+        public string DisplayGlassOverlay = "Display Glass Overlay";
         public string DisplayWeather = "Display Weather";
         public string ExtenderLayoutEnhancements = "Extender Layout Enhancements";
         public string EHSGradientOpacity = "EHS Gradient Opacity";
@@ -99,39 +100,22 @@ namespace Diamond
             this.FileName = file;
         }
 
-        MyStrings() //for the serializer
+        public MyStrings() //for the serializer
         {
         }
 
         public static MyStrings FromFile(string file)
         {
-            MyStrings s;
+            MyStrings s = new MyStrings();
+            XmlSettings<MyStrings> settings = XmlSettings<MyStrings>.Bind(s, file);
 
-            if (!File.Exists(file))
-            {
-                s = new MyStrings(file);
-                s.Save();
-            }
             Logger.ReportInfo("Using String Data from " + file);
-            XmlSerializer xs = new XmlSerializer(typeof(MyStrings));
-            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+
+            if (VERSION != s.Version)
             {
-                try
-                {
-                    s = (MyStrings)xs.Deserialize(fs);
-                }
-                catch
-                {
-                    //file is mucked up - just re-create it
-                    s = new MyStrings(file);
-                }
-            }
-            if (s.Version != s.version)
-            {
-                //new version - save over old file
-                s = new MyStrings(file);
-                s.Version = s.version;
-                s.Save();
+                File.Delete(file);
+                s = new MyStrings();
+                settings = XmlSettings<MyStrings>.Bind(s, file);
             }
             return s;
         }
