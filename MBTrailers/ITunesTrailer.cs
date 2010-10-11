@@ -13,7 +13,31 @@ namespace MBTrailers {
         public string RealPath { get; set; }
 
         public override bool RefreshMetadata(MetadataRefreshOptions options) {
-            // do nothing, metadata is assigned external to the provider framework
+            // just refresh images - metadata is assigned external to the provider framework
+            if ((options & MetadataRefreshOptions.Force) == MetadataRefreshOptions.Force)
+            {
+                var images = new List<MediaBrowser.Library.ImageManagement.LibraryImage>();
+                images.Add(PrimaryImage);
+                images.Add(SecondaryImage);
+                images.Add(BannerImage);
+                images.AddRange(BackdropImages);
+
+                foreach (var image in images)
+                {
+                    try
+                    {
+                        if (image != null)
+                        {
+                            image.ClearLocalImages();
+                            MediaBrowser.Library.Factories.LibraryImageFactory.Instance.ClearCache(image.Path);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MediaBrowser.Library.Logging.Logger.ReportException("Failed to clear local image (its probably in use)", ex);
+                    }
+                }
+            }
             return false;
         }
     }
