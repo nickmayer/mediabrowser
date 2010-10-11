@@ -237,6 +237,7 @@ namespace WebProxy {
                 bool gotHeader = false;
                 int contentLength = -1;
                 int totalRead = 0;
+                int headerLength = 0;
 
                 while (bytesRead > 0) {
 
@@ -246,7 +247,7 @@ namespace WebProxy {
                         string headerString = header.ToString();
                         if (headerString.Contains("\r\n\r\n"))
                         {
-                            Console.WriteLine(headerString);
+                            Trace.WriteLine(headerString);
                             gotHeader = true;
                             foreach (var line in headerString.Split('\n'))
                             {
@@ -256,7 +257,9 @@ namespace WebProxy {
                                      contentLength = int.Parse(line.Substring(16).Trim());
                                 }
                             }
-                            Console.WriteLine(contentLength);
+                            Trace.WriteLine(contentLength);
+
+                            headerLength = headerString.IndexOf("\r\n\r\n") + 4;
                         }
                     }
                     
@@ -280,7 +283,11 @@ namespace WebProxy {
                     var amountToRead = buffer.Length; 
                     if (contentLength > 0)
                     {
-                        amountToRead = Math.Min(buffer.Length, contentLength - totalRead);
+                        amountToRead = Math.Min(buffer.Length, (contentLength + headerLength) - totalRead);
+                    }
+                    if (amountToRead == 0)
+                    {
+                        break;
                     }
                     bytesRead = proxyStream.Read(buffer, 0, amountToRead);
                 }
