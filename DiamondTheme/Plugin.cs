@@ -118,7 +118,7 @@ namespace Diamond
         {
             get
             {
-                return new System.Version(2,2,5,0);
+                return new System.Version(2,2,8,0);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Diamond
         {
             get
             {
-                return new System.Version(2, 2, 5, 0);
+                return new System.Version(2, 2, 8, 0);
             }
         }
 

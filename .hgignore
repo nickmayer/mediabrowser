@@ -22,3 +22,4 @@ glob:MediaBrowser/Select
 glob:MediaBrowser.5.0.ReSharper.user
 glob:_ReSharper.MediaBrowser/*
 glob:*.*.orig
+glob:DiamondTheme/_ReSharper.Diamond/*
