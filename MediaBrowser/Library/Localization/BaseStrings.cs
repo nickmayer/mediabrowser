@@ -276,6 +276,8 @@ namespace MediaBrowser.Library.Localization
         public string Restartstr = "Restart";
         public string Errorstr = "Error";
         public string Playstr = "Play";
+        public string MinutesStr = "mins"; //Minutes abbreviation
+        public string KBsStr = "Kbps";  //Kilobytes per second
 
         //Profiler
         public string WelcomeProf = "Welcome to Media Browser";
