@@ -16,6 +16,9 @@ namespace MBTrailers
         [Label("Use HD Trailers")]
         public bool HDTrailers = false;
 
+        //[Label("Sort Value")]
+        //public string SortOrder = "";
+
         [Label("Cache Directory")] 
         public string CacheDir = "";
 
