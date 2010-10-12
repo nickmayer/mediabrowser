@@ -78,7 +78,7 @@ namespace WebProxy {
                 try
                 {
                     socket.Connect(IPAddress.Loopback, port);
-                    socket.Disconnect(true);
+                    // don't disconnect ... its blocking, socket dispose will take care of it
                     Logger.ReportInfo("MBTrailer Proxy already running on port "+port);
                     return true;
                 }

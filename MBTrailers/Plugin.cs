@@ -47,7 +47,7 @@ namespace MBTrailers {
 
                 int port = ProxyPort;
                 proxy = new HttpProxy(cachePath, port);
-                while (proxy.AlreadyRunning() && port < ProxyPort + 10)
+                while (proxy.AlreadyRunning() && port < ProxyPort + 50)
                 {
                     //try a different port if already running
                     port++;
