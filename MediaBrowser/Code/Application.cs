@@ -705,7 +705,7 @@ namespace MediaBrowser
         public bool ShowNowPlaying
         {
             get { return this.showNowPlaying && (MediaCenterEnvironment.MediaExperience != null); }
-            set { }
+            set { if (showNowPlaying != value) { showNowPlaying = value; FirePropertyChanged("ShowNowPlaying"); } }
         }
 
 

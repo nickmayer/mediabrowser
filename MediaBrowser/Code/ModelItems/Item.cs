@@ -413,7 +413,7 @@ namespace MediaBrowser.Library
                             }
                             else
                             {
-                                runTimeStr = "mins"; //have watched time but not running time so tack on 'mins'
+                                runTimeStr = Kernel.Instance.StringData.GetString("MinutesStr"); //have watched time but not running time so tack on 'mins'
                             }
                         }
                         return Kernel.Instance.StringData.GetString("WatchedEHS") + watchTimeStr + runTimeStr + " " +
