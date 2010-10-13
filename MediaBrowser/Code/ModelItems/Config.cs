@@ -742,6 +742,24 @@ namespace MediaBrowser
             set { if (this.data.LastFullRefresh != value) { this.data.LastFullRefresh = value; Save(); FirePropertyChanged("LastFullRefresh"); } }
         }
 
+        public int MinResumeDuration
+        {
+            get { return this.data.MinResumeDuration; }
+            set { if (this.data.MinResumeDuration != value) { this.data.MinResumeDuration = value; Save(); FirePropertyChanged("MinResumeDuration"); } }
+        }
+
+        public int MinResumePct
+        {
+            get { return this.data.MinResumePct; }
+            set { if (this.data.MinResumePct != value) { this.data.MinResumePct = value; Save(); FirePropertyChanged("MinResumePct"); } }
+        }
+
+        public int MaxResumePct
+        {
+            get { return this.data.MaxResumePct; }
+            set { if (this.data.MaxResumePct != value) { this.data.MaxResumePct = value; Save(); FirePropertyChanged("MaxResumePct"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;

@@ -354,10 +354,6 @@ namespace MediaBrowser.Library
                     this.PlayableItem.QueueItem = queue;
                     this.PlayableItem.Play(this.PlayState, resume);
                     if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
-                    Async.Queue("Resume state updater", () =>
-                    {
-                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
-                    }, 10 * 1000);
                 }
             }
             catch (Exception)
@@ -365,6 +361,11 @@ namespace MediaBrowser.Library
                 MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
                 ev.Dialog(Application.CurrentInstance.StringData("ContentErrorDial") + "\n" + baseItem.Path, Application.CurrentInstance.StringData("ContentErrorCapDial"), DialogButtons.Ok, 60, true);
             }
+        }
+
+        public void UpdateResume()
+        {
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
         }
 
         private void Play(bool resume)

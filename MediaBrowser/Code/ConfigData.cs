@@ -142,6 +142,10 @@ namespace MediaBrowser
 
         public bool ProcessBanners = false; //hook to allow future processing of banners
 
+        public int MinResumeDuration = 0; //minimum duration of video to have resume functionality
+        public int MinResumePct = 10; //if this far or less into video, don't resume
+        public int MaxResumePct = 90; //if this far or more into video, don't resume
+
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 

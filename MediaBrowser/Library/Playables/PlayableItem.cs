@@ -161,7 +161,8 @@ namespace MediaBrowser.Library
 
         public virtual bool UpdatePosition(string title, long positionTicks)
         {
-            Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
+            //I wonder if the below is slowing us down during playback - commenting out -ebr
+            //Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
 
             if (PlayState == null)
             {
