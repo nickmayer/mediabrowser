@@ -139,7 +139,14 @@ namespace MediaBrowser.Library
             {
                 if (!HasBackdropImage)
                 {
-                    return null;
+                    if (PhysicalParent != null)
+                    {
+                        return PhysicalParent.BackdropImages;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
 
                 if (backdropImages == null)
