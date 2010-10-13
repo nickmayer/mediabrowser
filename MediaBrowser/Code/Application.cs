@@ -701,7 +701,7 @@ namespace MediaBrowser
             }
         }
 
-        private bool showNowPlaying = true;
+        private bool showNowPlaying = false;
         public bool ShowNowPlaying
         {
             get { return this.showNowPlaying && (MediaCenterEnvironment.MediaExperience != null); }
