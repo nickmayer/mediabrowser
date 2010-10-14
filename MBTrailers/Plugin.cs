@@ -67,6 +67,10 @@ namespace MBTrailers {
                 proxy.Start();
 
                 trailers.RefreshProxy();
+
+                //tell core our types are playable (for menus)
+                kernel.AddExternalPlayableItem(typeof(ITunesTrailer));
+                kernel.AddExternalPlayableFolder(typeof(MBTrailerFolder));
             }
             Logger.ReportInfo("MBTrailers (version "+Version+") Plug-in loaded.");
      
