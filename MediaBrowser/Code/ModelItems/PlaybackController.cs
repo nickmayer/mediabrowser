@@ -408,6 +408,11 @@ namespace MediaBrowser
                     (state == Microsoft.MediaCenter.PlayState.Playing) ||
                     (state == Microsoft.MediaCenter.PlayState.Paused));
                 Application.CurrentInstance.CurrentItem.UpdateResume();
+                if (state == Microsoft.MediaCenter.PlayState.Finished || state == Microsoft.MediaCenter.PlayState.Stopped)
+                {
+                    //we're done - call post-processor
+                    Application.CurrentInstance.RunPostPlayProcesses();
+                }
             }
 
 

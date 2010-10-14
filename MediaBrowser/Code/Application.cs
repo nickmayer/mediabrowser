@@ -1148,6 +1148,25 @@ namespace MediaBrowser
             }
         }
 
+        public bool RunPrePlayProcesses(Item item)
+        {
+            //Logger.ReportInfo("Running pre-play processes");
+            foreach (Kernel.PrePlayProcess process in Kernel.Instance.PrePlayProcesses)
+            {
+                if (!process(item)) return false;
+            }
+            return true;
+        }
+
+        public void RunPostPlayProcesses()
+        {
+            //Logger.ReportInfo("Running post-play processes");
+            foreach (Kernel.PostPlayProcess process in Kernel.Instance.PostPlayProcesses)
+            {
+                process();
+            }
+        }
+
         public void UnlockPC()
         {
             Kernel.Instance.ParentalControls.Unlock();
