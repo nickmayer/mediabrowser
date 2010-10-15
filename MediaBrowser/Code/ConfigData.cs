@@ -172,9 +172,20 @@ namespace MediaBrowser
             }
         }
 
-        // for the serializer
+        // for our reset routine
         public ConfigData ()
 	    {
+            try
+            {
+                File.Delete(ApplicationPaths.ConfigFile);
+            }
+            catch (Exception e)
+            {
+                MediaBrowser.Library.Logging.Logger.ReportException("Unable to delete config file " + ApplicationPaths.ConfigFile, e);
+            }
+            //continue anyway
+            this.file = ApplicationPaths.ConfigFile;
+            this.settings = XmlSettings<ConfigData>.Bind(this, file);
 	    }
 
 
