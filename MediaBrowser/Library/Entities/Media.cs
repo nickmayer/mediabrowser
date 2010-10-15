@@ -12,14 +12,7 @@ namespace MediaBrowser.Library.Entities {
 
         public override bool PlayAction(Item item)
         {
-            //put this on a thread so that we can run it sychronously, but not tie up the UI
-            MediaBrowser.Library.Threading.Async.Queue("Play Action", () =>
-            {
-                if (Application.CurrentInstance.RunPrePlayProcesses(item))
-                {
-                    Application.CurrentInstance.Play(item);
-                }
-            });
+            Application.CurrentInstance.Play(item, false, false); //play with no intros
             return true;
         }
 

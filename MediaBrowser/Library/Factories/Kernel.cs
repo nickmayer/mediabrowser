@@ -471,7 +471,7 @@ namespace MediaBrowser.Library {
             return menuItem;
         }
 
-        public delegate bool PrePlayProcess(Item item);
+        public delegate bool PrePlayProcess(Item item, bool PlayIntros);
         public delegate void PostPlayProcess();
         public List<PrePlayProcess> PrePlayProcesses = new List<PrePlayProcess>();
         public List<PostPlayProcess> PostPlayProcesses = new List<PostPlayProcess>();

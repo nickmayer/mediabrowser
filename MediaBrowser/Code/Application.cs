@@ -1128,6 +1128,11 @@ namespace MediaBrowser
 
         public void Play(Item item, bool queue)
         {
+            Play(item, queue, true);
+        }
+
+        public void Play(Item item, bool queue, bool intros)
+        {
             if (item.IsPlayable || item.IsFolder)
             {
                 currentPlaybackController = item.PlaybackController;
@@ -1135,7 +1140,16 @@ namespace MediaBrowser
                 if (queue)
                     item.Queue();
                 else
-                    item.Play();
+                {
+                    //put this on a thread so that we can run it sychronously, but not tie up the UI
+                    MediaBrowser.Library.Threading.Async.Queue("Play Action", () =>
+                    {
+                        if (Application.CurrentInstance.RunPrePlayProcesses(item, intros))
+                        {
+                            item.Play();
+                        }
+                    });
+                }
             }
         }
 
@@ -1148,12 +1162,12 @@ namespace MediaBrowser
             }
         }
 
-        public bool RunPrePlayProcesses(Item item)
+        public bool RunPrePlayProcesses(Item item, bool intros)
         {
             //Logger.ReportInfo("Running pre-play processes");
             foreach (Kernel.PrePlayProcess process in Kernel.Instance.PrePlayProcesses)
             {
-                if (!process(item)) return false;
+                if (!process(item, intros)) return false;
             }
             return true;
         }
