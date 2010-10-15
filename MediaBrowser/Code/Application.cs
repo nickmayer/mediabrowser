@@ -503,6 +503,7 @@ namespace MediaBrowser
         // Entry point for the app
         public void GoToMenu()
         {
+            Logger.ReportInfo("Media Browser (version " + AppVersion + ") Starting up.");
             try
             {
                 if (Config.IsFirstRun)
