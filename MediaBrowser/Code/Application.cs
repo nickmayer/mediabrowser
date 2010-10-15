@@ -1247,7 +1247,7 @@ namespace MediaBrowser
 
         public string AppVersion
         {
-            get { return Kernel.Instance.Version.ToString(); }
+            get { return Kernel.Instance.VersionStr; }
         }
 
         private Information _information = new Information();

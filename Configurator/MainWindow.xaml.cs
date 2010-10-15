@@ -62,7 +62,7 @@ namespace Configurator
             InitializeComponent();
             config = Kernel.Instance.ConfigData;
             LoadComboBoxes();
-            lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.Version;
+            lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.VersionStr;
 
             //we're hiding the podcast and plugin detail panels until the user selects one
             infoPlayerPanel.Visibility = pluginPanel.Visibility = Visibility.Hidden;
