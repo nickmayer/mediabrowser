@@ -208,7 +208,11 @@ namespace MediaBrowser.Library
             {
                 if (Config.Instance.RandomizeBackdrops)
                 {
-                    backdropImageIndex = randomizer.Next(images.Count);
+                    int lastOne = backdropImageIndex;
+                    while (backdropImageIndex == lastOne)
+                    {
+                        backdropImageIndex = randomizer.Next(images.Count);
+                    }
                 }
                 else
                 {
