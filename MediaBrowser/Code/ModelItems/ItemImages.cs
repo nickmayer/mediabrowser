@@ -196,7 +196,6 @@ namespace MediaBrowser.Library
         {
             if (!Config.Instance.RotateBackdrops) return; // only do this if we want to rotate
 
-            backdropImageIndex++;
             EnsureAllBackdropsAreLoaded();
             var images = new List<AsyncImageLoader>();
             lock (backdropImages)
@@ -217,6 +216,7 @@ namespace MediaBrowser.Library
                 else
                 {
 
+                    backdropImageIndex++;
                     backdropImageIndex = backdropImageIndex % images.Count;
                 }
                 if (images[backdropImageIndex].Image != null)
