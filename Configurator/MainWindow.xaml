@@ -125,7 +125,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-                <TabItem Header="display" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsSelected="True">
+                <TabItem Header="display/playback" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsSelected="True">
                     <Grid>
                         <GroupBox Header="General Display Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,35,0,0" Height="170" Name="groupBox1" Width="270">
                             <Grid>
@@ -174,6 +174,19 @@
                                     <Hyperlink NavigateUri="http://community.mediabrowser.tv/permalinks/1368/how-do-i-show-the-weather-on-supported-themes" RequestNavigate="HandleRequestNavigate">Help?</Hyperlink>
                                 </TextBlock>
                                 
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Resume" Height="100" Margin="301,289.76,0,0" Name="groupBox7" VerticalAlignment="Top" HorizontalAlignment="Left" Width="430">
+                            <Grid>
+                                <Label HorizontalAlignment="Left" Margin="8,9.24,0,36.76" Name="label10" Width="155">Min Resumable Length</Label>
+                                <Label Margin="183,9.24,188,36.76" Name="label11">Start</Label>
+                                <Label HorizontalAlignment="Right" Margin="0,9.24,47,36.76" Name="label12" Width="56.88">End</Label>
+                                <TextBox HorizontalAlignment="Left" Margin="23,34,0,17" Name="tbxMinResumeDuration" Width="33" PreviewTextInput="tbxMinResumeDuration_PreviewTextInput" LostFocus="tbxMinResumeDuration_LostFocus"  ToolTip="Any media less than this length will not save resume status" HorizontalContentAlignment="Right" />
+                                <Label Margin="62,32,0,14.38" Name="label13" HorizontalAlignment="Left" Width="47">Mins</Label>
+                                <Slider Margin="169,35.38,147,17" Name="sldrMinResumePct" Maximum="100" TickFrequency="5" TickPlacement="TopLeft" SmallChange="1" LargeChange="10" ToolTip="If you haven't watched this far into a video, it won't save resume status" ValueChanged="sldrMinResumePct_ValueChanged" />
+                                <Slider HorizontalAlignment="Right" LargeChange="10" Margin="0,35.38,13,17" Maximum="100" Name="sldrMaxResumePct" SmallChange="1" TickFrequency="5" TickPlacement="TopLeft" Width="100" ToolTip="If you have watched this much or more of a video, it will no longer save resume status" ValueChanged="sldrMaxResumePct_ValueChanged" />
+                                <Label HorizontalAlignment="Right" Margin="0,9.24,147,36.76" Name="lblMinResumePct" Width="43" HorizontalContentAlignment="Right">5%</Label>
+                                <Label HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,9.24,13,36.76" Name="lblMaxResumePct" Width="43">5%</Label>
                             </Grid>
                         </GroupBox>
                     </Grid>

@@ -390,6 +390,10 @@ namespace Configurator
             else
                 ddlWeatherUnits.SelectedItem = "Celsius";
 
+            tbxMinResumeDuration.Text = config.MinResumeDuration.ToString();
+            sldrMinResumePct.Value = config.MinResumePct;
+            sldrMaxResumePct.Value = config.MaxResumePct;
+
             //Parental Control
             cbxEnableParentalControl.IsChecked = config.ParentalControlEnabled;
             cbxOptionBlockUnrated.IsChecked = config.ParentalBlockUnrated;
@@ -1793,6 +1797,31 @@ sortorder: {2}
             return valid;
         }
 
+        private void sldrMinResumePct_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblMinResumePct.Content = ((int)e.NewValue).ToString() + "%";
+            config.MinResumePct = (int)e.NewValue;
+            SaveConfig();
+        }
+
+        private void sldrMaxResumePct_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblMaxResumePct.Content = ((int)e.NewValue).ToString() + "%";
+            config.MaxResumePct = (int)e.NewValue;
+            SaveConfig();
+        }
+
+        private void tbxMinResumeDuration_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Int32.TryParse(tbxMinResumeDuration.Text, out config.MinResumeDuration);
+            SaveConfig();
+        }
+
+        private void tbxMinResumeDuration_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Char.IsDigit(e.Text[0]);
+            base.OnPreviewTextInput(e);
+        }
     }
 
     #region FormatParser Class
