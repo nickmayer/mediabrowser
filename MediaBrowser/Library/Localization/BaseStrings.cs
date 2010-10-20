@@ -179,7 +179,7 @@ namespace MediaBrowser.Library.Localization
         public string PlayDetail = "Play";
         public string ResumeDetail = "Resume";
         public string RefreshDetail = "Refresh";
-        public string PlayTrailersDetail = "Play Trailer";
+        public string PlayTrailersDetail = "Trailer";
         public string CacheDetail = "Cache 2 xml";
         public string DeleteDetail = "Delete";
         public string IMDBRatingDetail = "IMDB Rating";
