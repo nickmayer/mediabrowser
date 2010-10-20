@@ -1278,6 +1278,13 @@ namespace Diamond {
             }
         }
         
+        internal static System.Drawing.Bitmap dia_stripviewPanel {
+            get {
+                object obj = ResourceManager.GetObject("dia_stripviewPanel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap dia_timePanel {
             get {
                 object obj = ResourceManager.GetObject("dia_timePanel", resourceCulture);
@@ -1733,6 +1740,13 @@ namespace Diamond {
             }
         }
         
+        internal static byte[] LayoutThumbStripStreamlined {
+            get {
+                object obj = ResourceManager.GetObject("LayoutThumbStripStreamlined", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_3gp {
             get {
                 object obj = ResourceManager.GetObject("media_3gp", resourceCulture);
@@ -2058,6 +2072,20 @@ namespace Diamond {
         internal static byte[] ThumbStripScroller {
             get {
                 object obj = ResourceManager.GetObject("ThumbStripScroller", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] ThumbStripSelector {
+            get {
+                object obj = ResourceManager.GetObject("ThumbStripSelector", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] ThumbStripStreamlinedScroller {
+            get {
+                object obj = ResourceManager.GetObject("ThumbStripStreamlinedScroller", resourceCulture);
                 return ((byte[])(obj));
             }
         }

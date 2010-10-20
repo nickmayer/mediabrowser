@@ -24,6 +24,7 @@ namespace Diamond
         public bool InfoBoxThumbstrip = true;
         public bool InfoBoxCoverflow = true;
         public bool InfoBoxPoster = false;
+        public bool DiamondThumbstripStyle2 = false;
         public bool DisplayGlassOverlay = true;
 
         public bool AutoExtenderLayout = false;
