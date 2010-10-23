@@ -36,6 +36,7 @@
       <AnchorLayoutInput Name="LayoutInfoPanelBg" Left="Parent,0.5,-405" Right="Parent,0.5,405" Top="Parent,0,90" Bottom="Parent, .53,5" />
 
       <Command Name="NavRightCmd"/>
+      <Image Name="Tick" Image="image://i:Tick"/>
     </Locals>
 
     <Rules>
@@ -102,6 +103,7 @@
         </Actions>
       </Changed>
 
+      <Binding Source="[SelectedItem.HaveWatched]" Target="[TickIndicator.Visible]" />
     </Rules>
 
     <Content>
@@ -130,9 +132,18 @@
 
           </ps:ThumbStripStreamlinedScroller>
 
+          <Panel>
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0.5, -10" Right="Parent, 0.5, 10" Top="Parent, 1, -105" Bottom="Parent, 1, -85" />
+            </LayoutInput>
+            <Children>
+              <Graphic Name="TickIndicator" Visible="false" Content="[Tick]" MaintainAspectRatio="true" MaximumSize="20,20" />
+            </Children>
+          </Panel>
+
           <Graphic Content="image://i:DiamondTopPanel" SizingPolicy="SizeToConstraint">
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent, 1,-165" Bottom="Parent,1, -100" Left="Parent,0,25" Right="Parent, 1,-25"/>
+              <AnchorLayoutInput Top="Parent, 1,-155" Bottom="Parent,1, -80" Left="Parent,0,25" Right="Parent, 1,-25"/>
             </LayoutInput>
           </Graphic>
 

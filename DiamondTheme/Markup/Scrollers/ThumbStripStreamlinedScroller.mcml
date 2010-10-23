@@ -213,7 +213,6 @@
       <IntRangedValue Name="NavCount" IntRangedValue="$Required" />
       <!--<cor:String Name="ItemTitle" String="$Required" />-->
     
-      <Color Name="Color" Color="White"/>
       <Font Name="Font" Font="font://f:CV_PosterTopLabelFont" />
     </Properties>
 
@@ -221,6 +220,9 @@
     <Locals>
       <Timer Name="AnimTimer" Interval="[AnimDelay]" Enabled="false" AutoRepeat="false"/>
       <BooleanChoice Name="InFocus" Value="false" />
+      <Color Name="FocusedColor" Color="color://s:D_Focus" />
+      <Color Name="IdleColor" Color="color://s:D_Light" />
+      <Color Name="Color" Color="color://s:D_Normal" />
     </Locals>
     
     <Rules>
@@ -228,13 +230,6 @@
       <Default Target="[Input.KeyInteractive]" Value="true"/>
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       
-      <Condition Source="[ParentItem.SelectedChildIndex]" ConditionOp="Equals" SourceValue="[ItemIndex.SourceValue]">
-        <Actions>
-          <Set Target="[Main.ColorFilter]" Value="White"/>
-          
-        </Actions>
-      </Condition>
-
       <Condition Source="[ParentItem.SelectedChildIndex]" ConditionOp="NotEquals" SourceValue="[ItemIndex.SourceValue]">
         <Actions>
           <Invoke Target="[AnimTimer.Stop]" />
@@ -255,10 +250,19 @@
           <Set Target="[SelectRepeaterIndex.Value]" Value="[ItemIndex.Value]"/>
           <Invoke Target="[AnimTimer.Start]" />
           <Set Target="[Application.CurrentItem]" Value="[Item]" />
-          <Set Target="[LT.Alpha]" Value="1"/>
+          <!--<Set Target="[LT.Alpha]" Value="1"/>
           <Set Target="[GT.Alpha]" Value="1"/>
+          <Set Target="[title.Color]" Value="[Color]"/>-->
         </Actions>
       </Changed>
+
+      <Condition Source="[ParentItem.SelectedChildIndex]" ConditionOp="Equals" SourceValue="[ItemIndex.SourceValue]">
+        <Actions>
+          <Set Target="[LT.Alpha]" Value="1"/>
+          <Set Target="[GT.Alpha]" Value="1"/>
+          <Set Target="[title.Color]" Value="[Color]"/>
+        </Actions>
+      </Condition>
 
       <Changed Source="[AnimTimer.Tick]">
         <Actions>
@@ -283,11 +287,12 @@
           <FlowLayout Orientation="Horizontal" />
         </Layout>
         <Children>
-
-          <Text Name="LT" Color="[Color]" Content="&lt;" Alpha="0" />
-          <Text Name="title" Color="[Color]" Content="[Item.Name]" HorizontalAlignment="Center"
+          <Graphic Name="LT" MinimumSize="25,25" MaximumSize="25,25" Content="image://me:TriangleR"
+                   ColorFilter="[FocusedColor]" Alpha="0" Margins="0,5,0,0" />
+          <Text Name="title" Color="[IdleColor]" Content="[Item.Name]" HorizontalAlignment="Center"
                  MinimumSize="450,40"  MaximumSize="450,40" />
-          <Text Name="GT" Color="[Color]" Content="&gt;" Alpha="0"/>
+          <Graphic Name="GT" MinimumSize="25,25" MaximumSize="25,25" Content="image://me:TriangleL"
+                   ColorFilter="[FocusedColor]" Alpha="0" Margins="0,5,0,0" />
         </Children>
       </Graphic>
       
@@ -302,4 +307,7 @@
     </Content>
   </UI>
 
+
+  <Image Name="TriangleR" Source="resx://Diamond/Diamond.Resources/IconRT" />
+  <Image Name="TriangleL" Source="resx://Diamond/Diamond.Resources/IconPlay" />
 </Mcml>

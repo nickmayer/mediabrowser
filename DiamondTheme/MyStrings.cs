@@ -23,7 +23,7 @@ namespace Diamond
     [Serializable]
     public class MyStrings : LocalizedStringData    
     {
-        const string VERSION = "0.3.1.0"; //this is used to see if we have changed and need to re-save
+        const string VERSION = "0.3.1.1"; //this is used to see if we have changed and need to re-save
 
         //these are our strings keyed by property name
         public string DiamondOptionsDesc = "Options for the Diamond Theme.";
@@ -38,7 +38,6 @@ namespace Diamond
         public string DisplayGlassOverlayDesc = "Display diamond glass overlay on poster images.";
 
         public string DisplayWeatherDesc = "Display weather in diamond theme.";
-        public string DisplayColourMediaInfoIconsDesc = "Replaces monochrome mediainfo icons with colour mediainfo icons.";
         public string ExtenderLayoutEnhancementsDesc = "Use custom layout adjustments for use with extenders.";
 
         //Diamond Config Panel
@@ -47,7 +46,7 @@ namespace Diamond
         public string DisplayEndTime = "Display End Time";
         public string DisplayInfoboxinCoverflowViews = "Display Infobox in Coverflow Views";
         public string DisplayInfoboxinThumbstripViews = "Display Infobox in Thumbstrip Views";
-        public string DiamondThumbstripStyle2 = "Enable Streamlined Thumbstrip Views";
+        public string DiamondThumbstripStyle2 = "Enable Thumbstrip View Style 2";
         public string DisplayInfoboxinPosterViews = "Display Infobox in Poster Views";
         public string DisplayGlassOverlay = "Display Glass Overlay";
         public string DisplayWeather = "Display Weather";

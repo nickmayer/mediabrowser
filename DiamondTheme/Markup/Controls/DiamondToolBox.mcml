@@ -233,7 +233,7 @@
 
                   <Panel Name="DirectedByPanel" Layout="HorizontalFlow" Visible="false">
                     <Children>
-                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="DIRECTOR" Visible="[FullMode]" MinimumSize="[MinSize]"/>
+                      <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#DirectorDetail!cor:String.ToUpper]" Visible="[FullMode]" MinimumSize="[MinSize]"/>
                       <!--<Text Name="Director" Font="font://f:MM_ItemFont" WordWrap="true" MaximumLines="3" Color="[ValueColor]" Content="[Item.DirectorString]"/>-->
                       <Repeater Name="DirectorRepeater" Source="[Item.Directors]" Margins="0,0,0,0" MaximumSize="0,150" >
                         <Layout>
