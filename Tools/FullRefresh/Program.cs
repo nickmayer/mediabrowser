@@ -6,6 +6,8 @@ using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Metadata;
 using System.Diagnostics;
 using MediaBrowser.Library;
+using System.IO;
+using MediaBrowser.Library.Configuration;
 
 namespace FullRefresh
 {
@@ -22,13 +24,18 @@ namespace FullRefresh
 
         static DateTime startTime = DateTime.Now;
 
+        static bool rebuildImageCache = false;
+
         static void Main(string[] args)
         {
             Console.WriteLine(@"The refresh process runs in 3 steps: 
 
 1. Your library is scanned for new files and missing files. They are added/removed with no metadata
 2. Your library is scanned a second time, this time we try to populate metadata for fast providers (ones that do not depend on the Internet, or a large amount of processing power.
-3. Your library is scanned a third time, this time all providers kick in.");
+3. Your library is scanned a third time, this time all providers kick in.
+
+/i on command line will cause image cache to be cleared and re-built during the last step.");
+            if (args.Count() > 0 && args[0].ToLower() == "/i") rebuildImageCache = true;
             FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default);
         }
 
@@ -58,11 +65,45 @@ namespace FullRefresh
                 });
             });
 
+            if (rebuildImageCache)
+            {
+                Console.WriteLine("/i specified - Clearing Image Cache for re-build");
+                try
+                {
+                    Directory.Delete(ApplicationPaths.AppImagePath, true);
+                    Directory.CreateDirectory(ApplicationPaths.AppImagePath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error trying to delete image cache. " + ex.Message);
+                }
+            }
+
+
             var slowMetadataTime = TimeAction(() =>
             {
                 RunActionRecursively("slow metadata", folder, item =>
                 {
                     slowMetadataChanged += item.RefreshMetadata(MetadataRefreshOptions.Default) ? 1 : 0;
+
+                    if (rebuildImageCache)
+                    {
+                        //touch all the images - causing them to be re-cached
+                        Console.WriteLine("Caching images for " + item.Name);
+                        //Console.WriteLine("Primary Image is: " + item.PrimaryImagePath);
+                        string ignore = null;
+                        if (item.PrimaryImage != null)
+                            ignore = item.PrimaryImage.GetLocalImagePath();
+                        if (item.SecondaryImage != null)
+                            ignore = item.SecondaryImage.GetLocalImagePath();
+                        if (item.BackdropImages != null)
+                            foreach (var image in item.BackdropImages)
+                            {
+                                ignore = image.GetLocalImagePath();
+                            }
+                        if (item.BannerImage != null)
+                            ignore = item.BannerImage.GetLocalImagePath();
+                    }
                 });
             });
 
