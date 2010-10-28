@@ -296,6 +296,11 @@ namespace MediaBrowser.Library {
             kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
                 kernel.RootFolder;
 
+            //create our default config panels with localized names
+            kernel.AddConfigPanel(kernel.StringData.GetString("GeneralConfig"), "");
+            kernel.AddConfigPanel(kernel.StringData.GetString("MediaOptionsConfig"), "");
+            kernel.AddConfigPanel(kernel.StringData.GetString("ThemesConfig"), "");
+            kernel.AddConfigPanel(kernel.StringData.GetString("ParentalControlConfig"), "");
             // create a mouseActiveHooker for us to know if the mouse is active on our window (used to handle mouse scrolling control)
             // we will wire it to an event on application
             kernel.MouseActiveHooker = new IsMouseActiveHooker();
@@ -421,8 +426,7 @@ namespace MediaBrowser.Library {
 
             this.ParentalControls.ClearEnteredList();
         }
-        public Dictionary<string, ConfigPanel> ConfigPanels = new Dictionary<string, ConfigPanel>() {
-            {"General",new ConfigPanel("")},{"Media Options",new ConfigPanel("")},{"Themes",new ConfigPanel("")},{"Parental Control",new ConfigPanel("")} }; //defaults are embedded in configpage others will be added to end
+        public Dictionary<string, ConfigPanel> ConfigPanels = new Dictionary<string, ConfigPanel>();
 
         //method for external entities (plug-ins) to add a new config panels
         //panel should be a resx reference to a UI that fits within the config panel area and takes Application and FocusItem as parms

@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0013";
+        const string VERSION = "1.0014";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -83,7 +83,7 @@ namespace MediaBrowser.Library.Localization
         public string ConfigConfig = "Configuration";
         public string VersionConfig = "Version";
         public string MediaOptionsConfig = "Media Options";
-        public string ThemesConfig = "Themes";
+        public string ThemesConfig = "Theme Options";
         public string ParentalControlConfig = "Parental Control";
         public string ContinueConfig = "Continue";
         public string ResetDefaultsConfig = "Reset Defaults";
