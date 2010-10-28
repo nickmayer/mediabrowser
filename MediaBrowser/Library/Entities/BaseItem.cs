@@ -98,23 +98,13 @@ namespace MediaBrowser.Library.Entities {
         public List<LibraryImage> BackdropImages {
             get {
                 var images = new List<LibraryImage>();
-                if (BackdropImagePaths != null)
-                {
-                    foreach (var path in BackdropImagePaths)
-                    {
+                if (BackdropImagePaths != null) {
+                    foreach (var path in BackdropImagePaths) {
                         var image = GetImage(path);
                         if (image != null) images.Add(image);
                     }
                 }
-                else
-                {
-                    if (Parent != null)
-                    {
-                        return Parent.BackdropImages;
-                    }
-                }
                 return images;
-                    
             }
         }
 
