@@ -570,9 +570,15 @@ namespace MediaBrowser.Library
 
         #region Metadata loading and refresh
 
-        public void RefreshMetadata()
+        public virtual void RefreshMetadata()
         {
-            Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshProf") + " " + this.Name);
+            RefreshMetadata(true);
+        }
+
+        public void RefreshMetadata(bool displayMessage)
+        {
+            if (displayMessage)
+                Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshProf") + " " + this.Name);
             Async.Queue("UI Triggered Metadata Loader", () =>
             {
                 baseItem.RefreshMetadata(MetadataRefreshOptions.Force);
@@ -580,6 +586,10 @@ namespace MediaBrowser.Library
                 primaryImage = null;
                 bannerImage = null;
                 primaryImageSmall = null;
+                if (baseItem.PrimaryImage != null)
+                {
+                    var ignore = baseItem.PrimaryImage.GetLocalImagePath(); //force the primary to re-cache
+                }
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });
         }

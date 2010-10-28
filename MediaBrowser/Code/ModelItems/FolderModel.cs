@@ -10,6 +10,7 @@ using System.Threading;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Metadata;
 
 
 namespace MediaBrowser.Library {
@@ -468,6 +469,19 @@ namespace MediaBrowser.Library {
                 }
 
             }
+        }
+
+        public override void RefreshMetadata()
+        {
+            Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshFolderProf") + " " + this.Name);
+            //first do us - no message
+            base.RefreshMetadata(false);
+            //and now all our children
+            foreach (Item item in this.Children)
+            {
+                item.RefreshMetadata(false);
+            }
+
         }
 
         public void RefreshUI()

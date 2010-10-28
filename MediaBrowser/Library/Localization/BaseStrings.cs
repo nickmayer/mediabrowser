@@ -284,6 +284,7 @@ namespace MediaBrowser.Library.Localization
         public string ProfilerTimeProf = "{1} took {2} seconds.";
         public string RefreshProf = "Refresh";
         public string SetWatchedProf = "Set Watched {0}";
+        public string RefreshFolderProf = "Refresh Folder and all Children of";
         public string ClearWatchedProf = "Clear Watched {0}";
         public string FullRefreshProf = "Full Library Refresh";
         public string FullValidationProf = "Full Library Validation";
