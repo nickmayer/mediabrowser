@@ -25,17 +25,34 @@ namespace FullRefresh
         static DateTime startTime = DateTime.Now;
 
         static bool rebuildImageCache = false;
+        static bool writeToFullRefreshLog = false;
 
         static void Main(string[] args)
         {
-            Console.WriteLine(@"The refresh process runs in 3 steps: 
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args.Count() > 0 && args[i].ToLower() == "/i") rebuildImageCache = true;
+                if (args.Count() > 0 && args[i].ToLower() == "/log") writeToFullRefreshLog = true;
+            }
+
+            if (writeToFullRefreshLog)
+            {
+                // Redirect output to a file named FullRefresh.log
+                StreamWriter sw = new StreamWriter(@".\FullRefresh.log");
+                sw.AutoFlush = true;
+                Console.SetOut(sw);
+            }
+
+            Console.Out.WriteLine(@"
+===[Information]=========================================
+
+The refresh process runs in 3 steps: 
 
 1. Your library is scanned for new files and missing files. They are added/removed with no metadata
 2. Your library is scanned a second time, this time we try to populate metadata for fast providers (ones that do not depend on the Internet, or a large amount of processing power.
 3. Your library is scanned a third time, this time all providers kick in.
 
 /i on command line will cause image cache to be cleared and re-built during the last step.");
-            if (args.Count() > 0 && args[0].ToLower() == "/i") rebuildImageCache = true;
             FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default);
         }
 
@@ -46,7 +63,9 @@ namespace FullRefresh
             int fastMetadataChanged = 0;
             int slowMetadataChanged = 0;
             folder.RefreshMetadata(options);
-
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("===[Validate]============================================");
+            Console.Out.WriteLine();
             var validationTime = TimeAction(() =>
             {
                 RunActionRecursively("validate", folder, item =>
@@ -55,7 +74,9 @@ namespace FullRefresh
                     if (f != null) f.ValidateChildren();
                 });
             });
-
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("===[Fast Metadata]=======================================");
+            Console.Out.WriteLine();
             var fastMetadataTime = TimeAction(() =>
             {
                 RunActionRecursively("fast metadata", folder, item => {
@@ -64,23 +85,41 @@ namespace FullRefresh
 
                 });
             });
-
             if (rebuildImageCache)
             {
-                Console.WriteLine("/i specified - Clearing Image Cache for re-build");
+                Console.Out.WriteLine();
+                Console.Out.WriteLine("===[Recreate ImageCache]=================================");
+                Console.Out.WriteLine();
+                Console.Out.WriteLine("/i specified - Clearing Image Cache for re-build..");
+                Console.Out.WriteLine();
                 try
                 {
+                    Console.Out.WriteLine("Deleting ImageCache folder.");
                     Directory.Delete(ApplicationPaths.AppImagePath, true);
-                    System.Threading.Thread.Sleep(2000); // give it time to fully delete
+                }
+                catch (Exception ex)
+                {
+                    Console.Out.WriteLine("Error trying to delete ImageCache folder. " + ex.Message);
+                }
+                Console.Out.WriteLine("Sleeping 2 seconds.");
+                System.Threading.Thread.Sleep(2000); // give it time to fully delete
+                Console.Out.WriteLine("Continuing.");
+                try
+                {
+                    Console.Out.WriteLine("Creating ImageCache folder.");
                     Directory.CreateDirectory(ApplicationPaths.AppImagePath);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error trying to delete image cache. " + ex.Message);
+                    Console.Out.WriteLine("Error trying to create ImageCache folder. " + ex.Message);
                 }
+                Console.Out.WriteLine("Sleeping 2 seconds.");
+                System.Threading.Thread.Sleep(2000); // give it time to fully create
+                Console.Out.WriteLine("Continuing.");
             }
-
-
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("===[Slow Metadata]=======================================");
+            Console.Out.WriteLine();
             var slowMetadataTime = TimeAction(() =>
             {
                 RunActionRecursively("slow metadata", folder, item =>
@@ -90,8 +129,7 @@ namespace FullRefresh
                     if (rebuildImageCache)
                     {
                         //touch all the images - causing them to be re-cached
-                        Console.WriteLine("Caching images for " + item.Name);
-                        //Console.WriteLine("Primary Image is: " + item.PrimaryImagePath);
+                        Console.Out.WriteLine("Caching images for " + item.Name);
                         string ignore = null;
                         if (item.PrimaryImage != null)
                             ignore = item.PrimaryImage.GetLocalImagePath();
@@ -107,23 +145,26 @@ namespace FullRefresh
                     }
                 });
             });
-
-            Console.WriteLine("We are done");
-            Console.WriteLine("");
-            Console.WriteLine("Validation took: " + (new DateTime(validationTime.Ticks)).ToString("HH:mm:ss"));
-            Console.WriteLine("Fast metadata took: " + (new DateTime(fastMetadataTime.Ticks)).ToString("HH:mm:ss"));
-            Console.WriteLine("Slow metadata took: " + (new DateTime(slowMetadataTime.Ticks)).ToString("HH:mm:ss"));
-
-            Console.WriteLine();
-            Console.WriteLine("Total items in your library: {0}", totalItems);
-            Console.WriteLine("Fast metadata changed on {0} item/s", fastMetadataChanged);
-            Console.WriteLine("Slow metadata changed on {0} item/s", slowMetadataChanged);
-            Console.WriteLine();
-
-            Console.WriteLine("Setting LastFullRefresh in config");
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("===[Saving LastFullRefresh]==============================");
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("Saving LastFullRefresh in config");
             Kernel.Instance.ConfigData.LastFullRefresh = DateTime.Now;
             Kernel.Instance.ConfigData.Save();
-            
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("===[Results]=============================================");
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("We are done");
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("Validation took:              " + (new DateTime(validationTime.Ticks)).ToString("HH:mm:ss"));
+            Console.Out.WriteLine("Fast metadata took:           " + (new DateTime(fastMetadataTime.Ticks)).ToString("HH:mm:ss"));
+            Console.Out.WriteLine("Slow metadata took:           " + (new DateTime(slowMetadataTime.Ticks)).ToString("HH:mm:ss"));
+            Console.Out.WriteLine("Total items in your library:  {0}", totalItems);
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("Fast metadata changed on {0} item's", fastMetadataChanged);
+            Console.Out.WriteLine("Slow metadata changed on {0} item's", slowMetadataChanged);
+            Console.Out.WriteLine();
+            Console.Out.WriteLine("===[EOF]==================================================");
         }
 
         static string TimeSinceStart()
@@ -133,12 +174,12 @@ namespace FullRefresh
 
         static void RunActionRecursively(string desc, Folder folder, Action<BaseItem> action)
         {
-            Console.WriteLine("Refreshing Folder: " + folder.Path);
-            Console.WriteLine("{0} - {1} : {2} {3} (t) {4}", desc, folder.GetType(), folder.Name, folder.Path, TimeSinceStart());
+            Console.Out.WriteLine("Refreshing Folder: " + folder.Path);
+            Console.Out.WriteLine("{0} - {1} : {2} {3} (t) {4}", desc, folder.GetType(), folder.Name, folder.Path, TimeSinceStart());
             action(folder);
             foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateModified))
             {
-                Console.WriteLine("{0} - {1} : {2} {3} (t) {4}", desc ,item.GetType(), item.Name, item.Path, TimeSinceStart());
+                Console.Out.WriteLine("{0} - {1} : {2} {3} (t) {4}", desc ,item.GetType(), item.Name, item.Path, TimeSinceStart());
                 action(item);
             }
         }
