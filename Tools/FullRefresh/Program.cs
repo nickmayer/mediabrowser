@@ -71,6 +71,7 @@ namespace FullRefresh
                 try
                 {
                     Directory.Delete(ApplicationPaths.AppImagePath, true);
+                    System.Threading.Thread.Sleep(2000); // give it time to fully delete
                     Directory.CreateDirectory(ApplicationPaths.AppImagePath);
                 }
                 catch (Exception ex)
