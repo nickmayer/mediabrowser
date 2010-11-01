@@ -39,9 +39,18 @@ namespace MediaInfoProvider
             }
 
             string mediaInfoPath = Path.Combine(path, "mediainfo.dll");
-            if (!File.Exists(mediaInfoPath)) {
-                string resourceName = string.Format("MediaInfoProvider.MediaInfo{0}.dll.gz", Is64Bit ? 64 : 32);
+            string resourceName = string.Format("MediaInfoProvider.MediaInfo{0}.dll.gz", Is64Bit ? 64 : 32);
+            if (!File.Exists(mediaInfoPath))
+            {
+                Logger.ReportInfo("MediaInfo Provider: MediaInfo.dll doesn't exist. Extracting version " + Plugin.includedMediaInfoDLL);
                 LibraryLoader.Extract(resourceName, mediaInfoPath);
+            } else {
+                FileVersionInfo mediaInfoVersion = FileVersionInfo.GetVersionInfo(mediaInfoPath);
+                if (mediaInfoVersion.FileVersion.ToString() != Plugin.includedMediaInfoDLL)
+                {
+                    Logger.ReportInfo("MediaInfo Provider: currently MediaInfo.dll version " + mediaInfoVersion.FileVersion + " is installed. updating MediaInfo.dll to version " + Plugin.includedMediaInfoDLL);
+                    LibraryLoader.Extract(resourceName, mediaInfoPath);
+                }
             }
 
             if (File.Exists(mediaInfoPath)) {
