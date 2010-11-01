@@ -590,6 +590,10 @@ namespace MediaBrowser.Library
                 {
                     var ignore = baseItem.PrimaryImage.GetLocalImagePath(); //force the primary to re-cache
                 }
+                if (baseItem.BackdropImage != null)
+                {
+                    var ignore = baseItem.BackdropImage.GetLocalImagePath(); //force the main backdrop to re-cache
+                }
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });
         }
