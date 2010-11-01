@@ -467,9 +467,6 @@
     <WixVariable Id="WixUIBannerBmp" Value="Images\header.bmp"/>
     <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp"/>
 
-    <!-- we don't want to see the popup dialog that checks for diskspace -->
-    <WixVariable Id="WixUICostingPopupOptOut" Value="1" Overridable="yes" />
-
     <!-- These properties may be modified in the user interface -->
     <!-- <Property Id="OPTIONALDESKTOPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
     <!-- <Property Id="OPTIONALSTARTMENUSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
