@@ -78,6 +78,9 @@ namespace MediaBrowser.Library.Localization
         public string RandomizeBackdropConfigDesc = "Select random fan art from the available ones.";
         public string RotateBackdropConfigDesc = "Show all available fan art in a sequence (can be random).";
         public string UpdateLibraryConfigDesc = "Update information on the items in your library.";
+        public string BackdropRotationIntervalConfigDesc = "Seconds between Backdrop Rotations.";
+        public string BackdropTransitionIntervalConfigDesc = "Fade in seconds for the backdrop transition animation.";
+
 
         //Config Panel
         public string ConfigConfig = "Configuration";
@@ -151,6 +154,9 @@ namespace MediaBrowser.Library.Localization
         public string RandomizeBackdropConfig = "Randomize";
         public string RotateBackdropConfig = "Rotate";
         public string UpdateLibraryConfig = "Update Library";
+        public string BackdropSettingsConfig = "Backdrop Settings";
+        public string BackdropRotationIntervalConfig = "Rotation Time";
+        public string BackdropTransitionIntervalConfig = "Transition Time";
 
 
 

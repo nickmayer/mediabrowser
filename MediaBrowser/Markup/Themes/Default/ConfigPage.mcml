@@ -132,6 +132,9 @@
       <IntRangedValue Name="DefaultPosterSize" Value="[Application.Config.DefaultPosterSizeCfg]" MaxValue="1000" MinValue="60" Step="10" />
       <IntRangedValue Name="ThumbStripPosterWidth" Value="[Application.Config.ThumbStripPosterWidth]" MaxValue="1200" MinValue="200" Step="10" />
 
+      <IntRangedValue Name="BackdropRotationInterval" Value="[Application.Config.BackdropRotationInterval]" MaxValue="15" MinValue="1" Step="1"/>
+      <RangedValue Name="BackdropTransitionInterval" Value="[Application.Config.BackdropTransitionInterval]" MaxValue="3" MinValue=".1" Step=".1"/>
+
       <ScrollingData Name="SD" BeginPadding="150" EndPadding="150"/>
       <Inset Name="SMargin" Inset="10,0,0,0" />
       <Inset Name="CMargin" Inset="25,0,0,0" />
@@ -396,6 +399,10 @@
       <Binding Source="[DefaultPosterSize.Value]" Target="[Config.DefaultPosterSizeCfg]" />
       <Binding Source="[ThumbStripPosterWidth.Value]" Target="[Config.ThumbStripPosterWidth]" />
 
+      <Binding Source="[BackdropRotationInterval.Value]" Target="[Config.BackdropRotationInterval]" />
+      <Binding Source="[BackdropTransitionInterval.Value]" Target="[Config.BackdropTransitionInterval]" />
+
+
       <Changed Source="[FocusItem.Value]">
         <Actions>
           <Invoke Target="[Application.DescString]" name="[FocusItem.Value]" ResultTarget="[Description.Content]"/>
@@ -584,12 +591,7 @@
                       <ss:SimpleSpinner Label="[Application.LocalStrings.#PosterGridSpacingConfig!cor:String]" Model="[GridSpacing]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                       <ss:SimpleSpinner Label="[Application.LocalStrings.#ThumbWidthSplitConfig!cor:String]" Model="[ThumbStripPosterWidth]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                       <ss:SimpleSpinner Label="[Application.LocalStrings.#BreadcrumbCountConfig!cor:String]" Model="[BreadcrumbCount]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
-                      <cb:CheckBox Label="[Application.LocalStrings.#ShowFanArtonViewsConfig!cor:String]" Checked="[ShowBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Padding="40,0,0,0" Label="[Application.LocalStrings.#RotateBackdropConfig!cor:String]" Checked="[RotateBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Padding="40,0,0,0" Label="[Application.LocalStrings.#RandomizeBackdropConfig!cor:String]" Checked="[RandomizeBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="[Application.LocalStrings.#ShowInitialFolderBackgroundConfig!cor:String]" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowRootBackground]"  Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="[Application.LocalStrings.#ShowThemeBackgroundConfig!cor:String]" Checked="[ShowThemeBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-
+                      
                       <cb:CheckBox Label="[Application.LocalStrings.#EnableAdvancedCmdsConfig!cor:String]" Checked="[EnableAdvancedCmds]" FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont" Visible="false"/>
 
                     </Children>
@@ -649,6 +651,18 @@
                       <me:TextLine Text="[Application.LocalStrings.#RequiresRestartConfig!cor:String]" />
                     </Children>
                   </Panel>
+                  <Panel Layout="VerticalFlow" >
+                    <Children>
+                  <me:TextHeader Text="[Application.LocalStrings.#BackdropSettingsConfig!cor:String]" />
+                  <ss:SimpleSpinner  Label="[Application.LocalStrings.#BackdropRotationIntervalConfig!cor:String]" Model="[BackdropRotationInterval]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                  <ss:SimpleSpinner  Label="[Application.LocalStrings.#BackdropTransitionIntervalConfig!cor:String]" Model="[BackdropTransitionInterval]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                  <cb:CheckBox Label="[Application.LocalStrings.#ShowFanArtonViewsConfig!cor:String]" Checked="[ShowBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                  <cb:CheckBox Padding="40,0,0,0" Label="[Application.LocalStrings.#RotateBackdropConfig!cor:String]" Checked="[RotateBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                  <cb:CheckBox Padding="40,0,0,0" Label="[Application.LocalStrings.#RandomizeBackdropConfig!cor:String]" Checked="[RandomizeBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
+                  <cb:CheckBox Label="[Application.LocalStrings.#ShowInitialFolderBackgroundConfig!cor:String]" Margins="[CMargin]" FocusItem="[FocusItem]"   Checked="[ShowRootBackground]"  Font="font://f:CP_ConfigItemFont"/>
+                  <cb:CheckBox Label="[Application.LocalStrings.#ShowThemeBackgroundConfig!cor:String]" Checked="[ShowThemeBackground]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                    </Children>
+                  </Panel>     
                 </Children>
               </Graphic>
 

@@ -262,7 +262,7 @@
               <FormLayoutInput Top="Parent,0,-20" Left="Parent,0,-50" Bottom="Parent,1,10" Right="Parent,1,50" />
             </LayoutInput>
             <Children>
-              <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]"/>
+              <bd:BackdropFullScreen Application="[Application]" Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Item.BackdropImage]" Item="[Item]"/>
             </Children>
           </ColorFill>
 

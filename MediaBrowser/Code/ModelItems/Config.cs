@@ -724,6 +724,18 @@ namespace MediaBrowser
             set { if (this.data.RotateBackdrops != value) { this.data.RotateBackdrops = value; Save(); FirePropertyChanged("RotateBackdrops"); } }
         }
 
+        public int BackdropRotationInterval
+        {
+            get { return this.data.BackdropRotationInterval; }
+            set { if (this.data.BackdropRotationInterval != value) { this.data.BackdropRotationInterval = value; Save(); FirePropertyChanged("BackdropRotationInterval"); } }
+        }
+
+        public float BackdropTransitionInterval
+        {
+            get { return this.data.BackdropTransitionInterval; }
+            set { if (this.data.BackdropTransitionInterval != value) { this.data.BackdropTransitionInterval = (float)Math.Round(value, 1); Save(); FirePropertyChanged("BackdropTransitionInterval"); } }
+        }
+        
         public int FullRefreshInterval
         {
             get { return this.data.FullRefreshInterval; }
