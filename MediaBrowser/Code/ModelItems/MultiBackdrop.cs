@@ -36,6 +36,9 @@ namespace MediaBrowser
                 cycle.Tick += delegate { OnRefresh(); };
                 cycle.Enabled = true;
             }
+            // new item - restart timer
+            cycle.Stop();
+            cycle.Start();
         }
 
         private void OnRefresh()
