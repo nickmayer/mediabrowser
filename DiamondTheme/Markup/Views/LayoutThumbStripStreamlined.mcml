@@ -147,11 +147,11 @@
             </LayoutInput>
           </Graphic>
 
-          <Me:Bounce Command="[NavRightCmd]" >
+          <dtb:Bounce Command="[NavRightCmd]" >
             <LayoutInput>
               <AnchorLayoutInput Left="Parent,0.5" Top="Parent, 1, -75" />
             </LayoutInput>
-          </Me:Bounce>
+          </dtb:Bounce>
 
           <!-- Backdrop -->
           <bd:Backdrop4 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]"
@@ -162,20 +162,4 @@
     </Content>
   </UI>
 
-  <UI Name="Bounce">
-    <Properties>
-      <Command Name="Command"/>
-    </Properties>
-    <Rules>
-      <Default Target="[Input.KeyInteractive]" Value="true"></Default>
-      <Changed Source="[Input.KeyFocus]">
-        <Actions>
-          <Invoke Target="[Command.Invoke]"></Invoke>
-        </Actions>
-      </Changed>
-    </Rules>
-    <Content>
-      <ColorFill Name="Item" MinimumSize="50,50" Content="Transparent"></ColorFill>
-    </Content>
-  </UI>
 </Mcml>

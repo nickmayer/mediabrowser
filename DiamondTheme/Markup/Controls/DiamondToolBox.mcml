@@ -309,6 +309,22 @@
     </Content>
   </UI>
 
+  <UI Name="Bounce">
+    <Properties>
+      <Command Name="Command"/>
+    </Properties>
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true"></Default>
+      <Changed Source="[Input.KeyFocus]">
+        <Actions>
+          <Invoke Target="[Command.Invoke]"></Invoke>
+        </Actions>
+      </Changed>
+    </Rules>
+    <Content>
+      <ColorFill Name="Item" MinimumSize="50,50" Content="Transparent"></ColorFill>
+    </Content>
+  </UI>
 
   <UI Name="DiamondCounter">
     <Properties>
