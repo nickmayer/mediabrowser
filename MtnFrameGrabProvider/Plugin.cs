@@ -44,7 +44,8 @@ namespace MtnFrameGrabProvider {
             PluginOptions.Load();
 
             EnsureMtnIsExtracted();
-            clearMtnCache();
+            deleteMtnCache();
+            createMtnCache();
 
             kernel.MetadataProviderFactories.Add(new MetadataProviderFactory(typeof(FrameGrabProvider)));
 
@@ -105,8 +106,6 @@ namespace MtnFrameGrabProvider {
             if (!Directory.Exists(MtnPath))
             {
                 Directory.CreateDirectory(MtnPath);
-                Directory.CreateDirectory(FrameGrabsPath);
-
 
                 string name = "MtnFrameGrabProvider.mtn.zip";
                 var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
@@ -124,16 +123,40 @@ namespace MtnFrameGrabProvider {
             }
         }
 
-        public static void clearMtnCache()
+        public static void deleteMtnCache()
         {
             if (Directory.Exists(FrameGrabsPath))
             {
+                Logger.ReportInfo(PluginName + ": Deleting FrameGrabs folder");
                 try
                 {
-                    foreach (var file in Directory.GetFiles(FrameGrabsPath, "*.jpg"))
-                    {
-                        File.Delete(file);
-                    }
+                    Directory.Delete(FrameGrabsPath, true);
+                }
+                catch
+                {
+                    // well at least we tried
+                }
+                //try
+                //{
+                //    foreach (var file in Directory.GetFiles(FrameGrabsPath, "*.jpg"))
+                //    {
+                //        File.Delete(file);
+                //    }
+                //}
+                //catch
+                //{
+                //    // well at least we tried
+                //}
+            }
+        }
+        public static void createMtnCache()
+        {
+            if (!Directory.Exists(FrameGrabsPath))
+            {
+                Logger.ReportInfo(PluginName + ": Creating FrameGrabs folder");
+                try
+                {
+                    Directory.CreateDirectory(FrameGrabsPath);
                 }
                 catch
                 {
