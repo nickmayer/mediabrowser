@@ -116,7 +116,7 @@ namespace MediaBrowser.Library
 
         private void getRandomBackdropImage()
         {
-            if (Config.Instance.RotateBackdrops)
+            if (Config.Instance.RotateBackdrops && baseItem.BackdropImages.Count > 1)
             {
                 //start the rotation so we don't get the first one twice
                 GetNextBackDropImage();
