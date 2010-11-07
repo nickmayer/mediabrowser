@@ -123,7 +123,7 @@ namespace MediaInfoProvider
                 int audioChannels;
                 Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)"), out audioChannels);
                 string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
-                string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate/String");
+                string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
 
 
                 mediaInfoData = new MediaInfoData

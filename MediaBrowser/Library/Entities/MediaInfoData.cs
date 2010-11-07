@@ -190,7 +190,7 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                return VideoFPS;
+                return VideoFPS.ToString() + " " + Kernel.Instance.StringData.GetString("FrameRateStr");
             }
         }
 
@@ -316,7 +316,7 @@ namespace MediaBrowser.Library.Entities
                     case "mpeg audio":
                         {
                             if (this.AudioProfile != null && this.AudioProfile != "")
-                                return string.Format("{0} {1} {2} {3}", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
+                                return string.Format("{0} {1} {2} {3}", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString(" "));
                             else
                                 return string.Format("{0} {1} {2}", this.AudioFormat, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
                         }

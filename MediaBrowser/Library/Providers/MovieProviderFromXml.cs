@@ -111,6 +111,9 @@ namespace MediaBrowser.Library.Providers
                         case "hd dvd":
                             movie.DisplayMediaType = MediaType.HDDVD.ToString();
                             break;
+                        default:
+                            movie.DisplayMediaType = null;
+                            break;
                     }
                 }
 
