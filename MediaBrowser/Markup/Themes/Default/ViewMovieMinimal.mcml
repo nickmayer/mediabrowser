@@ -133,7 +133,7 @@
           <!-- Now Playing View -->
           <np:NowPlayingViewport Name="NowPlaying" Application="[Application]">
             <LayoutInput>
-              <FormLayoutInput Top="Parent,0,45" Right="Parent,1,495" />
+              <FormLayoutInput Top="TitleText,1,10" Right="Parent,1,495" />
             </LayoutInput>
           </np:NowPlayingViewport>
           

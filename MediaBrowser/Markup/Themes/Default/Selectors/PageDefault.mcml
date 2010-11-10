@@ -40,6 +40,7 @@
 
       <BooleanChoice Name="LeftEdgeHasFocus"   Value="false"/>
       <BooleanChoice Name="RightEdgeHasFocus"   Value="false"/>
+      <BooleanChoice Name="BottomEdgeHasFocus"   Value="false"/>
       
       <!-- Timers -->
       
@@ -99,6 +100,9 @@
           <Set Target="[IndexConfig.Visible]" Value="false"/>
           <Set Target="[Breadcrumbs.Visible]" Value="false"/>
           <Set Target="[NowPlaying.Visible]" Value="false"/>
+          <Set Target="[LeftEdge.Visible]" Value="false"/>
+          <Set Target="[RightEdge.Visible]" Value="false"/>
+          <Set Target="[BottomEdge.Visible]" Value="false"/>
         </Actions>
       </Rule>
 
@@ -343,7 +347,7 @@
 
       <!-- Edge Redirect Logic -->
 
-      <!-- Send focus to Now Playing Only if NowPlaying is Visible -->
+      <!-- Left Edge - Send focus to Now Playing Only if NowPlaying is Visible -->
       <Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[LeftEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
@@ -362,6 +366,32 @@
       <Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[LeftEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[NowPlaying.Visible]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <!-- Bottom Edge - Send focus to Now Playing Only if NowPlaying is Visible -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[BottomEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[NowPlaying.Visible]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[NowPlaying.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <!-- Send focus to View Panel but only if NowPlaying is not Visible 
+           The off screen control steals focus when the Now Playing View shuts down
+           after user stops the video. Need to send focus back to the View Panel.
+           Without this rule focus is off screen.
+      -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[BottomEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
           <Equality Source="[NowPlaying.Visible]" ConditionOp="Equals" Value="false" />
         </Conditions>
         <Actions>
@@ -513,18 +543,26 @@
               <cm:PlayMenu Name="PopupPlay" Application="[Application]" Close="[ClosePopupPlay]" Visible="false" />
 
               <!-- Edge Detection Left Side -->
-              <edge:EdgeDetect Name="LeftSide" InFocus="[LeftEdgeHasFocus]">
+              <edge:EdgeDetect Name="LeftEdge" InFocus="[LeftEdgeHasFocus]">
                 <LayoutInput>
                   <AnchorLayoutInput Left="Parent,0,-120"/>
                 </LayoutInput>
               </edge:EdgeDetect>
 
               <!-- Edge Detection Right Side -->
-              <edge:EdgeDetect Name="RightSide" InFocus="[RightEdgeHasFocus]">
+              <edge:EdgeDetect Name="RightEdge" InFocus="[RightEdgeHasFocus]">
                 <LayoutInput>
                   <AnchorLayoutInput Right="Parent,1,120"/>
                 </LayoutInput>
               </edge:EdgeDetect>
+
+              <!-- Edge Detection Bottom Side -->
+              <edge:EdgeDetect Name="BottomEdge" InFocus="[BottomEdgeHasFocus]">
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent,1,120"/>
+                </LayoutInput>
+              </edge:EdgeDetect>
+
 
               <Panel Name="MainBG" Layout="Fill" Margins="-50,-20,-150,-20" >
                 <Children>
