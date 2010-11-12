@@ -316,7 +316,7 @@ namespace MediaBrowser.Library.Entities
                     case "mpeg audio":
                         {
                             if (this.AudioProfile != null && this.AudioProfile != "")
-                                return string.Format("{0} {1} {2} {3}", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString(" "));
+                                return string.Format("{0} {1} {2} {3}", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
                             else
                                 return string.Format("{0} {1} {2}", this.AudioFormat, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
                         }
