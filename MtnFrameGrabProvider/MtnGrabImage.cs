@@ -40,7 +40,17 @@ namespace MtnFrameGrabProvider {
                 if (ThumbCreator.CreateThumb(video, ref tempFile, secondsIn)) {
                     if (File.Exists(tempFile)) {
                         //load image and pass to processor
-                        return Image.FromFile(tempFile);
+                        //return Image.FromFile(tempFile);
+
+                        // load image from a buffer, then delete the temp file.
+                        MemoryStream ms = new MemoryStream(File.ReadAllBytes(tempFile));
+                        Image img = Image.FromStream(ms);
+                        // note: do not dispose of MemoryStream, as the Image requires it during
+                        //       the lifetime of the object. Garbage collection will clean up the MemoryStream.
+                        //ms.Dispose();
+                        ms = null;
+                        File.Delete(tempFile);
+                        return img;
                     } else {
                         Logger.ReportError("Unable to process thumb image for " + video);
                         return null;
