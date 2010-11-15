@@ -29,7 +29,7 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public int AudioStreamCount = 0;
         [Persist]
-        public int AudioChannelCount = 0;
+        public string AudioChannelCount = "";
         [Persist]
         public string AudioProfile = "";
         [Persist]
@@ -52,7 +52,7 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 if (VideoBitRate > 0)
-                    return (VideoBitRate / 1000).ToString() + Kernel.Instance.StringData.GetString("KBsStr") + ",";
+                    return (VideoBitRate / 1000).ToString() + Kernel.Instance.StringData.GetString("KBsStr");
                 else
                     return "";
             }
@@ -75,7 +75,7 @@ namespace MediaBrowser.Library.Entities
             {
                 if (this != Empty)
                 {
-                           return string.Format("{0} {1} {2} {3} {4} {5}", this.SizeStr, this.VideoCodec, this.VideoRateStr, this.AudioFormat, this.AudioProfile, this.AudioRateStr);
+                           return string.Format("{0} {1} {2}, {3} {4} {5}", this.SizeStr, this.VideoCodec, this.VideoRateStr, this.AudioFormat, this.AudioProfile, this.AudioRateStr);
                 }
                 else
                     return "";
@@ -222,6 +222,10 @@ namespace MediaBrowser.Library.Entities
             {"truehd 6","DDTrueHD_51"},
             {"truehd 7","DDTrueHD_61"},
             {"truehd 8","DDTrueHD_71"},
+            {"ac-3 truehd / core 5 / 6","DDTrueHD_50"},
+            {"ac-3 truehd / core 6 / 6","DDTrueHD_51"},
+            {"ac-3 truehd / core 7 / 6","DDTrueHD_61"},
+            {"ac-3 truehd / core 8 / 6","DDTrueHD_71"},
             {"ac-3 1","DD_10"},
             {"ac-3 2","DD_20"},
             {"ac-3 3","DD_30"},
@@ -233,6 +237,7 @@ namespace MediaBrowser.Library.Entities
             {"e-ac-3","DDPlus"},
             {"ac-3 truehd","DDTrueHD"},
             {"truehd","DDTrueHD"},
+            {"ac-3 truehd / core","DDTrueHD"},
             {"ac-3","Ac3"},
             {"ac-3 dolby digital","Ac3"},            
             {"dts 1","DTS_DS_10"},
