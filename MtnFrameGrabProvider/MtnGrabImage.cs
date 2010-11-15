@@ -24,24 +24,23 @@ namespace MtnFrameGrabProvider {
 
                 string tempFile = ""; //this will get filled in by the thumb grabber
 
-                // note: this code doesn't quite work, so we let a modified mtn do it.
+                // note: this code doesn't quite work right sometimes (ie. under 1 minute videos), 
+                //       so we let a modified mtn figure it out when that happens.
                 //try to grab thumb 10% into the file - if we don't know runtime then default to 5 mins
-                /*
                 int secondsIn = 0;
                 Video videoItem = item as Video;
                 if (videoItem != null) {
                     if (videoItem.MediaInfo != null && videoItem.MediaInfo.RunTime > 0) {
-                        secondsIn = (Int32)((videoItem.MediaInfo.RunTime / 10) * 60);
+                        //secondsIn = (Int32)((videoItem.MediaInfo.RunTime / 10) * 60);
+                        secondsIn = (Int32)(videoItem.MediaInfo.RunTime * 6);
                     }
                 }
                 if (secondsIn == 0)
                 {
                     if (!Int32.TryParse(Plugin.PluginOptions.Instance.SecondsIn, out secondsIn)) secondsIn = 300;
                 }
-                */
-                int secondsIn = 0;
-                if (!Int32.TryParse(Plugin.PluginOptions.Instance.SecondsIn, out secondsIn)) secondsIn = 300;
-
+                
+                Logger.ReportInfo("Video is {0} length long", videoItem.MediaInfo.RuntimeString);
                 Logger.ReportInfo("Looking " + secondsIn + " seconds into video.");
                 if (ThumbCreator.CreateThumb(video, ref tempFile, secondsIn)) {
                     if (File.Exists(tempFile)) {
