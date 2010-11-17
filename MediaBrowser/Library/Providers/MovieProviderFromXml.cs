@@ -307,13 +307,7 @@ namespace MediaBrowser.Library.Providers
                                 break;
                             case "h.264":
                                 movie.MediaInfo.VideoCodec = "AVC";
-                                break;
-                            case "wmv hd":
-                                movie.MediaInfo.VideoCodec = "WMV_HD";
-                                break;
-                            case "mpeg video":
-                                movie.MediaInfo.VideoCodec = "mpegvideo";
-                                break;
+                                break;                            
                             default:
                                 movie.MediaInfo.VideoCodec = video;
                                 break;
