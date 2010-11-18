@@ -111,7 +111,7 @@ namespace MediaBrowser.Library.Providers
                         case "hd dvd":
                             movie.DisplayMediaType = MediaType.HDDVD.ToString();
                             break;
-                        default:
+                        case "":
                             movie.DisplayMediaType = null;
                             break;
                     }
@@ -307,7 +307,7 @@ namespace MediaBrowser.Library.Providers
                                 break;
                             case "h.264":
                                 movie.MediaInfo.VideoCodec = "AVC";
-                                break;                            
+                                break;
                             default:
                                 movie.MediaInfo.VideoCodec = video;
                                 break;
