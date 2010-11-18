@@ -1357,6 +1357,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static byte[] EdgeDetection {
+            get {
+                object obj = ResourceManager.GetObject("EdgeDetection", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] ExternalPlayback {
             get {
                 object obj = ResourceManager.GetObject("ExternalPlayback", resourceCulture);

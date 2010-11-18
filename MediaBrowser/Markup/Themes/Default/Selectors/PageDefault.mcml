@@ -10,14 +10,14 @@
 		xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu"
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
     xmlns:cm="resx://MediaBrowser/MediaBrowser.Resources/ContextMenu"
-	    xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
-	  
+	  xmlns:sd="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
 	  xmlns:pda="resx://MediaBrowser/MediaBrowser.Resources/PageDetailArea"
+    xmlns:edge="resx://MediaBrowser/MediaBrowser.Resources/EdgeDetection"
     xmlns:me="Me"
       >
 
 
-  <UI Name="Page">
+  <UI Name="Page"> 
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
@@ -37,6 +37,10 @@
       </TypingHandler>
 
       <cor:Boolean Name="CanPlay" Boolean="false" />
+
+      <BooleanChoice Name="LeftEdgeHasFocus"   Value="false"/>
+      <BooleanChoice Name="RightEdgeHasFocus"   Value="false"/>
+      <BooleanChoice Name="BottomEdgeHasFocus"   Value="false"/>
       
       <!-- Timers -->
       
@@ -73,9 +77,7 @@
       </Changed>-->
 
       <Changed Source="[RefocusItemListTimer.Tick]">
-        <Conditions>
-          <Equality Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" Value="Detail" />
-        </Conditions>
+       
         <Actions>
           <Set Target="[RefocusItemListTimer.Enabled]" Value="false" />
           <Invoke Target="[ViewPanel.NavigateInto]" />
@@ -98,6 +100,9 @@
           <Set Target="[IndexConfig.Visible]" Value="false"/>
           <Set Target="[Breadcrumbs.Visible]" Value="false"/>
           <Set Target="[NowPlaying.Visible]" Value="false"/>
+          <Set Target="[LeftEdge.Visible]" Value="false"/>
+          <Set Target="[RightEdge.Visible]" Value="false"/>
+          <Set Target="[BottomEdge.Visible]" Value="false"/>
         </Actions>
       </Rule>
 
@@ -340,7 +345,72 @@
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Detail" Target="[NowPlayingIsText.Value]" Value="true" />
       <Condition Source="[Folder.DisplayPrefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="Detail" Target="[NowPlayingIsText.Value]" Value="false" />
 
+      <!-- Edge Redirect Logic -->
 
+      <!-- Left Edge - Send focus to Now Playing Only if NowPlaying is Visible -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[LeftEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[NowPlaying.Visible]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[NowPlaying.NavigateInto]" />
+        </Actions>
+      </Rule>
+      
+      <!-- Send focus to View Panel but only if NowPlaying is not Visible 
+           The off screen control steals focus when the Now Playing View shuts down
+           after user stops the video. Need to send focus back to the View Panel.
+           Without this rule focus is off screen.
+      -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[LeftEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[NowPlaying.Visible]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <!-- Bottom Edge - Send focus to Now Playing Only if NowPlaying is Visible -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[BottomEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[NowPlaying.Visible]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[NowPlaying.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <!-- Send focus to View Panel but only if NowPlaying is not Visible 
+           The off screen control steals focus when the Now Playing View shuts down
+           after user stops the video. Need to send focus back to the View Panel.
+           Without this rule focus is off screen.
+      -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[BottomEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
+          <Equality Source="[NowPlaying.Visible]" ConditionOp="Equals" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ViewPanel.NavigateInto]" />
+        </Actions>
+      </Rule>
+
+      <!-- If user Presses Right Send focus to Views Button for quick access to the menu -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[RightEdgeHasFocus.Value]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ViewsBtn.NavigateInto]" />
+        </Actions>
+      </Rule>
+      
+      <!-- End Edge Redirect Logic -->
+          
     </Rules>
 
     <Content>
@@ -471,6 +541,27 @@
 
               <!-- Play Menu -->
               <cm:PlayMenu Name="PopupPlay" Application="[Application]" Close="[ClosePopupPlay]" Visible="false" />
+
+              <!-- Edge Detection Left Side -->
+              <edge:EdgeDetect Name="LeftEdge" InFocus="[LeftEdgeHasFocus]">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,-120"/>
+                </LayoutInput>
+              </edge:EdgeDetect>
+
+              <!-- Edge Detection Right Side -->
+              <edge:EdgeDetect Name="RightEdge" InFocus="[RightEdgeHasFocus]">
+                <LayoutInput>
+                  <AnchorLayoutInput Right="Parent,1,120"/>
+                </LayoutInput>
+              </edge:EdgeDetect>
+
+              <!-- Edge Detection Bottom Side -->
+              <edge:EdgeDetect Name="BottomEdge" InFocus="[BottomEdgeHasFocus]">
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent,1,120"/>
+                </LayoutInput>
+              </edge:EdgeDetect>
 
 
               <Panel Name="MainBG" Layout="Fill" Margins="-50,-20,-150,-20" >

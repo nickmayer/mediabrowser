@@ -66,6 +66,7 @@
 				</Conditions>
 				<Actions>
 					<Set Target="[MainPanel.Visible]" Value="true"/>
+          <Invoke Target="[ScrollingData.Home]" ></Invoke>
 				</Actions>
 			</Changed>
 
@@ -153,6 +154,126 @@
 			</Panel>
 		</Content>
 	</UI>
+
+  <!-- This UI is used for Automatically Scrolling Text on Screen without User Input -->
+  <UI Name="AutoScrollText">
+    <Properties>
+      <cor:String Name="Text" String="" />
+      <Font Name="Font" Font="$Required"/>
+      <Color Name="Color" Color="color://s:FontColorLight"/>
+      <Color Name="FocusColor" Color="color://s:FontColorLight"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="false" />
+      <ScrollingData Name="ScrollingData" ScrollStep="1" />
+
+      <Timer Name="ScrollText" Interval="150" AutoRepeat="true" Enabled="false" />
+      <Timer Name="Delay" Interval="8000" AutoRepeat="false" Enabled="true"/>
+      <Timer Name="EndDelay" Interval="8000" AutoRepeat="false" Enabled="false"/>
+      <cor:Single Name="ScrollTime" Single="10"></cor:Single>
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="false" />
+
+      <Changed Source="[Delay.Tick]">
+        <Actions>
+          <Invoke Target="[Delay.Stop]"></Invoke>
+          <Invoke Target="[ScrollText.Start]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ScrollText.Tick]">
+        <Conditions>
+          <Equality Source="[ScrollingData.CanScrollDown]" ConditionOp="Equals" Value="true"></Equality>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.ScrollDown]" ></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ScrollText.Tick]">
+        <Conditions>
+          <Equality Source="[ScrollingData.CanScrollDown]" ConditionOp="Equals" Value="false"></Equality>
+        </Conditions>
+        <Actions>
+          <Set Target="[testtext.Content]" Value="Wait at end"></Set>
+          <Invoke Target="[ScrollText.Stop]"></Invoke>
+          <Invoke Target="[EndDelay.Start]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[EndDelay.Tick]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]" ></Invoke>
+          <Invoke Target="[Delay.Start]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Text]" InitialEvaluate="true">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]" ></Invoke>
+          <Invoke Target="[Delay.Stop]"></Invoke>
+          <Invoke Target="[Delay.Start]"></Invoke>
+          <Invoke Target="[ScrollText.Stop]"></Invoke>
+        </Actions>
+      </Changed>
+
+      <Binding Source="[Text]" Target="[TextVal.Content]" />
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+
+
+    </Rules>
+
+    <Content>
+      <Panel Layout="Center" >
+        <Children>
+
+          <Panel>
+            <Children>
+              <Text Name="testtext" Color="0,255,200,200" Font="[Font]" WordWrap="true" Content="Waiting..." Padding="0,0,0,0"></Text>
+
+            </Children>
+          </Panel>
+          <Graphic Name="MainPanel" Content="image://i:BlankImage" Layout="Dock" Padding="5,5,5,5">
+            <Children>
+
+              <Scroller Name="AutoText" Orientation="Vertical" FadeSize="5"  ScrollingData="[ScrollingData]" >
+
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Fill" ContributesToHeight="true" Vertical="Fill" />
+                </LayoutInput>
+                <Children>
+
+                  <Text Name="TextVal" Color="[Color]" Font="[Font]" WordWrap="true" Content="[Text]"
+                        Padding="0,0,0,50">
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe RelativeTo="Current" Time="0"/>
+                          <PositionKeyframe RelativeTo="Final" Time="0.1"/>
+                        </Keyframes>
+                      </Animation>
+                      <Animation Type="Alpha">
+                        <Keyframes>
+                          <AlphaKeyframe RelativeTo="Current" Time="0"/>
+                          <AlphaKeyframe RelativeTo="Final" Time="0.4"/>
+                        </Keyframes>
+                      </Animation>
+
+                    </Animations>
+                  </Text>
+
+                </Children>
+              </Scroller>
+            </Children>
+          </Graphic>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
 
 
 

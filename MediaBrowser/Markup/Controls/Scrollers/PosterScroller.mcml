@@ -267,7 +267,9 @@
 		</Rules>
 
 		<Content>
-			<Panel Name="ItemPanel" Layout="Form" Navigation="ContainHorizontal" >
+			<!--Panel Name="ItemPanel" Layout="Form" Navigation="ContainHorizontal" >-->
+      <!-- Removed ContainHorizontal in order for Edge Redirect Control to function. -->
+      <Panel Name="ItemPanel" Layout="Form">
 				<Children>
           <!--<pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
                         Application="[Application]" >
