@@ -13,6 +13,7 @@
 	    xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
 	    xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
 	    xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
+      xmlns:as="resx://MediaBrowser/MediaBrowser.Resources/AutoScroller"
 	    xmlns:ps="resx://MediaBrowser/MediaBrowser.Resources/PosterScroller"
 	    xmlns:bd="resx://MediaBrowser/MediaBrowser.Resources/Backdrop"
       xmlns:mp="resx://MediaBrowser/MediaBrowser.Resources/MPAARating"
@@ -92,10 +93,19 @@
       <Binding Target="[Title1.Content]" Source="[SelectedItem.Name]"/>
       <Binding Target="[Title2.Content]" Source="[SelectedItem.SubTitle]"/>
       <Binding Target="[Summary.Text]" Source="[SelectedItem.Overview]"/>
+      <Binding Target="[AutoScrollOverview.Text]" Source="[SelectedItem.Overview]"/>
       <Binding Target="[LastWatched.Content]" Source="[SelectedItem.LastPlayedString]"/>
       <Binding Target="[LastWatched.Visible]" Source="[SelectedItem.HaveWatched]"/>
       <Binding Target="[MPAARating.Value]" Source="[SelectedItem.MpaaRating]" />
       <Binding Target="[MediaInfo.Item]" Source="[SelectedItem]" />
+
+      <!-- Show Proper Overview Panel -->
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[AutoScrollOverview.Visible]" />
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[Summary.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true" />
+        </Transformer>
+      </Binding>
 
       <Changed Source="[SelectedItem]" InitialEvaluate="true">
         <Conditions>
@@ -180,7 +190,7 @@
 													/>
                 </Content>
               </Repeater>
-              <mip:MediaInfoPanel Name="MediaInfo" Item="[Item.SelectedChild]" />
+              <mip:MediaInfoPanel Name="MediaInfo" Item="[Item.SelectedChild]" MaxIconSize="0,45"/>
             </Children>
           </Panel>
 
@@ -196,6 +206,8 @@
 
               <Text Name="LastWatched" Color="color://s:FontColorLight" Font="font://f:DV_LastWatchedFont"/>
               <st:ScrollableText Name="Summary" Font="font://f:DV_SummaryFont" Color="color://s:FontColorMedium" FocusColor="color://s:FontColorLight"/>
+              <!-- MaximumSize is required here. Without it, sometimes the ScrollPage will not auto reset after a full cycle.-->
+              <as:AutoScrollText Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:DV_SummaryFont" MaximumSize="0,275"/>
             </Children>
           </Panel>
 

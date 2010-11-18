@@ -148,6 +148,8 @@ namespace MediaBrowser
         public int MinResumePct = 10; //if this far or less into video, don't resume
         public int MaxResumePct = 90; //if this far or more into video, don't resume
 
+        public bool AutoScrollText = false; //Turn on/off Auto Scrolling Text (typically for Overviews)
+
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 

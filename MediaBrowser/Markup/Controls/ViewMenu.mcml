@@ -155,7 +155,7 @@
 
       <Condition Source="[Prefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Poster" Target="[VerticalScroll.Visible]" Value="true" />
       <Condition Source="[Prefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Thumb" Target="[VerticalScroll.Visible]" Value="true" />
-      <Condition Source="[Prefs.ViewTypeString]" ConditionOp="Equals" SourceValue="ThumbStrip" Target="[VerticalScroll.Visible]" Value="false" />
+      <Condition Source="[Prefs.ViewTypeString]" ConditionOp="Equals" SourceValue="ThumbStrip" Target="[VerticalScroll.Visible]" Value="true" />
       <Condition Source="[Prefs.ViewTypeString]" ConditionOp="Equals" SourceValue="CoverFlow" Target="[VerticalScroll.Visible]" Value="false" />
       <Condition Source="[Prefs.ViewTypeString]" ConditionOp="Equals" SourceValue="Detail" Target="[VerticalScroll.Visible]" Value="false" />
       <Condition Source="[Prefs.ViewTypeString]" ConditionOp="NotEquals" SourceValue="ThumbStrip" Target="[UseCoverflow.Visible]" Value="false" />

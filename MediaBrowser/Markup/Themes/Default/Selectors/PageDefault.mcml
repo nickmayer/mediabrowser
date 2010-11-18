@@ -17,7 +17,7 @@
       >
 
 
-  <UI Name="Page">
+  <UI Name="Page"> 
     <Properties>
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>

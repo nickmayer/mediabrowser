@@ -600,6 +600,17 @@
       <Binding Source="[Item.Genres]" Target="[GenreRepeater.Source]" />
       <Binding Source="[Item.Directors]" Target="[DirectorRepeater.Source]"/>
       <Binding Source="[Item.Overview]" Target="[Overview.Text]" />
+      <Binding Source="[Item.Overview]" Target="[AutoScrollOverview.Text]" />
+
+      <!-- Show Proper Overview Panel -->
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[AutoScrollOverview.Visible]" />
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[Overview.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true" />
+        </Transformer>
+      </Binding>
+      
+      
       <Condition Source="[Item.ImdbRating]" ConditionOp="GreaterThanOrEquals" SourceValue="0" Target="[IMDBRatingPanel.Visible]" Value="true"  />
       <Condition Source="[Item.Directors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[DirectedByPanel.Visible]" Value="true"  />
 
@@ -664,7 +675,7 @@
                   <FlowLayout Orientation="Horizontal" AllowWrap="true"/>
                 </Layout>
                 <Children>
-                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" />
+                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,45"/>
                   <Text Name="MediaInfo" Font="Arial, 12" Color="[ValueColor]" WordWrap="true" />
                 </Children>
               </Panel>
@@ -778,6 +789,7 @@
                 </Layout>
                 <Children>
                   <as:AutoScroller Name="Overview" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"/>
+                  <as:AutoScrollText Name="AutoScrollOverview" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"/>
                 </Children>
               </Panel>
             </Children>
