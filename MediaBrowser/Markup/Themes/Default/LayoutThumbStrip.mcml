@@ -9,6 +9,8 @@
 	  xmlns:lw="resx://MediaBrowser/MediaBrowser.Resources/LastWatched"
 	  xmlns:ts="resx://MediaBrowser/MediaBrowser.Resources/TitleSet"
 	  xmlns:sy="resx://MediaBrowser/MediaBrowser.Resources/Summary"
+    xmlns:as="resx://MediaBrowser/MediaBrowser.Resources/AutoScroller"
+    xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
@@ -71,11 +73,21 @@
 
       <Binding Source="[SelectedItem]" Target="[TitleSet.Model]"/>
       <Binding Source="[SelectedItem]" Target="[MovieInfo.Model]"/>
-      <Binding Source="[SelectedItem]" Target="[Summary.Model]"/>
+      <Binding Source="[SelectedItem.Overview]" Target="[Summary.Text]"/>
+      <Binding Source="[SelectedItem.Overview]" Target="[AutoScrollOverview.Text]"/>
       <Binding Source="[PreSelectedItem]" Target="[TitleSet.ModelFast]"/>
       <Binding Source="[PreSelectedItem]" Target="[MovieInfo.ModelFast]"/>
-      <Binding Source="[PreSelectedItem]" Target="[Summary.ModelFast]"/>
+      <!--<Binding Source="[PreSelectedItem]" Target="[Summary.ModelFast]"/>-->
       <Binding Target="[Backdrop.Image]" Source="[PreviousSelectedItem.BackdropImage]" />
+
+      <!-- Show Proper Overview Panel -->
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[AutoScrollOverview.Visible]" />
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[Summary.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true" />
+        </Transformer>
+      </Binding>
+
 
       <Binding Source="[Item.Children.Count]" Target="[TotalItems.Content]">
         <Transformer>
@@ -169,7 +181,7 @@
     </Rules>
 
     <Content>
-      <Panel Layout="Form">
+      <Panel Layout="Form" Navigation="PreferFocusOrder">
         <Children>
 
 
@@ -186,11 +198,18 @@
             </Children>
           </Panel>
 
-          <sy:SummaryNonScrolling Name="Summary" Model="[SelectedItem]"  ModelFast="[PreSelectedItem]" Color="color://s:FontColorLight" Font="font://f:SV_SummaryFont">
+          <st:ScrollableText Name="Summary" Font="font://f:SV_SummaryFont" Color="color://s:FontColorMedium" FocusColor="color://s:FontColorLight">
+          <!--<sy:SummaryNonScrolling Name="Summary" Model="[SelectedItem]"  ModelFast="[PreSelectedItem]" Color="color://s:FontColorLight" Font="font://f:SV_SummaryFont">-->
             <LayoutInput>
               <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Counters,0,-10"></FormLayoutInput>
             </LayoutInput>
-          </sy:SummaryNonScrolling>
+          </st:ScrollableText>
+
+          <as:AutoScrollText Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:SV_SummaryFont">
+            <LayoutInput>
+              <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Counters,0,-10"></FormLayoutInput>
+            </LayoutInput>
+          </as:AutoScrollText>
 
           <Panel Layout="HorizontalFlow" Name="Counters" Padding="3,3,3,3">
             <LayoutInput>
@@ -216,7 +235,7 @@
           </ColorFill>
 
 
-          <Panel Name="MyItems" Layout="Anchor" LayoutInput="[BaseLayout]">
+          <Panel Name="MyItems" Layout="Anchor" LayoutInput="[BaseLayout]" FocusOrder="0">
             <Children>
 
               <lcf:CoverflowScroller Name="FlowItems" Application="[Application]" Folder="[Item]" >

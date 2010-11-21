@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,29 +16,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Net;
-
+using System.Windows.Threading;
+using System.Xml.Serialization;
+using Microsoft.Win32;
 
 using MediaBrowser;
-using MediaBrowser.LibraryManagement;
-using System.IO;
-using Microsoft.Win32;
+using Configurator.Code;
 using MediaBrowser.Code.ShadowTypes;
-using System.Xml.Serialization;
 using MediaBrowser.Library;
 using MediaBrowser.Library.Configuration;
-using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Entities;
-using MediaBrowser.Library.Network;
+using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Logging;
-using Configurator.Code;
+using MediaBrowser.Library.Network;
 using MediaBrowser.Library.Plugins;
-using System.Diagnostics;
 using MediaBrowser.Library.Threading;
-using System.Windows.Threading;
-using System.Threading;
-using System.Security.AccessControl;
-using System.Security.Principal;
+using MediaBrowser.LibraryManagement;
 
 namespace Configurator
 {
@@ -794,13 +793,13 @@ sortorder: {2}
             var virtualFolder = folderList.SelectedItem as VirtualFolder;
             if (virtualFolder == null) return;
 
-            var dialog = new OpenFileDialog();
+            var dialog = new System.Windows.Forms.OpenFileDialog();
             dialog.Title = "Select your image";
             dialog.Filter = "Image files (*.png;*.jpg;)|*.png;*.jpg;";
             dialog.FilterIndex = 1;
             dialog.RestoreDirectory = true;
-            var result = dialog.ShowDialog(this);
-            if (result == true)
+            //var result = dialog.ShowDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 virtualFolder.ImagePath = dialog.FileName;
                 folderImage.Source = new BitmapImage(new Uri(virtualFolder.ImagePath));
@@ -1001,10 +1000,10 @@ sortorder: {2}
 
         private void changeDaemonToolsLocation_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog();
+            var dialog = new System.Windows.Forms.OpenFileDialog();
             dialog.Filter = "*.exe|*.exe";
             var result = dialog.ShowDialog();
-            if (result == true)
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
                 config.DaemonToolsLocation = dialog.FileName;
                 //daemonToolsLocation.Content = config.DaemonToolsLocation;
@@ -1087,12 +1086,12 @@ sortorder: {2}
             var mediaPlayer = lstExternalPlayers.SelectedItem as ConfigData.ExternalPlayer;
             if (mediaPlayer != null)
             {
-                var dialog = new OpenFileDialog();
+                var dialog = new System.Windows.Forms.OpenFileDialog();
                 dialog.Filter = "*.exe|*.exe";
                 if (mediaPlayer.Command != string.Empty)
                     dialog.FileName = mediaPlayer.Command;
 
-                if (dialog.ShowDialog() == true)
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     mediaPlayer.Command = dialog.FileName;
                     txtPlayerCommand.Text = mediaPlayer.Command;
@@ -1370,7 +1369,7 @@ sortorder: {2}
             hdrAdvanced.FontWeight = hdrBasic.FontWeight = hdrHelpAbout.FontWeight = FontWeights.Normal;
             tabControl1.SelectedIndex = 0;
         }
-        private void SetHeader(Label label)
+        private void SetHeader(System.Windows.Controls.Label label)
         {
             ClearHeaders();
             label.Foreground = new SolidColorBrush(System.Windows.Media.Colors.Black);
