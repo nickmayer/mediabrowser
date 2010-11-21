@@ -289,8 +289,8 @@ namespace MediaBrowser.Library.Providers
                                 break;
                         }
                     }
-                }
-                if (movie.MediaInfo.AudioChannelCount == 0) movie.MediaInfo.AudioChannelCount = doc.SafeGetInt32("Title/MediaInfo/Audio/Channels");
+                }                
+                if (string.IsNullOrEmpty(movie.MediaInfo.AudioChannelCount)) movie.MediaInfo.AudioChannelCount = doc.SafeGetString("Title/MediaInfo/Audio/Channels", "");
                 if (movie.MediaInfo.AudioBitRate == 0) movie.MediaInfo.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec))
                 {
@@ -307,12 +307,6 @@ namespace MediaBrowser.Library.Providers
                                 break;
                             case "h.264":
                                 movie.MediaInfo.VideoCodec = "AVC";
-                                break;
-                            case "wmv hd":
-                                movie.MediaInfo.VideoCodec = "WMV_HD";
-                                break;
-                            case "mpeg video":
-                                movie.MediaInfo.VideoCodec = "mpegvideo";
                                 break;
                             default:
                                 movie.MediaInfo.VideoCodec = video;

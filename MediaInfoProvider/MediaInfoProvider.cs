@@ -78,7 +78,7 @@ namespace MediaInfoProvider
         {
             if (original == null) return acquired;
             if (original.AudioBitRate == 0) original.AudioBitRate = acquired.AudioBitRate;
-            if (original.AudioChannelCount == 0) original.AudioChannelCount = acquired.AudioChannelCount;
+            if (original.AudioChannelCount == "") original.AudioChannelCount = acquired.AudioChannelCount;
             if (original.AudioFormat == "")
             {
                 original.AudioProfile = acquired.AudioProfile;
@@ -119,11 +119,10 @@ namespace MediaInfoProvider
                 int runTime;
                 Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
                 int streamCount;
-                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
-                int audioChannels;
-                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)"), out audioChannels);
+                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);               
+                string audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
                 string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
-                string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate/String");
+                string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
 
 
                 mediaInfoData = new MediaInfoData
