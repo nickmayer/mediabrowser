@@ -30,11 +30,11 @@ namespace MtnFrameGrabProvider {
             psi.CreateNoWindow = true;
             // see: http://moviethumbnail.sourceforge.net/usage.en.html
             psi.Arguments = string.Format("\"{0}\" -P -c 1 -r 1 -B {1} -C 2 -i -t -z -D 8 -o .jpg -O {2}",
-                video, secondsFromStart, GetShortPath(Plugin.FrameGrabsPath));
+                video, secondsFromStart, GetShortPath(Path.GetTempPath()));
             var process = Process.Start(psi);
             process.WaitForExit();
 
-            destination = Path.Combine(Plugin.FrameGrabsPath, Path.GetFileNameWithoutExtension(video) + ".jpg");
+            destination = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video) + ".jpg");
             if (process.ExitCode == 0)
                 return true;
             else
