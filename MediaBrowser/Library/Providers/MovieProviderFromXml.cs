@@ -281,7 +281,7 @@ namespace MediaBrowser.Library.Providers
                                 movie.MediaInfo.AudioProfile = "TrueHD";
                                 break;
                             case "mp2":
-                                movie.MediaInfo.AudioFormat = "MPEG AUDIO";
+                                movie.MediaInfo.AudioFormat = "MPEG Audio";
                                 movie.MediaInfo.AudioProfile = "Layer 2";
                                 break;
                             default:
