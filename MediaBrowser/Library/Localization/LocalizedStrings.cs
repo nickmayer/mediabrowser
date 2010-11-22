@@ -34,7 +34,7 @@ namespace MediaBrowser.Library.Localization
 
         public void AddStringData(object stringData)
         {
-            //translate our object definition into a properyset for mcml lookups
+            //translate our object definition into a propertyset for mcml lookups
             // and a reverse dictionary so we can lookup keys by value
             foreach (var field in stringData.GetType().GetFields())
             {

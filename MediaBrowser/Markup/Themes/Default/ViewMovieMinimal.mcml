@@ -8,7 +8,7 @@
 	  xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
 	  xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
-	  xmlns:vp="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
+	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
 	  xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
 	  xmlns:mp="resx://MediaBrowser/MediaBrowser.Resources/MPAARating"
 	  xmlns:st="resx://MediaBrowser/MediaBrowser.Resources/ScrollableText"
@@ -120,6 +120,8 @@
       <!-- Show and hide Selectors -->
       <Condition Source="[Model.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Info.Visible]" Value="true" />
       <Condition Source="[Model.ChosenIndex]" SourceValue="1" ConditionOp="Equals" Target="[ActorScroller.Visible]" Value="true" />
+      
+      <Binding Source="[Application.ShowNowPlaying]" Target="[NowPlaying.Visible]" />
 
     </Rules>
 
@@ -128,6 +130,13 @@
 
         <Children>
 
+          <!-- Now Playing View -->
+          <np:NowPlayingViewport Name="NowPlaying" Application="[Application]">
+            <LayoutInput>
+              <FormLayoutInput Top="TitleText,1,10" Right="Parent,1,495" />
+            </LayoutInput>
+          </np:NowPlayingViewport>
+          
           <!-- Movie Title -->
           <Clip Name="TitleText" FadeSize="40" Orientation="Vertical" FadeAmount="0.7" NearOffset="-25"
                 CenterPointPercent="-100,-100,0">
@@ -379,7 +388,7 @@
             </LayoutInput>
             <Children>
               <ColorFill Content="Transparent" Layout="VerticalFlow"
-                         Padding="0,10,100,10" Margins="20,0,0,0" Navigation="ContainHorizontal, RememberFocus" >
+                         Padding="0,10,100,10" Margins="20,0,0,0" Navigation="RememberFocus" >
                 <Children>
                   <ib:ImageButton Name="ResumeMovieButton" Text="[Application.LocalStrings.#ResumeDetail!cor:String]" Command="[ResumeMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconResume" Size="200,50" Font="font://f:MM_ButtonFont"/>
                   <ib:ImageButton Name="PlayMovieButton" Text="[Application.LocalStrings.#PlayDetail!cor:String]" Command="[PlayMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPlay" Size="200,50" Font="font://f:MM_ButtonFont" />
@@ -591,6 +600,17 @@
       <Binding Source="[Item.Genres]" Target="[GenreRepeater.Source]" />
       <Binding Source="[Item.Directors]" Target="[DirectorRepeater.Source]"/>
       <Binding Source="[Item.Overview]" Target="[Overview.Text]" />
+      <Binding Source="[Item.Overview]" Target="[AutoScrollOverview.Text]" />
+
+      <!-- Show Proper Overview Panel -->
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[AutoScrollOverview.Visible]" />
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[Overview.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true" />
+        </Transformer>
+      </Binding>
+      
+      
       <Condition Source="[Item.ImdbRating]" ConditionOp="GreaterThanOrEquals" SourceValue="0" Target="[IMDBRatingPanel.Visible]" Value="true"  />
       <Condition Source="[Item.Directors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[DirectedByPanel.Visible]" Value="true"  />
 
@@ -655,7 +675,7 @@
                   <FlowLayout Orientation="Horizontal" AllowWrap="true"/>
                 </Layout>
                 <Children>
-                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" />
+                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,45"/>
                   <Text Name="MediaInfo" Font="Arial, 12" Color="[ValueColor]" WordWrap="true" />
                 </Children>
               </Panel>
@@ -769,6 +789,7 @@
                 </Layout>
                 <Children>
                   <as:AutoScroller Name="Overview" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"/>
+                  <as:AutoScrollText Name="AutoScrollOverview" Text="[Item.Overview]" Font="font://f:MM_SummaryFont"/>
                 </Children>
               </Panel>
             </Children>

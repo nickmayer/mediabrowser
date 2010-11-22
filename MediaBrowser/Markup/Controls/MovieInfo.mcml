@@ -84,7 +84,7 @@
           <gl:GenreList Name="Genres" SourceData="[Model.Genres]" Font="font://f:TD_MI_GenreFont" Visible="[DisplayGenres]"/>
           <d:Directors Name="Directors" Application="[Application]" Item="[Model]" TitleFont="font://f:TD_MI_DirectorTitleFont" Font="font://f:TD_MI_DirectorFont" Visible="[DisplayDirector]"/>
           <w:Writers Name="Writers" Application="[Application]" Item="[Model]" TitleFont="font://f:TD_MI_WriterTitleFont" Font="font://f:TD_MI_WriterFont" Visible="[DisplayWriter]"/>
-          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Model]" Visible="[DisplayMediaInfo]"/>
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Model]" Visible="[DisplayMediaInfo]" MaxIconSize="0,45"/>
           <Text Name="MediaInfo" Font="Arial, 12" Color="color://s:FontColorLight" Visible="[DisplayMediaInfo]" />
         </Children>
       </Panel>

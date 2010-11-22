@@ -80,6 +80,7 @@ namespace MediaBrowser.Library.Localization
         public string UpdateLibraryConfigDesc = "Update information on the items in your library.";
         public string BackdropRotationIntervalConfigDesc = "Seconds between Backdrop Rotations.";
         public string BackdropTransitionIntervalConfigDesc = "Fade in seconds for the backdrop transition animation.";
+        public string AutoScrollTextConfigDesc = "Turn on Automatically Scrolling Overviews.";
 
 
         //Config Panel
@@ -157,6 +158,7 @@ namespace MediaBrowser.Library.Localization
         public string BackdropSettingsConfig = "Backdrop Settings";
         public string BackdropRotationIntervalConfig = "Rotation Time";
         public string BackdropTransitionIntervalConfig = "Transition Time";
+        public string AutoScrollTextConfig = "Auto Scroll Overview";
 
 
 
@@ -284,6 +286,7 @@ namespace MediaBrowser.Library.Localization
         public string Playstr = "Play";
         public string MinutesStr = "mins"; //Minutes abbreviation
         public string KBsStr = "Kbps";  //Kilobytes per second
+        public string FrameRateStr = "fps";  //Frames per second
 
         //Profiler
         public string WelcomeProf = "Welcome to Media Browser";

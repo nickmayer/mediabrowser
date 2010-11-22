@@ -772,6 +772,12 @@ namespace MediaBrowser
             set { if (this.data.MaxResumePct != value) { this.data.MaxResumePct = value; Save(); FirePropertyChanged("MaxResumePct"); } }
         }
 
+        public bool AutoScrollText
+        {
+            get { return this.data.AutoScrollText; }
+            set { if (this.data.AutoScrollText != value) { this.data.AutoScrollText = value; Save(); FirePropertyChanged("AutoScrollText"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;
