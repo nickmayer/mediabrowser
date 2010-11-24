@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0014";
+        const string VERSION = "1.0015";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -159,6 +159,7 @@ namespace MediaBrowser.Library.Localization
         public string BackdropRotationIntervalConfig = "Rotation Time";
         public string BackdropTransitionIntervalConfig = "Transition Time";
         public string AutoScrollTextConfig = "Auto Scroll Overview";
+        public string SortYearsAscConfig = "Sort by Year in Ascending Order";
 
 
 

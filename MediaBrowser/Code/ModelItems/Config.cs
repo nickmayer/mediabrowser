@@ -772,6 +772,12 @@ namespace MediaBrowser
             set { if (this.data.MaxResumePct != value) { this.data.MaxResumePct = value; Save(); FirePropertyChanged("MaxResumePct"); } }
         }
 
+         public bool YearSortAsc
+        {
+            get { return this.data.YearSortAsc; }
+            set { if (this.data.YearSortAsc != value) { this.data.YearSortAsc = value; Save(); FirePropertyChanged("YearSortAsc"); } }
+        }
+
         public bool AutoScrollText
         {
             get { return this.data.AutoScrollText; }

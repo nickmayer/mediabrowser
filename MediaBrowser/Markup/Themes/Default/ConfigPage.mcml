@@ -116,6 +116,7 @@
       <BooleanChoice Name="DefaultShowLabels" Value="[Application.Config.DefaultShowLabels]" />
       <BooleanChoice Name="DefaultVerticalScroll" Value="[Application.Config.DefaultVerticalScroll]" />
       <BooleanChoice Name="UseAutoPlayForIso" Value="[Application.Config.UseAutoPlayForIso]" />
+      <BooleanChoice Name="YearSortAsc" Value="[Application.Config.YearSortAsc]" />
       <EditableText Name="InitialFolder" Value="[Application.Config.InitialFolder]" />
       <EditableText Name="ImageByNameLocation" Value="[Application.Config.ImageByNameLocation]" />
       <EditableText Name="ExtenderNativeTypes" Value="[Application.Config.ExtenderNativeTypes]" />
@@ -393,6 +394,7 @@
       <Binding Source="[SortRemoveCharacters.Value]" Target="[Config.SortRemoveCharacters]" />
       <Binding Source="[SortReplaceCharacters.Value]" Target="[Config.SortReplaceCharacters]" />
       <Binding Source="[SortReplaceWords.Value]" Target="[Config.SortReplaceWords]" />
+      <Binding Source="[YearSortAsc.Value]" Target="[Config.YearSortAsc]" />
 
       <Binding Source="[PlaylistLimit.Value]" Target="[Config.PlaylistLimit]" />
       <Binding Source="[BreadcrumbCount.Value]" Target="[Config.BreadcrumbCountLimit]" />
@@ -610,6 +612,7 @@
                       <me:TextHeader Text="[Application.LocalStrings.#GeneralBehaviorConfig!cor:String]" />
                       <cb:CheckBox Label="[Application.LocalStrings.#AllowNestedMovieFoldersConfig!cor:String]" Checked="[EnableNestedMovieFolders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="[Application.LocalStrings.#AutoEnterSingleFolderItemsConfig!cor:String]" Checked="[AutoEnterSingleDirs]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="[Application.LocalStrings.#SortYearsAscConfig!cor:String]" Checked="[YearSortAsc]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <me:TextHeader Text="[Application.LocalStrings.#MultipleFileBehaviorConfig!cor:String]" />
                       <cb:CheckBox Label="[Application.LocalStrings.#TreatMultipleFilesAsSingleMovieConfig!cor:String]" Checked="[EnableMoviePlaylists]"  FocusItem="[FocusItem]" Margins="[CMargin]"  Font="font://f:CP_ConfigItemFont"/>
                       <ss:SimpleSpinner  Label="[Application.LocalStrings.#MultipleFileSizeLimitConfig!cor:String]" Model="[PlaylistLimit]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
