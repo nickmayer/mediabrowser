@@ -98,12 +98,20 @@ namespace MediaBrowser.Library.Entities {
         public List<LibraryImage> BackdropImages {
             get {
                 var images = new List<LibraryImage>();
+                if (BackdropImagePaths == null)
+                {
+                    // inherit from parent
+                    if (Parent != null)
+                    {
+                        BackdropImagePaths = Parent.BackdropImagePaths;
+                    }
+                }
                 if (BackdropImagePaths != null) {
                     foreach (var path in BackdropImagePaths) {
                         var image = GetImage(path);
                         if (image != null) images.Add(image);
                     }
-                }
+                }  
                 return images;
             }
         }
