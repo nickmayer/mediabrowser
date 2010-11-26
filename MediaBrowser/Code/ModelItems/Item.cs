@@ -588,7 +588,20 @@ namespace MediaBrowser.Library
                 primaryImageSmall = null;
                 if (baseItem.PrimaryImage != null)
                 {
-                    var ignore = baseItem.PrimaryImage.GetLocalImagePath(); //force the primary to re-cache
+                    string ignore;
+                    //get the display size of our primary image if known
+                    if (PhysicalParent != null && PhysicalParent.DisplayPrefs != null)
+                    {
+                        Size s = PhysicalParent.DisplayPrefs.ThumbConstraint.Value;
+                        if (s != null && s.Width > 0 && s.Height > 0)
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
+                        else
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at full size
+                    }
+                    else
+                    {
+                        ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at full size
+                    }
                 }
                 if (baseItem.BackdropImage != null)
                 {
