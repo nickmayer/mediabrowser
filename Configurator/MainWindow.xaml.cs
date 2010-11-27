@@ -113,36 +113,8 @@ namespace Configurator
 
                 RefreshEntryPoints(false);
                 ValidateMBAppDataFolderPermissions();
-
-
-                //wait for plugins to get loaded and then go see if we have updates
-                while (!PluginManager.Instance.PluginsLoaded) { }
-                if (pluginUpgradesAvailable()) MessageBox.Show("Some of your installed plug-ins have newer versions available.  You should upgrade these plugins from the 'Plug-ins' tab.\n\nYour current versions may not work with this version of MediaBrowser.", "Upgrade Plugins");
-            },() =>
-                {
-                    //be sure latest version gets selected properly
-                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-                    {
-                        pluginList_SelectionChanged(this, null);
-                    }));
-                });
+            });
         }
-
-        private bool pluginUpgradesAvailable()
-        {
-            //Look to see if any of our installed plugins have upgrades available
-            foreach (IPlugin plugin in Kernel.Instance.Plugins)
-            {
-                System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
-                if (v != null)
-                {
-                    if (v > plugin.Version && rv <= Kernel.Instance.Version) return true;
-                }
-            }
-            return false;
-        }
-
 
         public void ValidateMBAppDataFolderPermissions()
         {

@@ -65,6 +65,18 @@ namespace Configurator.Code {
         {
             get { return false; }
         }
+
+        public virtual bool Installed
+        {
+            get { return true; }
+            set {}
+        }
+
+        public virtual bool UpdateAvail
+        {
+            get;
+            set;
+        }
     }
 
     public class PluginCollection : ObservableCollection<IPlugin> {
@@ -74,9 +86,9 @@ namespace Configurator.Code {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
 
                 Add(new SamplePlugin() { Name = "Super Plugin", 
-                    Description = "This plugin does absoulutly nothing, its actually a sample plugin for wpf to bind to."});
+                    Description = "This plugin does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = false});
                 Add(new SamplePlugin() { Name = "The other plugin", 
-                    Description = "This plugin also does absoulutly nothing, its actually a sample plugin for wpf to bind to." });
+                    Description = "This plugin also does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = true });
 
             } 
         }

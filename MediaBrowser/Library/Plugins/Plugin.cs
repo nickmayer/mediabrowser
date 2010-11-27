@@ -119,6 +119,18 @@ namespace MediaBrowser.Library.Plugins {
             get { return pluginInterface.InstallGlobally; }
         }
 
+        public bool Installed
+        {
+            get { return pluginInterface.InstallGlobally; }
+            set { pluginInterface.Installed = value; }
+        }
+
+        public bool UpdateAvail
+        {
+            get { return pluginInterface.UpdateAvail; }
+            set { pluginInterface.UpdateAvail = value; }
+        }
+
         public virtual void Configure()
         {
             pluginInterface.Configure();

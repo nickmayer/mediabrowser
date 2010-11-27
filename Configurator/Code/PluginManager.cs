@@ -61,6 +61,7 @@ namespace Configurator.Code {
             requiredVersions.Clear();
 
             foreach (var plugin in sources.AvailablePlugins) {
+                plugin.Installed = (this.InstalledPlugins.Find(plugin) != null );
                 availablePlugins.Add(plugin);
                 try
                 {
@@ -120,6 +121,13 @@ namespace Configurator.Code {
 
             installedPlugins.Clear();
             foreach (var plugin in Kernel.Instance.Plugins) {
+                System.Version v = GetLatestVersion(plugin);
+                System.Version rv = GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
+                if (v != null)
+                {
+                    plugin.UpdateAvail = (v > plugin.Version && rv <= Kernel.Instance.Version);
+                }
+                plugin.Installed = true;
                 installedPlugins.Add(plugin);
             }
         }

@@ -70,5 +70,8 @@ namespace MediaBrowser.Library.Plugins {
             get;
             set;
         }
+
+        public virtual bool Installed { get; set; }
+        public virtual bool UpdateAvail { get; set; }
     }
 }
