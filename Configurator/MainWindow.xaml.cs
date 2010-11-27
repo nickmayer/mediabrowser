@@ -846,7 +846,8 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0,0,0,0);
+                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
+                System.Version bv = PluginManager.Instance.GetBackedUpVersion(plugin);
                 //enable the remove button if a plugin is selected.
                 removePlugin.IsEnabled = true;
 
@@ -868,6 +869,18 @@ sortorder: {2}
                 {
                     latestPluginVersion.Content = "Unknown";
                     upgradePlugin.IsEnabled = false;
+                }
+                //show backup if exists
+                if (bv != null)
+                {
+                    lblBackedUpVersion.Content = bv.ToString();
+                    btnRollback.IsEnabled = (bv != plugin.Version);
+                    rollbackPanel.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    btnRollback.IsEnabled = false;
+                    rollbackPanel.Visibility = Visibility.Hidden;
                 }
             }
         }
@@ -1792,6 +1805,29 @@ sortorder: {2}
         {
             e.Handled = !Char.IsDigit(e.Text[0]);
             base.OnPreviewTextInput(e);
+        }
+
+        private void btnRollback_Click(object sender, RoutedEventArgs e)
+        {
+            IPlugin plugin = pluginList.SelectedItem as IPlugin;
+            if (plugin == null) return;
+            if (MessageBox.Show("Are you sure you want to overwrite your current version of "+plugin.Name, "Rollback Plug-in", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                this.Cursor = Cursors.Wait;
+                if (PluginManager.Instance.RollbackPlugin(plugin))
+                {
+                    PluginManager.Instance.RefreshInstalledPlugins();
+                    pluginList.SelectedIndex = 0;
+                    this.Cursor = Cursors.Arrow;
+                    MessageBox.Show("Plugin " + plugin.Name + " rolled back to previous version.", "Rollback Successful");
+                }
+                else
+                {
+                    Logger.ReportError("Error attempting to rollback plugin " + plugin.Name);
+                    this.Cursor = Cursors.Arrow;
+                    MessageBox.Show("Error attempting to rollback plugin " + plugin.Name, "Rollback Failed");
+                }
+            }
         }
     }
 

@@ -635,7 +635,7 @@ namespace MediaBrowser.Library {
                 IAsyncResult result = (IAsyncResult)request.BeginGetResponse(new AsyncCallback(ResponseCallback), requestState);
             }
             else {
-                File.Copy(path, target);
+                File.Copy(path, target, true);
                 InitialisePlugin(target);
             }
 

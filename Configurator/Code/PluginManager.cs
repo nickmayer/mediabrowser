@@ -35,7 +35,9 @@ namespace Configurator.Code {
 
         PluginCollection installedPlugins = new PluginCollection();
         PluginCollection availablePlugins = new PluginCollection();
+        PluginCollection backedUpPlugins = new PluginCollection();
         PluginSourceCollection sources = PluginSourceCollection.Instance;
+        string backupDir = Path.Combine(ApplicationPaths.AppPluginPath, "Backup");
 
         Dictionary<string, System.Version> latestVersions = new Dictionary<string, System.Version>();
         Dictionary<string, System.Version> requiredVersions = new Dictionary<string, System.Version>();
@@ -46,6 +48,7 @@ namespace Configurator.Code {
                 {
                     RefreshInstalledPlugins();
                     RefreshAvailablePlugins();
+                    RefreshBackedUpPlugins();
                     PluginsLoaded = true; //safe to go see if we have updates
                 });
             }
@@ -76,7 +79,29 @@ namespace Configurator.Code {
                     Logger.ReportException("Cannot add plugin latest version. Probably two references to same plugin.", e);
                 }
             }
-        } 
+        }
+
+        private void RefreshBackedUpPlugins()
+        {
+            backedUpPlugins.Clear();
+            if (Directory.Exists(backupDir))
+            {
+                foreach (var file in Directory.GetFiles(backupDir))
+                {
+                    if (file.ToLower().EndsWith(".dll"))
+                    {
+                        try
+                        {
+                            backedUpPlugins.Add(Plugin.FromFile(file, true));
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error attempting to load " + file + " as plug-in.", e);
+                        }
+                    }
+                }
+            }
+        }
 
         public void InstallPlugin(IPlugin plugin,
           MediaBrowser.Library.Network.WebDownload.PluginInstallUpdateCB updateCB,
@@ -91,23 +116,7 @@ namespace Configurator.Code {
             //    }
             //}
 
-            //Backup current version if installed and different from the one we are installing
-              try
-              {
-                  if (plugin.Installed && InstalledPlugins.Find(plugin).Version != plugin.Version)
-                  {
-                      string backupDir = Path.Combine(ApplicationPaths.AppPluginPath, "Backup");
-                      if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
-                      string oldPluginPath = plugin.InstallGlobally ?
-                          Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", plugin.Filename)) :
-                          Path.Combine(ApplicationPaths.AppPluginPath, plugin.Filename);
-                      File.Copy(oldPluginPath, Path.Combine(backupDir, plugin.Filename));
-                  }
-              }
-              catch (Exception e)
-              {
-                  Logger.ReportException("Error trying to backup current plugin", e);
-              }
+            BackupPlugin(plugin);
 
             if (plugin is RemotePlugin) {
                 try {
@@ -130,6 +139,51 @@ namespace Configurator.Code {
                 }
             }
 
+        }
+
+        private bool BackupPlugin(IPlugin plugin)
+        {
+            //Backup current version if installed and different from the one we are installing
+            try
+            {
+                if (plugin.Installed && InstalledPlugins.Find(plugin).Version != plugin.Version)
+                {
+                    if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
+                    string oldPluginPath = plugin.InstallGlobally ?
+                        Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", plugin.Filename)) :
+                        Path.Combine(ApplicationPaths.AppPluginPath, plugin.Filename);
+                    File.Copy(oldPluginPath, Path.Combine(backupDir, plugin.Filename),true);
+                    if (backedUpPlugins.Find(plugin) == null) backedUpPlugins.Add(plugin);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error trying to backup current plugin", e);
+            }
+            return false;
+        }
+
+        public bool RollbackPlugin(IPlugin plugin)
+        {
+            try
+            {
+                string source = Path.Combine(backupDir, plugin.Filename);
+                if (File.Exists(source))
+                {
+                    string target = plugin.InstallGlobally ?
+                            Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", plugin.Filename)) :
+                            Path.Combine(ApplicationPaths.AppPluginPath, plugin.Filename);
+                    Kernel.Instance.InstallPlugin(source, plugin.InstallGlobally, null, null, null);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error attempting to rollback plugin " + plugin.Name, e);
+            }
+
+            return false;
         }
 
         public void RefreshInstalledPlugins() {
@@ -173,8 +227,15 @@ namespace Configurator.Code {
             System.Version version;
             requiredVersions.TryGetValue(plugin.Name + plugin.Filename, out version);
             return version;
-        } 
+        }
 
+        public System.Version GetBackedUpVersion(IPlugin plugin)
+        {
+            System.Version version = null;
+            IPlugin p = backedUpPlugins.Find(plugin);
+            if (p != null) version = p.Version;
+            return version;
+        }
 
         public PluginCollection InstalledPlugins {
             get {
@@ -182,10 +243,19 @@ namespace Configurator.Code {
             } 
         }
 
-        public PluginCollection AvailablePlugins {
-            get {
+        public PluginCollection AvailablePlugins
+        {
+            get
+            {
                 return availablePlugins;
-            } 
+            }
+        }
+        public PluginCollection BackedUpPlugins
+        {
+            get
+            {
+                return backedUpPlugins;
+            }
         }
         public PluginSourceCollection Sources
         {
