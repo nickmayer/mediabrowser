@@ -65,7 +65,7 @@
                             <SolidColorBrush Color="Red"/>
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="FontWeight" Value="Bold" />
+                    <!--<Setter Property="FontWeight" Value="Bold" />-->
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Path=Highlight}" Value="True">
                     <Setter Property="Background">

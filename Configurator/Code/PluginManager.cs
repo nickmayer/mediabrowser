@@ -66,7 +66,13 @@ namespace Configurator.Code {
             requiredVersions.Clear();
 
             foreach (var plugin in sources.AvailablePlugins) {
-                plugin.Installed = (this.InstalledPlugins.Find(plugin) != null );
+                IPlugin ip = this.InstalledPlugins.Find(plugin);
+                if (ip != null)
+                {
+                    plugin.Installed = true;
+                    //we need to set this in the installed plugin here because we didn't have this info the first time we refreshed
+                    plugin.UpdateAvail = ip.UpdateAvail = (plugin.Version > ip.Version && Kernel.Instance.Version >= plugin.RequiredMBVersion);
+                }
                 availablePlugins.Add(plugin);
                 try
                 {
@@ -152,8 +158,11 @@ namespace Configurator.Code {
                     string oldPluginPath = plugin.InstallGlobally ?
                         Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", plugin.Filename)) :
                         Path.Combine(ApplicationPaths.AppPluginPath, plugin.Filename);
-                    File.Copy(oldPluginPath, Path.Combine(backupDir, plugin.Filename),true);
-                    if (backedUpPlugins.Find(plugin) == null) backedUpPlugins.Add(plugin);
+                    string bpPath = Path.Combine(backupDir, plugin.Filename);
+                    File.Copy(oldPluginPath,bpPath ,true);
+                    IPlugin bp = backedUpPlugins.Find(plugin);
+                    if (bp != null) backedUpPlugins.Remove(bp);
+                    backedUpPlugins.Add(Plugin.FromFile(bpPath,false));
                     return true;
                 }
             }
@@ -200,6 +209,12 @@ namespace Configurator.Code {
                 if (v != null)
                 {
                     plugin.UpdateAvail = (v > plugin.Version && rv <= Kernel.Instance.Version);
+                    IPlugin ap = availablePlugins.Find(plugin);
+                    if (ap != null)
+                    {
+                        ap.Installed = true;
+                        ap.UpdateAvail = plugin.UpdateAvail;
+                    }
                 }
                 plugin.Installed = true;
                 installedPlugins.Add(plugin);

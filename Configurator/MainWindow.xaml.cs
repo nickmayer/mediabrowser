@@ -883,6 +883,10 @@ sortorder: {2}
                     rollbackPanel.Visibility = Visibility.Hidden;
                 }
             }
+            else
+            {
+                pluginPanel.Visibility = Visibility.Hidden;
+            }
         }
 
         private void upgradePlugin_Click(object sender, RoutedEventArgs e) {
