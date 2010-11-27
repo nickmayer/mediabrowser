@@ -6,11 +6,13 @@ using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library;
 using System.ComponentModel;
 using System.Windows;
+using System.IO;
 using MediaBrowser.Library.Logging;
 using System.Diagnostics;
 using System.Windows.Data;
 using System.Windows.Threading;
 using MediaBrowser.Library.Threading;
+using MediaBrowser.Library.Configuration;
 
 namespace Configurator.Code {
     public class PluginManager {
@@ -88,6 +90,24 @@ namespace Configurator.Code {
             //        return;
             //    }
             //}
+
+            //Backup current version if installed and different from the one we are installing
+              try
+              {
+                  if (plugin.Installed && InstalledPlugins.Find(plugin).Version != plugin.Version)
+                  {
+                      string backupDir = Path.Combine(ApplicationPaths.AppPluginPath, "Backup");
+                      if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
+                      string oldPluginPath = plugin.InstallGlobally ?
+                          Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", plugin.Filename)) :
+                          Path.Combine(ApplicationPaths.AppPluginPath, plugin.Filename);
+                      File.Copy(oldPluginPath, Path.Combine(backupDir, plugin.Filename));
+                  }
+              }
+              catch (Exception e)
+              {
+                  Logger.ReportException("Error trying to backup current plugin", e);
+              }
 
             if (plugin is RemotePlugin) {
                 try {
