@@ -146,7 +146,7 @@
                         <Button Margin="0,0,0,77" VerticalAlignment="Bottom" Height="32" Content="Configure" Width="80" IsEnabled="{Binding Path=SelectedItem.IsConfigurable, ElementName=pluginList, Mode=Default}" HorizontalAlignment="Right" x:Name="configPlugin"  Click="configurePlugin_Click" Visibility="Visible"/>
 					    <ProgressBar VerticalAlignment="Bottom" Margin="0,0,0,0" x:Name="progress" Visibility="Hidden" Height="32"/>
                             <Grid Height="45" Margin="0,0,0,115" Name="rollbackPanel" VerticalAlignment="Bottom">
-                                <Button Name="btnRollback" Visibility="Visible" Width="80" HorizontalAlignment="Right" Margin="0,13,0,0" Height="32" VerticalAlignment="Top" Click="btnRollback_Click">Rolllback</Button>
+                                <Button Name="btnRollback" Visibility="Visible" Width="80" HorizontalAlignment="Right" Margin="0,13,0,0" Height="32" VerticalAlignment="Top" Click="btnRollback_Click">Rollback</Button>
                                 <Label Content="1.2.3.3" Margin="0,13,114,0" Name="lblBackedUpVersion" HorizontalAlignment="Right" Width="90" />
                                 <Label HorizontalContentAlignment="Right" Margin="59,13,210,0">Backed Up Version:</Label>
                             </Grid>
@@ -364,6 +364,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
+            <TextBlock Height="25" Margin="15,54,339,0" Name="alertText" VerticalAlignment="Top" Text="Some of your plugins have updates available" FontSize="16" Foreground="MidnightBlue" FontWeight="Bold" Opacity="0" IsEnabled="False" Visibility="Hidden" />
         </Grid>
         
         

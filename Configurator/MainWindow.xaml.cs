@@ -45,7 +45,7 @@ namespace Configurator
         ConfigData config;
         Ratings ratings = new Ratings();
         PermissionDialog waitWin;
-        PopupMsg PopUpMsg = new PopupMsg();
+        PopupMsg PopUpMsg;
 
         public MainWindow()
         { 
@@ -61,6 +61,7 @@ namespace Configurator
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
             
             InitializeComponent();
+            PopUpMsg = new PopupMsg(alertText);
             config = Kernel.Instance.ConfigData;
             LoadComboBoxes();
             lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.VersionStr;
@@ -118,7 +119,7 @@ namespace Configurator
                 if (PluginManager.Instance.UpgradesAvailable())
                     Dispatcher.Invoke(DispatcherPriority.Normal, (System.Windows.Forms.MethodInvoker)(() =>
                     {
-                        PopUpMsg.DisplayMessage("Some of your plug-ins have upgrades available.  Select the plug-ins tab to install updates.", this.Width - 200, this.Height - 250);
+                        PopUpMsg.DisplayMessage("Some of your plug-ins have upgrades available.");
                     }));
             });
         }
@@ -1830,7 +1831,7 @@ sortorder: {2}
                     PluginManager.Instance.RefreshInstalledPlugins();
                     pluginList.SelectedIndex = 0;
                     this.Cursor = Cursors.Arrow;
-                    PopUpMsg.DisplayMessage("Plugin " + plugin.Name + " rolled back to previous version.", this.Width-200,this.Height-250);
+                    PopUpMsg.DisplayMessage("Plugin " + plugin.Name + " rolled back.");
                 }
                 else
                 {
