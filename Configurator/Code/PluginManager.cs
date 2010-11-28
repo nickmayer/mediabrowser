@@ -203,7 +203,7 @@ namespace Configurator.Code {
             }
 
             installedPlugins.Clear();
-            foreach (var plugin in Kernel.Instance.Plugins) {
+            foreach (var plugin in Kernel.Instance.Plugins.OrderBy(p => p.Name)) {
                 System.Version v = GetLatestVersion(plugin);
                 System.Version rv = GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
                 if (v != null)
