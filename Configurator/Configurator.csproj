@@ -173,6 +173,7 @@
     <Compile Include="Code\LibraryFolder.cs" />
     <Compile Include="Code\PluginCollection.cs" />
     <Compile Include="Code\PluginManager.cs" />
+    <Compile Include="Code\PopupMsg.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PermissionDialog.xaml.cs">
       <DependentUpon>PermissionDialog.xaml</DependentUpon>
@@ -273,6 +274,9 @@
   <ItemGroup>
     <Resource Include="Images\btn_down.png" />
     <Resource Include="Images\btn_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\popup_message.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -45,6 +45,7 @@ namespace Configurator
         ConfigData config;
         Ratings ratings = new Ratings();
         PermissionDialog waitWin;
+        PopupMsg PopUpMsg = new PopupMsg();
 
         public MainWindow()
         { 
@@ -113,6 +114,12 @@ namespace Configurator
 
                 RefreshEntryPoints(false);
                 ValidateMBAppDataFolderPermissions();
+                while (!PluginManager.Instance.PluginsLoaded) { } //wait for plugins to load
+                if (PluginManager.Instance.UpgradesAvailable())
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (System.Windows.Forms.MethodInvoker)(() =>
+                    {
+                        PopUpMsg.DisplayMessage("Some of your plug-ins have upgrades available.  Select the plug-ins tab to install updates.", this.Width - 200, this.Height - 250);
+                    }));
             });
         }
 
@@ -1823,7 +1830,7 @@ sortorder: {2}
                     PluginManager.Instance.RefreshInstalledPlugins();
                     pluginList.SelectedIndex = 0;
                     this.Cursor = Cursors.Arrow;
-                    MessageBox.Show("Plugin " + plugin.Name + " rolled back to previous version.", "Rollback Successful");
+                    PopUpMsg.DisplayMessage("Plugin " + plugin.Name + " rolled back to previous version.", this.Width-200,this.Height-250);
                 }
                 else
                 {

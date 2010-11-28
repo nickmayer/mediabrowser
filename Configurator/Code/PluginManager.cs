@@ -231,6 +231,15 @@ namespace Configurator.Code {
             }
         }
 
+        public bool UpgradesAvailable()
+        {
+            foreach (IPlugin plugin in installedPlugins)
+            {
+                if (plugin.UpdateAvail) return true;
+            }
+            return false;
+        }
+
         public System.Version GetLatestVersion(IPlugin plugin) {
             System.Version version;
             latestVersions.TryGetValue(plugin.Name+plugin.Filename, out version);
