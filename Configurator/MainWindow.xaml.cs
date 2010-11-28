@@ -110,17 +110,21 @@ namespace Configurator
 
             PluginManager.Init();
 
-            Async.Queue("Startup Validations", () =>
+            Async.Queue("Plugin Upgrade Check", () =>
             {
-
-                RefreshEntryPoints(false);
-                ValidateMBAppDataFolderPermissions();
                 while (!PluginManager.Instance.PluginsLoaded) { } //wait for plugins to load
                 if (PluginManager.Instance.UpgradesAvailable())
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (System.Windows.Forms.MethodInvoker)(() =>
+                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                     {
                         PopUpMsg.DisplayMessage("Some of your plug-ins have upgrades available.");
                     }));
+            });
+
+
+            Async.Queue("Startup Validations", () =>
+            {
+                RefreshEntryPoints(false);
+                ValidateMBAppDataFolderPermissions();
             });
         }
 
