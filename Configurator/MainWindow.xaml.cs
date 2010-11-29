@@ -108,10 +108,10 @@ namespace Configurator
             podcastDetails(false);
             SaveConfig();
 
-            PluginManager.Init();
 
-            Async.Queue("Plugin Upgrade Check", () =>
+            Async.Queue("Plugin Init", () =>
             {
+                PluginManager.Instance.Init();
                 while (!PluginManager.Instance.PluginsLoaded) { } //wait for plugins to load
                 if (PluginManager.Instance.UpgradesAvailable())
                     Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>

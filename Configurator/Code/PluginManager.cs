@@ -22,15 +22,17 @@ namespace Configurator.Code {
         static PluginManager instance; 
         public static PluginManager Instance {
             get {
-                if (instance == null) {
-                    instance = (Application.Current.FindResource("PluginManager") as ObjectDataProvider).Data as PluginManager;
-                }
                 return instance;
             }
         }
 
-        internal static void Init() {
-            var junk = Instance;
+        internal void Init() {
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+                RefreshInstalledPlugins();
+                RefreshAvailablePlugins();
+                RefreshBackedUpPlugins();
+                PluginsLoaded = true; //safe to go see if we have updates
+            }
         }
 
         PluginCollection installedPlugins = new PluginCollection();
@@ -43,15 +45,7 @@ namespace Configurator.Code {
         Dictionary<string, System.Version> requiredVersions = new Dictionary<string, System.Version>();
 
         public PluginManager() {
-            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
-                Async.Queue("Plugin refresher", () =>
-                {
-                    RefreshInstalledPlugins();
-                    RefreshAvailablePlugins();
-                    RefreshBackedUpPlugins();
-                    PluginsLoaded = true; //safe to go see if we have updates
-                });
-            }
+            instance = this;
         }
 
         public void RefreshAvailablePlugins() {
