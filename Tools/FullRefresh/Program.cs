@@ -137,13 +137,9 @@ The refresh process runs in 3 steps:
                             if (item.Parent != null)
                             {
                                 DisplayPreferences dp = Kernel.Instance.ItemRepository.RetrieveDisplayPreferences(item.Id);
-                                Microsoft.MediaCenter.UI.Size s = new Microsoft.MediaCenter.UI.Size();
-                                if (dp != null) s = dp.ThumbConstraint.Value;
-                                if (s.Width > 0 && s.Height > 0)
-                                {
-                                    Console.Out.WriteLine("Cacheing primary image at " + s.Width + " x " + s.Height);
+                                Microsoft.MediaCenter.UI.Size s = dp.ThumbConstraint.Value;
+                                if (s != null && s.Width > 0 && s.Height > 0)
                                     ignore = item.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
-                                }
                                 else
                                     ignore = item.PrimaryImage.GetLocalImagePath(); //no size - cache at full size
                             }
