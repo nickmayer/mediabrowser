@@ -10,8 +10,8 @@ namespace MediaInfoProvider {
     public class Plugin : BasePlugin {
 
         internal const string PluginName = "MediaInfo Provider";
-        internal const string PluginDescription = "This plugin provides rich information about your media using the MediaInfo project."; 
-        internal const string includedMediaInfoDLL = "0.7.35.0";
+        internal const string PluginDescription = "This plugin provides rich information about your media like codecs, aspect ratio, resolution, etc. using the MediaInfo project.\n\nThis version includes MediaInfo.dll version " + Plugin.includedMediaInfoDLL + ".";
+        internal const string includedMediaInfoDLL = "0.7.37.0"; 
 
         public override void Init(Kernel kernel) {
             kernel.MetadataProviderFactories.Add(MetadataProviderFactory.Get<MediaInfoProvider>()); 
