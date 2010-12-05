@@ -39,8 +39,10 @@ namespace MtnFrameGrabProvider {
                 {
                     if (!Int32.TryParse(Plugin.PluginOptions.Instance.SecondsIn, out secondsIn)) secondsIn = 300;
                 }
-                
-                Logger.ReportInfo("Video is {0} length long", videoItem.MediaInfo.RuntimeString);
+
+                if (videoItem.MediaInfo != null) {
+                    Logger.ReportInfo("Video is {0} length long", videoItem.MediaInfo.RuntimeString);
+                }
                 Logger.ReportInfo("Looking " + secondsIn + " seconds into video.");
                 if (ThumbCreator.CreateThumb(video, ref tempFile, secondsIn)) {
                     if (File.Exists(tempFile)) {
