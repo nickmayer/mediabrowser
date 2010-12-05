@@ -132,31 +132,16 @@ The refresh process runs in 3 steps:
                         Console.Out.WriteLine("Caching images for " + item.Name);
                         string ignore = null;
                         if (item.PrimaryImage != null)
-                        {
-                            //get the display size of our primary image if known
-                            if (item.Parent != null)
+                            ignore = item.PrimaryImage.GetLocalImagePath();
+                        if (item.SecondaryImage != null)
+                            ignore = item.SecondaryImage.GetLocalImagePath();
+                        if (item.BackdropImages != null)
+                            foreach (var image in item.BackdropImages)
                             {
-                                DisplayPreferences dp = Kernel.Instance.ItemRepository.RetrieveDisplayPreferences(item.Id);
-                                Microsoft.MediaCenter.UI.Size s = dp.ThumbConstraint.Value;
-                                if (s != null && s.Width > 0 && s.Height > 0)
-                                    ignore = item.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
-                                else
-                                    ignore = item.PrimaryImage.GetLocalImagePath(); //no size - cache at full size
+                                ignore = image.GetLocalImagePath();
                             }
-                            else
-                            {
-                                ignore = item.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at full size
-                            }
-                            if (item.SecondaryImage != null)
-                                ignore = item.SecondaryImage.GetLocalImagePath();
-                            if (item.BackdropImages != null)
-                                foreach (var image in item.BackdropImages)
-                                {
-                                    ignore = image.GetLocalImagePath();
-                                }
-                            if (item.BannerImage != null)
-                                ignore = item.BannerImage.GetLocalImagePath();
-                        }
+                        if (item.BannerImage != null)
+                            ignore = item.BannerImage.GetLocalImagePath();
                     }
                 });
             });
