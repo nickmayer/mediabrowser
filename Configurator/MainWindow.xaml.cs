@@ -858,7 +858,7 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
+                System.Version rv = plugin.RequiredMBVersion;
                 System.Version bv = PluginManager.Instance.GetBackedUpVersion(plugin);
                 //enable the remove button if a plugin is selected.
                 removePlugin.IsEnabled = true;

@@ -131,6 +131,11 @@ namespace MediaBrowser.Library.Plugins {
             set { pluginInterface.UpdateAvail = value; }
         }
 
+        public string ListDisplayString
+        {
+            get { return pluginInterface.ListDisplayString; }
+        }
+
         public virtual void Configure()
         {
             pluginInterface.Configure();
