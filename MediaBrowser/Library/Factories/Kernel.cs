@@ -327,8 +327,8 @@ namespace MediaBrowser.Library {
         }
 
         static System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs args) {
-            Logger.ReportInfo(args.Name + " is being resolved!");
             if (args.Name.StartsWith("MediaBrowser,")) {
+                Logger.ReportInfo("Plug-in reference to "+args.Name + " is being linked to version "+System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
                 return typeof(Kernel).Assembly;
             }
             return null;
