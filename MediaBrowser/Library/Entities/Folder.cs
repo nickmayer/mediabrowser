@@ -169,6 +169,7 @@ namespace MediaBrowser.Library.Entities {
 
             if (indexType == IndexType.None) throw new ArgumentException("Index type should not be none!");
             Func<IShow, IEnumerable<BaseItem>> indexingFunction = null;
+            bool allowEpisodes = false;
 
             switch (indexType) {
                 case IndexType.Actor:
@@ -188,6 +189,7 @@ namespace MediaBrowser.Library.Entities {
                 case IndexType.Year:
                     indexingFunction = show =>
                         show.ProductionYear == null ? null : new BaseItem[] { Year.GetYear(show.ProductionYear.ToString()) };
+                    allowEpisodes = true;
                     break;
                 case IndexType.Studio:
                     indexingFunction = show => MapStringsToBaseItems(show.Studios, s => Studio.GetStudio(s));
@@ -209,7 +211,7 @@ namespace MediaBrowser.Library.Entities {
 
                 if (subIndex != null) {
                     foreach (BaseItem innerItem in subIndex) {
-                        if (!(item is Episode) && !(item is Season)) //exclude episodes/seasons as their series will be there
+                        if ((allowEpisodes && !(innerItem is Series)) || (!(innerItem is Episode) && !(innerItem is Season))) //exclude episodes/seasons as their series will be there
                         {
                             AddItemToIndex(index, innerItem, item);
                             added = true;
@@ -217,7 +219,8 @@ namespace MediaBrowser.Library.Entities {
                     }
                 }
 
-                if (!added && item is IShow && !(item is Episode) && !(item is Season)) {
+                if (!added && item is IShow && ((allowEpisodes && !(item is Series)) || (!allowEpisodes && !(item is Episode) && !(item is Season))))
+                {
                     AddItemToIndex(index, unknown, item);
                 }
 
@@ -414,7 +417,22 @@ namespace MediaBrowser.Library.Entities {
                 subItems = new List<BaseItem>();
                 index[item] = subItems;
             }
-            subItems.Add(child);
+            if (child is Episode)
+            {
+                //we want to group these by series - find or create a series head
+                Episode episode = child as Episode;
+                IndexFolder series = (IndexFolder)index[item].Find(i => i.Id == (item.Name+episode.Series.Name).GetMD5());
+                if (series == null)
+                {
+                    series = new IndexFolder() { Id = (item.Name+episode.Series.Name).GetMD5(), Name = episode.Series.Name, Overview = episode.Series.Overview, PrimaryImagePath = episode.Series.PrimaryImagePath };
+                    index[item].Add(series);
+                }
+                series.ActualChildren.Add(episode);
+            }
+            else
+            {
+                if (!(child is Season)) subItems.Add(child); //never want seasons
+            }
         }
 
         void Sort(SortOrder sortOrder, bool notifyChange) {
