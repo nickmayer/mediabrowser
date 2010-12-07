@@ -858,7 +858,7 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
+                System.Version rv = plugin.RequiredMBVersion;
                 System.Version bv = PluginManager.Instance.GetBackedUpVersion(plugin);
                 //enable the remove button if a plugin is selected.
                 removePlugin.IsEnabled = true;
@@ -1701,9 +1701,9 @@ sortorder: {2}
             {
                 try
                 {
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate")))
+                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate")))
                     {
-                        string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate"));
+                        string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate"));
                         foreach (string file in files)
                         {
                             File.Delete(file);
@@ -1721,7 +1721,7 @@ sortorder: {2}
             {
                 try
                 {
-                    string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "display"));
+                    string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "display"));
                     foreach (string file in files) {
                         File.Delete(file);
                     }

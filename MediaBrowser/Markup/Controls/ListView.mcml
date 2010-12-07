@@ -17,6 +17,7 @@
 		</Properties>
 
 		<Locals>
+      <cor:Int32 Name="Startup" />
 			<!-- Use the MouseWheel handler to handle the mouse wheel.  -->
 			<ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
 							  HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Bubbled" Name="ScrollingHandler"/>
@@ -29,7 +30,18 @@
 
 		<Rules>
 
-			<Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
+      <!--The below default dummy rule is used to navigate to the proper first item.  using a generic rule or changed does not work the first time-->
+      <Default Target="[Startup]" Value="1" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="true"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
+        </Actions>
+      </Default>
+
+      <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
 			<!-- Give ScrollingData to ScrollingHandler. -->
 			<Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
 
@@ -55,16 +67,6 @@
 			</Binding>
 
 			<Binding Source="[Folder.Children]" Target="[MyRepeater.Source]"/>
-			<Rule ConditionLogicalOp="And">
-				<Conditions>
-					<Modified Source="[Application]" InitialEvaluate="true"/>
-					<Equality Source="[Application.NavigatingForward]" Value="true"/>
-					<Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
-				</Conditions>
-				<Actions>
-					<Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
-				</Actions>
-			</Rule>
 			<Changed Source="[Folder.JILShift]">
 				<Actions>
 					<Invoke Target="[ScrollingData.Scroll]"  amount="[Folder.JILShift]"/>

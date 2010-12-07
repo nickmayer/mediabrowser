@@ -42,7 +42,6 @@ namespace Configurator.Code {
         string backupDir = Path.Combine(ApplicationPaths.AppPluginPath, "Backup");
 
         Dictionary<string, System.Version> latestVersions = new Dictionary<string, System.Version>();
-        Dictionary<string, System.Version> requiredVersions = new Dictionary<string, System.Version>();
 
         public PluginManager() {
             instance = this;
@@ -57,22 +56,24 @@ namespace Configurator.Code {
 
             availablePlugins.Clear();
             latestVersions.Clear();
-            requiredVersions.Clear();
 
             foreach (var plugin in sources.AvailablePlugins) {
                 IPlugin ip = this.InstalledPlugins.Find(plugin);
                 if (ip != null)
                 {
-                    plugin.Installed = true;
+                    if (ip.Version == plugin.Version)
+                        plugin.Installed = true;
+
                     //we need to set this in the installed plugin here because we didn't have this info the first time we refreshed
                     plugin.UpdateAvail = ip.UpdateAvail = (plugin.Version > ip.Version && Kernel.Instance.Version >= plugin.RequiredMBVersion);
                 }
                 availablePlugins.Add(plugin);
                 try
                 {
-                    //this could blow if we have two references to the same plugin...
-                    latestVersions.Add(plugin.Name + System.IO.Path.GetFileName(plugin.Filename), plugin.Version);
-                    requiredVersions.Add(plugin.Name + System.IO.Path.GetFileName(plugin.Filename), plugin.RequiredMBVersion);
+                    string key = plugin.Name + System.IO.Path.GetFileName(plugin.Filename);
+                    if (latestVersions.ContainsKey(key)) {
+                        if (plugin.Version > latestVersions[key]) latestVersions[key] = plugin.Version;
+                    } else latestVersions.Add(key, plugin.Version);
                 }
                 catch (Exception e)
                 {
@@ -120,7 +121,7 @@ namespace Configurator.Code {
 
             if (plugin is RemotePlugin) {
                 try {
-                    Kernel.Instance.InstallPlugin((plugin as RemotePlugin).BaseUrl + "\\" + plugin.Filename, plugin.InstallGlobally, updateCB, doneCB, errorCB);
+                    Kernel.Instance.InstallPlugin((plugin as RemotePlugin).BaseUrl + "\\" + (plugin as RemotePlugin).SourceFilename, plugin.Filename, plugin.InstallGlobally, updateCB, doneCB, errorCB);
                 }
                 catch (Exception ex) {
                     MessageBox.Show("Cannot Install Plugin.  If MediaBrowser is running, please close it and try again.\n" + ex.Message, "Install Error");
@@ -199,7 +200,7 @@ namespace Configurator.Code {
             installedPlugins.Clear();
             foreach (var plugin in Kernel.Instance.Plugins.OrderBy(p => p.Name)) {
                 System.Version v = GetLatestVersion(plugin);
-                System.Version rv = GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
+                System.Version rv = plugin.RequiredMBVersion;
                 if (v != null)
                 {
                     plugin.UpdateAvail = (v > plugin.Version && rv <= Kernel.Instance.Version);
@@ -237,13 +238,6 @@ namespace Configurator.Code {
         public System.Version GetLatestVersion(IPlugin plugin) {
             System.Version version;
             latestVersions.TryGetValue(plugin.Name+plugin.Filename, out version);
-            return version;
-        }
-
-        public System.Version GetRequiredVersion(IPlugin plugin)
-        {
-            System.Version version;
-            requiredVersions.TryGetValue(plugin.Name + plugin.Filename, out version);
             return version;
         }
 

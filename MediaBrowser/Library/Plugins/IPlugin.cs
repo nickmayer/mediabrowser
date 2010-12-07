@@ -24,5 +24,6 @@ namespace MediaBrowser.Library.Plugins {
         bool InstallGlobally { get; }
         bool UpdateAvail { get; set; }
         bool Installed { get; set; }
+        string ListDisplayString { get; }
     }
 }

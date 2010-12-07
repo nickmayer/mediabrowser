@@ -81,6 +81,14 @@ namespace MediaBrowser.Library.Plugins {
         public virtual bool Installed { get; set; }
         public virtual bool UpdateAvail { get; set; }
 
+        public string ListDisplayString
+        {
+            get
+            {
+                return Name + " (v" + Version + ")";
+            }
+        }
+
         public virtual IPluginConfiguration PluginConfiguration {
             get {
                 return null;

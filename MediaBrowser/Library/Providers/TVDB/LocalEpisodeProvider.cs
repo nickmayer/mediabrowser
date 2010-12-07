@@ -89,6 +89,10 @@ namespace MediaBrowser.Library.Providers.TVDB {
             episode.SeasonNumber = metadataDoc.SafeGetString("Item/SeasonNumber");
             episode.ImdbRating = metadataDoc.SafeGetSingle("Item/Rating", (float)-1, 10);
             episode.FirstAired = metadataDoc.SafeGetString("Item/FirstAired");
+            DateTime airDate = DateTime.MinValue;
+            DateTime.TryParse(episode.FirstAired, out airDate);
+            episode.ProductionYear = airDate.Year;
+            
 
 
             string writers = metadataDoc.SafeGetString("Item/Writer");

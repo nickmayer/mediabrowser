@@ -77,6 +77,11 @@ namespace Configurator.Code {
             get;
             set;
         }
+
+        public string ListDisplayString
+        {
+            get { return Name + " (v" + Version + ")"; }
+        }
     }
 
     public class PluginCollection : ObservableCollection<IPlugin> {

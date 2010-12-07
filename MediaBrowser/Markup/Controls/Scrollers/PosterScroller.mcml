@@ -23,6 +23,7 @@
 			<cor:Boolean Name="CenterFocus" Boolean="false" />
 		</Properties>
 		<Locals>
+      <cor:Int32 Name="Startup" />
              <Command Name="ClosePopupPlay"/>
 			<!-- Use the MouseWheel handler to handle the mouse wheel.  -->
 			<ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
@@ -58,6 +59,17 @@
 
 
 		<Rules>
+      <!--The below default dummy rule is used to navigate to the proper first item.  using a generic rule or changed does not work the first time-->
+      <Default Target="[Startup]" Value="1" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="true"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
+        </Actions>
+      </Default>
+
       <!--These rules allow the user to move over the posters with the mouse without them scrolling away under them-->
       <Rule ConditionLogicalOp="And">
         <Conditions>
@@ -184,19 +196,6 @@
 				</Conditions>
 				<Actions>
 					<Invoke Target="[ScrollingData.PageUp]"/>
-				</Actions>
-			</Rule>
-
-
-
-			<Rule ConditionLogicalOp="And">
-				<Conditions>
-					<Modified Source="[Application]" InitialEvaluate="true"/>
-					<Equality Source="[Application.NavigatingForward]" Value="true"/>
-					<Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
-				</Conditions>
-				<Actions>
-					<Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
 				</Actions>
 			</Rule>
 
