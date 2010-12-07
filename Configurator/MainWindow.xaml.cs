@@ -1701,9 +1701,9 @@ sortorder: {2}
             {
                 try
                 {
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate")))
+                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate")))
                     {
-                        string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate"));
+                        string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate"));
                         foreach (string file in files)
                         {
                             File.Delete(file);
@@ -1721,7 +1721,7 @@ sortorder: {2}
             {
                 try
                 {
-                    string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "display"));
+                    string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "display"));
                     foreach (string file in files) {
                         File.Delete(file);
                     }
