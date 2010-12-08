@@ -424,7 +424,15 @@ namespace MediaBrowser.Library.Entities {
                 IndexFolder series = (IndexFolder)index[item].Find(i => i.Id == (item.Name+episode.Series.Name).GetMD5());
                 if (series == null)
                 {
-                    series = new IndexFolder() { Id = (item.Name+episode.Series.Name).GetMD5(), Name = episode.Series.Name, Overview = episode.Series.Overview, PrimaryImagePath = episode.Series.PrimaryImagePath };
+                    series = new IndexFolder() { 
+                        Id = (item.Name+episode.Series.Name).GetMD5(), 
+                        Name = episode.Series.Name, 
+                        Overview = episode.Series.Overview, 
+                        PrimaryImagePath = episode.Series.PrimaryImagePath,
+                        SecondaryImagePath = episode.Series.SecondaryImagePath,
+                        BannerImagePath = episode.Series.BannerImagePath,
+                        BackdropImagePaths = episode.Series.BackdropImagePaths
+                    };
                     index[item].Add(series);
                 }
                 series.AddChild(episode);
