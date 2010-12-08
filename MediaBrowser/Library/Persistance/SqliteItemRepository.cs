@@ -148,11 +148,11 @@ namespace MediaBrowser.Library.Persistance {
 
             MigratePlayState();
 
-            string[] queries = {"create table provider_data (guid, full_name, data)",
-                                "create unique index idx_provider on provider_data(guid, full_name)",
-                                "create table items (guid primary key, data)",
-                                "create table children (guid, child)", 
-                                "create unique index idx_children on children(guid, child)",
+            string[] queries = {"create table if not exists provider_data (guid, full_name, data)",
+                                "create unique index if not exists idx_provider on provider_data(guid, full_name)",
+                                "create table if not exists items (guid primary key, data)",
+                                "create table if not exists children (guid, child)", 
+                                "create unique index if not exists idx_children on children(guid, child)",
                                // @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll 
                                //        sort_order, index_by, use_banner, thumb_constraint_width, thumb_constraint_height, use_coverflow, use_backdrop )" 
                                 //,   "create table play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)"

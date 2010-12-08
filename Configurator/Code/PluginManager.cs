@@ -57,7 +57,8 @@ namespace Configurator.Code {
             availablePlugins.Clear();
             latestVersions.Clear();
 
-            foreach (var plugin in sources.AvailablePlugins) {
+            foreach (var plugin in sources.AvailablePlugins.OrderBy(p => p.Name))
+            {
                 IPlugin ip = this.InstalledPlugins.Find(plugin);
                 if (ip != null)
                 {
