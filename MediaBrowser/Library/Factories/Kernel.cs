@@ -60,6 +60,23 @@ namespace MediaBrowser.Library {
         static object sync = new object();
         static Kernel kernel;
 
+        public bool MajorActivity
+        {
+            get
+            {
+                if (Application.CurrentInstance != null)
+                    return Application.CurrentInstance.Information.MajorActivity;
+                else
+                    return false;
+            }
+            set
+            {
+                if (Application.CurrentInstance != null)
+                if (Application.CurrentInstance.Information.MajorActivity != value)
+                    Application.CurrentInstance.Information.MajorActivity = value;
+            }
+        }
+
         private static MultiLogger GetDefaultLogger(ConfigData config) {
             var logger = new MultiLogger();
 
