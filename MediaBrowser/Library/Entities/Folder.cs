@@ -427,7 +427,7 @@ namespace MediaBrowser.Library.Entities {
                     series = new IndexFolder() { Id = (item.Name+episode.Series.Name).GetMD5(), Name = episode.Series.Name, Overview = episode.Series.Overview, PrimaryImagePath = episode.Series.PrimaryImagePath };
                     index[item].Add(series);
                 }
-                series.ActualChildren.Add(episode);
+                series.AddChild(episode);
             }
             else
             {
