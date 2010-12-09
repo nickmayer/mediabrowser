@@ -1652,18 +1652,25 @@ sortorder: {2}
                 try
                 {
                     this.Cursor = Cursors.Wait;
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items")))
-                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"), true);
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children")))
-                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"), true);
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata")))
-                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"), true);
-                    File.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "cache.db"));
+                    if (config.EnableExperimentalSqliteSupport)
+                    {
+                        Kernel.Instance.ItemRepository.ClearEntireCache();
+                    }
+                    else
+                    {
 
-                    //recreate the directories
-                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"));
-                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"));
-                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
+                        if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items")))
+                            Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"), true);
+                        if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children")))
+                            Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"), true);
+                        if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata")))
+                            Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"), true);
+
+                        //recreate the directories
+                        Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"));
+                        Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"));
+                        Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
+                    }
                     //force MB to re-build library next time
                     config.LastFullRefresh = DateTime.MinValue;
                     config.Save();

@@ -368,7 +368,7 @@ namespace MediaBrowser.Library.Persistance {
                 connection.Exec("delete from provider_data"); 
                 connection.Exec("delete from items");
                 connection.Exec("delete from children");
-                connection.Exec("delete from display_prefs");
+                //connection.Exec("delete from display_prefs");
                 // People will get annoyed if this is lost
                 // connection.Exec("delete from play_states");
                 tran.Commit(); 
