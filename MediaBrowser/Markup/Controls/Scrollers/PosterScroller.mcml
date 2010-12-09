@@ -290,13 +290,13 @@
 						<Children>
 							<Repeater Source="[Folder.Children]" Name="MyRepeater" ContentName="BaseItem" Layout="[MyLayout]" DiscardOffscreenVisuals="false" >
 								<Animations>
-									<Animation Type="Move">
-										<Keyframes>
-											<PositionKeyframe Time="0" RelativeTo="Current"/>
-											<PositionKeyframe Time="0.15" RelativeTo="Final"/>
-										</Keyframes>
-									</Animation>
-								</Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.25"/>
+                      <PositionKeyframe Time="0.75" RelativeTo="Final"  />
+                    </Keyframes>
+                  </Animation>
+                </Animations>
 							</Repeater>
 						</Children>
 						<LayoutInput>

@@ -19,9 +19,12 @@
     </Rules>
 
     <Content>
-      <Panel Layout="HorizontalFlow" >
+      <Panel Layout="Form" >
         <Children>
           <gb:GreenBallIndicator Name="ActivityInd" MaximumSize="30,30" Padding="5,5,5,5" Visible="false">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" />
+            </LayoutInput>
             <Animations>
               <Animation Type="Show">
                 <Keyframes>
@@ -40,6 +43,9 @@
             
           </gb:GreenBallIndicator>
           <Text Name="InfoPanelDisplay" Font="font://f:P_ClockFont"  Color="[Color]">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,35" />
+            </LayoutInput>
             <Animations>
               <Animation Type="ContentChangeShow">
                 <Keyframes>

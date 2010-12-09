@@ -102,5 +102,10 @@ namespace Configurator.Code {
         {
             return this.Items.ToList().Find(p => p.Filename == plugin.Filename);
         }
+
+        public IPlugin Find(IPlugin plugin, System.Version version)
+        {
+            return this.Items.ToList().Find(p => p.Filename == plugin.Filename && p.Version == version);
+        }
     }
 }
