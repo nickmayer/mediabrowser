@@ -383,8 +383,8 @@
                 <Animations>
                   <Animation Type="Move">
                     <Keyframes>
-                      <PositionKeyframe Time="0" RelativeTo="Current"/>
-                      <PositionKeyframe Time="0.3" RelativeTo="Final"/>
+                      <PositionKeyframe Time="0" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.25"/>
+                      <PositionKeyframe Time="0.75" RelativeTo="Final"  />
                     </Keyframes>
                   </Animation>
                 </Animations>
