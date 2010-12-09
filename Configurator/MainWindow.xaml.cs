@@ -905,8 +905,8 @@ sortorder: {2}
             if (pluginList.SelectedItem != null)
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
-                //get our original source so we can upgrade...
-                IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin);
+                //get our latest version so we can upgrade...
+                IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin, PluginManager.Instance.GetLatestVersion(plugin));
                 if (newPlugin != null)
                 {
                     PluginInstaller p = new PluginInstaller();
