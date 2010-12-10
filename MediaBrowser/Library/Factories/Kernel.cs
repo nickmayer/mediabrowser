@@ -638,7 +638,7 @@ namespace MediaBrowser.Library {
                 //install to ehome for now - can change this to GAC if figure out how...
                 target = Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", targetName));
                 //and put our pointer file in "plugins"
-                File.Create(Path.Combine(ApplicationPaths.AppPluginPath, Path.ChangeExtension(Path.GetFileName(sourcePath), ".pgn")));
+                File.Create(Path.Combine(ApplicationPaths.AppPluginPath, Path.ChangeExtension(Path.GetFileName(targetName), ".pgn")));
             }
             else {
                 target = Path.Combine(ApplicationPaths.AppPluginPath, targetName);
