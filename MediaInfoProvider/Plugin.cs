@@ -28,14 +28,14 @@ namespace MediaInfoProvider {
         {
             get
             {
-                return new System.Version(2, 2, 6, 0);
+                return new System.Version(2, 3, 0, 0);
             }
         }
         public override System.Version TestedMBVersion
         {
             get
             {
-                return new System.Version(2, 2, 3, 0);
+                return new System.Version(2, 3, 0, 0);
             }
         }
     }

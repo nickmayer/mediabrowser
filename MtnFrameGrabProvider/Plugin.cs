@@ -80,14 +80,14 @@ namespace MtnFrameGrabProvider {
         {
             get
             {
-                return new System.Version(2, 2, 3, 0);
+                return new System.Version(2, 3, 0, 0);
             }
         }
         public override System.Version TestedMBVersion
         {
             get
             {
-                return new System.Version(2, 2, 4, 0);
+                return new System.Version(2, 3, 0, 0);
             }
         }
         
