@@ -59,6 +59,8 @@ namespace Configurator {
             pluginList.IsEnabled = true;
             this.progress.Value = 0;
             this.progress.Visibility = Visibility.Hidden;
+            IPlugin plugin = pluginList.SelectedItem as IPlugin;
+            if (plugin != null) plugin.Installed = true; //mark it
         }
 
         private void btnDone_Click(object sender, RoutedEventArgs e)

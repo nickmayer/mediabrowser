@@ -28,6 +28,7 @@ namespace Configurator.Code {
 
         internal void Init() {
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+                sources = PluginSourceCollection.Instance;
                 RefreshInstalledPlugins();
                 RefreshAvailablePlugins();
                 RefreshBackedUpPlugins();
@@ -38,7 +39,7 @@ namespace Configurator.Code {
         PluginCollection installedPlugins = new PluginCollection();
         PluginCollection availablePlugins = new PluginCollection();
         PluginCollection backedUpPlugins = new PluginCollection();
-        PluginSourceCollection sources = PluginSourceCollection.Instance;
+        PluginSourceCollection sources;
         string backupDir = Path.Combine(ApplicationPaths.AppPluginPath, "Backup");
 
         Dictionary<string, System.Version> latestVersions = new Dictionary<string, System.Version>();
