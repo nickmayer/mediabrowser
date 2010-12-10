@@ -164,7 +164,7 @@ namespace MediaBrowser
         [Comment("The last time a full refresh was done.")]
         public DateTime LastFullRefresh =  DateTime.MinValue;
 
-        public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/plugin_info.xml" };
+        public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 
         public class ExternalPlayer
         {

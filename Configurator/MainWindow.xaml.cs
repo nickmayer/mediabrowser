@@ -64,11 +64,12 @@ namespace Configurator
             PopUpMsg = new PopupMsg(alertText);
             config = Kernel.Instance.ConfigData;
             //put this check here because it will run before the first run of MB and we need it now
-            if (config.MBVersion != Kernel.Instance.Version.ToString() && Kernel.Instance.Version.ToString() == "2.3.0.0")
+            if (Config.Instance.MBVersion != Kernel.Instance.Version.ToString() && Kernel.Instance.Version.ToString() == "2.3.0.0")
             {
                 try
                 {
                     Config.Instance.PluginSources.RemoveAt(config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
+                    config.PluginSources.RemoveAt(config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
                 }
                 catch
                 {
@@ -77,6 +78,7 @@ namespace Configurator
                 if (Config.Instance.PluginSources.Find(s => s == "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml") == null)
                 {
                     Config.Instance.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
+                    config.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
                     Logger.ReportInfo("Plug-in Source migrated to multi-version source");
                 }
                 //not going to re-set version in case there is something we want to do in MB itself
