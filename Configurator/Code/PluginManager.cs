@@ -67,7 +67,7 @@ namespace Configurator.Code {
                         plugin.Installed = true;
 
                     //we need to set this in the installed plugin here because we didn't have this info the first time we refreshed
-                    plugin.UpdateAvail = ip.UpdateAvail = (plugin.Version > ip.Version && Kernel.Instance.Version >= plugin.RequiredMBVersion);
+                    ip.UpdateAvail = (plugin.Version > ip.Version && Kernel.Instance.Version >= plugin.RequiredMBVersion);
                 }
                 availablePlugins.Add(plugin);
                 try
@@ -192,6 +192,16 @@ namespace Configurator.Code {
             return false;
         }
 
+        public void UpdateAvailableAttributes(IPlugin plugin, bool installed)
+        {
+            //first find any version of this that was installed and un-mark it
+            IPlugin ip = this.AvailablePlugins.Find(plugin, true);
+            if (ip != null) ip.Installed = false; //reset
+            //now go find the one we just installed and mark it
+            ip = this.AvailablePlugins.Find(plugin, plugin.Version);
+            if (ip != null) ip.Installed = installed;
+        }
+
         public void RefreshInstalledPlugins() {
 
             if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread) {
@@ -206,11 +216,10 @@ namespace Configurator.Code {
                 if (v != null)
                 {
                     plugin.UpdateAvail = (v > plugin.Version && rv <= Kernel.Instance.Version);
-                    IPlugin ap = availablePlugins.Find(plugin);
+                    IPlugin ap = availablePlugins.Find(plugin, plugin.Version);
                     if (ap != null)
                     {
                         ap.Installed = true;
-                        ap.UpdateAvail = plugin.UpdateAvail;
                     }
                 }
                 plugin.Installed = true;

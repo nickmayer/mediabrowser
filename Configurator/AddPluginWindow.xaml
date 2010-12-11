@@ -14,13 +14,13 @@
                 <DataTrigger Binding="{Binding Path=Installed}" Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=UpdateAvail}" Value="True">
+                <!--<DataTrigger Binding="{Binding Path=UpdateAvail}" Value="True">
                     <Setter Property="Foreground">
                         <Setter.Value>
                             <SolidColorBrush Color="Red"/>
                         </Setter.Value>
                     </Setter>
-                </DataTrigger>
+                </DataTrigger>-->
             </Style.Triggers>
         </Style>
 

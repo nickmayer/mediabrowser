@@ -1477,6 +1477,7 @@ sortorder: {2}
             if (
                   MessageBox.Show(message, "Remove plugin", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes) {
                 PluginManager.Instance.RemovePlugin(plugin);
+                PluginManager.Instance.UpdateAvailableAttributes(plugin, false);
                 RefreshEntryPoints(true);
                 RefreshThemes();
             }

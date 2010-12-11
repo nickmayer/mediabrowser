@@ -107,5 +107,10 @@ namespace Configurator.Code {
         {
             return this.Items.ToList().Find(p => p.Filename == plugin.Filename && p.Version == version);
         }
+
+        public IPlugin Find(IPlugin plugin, bool installed)
+        {
+            return this.Items.ToList().Find(p => p.Filename == plugin.Filename && p.Installed == installed);
+        }
     }
 }
