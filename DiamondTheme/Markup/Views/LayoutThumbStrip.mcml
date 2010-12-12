@@ -80,7 +80,7 @@
           <Equality Source="[ThemeConfig.InfoBoxThumbstrip]" ConditionOp="Equals" Value="true" />
         </Conditions>
       </Binding>
-      <Binding Source="[ThemeConfig.InfoBoxCoverflow]" Target="[InfoBox.Visible]" />
+      <Binding Source="[ThemeConfig.InfoBoxThumbstrip]" Target="[InfoBox.Visible]" />
 
       <!-- Counter Bindings -->
       <Binding Source="[Item.SelectedChildIndex]" Target="[Counter.List_Counter]" />
@@ -100,6 +100,7 @@
         </Actions>
       </Rule>
 
+      <Binding Source="[Application.ShowNowPlaying]" Target="[Bounce.Visible]" />
     </Rules>
 
     <Content>
@@ -117,9 +118,9 @@
             </LayoutInput>
           </dtb:DiamondCommonInformation>
 
-          <dtb:Bounce Command="[NavRightCmd]" >
+          <dtb:Bounce Name="Bounce" Command="[NavRightCmd]" >
             <LayoutInput>
-              <AnchorLayoutInput Left="Parent,0.5" Top="Parent, 1, -75" />
+              <AnchorLayoutInput Left="Parent,0.5" Top="Parent, 1, -50" />
             </LayoutInput>
           </dtb:Bounce>
 

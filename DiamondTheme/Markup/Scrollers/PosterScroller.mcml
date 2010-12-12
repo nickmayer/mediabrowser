@@ -56,7 +56,7 @@
 			<FormLayoutInput Name="HLayout" Horizontal="Fill" Vertical="Center"/>
 			<FormLayoutInput Name="VLayout" Horizontal="Center" Vertical="Fill"/>
       <cor:Int32 Name="backFocus" Int32="[Folder.SelectedChildIndex]" />
-
+      <cor:Int32 Name="Startup" />
     </Locals>
 
 
@@ -192,17 +192,17 @@
 			</Rule>
       
       <!-- Default to first unwatched item -->
-			<Rule ConditionLogicalOp="And">
-				<Conditions>
-					<Modified Source="[Application]" InitialEvaluate="true"/>
-					<Equality Source="[Application.NavigatingForward]" Value="true"/>
-					<Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
-				</Conditions>
-				<Actions>
-					<Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
-				</Actions>
-			</Rule>
-      
+
+      <Default Target="[Startup]" Value="1" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="true"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
+        </Actions>
+      </Default>
+
       <Rule ConditionLogicalOp="And" >
         <Conditions>
           <Equality Source="[Application.NavigatingForward]" Value="false"/>

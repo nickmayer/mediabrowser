@@ -55,11 +55,11 @@
               <me:TextHeader Text="[Application.LocalStrings.#DiamondOptions!cor:String]" />
               <cb:CheckBox Label="[Application.LocalStrings.#MediaDetailsinMiniMode!cor:String]" Checked="[MiniMode]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayEndTime!cor:String]" Checked="[DisplayEndTime]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinCoverflowViews!cor:String]" Checked="[DisplayGlassOverlay]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinThumbstripViews!cor:String]" Checked="[InfoBoxCoverflow]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayGlassOverlay!cor:String]" Checked="[DisplayGlassOverlay]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DiamondThumbstripStyle2!cor:String]" Checked="[DiamondThumbstripStyle2]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinPosterViews!cor:String]" Checked="[InfoBoxThumbstrip]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <cb:CheckBox Label="[Application.LocalStrings.#DisplayGlassOverlay!cor:String]" Checked="[InfoBoxPoster]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinCoverflowViews!cor:String]" Checked="[InfoBoxCoverflow]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinThumbstripViews!cor:String]" Checked="[InfoBoxThumbstrip]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinPosterViews!cor:String]" Checked="[InfoBoxPoster]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <!--<cb:CheckBox Label="Display Colour MediaInfo Icons" Checked="[DiamondColorMediaInfo]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>-->
               </Children>
           </Panel>

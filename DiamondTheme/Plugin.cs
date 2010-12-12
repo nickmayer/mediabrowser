@@ -100,7 +100,7 @@ namespace Diamond
         {
             get
             {
-                return new System.Version(0, 3, 3, 2);
+                return new System.Version(0, 3, 4, 0);
             }
             set
             {

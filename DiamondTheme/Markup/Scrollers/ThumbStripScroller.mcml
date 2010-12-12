@@ -44,7 +44,7 @@
       <!-- This must be greater than NormalKeyRepeat-->
       <cor:Int32 Name="SpeedUpDelay" Int32="2"/>
       <cor:Int32 Name="backFocus" Int32="[Folder.SelectedChildIndex]" />
-
+      <cor:Int32 Name="Startup" />
     </Locals>
 
     <Rules>
@@ -104,17 +104,15 @@
         </Actions>
       </Changed>
 
-
-      <Rule ConditionLogicalOp="And">
+      <Default Target="[Startup]" Value="1" ConditionLogicalOp="And">
         <Conditions>
-          <Modified Source="[Application]" InitialEvaluate="true"/>
           <Equality Source="[Application.NavigatingForward]" Value="true"/>
           <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
         </Conditions>
         <Actions>
           <Invoke Target="[CoverRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
         </Actions>
-      </Rule>
+      </Default>
 
       <Rule ConditionLogicalOp="And" >
         <Conditions>

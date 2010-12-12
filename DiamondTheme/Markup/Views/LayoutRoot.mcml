@@ -729,7 +729,7 @@
       <cor:Int32 Name="DisplayCount" Int32="20" />
       <Color Name="FocusColor" Color="color://s:D_Normal" />
       <Color Name="Color" Color="color://s:D_Light" />
-      <Color Name="BulletFocusColor" Color="color://s:D_Normal" />
+      <Color Name="BulletFocusColor" Color="color://s:D_Focus" />
     </Locals>
 
     <Rules>
