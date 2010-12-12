@@ -14,6 +14,8 @@ namespace Configurator.Code {
     // sample data 
     public class SamplePlugin : IPlugin {
 
+        public bool ServiceOnly { get; set; }
+
         public void Init(Kernel kernel) {
         }
 
