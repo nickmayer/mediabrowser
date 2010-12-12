@@ -35,7 +35,9 @@ namespace MediaBrowser.Library {
         /// <summary>
         /// Ensure plugin dlls are not locked 
         /// </summary>
-        ShadowPlugins
+        ShadowPlugins, 
+
+        LoadServicePlugins
     } 
 
     /// <summary>
@@ -228,6 +230,19 @@ namespace MediaBrowser.Library {
             return plugins;
         }
 
+        static bool? runningInService;
+        static bool IsRunningInService 
+        {
+            get 
+            {
+                if (runningInService == null)
+                {
+                    runningInService = AppDomain.CurrentDomain.FriendlyName.ToLower().Contains("mediabrowserservice");
+                }
+                return runningInService.Value;
+            }
+        }
+
         static Kernel GetDefaultKernel(ConfigData config, KernelLoadDirective loadDirective) {
 
             IItemRepository repository = null;
@@ -295,7 +310,10 @@ namespace MediaBrowser.Library {
                 {
                     try
                     {
-                        plugin.Init(kernel);
+                        if (!plugin.ServiceOnly || IsRunningInService)
+                        {
+                            plugin.Init(kernel);
+                        }
                     }
                     catch (Exception e)
                     {

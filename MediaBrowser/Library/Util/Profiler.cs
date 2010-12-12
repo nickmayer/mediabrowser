@@ -6,7 +6,7 @@ using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Util
 {
-    class Profiler : IDisposable
+    public class Profiler : IDisposable
     {
 
         public static void TimeAction(string description, Action func)

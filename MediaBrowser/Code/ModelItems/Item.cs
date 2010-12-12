@@ -195,10 +195,11 @@ namespace MediaBrowser.Library
                     return "media_" + MediaTypeString;
             }
         }
-                
+
         public string MediaTypeString
         {
-            get {
+            get
+            {
                 if (this.BaseItem.DisplayMediaType != null)
                 {
                     return this.BaseItem.DisplayMediaType;
@@ -228,7 +229,7 @@ namespace MediaBrowser.Library
         {
             get
             {
-                      
+
                 return Helper.GetMediaInfoImage("HDType_" + this.HDType.ToString());
             }
         }
@@ -435,6 +436,16 @@ namespace MediaBrowser.Library
                 return PlayState.LastPlayed == DateTime.MinValue ? "" : PlayState.LastPlayed.ToShortDateString();
             }
         }
+
+        // fix theme crash
+        public virtual List<Item> QuickListItems
+        {
+            get
+            {
+                return new List<Item>();
+            }
+        }
+
 
         private PlaybackStatus PlayState
         {

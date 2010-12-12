@@ -87,7 +87,7 @@ namespace MediaBrowser.Library {
             }
         }
 
-        public List<Item> QuickListItems {
+        public override List<Item> QuickListItems {
             get {
                 if (Application.CurrentInstance.RecentItemOption == "watched") {
                     return RecentItems;

@@ -70,5 +70,7 @@ namespace MediaBrowser.Library.Plugins {
             get;
             set;
         }
+
+        public virtual bool ServiceOnly { get; set; }
     }
 }

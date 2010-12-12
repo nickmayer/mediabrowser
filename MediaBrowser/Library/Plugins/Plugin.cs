@@ -100,6 +100,8 @@ namespace MediaBrowser.Library.Plugins {
             get { return Path.GetFileName(filename); } 
         }
 
+        public bool ServiceOnly { get { return pluginInterface.ServiceOnly; } }
+
         public void Delete() {
             File.Delete(filename);
             if (this.InstallGlobally)

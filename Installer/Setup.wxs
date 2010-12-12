@@ -220,6 +220,25 @@
       <Component Id="MediaBrowserIcon.ico" Guid="25C6DD59-8881-42b4-B302-A616F747C99E" DiskId="1">
         <File Id="MediaBrowserIcon.ico" Name="MediaBrowserIcon.ico" Source="MediaBrowserIcon.ico" Checksum="no" />
       </Component>
+
+
+      <Component Id="MediaBrowserService.exe" Guid="D19774DD-253A-47E2-94FA-3EFB220E2B77" DiskId="1">
+        <File Id="MediaBrowserService.exe" Name="MediaBrowserService.exe" Source="..\MediaBrowserService\bin\$(var.BuildType)\MediaBrowserService.exe" Checksum="no" />
+        <ServiceInstall
+            Id="ServiceInstaller"
+            Type="ownProcess"
+            Vital="yes"
+            Name="MediaBrowserService"
+            DisplayName="Media Browser Service"
+            Description="Media Browser Service"
+            Start="auto"
+            Account="LocalSystem"
+            ErrorControl="ignore"
+            Interactive="no"
+              >
+        </ServiceInstall>
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MediaBrowserService" Wait="yes" />
+      </Component>
     </DirectoryRef>
 
     <!-- This component is installed so the default ProgramData\MediaBrowser is created during installerion -->
@@ -261,7 +280,11 @@
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
 		<Feature Id="APPROOTFEATURE" Title="MediaBrowser" Level="1">
       <ComponentRef Id="Configurator.exe" />
+      
       <ComponentRef Id="MediaBrowser.dll" />
+
+      <ComponentRef Id="MediaBrowserService.exe" />
+      
 			<ComponentRef Id="Application.png" />
       <ComponentRef Id="ApplicationInactive.png" />
       <ComponentRef Id="RegistrationVista.xml" />
@@ -276,6 +299,7 @@
       <!--<ComponentRef Id="RemPlugins" />-->
       <!--<ComponentRef Id="ClearCache" />-->
       <!--<ComponentRef Id="ClearCacheDB" />-->
+      
     </Feature>
     
 
@@ -467,8 +491,8 @@
     <WixVariable Id="WixUIBannerBmp" Value="Images\header.bmp"/>
     <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp"/>
 
-    <!-- we don't want to see the popup dialog that checks for diskspace -->
-    <WixVariable Id="WixUICostingPopupOptOut" Value="1" Overridable="yes" />
+    <!-- we don't want to see the popup dialog that checks for diskspace 
+    <WixVariable Id="WixUICostingPopupOptOut" Value="1" Overridable="yes" />-->
 
     <!-- These properties may be modified in the user interface -->
     <!-- <Property Id="OPTIONALDESKTOPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->

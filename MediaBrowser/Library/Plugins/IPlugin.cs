@@ -22,5 +22,9 @@ namespace MediaBrowser.Library.Plugins {
         bool IsConfigurable { get; }
         void Configure();
         bool InstallGlobally { get; }
+        /// <summary>
+        /// Plugin is only to be initialized if it is running in the service
+        /// </summary>
+        bool ServiceOnly { get; }
     }
 }
