@@ -2,9 +2,7 @@
     xmlns:a="assembly://MediaBrowser/MediaBrowser"
     xmlns:me="Me">
 
-  <Image Name="BlankImage" Image="null"/>
-  
-  
+  <Image Name="BlankImage" Image="null"/>  
 
   <Image Name="Lines" Source="resx://Diamond/Diamond.Resources/IconLines"/>
   <Image Name="ConfigImg" Source="resx://Diamond/Diamond.Resources/IconConfig"/>

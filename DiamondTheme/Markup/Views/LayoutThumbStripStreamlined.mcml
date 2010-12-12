@@ -30,7 +30,7 @@
       <BooleanChoice Name="Vertical" Value="false" />
       <Timer Name="InfoTimer" AutoRepeat="false" Interval="400" Enabled="false"/>
 
-      <AnchorLayoutInput Name="BaseLayout" Bottom="Parent, 1,-100" Top="Parent,1,-175" Left="Parent,0.07" Right="Parent, 0.93" />
+      <AnchorLayoutInput Name="BaseLayout" Bottom="Parent, 1,-120" Top="Parent,1,-195" Left="Parent,0.07" Right="Parent, 0.93" />
       <!-- Info Panel Layout -->
       <AnchorLayoutInput Name="LayoutInfoPanel" Left="Parent,0.5,-400" Right="Parent,0.5,400" Bottom="Parent,.55" Top="Parent, 0, 95" />
       <AnchorLayoutInput Name="LayoutInfoPanelBg" Left="Parent,0.5,-405" Right="Parent,0.5,405" Top="Parent,0,90" Bottom="Parent, .53,5" />
@@ -40,6 +40,9 @@
     </Locals>
 
     <Rules>
+
+      <Binding Source="[Application.ShowNowPlaying]" Target="[Bounce.Visible]" />
+      
       <!-- Backdrop-->
       <Binding Target="[Backdrop.Image]" Source="[Item.SelectedChild.BackdropImage]" />
       <Binding Target="[Backdrop.Item]" Source="[Item.SelectedChild]" />
@@ -76,7 +79,7 @@
           <Equality Source="[ThemeConfig.InfoBoxThumbstrip]" ConditionOp="Equals" Value="true" />
         </Conditions>
       </Binding>
-      <Binding Source="[ThemeConfig.InfoBoxCoverflow]" Target="[InfoBox.Visible]" />
+      <Binding Source="[ThemeConfig.InfoBoxThumbstrip]" Target="[InfoBox.Visible]" />
 
       <!-- Counter Bindings -->
       <Binding Source="[Item.SelectedChildIndex]" Target="[Counter.List_Counter]" />
@@ -134,7 +137,7 @@
 
           <Panel>
             <LayoutInput>
-              <AnchorLayoutInput Left="Parent, 0.5, -10" Right="Parent, 0.5, 10" Top="Parent, 1, -105" Bottom="Parent, 1, -85" />
+              <AnchorLayoutInput Left="Parent, 0.5, -10" Right="Parent, 0.5, 10" Top="Parent, 1, -125" Bottom="Parent, 1, -105" />
             </LayoutInput>
             <Children>
               <Graphic Name="TickIndicator" Visible="false" Content="[Tick]" MaintainAspectRatio="true" MaximumSize="20,20" />
@@ -143,13 +146,13 @@
 
           <Graphic Content="image://i:DiamondTopPanel" SizingPolicy="SizeToConstraint">
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent, 1,-155" Bottom="Parent,1, -80" Left="Parent,0,25" Right="Parent, 1,-25"/>
+              <AnchorLayoutInput Top="Parent, 1,-175" Bottom="Parent,1, -100" Left="Parent,0,25" Right="Parent, 1,-25"/>
             </LayoutInput>
           </Graphic>
 
-          <dtb:Bounce Command="[NavRightCmd]" >
+          <dtb:Bounce Name="Bounce" Command="[NavRightCmd]" >
             <LayoutInput>
-              <AnchorLayoutInput Left="Parent,0.5" Top="Parent, 1, -75" />
+              <AnchorLayoutInput Left="Parent,0.5" Top="Parent, 1, -50" />
             </LayoutInput>
           </dtb:Bounce>
 

@@ -89,7 +89,7 @@
           <dtb:DiamondCounter Name="Counter" LayoutInput="global://dtb:LI_ListCounter" />
 
           <!-- InfoBox -->
-          <dtb:DiamondCommonInformation Name="InfoBox" Application="[Application]" Visible="[ThemeConfig.InfoBoxThumbstrip]"
+          <dtb:DiamondCommonInformation Name="InfoBox" Application="[Application]" Visible="[ThemeConfig.InfoBoxCoverflow]"
                                              Item="[SelectedItem]" MaximumSize="0,0" FullMode="false" DisableInput="true">
             <LayoutInput>
               <AnchorLayoutInput Left="Parent, 1, -475" Right="Parent, 1, -25" Bottom="Focus, 0, -50" />
@@ -231,18 +231,6 @@
           <Set  Target="[Folder.SelectedChildIndex]" Value="-1"/>
         </Actions>
       </Changed>
-
-
-      <Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Modified Source="[Application]" InitialEvaluate="true"/>
-          <Equality Source="[Application.NavigatingForward]" Value="true"/>
-          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
-        </Conditions>
-        <Actions>
-          <Invoke Target="[CoverRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
-        </Actions>
-      </Rule>
 
       <Changed Source="[Folder.JILShift]">
         <Actions>
