@@ -139,8 +139,18 @@ namespace MediaBrowser
 
         public bool RandomizeBackdrops = false;
         public bool RotateBackdrops = true;
+        public int BackdropRotationInterval = 8; //Controls time delay, in seconds, between backdrops during rotation
+        public float BackdropTransitionInterval = 1.5F; //Controls animation fade time, in seconds
 
         public bool ProcessBanners = false; //hook to allow future processing of banners
+
+        public int MinResumeDuration = 0; //minimum duration of video to have resume functionality
+        public int MinResumePct = 10; //if this far or less into video, don't resume
+        public int MaxResumePct = 90; //if this far or more into video, don't resume
+
+        public bool YearSortAsc = false; //true to sort years in ascending order
+
+        public bool AutoScrollText = false; //Turn on/off Auto Scrolling Text (typically for Overviews)
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
@@ -154,7 +164,7 @@ namespace MediaBrowser
         [Comment("The last time a full refresh was done.")]
         public DateTime LastFullRefresh =  DateTime.MinValue;
 
-        public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/plugin_info.xml" };
+        public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 
         public class ExternalPlayer
         {
@@ -168,9 +178,20 @@ namespace MediaBrowser
             }
         }
 
-        // for the serializer
+        // for our reset routine
         public ConfigData ()
 	    {
+            try
+            {
+                File.Delete(ApplicationPaths.ConfigFile);
+            }
+            catch (Exception e)
+            {
+                MediaBrowser.Library.Logging.Logger.ReportException("Unable to delete config file " + ApplicationPaths.ConfigFile, e);
+            }
+            //continue anyway
+            this.file = ApplicationPaths.ConfigFile;
+            this.settings = XmlSettings<ConfigData>.Bind(this, file);
 	    }
 
 

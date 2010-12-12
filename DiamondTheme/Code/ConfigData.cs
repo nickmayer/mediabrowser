@@ -24,6 +24,7 @@ namespace Diamond
         public bool InfoBoxThumbstrip = true;
         public bool InfoBoxCoverflow = true;
         public bool InfoBoxPoster = false;
+        public bool DiamondThumbstripStyle2 = false;
         public bool DisplayGlassOverlay = true;
 
         public bool AutoExtenderLayout = false;
@@ -31,7 +32,6 @@ namespace Diamond
         public int BackdropSwitchingDelay = 280;
 
         public bool DiamondDisplayWeather = false;
-        public bool DiamondColorMediaInfo = false;
         public int AlphaOpacity = 60;
 
         #region Load / Save Data

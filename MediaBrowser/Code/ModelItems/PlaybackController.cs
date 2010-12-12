@@ -364,6 +364,21 @@ namespace MediaBrowser
             {
                 state = transport.PlayState;
                 long position = transport.Position.Ticks;
+                long duration = 0;
+                try
+                {
+                    //only track position for a reasonable portion of the video
+                    duration = (TimeSpan.Parse((string)MediaExperience.MediaMetadata["Duration"])).Ticks;
+                    //Logger.ReportInfo("position "+position+ " Value "+duration);
+                    if (duration > 0)
+                    {
+                        decimal pctIn = Decimal.Divide(position,duration) * 100;
+                        //Logger.ReportInfo("pctIn: " + pctIn + " duration: " + duration);
+                        if (pctIn < Config.Instance.MinResumePct || pctIn > Config.Instance.MaxResumePct) position = 0; //don't track in very begginning or very end
+                    }
+                }
+                catch { } // couldn't get duration - no biggie just don't blow chow
+
                 string title = null;
                 try
                 {
@@ -374,11 +389,11 @@ namespace MediaBrowser
                     Logger.ReportException("Failed to get title on current media item!", e);
                 }
 
-                if (title != null && progressHandler != null && (this.title != title || this.position != position))
+                if (title != null && progressHandler != null && (this.title != title || this.position != position) && (duration / TimeSpan.TicksPerMinute) >= Config.Instance.MinResumeDuration)
                 {
 
                     //Logger.ReportVerbose("progressHandler was called with : position =" + position.ToString() + " title :" + title);
-
+                    
                     progressHandler(this, new PlaybackStateEventArgs() { Position = position, Title = title });
                     this.title = title;
                     this.position = position;
@@ -392,6 +407,12 @@ namespace MediaBrowser
                 Application.CurrentInstance.ShowNowPlaying = (
                     (state == Microsoft.MediaCenter.PlayState.Playing) ||
                     (state == Microsoft.MediaCenter.PlayState.Paused));
+                Application.CurrentInstance.CurrentItem.UpdateResume();
+                if (state == Microsoft.MediaCenter.PlayState.Finished || state == Microsoft.MediaCenter.PlayState.Stopped)
+                {
+                    //we're done - call post-processor
+                    Application.CurrentInstance.RunPostPlayProcesses();
+                }
             }
 
 

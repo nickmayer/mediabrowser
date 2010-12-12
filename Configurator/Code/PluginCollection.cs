@@ -65,6 +65,23 @@ namespace Configurator.Code {
         {
             get { return false; }
         }
+
+        public virtual bool Installed
+        {
+            get { return true; }
+            set {}
+        }
+
+        public virtual bool UpdateAvail
+        {
+            get;
+            set;
+        }
+
+        public string ListDisplayString
+        {
+            get { return Name + " (v" + Version + ")"; }
+        }
     }
 
     public class PluginCollection : ObservableCollection<IPlugin> {
@@ -74,9 +91,9 @@ namespace Configurator.Code {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
 
                 Add(new SamplePlugin() { Name = "Super Plugin", 
-                    Description = "This plugin does absoulutly nothing, its actually a sample plugin for wpf to bind to."});
+                    Description = "This plugin does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = false});
                 Add(new SamplePlugin() { Name = "The other plugin", 
-                    Description = "This plugin also does absoulutly nothing, its actually a sample plugin for wpf to bind to." });
+                    Description = "This plugin also does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = true });
 
             } 
         }
@@ -84,6 +101,16 @@ namespace Configurator.Code {
         public IPlugin Find(IPlugin plugin)
         {
             return this.Items.ToList().Find(p => p.Filename == plugin.Filename);
+        }
+
+        public IPlugin Find(IPlugin plugin, System.Version version)
+        {
+            return this.Items.ToList().Find(p => p.Filename == plugin.Filename && p.Version == version);
+        }
+
+        public IPlugin Find(IPlugin plugin, bool installed)
+        {
+            return this.Items.ToList().Find(p => p.Filename == plugin.Filename && p.Installed == installed);
         }
     }
 }

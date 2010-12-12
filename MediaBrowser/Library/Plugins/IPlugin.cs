@@ -26,5 +26,8 @@ namespace MediaBrowser.Library.Plugins {
         /// Plugin is only to be initialized if it is running in the service
         /// </summary>
         bool ServiceOnly { get; }
+        bool UpdateAvail { get; set; }
+        bool Installed { get; set; }
+        string ListDisplayString { get; }
     }
 }

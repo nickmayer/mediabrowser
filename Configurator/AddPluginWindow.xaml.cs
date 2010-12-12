@@ -59,6 +59,13 @@ namespace Configurator {
             pluginList.IsEnabled = true;
             this.progress.Value = 0;
             this.progress.Visibility = Visibility.Hidden;
+            updateAttributes(pluginList.SelectedItem as IPlugin);
+        }
+
+        private void updateAttributes(IPlugin plugin)
+        {
+            PluginManager.Instance.UpdateAvailableAttributes(plugin, true);
+            pluginList.Items.Refresh();
         }
 
         private void btnDone_Click(object sender, RoutedEventArgs e)

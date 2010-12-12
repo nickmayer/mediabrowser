@@ -29,7 +29,8 @@ namespace MediaBrowser.Library {
                     xProductionYear = xProductionYear ?? 0;
                     yProductionYear = yProductionYear ?? 0;
 
-                    compare = yProductionYear.Value.CompareTo(xProductionYear.Value);
+                    int orderFactor = Config.Instance.YearSortAsc ? -1 : 1;
+                    compare = orderFactor * yProductionYear.Value.CompareTo(xProductionYear.Value); //this will reverse the order if that option is set
                     break;
 
                 case SortOrder.Rating:

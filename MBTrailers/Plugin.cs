@@ -29,7 +29,13 @@ namespace MBTrailers {
             
             var trailers = (kernel.ItemRepository.RetrieveItem(TrailersGuid) as MBTrailerFolder) ?? new MBTrailerFolder();
             trailers.Path = "";
-            trailers.Id = TrailersGuid;            
+            trailers.Id = TrailersGuid;
+            //validate sort value and fill in
+            //int sort = 0;
+            //int.TryParse(PluginOptions.Instance.SortOrder, out sort);
+            //if (sort > 0) trailers.SortName = sort.ToString("000");
+            //Logger.ReportInfo("MBTrailers Sort is: " + trailers.SortName);
+
             kernel.RootFolder.AddVirtualChild(trailers);
 
             isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
@@ -61,7 +67,12 @@ namespace MBTrailers {
                 proxy.Start();
 
                 trailers.RefreshProxy();
+
+                //tell core our types are playable (for menus)
+                kernel.AddExternalPlayableItem(typeof(ITunesTrailer));
+                kernel.AddExternalPlayableFolder(typeof(MBTrailerFolder));
             }
+            Logger.ReportInfo("MBTrailers (version "+Version+") Plug-in loaded.");
      
         }
 

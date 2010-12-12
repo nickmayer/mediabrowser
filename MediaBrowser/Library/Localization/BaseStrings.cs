@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0013";
+        const string VERSION = "1.0016";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -63,7 +63,7 @@ namespace MediaBrowser.Library.Localization
         public string UnlockPeriodHoursConfigDesc = "The Amount of Time (in Hours) Before the Library Will Automatically Re-Lock.";
         public string EnterNewPINConfigDesc = "Change the Global Security Code.";
         public string ContinueConfigDesc = "Return to the Previous Screen.  (All Changes Are Saved Automatically)";
-        public string ResetDefaultsConfigDesc = "Reset Configuration Items to Their Default Values.  USE WITH CAUTION - Setings Will Be Overwritten.";
+        public string ResetDefaultsConfigDesc = "Reset Configuration Items to Their Default Values.  USE WITH CAUTION - Settings Will Be Overwritten.";
         public string ClearCacheConfigDesc = "Delete the Internal Data Files MediaBrowser Uses and Cause Them to be Re-built.";
         public string UnlockConfigDesc = "Temporarily Disable Parental Control for the Entire Library.  Will Re-Lock Automatically.";
         public string AssumeWatchedIfOlderThanConfigDesc = "Mark All Items Older Than This as Watched.";
@@ -78,12 +78,16 @@ namespace MediaBrowser.Library.Localization
         public string RandomizeBackdropConfigDesc = "Select random fan art from the available ones.";
         public string RotateBackdropConfigDesc = "Show all available fan art in a sequence (can be random).";
         public string UpdateLibraryConfigDesc = "Update information on the items in your library.";
+        public string BackdropRotationIntervalConfigDesc = "Seconds between Backdrop Rotations.";
+        public string BackdropTransitionIntervalConfigDesc = "Fade in seconds for the backdrop transition animation.";
+        public string AutoScrollTextConfigDesc = "Turn on Automatically Scrolling Overviews.";
+
 
         //Config Panel
         public string ConfigConfig = "Configuration";
         public string VersionConfig = "Version";
         public string MediaOptionsConfig = "Media Options";
-        public string ThemesConfig = "Themes";
+        public string ThemesConfig = "Theme Options";
         public string ParentalControlConfig = "Parental Control";
         public string ContinueConfig = "Continue";
         public string ResetDefaultsConfig = "Reset Defaults";
@@ -151,6 +155,11 @@ namespace MediaBrowser.Library.Localization
         public string RandomizeBackdropConfig = "Randomize";
         public string RotateBackdropConfig = "Rotate";
         public string UpdateLibraryConfig = "Update Library";
+        public string BackdropSettingsConfig = "Backdrop Settings";
+        public string BackdropRotationIntervalConfig = "Rotation Time";
+        public string BackdropTransitionIntervalConfig = "Transition Time";
+        public string AutoScrollTextConfig = "Auto Scroll Overview";
+        public string SortYearsAscConfig = "Sort by Year in Ascending Order";
 
 
 
@@ -179,7 +188,7 @@ namespace MediaBrowser.Library.Localization
         public string PlayDetail = "Play";
         public string ResumeDetail = "Resume";
         public string RefreshDetail = "Refresh";
-        public string PlayTrailersDetail = "Play Trailer";
+        public string PlayTrailersDetail = "Trailer";
         public string CacheDetail = "Cache 2 xml";
         public string DeleteDetail = "Delete";
         public string IMDBRatingDetail = "IMDB Rating";
@@ -278,12 +287,14 @@ namespace MediaBrowser.Library.Localization
         public string Playstr = "Play";
         public string MinutesStr = "mins"; //Minutes abbreviation
         public string KBsStr = "Kbps";  //Kilobytes per second
+        public string FrameRateStr = "fps";  //Frames per second
 
         //Profiler
         public string WelcomeProf = "Welcome to Media Browser";
         public string ProfilerTimeProf = "{1} took {2} seconds.";
         public string RefreshProf = "Refresh";
         public string SetWatchedProf = "Set Watched {0}";
+        public string RefreshFolderProf = "Refresh Folder and all Children of";
         public string ClearWatchedProf = "Clear Watched {0}";
         public string FullRefreshProf = "Full Library Refresh";
         public string FullValidationProf = "Full Library Validation";

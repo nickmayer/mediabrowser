@@ -724,6 +724,18 @@ namespace MediaBrowser
             set { if (this.data.RotateBackdrops != value) { this.data.RotateBackdrops = value; Save(); FirePropertyChanged("RotateBackdrops"); } }
         }
 
+        public int BackdropRotationInterval
+        {
+            get { return this.data.BackdropRotationInterval; }
+            set { if (this.data.BackdropRotationInterval != value) { this.data.BackdropRotationInterval = value; Save(); FirePropertyChanged("BackdropRotationInterval"); } }
+        }
+
+        public float BackdropTransitionInterval
+        {
+            get { return this.data.BackdropTransitionInterval; }
+            set { if (this.data.BackdropTransitionInterval != value) { this.data.BackdropTransitionInterval = (float)Math.Round(value, 1); Save(); FirePropertyChanged("BackdropTransitionInterval"); } }
+        }
+        
         public int FullRefreshInterval
         {
             get { return this.data.FullRefreshInterval; }
@@ -740,6 +752,36 @@ namespace MediaBrowser
         {
             get { return this.data.LastFullRefresh;  }
             set { if (this.data.LastFullRefresh != value) { this.data.LastFullRefresh = value; Save(); FirePropertyChanged("LastFullRefresh"); } }
+        }
+
+        public int MinResumeDuration
+        {
+            get { return this.data.MinResumeDuration; }
+            set { if (this.data.MinResumeDuration != value) { this.data.MinResumeDuration = value; Save(); FirePropertyChanged("MinResumeDuration"); } }
+        }
+
+        public int MinResumePct
+        {
+            get { return this.data.MinResumePct; }
+            set { if (this.data.MinResumePct != value) { this.data.MinResumePct = value; Save(); FirePropertyChanged("MinResumePct"); } }
+        }
+
+        public int MaxResumePct
+        {
+            get { return this.data.MaxResumePct; }
+            set { if (this.data.MaxResumePct != value) { this.data.MaxResumePct = value; Save(); FirePropertyChanged("MaxResumePct"); } }
+        }
+
+         public bool YearSortAsc
+        {
+            get { return this.data.YearSortAsc; }
+            set { if (this.data.YearSortAsc != value) { this.data.YearSortAsc = value; Save(); FirePropertyChanged("YearSortAsc"); } }
+        }
+
+        public bool AutoScrollText
+        {
+            get { return this.data.AutoScrollText; }
+            set { if (this.data.AutoScrollText != value) { this.data.AutoScrollText = value; Save(); FirePropertyChanged("AutoScrollText"); } }
         }
 
         /* End of app specific settings*/

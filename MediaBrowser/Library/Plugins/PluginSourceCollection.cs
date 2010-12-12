@@ -85,6 +85,7 @@ namespace MediaBrowser.Library.Plugins {
                         Description = pluginRoot.SafeGetString("Description"),
                         RichDescURL = richURL,
                         Filename = pluginRoot.SafeGetString("Filename"),
+                        SourceFilename = pluginRoot.SafeGetString("SourceFilename") ?? pluginRoot.SafeGetString("Filename"),
                         Version = new System.Version(pluginRoot.SafeGetString("Version")),
                         RequiredMBVersion = new System.Version(requiredVersion),
                         TestedMBVersion = new System.Version(testedVersion),

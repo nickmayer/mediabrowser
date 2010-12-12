@@ -161,7 +161,7 @@ namespace MediaBrowser.Library.Metadata {
                     }
                 } catch (Exception e) {
                     Debug.Assert(false, "Meta data provider should not be leaking exceptions");
-                    Logger.ReportException("Provider failed: " + provider.GetType().ToString(), e);
+                    Logger.ReportException("Provider: " + provider.GetType().ToString()+" failed for item at: "+item.Path, e);
                 }
             }
             if (changed) {

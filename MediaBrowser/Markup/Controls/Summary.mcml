@@ -16,7 +16,7 @@
 		</Properties>
 		<Rules>
 			<Binding Source="[Model.Overview]" Target="[Summary.Text]" />
-			<Changed Source="[Model]">
+			<Changed Source="[Model.Overview]">
 				<Conditions>
 					<Equality Source="[Model.Overview.Length]" ConditionOp="Equals" Value="0"/>
 				</Conditions>
@@ -24,7 +24,7 @@
 					<Set Target="[Summary.Visible]" Value="false"/>
 				</Actions>
 			</Changed>
-			<Changed Source="[Model]">
+			<Changed Source="[Model.Overview]">
 				<Conditions>
 					<Equality Source="[Model.Overview.Length]" ConditionOp="NotEquals" Value="0"/>
 				</Conditions>
@@ -53,7 +53,7 @@
 		</Properties>
 		<Rules>
 			<Binding Source="[Model.Overview]" Target="[Summary.Text]" />
-			<Changed Source="[Model]">
+			<Changed Source="[Model.Overview]">
 				<Conditions>
 					<Equality Source="[Model.Overview.Length]" ConditionOp="Equals" Value="0"/>
 				</Conditions>
@@ -61,7 +61,7 @@
 					<Set Target="[Summary.Visible]" Value="false"/>
 				</Actions>
 			</Changed>
-			<Changed Source="[Model]">
+			<Changed Source="[Model.Overview]">
 				<Conditions>
 					<Equality Source="[Model.Overview.Length]" ConditionOp="NotEquals" Value="0"/>
 				</Conditions>
@@ -89,7 +89,7 @@
 		</Properties>
 		<Rules>
 			<Binding Source="[Model.Overview]" Target="[Summary.Content]" />
-			<Changed Source="[Model]">
+			<Changed Source="[Model.Overview]">
 				<Conditions>
 					<Equality Source="[Model.Overview.Length]" ConditionOp="Equals" Value="0"/>
 				</Conditions>
@@ -97,7 +97,7 @@
 					<Set Target="[Summary.Visible]" Value="false"/>
 				</Actions>
 			</Changed>
-			<Changed Source="[Model]">
+			<Changed Source="[Model.Overview]">
 				<Conditions>
 					<Equality Source="[Model.Overview.Length]" ConditionOp="NotEquals" Value="0"/>
 				</Conditions>

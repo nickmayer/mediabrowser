@@ -39,6 +39,7 @@
 				</Conditions>
 				<Actions>
 					<Set Target="[MainPanel.Visible]" Value="true"/>
+          <Invoke Target="[ScrollingData.Home]" ></Invoke>
 				</Actions>
 			</Changed>
 

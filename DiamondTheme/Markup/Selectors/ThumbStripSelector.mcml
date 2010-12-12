@@ -1,0 +1,81 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
+    xmlns:lib="assembly://MediaBrowser/MediaBrowser.Library"
+	  xmlns:ltss="resx://Diamond/Diamond.Resources/LayoutThumbStripStreamlined"
+	  xmlns:lts="resx://Diamond/Diamond.Resources/LayoutThumbStrip"
+    xmlns:app="assembly://Diamond/Diamond"
+      
+      >
+
+  <!--*****************************************************************************************************************
+  
+  This is an example of a page detail area selector.  To build your theme you must modify the individual mcml
+  files for your specific views OR change the references to existing/default views in MB.
+  
+  The project template should have generated references to and shell mcml for standard view UIs with the following naming convention:
+  
+    [projectname]LayoutPoster
+    [projectname]LayoutThumb
+    [projectname]LayoutDetails
+    [projectname]LayoutCoverflow
+    [projectname]LayoutThumbStrip
+    
+    
+  *********************************************************************************************************************-->
+  
+	<UI Name="ThumbStripSelector">
+		<Properties>
+			<a:Application Name="Application" Application="$Required"/>
+			<lib:FolderModel Name="Folder" FolderModel="$Required"/>
+      <app:Config Name="ThemeConfig" />
+		</Properties>
+
+
+		<Rules>
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[ThemeConfig.DiamondThumbstripStyle2]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ThumbStripView.Visible]" Value="false"/>
+          <Set Target="[ThumbStripViewStreamlined.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+      
+      <Rule ConditionLogicalOp ="And">
+        <Conditions >
+          <Equality Source="[ThemeConfig.DiamondThumbstripStyle2]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ThumbStripView.Visible]" Value="true"/>
+          <Set Target="[ThumbStripViewStreamlined.Visible]" Value="false"/>
+        </Actions>
+      </Rule>
+
+
+		</Rules>
+
+		<Content>
+			<Panel Name="MainPanel" Layout="Form">
+				<Children>
+          <!--  View Details-->
+					<lts:DiamondLayoutThumbStrip Name="ThumbStripView" Visible="false" Item="[Folder]" Application="[Application]" >
+						<LayoutInput>
+							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+						</LayoutInput>
+					</lts:DiamondLayoutThumbStrip>
+
+          <!--  View Details-->
+					<ltss:DiamondLayoutThumbStripStreamlined Name="ThumbStripViewStreamlined" Visible="false" Item="[Folder]" Application="[Application]" >
+						<LayoutInput>
+							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
+						</LayoutInput>
+					</ltss:DiamondLayoutThumbStripStreamlined>
+          
+				</Children>
+			</Panel>
+		</Content>
+	</UI>
+
+</Mcml>

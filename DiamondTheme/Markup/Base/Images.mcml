@@ -39,6 +39,7 @@
   <Image Name="DiamondCounterPanel" Source="resx://Diamond/Diamond.Resources/dia_CounterPanel" NineGrid="10,10,10,10" />
   <Image Name="DiamondDetailA" Source="resx://Diamond/Diamond.Resources/dia_detailA" NineGrid="10,10,10,10" />
   <Image Name="DiamondDetailB" Source="resx://Diamond/Diamond.Resources/dia_detailB" NineGrid="15,15,15,15" />
+  <Image Name="DiamondStripPanel" Source="resx://Diamond/Diamond.Resources/dia_stripviewPanel" NineGrid="15,15,15,15" />
 
   <Image Name="DiamondCFArc" Source="resx://Diamond/Diamond.Resources/dia_cf_arc" />
 

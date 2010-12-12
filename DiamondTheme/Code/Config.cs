@@ -92,6 +92,20 @@ namespace Diamond
             }
         }
 
+        public bool DiamondThumbstripStyle2
+        {
+            get { return this.data.DiamondThumbstripStyle2; }
+            set
+            {
+                if (this.data.DiamondThumbstripStyle2 != value)
+                {
+                    this.data.DiamondThumbstripStyle2 = value;
+                    Save();
+                    FirePropertyChanged("DiamondThumbstripStyle2");
+                }
+            }
+        }
+
         public bool DisplayGlassOverlay
         {
             get { return this.data.DisplayGlassOverlay; }
@@ -157,20 +171,6 @@ namespace Diamond
                     this.data.DiamondDisplayWeather = value;
                     Save();
                     FirePropertyChanged("DiamondDisplayWeather");
-                }
-            }
-        }
-
-        public bool DiamondColorMediaInfo
-        {
-            get { return this.data.DiamondColorMediaInfo; }
-            set
-            {
-                if (this.data.DiamondColorMediaInfo != value)
-                {
-                    this.data.DiamondColorMediaInfo = value;
-                    Save();
-                    FirePropertyChanged("DiamondColorMediaInfo");
                 }
             }
         }

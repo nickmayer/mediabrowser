@@ -8,6 +8,7 @@
 	  xmlns:lw="resx://MediaBrowser/MediaBrowser.Resources/LastWatched"
 	  xmlns:ts="resx://MediaBrowser/MediaBrowser.Resources/TitleSet"
 	  xmlns:sy="resx://MediaBrowser/MediaBrowser.Resources/Summary"
+    xmlns:as="resx://MediaBrowser/MediaBrowser.Resources/AutoScroller"
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
@@ -65,6 +66,7 @@
       <Binding Source="[SelectedItem]" Target="[TitleSet.Model]"/>
       <Binding Source="[SelectedItem]" Target="[MovieInfo.Model]"/>
       <Binding Source="[SelectedItem]" Target="[Summary.Model]"/>
+      <Binding Source="[SelectedItem.Overview]" Target="[AutoScrollOverview.Text]"/>
       <Binding Source="[SelectedItem]" Target="[LastWatched.Model]"/>
       <Binding Source="[PreSelectedItem]" Target="[TitleSet.ModelFast]"/>
       <Binding Source="[PreSelectedItem]" Target="[MovieInfo.ModelFast]"/>
@@ -74,6 +76,14 @@
       <Binding Target="[Backdrop.Image]" Source="[PreviousSelectedItem.BackdropImage]" />
       <Binding Target="[Split.Right.Offset]" Source="[Application.Config.ThumbStripPosterWidth]" />
       <Binding Target="[Split2.Left.Offset]" Source="[Application.Config.ThumbStripPosterWidth]" />
+
+      <!-- Show Proper Overview Panel -->
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[AutoScrollOverview.Visible]" />
+      <Binding Source="[Application.Config.AutoScrollText]" Target="[Summary.Visible]">
+        <Transformer>
+          <BooleanTransformer Inverse="true" />
+        </Transformer>
+      </Binding>
 
       <!-- Counter Bindings -->
       <Binding Source="[Folder.SelectedChildIndex!cor:String]" Target="[List_Counter.Content]">
@@ -128,12 +138,21 @@
 
           <sy:SummaryNonScrolling Name="Summary" Model="[SelectedItem]"  ModelFast="[PreSelectedItem]" Color="color://s:FontColorLight" Font="font://f:PD_SummaryFont">
             <Layout>
-              <FlowLayout Orientation="Vertical" StripAlignment="Far" Spacing="0,0"/>
+              <FlowLayout Orientation="Vertical" StripAlignment="Near" Spacing="0,0"/>
             </Layout>
             <LayoutInput>
               <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Parent,1,-80" />
             </LayoutInput>
           </sy:SummaryNonScrolling>
+
+          <as:AutoScrollText Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:PD_SummaryFont">
+          <Layout>
+            <FlowLayout Orientation="Vertical" StripAlignment="Near" Spacing="0,0"/>
+          </Layout>
+          <LayoutInput>
+            <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Parent,1,-80" />
+          </LayoutInput>
+          </as:AutoScrollText>
 
           <bd:Backdrop2 Name="Backdrop" Visible="[Application.Config.ShowBackdrop]" Image="[Folder.BackdropImage]">
             <LayoutInput>

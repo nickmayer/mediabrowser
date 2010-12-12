@@ -7,7 +7,7 @@
 	  xmlns:lde="resx://Diamond/Diamond.Resources/LayoutDetails"
 	  xmlns:lcf="resx://Diamond/Diamond.Resources/LayoutCoverflow2"
 	  xmlns:lr="resx://Diamond/Diamond.Resources/LayoutRoot"
-	  xmlns:lts="resx://Diamond/Diamond.Resources/LayoutThumbStrip"
+	  xmlns:lts="resx://Diamond/Diamond.Resources/ThumbStripSelector"
 	  xmlns:la="resx://Diamond/Diamond.Resources/LayoutAlbum"      
       
       >
@@ -137,11 +137,11 @@
 						</LayoutInput>
 					</lcf:DiamondLayoutCoverflow>
 
-					<lts:DiamondLayoutThumbStrip Name="ThumbStripView" Visible="false" Item="[Folder]" Application="[Application]" >
+          <lts:ThumbStripSelector Name="ThumbStripView" Visible="false" Folder="[Folder]" Application="[Application]" >
 						<LayoutInput>
 							<FormLayoutInput Horizontal="Fill" Top="Parent,0" Bottom="Parent,1"/>
 						</LayoutInput>
-					</lts:DiamondLayoutThumbStrip>
+					</lts:ThumbStripSelector>
 
           <la:LayoutAlbum Name="AlbumArtist" Visible="false" Item="[Folder]" Application="[Application]">
             <LayoutInput>

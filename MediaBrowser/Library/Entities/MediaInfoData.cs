@@ -29,7 +29,7 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public int AudioStreamCount = 0;
         [Persist]
-        public int AudioChannelCount = 0;
+        public string AudioChannelCount = "";
         [Persist]
         public string AudioProfile = "";
         [Persist]
@@ -42,7 +42,7 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 if (Height > 0 && Width > 0)
-                    return Width + "x" + Height + ",";
+                    return Width + "x" + Height + ", ";
                 else
                     return "";
             }
@@ -52,7 +52,7 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 if (VideoBitRate > 0)
-                    return (VideoBitRate / 1000).ToString() + Kernel.Instance.StringData.GetString("KBsStr") + ",";
+                    return (VideoBitRate / 1000).ToString() + " " + Kernel.Instance.StringData.GetString("KBsStr");
                 else
                     return "";
             }
@@ -63,7 +63,7 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 if (AudioBitRate > 0)
-                    return (AudioBitRate / 1000).ToString()+Kernel.Instance.StringData.GetString("KBsStr");
+                    return (AudioBitRate / 1000).ToString() + " " + Kernel.Instance.StringData.GetString("KBsStr");
                 else
                     return "";
             }
@@ -73,12 +73,14 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (this != Empty)
+                if (this.VideoCodecExtendedString != null && this.VideoCodecExtendedString != "")
                 {
-                           return string.Format("{0} {1} {2} {3} {4} {5}", this.SizeStr, this.VideoCodec, this.VideoRateStr, this.AudioFormat, this.AudioProfile, this.AudioRateStr);
+                    return string.Format("{0}{1}, {2}", this.SizeStr, this.VideoCodecExtendedString, this.AudioCodecExtendedString);
                 }
-                else
-                    return "";
+                else 
+                {
+                    return string.Format("{0}{1}", this.SizeStr, this.AudioCodecExtendedString);
+                }
             }
         }
 
@@ -94,8 +96,11 @@ namespace MediaBrowser.Library.Entities
             {"wmv2","wmv"},
             {"wmv3","wmv"},
             {"wmv3hd","wmv_hd"},
+            {"wmvhd","wmv_hd"},
+            {"wmv hd","wmv_hd"},
             {"wvc1","wmv"},
             {"wvc1hd","wmv_hd"},
+            {"mpeg video","mpegvideo"},
             {"mpeg-4 visual","mpeg4visual"},
             {"mpeg-1 video","mpeg1video"},
             {"mpeg-2 video","H262"},
@@ -190,7 +195,11 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                return VideoFPS;
+                if (this.VideoFPS != null && this.VideoFPS != "")
+                {
+                    return VideoFPS.ToString() + " " + Kernel.Instance.StringData.GetString("FrameRateStr");
+                }   
+                else return "";
             }
         }
 
@@ -198,7 +207,12 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                return string.Format("{0} {1} {2}", this.VideoCodec, this.VideoBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
+                if (this.VideoRateStr != null && this.VideoRateStr != "")
+                {
+                    return string.Format("{0} {1}", this.VideoCodec, this.VideoRateStr);
+                }
+                else
+                    return this.VideoCodec;
             }
         }
         #endregion
@@ -218,6 +232,14 @@ namespace MediaBrowser.Library.Entities
             {"ac-3 truehd 6","DDTrueHD_51"},
             {"ac-3 truehd 7","DDTrueHD_61"},
             {"ac-3 truehd 8","DDTrueHD_71"},
+            {"truehd 5","DDTrueHD_50"},
+            {"truehd 6","DDTrueHD_51"},
+            {"truehd 7","DDTrueHD_61"},
+            {"truehd 8","DDTrueHD_71"},
+            {"ac-3 truehd / core 5 / 6","DDTrueHD_50"},
+            {"ac-3 truehd / core 6 / 6","DDTrueHD_51"},
+            {"ac-3 truehd / core 7 / 6","DDTrueHD_61"},
+            {"ac-3 truehd / core 8 / 6","DDTrueHD_71"},
             {"ac-3 1","DD_10"},
             {"ac-3 2","DD_20"},
             {"ac-3 3","DD_30"},
@@ -228,6 +250,8 @@ namespace MediaBrowser.Library.Entities
             {"ac-3 dolby digital 6","DD_51"},
             {"e-ac-3","DDPlus"},
             {"ac-3 truehd","DDTrueHD"},
+            {"truehd","DDTrueHD"},
+            {"ac-3 truehd / core","DDTrueHD"},
             {"ac-3","Ac3"},
             {"ac-3 dolby digital","Ac3"},            
             {"dts 1","DTS_DS_10"},
@@ -296,7 +320,10 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                return AudioStreamCount.ToString();
+                if (AudioStreamCount > 0)
+                    return AudioStreamCount.ToString();
+                else
+                    return "";
             }
         }
 
@@ -304,20 +331,12 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                switch (this.AudioFormat.ToLower())
+                if (this.AudioRateStr != null && this.AudioRateStr != "")
                 {
-                    case "ac-3":
-                    case "dts":
-                    case "mpeg audio":
-                        {
-                            if (this.AudioProfile != null && this.AudioProfile != "")
-                                return string.Format("{0} {1} {2} {3}", this.AudioFormat, this.AudioProfile, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
-                            else
-                                return string.Format("{0} {1} {2}", this.AudioFormat, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
-                        }
-                    default:
-                        return string.Format("{0} {1} {2}", this.AudioFormat, this.AudioBitRate / 1000, Kernel.Instance.StringData.GetString("KBsStr"));
+                    return string.Format("{0} {1}", this.AudioProfileString, this.AudioRateStr);
                 }
+                else
+                    return this.AudioProfileString;
             }
         }
 

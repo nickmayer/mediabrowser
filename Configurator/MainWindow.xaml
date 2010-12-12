@@ -53,6 +53,29 @@
                 </Grid>
               </Grid>
         </DataTemplate>
+        <DataTemplate x:Key="PluginListTemplate" >
+            <TextBlock Text="{Binding Path=Name}" Style="{DynamicResource PluginListTriggers}" />
+            
+        </DataTemplate>
+        <Style x:Key="PluginListTriggers" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=UpdateAvail}" Value="True">
+                    <Setter Property="Foreground">
+                        <Setter.Value>
+                            <SolidColorBrush Color="Red"/>
+                        </Setter.Value>
+                    </Setter>
+                    <!--<Setter Property="FontWeight" Value="Bold" />-->
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Highlight}" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="Red" Opacity="0.6" />
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -109,23 +132,28 @@
             <TabItem Header="plug-ins" x:Name="plugins" Foreground="#FF323232" FontSize="14" FontWeight="Normal" IsSelected="True">
                 <Grid DataContext="{DynamicResource PluginManager}" >
                     <Label Height="34" HorizontalAlignment="Left" Margin="20,6,0,0" Name="label6" VerticalAlignment="Top" Width="260">Installed Plug-ins:</Label>
-                    <ListBox IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" Margin="20,45,0,60" Width="260" SelectionChanged="pluginList_SelectionChanged" x:Name="pluginList" DisplayMemberPath="Name" ItemsSource="{Binding Path=InstalledPlugins}" OverridesDefaultStyle="False" /> <!-- SelectedIndex="0" -->
+                    <ListBox IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Left" Margin="20,45,0,60" Width="260" ItemTemplate="{DynamicResource PluginListTemplate}" SelectionChanged="pluginList_SelectionChanged" x:Name="pluginList" ItemsSource="{Binding Path=InstalledPlugins}" OverridesDefaultStyle="False" ToolTip="Items shown in red have updates available" />
                     <Button HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Bottom" Width="125" Height="32" Content="More Plug-ins..." x:Name="addPlugin" Click="addPlugin_Click" />
                     <Button HorizontalAlignment="Left" Margin="200,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Remove" x:Name="removePlugin" Click="removePlugin_Click" Visibility="Visible" IsEnabled="False" />
                     <Grid Margin="300,0,20,20" x:Name="pluginPanel">
-                        <Label Margin="0,10,0,0" VerticalAlignment="Top" Height="35" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="20" FontFamily="Trebuchet MS" x:Name="pluginName"/>
-                        <TextBlock Margin="0,45,0,120" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList, Mode=Default}" TextWrapping="Wrap" x:Name="pluginDescription"/>
+                            <Label Margin="0,10,0,0" VerticalAlignment="Top" Height="35" Content="{Binding Path=SelectedItem.Name, ElementName=pluginList, Mode=Default}" FontWeight="Normal" FontSize="20" FontFamily="Trebuchet MS" x:Name="pluginName"/>
+                        <TextBlock Margin="0,45,0,166" Text="{Binding Path=SelectedItem.Description, ElementName=pluginList}" TextWrapping="Wrap" x:Name="pluginDescription" />
                         <Label Margin="0,0,210,40" Content="Latest Version:" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="32" HorizontalContentAlignment="Right" />
                         <Label HorizontalAlignment="Right" Margin="0,0,113,40" Width="90" Height="32" VerticalAlignment="Bottom" x:Name="latestPluginVersion" Content="{Binding Path=SelectedItem.LatestVersion}"/>
-                        <Label Margin="0,0,210,82" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="32" Content="Installed Version:" HorizontalContentAlignment="Right" />
-                        <Label HorizontalAlignment="Right" Margin="0,0,113,82" VerticalAlignment="Bottom" Width="90" Height="32" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="installedPluginVersion"/>
+                        <Label Margin="102.99,0,210,77" VerticalAlignment="Bottom" Height="32" Content="Installed Version:" HorizontalContentAlignment="Right" />
+                        <Label HorizontalAlignment="Right" Margin="0,0,114,77" VerticalAlignment="Bottom" Width="90" Height="32" Content="{Binding Path=SelectedItem.Version, ElementName=pluginList, Mode=Default}" x:Name="installedPluginVersion"/>
                         <Button Margin="0,0,00,40" VerticalAlignment="Bottom" Height="32" Content="Upgrade" Width="80" HorizontalAlignment="Right" Click="upgradePlugin_Click" x:Name="upgradePlugin" Visibility="Visible"/>
-                        <Button Margin="0,0,00,82" VerticalAlignment="Bottom" Height="32" Content="Configure" Width="80" IsEnabled="{Binding Path=SelectedItem.IsConfigurable, ElementName=pluginList, Mode=Default}" HorizontalAlignment="Right" x:Name="configPlugin"  Click="configurePlugin_Click" Visibility="Visible"/>
+                        <Button Margin="0,0,0,77" VerticalAlignment="Bottom" Height="32" Content="Configure" Width="80" IsEnabled="{Binding Path=SelectedItem.IsConfigurable, ElementName=pluginList, Mode=Default}" HorizontalAlignment="Right" x:Name="configPlugin"  Click="configurePlugin_Click" Visibility="Visible"/>
 					    <ProgressBar VerticalAlignment="Bottom" Margin="0,0,0,0" x:Name="progress" Visibility="Hidden" Height="32"/>
-                    </Grid>
+                            <Grid Height="45" Margin="0,0,0,115" Name="rollbackPanel" VerticalAlignment="Bottom">
+                                <Button Name="btnRollback" Visibility="Visible" Width="80" HorizontalAlignment="Right" Margin="0,13,0,0" Height="32" VerticalAlignment="Top" Click="btnRollback_Click">Rollback</Button>
+                                <Label Content="1.2.3.3" Margin="0,13,114,0" Name="lblBackedUpVersion" HorizontalAlignment="Right" Width="90" />
+                                <Label HorizontalContentAlignment="Right" Margin="59,13,210,0">Backed Up Version:</Label>
+                            </Grid>
+                        </Grid>
                 </Grid>
             </TabItem>
-                <TabItem Header="display" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsSelected="True">
+                <TabItem Header="display/playback" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsSelected="True">
                     <Grid>
                         <GroupBox Header="General Display Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,35,0,0" Height="170" Name="groupBox1" Width="270">
                             <Grid>
@@ -174,6 +202,19 @@
                                     <Hyperlink NavigateUri="http://community.mediabrowser.tv/permalinks/1368/how-do-i-show-the-weather-on-supported-themes" RequestNavigate="HandleRequestNavigate">Help?</Hyperlink>
                                 </TextBlock>
                                 
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Resume" Height="100" Margin="301,289.76,0,0" Name="groupBox7" VerticalAlignment="Top" HorizontalAlignment="Left" Width="430">
+                            <Grid>
+                                <Label HorizontalAlignment="Left" Margin="8,9.24,0,36.76" Name="label10" Width="155">Min Resumable Length</Label>
+                                <Label Margin="183,9.24,188,36.76" Name="label11">Start</Label>
+                                <Label HorizontalAlignment="Right" Margin="0,9.24,47,36.76" Name="label12" Width="56.88">End</Label>
+                                <TextBox HorizontalAlignment="Left" Margin="23,34,0,17" Name="tbxMinResumeDuration" Width="33" PreviewTextInput="tbxMinResumeDuration_PreviewTextInput" LostFocus="tbxMinResumeDuration_LostFocus"  ToolTip="Any media less than this length will not save resume status" HorizontalContentAlignment="Right" />
+                                <Label Margin="62,32,0,14.38" Name="label13" HorizontalAlignment="Left" Width="47">Mins</Label>
+                                <Slider Margin="169,35.38,147,17" Name="sldrMinResumePct" Maximum="100" TickFrequency="5" TickPlacement="TopLeft" SmallChange="1" LargeChange="10" ToolTip="If you haven't watched this far into a video, it won't save resume status" ValueChanged="sldrMinResumePct_ValueChanged" />
+                                <Slider HorizontalAlignment="Right" LargeChange="10" Margin="0,35.38,13,17" Maximum="100" Name="sldrMaxResumePct" SmallChange="1" TickFrequency="5" TickPlacement="TopLeft" Width="100" ToolTip="If you have watched this much or more of a video, it will no longer save resume status" ValueChanged="sldrMaxResumePct_ValueChanged" />
+                                <Label HorizontalAlignment="Right" Margin="0,9.24,147,36.76" Name="lblMinResumePct" Width="43" HorizontalContentAlignment="Right">5%</Label>
+                                <Label HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,9.24,13,36.76" Name="lblMaxResumePct" Width="43">5%</Label>
                             </Grid>
                         </GroupBox>
                     </Grid>
@@ -290,7 +331,7 @@
             </TabItem>
             <TabItem Header="help" Name="helpTab" FontSize="14" Visibility="Collapsed" IsSelected="True">
                 <Grid>
-                        <Label HorizontalAlignment="Right" Margin="0,10,20,0" HorizontalContentAlignment="Right" Name="lblVersion2" VerticalAlignment="Top" Width="112" Height="25">Version 0.0.0.0</Label>
+                        <Label HorizontalAlignment="Right" Margin="0,10,20,0" HorizontalContentAlignment="Right" Name="lblVersion2" VerticalAlignment="Top" Width="143" Height="25">Version 0.0.0.0</Label>
                         <GroupBox Header="Help &amp; Support" Margin="20,35,20,0" Height="210" FontSize="14" VerticalAlignment="Top">
                         <Grid>
                             <TextBlock Margin="10,10,10,0" VerticalAlignment="Top" Height="25">If you need any help, have a look at these resources:</TextBlock>
@@ -312,16 +353,18 @@
                     <GroupBox Header="About Media Browser" Margin="220,265,20,20" Height="142" FontSize="14" VerticalAlignment="Top">
                     <Grid>
                         <TextBlock Margin="10,10,0,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Left" Width="146"><Hyperlink NavigateUri="http://www.mediabrowser.tv" RequestNavigate="HandleRequestNavigate" Name="h5">www.mediabrowser.tv</Hyperlink></TextBlock>
-                        <TextBlock Margin="10,35,0,0" VerticalAlignment="Top" Height="25">Visit the official website...</TextBlock>
+                        <TextBlock Margin="10,35,0,56.38" HorizontalAlignment="Left" Width="177">Visit the official website...</TextBlock>
                         <TextBlock Margin="10,0,0,31.38" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="95"><Hyperlink NavigateUri="http://www.mediabrowser.tv/donate" TextDecorations="None" RequestNavigate="HandleRequestNavigate" Name="h6"><Image Source="./Images/btn_donate.png"/></Hyperlink></TextBlock>
                         <TextBlock Margin="10,85,10,0" VerticalAlignment="Top" Height="25">If you like Media Browser, please consider making a donation!</TextBlock>
-                                <Label Margin="211,32,165,57" Name="label9">Supporter Key</Label>
-                                <TextBox Margin="211,58,31,36" Name="tbxSupporterKey" LostFocus="tbxSupporterKey_LostFocus" ToolTip="Paste the key from the email you received when you donated" />
+                                <Label Margin="0,5,165,0" Name="label9" HorizontalAlignment="Right" Width="120" Height="27.38" VerticalAlignment="Top">Supporter Key</Label>
+                                <TextBox Margin="0,31,31,0" Name="tbxSupporterKey" ToolTip="Paste the key from the email you received when you donated" Height="22.38" VerticalAlignment="Top" HorizontalAlignment="Right" Width="254" />
+                                <Button Margin="0,59,31,0" Name="btnValidateKey" HorizontalAlignment="Right" Width="75" Height="22.38" VerticalAlignment="Top" Click="btnValidateKey_Click">Save</Button>
                             </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>
+            <TextBlock Height="25" Margin="15,54,339,0" Name="alertText" VerticalAlignment="Top" Text="Some of your plugins have updates available" FontSize="16" Foreground="MidnightBlue" FontWeight="Bold" Opacity="0" IsEnabled="False" Visibility="Hidden" />
         </Grid>
         
         

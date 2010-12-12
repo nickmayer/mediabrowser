@@ -28,6 +28,7 @@
       <cor:Int32 Name="CurrentItemIndex" Int32="0"/>
       <BooleanChoice Name="Vertical" Value="false" />
       <Timer Name="InfoTimer" AutoRepeat="false" Interval="400" Enabled="false"/>
+      <Command Name="NavRightCmd"/>
 
       <AnchorLayoutInput Name="BaseLayout" Bottom="Parent, 1,-100" Top="Parent,0,100"  Horizontal="Fill" />
       <!-- Info Panel Layout -->
@@ -60,6 +61,13 @@
       <Changed Source="[InfoTimer.Tick]">
         <Actions>
           <Set Target="[SelectedItem]" Value="[Item.SelectedChild]" />
+        </Actions>
+      </Changed>
+      
+      <!-- Focus Commands -->
+      <Changed Source="[NavRightCmd.Invoked]">
+        <Actions>
+          <Invoke Target="[PosterItems.NavigateInto]" />
         </Actions>
       </Changed>
 
@@ -109,7 +117,11 @@
             </LayoutInput>
           </dtb:DiamondCommonInformation>
 
-
+          <dtb:Bounce Command="[NavRightCmd]" >
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0.5" Top="Parent, 1, -75" />
+            </LayoutInput>
+          </dtb:Bounce>
 
           <!-- List Counter -->
           <dtb:DiamondCounter Name="Counter" LayoutInput="global://dtb:LI_ListCounter" />

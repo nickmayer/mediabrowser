@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,28 +16,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Windows.Threading;
+using System.Xml.Serialization;
+using Microsoft.Win32;
 
 using MediaBrowser;
-using MediaBrowser.LibraryManagement;
-using System.IO;
-using Microsoft.Win32;
+using Configurator.Code;
 using MediaBrowser.Code.ShadowTypes;
-using System.Xml.Serialization;
 using MediaBrowser.Library;
 using MediaBrowser.Library.Configuration;
-using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Entities;
-using MediaBrowser.Library.Network;
+using MediaBrowser.Library.Factories;
 using MediaBrowser.Library.Logging;
-using Configurator.Code;
+using MediaBrowser.Library.Network;
 using MediaBrowser.Library.Plugins;
-using System.Diagnostics;
 using MediaBrowser.Library.Threading;
-using System.Windows.Threading;
-using System.Threading;
-using System.Security.AccessControl;
-using System.Security.Principal;
+using MediaBrowser.LibraryManagement;
 
 namespace Configurator
 {
@@ -45,6 +45,7 @@ namespace Configurator
         ConfigData config;
         Ratings ratings = new Ratings();
         PermissionDialog waitWin;
+        PopupMsg PopUpMsg;
 
         public MainWindow()
         { 
@@ -60,9 +61,31 @@ namespace Configurator
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
             
             InitializeComponent();
+            PopUpMsg = new PopupMsg(alertText);
             config = Kernel.Instance.ConfigData;
+            //put this check here because it will run before the first run of MB and we need it now
+            if (Config.Instance.MBVersion != Kernel.Instance.Version.ToString() && Kernel.Instance.Version.ToString() == "2.3.0.0")
+            {
+                try
+                {
+                    Config.Instance.PluginSources.RemoveAt(config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
+                    config.PluginSources.RemoveAt(config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
+                }
+                catch
+                {
+                    //wasn't there - no biggie
+                }
+                if (Config.Instance.PluginSources.Find(s => s == "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml") == null)
+                {
+                    Config.Instance.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
+                    config.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
+                    Logger.ReportInfo("Plug-in Source migrated to multi-version source");
+                }
+                //not going to re-set version in case there is something we want to do in MB itself
+            }
+
             LoadComboBoxes();
-            lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.Version;
+            lblVersion.Content = lblVersion2.Content = "Version " + Kernel.Instance.VersionStr;
 
             //we're hiding the podcast and plugin detail panels until the user selects one
             infoPlayerPanel.Visibility = pluginPanel.Visibility = Visibility.Hidden;
@@ -106,43 +129,25 @@ namespace Configurator
             podcastDetails(false);
             SaveConfig();
 
-            PluginManager.Init();
+
+            Async.Queue("Plugin Init", () =>
+            {
+                PluginManager.Instance.Init();
+                while (!PluginManager.Instance.PluginsLoaded) { } //wait for plugins to load
+                if (PluginManager.Instance.UpgradesAvailable())
+                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                    {
+                        PopUpMsg.DisplayMessage("Some of your plug-ins have upgrades available.");
+                    }));
+            });
+
 
             Async.Queue("Startup Validations", () =>
             {
-
                 RefreshEntryPoints(false);
                 ValidateMBAppDataFolderPermissions();
-
-
-                //wait for plugins to get loaded and then go see if we have updates
-                while (!PluginManager.Instance.PluginsLoaded) { }
-                if (pluginUpgradesAvailable()) MessageBox.Show("Some of your installed plug-ins have newer versions available.  You should upgrade these plugins from the 'Plug-ins' tab.\n\nYour current versions may not work with this version of MediaBrowser.", "Upgrade Plugins");
-            },() =>
-                {
-                    //be sure latest version gets selected properly
-                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-                    {
-                        pluginList_SelectionChanged(this, null);
-                    }));
-                });
+            });
         }
-
-        private bool pluginUpgradesAvailable()
-        {
-            //Look to see if any of our installed plugins have upgrades available
-            foreach (IPlugin plugin in Kernel.Instance.Plugins)
-            {
-                System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0, 0, 0, 0);
-                if (v != null)
-                {
-                    if (v > plugin.Version && rv <= Kernel.Instance.Version) return true;
-                }
-            }
-            return false;
-        }
-
 
         public void ValidateMBAppDataFolderPermissions()
         {
@@ -388,6 +393,10 @@ namespace Configurator
                 ddlWeatherUnits.SelectedItem = "Fahrenheit";
             else
                 ddlWeatherUnits.SelectedItem = "Celsius";
+
+            tbxMinResumeDuration.Text = config.MinResumeDuration.ToString();
+            sldrMinResumePct.Value = config.MinResumePct;
+            sldrMaxResumePct.Value = config.MaxResumePct;
 
             //Parental Control
             cbxEnableParentalControl.IsChecked = config.ParentalControlEnabled;
@@ -789,13 +798,13 @@ sortorder: {2}
             var virtualFolder = folderList.SelectedItem as VirtualFolder;
             if (virtualFolder == null) return;
 
-            var dialog = new OpenFileDialog();
+            var dialog = new System.Windows.Forms.OpenFileDialog();
             dialog.Title = "Select your image";
             dialog.Filter = "Image files (*.png;*.jpg;)|*.png;*.jpg;";
             dialog.FilterIndex = 1;
             dialog.RestoreDirectory = true;
-            var result = dialog.ShowDialog(this);
-            if (result == true)
+            //var result = dialog.ShowDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 virtualFolder.ImagePath = dialog.FileName;
                 folderImage.Source = new BitmapImage(new Uri(virtualFolder.ImagePath));
@@ -870,7 +879,8 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-                System.Version rv = PluginManager.Instance.GetRequiredVersion(plugin) ?? new System.Version(0,0,0,0);
+                System.Version rv = plugin.RequiredMBVersion;
+                System.Version bv = PluginManager.Instance.GetBackedUpVersion(plugin);
                 //enable the remove button if a plugin is selected.
                 removePlugin.IsEnabled = true;
 
@@ -893,6 +903,22 @@ sortorder: {2}
                     latestPluginVersion.Content = "Unknown";
                     upgradePlugin.IsEnabled = false;
                 }
+                //show backup if exists
+                if (bv != null)
+                {
+                    lblBackedUpVersion.Content = bv.ToString();
+                    btnRollback.IsEnabled = (bv != plugin.Version);
+                    rollbackPanel.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    btnRollback.IsEnabled = false;
+                    rollbackPanel.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                pluginPanel.Visibility = Visibility.Hidden;
             }
         }
 
@@ -900,8 +926,8 @@ sortorder: {2}
             if (pluginList.SelectedItem != null)
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
-                //get our original source so we can upgrade...
-                IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin);
+                //get our latest version so we can upgrade...
+                IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin, PluginManager.Instance.GetLatestVersion(plugin));
                 if (newPlugin != null)
                 {
                     PluginInstaller p = new PluginInstaller();
@@ -996,10 +1022,10 @@ sortorder: {2}
 
         private void changeDaemonToolsLocation_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog();
+            var dialog = new System.Windows.Forms.OpenFileDialog();
             dialog.Filter = "*.exe|*.exe";
             var result = dialog.ShowDialog();
-            if (result == true)
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
                 config.DaemonToolsLocation = dialog.FileName;
                 //daemonToolsLocation.Content = config.DaemonToolsLocation;
@@ -1082,12 +1108,12 @@ sortorder: {2}
             var mediaPlayer = lstExternalPlayers.SelectedItem as ConfigData.ExternalPlayer;
             if (mediaPlayer != null)
             {
-                var dialog = new OpenFileDialog();
+                var dialog = new System.Windows.Forms.OpenFileDialog();
                 dialog.Filter = "*.exe|*.exe";
                 if (mediaPlayer.Command != string.Empty)
                     dialog.FileName = mediaPlayer.Command;
 
-                if (dialog.ShowDialog() == true)
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     mediaPlayer.Command = dialog.FileName;
                     txtPlayerCommand.Text = mediaPlayer.Command;
@@ -1365,7 +1391,7 @@ sortorder: {2}
             hdrAdvanced.FontWeight = hdrBasic.FontWeight = hdrHelpAbout.FontWeight = FontWeights.Normal;
             tabControl1.SelectedIndex = 0;
         }
-        private void SetHeader(Label label)
+        private void SetHeader(System.Windows.Controls.Label label)
         {
             ClearHeaders();
             label.Foreground = new SolidColorBrush(System.Windows.Media.Colors.Black);
@@ -1451,6 +1477,7 @@ sortorder: {2}
             if (
                   MessageBox.Show(message, "Remove plugin", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes) {
                 PluginManager.Instance.RemovePlugin(plugin);
+                PluginManager.Instance.UpdateAvailableAttributes(plugin, false);
                 RefreshEntryPoints(true);
                 RefreshThemes();
             }
@@ -1647,18 +1674,25 @@ sortorder: {2}
                 try
                 {
                     this.Cursor = Cursors.Wait;
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items")))
-                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"), true);
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children")))
-                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"), true);
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata")))
-                        Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"), true);
-                    File.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "cache.db"));
+                    if (config.EnableExperimentalSqliteSupport)
+                    {
+                        Kernel.Instance.ItemRepository.ClearEntireCache();
+                    }
+                    else
+                    {
 
-                    //recreate the directories
-                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"));
-                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"));
-                    Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
+                        if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items")))
+                            Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"), true);
+                        if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children")))
+                            Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"), true);
+                        if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata")))
+                            Directory.Delete(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"), true);
+
+                        //recreate the directories
+                        Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "items"));
+                        Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "children"));
+                        Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
+                    }
                     //force MB to re-build library next time
                     config.LastFullRefresh = DateTime.MinValue;
                     config.Save();
@@ -1696,9 +1730,9 @@ sortorder: {2}
             {
                 try
                 {
-                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate")))
+                    if (Directory.Exists(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate")))
                     {
-                        string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "playstate"));
+                        string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate"));
                         foreach (string file in files)
                         {
                             File.Delete(file);
@@ -1716,7 +1750,7 @@ sortorder: {2}
             {
                 try
                 {
-                    string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "display"));
+                    string[] files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "display"));
                     foreach (string file in files) {
                         File.Delete(file);
                     }
@@ -1761,11 +1795,83 @@ sortorder: {2}
             }
         }
 
-        private void tbxSupporterKey_LostFocus(object sender, RoutedEventArgs e)
+        private void btnValidateKey_Click(object sender, RoutedEventArgs e)
         {
-            //if (sender == tbxSupporterKey)
+            Config.Instance.SupporterKey = tbxSupporterKey.Text.Trim();
+            if (ValidateKey("trailers")) //use trailers because it is the lowest level
             {
-                Config.Instance.SupporterKey = tbxSupporterKey.Text;
+                MessageBox.Show("Supporter key saved and validated.  Thank you for your support.", "Save Key");
+            }
+            else
+            {
+                MessageBox.Show("Supporter key does not appear to be valid.  Please double check. Copy and paste from the email for best results.", "Supporter Key Invalid");
+            }
+        }
+
+        private bool ValidateKey(string feature)
+        {
+            this.Cursor = Cursors.Wait;
+            bool valid = false;
+            string path = "http://www.mediabrowser.tv/registration/registrations?feature=" + feature + "&key=" + Config.Instance.SupporterKey;
+            WebRequest request = WebRequest.Create(path);
+
+            using (var response = request.GetResponse()) using (Stream stream = response.GetResponseStream())
+            {
+                byte[] buffer = new byte[5];
+                stream.Read(buffer, 0, 5);
+                string res = System.Text.Encoding.ASCII.GetString(buffer).Trim();
+                valid = res.StartsWith("true");
+            }
+            this.Cursor = Cursors.Arrow;
+            return valid;
+        }
+
+        private void sldrMinResumePct_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblMinResumePct.Content = ((int)e.NewValue).ToString() + "%";
+            config.MinResumePct = (int)e.NewValue;
+            SaveConfig();
+        }
+
+        private void sldrMaxResumePct_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblMaxResumePct.Content = ((int)e.NewValue).ToString() + "%";
+            config.MaxResumePct = (int)e.NewValue;
+            SaveConfig();
+        }
+
+        private void tbxMinResumeDuration_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Int32.TryParse(tbxMinResumeDuration.Text, out config.MinResumeDuration);
+            SaveConfig();
+        }
+
+        private void tbxMinResumeDuration_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Char.IsDigit(e.Text[0]);
+            base.OnPreviewTextInput(e);
+        }
+
+        private void btnRollback_Click(object sender, RoutedEventArgs e)
+        {
+            IPlugin plugin = pluginList.SelectedItem as IPlugin;
+            if (plugin == null) return;
+            if (MessageBox.Show("Are you sure you want to overwrite your current version of "+plugin.Name, "Rollback Plug-in", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                this.Cursor = Cursors.Wait;
+                if (PluginManager.Instance.RollbackPlugin(plugin))
+                {
+                    PluginManager.Instance.RefreshInstalledPlugins();
+                    pluginList.SelectedIndex = 0;
+                    this.Cursor = Cursors.Arrow;
+                    PopUpMsg.DisplayMessage("Plugin " + plugin.Name + " rolled back.");
+                }
+                else
+                {
+                    Logger.ReportError("Error attempting to rollback plugin " + plugin.Name);
+                    this.Cursor = Cursors.Arrow;
+                    MessageBox.Show("Error attempting to rollback plugin " + plugin.Name, "Rollback Failed");
+                }
             }
         }
     }

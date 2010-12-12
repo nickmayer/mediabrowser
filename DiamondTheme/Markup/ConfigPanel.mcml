@@ -24,6 +24,7 @@
       <BooleanChoice Name="InfoBoxCoverflow" Value="[Config.InfoBoxCoverflow]" />
       <BooleanChoice Name="InfoBoxThumbstrip" Value="[Config.InfoBoxThumbstrip]" />
       <BooleanChoice Name="DisplayGlassOverlay" Value="[Config.DisplayGlassOverlay]" />
+      <BooleanChoice Name="DiamondThumbstripStyle2" Value="[Config.DiamondThumbstripStyle2]" />
       <BooleanChoice Name="InfoBoxPoster" Value="[Config.InfoBoxPoster]" />
       <BooleanChoice Name="AutoExtenderLayout" Value="[Config.AutoExtenderLayout]" />
       <BooleanChoice Name="DiamondDisplayWeather" Value="[Config.DiamondDisplayWeather]" />
@@ -37,6 +38,7 @@
       <Binding Source="[DisplayEndTime.Value]" Target="[Config.DisplayEndTime]" />
       <Binding Source="[InfoBoxCoverflow.Value]" Target="[Config.InfoBoxCoverflow]" />
       <Binding Source="[InfoBoxThumbstrip.Value]" Target="[Config.InfoBoxThumbstrip]" />
+      <Binding Source="[DiamondThumbstripStyle2.Value]" Target="[Config.DiamondThumbstripStyle2]" />
       <Binding Source="[InfoBoxPoster.Value]" Target="[Config.InfoBoxPoster]" />
       <Binding Source="[DisplayGlassOverlay.Value]" Target="[Config.DisplayGlassOverlay]" />
       <Binding Source="[AutoExtenderLayout.Value]" Target="[Config.AutoExtenderLayout]" />
@@ -55,6 +57,7 @@
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayEndTime!cor:String]" Checked="[DisplayEndTime]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinCoverflowViews!cor:String]" Checked="[DisplayGlassOverlay]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinThumbstripViews!cor:String]" Checked="[InfoBoxCoverflow]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
+              <cb:CheckBox Label="[Application.LocalStrings.#DiamondThumbstripStyle2!cor:String]" Checked="[DiamondThumbstripStyle2]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinPosterViews!cor:String]" Checked="[InfoBoxThumbstrip]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayGlassOverlay!cor:String]" Checked="[InfoBoxPoster]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <!--<cb:CheckBox Label="Display Colour MediaInfo Icons" Checked="[DiamondColorMediaInfo]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>-->

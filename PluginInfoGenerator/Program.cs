@@ -49,8 +49,10 @@ namespace PluginInfoGenerator {
                     writer.WriteElementString("Version", plugin.Version.ToString());
                     writer.WriteElementString("Name", plugin.Name);
                     writer.WriteElementString("Description", plugin.Description);
-                    writer.WriteElementString("Filename", Path.GetFileName(file));
-                    if (!string.IsNullOrEmpty(plugin.RichDescURL)) {
+                    writer.WriteElementString("SourceFilename", Path.GetFileName(file));
+                    writer.WriteElementString("Filename", stripID(Path.GetFileName(file)));
+                    if (!string.IsNullOrEmpty(plugin.RichDescURL))
+                    {
                         writer.WriteElementString("RichDescURL", plugin.RichDescURL);
                     }
                     writer.WriteElementString("RequiredMBVersion", plugin.RequiredMBVersion.ToString());
@@ -70,6 +72,18 @@ namespace PluginInfoGenerator {
 
             Console.WriteLine("Wrote data to " + PLUGIN_INFO);
 
+        }
+
+        private static string stripID(string filename)
+        {
+            //this will provide backward compatability with old configurator
+            int firstDotPos = filename.IndexOf('.');
+            int id = -1;
+            Int32.TryParse(filename.Substring(0,firstDotPos), out id);
+            if (id > 0)
+                return filename.Substring(firstDotPos+1); //we have an id, strip it
+            else
+                return filename; //no id (old format)
         }
 
         private static void Usage() {

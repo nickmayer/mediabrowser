@@ -355,10 +355,6 @@ namespace MediaBrowser.Library
                     this.PlayableItem.QueueItem = queue;
                     this.PlayableItem.Play(this.PlayState, resume);
                     if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
-                    Async.Queue("Resume state updater", () =>
-                    {
-                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
-                    }, 10 * 1000);
                 }
             }
             catch (Exception)
@@ -366,6 +362,11 @@ namespace MediaBrowser.Library
                 MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
                 ev.Dialog(Application.CurrentInstance.StringData("ContentErrorDial") + "\n" + baseItem.Path, Application.CurrentInstance.StringData("ContentErrorCapDial"), DialogButtons.Ok, 60, true);
             }
+        }
+
+        public void UpdateResume()
+        {
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => FirePropertyChanged("CanResume")); //force UI to update
         }
 
         private void Play(bool resume)
@@ -580,9 +581,15 @@ namespace MediaBrowser.Library
 
         #region Metadata loading and refresh
 
-        public void RefreshMetadata()
+        public virtual void RefreshMetadata()
         {
-            Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshProf") + " " + this.Name);
+            RefreshMetadata(true);
+        }
+
+        public void RefreshMetadata(bool displayMessage)
+        {
+            if (displayMessage)
+                Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshProf") + " " + this.Name);
             Async.Queue("UI Triggered Metadata Loader", () =>
             {
                 baseItem.RefreshMetadata(MetadataRefreshOptions.Force);
@@ -590,6 +597,27 @@ namespace MediaBrowser.Library
                 primaryImage = null;
                 bannerImage = null;
                 primaryImageSmall = null;
+                if (baseItem.PrimaryImage != null)
+                {
+                    string ignore;
+                    //get the display size of our primary image if known
+                    if (PhysicalParent != null && PhysicalParent.DisplayPrefs != null)
+                    {
+                        Size s = PhysicalParent.DisplayPrefs.ThumbConstraint.Value;
+                        if (s != null && s.Width > 0 && s.Height > 0)
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
+                        else
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at full size
+                    }
+                    else
+                    {
+                        ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at full size
+                    }
+                }
+                if (baseItem.BackdropImage != null)
+                {
+                    var ignore = baseItem.BackdropImage.GetLocalImagePath(); //force the main backdrop to re-cache
+                }
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });
         }

@@ -15,7 +15,7 @@ namespace MediaBrowser.Library.Logging {
             {
                 if (AppDomain.CurrentDomain.FriendlyName.Contains("Configurator"))
                 {
-                    return "ConfigWizard-";
+                    return "Configurator-";
                 }
                 else
                 {

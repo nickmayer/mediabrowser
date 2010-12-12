@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MediaBrowser.Library;
 using System.IO;
+using System.Diagnostics;
 using MediaBrowser.Library.Configuration;
 using System.Reflection;
 using MediaBrowser.Library.Plugins;
@@ -16,6 +17,7 @@ namespace MtnFrameGrabProvider {
 
         internal const string PluginName = "High Quality Thumbnails";
         internal const string PluginDescription = "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net";
+        internal const string includedMtnVersion = "2010.11.10";
         public static PluginConfiguration<PluginOptions> PluginOptions { get; set; }
 
         static Plugin() {
@@ -25,14 +27,11 @@ namespace MtnFrameGrabProvider {
                 // mono workaround 
                 MtnPath = "temp";
             }
-            MtnExe = Path.Combine(MtnPath, "mtn.exe");
-            FrameGrabsPath = Path.Combine(MtnPath, "FrameGrabs");
-           
+            MtnExe = Path.Combine(MtnPath, "mtn.exe");           
         }
 
         public static readonly string MtnPath;
         public static readonly string MtnExe;
-        public static readonly string FrameGrabsPath;
 
         public override void Init(Kernel kernel) {
             PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
@@ -81,26 +80,27 @@ namespace MtnFrameGrabProvider {
         {
             get
             {
-                return new System.Version(2, 2, 3, 0);
+                return new System.Version(2, 3, 0, 0);
             }
         }
         public override System.Version TestedMBVersion
         {
             get
             {
-                return new System.Version(2, 2, 4, 0);
+                return new System.Version(2, 3, 0, 0);
             }
         }
+        
         public static void EnsureMtnIsExtracted()
         {
+            string name = "MtnFrameGrabProvider.mtn.zip";
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name); 
+            bool needsToExtractMtn = false;
            
+            /*
             if (!Directory.Exists(MtnPath)) {
                 Directory.CreateDirectory(MtnPath);
-                Directory.CreateDirectory(FrameGrabsPath);
-                
-
-                string name = "MtnFrameGrabProvider.mtn.zip";
-                var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name); 
+                //Directory.CreateDirectory(FrameGrabsPath);
                 
                 using (var zip = new ZipInputStream(stream)) {
 
@@ -110,8 +110,54 @@ namespace MtnFrameGrabProvider {
                         File.WriteAllBytes(destination, zip.ReadAllBytes());
                     }
                 }
+            } else {
+                FileVersionInfo mtnVersion = FileVersionInfo.GetVersionInfo(MtnExe);
+                Logger.ReportInfo("Using mtn version:{0}", mtnVersion.FileVersion);
+                if (mtnVersion.FileVersion == null)
+                    Logger.ReportInfo("Using a pre-versioning copy of mtn.");
+            }
+            */
+
+            if (!Directory.Exists(MtnPath)) 
+            {
+                Directory.CreateDirectory(MtnPath);
+                needsToExtractMtn = true;
+            } 
+            else 
+            {
+                FileVersionInfo mtnVersion = FileVersionInfo.GetVersionInfo(MtnExe);
+                Logger.ReportInfo("Using mtn version:{0}", mtnVersion.FileVersion);
+
+                if (mtnVersion.FileVersion != null) 
+                {
+                    if (mtnVersion.FileVersion.ToString() != includedMtnVersion) 
+                    {
+                        Logger.ReportInfo("mtn too old!");
+                        needsToExtractMtn = true;
+                    }
+                } 
+                else 
+                {
+                    Logger.ReportInfo("Using pre-versioning copy of mtn!");
+                    needsToExtractMtn = true;
+                }
+
+            }
+
+            if (needsToExtractMtn) 
+            {
+                using (var zip = new ZipInputStream(stream))
+                {
+                    ZipEntry entry;
+                    while ((entry = zip.GetNextEntry()) != null)
+                    {
+                        string destination = Path.Combine(MtnPath, entry.Name);
+                        File.WriteAllBytes(destination, zip.ReadAllBytes());
+                    }
+                }
             }
         }
+        
 
 
     }

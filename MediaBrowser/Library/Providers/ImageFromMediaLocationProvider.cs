@@ -74,7 +74,7 @@ namespace MediaBrowser.Library.Providers
             string primaryExt = ".jpg";
             string secondaryExt = ".png";
 
-            if (Application.CurrentInstance.Config.PNGTakesPrecedence)
+            if (Config.Instance.PNGTakesPrecedence)
             {
                 primaryExt = ".png";
                 secondaryExt = ".jpg";

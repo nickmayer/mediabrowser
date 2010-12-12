@@ -45,8 +45,39 @@ namespace MediaBrowser.Library {
     /// </summary>
     public class Kernel {
 
+        /**** Version extension is used to provide for specific versions between current releases without having to actually change the 
+         * actual assembly version number.  Suggested Values:
+         * "R" Released major version
+         * "R+" Trunk build (not released as a build to anyone but modified since last true release)
+         * "SP1", "SP2", "SPn" Service release without major version change
+         * "SPn+" Trunk build after a service release
+         * "A1", "A2", "An" Alpha versions
+         * "B1", "B2", "Bn" Beta versions
+         * 
+         * This should be set to "R" (or "SPn") with each official release and then immediately changed back to "R+" (or "SPn+")
+         * so future trunk builds will indicate properly.
+         * */
+        private const string versionExtension = "B+";
+
         static object sync = new object();
         static Kernel kernel;
+
+        public bool MajorActivity
+        {
+            get
+            {
+                if (Application.CurrentInstance != null)
+                    return Application.CurrentInstance.Information.MajorActivity;
+                else
+                    return false;
+            }
+            set
+            {
+                if (Application.CurrentInstance != null)
+                if (Application.CurrentInstance.Information.MajorActivity != value)
+                    Application.CurrentInstance.Information.MajorActivity = value;
+            }
+        }
 
         private static MultiLogger GetDefaultLogger(ConfigData config) {
             var logger = new MultiLogger();
@@ -297,6 +328,11 @@ namespace MediaBrowser.Library {
             kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
                 kernel.RootFolder;
 
+            //create our default config panels with localized names
+            kernel.AddConfigPanel(kernel.StringData.GetString("GeneralConfig"), "");
+            kernel.AddConfigPanel(kernel.StringData.GetString("MediaOptionsConfig"), "");
+            kernel.AddConfigPanel(kernel.StringData.GetString("ThemesConfig"), "");
+            kernel.AddConfigPanel(kernel.StringData.GetString("ParentalControlConfig"), "");
             // create a mouseActiveHooker for us to know if the mouse is active on our window (used to handle mouse scrolling control)
             // we will wire it to an event on application
             kernel.MouseActiveHooker = new IsMouseActiveHooker();
@@ -326,8 +362,8 @@ namespace MediaBrowser.Library {
         }
 
         static System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs args) {
-            Logger.ReportInfo(args.Name + " is being resolved!");
             if (args.Name.StartsWith("MediaBrowser,")) {
+                Logger.ReportInfo("Plug-in reference to "+args.Name + " is being linked to version "+System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
                 return typeof(Kernel).Assembly;
             }
             return null;
@@ -352,6 +388,11 @@ namespace MediaBrowser.Library {
         public System.Version Version
         {
             get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; }
+        }
+
+        public string VersionStr
+        {
+            get { return Version + " " + versionExtension; }
         }
 
 
@@ -420,8 +461,7 @@ namespace MediaBrowser.Library {
 
             this.ParentalControls.ClearEnteredList();
         }
-        public Dictionary<string, ConfigPanel> ConfigPanels = new Dictionary<string, ConfigPanel>() {
-            {"General",new ConfigPanel("")},{"Media Options",new ConfigPanel("")},{"Themes",new ConfigPanel("")},{"Parental Control",new ConfigPanel("")} }; //defaults are embedded in configpage others will be added to end
+        public Dictionary<string, ConfigPanel> ConfigPanels = new Dictionary<string, ConfigPanel>();
 
         //method for external entities (plug-ins) to add a new config panels
         //panel should be a resx reference to a UI that fits within the config panel area and takes Application and FocusItem as parms
@@ -489,6 +529,46 @@ namespace MediaBrowser.Library {
             return menuItem;
         }
 
+        public delegate bool PrePlayProcess(Item item, bool PlayIntros);
+        public delegate void PostPlayProcess();
+        public List<PrePlayProcess> PrePlayProcesses = new List<PrePlayProcess>();
+        public List<PostPlayProcess> PostPlayProcesses = new List<PostPlayProcess>();
+
+        public PrePlayProcess AddPrePlayProcess(PrePlayProcess process)
+        {
+            return AddPrePlayProcess(process, 2);
+        }
+
+        public PrePlayProcess AddPrePlayProcess(PrePlayProcess process, int priority)
+        {
+            if (priority == 0)
+            {
+                PrePlayProcesses.Insert(0, process);
+            }
+            else
+            {
+                PrePlayProcesses.Add(process);
+            }
+            return process;
+        }
+
+        public PostPlayProcess AddPostPlayProcess(PostPlayProcess process)
+        {
+            return AddPostPlayProcess(process, 2);
+        }
+
+        public PostPlayProcess AddPostPlayProcess(PostPlayProcess process, int priority)
+        {
+            if (priority == 0)
+            {
+                PostPlayProcesses.Insert(0, process);
+            }
+            else
+            {
+                PostPlayProcesses.Add(process);
+            }
+            return process;
+        }
 
         public void AddExternalPlayableItem(Type aType)
         {
@@ -556,28 +636,36 @@ namespace MediaBrowser.Library {
         }
 
         public void InstallPlugin(string path, bool globalTarget) {
-            InstallPlugin(path, globalTarget, null, null, null);
+            InstallPlugin(path, Path.GetFileName(path), globalTarget, null, null, null);
         }
 
         public void InstallPlugin(string path, bool globalTarget,
+                MediaBrowser.Library.Network.WebDownload.PluginInstallUpdateCB updateCB,
+                MediaBrowser.Library.Network.WebDownload.PluginInstallFinishCB doneCB,
+                MediaBrowser.Library.Network.WebDownload.PluginInstallErrorCB errorCB)
+        {
+            InstallPlugin(path, Path.GetFileName(path), globalTarget, updateCB, doneCB, errorCB);
+        }
+
+        public void InstallPlugin(string sourcePath, string targetName, bool globalTarget,
                 MediaBrowser.Library.Network.WebDownload.PluginInstallUpdateCB updateCB,
                 MediaBrowser.Library.Network.WebDownload.PluginInstallFinishCB doneCB,
                 MediaBrowser.Library.Network.WebDownload.PluginInstallErrorCB errorCB) {
             string target;
             if (globalTarget) {
                 //install to ehome for now - can change this to GAC if figure out how...
-                target = Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", Path.GetFileName(path)));
+                target = Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", targetName));
                 //and put our pointer file in "plugins"
-                File.Create(Path.Combine(ApplicationPaths.AppPluginPath, Path.ChangeExtension(Path.GetFileName(path), ".pgn")));
+                File.Create(Path.Combine(ApplicationPaths.AppPluginPath, Path.ChangeExtension(Path.GetFileName(targetName), ".pgn")));
             }
             else {
-                target = Path.Combine(ApplicationPaths.AppPluginPath, Path.GetFileName(path));
+                target = Path.Combine(ApplicationPaths.AppPluginPath, targetName);
             }
 
-            if (path.ToLower().StartsWith("http")) {
+            if (sourcePath.ToLower().StartsWith("http")) {
                 // Initialise Async Web Request
                 int BUFFER_SIZE = 1024;
-                Uri fileURI = new Uri(path);
+                Uri fileURI = new Uri(sourcePath);
 
                 WebRequest request = WebRequest.Create(fileURI);
                 Network.WebDownload.State requestState = new Network.WebDownload.State(BUFFER_SIZE, target);
@@ -590,7 +678,7 @@ namespace MediaBrowser.Library {
                 IAsyncResult result = (IAsyncResult)request.BeginGetResponse(new AsyncCallback(ResponseCallback), requestState);
             }
             else {
-                File.Copy(path, target);
+                File.Copy(sourcePath, target, true);
                 InitialisePlugin(target);
             }
 

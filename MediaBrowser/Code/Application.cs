@@ -503,6 +503,7 @@ namespace MediaBrowser
         // Entry point for the app
         public void GoToMenu()
         {
+            Logger.ReportInfo("Media Browser (version " + AppVersion + ") Starting up.");
             try
             {
                 if (Config.IsFirstRun)
@@ -611,7 +612,7 @@ namespace MediaBrowser
 
         void FullRefresh(Folder folder, MetadataRefreshOptions options)
         {
-            Information.MajorActivity = true;
+            Kernel.Instance.MajorActivity = true;
             Information.AddInformationString(CurrentInstance.StringData("FullRefreshMsg"));
             folder.RefreshMetadata(options);
 
@@ -635,7 +636,7 @@ namespace MediaBrowser
             }
 
             Information.AddInformationString(CurrentInstance.StringData("FullRefreshFinishedMsg"));
-            Information.MajorActivity = false;
+            Kernel.Instance.MajorActivity = false;
         }
 
         void RunActionRecursively(Folder folder, Action<BaseItem> action)
@@ -676,7 +677,7 @@ namespace MediaBrowser
             }
         }
 
-        private bool showNowPlaying = true;
+        private bool showNowPlaying = false;
         public bool ShowNowPlaying
         {
             get { return this.showNowPlaying && (MediaCenterEnvironment.MediaExperience != null); }
@@ -1103,6 +1104,11 @@ namespace MediaBrowser
 
         public void Play(Item item, bool queue)
         {
+            Play(item, queue, true);
+        }
+
+        public void Play(Item item, bool queue, bool intros)
+        {
             if (item.IsPlayable || item.IsFolder)
             {
                 currentPlaybackController = item.PlaybackController;
@@ -1110,7 +1116,16 @@ namespace MediaBrowser
                 if (queue)
                     item.Queue();
                 else
-                    item.Play();
+                {
+                    //put this on a thread so that we can run it sychronously, but not tie up the UI
+                    MediaBrowser.Library.Threading.Async.Queue("Play Action", () =>
+                    {
+                        if (Application.CurrentInstance.RunPrePlayProcesses(item, intros))
+                        {
+                            item.Play();
+                        }
+                    });
+                }
             }
         }
 
@@ -1120,6 +1135,25 @@ namespace MediaBrowser
             {
                 currentPlaybackController = item.PlaybackController;
                 item.Resume();
+            }
+        }
+
+        public bool RunPrePlayProcesses(Item item, bool intros)
+        {
+            //Logger.ReportInfo("Running pre-play processes");
+            foreach (Kernel.PrePlayProcess process in Kernel.Instance.PrePlayProcesses)
+            {
+                if (!process(item, intros)) return false;
+            }
+            return true;
+        }
+
+        public void RunPostPlayProcesses()
+        {
+            //Logger.ReportInfo("Running post-play processes");
+            foreach (Kernel.PostPlayProcess process in Kernel.Instance.PostPlayProcesses)
+            {
+                process();
             }
         }
 
@@ -1189,7 +1223,7 @@ namespace MediaBrowser
 
         public string AppVersion
         {
-            get { return Kernel.Instance.Version.ToString(); }
+            get { return Kernel.Instance.VersionStr; }
         }
 
         private Information _information = new Information();

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E7FD3720-EBA8-4A14-8142-75A3A438C8EA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -323,6 +323,7 @@
     <Content Include="Images\dia_list_focus.png" />
     <None Include="Images\Panels\dia_infoPanel.png" />
     <None Include="Images\Panels\dia_pagePanel.png" />
+    <Content Include="Images\Panels\dia_stripviewPanel.png" />
     <Content Include="Images\Panels\dia_timePanel.png" />
     <Content Include="Images\Panels\dia_titlePanel.png" />
     <Content Include="Images\Panels\dia_TopPanel.png" />
@@ -365,6 +366,7 @@
     <Content Include="Markup\Controls\Buttons\DiamondBall.mcml" />
     <Content Include="Markup\Controls\Menus\DiamondFolderMenu.mcml" />
     <Content Include="Markup\Controls\Utility\FocusSelector.mcml" />
+    <Content Include="Markup\Scrollers\ThumbStripStreamlinedScroller.mcml" />
     <Content Include="Markup\Scrollers\CoverflowScroller.mcml" />
     <Content Include="Markup\Scrollers\DiamondListAlbum.mcml" />
     <Content Include="Markup\Scrollers\DiamondListView.mcml" />
@@ -377,8 +379,10 @@
     <Content Include="Markup\Scrollers\PosterScroller.mcml" />
     <Content Include="Markup\Scrollers\ThumbStripScroller.mcml" />
     <Content Include="Markup\Scrollers\PosterViewItem.mcml" />
+    <Content Include="Markup\Selectors\ThumbStripSelector.mcml" />
     <Content Include="Markup\Selectors\Page.mcml" />
     <Content Include="Markup\Selectors\PageDetailArea.mcml" />
+    <Content Include="Markup\Views\LayoutThumbStripStreamlined.mcml" />
     <Content Include="Markup\Views\LayoutCoverflow2.mcml" />
     <Content Include="Markup\Views\LayoutAlbum.mcml" />
     <Content Include="Markup\Views\LayoutCoverflow.mcml" />

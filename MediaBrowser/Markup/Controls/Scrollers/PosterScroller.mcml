@@ -23,6 +23,7 @@
 			<cor:Boolean Name="CenterFocus" Boolean="false" />
 		</Properties>
 		<Locals>
+      <cor:Int32 Name="Startup" />
              <Command Name="ClosePopupPlay"/>
 			<!-- Use the MouseWheel handler to handle the mouse wheel.  -->
 			<ScrollingHandler HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandleMouseWheel="true"
@@ -58,6 +59,17 @@
 
 
 		<Rules>
+      <!--The below default dummy rule is used to navigate to the proper first item.  using a generic rule or changed does not work the first time-->
+      <Default Target="[Startup]" Value="1" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="true"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
+        </Actions>
+      </Default>
+
       <!--These rules allow the user to move over the posters with the mouse without them scrolling away under them-->
       <Rule ConditionLogicalOp="And">
         <Conditions>
@@ -187,19 +199,6 @@
 				</Actions>
 			</Rule>
 
-
-
-			<Rule ConditionLogicalOp="And">
-				<Conditions>
-					<Modified Source="[Application]" InitialEvaluate="true"/>
-					<Equality Source="[Application.NavigatingForward]" Value="true"/>
-					<Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
-				</Conditions>
-				<Actions>
-					<Invoke Target="[MyRepeater.NavigateIntoIndex]"  index="[Folder.FirstUnwatchedIndex]"/>
-				</Actions>
-			</Rule>
-
 			<Changed Source="[Folder.JILShift]">
 				<Actions>
 					<Invoke Target="[ScrollingData.Scroll]"  amount="[Folder.JILShift]"/>
@@ -267,7 +266,9 @@
 		</Rules>
 
 		<Content>
-			<Panel Name="ItemPanel" Layout="Form" Navigation="ContainHorizontal" >
+			<!--Panel Name="ItemPanel" Layout="Form" Navigation="ContainHorizontal" >-->
+      <!-- Removed ContainHorizontal in order for Edge Redirect Control to function. -->
+      <Panel Name="ItemPanel" Layout="Form">
 				<Children>
           <!--<pp:PopupPlay Name="PopupPlay" Visible="false" Item="[Folder.SelectedChild]" Close="[ClosePopupPlay]"
                         Application="[Application]" >
@@ -289,13 +290,13 @@
 						<Children>
 							<Repeater Source="[Folder.Children]" Name="MyRepeater" ContentName="BaseItem" Layout="[MyLayout]" DiscardOffscreenVisuals="false" >
 								<Animations>
-									<Animation Type="Move">
-										<Keyframes>
-											<PositionKeyframe Time="0" RelativeTo="Current"/>
-											<PositionKeyframe Time="0.15" RelativeTo="Final"/>
-										</Keyframes>
-									</Animation>
-								</Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.25"/>
+                      <PositionKeyframe Time="0.75" RelativeTo="Final"  />
+                    </Keyframes>
+                  </Animation>
+                </Animations>
 							</Repeater>
 						</Children>
 						<LayoutInput>

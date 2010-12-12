@@ -19,7 +19,6 @@ namespace MediaBrowser
     /// </summary>
     public class MultiBackdrop : ModelItem
     {
-        private const int cycleInterval = 8000;
         Item _item;
         Timer cycle;
 
@@ -33,10 +32,13 @@ namespace MediaBrowser
             this._item = item;
             if (cycle == null) {
                 cycle = new Timer(this);
-                cycle.Interval = cycleInterval;
+                cycle.Interval = (Config.Instance.BackdropRotationInterval * 1000); //Convert to millisecs
                 cycle.Tick += delegate { OnRefresh(); };
                 cycle.Enabled = true;
             }
+            // new item - restart timer
+            cycle.Stop();
+            cycle.Start();
         }
 
         private void OnRefresh()

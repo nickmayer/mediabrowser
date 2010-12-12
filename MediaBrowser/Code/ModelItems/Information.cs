@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 using System.Xml.XPath;
 using Microsoft.MediaCenter.UI;
+using MediaBrowser.Library;
 using System.Diagnostics;
 
 namespace MediaBrowser

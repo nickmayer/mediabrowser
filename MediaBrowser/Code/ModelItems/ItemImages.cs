@@ -116,11 +116,21 @@ namespace MediaBrowser.Library
 
         private void getRandomBackdropImage()
         {
-            backdropImage = new AsyncImageLoader(
-                () => baseItem.BackdropImages[randomizer.Next(baseItem.BackdropImages.Count)],
-                null,
-                () => this.FirePropertyChanged("BackdropImage"));
-            backdropImage.LowPriority = true;
+            if (Config.Instance.RotateBackdrops && baseItem.BackdropImages.Count > 1)
+            {
+                //start the rotation so we don't get the first one twice
+                GetNextBackDropImage();
+            }
+            else
+            {
+                //just a single one required
+                backdropImageIndex = randomizer.Next(baseItem.BackdropImages.Count);
+                backdropImage = new AsyncImageLoader(
+                    () => baseItem.BackdropImages[backdropImageIndex],
+                    null,
+                    () => this.FirePropertyChanged("BackdropImage"));
+                backdropImage.LowPriority = true;
+            }
         }
 
         public Image PrimaryBackdropImage
@@ -139,7 +149,14 @@ namespace MediaBrowser.Library
             {
                 if (!HasBackdropImage)
                 {
-                    return null;
+                    if (PhysicalParent != null)
+                    {
+                        return PhysicalParent.BackdropImages;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
 
                 if (backdropImages == null)
@@ -159,7 +176,6 @@ namespace MediaBrowser.Library
             if (backdropImages == null)
             {
                 backdropImages = new List<AsyncImageLoader>();
-
      
                 Async.Queue("Backdrop Loader", () =>
                 {
@@ -189,7 +205,6 @@ namespace MediaBrowser.Library
         {
             if (!Config.Instance.RotateBackdrops) return; // only do this if we want to rotate
 
-            backdropImageIndex++;
             EnsureAllBackdropsAreLoaded();
             var images = new List<AsyncImageLoader>();
             lock (backdropImages)
@@ -201,11 +216,16 @@ namespace MediaBrowser.Library
             {
                 if (Config.Instance.RandomizeBackdrops)
                 {
-                    backdropImageIndex = randomizer.Next(images.Count);
+                    int lastOne = backdropImageIndex;
+                    while (backdropImageIndex == lastOne)
+                    {
+                        backdropImageIndex = randomizer.Next(images.Count);
+                    }
                 }
                 else
                 {
 
+                    backdropImageIndex++;
                     backdropImageIndex = backdropImageIndex % images.Count;
                 }
                 if (images[backdropImageIndex].Image != null)

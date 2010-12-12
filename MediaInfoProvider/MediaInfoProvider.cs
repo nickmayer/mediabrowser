@@ -39,9 +39,18 @@ namespace MediaInfoProvider
             }
 
             string mediaInfoPath = Path.Combine(path, "mediainfo.dll");
-            if (!File.Exists(mediaInfoPath)) {
-                string resourceName = string.Format("MediaInfoProvider.MediaInfo{0}.dll.gz", Is64Bit ? 64 : 32);
+            string resourceName = string.Format("MediaInfoProvider.MediaInfo{0}.dll.gz", Is64Bit ? 64 : 32);
+            if (!File.Exists(mediaInfoPath))
+            {
+                Logger.ReportInfo("MediaInfo Provider: MediaInfo.dll doesn't exist. Extracting version " + Plugin.includedMediaInfoDLL);
                 LibraryLoader.Extract(resourceName, mediaInfoPath);
+            } else {
+                FileVersionInfo mediaInfoVersion = FileVersionInfo.GetVersionInfo(mediaInfoPath);
+                if (mediaInfoVersion.FileVersion.ToString() != Plugin.includedMediaInfoDLL)
+                {
+                    Logger.ReportInfo("MediaInfo Provider: currently MediaInfo.dll version " + mediaInfoVersion.FileVersion + " is installed. updating MediaInfo.dll to version " + Plugin.includedMediaInfoDLL);
+                    LibraryLoader.Extract(resourceName, mediaInfoPath);
+                }
             }
 
             if (File.Exists(mediaInfoPath)) {
@@ -69,7 +78,7 @@ namespace MediaInfoProvider
         {
             if (original == null) return acquired;
             if (original.AudioBitRate == 0) original.AudioBitRate = acquired.AudioBitRate;
-            if (original.AudioChannelCount == 0) original.AudioChannelCount = acquired.AudioChannelCount;
+            if (original.AudioChannelCount == "") original.AudioChannelCount = acquired.AudioChannelCount;
             if (original.AudioFormat == "")
             {
                 original.AudioProfile = acquired.AudioProfile;
@@ -110,11 +119,10 @@ namespace MediaInfoProvider
                 int runTime;
                 Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
                 int streamCount;
-                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
-                int audioChannels;
-                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)"), out audioChannels);
+                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);               
+                string audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
                 string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
-                string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate/String");
+                string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
 
 
                 mediaInfoData = new MediaInfoData
