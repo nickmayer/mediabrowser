@@ -33,7 +33,10 @@ namespace MediaBrowserService
 
         private void FullRefresh() 
         {
-            if (!refreshRunning && Kernel.Instance.ConfigData.LastFullRefresh < DateTime.Now.AddHours(-(Kernel.Instance.ConfigData.FullRefreshInterval)))
+            var verylate = Kernel.Instance.ConfigData.LastFullRefresh < DateTime.Now.AddHours(-(Kernel.Instance.ConfigData.FullRefreshInterval * 3));
+            var overdue = Kernel.Instance.ConfigData.LastFullRefresh < DateTime.Now.AddHours(-(Kernel.Instance.ConfigData.FullRefreshInterval));
+
+            if (!refreshRunning && (verylate || (overdue && DateTime.Now.Hour == Kernel.Instance.ConfigData.FullRefreshPreferredHour)))
             {
                 refreshRunning = true;
                 Async.Queue("Full Refresh", () =>
