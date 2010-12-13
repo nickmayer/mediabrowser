@@ -15,7 +15,7 @@ namespace MediaBrowser
         {
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
-			{ 
+			{
 				new MediaBrowserService() 
 			};
             ServiceBase.Run(ServicesToRun);
