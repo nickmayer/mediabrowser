@@ -18,9 +18,14 @@ namespace MediaBrowser.Library.Logging {
                     return "Configurator-";
                 }
                 else
-                {
-                    return "";
-                }
+                    if (AppDomain.CurrentDomain.FriendlyName.Contains("MediaBrowserService"))
+                    {
+                        return "MBService-";
+                    }
+                    else
+                    {
+                        return "";
+                    }
             }
         }
 
