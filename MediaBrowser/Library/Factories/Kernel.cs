@@ -57,7 +57,7 @@ namespace MediaBrowser.Library {
          * This should be set to "R" (or "SPn") with each official release and then immediately changed back to "R+" (or "SPn+")
          * so future trunk builds will indicate properly.
          * */
-        private const string versionExtension = "B2";
+        private const string versionExtension = "B+";
 
         static object sync = new object();
         static Kernel kernel;
