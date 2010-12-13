@@ -95,7 +95,7 @@ namespace MediaBrowser.Library.Plugins {
             }
         }
 
-        public virtual bool ServiceOnly { get { return true; } }
+        public virtual bool ServiceOnly { get { return false; } }
 
 
         public virtual void Configure() {
