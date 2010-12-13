@@ -479,7 +479,7 @@ namespace MediaBrowser.Library {
             //and now all our children
             foreach (Item item in this.Children)
             {
-                item.RefreshMetadata(false);
+                item.RefreshMetadata();
             }
 
         }
