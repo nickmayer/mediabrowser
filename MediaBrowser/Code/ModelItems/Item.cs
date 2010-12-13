@@ -600,19 +600,28 @@ namespace MediaBrowser.Library
                 if (baseItem.PrimaryImage != null)
                 {
                     string ignore;
-                    //get the display size of our primary image if known
-                    if (PhysicalParent != null && PhysicalParent.DisplayPrefs != null)
+                    try
                     {
-                        Size s = PhysicalParent.DisplayPrefs.ThumbConstraint.Value;
-                        if (s != null && s.Width > 0 && s.Height > 0)
-                            ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
+                        //get the display size of our primary image if known
+                        if (PhysicalParent != null && PhysicalParent.DisplayPrefs != null)
+                        {
+                            Size s = PhysicalParent.DisplayPrefs.ThumbConstraint.Value;
+                            if (s != null && s.Width > 0 && s.Height > 0)
+                                ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
+                            else
+                                ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at full size
+                        }
                         else
-                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at full size
+                        {
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at full size
+                        }
                     }
-                    else
+                    catch(InvalidOperationException)
                     {
-                        ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at full size
+                        //displayprefs were not loaded yet and we can't load them in this asynch thread - just cache full size
+                        ignore = baseItem.PrimaryImage.GetLocalImagePath();
                     }
+
                 }
                 if (baseItem.BackdropImage != null)
                 {
