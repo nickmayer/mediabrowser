@@ -24,7 +24,7 @@ namespace MediaBrowser.Library.Logging {
                     }
                     else
                     {
-                        return "";
+                        return "MBCore-";
                     }
             }
         }
