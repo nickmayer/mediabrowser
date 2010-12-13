@@ -6,32 +6,56 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
-using MediaBrowser.Library.Threading;
-using System.Reflection;
 using MediaBrowser.Library;
-using MediaBrowser.Util;
+using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Logging;
-using MediaBrowser.Library.Metadata;
+using MediaBrowser.Util;
 using MediaBrowser.Library.Entities;
+using MediaBrowser.Library.Metadata;
+using System.Threading;
 
-namespace MediaBrowserService
+namespace MediaBrowser
 {
-    public partial class Service : ServiceBase
+    public partial class MediaBrowserService : ServiceBase
     {
-        public Service()
+        public MediaBrowserService()
         {
             InitializeComponent();
-            Kernel.Init(KernelLoadDirective.LoadServicePlugins);
+            
         }
 
         protected override void OnStart(string[] args)
         {
-            Async.Every(60 * 1000, FullRefresh);
+            Async.Queue("Startup", () =>
+            {
+                int retries = 10;
+                while (true)
+                {
+                    try
+                    {
+                        // ensure the assembly is there 
+                        Logger.ReportInfo("Starting the Media Browser Service");
+                        break;
+                    }
+                    catch
+                    {
+                        if (retries-- < 0)
+                        {
+                            // failed to init, crash the service
+                            throw;
+                        }
+                        Thread.Sleep(10 * 10000);
+                    }
+                }
+
+                Kernel.Init(KernelLoadDirective.LoadServicePlugins);
+                Async.Every(60 * 1000, FullRefresh);
+            }, null , false, 10 * 1000);
         }
 
-        private bool refreshRunning = false;   
+        private bool refreshRunning = false;
 
-        private void FullRefresh() 
+        private void FullRefresh()
         {
             var verylate = Kernel.Instance.ConfigData.LastFullRefresh < DateTime.Now.AddHours(-(Kernel.Instance.ConfigData.FullRefreshInterval * 3));
             var overdue = Kernel.Instance.ConfigData.LastFullRefresh < DateTime.Now.AddHours(-(Kernel.Instance.ConfigData.FullRefreshInterval));
@@ -39,30 +63,29 @@ namespace MediaBrowserService
             if (!refreshRunning && (verylate || (overdue && DateTime.Now.Hour == Kernel.Instance.ConfigData.FullRefreshPreferredHour)))
             {
                 refreshRunning = true;
-                Async.Queue("Full Refresh", () =>
+                
+                using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
                 {
-                    using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
+                    try
                     {
-                        try
-                        {
 
-                            // only refresh for the root entry, this will help speed things up
-                            FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default);
-                            Kernel.Instance.ConfigData.LastFullRefresh = DateTime.Now;
-                            Kernel.Instance.ConfigData.Save();
+                        // only refresh for the root entry, this will help speed things up
+                        FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default);
+                        Kernel.Instance.ConfigData.LastFullRefresh = DateTime.Now;
+                        Kernel.Instance.ConfigData.Save();
 
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.ReportException("Failed to refresh library! ", ex);
-                            Debug.Assert(false, "Full refresh thread should never crash!");
-                        }
-                        finally
-                        {
-                            refreshRunning = false;
-                        }
                     }
-                }, 20 * 1000);
+                    catch (Exception ex)
+                    {
+                        Logger.ReportException("Failed to refresh library! ", ex);
+                        Debug.Assert(false, "Full refresh thread should never crash!");
+                    }
+                    finally
+                    {
+                        refreshRunning = false;
+                    }
+                }
+                
             }
         }
 

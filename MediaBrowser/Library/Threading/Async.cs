@@ -133,6 +133,14 @@ namespace MediaBrowser.Library.Threading {
             Queue(uniqueId, action, done, urgent, 0);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uniqueId"></param>
+        /// <param name="action"></param>
+        /// <param name="done"></param>
+        /// <param name="urgent"></param>
+        /// <param name="delay">Millisecond delay before executing </param>
         public static void Queue(string uniqueId, Action action, Action done, bool urgent, int delay) {
 
             Debug.Assert(uniqueId != null);

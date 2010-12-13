@@ -223,8 +223,8 @@
 
 
       <Component Id="MediaBrowserService.exe" Guid="D19774DD-253A-47E2-94FA-3EFB220E2B77" DiskId="1">
-        <File Id="MediaBrowserService.exe" Name="MediaBrowserService.exe" Source="..\MediaBrowserService\bin\$(var.BuildType)\MediaBrowserService.exe" Checksum="no" />
-        <ServiceInstall
+        <File Id="MediaBrowserService.exe" Name="MediaBrowserService.exe" Source="..\MediaBrowserService\bin\$(var.BuildType)\MediaBrowserService.exe" Checksum="no" KeyPath="yes"/>
+      <ServiceInstall
             Id="ServiceInstaller"
             Type="ownProcess"
             Vital="yes"
@@ -237,7 +237,9 @@
             Interactive="no"
               >
         </ServiceInstall>
-        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MediaBrowserService" Wait="yes" />
+
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MediaBrowserService" Wait="yes" /> 
+
       </Component>
     </DirectoryRef>
 
@@ -280,11 +282,7 @@
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
 		<Feature Id="APPROOTFEATURE" Title="MediaBrowser" Level="1">
       <ComponentRef Id="Configurator.exe" />
-      
       <ComponentRef Id="MediaBrowser.dll" />
-
-      <ComponentRef Id="MediaBrowserService.exe" />
-      
 			<ComponentRef Id="Application.png" />
       <ComponentRef Id="ApplicationInactive.png" />
       <ComponentRef Id="RegistrationVista.xml" />
@@ -296,6 +294,8 @@
       <ComponentRef Id="OptionalDesktopFolderShortcut" />
       <!--<ComponentRef Id="OptionalQuickLaunchFolderShortcut" />-->
       <ComponentRef Id="OptionalStartupFolderShortcut" />
+      <ComponentRef Id="MediaBrowserService.exe" />
+      
       <!--<ComponentRef Id="RemPlugins" />-->
       <!--<ComponentRef Id="ClearCache" />-->
       <!--<ComponentRef Id="ClearCacheDB" />-->

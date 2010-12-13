@@ -1,6 +1,6 @@
-﻿namespace MediaBrowserService
+﻿namespace MediaBrowser
 {
-    partial class Service
+    partial class MediaBrowserService
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            // 
+            // MediaBrowserService
+            // 
+            this.ServiceName = "MediaBrowserService";
+
         }
 
         #endregion
