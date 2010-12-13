@@ -145,8 +145,8 @@ namespace MediaBrowser
         public bool ProcessBanners = false; //hook to allow future processing of banners
 
         public int MinResumeDuration = 0; //minimum duration of video to have resume functionality
-        public int MinResumePct = 10; //if this far or less into video, don't resume
-        public int MaxResumePct = 90; //if this far or more into video, don't resume
+        public int MinResumePct = 1; //if this far or less into video, don't resume
+        public int MaxResumePct = 95; //if this far or more into video, don't resume
 
         public bool YearSortAsc = false; //true to sort years in ascending order
 
