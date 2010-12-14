@@ -1758,10 +1758,15 @@ sortorder: {2}
                     foreach (string file in files) {
                         File.Delete(file);
                     }
+                    files = Directory.GetFiles(System.IO.Path.Combine(ApplicationPaths.AppUserSettingsPath, "thumbsizes"));
+                    foreach (string file in files)
+                    {
+                        File.Delete(file);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Logger.ReportException("Error trying to delete display cache.", ex);
+                    Logger.ReportException("Error trying to delete display/thumb cache.", ex);
                     error = true;
                 }
             }
