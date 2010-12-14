@@ -22,15 +22,31 @@ using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library {
+    public class ThumbSize 
+    {
+        public Int32 Width = 0;
+        public Int32 Height = 0;
+
+        public ThumbSize(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+        }
+
+        public ThumbSize() { } //for the serializer
+    }
+
     class ItemRepository : IItemRepository, IDisposable {
         public ItemRepository() {
             playbackStatus = new FileBasedDictionary<PlaybackStatus>(GetPath("playstate", userSettingPath));
+            thumbSizes = new FileBasedDictionary<ThumbSize>(GetPath("thumbsizes", userSettingPath));
         }
 
         string rootPath = ApplicationPaths.AppCachePath;
         string userSettingPath = ApplicationPaths.AppUserSettingsPath;
 
         FileBasedDictionary<PlaybackStatus> playbackStatus;
+        FileBasedDictionary<ThumbSize> thumbSizes;
 
         #region IItemCacheProvider Members
 
@@ -89,6 +105,11 @@ namespace MediaBrowser.Library {
             return playbackStatus[id]; 
         }
 
+        public ThumbSize RetrieveThumbSize(Guid id)
+        {
+            return thumbSizes[id];
+        }
+
         public DisplayPreferences RetrieveDisplayPreferences(Guid id) {
             string file = GetDisplayPrefsFile(id);
 
@@ -111,6 +132,8 @@ namespace MediaBrowser.Library {
             using (Stream fs = WriteExclusiveFileStream(file)) {
                 prefs.WriteToStream(new BinaryWriter(fs));
             }
+            //also save the thumb size in a way we can access outside of MC
+            thumbSizes[prefs.Id] = new ThumbSize(prefs.ThumbConstraint.Value.Width, prefs.ThumbConstraint.Value.Height);
         }
 
         public BaseItem RetrieveItem(Guid id) {
@@ -196,8 +219,13 @@ namespace MediaBrowser.Library {
             return GetFile("playstate", id, this.userSettingPath);
         }
 
+        private string GetThumbSizeFile(Guid id)
+        {
+            return GetFile("thumbsizes", id, this.userSettingPath);
+        }
 
-        private string GetFile(string type, Guid id) {
+        private string GetFile(string type, Guid id)
+        {
             return GetFile(type, id, rootPath);
         }
 

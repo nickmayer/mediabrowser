@@ -600,26 +600,19 @@ namespace MediaBrowser.Library
                 if (baseItem.PrimaryImage != null)
                 {
                     string ignore;
-                    try
-                    {
                         //get the display size of our primary image if known
-                        if (PhysicalParent != null && PhysicalParent.DisplayPrefs != null)
-                        {
-                            Size s = PhysicalParent.DisplayPrefs.ThumbConstraint.Value;
-                            if (s != null && s.Width > 0 && s.Height > 0)
-                                ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
-                            else
-                                ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at full size
-                        }
-                        else
-                        {
-                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at full size
-                        }
-                    }
-                    catch(InvalidOperationException)
+                    if (PhysicalParent != null)
                     {
-                        //displayprefs were not loaded yet and we can't load them in this asynch thread - just cache full size
-                        ignore = baseItem.PrimaryImage.GetLocalImagePath();
+                        ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(PhysicalParent.Id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
+                        Logger.ReportInfo("Cacheing image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
+                        if (s != null && s.Width > 0 && s.Height > 0)
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
+                        else
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at default size
+                    }
+                    else
+                    {
+                        ignore = baseItem.PrimaryImage.GetLocalImagePath(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height); //no parent or display prefs - cache at default size
                     }
 
                 }

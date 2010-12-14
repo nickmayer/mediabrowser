@@ -202,6 +202,10 @@ namespace MediaBrowser.Library.Persistance {
             return itemRepo.RetrievePlayState(id);
         }
 
+        public ThumbSize RetrieveThumbSize(Guid id)
+        {
+            return itemRepo.RetrieveThumbSize(id);
+        }
 
         public void SavePlayState(PlaybackStatus playState) {
             itemRepo.SavePlayState(playState);

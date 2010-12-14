@@ -18,7 +18,8 @@ namespace MediaBrowser.Library
 
         PlaybackStatus RetrievePlayState(Guid id);
         DisplayPreferences RetrieveDisplayPreferences(Guid id);
-
+        ThumbSize RetrieveThumbSize(Guid id);
+        
         void SavePlayState( PlaybackStatus playState);
         void SaveDisplayPreferences(DisplayPreferences prefs);
 

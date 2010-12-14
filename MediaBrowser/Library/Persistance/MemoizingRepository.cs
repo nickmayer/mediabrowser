@@ -82,7 +82,13 @@ namespace MediaBrowser.Library.Persistance {
             return repository.RetrieveDisplayPreferences(id);
         }
 
-        public void SaveDisplayPreferences(DisplayPreferences prefs) {
+        public ThumbSize RetrieveThumbSize(Guid id)
+        {
+            return repository.RetrieveThumbSize(id);
+        }
+
+        public void SaveDisplayPreferences(DisplayPreferences prefs)
+        {
             repository.SaveDisplayPreferences(prefs);
         }
 
