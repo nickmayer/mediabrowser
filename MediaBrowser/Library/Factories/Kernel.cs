@@ -363,7 +363,7 @@ namespace MediaBrowser.Library {
                 {
                     try
                     {
-                        Logger.ReportInfo("LoadContext is: " + LoadContext + " " + plugin.Name + " Initdirective is: " + plugin.InitDirective);
+                        //Logger.ReportInfo("LoadContext is: " + LoadContext + " " + plugin.Name + " Initdirective is: " + plugin.InitDirective);
                         if ((LoadContext & plugin.InitDirective) > 0)
                         {
                             plugin.Init(kernel);
