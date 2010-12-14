@@ -23,9 +23,9 @@ namespace MediaBrowser.Library.Plugins {
         void Configure();
         bool InstallGlobally { get; }
         /// <summary>
-        /// Plugin is only to be initialized if it is running in the service
+        /// Context in which this plugin should be intialized
         /// </summary>
-        bool ServiceOnly { get; }
+        PluginInitContext InitDirective { get; }
         bool UpdateAvail { get; set; }
         bool Installed { get; set; }
         string ListDisplayString { get; }

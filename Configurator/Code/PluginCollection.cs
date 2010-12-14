@@ -14,7 +14,7 @@ namespace Configurator.Code {
     // sample data 
     public class SamplePlugin : IPlugin {
 
-        public bool ServiceOnly { get; set; }
+        public PluginInitContext InitDirective { get; set; }
 
         public void Init(Kernel kernel) {
         }
@@ -90,14 +90,14 @@ namespace Configurator.Code {
 
         public PluginCollection() {
 
-            if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+            //if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
 
-                Add(new SamplePlugin() { Name = "Super Plugin", 
-                    Description = "This plugin does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = false});
-                Add(new SamplePlugin() { Name = "The other plugin", 
-                    Description = "This plugin also does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = true });
+            //    Add(new SamplePlugin() { Name = "Super Plugin", 
+            //        Description = "This plugin does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = false});
+            //    Add(new SamplePlugin() { Name = "The other plugin", 
+            //        Description = "This plugin also does absoulutly nothing, its actually a sample plugin for wpf to bind to.", UpdateAvail = true });
 
-            } 
+            //} 
         }
 
         public IPlugin Find(IPlugin plugin)

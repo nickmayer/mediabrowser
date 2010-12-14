@@ -95,8 +95,15 @@ namespace MediaBrowser.Library.Plugins {
             }
         }
 
-        public virtual bool ServiceOnly { get { return false; } }
-
+        public virtual PluginInitContext InitDirective { 
+            get {
+                //by default, any plug-in that produces an interface should only init in core
+                if (InstallGlobally)
+                    return PluginInitContext.Core;
+                else
+                    return PluginInitContext.All; 
+            } 
+        }
 
         public virtual void Configure() {
             if (PluginConfiguration != null) {

@@ -1496,8 +1496,11 @@ sortorder: {2}
             Async.Queue("Refresh after plugin add", () =>
             {
                 RefreshEntryPoints(true);
-                PluginManager.Instance.RefreshInstalledPlugins(); //refresh list
             });
+            int current = pluginList.SelectedIndex;
+            PluginManager.Instance.RefreshInstalledPlugins(); //refresh list
+            if (current > pluginList.Items.Count) current = pluginList.Items.Count;
+            pluginList.SelectedIndex = current;
             RefreshThemes();
         }
 

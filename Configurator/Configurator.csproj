@@ -55,7 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MediaBrowser, Version=2.2.4.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
+    <Reference Include="MediaBrowser, Version=2.3.0.0, Culture=neutral, PublicKeyToken=59fc04479785fd64, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\MediaBrowser\bin\Release\MediaBrowser.dll</HintPath>
     </Reference>

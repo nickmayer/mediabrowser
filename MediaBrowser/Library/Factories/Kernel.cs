@@ -38,7 +38,17 @@ namespace MediaBrowser.Library {
         ShadowPlugins, 
 
         LoadServicePlugins
-    } 
+    }
+
+    [Flags]
+    public enum PluginInitContext
+    {
+        None = 0x0,
+        Service = 0x1,
+        Core = 0x2,
+        Other = 0x4,
+        All = Service | Core | Other
+    }
 
     /// <summary>
     /// This is the one class that contains all the dependencies. 
@@ -261,16 +271,23 @@ namespace MediaBrowser.Library {
             return plugins;
         }
 
-        static bool? runningInService;
-        static bool IsRunningInService 
+        static PluginInitContext? _loadContext;
+        static PluginInitContext LoadContext 
         {
             get 
             {
-                if (runningInService == null)
+                if (_loadContext == null)
                 {
-                    runningInService = AppDomain.CurrentDomain.FriendlyName.ToLower().Contains("mediabrowserservice");
+                    string assemblyName = AppDomain.CurrentDomain.FriendlyName.ToLower();
+                    if (assemblyName.Contains("mediabrowserservice"))
+                        _loadContext = PluginInitContext.Service;
+                    else
+                        if (assemblyName.Contains("ehexthost"))
+                            _loadContext = PluginInitContext.Core;
+                            else
+                                _loadContext = PluginInitContext.Other;
                 }
-                return runningInService.Value;
+                return _loadContext.Value;
             }
         }
 
@@ -346,7 +363,8 @@ namespace MediaBrowser.Library {
                 {
                     try
                     {
-                        if (!plugin.ServiceOnly || IsRunningInService)
+                        Logger.ReportInfo("LoadContext is: " + LoadContext + " " + plugin.Name + " Initdirective is: " + plugin.InitDirective);
+                        if ((LoadContext & plugin.InitDirective) > 0)
                         {
                             plugin.Init(kernel);
                         }
