@@ -623,9 +623,9 @@ namespace MediaBrowser.Library
                     }
 
                 }
-                if (baseItem.BackdropImage != null)
+                foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in baseItem.BackdropImages)
                 {
-                    var ignore = baseItem.BackdropImage.GetLocalImagePath(); //force the main backdrop to re-cache
+                    var ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
                 }
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });
