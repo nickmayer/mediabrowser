@@ -119,7 +119,7 @@ namespace Configurator.Code {
             //    }
             //}
 
-            BackupPlugin(plugin);
+            if (BackupPlugin(plugin)) Logger.ReportInfo("Plugin "+plugin.Name+"v"+plugin.Version+" backed up.");
 
             if (plugin is RemotePlugin) {
                 try {
@@ -149,7 +149,8 @@ namespace Configurator.Code {
             //Backup current version if installed and different from the one we are installing
             try
             {
-                if (plugin.Installed && InstalledPlugins.Find(plugin).Version != plugin.Version)
+                IPlugin ip = InstalledPlugins.Find(plugin);
+                if (ip != null && ip.Version != plugin.Version)
                 {
                     if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
                     string oldPluginPath = plugin.InstallGlobally ?
@@ -181,6 +182,7 @@ namespace Configurator.Code {
                             Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", plugin.Filename)) :
                             Path.Combine(ApplicationPaths.AppPluginPath, plugin.Filename);
                     Kernel.Instance.InstallPlugin(source, plugin.InstallGlobally, null, null, null);
+                    UpdateAvailableAttributes(plugin, true);
                     return true;
                 }
             }
@@ -216,11 +218,7 @@ namespace Configurator.Code {
                 if (v != null)
                 {
                     plugin.UpdateAvail = (v > plugin.Version && rv <= Kernel.Instance.Version);
-                    IPlugin ap = availablePlugins.Find(plugin, plugin.Version);
-                    if (ap != null)
-                    {
-                        ap.Installed = true;
-                    }
+                    UpdateAvailableAttributes(plugin, true);
                 }
                 plugin.Installed = true;
                 installedPlugins.Add(plugin);
