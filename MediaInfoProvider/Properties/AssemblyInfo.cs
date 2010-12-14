@@ -9,7 +9,7 @@ using MediaInfoProvider;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Media Browser")]
 [assembly: AssemblyProduct("MediaInfoProvider")]
-[assembly: AssemblyCopyright("Copyright © Media Browser 2009")]
+[assembly: AssemblyCopyright("Copyright © Media Browser 2009-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,8 +34,8 @@ using MediaInfoProvider;
 
 
 
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.1.0")]
+[assembly: AssemblyFileVersion("1.1.1.0")]
 
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]
