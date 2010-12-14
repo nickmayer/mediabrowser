@@ -130,6 +130,7 @@ namespace Configurator
             SaveConfig();
 
             PluginManager.Instance.Init();
+            pluginList.Items.Refresh();
 
             Async.Queue("Plugin Update Check", () =>
             {
