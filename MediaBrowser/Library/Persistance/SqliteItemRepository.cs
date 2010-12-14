@@ -372,6 +372,7 @@ namespace MediaBrowser.Library.Persistance {
                 // People will get annoyed if this is lost
                 // connection.Exec("delete from play_states");
                 tran.Commit(); 
+                connection.Exec("vacuum");
             }
 
             return true;
