@@ -447,7 +447,7 @@ namespace MediaBrowser.Library {
                     if (item is Video)
                     {
                         Video i = item as Video;
-                        if (i.PlaybackStatus.WasPlayed == false)
+                        if (i.PlaybackStatus.WasPlayed == false && DateTime.Compare(item.DateCreated,daysAgo) > 0)
                         {
                             FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
                             folderModel.PhysicalParent = this;
