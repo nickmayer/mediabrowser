@@ -207,7 +207,7 @@
               <Text Name="LastWatched" Color="color://s:FontColorLight" Font="font://f:DV_LastWatchedFont"/>
               <st:ScrollableText Name="Summary" Font="font://f:DV_SummaryFont" Color="color://s:FontColorMedium" FocusColor="color://s:FontColorLight"/>
               <!-- MaximumSize is required here. Without it, sometimes the ScrollPage will not auto reset after a full cycle.-->
-              <as:AutoScrollText Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:DV_SummaryFont" MaximumSize="0,275"/>
+              <as:AutoScrollText ScrollSpeed="[Application.Config.AutoScrollSpeed]" ScrollDelay="[Application.Config.AutoScrollDelay]" Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:DV_SummaryFont" MaximumSize="0,275"/>
             </Children>
           </Panel>
 

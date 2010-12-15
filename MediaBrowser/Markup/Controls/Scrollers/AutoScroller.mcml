@@ -162,15 +162,18 @@
       <Font Name="Font" Font="$Required"/>
       <Color Name="Color" Color="color://s:FontColorLight"/>
       <Color Name="FocusColor" Color="color://s:FontColorLight"/>
+      <cor:Int32 Name="ScrollSpeed" Int32="1"/>
+      <cor:Int32 Name="ScrollDelay" Int32="8000"/>
     </Properties>
 
     <Locals>
+      
       <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="false" />
-      <ScrollingData Name="ScrollingData" ScrollStep="1" />
+      <ScrollingData Name="ScrollingData" ScrollStep="[ScrollSpeed]"/>
 
-      <Timer Name="ScrollText" Interval="150" AutoRepeat="true" Enabled="false" />
-      <Timer Name="Delay" Interval="8000" AutoRepeat="false" Enabled="true"/>
-      <Timer Name="EndDelay" Interval="8000" AutoRepeat="false" Enabled="false"/>
+      <Timer Name="ScrollText" Interval="100" AutoRepeat="true" Enabled="false" />
+      <Timer Name="Delay" Interval="[ScrollDelay]" AutoRepeat="false" Enabled="true"/>
+      <Timer Name="EndDelay" Interval="[ScrollDelay]" AutoRepeat="false" Enabled="false"/>
       <cor:Single Name="ScrollTime" Single="10"></cor:Single>
     </Locals>
 
@@ -252,13 +255,13 @@
                       <Animation Type="Move">
                         <Keyframes>
                           <PositionKeyframe RelativeTo="Current" Time="0"/>
-                          <PositionKeyframe RelativeTo="Final" Time="0.1"/>
+                          <PositionKeyframe RelativeTo="Final" Time="0.5"/>
                         </Keyframes>
                       </Animation>
                       <Animation Type="Alpha">
                         <Keyframes>
                           <AlphaKeyframe RelativeTo="Current" Time="0"/>
-                          <AlphaKeyframe RelativeTo="Final" Time="0.4"/>
+                          <AlphaKeyframe RelativeTo="Final" Time="0.6"/>
                         </Keyframes>
                       </Animation>
 
