@@ -113,7 +113,6 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     DateTime airDate = DateTime.MinValue;
                     DateTime.TryParse(episode.FirstAired, out airDate);
                     episode.ProductionYear = airDate.Year;
-                    Logger.ReportInfo("Airdate: " + episode.FirstAired + " year: " + episode.ProductionYear);
 
                     string actors = doc.SafeGetString("//GuestStars");
                     if (actors != null) {

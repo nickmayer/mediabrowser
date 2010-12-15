@@ -604,7 +604,7 @@ namespace MediaBrowser.Library
                     if (PhysicalParent != null)
                     {
                         ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(PhysicalParent.Id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
-                        Logger.ReportInfo("Cacheing image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
+                        //Logger.ReportInfo("Caching image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
                         if (s != null && s.Width > 0 && s.Height > 0)
                             ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
                         else
