@@ -112,7 +112,10 @@ namespace MediaBrowser.Library.Metadata {
                 try {
                     if ((provider.IsSlow || provider.RequiresInternet) && fastOnly) continue;
                     if (provider.NeedsRefresh())
+                    {
+                        //Logger.ReportInfo("Provider " + provider.GetType() + " reports need refresh");
                         return true;
+                    }
                 } catch (Exception e) {
                     Logger.ReportException("Metadata provider failed during NeedsRefresh", e);
                     Debug.Assert(false, "Providers should catch all the exceptions that NeedsRefresh generates!");
