@@ -783,6 +783,16 @@ namespace MediaBrowser
             get { return this.data.AutoScrollText; }
             set { if (this.data.AutoScrollText != value) { this.data.AutoScrollText = value; Save(); FirePropertyChanged("AutoScrollText"); } }
         }
+        public int AutoScrollDelay
+        {
+            get { return this.data.AutoScrollDelay * 1000; } //Convert to milliseconds for MCML consumption
+            set { if (this.data.AutoScrollDelay != value) { this.data.AutoScrollDelay = value; Save(); FirePropertyChanged("AutoScrollDelay"); } }
+        }
+        public int AutoScrollSpeed
+        {
+            get { return this.data.AutoScrollSpeed; }
+            set { if (this.data.AutoScrollSpeed != value) { this.data.AutoScrollSpeed = value; Save(); FirePropertyChanged("AutoScrollSpeed"); } }
+        }
 
         /* End of app specific settings*/
 
