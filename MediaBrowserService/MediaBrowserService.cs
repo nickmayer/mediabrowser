@@ -13,6 +13,7 @@ using MediaBrowser.Util;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Metadata;
 using System.Threading;
+using System.Runtime.CompilerServices;
 
 namespace MediaBrowser
 {
@@ -24,33 +25,53 @@ namespace MediaBrowser
             
         }
 
+
+        // This works around some super annoying msi behavior
+        // I can not figure out how to launch the service after installation, so we are stuck with potentially no assembly in the GAC
+        private void Startup() 
+        {
+            Thread.Sleep(10 * 10000);
+            int retries = 10;
+            while (true)
+            {
+                try
+                {
+                    // ensure the assembly is there 
+                    CheckIfReady(); 
+                    break;
+                }
+                catch
+                {
+                    if (retries-- < 0)
+                    {
+                        // failed to init, crash the service
+                        throw;
+                    }
+                    Thread.Sleep(10 * 10000);
+                }
+            }
+
+            Go();
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void CheckIfReady()
+        {
+            Logger.ReportInfo("Starting Service");
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void Go()
+        {
+
+            Kernel.Init(KernelLoadDirective.LoadServicePlugins);
+            Async.Every(60 * 1000, FullRefresh);
+        }
+
         protected override void OnStart(string[] args)
         {
-            Async.Queue("Startup", () =>
-            {
-                int retries = 10;
-                while (true)
-                {
-                    try
-                    {
-                        // ensure the assembly is there 
-                        Logger.ReportInfo("Starting the Media Browser Service");
-                        break;
-                    }
-                    catch
-                    {
-                        if (retries-- < 0)
-                        {
-                            // failed to init, crash the service
-                            throw;
-                        }
-                        Thread.Sleep(10 * 10000);
-                    }
-                }
-
-                Kernel.Init(KernelLoadDirective.LoadServicePlugins);
-                Async.Every(60 * 1000, FullRefresh);
-            }, null , false, 10 * 1000);
+            Thread t = new Thread(new ThreadStart(Startup));
+            t.Start();
         }
 
         private bool refreshRunning = false;

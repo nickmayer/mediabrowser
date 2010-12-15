@@ -238,7 +238,7 @@
               >
         </ServiceInstall>
 
-        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MediaBrowserService" Wait="no" /> 
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MediaBrowserService" Wait="yes" /> 
 
       </Component>
     </DirectoryRef>
@@ -339,6 +339,19 @@
 
     <CustomAction Id="CA_CheckDotNetFramework" BinaryKey="WixCA" ExeCommand="" />
 
+    <!--
+    
+    <CustomAction Id="CA_StartService_Cmd"
+                  Directory="APPROOTDIRECTORY"
+                  ExeCommand="&quot;[SystemFolder]Net.exe&quot; start MediaBrowserService"
+                  Return="asyncNoWait" />
+    
+    
+ 
+    <CustomAction Id="CA_StartService_Cmd" Property="CA_StartService" Value="&quot;[SystemFolder]Net.exe&quot; start MediaBrowserService" />
+    <CustomAction Id="CA_StartService" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check"/>
+    -->
+
     <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
 		<!-- installation, repair and uninstall of this product.                                             -->
 		<InstallExecuteSequence>
@@ -398,13 +411,18 @@
 			<Custom Action="CA_RegisterMceApp_Rollback" After="InstallFiles">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
+      
 			<Custom Action="CA_RegisterMceApp_Unregister_Install" After="CA_RegisterMceApp_Rollback">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
 			<Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
-      <ScheduleReboot After ="InstallFinalize" />
+<!--
+      <Custom Action="CA_StartService_Cmd" After="InstallFinalize">
+         <![CDATA[NOT REMOVE]]>
+      </Custom>
+-->
 		</InstallExecuteSequence>
 
 		<!-- The InstallUISequence table describes the order that actions will be executed when the user     -->
@@ -497,8 +515,8 @@
     <!-- <Property Id="OPTIONALSTARTMENUSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
     <!-- <Property Id="OPTIONALSTARTUPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
     <!-- <Property Id="OPTIONALQUICKLAUNCHSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
-    <!--<Property Id="LAUNCHAPPONEXIT">1</Property>-->
-    
+    <Property Id="LAUNCHAPPONEXIT">1</Property>
+
     <!-- CustomAction to condtionally launch the configurator after the setup finishes -->
     <CustomAction Id="StartAppOnExit" BinaryKey="WixCA" DllEntry="WixShellExec" Execute="immediate" Return="check" Impersonate="yes"/>
     <Property Id="WixShellExecTarget" Value="[#Configurator.exe]"/>
@@ -529,7 +547,7 @@
       <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
 
       <Publish Dialog="MediaBrowserExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
-      <!--<Publish Dialog="MediaBrowserExitDialog" Control="Finish" Order="1" Event="DoAction" Value="StartAppOnExit">LAUNCHAPPONEXIT</Publish>-->
+      <Publish Dialog="MediaBrowserExitDialog" Control="Finish" Order="1" Event="DoAction" Value="StartAppOnExit">LAUNCHAPPONEXIT</Publish>
 
       <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
 
@@ -587,9 +605,9 @@
         <Control Id="UserText2" Type="Text" X="135" Y="90" Width="225" Height="60" Transparent="yes" Text="!(loc.Dialog_MakeDonation)" />
         <Control Id="UserText3" Type="Text" X="135" Y="110" Width="225" Height="60" Transparent="yes" Text="!(loc.Dialog_DonationUrl)" />
         <Control Id="Title" Type="Text" X="135" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogTitle)" />
-        <!--<Control Id="LaunchCheckBox" Type="CheckBox" X="190" Y="243" Width="100" Height="17" Property="LAUNCHAPPONEXIT" Hidden="yes" CheckBoxValue="1" Text="Configure initial settings">
+        <Control Id="LaunchCheckBox" Type="CheckBox" X="190" Y="243" Width="100" Height="17" Property="LAUNCHAPPONEXIT" Hidden="yes" CheckBoxValue="1" Text="Configure initial settings">
           <Condition Action="show">NOT Installed</Condition>
-        </Control>-->
+        </Control>
       </Dialog>
 
       <InstallUISequence>
