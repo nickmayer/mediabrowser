@@ -60,7 +60,7 @@ namespace MediaBrowser.Code.ModelItems {
 
         public static void LoadChildren(FolderChildren children) {
             children.folder.EnsureChildrenLoaded();
-            childVerifier.Enqueue(children);
+            if (Config.Instance.AutoValidate) childVerifier.Enqueue(children);
         }
 
 

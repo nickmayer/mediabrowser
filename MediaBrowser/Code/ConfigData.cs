@@ -154,6 +154,8 @@ namespace MediaBrowser
         public int AutoScrollDelay = 8; //Delay to Start and Reset scrolling text
         public int AutoScrollSpeed = 1; //Scroll Speed for scrolling Text
 
+        public bool AutoValidate = true; //automatically validate and refresh items as we access them
+
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 

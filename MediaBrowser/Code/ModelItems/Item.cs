@@ -586,7 +586,7 @@ namespace MediaBrowser.Library
             RefreshMetadata(true);
         }
 
-        public void RefreshMetadata(bool displayMessage)
+        public virtual void RefreshMetadata(bool displayMessage)
         {
             if (displayMessage)
                 Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshProf") + " " + this.Name);
@@ -597,9 +597,9 @@ namespace MediaBrowser.Library
                 primaryImage = null;
                 bannerImage = null;
                 primaryImageSmall = null;
+                string ignore;
                 if (baseItem.PrimaryImage != null)
                 {
-                    string ignore;
                         //get the display size of our primary image if known
                     if (PhysicalParent != null)
                     {
@@ -618,7 +618,11 @@ namespace MediaBrowser.Library
                 }
                 foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in baseItem.BackdropImages)
                 {
-                    var ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
+                    ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
+                }
+                if (baseItem.BannerImage != null)
+                {
+                    ignore = baseItem.BannerImage.GetLocalImagePath(); //and, finally, banner
                 }
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });

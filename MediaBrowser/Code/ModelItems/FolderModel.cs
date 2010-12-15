@@ -49,7 +49,7 @@ namespace MediaBrowser.Library {
             displayPrefs = null;
 
             // metadata should be refreshed in a higher priority
-            folderChildren.RefreshAsap();
+            if (Config.Instance.AutoValidate) folderChildren.RefreshAsap();
 
             base.NavigatingInto();
         }
@@ -470,16 +470,24 @@ namespace MediaBrowser.Library {
 
             }
         }
+        public override void RefreshMetadata() {
+            this.RefreshMetadata(false);
+        }
 
-        public override void RefreshMetadata()
+
+        public override void RefreshMetadata(bool displayMsg)
         {
-            Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshFolderProf") + " " + this.Name);
-            //first do us - no message
+            if (displayMsg) Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshFolderProf") + " " + this.Name);
+            if (!Config.Instance.AutoValidate)
+            {
+                this.folder.ValidateChildren(); //need to look for new/deleted items if not auto
+            }
+            //first do us
             base.RefreshMetadata(false);
             //and now all our children
             foreach (Item item in this.Children)
             {
-                item.RefreshMetadata();
+                item.RefreshMetadata(false);
             }
 
         }
@@ -533,6 +541,7 @@ namespace MediaBrowser.Library {
             this.newestItems = null;
             this.recentUnwatchedItems = null;
             this.recentWatchedItems = null;
+            this.folderOverviewCache = null;
             RecentItemsChanged();
 
             FirePropertyChanged("Children");

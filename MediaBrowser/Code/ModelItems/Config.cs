@@ -794,6 +794,11 @@ namespace MediaBrowser
             set { if (this.data.AutoScrollSpeed != value) { this.data.AutoScrollSpeed = value; Save(); FirePropertyChanged("AutoScrollSpeed"); } }
         }
 
+        public bool AutoValidate
+        {
+            get { return this.data.AutoValidate; }
+            set { if (this.data.AutoValidate != value) { this.data.AutoValidate = value; Save(); FirePropertyChanged("AutoValidate"); } }
+        }
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;
