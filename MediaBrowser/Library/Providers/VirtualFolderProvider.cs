@@ -42,17 +42,18 @@ namespace MediaBrowser.Library.Providers
             }
         }
 
+        bool firstTime = true; 
         public override bool NeedsRefresh()
         {
             if (Item.Path == null) return false;
 
             bool changed = false;
-
             var virtualFolder = VirtualFolder;
             if (virtualFolder != null) {
-                changed = imagePath != virtualFolder.ImagePath;
+                changed = firstTime; // we need to refresh once per entry to be sure sort is right
+                firstTime = false;
+                changed |= imagePath != virtualFolder.ImagePath;
                 changed |= Item.PrimaryImagePath == null && virtualFolder.ImagePath != null;
-                //changed = true;  //just always refresh these in case the sort order changed - we don't have way of knowing if it did
             }
             return changed;
         }
