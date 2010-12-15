@@ -145,7 +145,7 @@
             </LayoutInput>
           </sy:SummaryNonScrolling>
 
-          <as:AutoScrollText Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:PD_SummaryFont">
+          <as:AutoScrollText ScrollSpeed="[Application.Config.AutoScrollSpeed]" ScrollDelay="[Application.Config.AutoScrollDelay]" Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:PD_SummaryFont">
           <Layout>
             <FlowLayout Orientation="Vertical" StripAlignment="Near" Spacing="0,0"/>
           </Layout>

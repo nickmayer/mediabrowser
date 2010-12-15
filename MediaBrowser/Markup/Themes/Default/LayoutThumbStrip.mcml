@@ -205,7 +205,7 @@
             </LayoutInput>
           </st:ScrollableText>
 
-          <as:AutoScrollText Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:SV_SummaryFont">
+          <as:AutoScrollText ScrollSpeed="[Application.Config.AutoScrollSpeed]" ScrollDelay="[Application.Config.AutoScrollDelay]" Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:SV_SummaryFont">
             <LayoutInput>
               <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Counters,0,-10"></FormLayoutInput>
             </LayoutInput>

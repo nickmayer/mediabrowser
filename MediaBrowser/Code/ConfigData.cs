@@ -151,6 +151,8 @@ namespace MediaBrowser
         public bool YearSortAsc = false; //true to sort years in ascending order
 
         public bool AutoScrollText = false; //Turn on/off Auto Scrolling Text (typically for Overviews)
+        public int AutoScrollDelay = 8; //Delay to Start and Reset scrolling text
+        public int AutoScrollSpeed = 1; //Scroll Speed for scrolling Text
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
