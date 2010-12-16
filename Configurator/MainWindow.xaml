@@ -165,7 +165,7 @@
                                 <CheckBox Height="22" Margin="10,120,10,0" Name="cbxOptionAutoEnter" VerticalAlignment="Top" Click="cbxOptionAutoEnter_Click" ToolTip="Automatically bypass an item with only one folder in it and continue to the contents of that folder." >Auto Enter Single Folder Items</CheckBox>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Media Tracking" HorizontalAlignment="Left" Margin="20,0,0,15" Name="groupBox2" Height="179.76" Width="270" VerticalAlignment="Bottom">
+                        <GroupBox Header="Media Tracking" HorizontalAlignment="Left" Margin="20,210,0,0" Name="groupBox2" Height="180" Width="270" VerticalAlignment="Top">
                             <Grid>
                                 <CheckBox Margin="10,10,10,0" Name="cbxOptionUnwatchedCount" Content="Show Unwatched Count" Height="22" VerticalAlignment="Top" Click="cbxOptionUnwatchedCount_Click" ToolTip="Show unwatched counter on top of poster art" />
                                 <CheckBox Margin="10,32,10,0" Name="cbxOptionUnwatchedOnFolder" Content="Watched Indicator on Folders" Height="22" VerticalAlignment="Top" Click="cbxOptionUnwatchedOnFolder_Click" ToolTip="Display indicator for previously viewed folders" />
@@ -408,7 +408,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Label Height="33" HorizontalAlignment="Left" Margin="38,15,0,0" Name="hdrBasic" VerticalAlignment="Top" Width="68" FontSize="18" MouseDown="hdrBasic_MouseDown" FontWeight="Bold" ToolTip="Click to display basic configuration options" Foreground="Black">basic</Label>
-        <Label FontSize="18" Height="33" HorizontalAlignment="Right" Margin="0,15,579,0" Name="hdrAdvanced" VerticalAlignment="Top" Width="91" Foreground="Gray" MouseDown="hdrAdvanced_MouseDown" ToolTip="Click to display advanced configuration options">advanced</Label>
+        <Label FontSize="18" Height="33" HorizontalAlignment="Left" Margin="108,15,0,0" Name="hdrAdvanced" VerticalAlignment="Top" Width="91" Foreground="Gray" MouseDown="hdrAdvanced_MouseDown" ToolTip="Click to display advanced configuration options">advanced</Label>
         <Rectangle Height="25.989" Margin="220,19.343,0,0" Name="rectangle2" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Left" Width="7" StrokeThickness="0">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
