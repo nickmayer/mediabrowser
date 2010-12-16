@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0016";
+        const string VERSION = "1.0017";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -81,6 +81,8 @@ namespace MediaBrowser.Library.Localization
         public string BackdropRotationIntervalConfigDesc = "Seconds between Backdrop Rotations.";
         public string BackdropTransitionIntervalConfigDesc = "Fade in seconds for the backdrop transition animation.";
         public string AutoScrollTextConfigDesc = "Turn on Automatically Scrolling Overviews.";
+        public string SortYearsAscConfigDesc = "Sort by Year from Lowest to Highest.";
+        public string AutoValidateConfigDesc = "Automatically validate and refresh while navigating. WARNING. Turning this off may cause the library to be inaccurate and you may need to manually refresh.";
 
 
         //Config Panel
@@ -160,7 +162,7 @@ namespace MediaBrowser.Library.Localization
         public string BackdropTransitionIntervalConfig = "Transition Time";
         public string AutoScrollTextConfig = "Auto Scroll Overview";
         public string SortYearsAscConfig = "Sort by Year in Ascending Order";
-
+        public string AutoValidateConfig = "Automatically Validate Items";
 
 
         //EHS        

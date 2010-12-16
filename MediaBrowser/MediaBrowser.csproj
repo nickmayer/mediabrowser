@@ -74,6 +74,7 @@
     <Reference Include="System.ServiceModel.Web">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase">
@@ -745,6 +746,7 @@
     <Compile Include="Library\Providers\LocalTrailerProvider.cs" />
     <Compile Include="Library\Providers\TVDB\LocalSeasonProvider.cs" />
     <Compile Include="Library\Ratings.cs" />
+    <Compile Include="Library\ServiceInteraction\MBServiceController.cs" />
     <Compile Include="Library\Threading\DelayedWeakReference.cs" />
     <Compile Include="Library\UI\ConfigPanel.cs" />
     <Compile Include="Library\UI\MenuManager.cs" />

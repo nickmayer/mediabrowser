@@ -52,6 +52,7 @@ namespace Configurator.Code
 
         public void DisplayMessage(string message)
         {
+            msg.Opacity = 0; //start invisible
             msg.Text = message;
             //fire our event
             msg.Visibility = Visibility.Hidden;
