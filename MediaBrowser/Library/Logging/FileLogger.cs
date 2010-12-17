@@ -13,12 +13,12 @@ namespace MediaBrowser.Library.Logging {
         {
             get
             {
-                if (AppDomain.CurrentDomain.FriendlyName.Contains("Configurator"))
+                if (AppDomain.CurrentDomain.FriendlyName.ToLower().Contains("configurator"))
                 {
                     return "Configurator-";
                 }
                 else
-                    if (AppDomain.CurrentDomain.FriendlyName.Contains("MediaBrowserService"))
+                    if (AppDomain.CurrentDomain.FriendlyName.ToLower().Contains("mediabrowserservice"))
                     {
                         return "MBService-";
                     }
