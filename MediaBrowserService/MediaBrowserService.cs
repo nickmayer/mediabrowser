@@ -30,7 +30,7 @@ namespace MediaBrowser
         // I can not figure out how to launch the service after installation, so we are stuck with potentially no assembly in the GAC
         private void Startup() 
         {
-            Thread.Sleep(10 * 10000);
+            Thread.Sleep(10 * 1000);
             int retries = 10;
             while (true)
             {
