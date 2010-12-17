@@ -47,7 +47,7 @@ namespace MediaBrowser
                         // failed to init, crash the service
                         throw;
                     }
-                    Thread.Sleep(10 * 10000);
+                    Thread.Sleep(10 * 1000);
                 }
             }
 
