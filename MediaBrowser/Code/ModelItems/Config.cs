@@ -738,8 +738,8 @@ namespace MediaBrowser
         
         public int FullRefreshInterval
         {
-            get { return this.data.FullRefreshInterval; }
-            set { if (this.data.FullRefreshInterval != value) { this.data.FullRefreshInterval = value; Save(); FirePropertyChanged("FullRefreshInterval"); } }
+            get { return Kernel.Instance.ServiceConfigData.FullRefreshInterval; }
+            //set { if (this.data.FullRefreshInterval != value) { this.data.FullRefreshInterval = value; Save(); FirePropertyChanged("FullRefreshInterval"); } }
         }
 
         public int ValidationDelay
@@ -750,8 +750,8 @@ namespace MediaBrowser
 
         public DateTime LastFullRefresh
         {
-            get { return this.data.LastFullRefresh;  }
-            set { if (this.data.LastFullRefresh != value) { this.data.LastFullRefresh = value; Save(); FirePropertyChanged("LastFullRefresh"); } }
+            get { return Kernel.Instance.ServiceConfigData.LastFullRefresh;  }
+            //set { if (this.data.LastFullRefresh != value) { this.data.LastFullRefresh = value; Save(); FirePropertyChanged("LastFullRefresh"); } }
         }
 
         public int MinResumeDuration

@@ -45,6 +45,7 @@ namespace MediaBrowser.Library
                 {
                     if (myController != null)
                     {
+                        myController.Refresh();
                         return myController.Status.ToString();
                     }
                     return "Unknown";

@@ -93,7 +93,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid x:Name="tabGrid1">
-        <TabControl Margin="10,90,10,10" x:Name="tabControl1" Background="{x:Null}" SelectionChanged="tabControl1_SelectionChanged" >
+            <TabControl Margin="10,90,10,10" x:Name="tabControl1" Background="{x:Null}" SelectionChanged="tabControl1_SelectionChanged">
             <TabItem Header="media" x:Name="mediacollectionTab" FontSize="14" FontWeight="Normal" Foreground="#FF323232" IsSelected="True">
                 <Grid>
                     <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="folderList" Width="260" SelectionChanged="folderList_SelectionChanged" FontSize="14" ItemTemplate="{StaticResource folderListTemplate}" SelectedIndex="0"/>
@@ -364,35 +364,6 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-                <TabItem Header="service" Name="serviceTab" FontSize="14" Visibility="Collapsed">
-                    <Grid>
-                        <GroupBox Header="Status" HorizontalAlignment="Right" Margin="0,14.04,17,141" Name="groupBox8" Width="317" FontSize="14">
-                            <Grid>
-                                <Label Height="28" Margin="25,33,71,0" Name="lblSvcStatus" VerticalAlignment="Top">Service is Not Connected</Label>
-                                <Label Height="28" Margin="25,67,16,0" Name="lblSvcActivity" VerticalAlignment="Top">Please check for proper installation</Label>
-                                <Label Margin="25,101,6,95.1" Name="lblNextSvcRefresh">Next Refresh at ...</Label>
-                                <Button Height="30" Margin="120,0,110,17" Name="btnUpdateSvcStatus" VerticalAlignment="Bottom" Click="btnUpdateSvcStatus_Click">Update</Button>
-                            </Grid>
-                        </GroupBox>
-                        <TextBlock Height="131" HorizontalAlignment="Left" Margin="53,50,0,0" Name="textBlock2" VerticalAlignment="Top" Width="299" TextWrapping="Wrap">You can see the status and control some of the functions of the Media Browser Library Service from this page.<LineBreak/><LineBreak/> This service refreshes your content on a set schedule. </TextBlock>
-                        <GroupBox Header="Schedule" Height="116" HorizontalAlignment="Right" Margin="0,0,17,6" Name="groupBox9" VerticalAlignment="Bottom" Width="317">
-                            <Grid>
-                                <Label Height="28" HorizontalAlignment="Left" Margin="27,13,0,0" Name="label14" VerticalAlignment="Top" Width="92">Interval (hrs)</Label>
-                                <Label Height="28" Margin="147,13,26,0" Name="label15" VerticalAlignment="Top">Refresh Time (24hr)</Label>
-                                <TextBox HorizontalAlignment="Left" Margin="39,0,0,21" Name="tbxRefreshInterval" Width="43" TextAlignment="Right" Height="22.38" VerticalAlignment="Bottom" LostFocus="tbxRefreshInterval_LostFocus" PreviewTextInput="NumberOnly_PreviewTextInput">24</TextBox>
-                                <TextBox Margin="0,0,95,20" Name="tbxRefreshHour" TextAlignment="Right" HorizontalAlignment="Right" Width="52" Height="23.38" VerticalAlignment="Bottom" LostFocus="tbxRefreshHour_LostFocus" PreviewTextInput="NumberOnly_PreviewTextInput">2</TextBox>
-                                <Label HorizontalAlignment="Right" Margin="0,45,42,17" Name="label16" Width="54">:00</Label>
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox Header="Control" Margin="16,187,356,6" Name="groupBox10">
-                            <Grid>
-                                <Button HorizontalAlignment="Left" Margin="19,30.14,0,0" Name="btnStartStopSvc" Width="97" Click="btnStartStopSvc_Click" Height="27" VerticalAlignment="Top">Start Service</Button>
-                                <Button HorizontalAlignment="Left" Margin="19,76.14,0,0" Name="btnFullRefresh" Width="97" Height="28" VerticalAlignment="Top">Refresh Now</Button>
-                                <CheckBox Margin="139,80.83,105,0" Name="cbxRefreshImages" Height="23.31" VerticalAlignment="Top">Rebuild Images</CheckBox>
-                            </Grid>
-                        </GroupBox>
-                    </Grid>
-                </TabItem>
             </TabControl>
             <TextBlock Height="25" Margin="15,54,318,0" Name="alertText" VerticalAlignment="Top" Text="Some of your plugins have updates available" FontSize="16" Foreground="MidnightBlue" FontWeight="Bold" Opacity="0" IsEnabled="False" Visibility="Hidden" />
         </Grid>

@@ -159,17 +159,8 @@ namespace MediaBrowser
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 
-        [Comment("The frequency at which we will force a full refresh of the library (in hours)")]
-        public int FullRefreshInterval = 24;
-
-        [Comment("The hour of day full refresh is supposed to run")]
-        public int FullRefreshPreferredHour = 2;
-
         [Comment("The delay (in seconds) before we start validating library items. This allows sleeping drives and servers to come alive")]
         public int ValidationDelay = 0;
-
-        [Comment("The last time a full refresh was done.")]
-        public DateTime LastFullRefresh =  DateTime.MinValue;
 
         public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 

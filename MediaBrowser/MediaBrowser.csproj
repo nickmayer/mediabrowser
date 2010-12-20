@@ -690,6 +690,7 @@
     <Compile Include="Code\MyHistoryOrientedPageSession.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Code\ServiceConfigData.cs" />
     <Compile Include="Code\ShadowTypes\Colors.cs">
       <SubType>Code</SubType>
     </Compile>

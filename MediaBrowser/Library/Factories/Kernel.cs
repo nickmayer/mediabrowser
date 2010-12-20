@@ -69,6 +69,8 @@ namespace MediaBrowser.Library {
          * */
         private const string versionExtension = "B+";
 
+        public const string MBSERVICE_MUTEX_ID = "Global\\{E155D5F4-0DDA-47bb-9392-D407018D24B1}";
+
         static object sync = new object();
         static Kernel kernel;
 
@@ -160,6 +162,21 @@ namespace MediaBrowser.Library {
                     });
                 }
 
+                //if we are in the service we need to watch the config file for changes
+                //if (LoadContext == PluginInitContext.Service)
+                //{
+                //    Async.Queue("Config File Watcher Setup", () =>
+                //    {
+                //        Logger.ReportInfo("Watching Config file for changes...");
+                //        configFileWatcher = new FileSystemWatcher(ApplicationPaths.AppConfigPath, Path.GetFileName(ApplicationPaths.ConfigFile));
+                //        configFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                //        configFileWatcher.IncludeSubdirectories = false;
+                //        configFileWatcher.Changed += new FileSystemEventHandler(ConfigFileUpdated);
+                //        configFileWatcher.EnableRaisingEvents = true;
+                //    });
+
+ 
+                //}
 
                 // add the podcast home
                 var podcastHome = kernel.GetItem<Folder>(kernel.ConfigData.PodcastHome);
@@ -167,13 +184,27 @@ namespace MediaBrowser.Library {
                     kernel.RootFolder.AddVirtualChild(podcastHome);
                 }
             }
-        } 
+        }
 
-        private static void DisposeKernel(Kernel kernel){
-            if (kernel.PlaybackControllers != null) {
-                foreach (var playbackController in kernel.PlaybackControllers) {
+        //private static FileSystemWatcher configFileWatcher;
+
+        //private static void ConfigFileUpdated(object sender, FileSystemEventArgs e)
+        //{
+        //    Logger.ReportInfo("Config File Changed - Reloading.");
+        //    configFileWatcher.EnableRaisingEvents = false;
+        //    kernel.ConfigData = ConfigData.FromFile(ApplicationPaths.ConfigFile);
+        //    configFileWatcher.EnableRaisingEvents = true;
+        //}
+
+        private static void DisposeKernel(Kernel kernel)
+        {
+            if (kernel.PlaybackControllers != null)
+            {
+                foreach (var playbackController in kernel.PlaybackControllers)
+                {
                     var disposable = playbackController as IDisposable;
-                    if (disposable != null) {
+                    if (disposable != null)
+                    {
                         disposable.Dispose();
                     }
                 }
@@ -321,6 +352,7 @@ namespace MediaBrowser.Library {
              PlaybackControllers = new List<IPlaybackController>(),
              MetadataProviderFactories = MetadataProviderHelper.DefaultProviders(),
              ConfigData = config,
+             ServiceConfigData = ServiceConfigData.FromFile(ApplicationPaths.ServiceConfigFile),
              StringData = new LocalizedStrings(),
              ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),
              ItemRepository = repository,
@@ -422,6 +454,7 @@ namespace MediaBrowser.Library {
         public List<ImageResolver> ImageResolvers { get; set; }
         public ChainedEntityResolver EntityResolver { get; set; }
         public ConfigData ConfigData { get; set; }
+        public ServiceConfigData ServiceConfigData { get; set; }
         public LocalizedStrings StringData { get; set; }
         public IItemRepository ItemRepository { get; set; }
         public IMediaLocationFactory MediaLocationFactory { get; set; }

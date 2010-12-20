@@ -220,26 +220,8 @@
       <Component Id="MediaBrowserIcon.ico" Guid="25C6DD59-8881-42b4-B302-A616F747C99E" DiskId="1">
         <File Id="MediaBrowserIcon.ico" Name="MediaBrowserIcon.ico" Source="MediaBrowserIcon.ico" Checksum="no" />
       </Component>
-
-
       <Component Id="MediaBrowserService.exe" Guid="D19774DD-253A-47E2-94FA-3EFB220E2B77" DiskId="1">
-        <File Id="MediaBrowserService.exe" Name="MediaBrowserService.exe" Source="..\MediaBrowserService\bin\$(var.BuildType)\MediaBrowserService.exe" Checksum="no" KeyPath="yes"/>
-      <ServiceInstall
-            Id="ServiceInstaller"
-            Type="ownProcess"
-            Vital="yes"
-            Name="MediaBrowserService"
-            DisplayName="Media Browser Service"
-            Description="Media Browser Service"
-            Start="auto"
-            Account="LocalSystem"
-            ErrorControl="ignore"
-            Interactive="no"
-              >
-        </ServiceInstall>
-
-        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MediaBrowserService" Wait="yes" /> 
-
+        <File Id="MediaBrowserService.exe" Name="MediaBrowserService.exe" Source="..\MediaBrowserService\bin\$(var.BuildType)\MediaBrowserService.exe" Checksum="no"/>
       </Component>
     </DirectoryRef>
 

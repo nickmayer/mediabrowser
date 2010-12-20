@@ -123,6 +123,17 @@ namespace MediaBrowser.Library.Configuration {
             }
         }
 
+        public static string ServiceConfigFile
+        {
+            get
+            {
+                var path = AppConfigPath;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                return Path.Combine(path, "MBServiceXml.config");
+            }
+        }
+
 
         public static string AppRSSPath {
             get {

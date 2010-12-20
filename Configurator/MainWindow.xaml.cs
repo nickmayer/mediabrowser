@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml.Serialization;
+using System.Management;
 using Microsoft.Win32;
 
 using MediaBrowser;
@@ -149,11 +150,6 @@ namespace Configurator
             {
                 RefreshEntryPoints(false);
                 ValidateMBAppDataFolderPermissions();
-                serviceConnected = ConnectToService(null);
-                Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-                {
-                    SetServiceStatus();
-                }));
             });
         }
 
@@ -421,10 +417,6 @@ namespace Configurator
 
             //logging
             cbxEnableLogging.IsChecked = config.EnableTraceLogging;
-
-            //service
-            tbxRefreshHour.Text = config.FullRefreshPreferredHour.ToString();
-            tbxRefreshInterval.Text = config.FullRefreshInterval.ToString();
 
             //library validation
             cbxAutoValidate.IsChecked = config.AutoValidate;
@@ -1386,14 +1378,14 @@ sortorder: {2}
         private void hdrBasic_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrBasic);
-            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = helpTab.Visibility = serviceTab.Visibility = Visibility.Collapsed;
+            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = helpTab.Visibility = Visibility.Collapsed;
             mediacollectionTab.Visibility = podcastsTab.Visibility = plugins.Visibility = Visibility.Visible;
         }
 
         private void hdrAdvanced_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrAdvanced);
-            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = serviceTab.Visibility = Visibility.Visible;
+            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = Visibility.Visible;
             mediacollectionTab.Visibility = podcastsTab.Visibility = plugins.Visibility = Visibility.Visible;
             helpTab.Visibility = Visibility.Collapsed;
         }
@@ -1719,8 +1711,8 @@ sortorder: {2}
                         Directory.CreateDirectory(System.IO.Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
                     }
                     //force MB to re-build library next time
-                    config.LastFullRefresh = DateTime.MinValue;
-                    config.Save();
+                    Kernel.Instance.ServiceConfigData.LastFullRefresh = DateTime.MinValue;
+                    Kernel.Instance.ServiceConfigData.Save();
 
                 }
                 catch (Exception ex)
@@ -1741,8 +1733,8 @@ sortorder: {2}
                     Directory.Delete(ApplicationPaths.AppImagePath,true);
                     Directory.CreateDirectory(ApplicationPaths.AppImagePath);
                     //force MB to re-build library next time
-                    config.LastFullRefresh = DateTime.MinValue;
-                    config.Save();
+                    Kernel.Instance.ServiceConfigData.LastFullRefresh = DateTime.MinValue;
+                    Kernel.Instance.ServiceConfigData.Save();
                 }
                 catch (Exception ex)
                 {
@@ -1882,31 +1874,6 @@ sortorder: {2}
             base.OnPreviewTextInput(e);
         }
 
-        private void tbxRefreshInterval_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Int32.TryParse(tbxRefreshInterval.Text, out config.FullRefreshInterval);
-            SaveConfig();
-            SetServiceStatus();
-        }
-
-        private void tbxRefreshHour_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Int32.TryParse(tbxRefreshHour.Text, out config.FullRefreshPreferredHour);
-            if (config.FullRefreshPreferredHour > 24)
-            {
-                config.FullRefreshPreferredHour = 2;
-                PopUpMsg.DisplayMessage("Hour cannot be more than 24. Reset to default.");
-                tbxRefreshHour.Text = config.FullRefreshPreferredHour.ToString();
-            }
-            SaveConfig();
-            SetServiceStatus();
-        }
-
-        private void NumberOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !Char.IsDigit(e.Text[0]);
-            base.OnPreviewTextInput(e);
-        }
 
         private void btnRollback_Click(object sender, RoutedEventArgs e)
         {
@@ -1930,72 +1897,6 @@ sortorder: {2}
                 }
             }
         }
-
-        private bool ConnectToService(string machineName)
-        {
-            bool success = false;
-            if (String.IsNullOrEmpty(machineName))
-            {
-                success = serviceController.Connect();
-            }
-            else
-            {
-                success = serviceController.Connect(machineName);
-            }
-            if (!success)
-            {
-                MessageBox.Show("Could not connect to Service.  Probably not installed.", "Service Connect Error");
-            }
-            return success;
-        }
-
-        private void SetServiceStatus()
-        {
-            if (serviceConnected)
-            {
-                lblSvcStatus.Content = "Service is " + serviceController.Status;
-                lblSvcActivity.Content = "Last Refresh was "+config.LastFullRefresh;
-                DateTime nextRefresh = config.LastFullRefresh.AddHours(config.FullRefreshInterval);
-                string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Tonight at "+(config.FullRefreshPreferredHour *100).ToString("00:00") : nextRefresh.ToShortDateString() +" at "+ (config.FullRefreshPreferredHour *100).ToString("00:00");
-                if (serviceController.Status != "Running") nextRefreshStr = "Never.  Please Start Service.";
-                    
-                lblNextSvcRefresh.Content = "Next Refresh: " + nextRefreshStr;
-
-                if (serviceController.Status == "Running")
-                {
-                    btnStartStopSvc.Content = "Stop Service";
-                    btnFullRefresh.IsEnabled = true;
-                    lblSvcStatus.Foreground = Brushes.DarkGreen;
-                }
-                else
-                {
-                    btnStartStopSvc.Content = "Start Service";
-                    btnFullRefresh.IsEnabled = false;
-                    lblSvcStatus.Foreground = Brushes.DarkRed;
-                }
-            }
-            else
-            {
-                btnStartStopSvc.IsEnabled = false;
-            }
-        }
-
-        private void btnUpdateSvcStatus_Click(object sender, RoutedEventArgs e)
-        {
-            SetServiceStatus();
-        }
-
-        private void btnStartStopSvc_Click(object sender, RoutedEventArgs e)
-        {
-            this.Cursor = Cursors.Wait;
-            if (serviceController.Status == "Running")
-                serviceController.StopService();
-            else
-                serviceController.StartService();
-            SetServiceStatus();
-            this.Cursor = Cursors.Arrow;
-        }
-
     }
 
     #region FormatParser Class
