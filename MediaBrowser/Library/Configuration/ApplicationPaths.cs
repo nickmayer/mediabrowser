@@ -134,6 +134,13 @@ namespace MediaBrowser.Library.Configuration {
             }
         }
 
+        public static string ServiceExecutableFile
+        {
+            get
+            {
+                return Path.Combine(Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MediaBrowser\\MediaBrowser\\MediaBrowserService.exe");
+            }
+        }
 
         public static string AppRSSPath {
             get {

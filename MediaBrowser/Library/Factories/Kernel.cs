@@ -142,6 +142,19 @@ namespace MediaBrowser.Library {
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
 
+                if (LoadContext != PluginInitContext.Service)
+                {
+                    Async.Queue("Start Service", () =>
+                    {
+                        //start our service if its not already going
+                        if (!MBServiceController.IsRunning)
+                        {
+                            Logger.ReportInfo("Starting MB Service...");
+                            MBServiceController.StartService();
+                        }
+                    });
+                }
+
                 // create filewatchers for each of our top-level folders (only if we are in MediaCenter, though)
                 bool isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
                 if (isMC && config.EnableDirectoryWatchers) //only do this inside of MediaCenter as we don't want to be trying to refresh things if MB isn't actually running
