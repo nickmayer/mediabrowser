@@ -99,7 +99,7 @@ namespace MediaBrowser.Library.Plugins {
             get {
                 //by default, any plug-in that produces an interface should only init in core
                 if (InstallGlobally)
-                    return PluginInitContext.Core;
+                    return PluginInitContext.Core | PluginInitContext.Other;
                 else
                     return PluginInitContext.All; 
             } 
