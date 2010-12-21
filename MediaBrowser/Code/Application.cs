@@ -593,6 +593,22 @@ namespace MediaBrowser
                     //set validationDelay to "0" - user can change it back if they wish or are directed to
                     Config.ValidationDelay = 0;
                     break;
+                case "2.3.0.0":
+                    //re-set plugin source if not already done by configurator...
+                    try
+                    {
+                        Config.PluginSources.RemoveAt(Config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
+                    }
+                    catch
+                    {
+                        //wasn't there - no biggie
+                    }
+                    if (Config.PluginSources.Find(s => s == "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml") == null)
+                    {
+                        Config.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
+                        Logger.ReportInfo("Plug-in Source migrated to multi-version source");
+                    }
+                    break;
             }
         }
 
