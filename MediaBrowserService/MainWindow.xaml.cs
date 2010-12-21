@@ -121,6 +121,7 @@ namespace MediaBrowserService
 
             tbxRefreshHour.Text = config.FullRefreshPreferredHour.ToString();
             tbxRefreshInterval.Text = config.FullRefreshInterval.ToString();
+            cbxSleep.IsChecked = config.SleepAfterScheduledRefresh;
             UpdateStatus();
         }
 
@@ -155,6 +156,12 @@ namespace MediaBrowserService
             {
                 FullRefresh(true);
             });
+        }
+
+        private void cbxSleep_Checked(object sender, RoutedEventArgs e)
+        {
+            config.SleepAfterScheduledRefresh = cbxSleep.IsChecked.Value;
+            config.Save();
         }
 
         #endregion
@@ -207,12 +214,13 @@ namespace MediaBrowserService
         private void FullRefresh(bool force)
         {
             var verylate = config.LastFullRefresh.Date < DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3));
-            var overdue = config.LastFullRefresh < DateTime.Now.Date.AddDays(-(config.FullRefreshInterval));
+            var overdue = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval));
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
             if (!refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour == config.FullRefreshPreferredHour)))
             {
                 refreshRunning = true;
+                bool onSchedule = (!force && (DateTime.Now.Hour == config.FullRefreshPreferredHour));
                 Logger.ReportInfo("Full Refresh Started");
 
                 using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
@@ -238,6 +246,11 @@ namespace MediaBrowserService
                     {
                         refreshRunning = false;
                         Logger.ReportInfo("Full Refresh Finished");
+                        if (onSchedule && config.SleepAfterScheduledRefresh)
+                        {
+                            Logger.ReportInfo("Putting computer to sleep...");
+                            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+                        }
                     }
                 }
 

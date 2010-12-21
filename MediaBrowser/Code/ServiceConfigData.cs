@@ -27,6 +27,9 @@ namespace MediaBrowser
         [Comment("The hour of day full refresh is supposed to run")]
         public int FullRefreshPreferredHour = 2;
 
+        [Comment("Option to put the computer to sleep after a refresh.  Will only do it if the refresh is running at it's normal time.")]
+        public bool SleepAfterScheduledRefresh = false;
+
         [Comment("The last time a full refresh was done.")]
         public DateTime LastFullRefresh = DateTime.MinValue;
 
