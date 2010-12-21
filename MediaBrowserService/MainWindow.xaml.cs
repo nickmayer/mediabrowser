@@ -91,6 +91,11 @@ namespace MediaBrowserService
 
         private void UpdateStatus()
         {
+            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+            {
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateStatus);
+                return;
+            }
             lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh;
             DateTime nextRefresh = config.LastFullRefresh.Date.AddDays(config.FullRefreshInterval);
             if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
@@ -213,11 +218,15 @@ namespace MediaBrowserService
 
         private void FullRefresh(bool force)
         {
-            var verylate = config.LastFullRefresh.Date < DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3));
+            if (refreshRunning) return; //get out of here fast
+
+            var verylate = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3));
             var overdue = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval));
 
+            UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
+
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour == config.FullRefreshPreferredHour)))
+            if (!refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour >= config.FullRefreshPreferredHour)))
             {
                 refreshRunning = true;
                 bool onSchedule = (!force && (DateTime.Now.Hour == config.FullRefreshPreferredHour));
@@ -244,8 +253,8 @@ namespace MediaBrowserService
                     }
                     finally
                     {
-                        refreshRunning = false;
                         Logger.ReportInfo("Full Refresh Finished");
+                        refreshRunning = false;
                         if (onSchedule && config.SleepAfterScheduledRefresh)
                         {
                             Logger.ReportInfo("Putting computer to sleep...");
