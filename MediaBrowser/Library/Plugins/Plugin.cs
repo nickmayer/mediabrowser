@@ -45,15 +45,20 @@ namespace MediaBrowser.Library.Plugins {
             IPlugin pluginInterface = null;
 
             var plugin = assembly.GetTypes().Where(type => typeof(IPlugin).IsAssignableFrom(type)).FirstOrDefault();
-            if (plugin != null) {
-                try {
+            if (plugin != null)
+            {
+                try
+                {
                     pluginInterface = plugin.GetConstructor(Type.EmptyTypes).Invoke(null) as IPlugin;
-                } catch (Exception e) {
-                    Logger.ReportException ("Failed to initialize plugin: ", e);
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Failed to initialize plugin: ", e);
                     Debug.Assert(false);
                     throw;
                 }
             }
+            else Logger.ReportError("Plugin interface not found for: " + assembly.FullName);
 
             if (pluginInterface == null) {
                 throw new ApplicationException("The following assembly is not a valid Plugin : " + assembly.FullName);

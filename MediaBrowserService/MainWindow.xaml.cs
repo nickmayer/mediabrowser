@@ -33,6 +33,7 @@ namespace MediaBrowserService
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private bool forceClose = false;
         private Mutex mutex;
+        private Timer mainLoop;
         private bool hasHandle = false;
         private MediaBrowser.ServiceConfigData config;
 
@@ -204,7 +205,7 @@ namespace MediaBrowserService
                     config = Kernel.Instance.ServiceConfigData;
                     RefreshInterface();
                     Logger.ReportInfo("Service Started");
-                    Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
+                    mainLoop = Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
                 }
                 catch  //some sort of error - release
                 {
