@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Media Browser Service" Height="532" Width="676" Icon="/MediaBrowserService;component/MBService.ico"
         Closing="OnClose" StateChanged="OnStateChanged" ResizeMode="CanMinimize">
-    <Grid ToolTip="This will only occur on a regularly scheduled refresh">
+    <Grid>
         <GroupBox FontSize="14" Header="Status" Margin="12,150,12,0" Name="groupBox8" Height="167" VerticalAlignment="Top">
             <Grid>
                 <Label Height="28" Margin="25,19,16,0" Name="lblSvcActivity" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontWeight="Bold">Please check for proper installation</Label>
@@ -18,7 +18,7 @@
                 <TextBox Height="22.38" HorizontalAlignment="Right" LostFocus="tbxRefreshInterval_LostFocus" Margin="0,22,42,0" Name="tbxRefreshInterval" PreviewTextInput="NumberOnly_PreviewTextInput" TextAlignment="Right" VerticalAlignment="Top" Width="33" FontSize="14">1</TextBox>
                 <TextBox Height="23.38" HorizontalAlignment="Right" LostFocus="tbxRefreshHour_LostFocus" Margin="0,52,42,0" Name="tbxRefreshHour" PreviewTextInput="NumberOnly_PreviewTextInput" TextAlignment="Right" VerticalAlignment="Top" Width="33" FontSize="14">2</TextBox>
                 <Label HorizontalAlignment="Right" Margin="0,50.34,6,0" Name="label16" Width="37" FontSize="14" Height="33.04" VerticalAlignment="Top">:00</Label>
-                <CheckBox Height="27" Margin="66,89.38,0,0" Name="cbxSleep" VerticalAlignment="Top" Checked="cbxSleep_Checked" Unchecked="cbxSleep_Checked" HorizontalAlignment="Left" Width="148">Sleep After Refresh</CheckBox>
+                <CheckBox Height="27" Margin="66,89.38,0,0" Name="cbxSleep" VerticalAlignment="Top" Checked="cbxSleep_Checked" Unchecked="cbxSleep_Checked" HorizontalAlignment="Left" Width="148" ToolTip="This will only occur on a regularly scheduled refresh">Sleep After Refresh</CheckBox>
             </Grid>
         </GroupBox>
         <Image Margin="156,0,-64,0" Name="image1" Stretch="Uniform" Source="/MediaBrowserService;component/MBSvcLogo.png" Height="144" VerticalAlignment="Top" />

@@ -82,8 +82,8 @@ namespace MediaBrowserService
             if (WindowState == WindowState.Minimized)
             {
                 Hide();
-                if (notifyIcon != null)
-                    notifyIcon.ShowBalloonTip(2000);
+                //if (notifyIcon != null)
+                //    notifyIcon.ShowBalloonTip(2000);
             }
             else
                 storedWindowState = WindowState;
