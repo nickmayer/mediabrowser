@@ -12,11 +12,39 @@ using NUnit.Framework;
 using System.Threading;
 using MediaBrowser.Library.Network;
 using MediaBrowser.Library;
+using System.Globalization;
 
 
 namespace TestMediaBrowser {
     [TestFixture]
     public class TestVodCast {
+
+        [Test]
+        public void TestParseCrappyDate()
+        {
+            var str = "Wed, 22 Dec 2010 12:22:22 +0:00";
+            var date = DateTime.ParseExact(str, "ddd',' dd MMM yyyy HH:mm:ss zzz", null);
+        }
+      
+        [Test]
+        public void TestTEDPodcastFetching()
+        {
+            var backup = Kernel.Instance.MediaLocationFactory;
+
+            MockMediaLocation location = new MockMediaLocation("test.vodcast");
+            location.Contents = "url : http://feeds.feedburner.com/TedtalksHD?format=xml";
+
+            // our kernel needs to know how to retrieve our location.
+            Kernel.Instance.MediaLocationFactory = new MockMediaLocationFactory(location);
+
+            VodCast vodcast = new VodCast();
+            vodcast.Assign(location, null, Guid.NewGuid());
+
+            Assert.IsTrue(vodcast.Children.Count > 0);
+
+            Kernel.Instance.MediaLocationFactory = backup;
+
+        }
 
 
         [Test]

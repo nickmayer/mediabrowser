@@ -56,5 +56,10 @@ namespace TestMediaBrowser {
         }
 
 
+        public ThumbSize RetrieveThumbSize(Guid id)
+        {
+            return new ThumbSize { Height = 10, Width = 10};
+        }
+
     }
 }
