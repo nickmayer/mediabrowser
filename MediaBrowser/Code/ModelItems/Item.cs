@@ -614,6 +614,16 @@ namespace MediaBrowser.Library
                         }
 
                         ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
+                        float f = baseItem.PrimaryImage.Aspect;
+                        if (f == 0)
+                            f = 1;
+                        if (s.Width == 0) s.Width = 1;
+                        float maxAspect = s.Height / s.Width;
+                        if (f > maxAspect)
+                            s.Width = (int)(s.Height / f);
+                        else
+                            s.Height = (int)(s.Width * f);
+
                         //Logger.ReportInfo("Caching image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
                         if (s != null && s.Width > 0 && s.Height > 0)
                             ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
