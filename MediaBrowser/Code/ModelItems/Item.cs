@@ -15,6 +15,7 @@ using MediaBrowser.Library.Metadata;
 using MediaBrowser.Library.RemoteControl;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.LibraryManagement;
+using MediaBrowser.Library.Extensions;
 using System.Linq;
 
 
@@ -603,7 +604,16 @@ namespace MediaBrowser.Library
                         //get the display size of our primary image if known
                     if (PhysicalParent != null)
                     {
-                        ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(PhysicalParent.Id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
+                        Guid id = PhysicalParent.Id;
+                        if (Config.Instance.EnableSyncViews)
+                        {
+                            if (baseItem is Folder && baseItem.GetType() != typeof(Folder))
+                            {
+                                id = baseItem.GetType().FullName.GetMD5();
+                            }
+                        }
+
+                        ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
                         //Logger.ReportInfo("Caching image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
                         if (s != null && s.Width > 0 && s.Height > 0)
                             ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
