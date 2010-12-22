@@ -618,11 +618,11 @@ namespace MediaBrowser.Library
                         if (s != null && s.Width > 0 && s.Height > 0)
                             ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
                         else
-                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at default size
+                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at original size
                     }
                     else
                     {
-                        ignore = baseItem.PrimaryImage.GetLocalImagePath(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height); //no parent or display prefs - cache at default size
+                        ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at original size
                     }
 
                 }

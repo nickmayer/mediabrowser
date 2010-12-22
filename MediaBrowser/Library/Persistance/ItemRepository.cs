@@ -22,6 +22,8 @@ using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library {
+
+    [Serializable]
     public class ThumbSize 
     {
         public Int32 Width = 0;
