@@ -22,6 +22,8 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Util;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Metadata;
+using MediaBrowser.Library.Extensions;
+using MediaBrowser.Library.Configuration;
 
 namespace MediaBrowserService
 {
@@ -36,6 +38,9 @@ namespace MediaBrowserService
         private Timer mainLoop;
         private bool hasHandle = false;
         private MediaBrowser.ServiceConfigData config;
+        private bool includeImagesOption = false;
+        private bool clearCacheOption = false;
+        private bool firstIteration = true;
 
         public MainWindow()
         {
@@ -97,11 +102,11 @@ namespace MediaBrowserService
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateStatus);
                 return;
             }
-            lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh;
+            lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
             DateTime nextRefresh = config.LastFullRefresh.Date.AddDays(config.FullRefreshInterval);
             if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
             string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Today/Tonight at " + (config.FullRefreshPreferredHour * 100).ToString("00:00") : 
-                nextRefresh.ToShortDateString() + " at " + (config.FullRefreshPreferredHour * 100).ToString("00:00");
+                nextRefresh.ToString("yyyy-MM-dd") + " at " + (config.FullRefreshPreferredHour * 100).ToString("00:00");
             lblNextSvcRefresh.Content = "Next Refresh: " + nextRefreshStr;
         }
 
@@ -170,6 +175,16 @@ namespace MediaBrowserService
             config.Save();
         }
 
+        private void cbxClearCache_Checked(object sender, RoutedEventArgs e)
+        {
+            clearCacheOption = cbxClearCache.IsChecked.Value;
+        }
+
+        private void cbxIncludeImages_Checked(object sender, RoutedEventArgs e)
+        {
+            includeImagesOption = cbxIncludeImages.IsChecked.Value;
+        }
+
         #endregion
 
         private void Go()
@@ -221,14 +236,24 @@ namespace MediaBrowserService
         {
             if (refreshRunning) return; //get out of here fast
 
-            var verylate = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3));
+            var verylate = (config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3)) && firstIteration);
             var overdue = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval));
 
+            firstIteration = false; //re set this so an interval of 0 doesn't keep firing us off
             UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour >= config.FullRefreshPreferredHour)))
+            if (!refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour >= config.FullRefreshPreferredHour) && config.LastFullRefresh.Date != DateTime.Now.Date))
             {
+                Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                {
+                    gbManual.IsEnabled = false;
+                    refreshProgress.Value = 0;
+                    refreshProgress.Visibility = Visibility.Visible;
+                    lblSvcActivity.Content = "Refresh Running...";
+                    lblNextSvcRefresh.Content = "";
+                }));
+
                 refreshRunning = true;
                 bool onSchedule = (!force && (DateTime.Now.Hour == config.FullRefreshPreferredHour));
                 Logger.ReportInfo("Full Refresh Started");
@@ -237,8 +262,26 @@ namespace MediaBrowserService
                 {
                     try
                     {
-
-                        FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default);
+                        if (force && clearCacheOption)
+                        {
+                            //clear all cache items except displayprefs and playstate
+                            Logger.ReportInfo("Clearing Cache on manual refresh...");
+                            Kernel.Instance.ItemRepository.ClearEntireCache();
+                            if (includeImagesOption)
+                            {
+                                try
+                                {
+                                    Directory.Delete(ApplicationPaths.AppImagePath, true);
+                                }
+                                catch (Exception e) { Logger.ReportException("Error trying to clear image cache.", e); } //just log it
+                                try
+                                {
+                                    Directory.CreateDirectory(ApplicationPaths.AppImagePath);
+                                }
+                                catch (Exception e) { Logger.ReportException("Error trying to create image cache.", e); } //just log it
+                            }
+                        }
+                        FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption);
                         config.LastFullRefresh = DateTime.Now;
                         config.Save();
                         Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
@@ -255,6 +298,12 @@ namespace MediaBrowserService
                     finally
                     {
                         Logger.ReportInfo("Full Refresh Finished");
+                        Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                        {
+                            refreshProgress.Value = 0;
+                            refreshProgress.Visibility = Visibility.Hidden;
+                            gbManual.IsEnabled = true;
+                        }));
                         refreshRunning = false;
                         if (onSchedule && config.SleepAfterScheduledRefresh)
                         {
@@ -269,17 +318,13 @@ namespace MediaBrowserService
 
         void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
         {
+            FullRefresh(folder, options, false);
+        }
+
+        void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, bool includeImages)
+        {
             double totalIterations = folder.RecursiveChildren.Count() * 3;
             int currentIteration = 0;
-
-            Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-            {
-                btnRefresh.IsEnabled = false;
-                refreshProgress.Value = 0;
-                refreshProgress.Visibility = Visibility.Visible;
-                lblSvcActivity.Content = "Refresh Running...";
-                lblNextSvcRefresh.Content = "";
-            }));
 
             folder.RefreshMetadata(options);
 
@@ -310,15 +355,55 @@ namespace MediaBrowserService
                     currentIteration++;
                     UpdateProgress("Slow Metadata",(currentIteration / totalIterations));
                     item.RefreshMetadata(MetadataRefreshOptions.Default);
+                    if (includeImages)
+                    {
+                        string ignore;
+                        if (item.PrimaryImage != null)
+                        {
+                            //get the display size of our primary image if known
+                            if (item.Parent != null)
+                            {
+                                Guid id = item.Parent.Id;
+                                if (Kernel.Instance.ConfigData.EnableSyncViews)
+                                {
+                                    if (item is Folder && item.GetType() != typeof(Folder))
+                                    {
+                                        id = item.GetType().FullName.GetMD5();
+                                    }
+                                }
+
+                                ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
+                                //Logger.ReportInfo("Caching image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
+                                if (s != null && s.Width > 0 && s.Height > 0)
+                                {
+                                    Logger.ReportInfo("Cacheing primary image for " + item.Name + " at "+s.Width+"x"+s.Height);
+                                    ignore = item.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
+                                }
+                                else
+                                {
+                                    Logger.ReportInfo("Cacheing primary image for " + item.Name + " at original size.");
+                                    ignore = item.PrimaryImage.GetLocalImagePath(); //no size - cache at default size
+                                }
+                            }
+                            else
+                            {
+                                Logger.ReportInfo("Cacheing primary image for " + item.Name + " at original size.");
+                                ignore = item.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at original size
+                            }
+
+                        }
+                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in item.BackdropImages)
+                        {
+                            ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
+                        }
+                        if (item.BannerImage != null)
+                        {
+                            ignore = item.BannerImage.GetLocalImagePath(); //and, finally, banner
+                        }
+                    }
                 });
             }
 
-            Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-            {
-                refreshProgress.Value = 0;
-                refreshProgress.Visibility = Visibility.Hidden;
-                btnRefresh.IsEnabled = true;
-            }));
         }
 
         void RunActionRecursively(Folder folder, Action<BaseItem> action)
