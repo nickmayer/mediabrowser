@@ -245,6 +245,7 @@ namespace MediaBrowserService
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
             if (!refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour >= config.FullRefreshPreferredHour) && config.LastFullRefresh.Date != DateTime.Now.Date))
             {
+                refreshRunning = true;
                 Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
                     gbManual.IsEnabled = false;
@@ -254,7 +255,7 @@ namespace MediaBrowserService
                     lblNextSvcRefresh.Content = "";
                 }));
 
-                refreshRunning = true;
+                MBServiceController.SendCommandToCore("shutdown");
                 bool onSchedule = (!force && (DateTime.Now.Hour == config.FullRefreshPreferredHour));
                 Logger.ReportInfo("Full Refresh Started");
 
@@ -284,6 +285,7 @@ namespace MediaBrowserService
                         FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption);
                         config.LastFullRefresh = DateTime.Now;
                         config.Save();
+                        //MBServiceController.SendCommandToCore("reload");
                         Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                         {
                             UpdateStatus();

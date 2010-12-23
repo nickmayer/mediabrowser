@@ -154,6 +154,8 @@ namespace MediaBrowser.Library {
                         }
                     });
                 }
+                if (LoadContext == PluginInitContext.Core)
+                    MBServiceController.ConnectToService(); //set up for service to tell us to do things
 
                 // create filewatchers for each of our top-level folders (only if we are in MediaCenter, though)
                 bool isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
@@ -175,21 +177,6 @@ namespace MediaBrowser.Library {
                     });
                 }
 
-                //if we are in the service we need to watch the config file for changes
-                //if (LoadContext == PluginInitContext.Service)
-                //{
-                //    Async.Queue("Config File Watcher Setup", () =>
-                //    {
-                //        Logger.ReportInfo("Watching Config file for changes...");
-                //        configFileWatcher = new FileSystemWatcher(ApplicationPaths.AppConfigPath, Path.GetFileName(ApplicationPaths.ConfigFile));
-                //        configFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
-                //        configFileWatcher.IncludeSubdirectories = false;
-                //        configFileWatcher.Changed += new FileSystemEventHandler(ConfigFileUpdated);
-                //        configFileWatcher.EnableRaisingEvents = true;
-                //    });
-
- 
-                //}
 
                 // add the podcast home
                 var podcastHome = kernel.GetItem<Folder>(kernel.ConfigData.PodcastHome);
@@ -198,16 +185,6 @@ namespace MediaBrowser.Library {
                 }
             }
         }
-
-        //private static FileSystemWatcher configFileWatcher;
-
-        //private static void ConfigFileUpdated(object sender, FileSystemEventArgs e)
-        //{
-        //    Logger.ReportInfo("Config File Changed - Reloading.");
-        //    configFileWatcher.EnableRaisingEvents = false;
-        //    kernel.ConfigData = ConfigData.FromFile(ApplicationPaths.ConfigFile);
-        //    configFileWatcher.EnableRaisingEvents = true;
-        //}
 
         private static void DisposeKernel(Kernel kernel)
         {
@@ -423,6 +400,17 @@ namespace MediaBrowser.Library {
             }
             return kernel;
         }
+
+        public void ReLoadRoot()
+        {
+            var root = kernel.GetLocation(ResolveInitialFolder(kernel.ConfigData.InitialFolder));
+            kernel.RootFolder = (AggregateFolder)BaseItemFactory<AggregateFolder>.Instance.CreateInstance(root, null);
+
+            // our root folder needs metadata
+            kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
+                kernel.RootFolder;
+        }
+
 
         static System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs args) {
             if (args.Name.StartsWith("MediaBrowser,")) {
