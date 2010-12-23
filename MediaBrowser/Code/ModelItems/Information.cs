@@ -57,8 +57,11 @@ namespace MediaBrowser
             }
             set
             {
-                _majorActivity = value;
-                FirePropertyChanged("MajorActivity");
+                if (_majorActivity != value)
+                {
+                    _majorActivity = value;
+                    FirePropertyChanged("MajorActivity");
+                }
             }
         }
         #endregion
