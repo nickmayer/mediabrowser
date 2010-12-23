@@ -497,10 +497,24 @@ namespace MediaBrowser.Library {
             //this could take a bit so kick this off in the background
             Async.Queue("Refresh UI", () =>
             {
+                //turn on our auto validate while we do this
+                bool autoValidateSetting = Config.Instance.AutoValidate;
+                Config.Instance.AutoValidate = true;
                 //force an update of the children
                 this.folder.ValidateChildren();
                 this.folderChildren.RefreshChildren();
                 this.folderChildren.Sort();
+                //if auto validate is off, we need to refresh everything
+                if (autoValidateSetting == false)
+                {
+                    foreach (BaseItem item in this.folder.RecursiveChildren)
+                    {
+                        if (item is Folder)
+                        {
+                            (item as Folder).ValidateChildren();
+                        }
+                    }
+                }
                 if (this.IsRoot)
                 {
                     //if this is the root page - also the recent items
@@ -521,6 +535,7 @@ namespace MediaBrowser.Library {
                     this.SelectedChildChanged(); //make sure recent list changes
                 }
                 FireChildrenChangedEvents(); //force UI to update
+                Config.Instance.AutoValidate = autoValidateSetting; //reset
             }, null, true);
         }
 

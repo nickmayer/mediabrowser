@@ -622,10 +622,8 @@ namespace MediaBrowser
 
         public void ReLoad()
         {
-            //re-load all our data
-            Kernel.Instance.ReLoadRoot();
-            session = new MyHistoryOrientedPageSession();
-            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => GoToMenu());
+            //force a re-load of all our data
+            this.RootFolderModel.RefreshUI();
         }
            
 
