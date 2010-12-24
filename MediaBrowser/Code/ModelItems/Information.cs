@@ -24,6 +24,7 @@ namespace MediaBrowser
 
         public Information()
         {
+            activityChangeTimer.Tick += majorActivityChanged;
             //AddInformation(new InfomationItem("Welcome to Media Browser.", 2)); 
             AddInformation(new InfomationItem(Library.Kernel.Instance.StringData.GetString("WelcomeProf"), 2));
             Begin();
@@ -47,6 +48,13 @@ namespace MediaBrowser
                 FirePropertyChanged("DisplayText");
             }
         }
+        bool changePending = false;
+        Timer activityChangeTimer = new Timer()
+        {
+            AutoRepeat = false,
+            Interval = 1000,
+            Enabled = false,
+        };
 
         bool _majorActivity = false;
         public bool MajorActivity
@@ -60,13 +68,28 @@ namespace MediaBrowser
                 if (_majorActivity != value)
                 {
                     _majorActivity = value;
-                    FirePropertyChanged("MajorActivity");
+                    if (!changePending)
+                    {
+                        FirePropertyChanged("MajorActivity");
+                        changePending = true;
+                        activityChangeTimer.Start();
+                    }
                 }
             }
         }
         #endregion
 
         #region methods
+
+        private void majorActivityChanged(object sender, EventArgs args)
+        {
+            lock (informationItems)
+            {
+                FirePropertyChanged("MajorActivity");
+                changePending = false;
+            }
+        }
+
         public void AddInformation(InfomationItem info)
         {
             lock (informationItems)
