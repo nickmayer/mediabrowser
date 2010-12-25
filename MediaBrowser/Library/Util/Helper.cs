@@ -450,7 +450,7 @@ namespace MediaBrowser.LibraryManagement
             if (!Directory.Exists(ibnLocation)) //no theme-specific one - use default
                 ibnLocation = Path.Combine(baseLocation, "all"); //don't use 'default' cuz that's the name of a theme...
 
-            string fileName = Path.Combine(ibnLocation, name + ".png");
+            string fileName = Path.Combine(ibnLocation, RemoveInvalidFileChars(name) + ".png");
             if (File.Exists(fileName))
             {
                 return new Image("file://" + fileName);
