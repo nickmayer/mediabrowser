@@ -23,8 +23,8 @@ namespace MediaBrowser.Library {
 
                 case SortOrder.Year:
 
-                    var xProductionYear = x is IShow ? (x as Show).ProductionYear : null;
-                    var yProductionYear = y is IShow ? (y as Show).ProductionYear : null;
+                    var xProductionYear = x is IShow ? (x as IShow).ProductionYear : null;
+                    var yProductionYear = y is IShow ? (y as IShow).ProductionYear : null;
 
                     xProductionYear = xProductionYear ?? 0;
                     yProductionYear = yProductionYear ?? 0;
@@ -35,8 +35,8 @@ namespace MediaBrowser.Library {
 
                 case SortOrder.Rating:
 
-                    var xImdbRating = x is IShow ? (x as Show).ImdbRating : null;
-                    var yImdbRating = y is IShow ? (y as Show).ImdbRating : null;
+                    var xImdbRating = x is IShow ? (x as IShow).ImdbRating : null;
+                    var yImdbRating = y is IShow ? (y as IShow).ImdbRating : null;
 
                     xImdbRating = xImdbRating ?? 0;
                     yImdbRating = yImdbRating ?? 0;
@@ -45,8 +45,8 @@ namespace MediaBrowser.Library {
                     break;
 
                 case SortOrder.Runtime:
-                    var xRuntime = x is IShow ? (x as Show).RunningTime : null;
-                    var yRuntime = y is IShow ? (y as Show).RunningTime : null;
+                    var xRuntime = x is IShow ? (x as IShow).RunningTime : null;
+                    var yRuntime = y is IShow ? (y as IShow).RunningTime : null;
 
                     xRuntime = xRuntime ?? int.MaxValue;
                     yRuntime = yRuntime ?? int.MaxValue;
