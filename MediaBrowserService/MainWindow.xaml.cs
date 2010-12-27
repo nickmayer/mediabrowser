@@ -64,7 +64,7 @@ namespace MediaBrowserService
 
         void OnClose(object sender, System.ComponentModel.CancelEventArgs args)
         {
-            if (forceClose || MessageBox.Show("Are you sure you want to close the Media Browser Service?  Library Updates may not occur...", "Exit Service", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            //if (sender != this || forceClose || MessageBox.Show("Are you sure you want to close the Media Browser Service?  Library Updates may not occur...", "Exit Service", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 if (notifyIcon != null)
                 {
@@ -73,7 +73,7 @@ namespace MediaBrowserService
                 }
                 if (hasHandle) mutex.ReleaseMutex();
             }
-            else args.Cancel = true;
+            //else args.Cancel = true;
         }
 
         private WindowState storedWindowState = WindowState.Normal; //we come up minimized
