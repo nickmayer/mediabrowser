@@ -67,7 +67,7 @@ namespace Configurator.Code {
                         plugin.Installed = true;
 
                     //we need to set this in the installed plugin here because we didn't have this info the first time we refreshed
-                    ip.UpdateAvail = (plugin.Version > ip.Version && Kernel.Instance.Version >= plugin.RequiredMBVersion);
+                    ip.UpdateAvail |= (plugin.Version > ip.Version && Kernel.Instance.Version >= plugin.RequiredMBVersion);
                 }
                 availablePlugins.Add(plugin);
                 try
