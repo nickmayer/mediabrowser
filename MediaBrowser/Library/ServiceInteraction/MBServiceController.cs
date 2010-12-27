@@ -31,11 +31,9 @@ namespace MediaBrowser.Library
                         pipe.WaitForConnection(); //wait for the service to tell us something
                         try
                         {
-                            // Read the request from the client. Once the client has
-                            // written to the pipe its security token will be available.
+                            // Read the request from the service.
                             StreamReader sr = new StreamReader(pipe);
 
-                            // Obtain the filename from the connected client.
                             string command = sr.ReadLine();
                             switch (command.ToLower())
                             {

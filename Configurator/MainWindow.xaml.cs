@@ -47,8 +47,6 @@ namespace Configurator
         Ratings ratings = new Ratings();
         PermissionDialog waitWin;
         PopupMsg PopUpMsg;
-        MBServiceController serviceController = new MBServiceController();
-        bool serviceConnected = false;
 
         public MainWindow()
         { 

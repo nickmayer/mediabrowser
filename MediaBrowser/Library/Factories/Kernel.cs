@@ -70,6 +70,7 @@ namespace MediaBrowser.Library {
         private const string versionExtension = "B+";
 
         public const string MBSERVICE_MUTEX_ID = "Global\\{E155D5F4-0DDA-47bb-9392-D407018D24B1}";
+        public const string MBCLIENT_MUTEX_ID = "Global\\{9F043CB3-EC8E-41bf-9579-81D5F6E641B9}";
 
         static object sync = new object();
         static Kernel kernel;
@@ -155,7 +156,17 @@ namespace MediaBrowser.Library {
                     });
                 }
                 if (LoadContext == PluginInitContext.Core)
+                {
+                    //listen for commands 
+                    if (!MBClientConnector.StartListening())
+                    { 
+                        //we couldn't start our listener - probably another instance going so we shut down
+                        Logger.ReportInfo("Could not start listener - assuming another instance of MB.  Closing...");
+                        Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
+                        return;
+                    }
                     MBServiceController.ConnectToService(); //set up for service to tell us to do things
+                }
 
                 // create filewatchers for each of our top-level folders (only if we are in MediaCenter, though)
                 bool isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
