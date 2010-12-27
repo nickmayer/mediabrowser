@@ -102,12 +102,12 @@ namespace Configurator.Code {
 
         public IPlugin Find(IPlugin plugin)
         {
-            return this.Items.ToList().Find(p => p.Filename == plugin.Filename);
+            return this.Items.ToList().Find(p => p.Filename.ToLower() == plugin.Filename.ToLower());
         }
 
         public IPlugin Find(IPlugin plugin, System.Version version)
         {
-            return this.Items.ToList().Find(p => p.Filename == plugin.Filename && p.Version == version);
+            return this.Items.ToList().Find(p => p.Filename.ToLower() == plugin.Filename.ToLower() && p.Version == version);
         }
 
         public IPlugin Find(IPlugin plugin, bool installed)
