@@ -439,7 +439,7 @@ namespace MediaBrowser.LibraryManagement
 
         public static Microsoft.MediaCenter.UI.Image GetMediaInfoImage(string name)
         {
-            name = name.ToLower();
+            name = name.ToLower().Replace('/','-');
             string baseLocation = Config.Instance.ImageByNameLocation;
             if ((baseLocation == null) || (baseLocation.Length == 0))
                 baseLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
