@@ -1385,7 +1385,7 @@ sortorder: {2}
         private void hdrAdvanced_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrAdvanced);
-            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = Visibility.Visible;
+            externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = Visibility.Visible;
             mediacollectionTab.Visibility = podcastsTab.Visibility = plugins.Visibility = Visibility.Visible;
             helpTab.Visibility = Visibility.Collapsed;
         }
