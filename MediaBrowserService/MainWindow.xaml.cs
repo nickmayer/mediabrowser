@@ -44,8 +44,19 @@ namespace MediaBrowserService
 
         public MainWindow()
         {
-            InitializeComponent();
-            Go();
+            try
+            {
+                InitializeComponent();
+                Go();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Critical error launching Media Browser Service, please report this bug with the full contents below to http://community.mediabrowser.tv");
+                Console.WriteLine(e.ToString());
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.InnerException);
+                Console.ReadKey();
+            }
         }
 
         private void CreateNotifyIcon()
