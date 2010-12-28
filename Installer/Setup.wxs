@@ -89,7 +89,7 @@
 
     <!-- For some reason we need to set the Icon Id to an exe, otherwise the .ico file cannot be used for shortcuts. -->
     <Icon Id="MediaBrowserIcon.exe" SourceFile="MediaBrowserIcon.ico"/>
-    
+
     <!-- These are the default shortcuts that will be created in the Start Menu during installation-->
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="DefaultShortcuts" Guid="C68522A1-03ED-4416-8326-F1375212ACB0">
@@ -320,6 +320,9 @@
 		<CustomAction Id="CA_RegisterMceApp_Rollback" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="rollback" Return="ignore" Impersonate="no"/>
 
     <CustomAction Id="CA_CheckDotNetFramework" BinaryKey="WixCA" ExeCommand="" />
+    <!-- Kill the service action -->
+    <CustomAction Id="KillSvc" Directory="APPROOTDIRECTORY" ExeCommand="taskkill /F /im MediaBrowserService*" Execute="immediate" Return="ignore"/>
+
 
     <!--
     
@@ -337,7 +340,8 @@
     <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
 		<!-- installation, repair and uninstall of this product.                                             -->
 		<InstallExecuteSequence>
-			<Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
+      <Custom Action="KillSvc" Before="InstallValidate">Installed</Custom>
+      <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
 				<![CDATA[NEWERVERSIONDETECTED]]>
 			</Custom>
       <!-- Save the current installation path -->
@@ -421,7 +425,7 @@
 		</InstallUISequence>
 
 
-		<!-- These properties define links that will appear in the Add/Remove Programs control panel when    -->
+    <!-- These properties define links that will appear in the Add/Remove Programs control panel when    -->
 		<!-- this product is installed on the system.                                                        -->
 		<Property Id="ARPHELPLINK" Value="!(loc.Property_ArpHelpLink)" />
 		<Property Id="ARPURLINFOABOUT" Value="!(loc.Property_ArpUrlInfoAbout)" />
