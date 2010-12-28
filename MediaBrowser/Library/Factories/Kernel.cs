@@ -383,9 +383,7 @@ namespace MediaBrowser.Library {
             kernel.AddConfigPanel(kernel.StringData.GetString("MediaOptionsConfig"), "");
             kernel.AddConfigPanel(kernel.StringData.GetString("ThemesConfig"), "");
             kernel.AddConfigPanel(kernel.StringData.GetString("ParentalControlConfig"), "");
-            // create a mouseActiveHooker for us to know if the mouse is active on our window (used to handle mouse scrolling control)
-            // we will wire it to an event on application
-            kernel.MouseActiveHooker = new IsMouseActiveHooker();
+
             using (new Profiler("Plugin Loading and Init"))
             {
                 kernel.Plugins = DefaultPlugins((loadDirective & KernelLoadDirective.ShadowPlugins) == KernelLoadDirective.ShadowPlugins);
@@ -472,7 +470,25 @@ namespace MediaBrowser.Library {
         public IMediaLocationFactory MediaLocationFactory { get; set; }
         public delegate System.Drawing.Image ImageProcessorRoutine(System.Drawing.Image image, BaseItem item);
         public ImageProcessorRoutine ImageProcessor;
-        public IsMouseActiveHooker MouseActiveHooker;
+
+
+        IsMouseActiveHooker _mouseActiveHooker;
+        public IsMouseActiveHooker MouseActiveHooker
+        {
+            get 
+            {
+                lock (this)
+                {
+                    if (_mouseActiveHooker == null)
+                    {
+                        _mouseActiveHooker = new IsMouseActiveHooker();
+                    }
+                    return _mouseActiveHooker;
+                }
+            }
+        }
+        
+        
         private ParentalControl parentalControls;
         public ParentalControl ParentalControls
         {

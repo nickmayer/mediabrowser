@@ -19,10 +19,6 @@ namespace MediaBrowser.Library.Localization
         public string FileName; //this is public so it will serialize and we know where to save ourselves
         public string Version = ""; //this will get saved so we can check it against us for changes
 
-        //we store us as an xml doc so we can get the strings out by property
-        private XmlDocument usAsXML;
-
-
 
         protected LocalizedStringData(string file)
         {
