@@ -3,8 +3,6 @@
     xmlns:a="assembly://MediaBrowser/MediaBrowser"
     xmlns:me="Me">
 
-
-
   <UI Name="FancyText">
     <Properties>
       <Font        Name="Font"              Font="Segoe Media Center, 24"/>
@@ -15,15 +13,14 @@
       <cor:Boolean Name="HasFocus"          Boolean="false"/>
       <a:FancyTextHelper Name="fth"/>
     </Properties>
-    
-    <Locals>      
+
+    <Locals>
       <cor:Single Name="AvailableSpace" />
       <cor:Int32 Name="DynamicDisplay" Int32="0" />
     </Locals>
-    
-    
-    <Rules>
 
+
+    <Rules>
       <!-- Content string-->
       <Binding Source="[Content]" Target="[Label.Content]" />
       <Binding Source="[Content]" Target="[FancyLabel.Content]" />
@@ -33,63 +30,25 @@
       <Condition Source="[DynamicDisplay]" SourceValue="0" Target="[FancyLabel.Visible]" Value="false" />
       <Condition Source="[DynamicDisplay]" SourceValue="1" Target="[Label.Visible]" Value="false" />
       <Condition Source="[DynamicDisplay]" SourceValue="1" Target="[FancyLabel.Visible]" Value="true" />
-      
-      <!--<Binding Source="[fth.UseDynamic]" Target="[Label.Visible]" >
-        <Transformer>
-          <BooleanTransformer Inverse="true"/>
-        </Transformer>
-      </Binding>
-      
-      <Binding Source="[fth.UseDynamic]" Target="[FancyLabel.Visible]" />-->
 
-      
       <Default Target="[fth.FontName]" Value="[Font.FontName]"/>
       <Default Target="[fth.FontSize]" Value="[Font.FontSize]"/>
       <Default Target="[fth.FontStyle]" Value="[Font.FontStyle]"/>
       <Default Target="[fth.MaximumWidthInt]" Value="[AvailableSpaceInt]"/>
-      
-      <Rule>
+
+      <Rule ConditionLogicalOp="And">
         <Conditions>
-          <Modified Source="[Content]"/>
+          <Modified Source="[Content]" InitialEvaluate="true"/>
+          <Equality Source="[AllowMarquee]"  ConditionOp="Equals" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[fth.Content]" Value="[Content]"/>
-           <!--<Set Target="[FancyTextHelper.FontName]" Value="[Font.FontName]"/>
-          <Set Target="[FancyTextHelper.FontSize]" Value="[Font.FontSize]"/>
-          <Set Target="[FancyTextHelper.FontStyle]" Value="[Font.FontStyle]"/>
-
-         <Set Target="[FancyTextHelper.MaximumWidthInt]" Value="[AvailableSpaceInt]" />
-
-          <Invoke Target="[FancyTextHelper.CalculateDisplay]" />-->
-<!--
-          <Set Target="[AvailableSpace]" Value="[FancyTextHelper.MaximumWidth]" />
-          <Set Target="[FancyLabel.AvailableSpace]" Value="[FancyTextHelper.MaximumWidth]" />-->
+          <Set Target="[FancyLabel.AvailableSpace]" Value="[AvailableSpaceInt!cor:Single]"/>
+          <Invoke Target="[fth.CalculateDisplay]" />
           <Invoke Target="[FancyLabel.ForceRefresh]" />
         </Actions>
       </Rule>
 
-
-      <!--<Rule>
-        <Conditions>
-          <Equality Source="[AllowMarquee]" ConditionOp="Equals" Value="true"/>
-        </Conditions>
-        <Actions>          
-          <Set Target="[FancyTextHelper.MaximumWidthInt]" Value="[AvailableSpaceInt]"/>
-          <Set Target="[AvailableSpace]" Value="[FancyTextHelper.MaximumWidth]"/>
-          <Set Target="[FancyLabel.AvailableSpace]" Value="[FancyTextHelper.MaximumWidth]"/>
-          <Invoke Target="[FancyLabel.ForceRefresh]"/>
-          <Set Target="[FancyTextHelper.Content]" Value="[Content]"/>
-          <Set Target="[FancyTextHelper.FontName]" Value="[Font.FontName]"/>
-          <Set Target="[FancyTextHelper.FontSize]" Value="[Font.FontSize]"/>
-          <Set Target="[FancyTextHelper.FontStyle]" Value="[Font.FontStyle]"/>
-        </Actions>
-      </Rule>-->
-
-      <!-- Determine if static or dynamic display should be used based on shouldscroll property -->      
-
-      
-
-      
     </Rules>
 
     <Content>
