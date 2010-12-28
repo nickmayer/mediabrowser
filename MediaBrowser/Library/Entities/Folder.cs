@@ -12,6 +12,7 @@ using System.Diagnostics;
 namespace MediaBrowser.Library.Entities {
 
     public class ChildrenChangedEventArgs : EventArgs {
+        public bool FolderContentChanged { get; set; }
     }
 
     public class Folder : BaseItem, MediaBrowser.Library.Entities.IFolder {
@@ -84,6 +85,7 @@ namespace MediaBrowser.Library.Entities {
         public void Sort(SortOrder sortOrder) {
             Sort(sortOrder, true);
         }
+
 
         public virtual void ValidateChildren() {
             // we never want 2 threads validating children at the same time
@@ -299,7 +301,7 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        void ValidateChildrenImpl() {
+        bool ValidateChildrenImpl() {
             location = null;
             // cache a copy of the children
 
@@ -356,8 +358,9 @@ namespace MediaBrowser.Library.Entities {
 
             if (changed) {
                 SaveChildren(Children);
-                OnChildrenChanged(null);
+                OnChildrenChanged(new ChildrenChangedEventArgs { FolderContentChanged = true });
             }
+            return changed;
         }
 
         List<BaseItem> GetChildren(bool allowCache) {

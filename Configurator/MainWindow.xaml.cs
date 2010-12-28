@@ -1362,13 +1362,15 @@ sortorder: {2}
             try
             {
 
-                if (slUnlockPeriod != null)
+                if (config != null && slUnlockPeriod != null)
                 {
                     config.ParentalUnlockPeriod = (int)slUnlockPeriod.Value;
+                    SaveConfig();
                 }
-                SaveConfig();
             }
-            catch { }
+            catch (Exception ex){
+                Logger.ReportException("Recovered from crash in slUnlockPeriod", ex);
+            }
         }
         #endregion
 

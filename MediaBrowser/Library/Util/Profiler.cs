@@ -39,8 +39,8 @@ namespace MediaBrowser.Util
             string message = string.Format("{1} took {2} seconds.",
                 caller, name, ((float)stopwatch.ElapsedMilliseconds / 1000).ToString("F"));
             Logger.ReportInfo(message);
-            //Take out the messages to the UI for now -ebr
-            //Application.CurrentInstance.Information.AddInformationString(message);
+
+            // DO NOT hook this into the UI, we use this for internal diagnostics
         }
 
         #endregion
