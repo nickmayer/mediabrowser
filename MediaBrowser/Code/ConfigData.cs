@@ -22,7 +22,7 @@ namespace MediaBrowser
     {
 
         [Comment(@"The version is used to determine if this is the first time a particular version has been run")]
-        public string MBVersion = "2.2.3.0";
+        public string MBVersion = "1.0.0.0"; //default value will tell us if it is a brand new install
         [Comment(@"By default we track a videos position to support resume, this can be disabled by setting this for diagnostic purposes")]
         public bool EnableResumeSupport = true; 
         [Comment(@"Any folder named trailers will be ignored and treated a folder containing trailers")]
