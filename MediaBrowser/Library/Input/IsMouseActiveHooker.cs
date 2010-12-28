@@ -50,10 +50,8 @@ namespace MediaBrowser.Library.Input
             this.mouseMoveTimer.Elapsed += new System.Timers.ElapsedEventHandler(mouseMoveTimer_Elapsed);
             this.mouseMoveTimer.Interval = 5000;
             this.mouseMoveTimer.AutoReset = false;
-            //this.WireupHook(); 
             _mouseHookID = SetMouseHook(_proc);
             _kbHookID = SetKBHook(_proc);
-            //UnhookWindowsHookEx(_hookID); 
             Tick += new TickHandler(IsMouseActiveHooker_Tick);
         }
 
@@ -63,8 +61,6 @@ namespace MediaBrowser.Library.Input
             {
                 MouseActiveEventArgs TOT = new MouseActiveEventArgs();
                 TOT.MouseActive = false;
-                //disabled for now-us is buggy around this... 
-                //MouseActive(this, TOT); 
             }
         }
 
@@ -94,29 +90,6 @@ namespace MediaBrowser.Library.Input
 
         }
 
-        //private bool WireupHook() 
-        //{ 
-        //    if (hHook == 0) 
-        //    { 
-        //        // Create an instance of HookProc. 
-        //        MouseHookProcedure = new HookProc(IsMouseActiveHooker.MouseHookProc); 
-        //        Process ehshell=this.GetEhShellProcess(); 
-        //        if (ehshell != null) 
-        //        { 
-        //            hHook = SetWindowsHookEx(WH_MOUSE_LL, 
-        //                        MouseHookProcedure, 
-        //                        (IntPtr)0, //5356); 
-        //                        ehshell.Id); 
-        //            //System.Threading.Thread.CurrentThread.ManagedThreadId); 
-        //            if (hHook == 0) 
-        //                return false; 
-        //        } 
-        //        else 
-        //            return false; 
-        //    } 
-        //    return true; 
-        //} 
-
         /// <summary>Gets a reference to the Process instance for the running ehshell.exe</summary> 
         private Process GetEhShellProcess()
         {
@@ -134,87 +107,6 @@ namespace MediaBrowser.Library.Input
             }
             return ehshell;
         }
-
-        //private static int MouseHookProc(int nCode, IntPtr wParam, IntPtr lParam) 
-        //{ 
-        //    //Marshall the data from the callback. 
-        //    MouseHookStruct MyMouseHookStruct = (MouseHookStruct)Marshal.PtrToStructure(lParam, typeof(MouseHookStruct)); 
-
-        //    if (nCode < 0) 
-        //    { 
-        //        return CallNextHookEx(hHook, nCode, wParam, lParam); 
-        //    } 
-        //    else 
-        //    { 
-        //        //Create a string variable that shows the current mouse coordinates. 
-        //        String strCaption = "x = " + 
-        //                MyMouseHookStruct.pt.x.ToString("d") + 
-        //                    "  y = " + 
-        //        MyMouseHookStruct.pt.y.ToString("d"); 
-        //        //You must get the active form because it is a static function. 
-        //        //Form tempForm = Form.ActiveForm; 
-
-        //        ////Set the caption of the form. 
-        //        //tempForm.Text = strCaption; 
-        //        if (Tick != null) 
-        //        { 
-        //            Tick(null, null); 
-        //        } 
-
-        //        return CallNextHookEx(hHook, nCode, wParam, lParam); 
-        //    } 
-        //} 
-
-        //private delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam); 
-
-        ////Declare the hook handle as an int. 
-        //static int hHook = 0; 
-
-        ////Declare the mouse hook constant. 
-        ////For other hook types, you can obtain these values from Winuser.h in the Microsoft SDK. 
-        //private const int WH_MOUSE = 7; 
-        //private const int WH_MOUSE_LL = 14; 
-
-        ////Declare MouseHookProcedure as a HookProc type. 
-        //HookProc MouseHookProcedure; 
-
-        ////Declare the wrapper managed POINT class. 
-        //[StructLayout(LayoutKind.Sequential)] 
-        //private class POINT 
-        //{ 
-        //    public int x; 
-        //    public int y; 
-        //} 
-
-        ////Declare the wrapper managed MouseHookStruct class. 
-        //[StructLayout(LayoutKind.Sequential)] 
-        //private class MouseHookStruct 
-        //{ 
-        //    public POINT pt; 
-        //    public int hwnd; 
-        //    public int wHitTestCode; 
-        //    public int dwExtraInfo; 
-        //} 
-
-        ////This is the Import for the SetWindowsHookEx function. 
-        ////Use this function to install a thread-specific hook. 
-        //[DllImport("user32.dll", CharSet = CharSet.Auto, 
-        // CallingConvention = CallingConvention.StdCall)] 
-        //private static extern int SetWindowsHookEx(int idHook, HookProc lpfn, 
-        //IntPtr hInstance, int threadId); 
-
-        ////This is the Import for the UnhookWindowsHookEx function. 
-        ////Call this function to uninstall the hook. 
-        //[DllImport("user32.dll", CharSet = CharSet.Auto, 
-        // CallingConvention = CallingConvention.StdCall)] 
-        //private static extern bool UnhookWindowsHookEx(int idHook); 
-
-        ////This is the Import for the CallNextHookEx function. 
-        ////Use this function to pass the hook information to the next hook procedure in chain. 
-        //[DllImport("user32.dll", CharSet = CharSet.Auto, 
-        // CallingConvention = CallingConvention.StdCall)] 
-        //private static extern int CallNextHookEx(int idHook, int nCode, 
-        //IntPtr wParam, IntPtr lParam); 
 
         private static LowLevelMouseProc _proc = HookCallback;
         private static IntPtr _mouseHookID = IntPtr.Zero;
@@ -247,8 +139,6 @@ namespace MediaBrowser.Library.Input
             if (nCode >= 0 &&
                 MouseMessages.WM_MOUSEMOVE == (MouseMessages)wParam)
             {
-                //MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT)); 
-                //Console.WriteLine(hookStruct.pt.x + ", " + hookStruct.pt.y); 
                 if (Tick != null)
                 {
                     MouseActiveEventArgs args = new MouseActiveEventArgs();

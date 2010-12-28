@@ -11,6 +11,7 @@ using System.Threading;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Metadata;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Util;
 
 namespace MediaBrowser.Code.ModelItems {
     public class FolderChildren : BaseModelItem, IList, ICollection, IList<Item>, IDisposable{
@@ -60,47 +61,81 @@ namespace MediaBrowser.Code.ModelItems {
 
         public static void LoadChildren(FolderChildren children) {
             children.folder.EnsureChildrenLoaded();
-            if (Config.Instance.AutoValidate) childVerifier.Enqueue(children);
+            
+            // Sam - Queueing a validation is a really bad idea ... as a side effect this could cause a full refresh
+            // Instead we cound on RefreshAsap and daily schedules taking care of verification. 
+            // if (Config.Instance.AutoValidate) childVerifier.Enqueue(children);
         }
 
 
         public static void VerifyChildren(FolderChildren children) {
 
-            //if we are a top-level folder optionally
-            //wait just a bit before we verify - in case a server was asleep or something
-            if (Application.CurrentInstance.RootFolder.Children.Contains(children.folder))
+            using (var profiler = new Profiler("Verify Children (UI Triggered) " + children.folder.Name))
             {
-                if (Config.Instance.ValidationDelay > 998) return; //just abort if they set this really high so we don't hold up threads
-                Thread.Sleep(Config.Instance.ValidationDelay * 1000); //default is 0 seconds (no delay)
-            }
 
-            children.folder.ValidateChildren();
+                //if we are a top-level folder optionally
+                //wait just a bit before we verify - in case a server was asleep or something
+                if (Application.CurrentInstance.RootFolder.Children.Contains(children.folder))
+                {
+                    if (Config.Instance.ValidationDelay > 998) return; //just abort if they set this really high so we don't hold up threads
+                    Thread.Sleep(Config.Instance.ValidationDelay * 1000); //default is 0 seconds (no delay)
+                }
 
-            // we may want to consider some pause APIs on the queues so we can ensure the correct ordering
-            // its not a big fuss, cause it will be picked up next time around anyway
+                // This is hairy, I do not want to change sigs, I also do not want to trigger expensive metadata refreshes UNLESS we detect changes in the folder.
 
-            // the reverse isn't really needed, but it means that metadata is acquired in the order the children are in. 
-            foreach (var item in children.folder.Children.Reverse()) {
-                fastMetadataRefresher.Inject(item);
-                // this ensures images are cached earlier 
-                var ignore = item.PrimaryImage;
-            }
+                bool changed = false;
+                var handler = new EventHandler<ChildrenChangedEventArgs>(
+                    (source, args) => {
+                        if (args != null && args.FolderContentChanged)
+                        {
+                            changed = true;
+                        }
+                        return; 
+                    }
+                 );
 
-            fastMetadataRefresher.Inject(children.folder);
-            bool isSeason = children.folder.GetType() == typeof(Season) && children.folder.Parent != null;
-            if (isSeason) {
-                fastMetadataRefresher.Inject(children.folder.Parent);
+                children.folder.ChildrenChanged += handler;
+                children.folder.ValidateChildren();
+                children.folder.ChildrenChanged -= handler;
+
+                // This makes validation extremely cheap, keep in mind stuff like changes to places that are not in the tree will not be picked up
+                //  by design .... 
+                if (!changed) { return; }
+
+                // we may want to consider some pause APIs on the queues so we can ensure the correct ordering
+                // its not a big fuss, cause it will be picked up next time around anyway
+
+                // the reverse isn't really needed, but it means that metadata is acquired in the order the children are in. 
+                foreach (var item in children.folder.Children.Reverse())
+                {
+                    fastMetadataRefresher.Inject(item);
+                    // this ensures images are cached earlier 
+                    var ignore = item.PrimaryImage;
+                }
+
+                fastMetadataRefresher.Inject(children.folder);
+                bool isSeason = children.folder.GetType() == typeof(Season) && children.folder.Parent != null;
+                if (isSeason)
+                {
+                    fastMetadataRefresher.Inject(children.folder.Parent);
+                }
             }
         }
 
 
         public static void FastMetadataRefresh(BaseItem item) {
-            item.RefreshMetadata(MetadataRefreshOptions.FastOnly);
-            slowMetadataRefresher.Inject(item);
+            using (var profiler = new Profiler("Fast Metadata Refresh (UI Triggered)" + item.Name))
+            {
+                item.RefreshMetadata(MetadataRefreshOptions.FastOnly);
+                slowMetadataRefresher.Inject(item);
+            }
         }
 
         public static void SlowMetadataRefresh(BaseItem item) {
-            item.RefreshMetadata(MetadataRefreshOptions.Default);
+            using (var profiler = new Profiler("Slow Metadata Refresh (UI Triggered)" + item.Name))
+            {
+                item.RefreshMetadata(MetadataRefreshOptions.Default);
+            }
         }
 
         public void RefreshAsap() {
