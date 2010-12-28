@@ -303,6 +303,20 @@ namespace MediaBrowser.Library {
             return plugins;
         }
 
+        private static bool? _isVista;
+        public static bool isVista
+        {
+            get
+            {
+                if (_isVista == null)
+                {
+                    System.Version ver = System.Environment.OSVersion.Version;
+                    _isVista = ver.Major == 6 && ver.Minor == 0;
+                }
+                return _isVista.Value;
+            }
+        }
+
         static PluginInitContext? _loadContext;
         static PluginInitContext LoadContext 
         {

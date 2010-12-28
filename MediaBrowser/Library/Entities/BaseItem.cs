@@ -318,7 +318,7 @@ namespace MediaBrowser.Library.Entities {
         /// <param name="force">Force a metadata refresh</param>
         /// <returns>True if the metadata changed</returns>
         public virtual bool RefreshMetadata(MetadataRefreshOptions options) {
-            Kernel.Instance.MajorActivity = true;
+            if (!Kernel.isVista) Kernel.Instance.MajorActivity = true; //this borks the UI on vista
             if ((options & MetadataRefreshOptions.Force) == MetadataRefreshOptions.Force) {
                 var images = new List<LibraryImage>();
                 images.Add(PrimaryImage);
@@ -342,7 +342,7 @@ namespace MediaBrowser.Library.Entities {
             if (changed) {
                 OnMetadataChanged(null);
             }
-            Kernel.Instance.MajorActivity = false;
+            if (!Kernel.isVista) Kernel.Instance.MajorActivity = false;
 
             return changed;
         }

@@ -8,7 +8,7 @@ using System;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Media Browser")]
-[assembly: AssemblyDescription("Vista MCE Media Browser")]
+[assembly: AssemblyDescription("Windows7/Vista MCE Media Browser")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Media Browser")]
 [assembly: AssemblyProduct("Media Browser")]
