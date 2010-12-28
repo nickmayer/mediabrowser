@@ -51,8 +51,11 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (VideoBitRate > 0)
+                if (VideoBitRate >= 1000)
                     return (VideoBitRate / 1000).ToString() + " " + Kernel.Instance.StringData.GetString("KBsStr");
+                else
+                    if (VideoBitRate > 0)
+                    return VideoBitRate.ToString() + " " + Kernel.Instance.StringData.GetString("KBsStr");
                 else
                     return "";
             }
