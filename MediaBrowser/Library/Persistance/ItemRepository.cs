@@ -250,11 +250,18 @@ namespace MediaBrowser.Library {
             
             // we are going to need a semaphore here.
             //lock (ProtectedFileStream.GlobalLock) {
+            try
+            {
                 success &= DeleteFolder(Path.Combine(ApplicationPaths.AppCachePath, "items"));
                 success &= DeleteFolder(Path.Combine(ApplicationPaths.AppCachePath, "providerdata"));
-                success &= DeleteFolder(Path.Combine(ApplicationPaths.AppCachePath, "images"));
                 success &= DeleteFolder(Path.Combine(ApplicationPaths.AppCachePath, "autoplaylists"));
                 success &= DeleteFolder(Path.Combine(ApplicationPaths.AppCachePath, "children"));
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error attempting to clear cache.", e);
+                return false;
+            }
             //}
             return success;
         }
