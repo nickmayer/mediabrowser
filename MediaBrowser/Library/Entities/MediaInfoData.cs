@@ -65,10 +65,13 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (AudioBitRate > 0)
+                if (AudioBitRate >= 1000)
                     return (AudioBitRate / 1000).ToString() + " " + Kernel.Instance.StringData.GetString("KBsStr");
                 else
-                    return "";
+                    if (AudioBitRate > 0)
+                        return AudioBitRate.ToString() + " " + Kernel.Instance.StringData.GetString("KBsStr");
+                    else
+                        return "";
             }
         }
 
