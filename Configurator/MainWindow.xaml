@@ -8,6 +8,7 @@
     mc:Ignorable="d" 
     xmlns:MediaBrowser="clr-namespace:MediaBrowser;assembly=MediaBrowser"
     xmlns:Code="clr-namespace:Configurator.Code"
+    Closing="Window_Closing"
     
     >
     <Window.Resources>

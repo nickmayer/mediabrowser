@@ -41,12 +41,15 @@ namespace MediaBrowserService
         private bool includeImagesOption = false;
         private bool clearCacheOption = false;
         private bool firstIteration = true;
+        public static MainWindow Instance;
+        private bool shutdown = false;
 
         public MainWindow()
         {
             try
             {
                 InitializeComponent();
+                Instance = this;
                 Go();
             }
             catch (Exception e)
@@ -72,6 +75,17 @@ namespace MediaBrowserService
             notifyIcon.ShowBalloonTip(2000);
         }
 
+        public void Shutdown()
+        {
+            //close the app, but wait for refresh to finish if it is going
+            if (refreshRunning)
+                shutdown = true;
+            else
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                {
+                    Close();
+                }));
+        }
 
         void OnClose(object sender, System.ComponentModel.CancelEventArgs args)
         {
@@ -141,6 +155,7 @@ namespace MediaBrowserService
         {
             if (config == null) return;
 
+            lblVersion.Content = "Version " + Kernel.Instance.VersionStr;
             tbxRefreshHour.Text = config.FullRefreshPreferredHour.ToString();
             tbxRefreshInterval.Text = config.FullRefreshInterval.ToString();
             cbxSleep.IsChecked = config.SleepAfterScheduledRefresh;
@@ -230,6 +245,7 @@ namespace MediaBrowserService
                     Kernel.Init(KernelLoadDirective.LoadServicePlugins);
                     config = Kernel.Instance.ServiceConfigData;
                     RefreshInterface();
+                    CoreCommunications.StartListening(); //start listening for commands from core/configurator
                     Logger.ReportInfo("Service Started");
                     mainLoop = Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
                 }
@@ -246,7 +262,6 @@ namespace MediaBrowserService
         private void FullRefresh(bool force)
         {
             if (refreshRunning) return; //get out of here fast
-
             var verylate = (config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3)) && firstIteration);
             var overdue = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval));
 
@@ -327,6 +342,12 @@ namespace MediaBrowserService
                 }
 
             }
+            if (shutdown) //we were told to shutdown on next iteration (keeps us from shutting down in the middle of a refresh
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                {
+                    Close();
+                }));
+
         }
 
         void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)

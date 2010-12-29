@@ -15,14 +15,19 @@ namespace MediaBrowser.Library
     public class MBServiceController
     {
         private static bool connected = false;
+        public const string MBSERVICE_IN_PIPE = "{2A01C6A9-5244-45cb-B57E-7EFCED93766E}";
+        public const string MBSERVICE_OUT_PIPE = "{8B012A2C-3920-4ab1-A685-A1F1A5C3BE6F}";
 
+        /// <summary>
+        /// Connect from core to the service - used in core to listen for commands from the service
+        /// </summary>
         public static void ConnectToService()
         {
             if (connected) return; //only one connection...
 
             Async.Queue("MBService Connection", () =>
             {
-                using (NamedPipeServerStream pipe = new NamedPipeServerStream(Kernel.MBSERVICE_MUTEX_ID,PipeDirection.In))
+                using (NamedPipeServerStream pipe = new NamedPipeServerStream(MBSERVICE_OUT_PIPE,PipeDirection.In))
                 {
                     connected = true;
                     bool process = true;
@@ -67,10 +72,20 @@ namespace MediaBrowser.Library
             });
         }
 
-        public static bool SendCommandToCore(string command)
+
+        public static bool SendCommandToCore(string command) {
+            return SendCommand(MBSERVICE_OUT_PIPE, command);
+        }
+
+        public static bool SendCommandToService(string command)
+        {
+            return SendCommand(MBSERVICE_IN_PIPE, command);
+        }
+
+        private static bool SendCommand(string pipeName, string command)
         {
             NamedPipeClientStream pipeClient =
-                new NamedPipeClientStream("localhost", Kernel.MBSERVICE_MUTEX_ID,
+                new NamedPipeClientStream("localhost", pipeName,
                 PipeDirection.Out, PipeOptions.None);
             StreamWriter sw = new StreamWriter(pipeClient);
             try
@@ -79,7 +94,7 @@ namespace MediaBrowser.Library
             }
             catch (TimeoutException)
             {
-                Logger.ReportWarning("Unable to send command to core (may not be running).");
+                Logger.ReportWarning("Unable to send command (may not be running).");
                 return false;
             }
             try
@@ -90,7 +105,7 @@ namespace MediaBrowser.Library
             }
             catch (Exception e)
             {
-                Logger.ReportException("Error sending commmand to core", e);
+                Logger.ReportException("Error sending commmand ", e);
                 return false;
             }
             return true;
@@ -120,6 +135,14 @@ namespace MediaBrowser.Library
                     }
                 }
             }
+        }
+
+        public static bool RestartService()
+        {
+            SendCommandToService("shutdown");
+            //give it time to exit
+            Thread.Sleep(1000);
+            return StartService();
         }
 
         public static bool StartService()
