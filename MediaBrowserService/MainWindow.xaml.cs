@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.IO;
+using System.Security.Principal;
 using System.Security.AccessControl;
 using System.Threading;
 using System.Diagnostics;
@@ -272,10 +273,19 @@ namespace MediaBrowserService
             mutex = new Mutex(false, Kernel.MBSERVICE_MUTEX_ID);
             {
                 //set up so everyone can access
-                var allowEveryoneRule = new MutexAccessRule("Everyone", MutexRights.FullControl, AccessControlType.Allow);
+                var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
                 var securitySettings = new MutexSecurity();
-                securitySettings.AddAccessRule(allowEveryoneRule);
-                mutex.SetAccessControl(securitySettings);
+                try
+                {
+                    //don't bomb if this fails
+                    securitySettings.AddAccessRule(allowEveryoneRule);
+                    mutex.SetAccessControl(securitySettings);
+                }
+                catch (Exception e)
+                {
+                    //just log the exception and go on
+                    Logger.ReportException("Failed setting access rule for mutex.", e);
+                }
                 try
                 {
                     try
