@@ -43,6 +43,7 @@ namespace MediaBrowserService
         private bool firstIteration = true;
         public static MainWindow Instance;
         private bool shutdown = false;
+        private DateTime startTime = DateTime.Now;
 
         public MainWindow()
         {
@@ -134,6 +135,19 @@ namespace MediaBrowserService
                 nextRefresh.ToString("yyyy-MM-dd") + " at " + (config.FullRefreshPreferredHour * 100).ToString("00:00");
             lblNextSvcRefresh.Content = "Next Refresh: " + nextRefreshStr;
         }
+
+        private void UpdateElapsedTime()
+        {
+            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+            {
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateElapsedTime);
+                return;
+            }
+            //update our elapsed time
+            TimeSpan elapsed = DateTime.Now - startTime;
+            lblElapsed.Content = string.Format("{0} Days {1} Hours and {2} Mins ", (int)elapsed.TotalDays, (int)elapsed.Hours, (int)elapsed.Minutes);
+        }
+
 
         #region Interface Handlers
 
@@ -245,6 +259,7 @@ namespace MediaBrowserService
                     Kernel.Init(KernelLoadDirective.LoadServicePlugins);
                     config = Kernel.Instance.ServiceConfigData;
                     RefreshInterface();
+                    lblSinceDate.Content = startTime;
                     CoreCommunications.StartListening(); //start listening for commands from core/configurator
                     Logger.ReportInfo("Service Started");
                     mainLoop = Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
@@ -261,6 +276,7 @@ namespace MediaBrowserService
 
         private void FullRefresh(bool force)
         {
+            UpdateElapsedTime();
             if (refreshRunning) return; //get out of here fast
             var verylate = (config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3)) && firstIteration);
             var overdue = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval));

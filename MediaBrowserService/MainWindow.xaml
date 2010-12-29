@@ -30,5 +30,8 @@
             </Grid>
         </GroupBox>
         <Label FontSize="10" Height="21" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,12,34,0" Name="lblVersion" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Width="112">Version 0.0.0.0</Label>
+        <Label Height="28" HorizontalAlignment="Left" Margin="12,9.84,0,0" Name="label1" VerticalAlignment="Top" Width="120" FontSize="14">Running Since:</Label>
+        <Label Height="28" HorizontalAlignment="Left" Margin="30,35,0,0" Name="lblSinceDate" VerticalAlignment="Top" Width="194" FontSize="14">Label</Label>
+        <Label Height="28" HorizontalAlignment="Left" Margin="30,57,0,0" Name="lblElapsed" VerticalAlignment="Top" Width="194" FontSize="14">Label</Label>
     </Grid>
 </Window>
