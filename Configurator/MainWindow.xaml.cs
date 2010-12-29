@@ -670,7 +670,9 @@ sortorder: {2}
                 {
                     Logger.ReportInfo("Reloading Virtual children");
                     if (RefreshPlugins)
+                    {
                         Kernel.Init(KernelLoadDirective.ShadowPlugins);
+                    }
 
                     Kernel.Instance.RootFolder.ValidateChildren();
                 }
@@ -1896,6 +1898,12 @@ sortorder: {2}
                     MessageBox.Show("Error attempting to rollback plugin " + plugin.Name, "Rollback Failed");
                 }
             }
+        }
+
+        private void Window_Closing(object sender, EventArgs e)
+        {
+            //reload the service so it will pick up any changes we made
+            MBServiceController.RestartService();
         }
     }
 
