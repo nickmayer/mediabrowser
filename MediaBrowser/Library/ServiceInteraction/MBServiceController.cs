@@ -42,17 +42,17 @@ namespace MediaBrowser.Library
                             string command = sr.ReadLine();
                             switch (command.ToLower())
                             {
-                                case "reload":
+                                case IPCCommands.ReloadItems:
                                     //refresh just finished, we need to re-load everything
                                     Logger.ReportInfo("Re-loading due to request from service.");
                                     Application.CurrentInstance.ReLoad();
                                     break;
-                                case "shutdown":
+                                case IPCCommands.Shutdown:
                                     //close MB
                                     Logger.ReportInfo("Shutting down due to request from service.");
                                     Application.CurrentInstance.Close();
                                     break;
-                                case "closeconnection":
+                                case IPCCommands.CloseConnection:
                                     //exit this connection
                                     Logger.ReportInfo("Service requested we stop listening.");
                                     process = false;
@@ -139,7 +139,7 @@ namespace MediaBrowser.Library
 
         public static bool RestartService()
         {
-            SendCommandToService("shutdown");
+            SendCommandToService(IPCCommands.Shutdown);
             //give it time to exit
             Thread.Sleep(1000);
             return StartService();

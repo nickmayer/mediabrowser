@@ -281,7 +281,6 @@ namespace MediaBrowserService
                     lblNextSvcRefresh.Content = "";
                 }));
 
-                //MBServiceController.SendCommandToCore("shutdown");
                 bool onSchedule = (!force && (DateTime.Now.Hour == config.FullRefreshPreferredHour));
                 Logger.ReportInfo("Full Refresh Started");
 
@@ -311,7 +310,7 @@ namespace MediaBrowserService
                         FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption);
                         config.LastFullRefresh = DateTime.Now;
                         config.Save();
-                        MBServiceController.SendCommandToCore("reload");
+                        MBServiceController.SendCommandToCore(IPCCommands.ReloadItems);
                         Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                         {
                             UpdateStatus();

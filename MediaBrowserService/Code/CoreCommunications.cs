@@ -43,17 +43,21 @@ namespace MediaBrowserService
                             string command = sr.ReadLine();
                             switch (command.ToLower())
                             {
-                                case "reloadkernel": //don't use this yet - need to figure out how to unload first do a shutdown and restart
+                                case IPCCommands.ReloadKernel: //don't use this yet - need to figure out how to unload first do a shutdown and restart
                                     //something changed, we need to re-load everything
                                     Logger.ReportInfo("Re-loading kernel due to request from client.");
                                     Kernel.Init(KernelLoadDirective.ShadowPlugins);
                                     break;
-                                case "shutdown":
+                                case IPCCommands.ReloadConfig:
+                                    //re-load the main config file
+                                    Kernel.Instance.ReLoadConfig();
+                                    break;
+                                case IPCCommands.Shutdown:
                                     //close Service
                                     Logger.ReportInfo("Shutting down due to request from client.");
                                     MainWindow.Instance.Shutdown();
                                     break;
-                                case "closeconnection":
+                                case IPCCommands.CloseConnection:
                                     //exit this connection
                                     Logger.ReportInfo("Client requested we stop listening.");
                                     process = false;
