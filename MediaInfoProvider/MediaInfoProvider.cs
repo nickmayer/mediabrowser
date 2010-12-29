@@ -68,6 +68,8 @@ namespace MediaInfoProvider
             Video video = Item as Video;
             if (video == null || !enabled) return;
 
+            if (video.ContainsRippedMedia) return; //can't process rips
+
             filename = FindVideoFile();
             if (filename != null) {
                 video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename));
