@@ -992,7 +992,12 @@ sortorder: {2}
         {
             //called when the upgrade process finishes - we just hide progress bar and re-enable
             this.IsEnabled = true;
+            IPlugin plugin = pluginList.SelectedItem as IPlugin;
             PluginManager.Instance.RefreshInstalledPlugins(); //refresh list
+            if (plugin != null)
+            {
+                Logger.ReportInfo(plugin.Name + " Upgraded to v" + PluginManager.Instance.GetLatestVersion(plugin));
+            }
             progress.Value = 0;
             progress.Visibility = Visibility.Hidden;
         }
@@ -1893,6 +1898,7 @@ sortorder: {2}
                     PluginManager.Instance.RefreshInstalledPlugins();
                     pluginList.SelectedIndex = 0;
                     this.Cursor = Cursors.Arrow;
+                    Logger.ReportInfo(plugin.Name + " rolled back.");
                     PopUpMsg.DisplayMessage("Plugin " + plugin.Name + " rolled back.");
                 }
                 else

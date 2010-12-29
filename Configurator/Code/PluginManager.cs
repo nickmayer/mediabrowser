@@ -119,7 +119,7 @@ namespace Configurator.Code {
             //    }
             //}
 
-            if (BackupPlugin(plugin)) Logger.ReportInfo("Plugin "+plugin.Name+"v"+plugin.Version+" backed up.");
+            if (BackupPlugin(plugin)) Logger.ReportInfo("Plugin "+plugin.Name+" v"+plugin.Version+" backed up.");
 
             if (plugin is RemotePlugin) {
                 try {
