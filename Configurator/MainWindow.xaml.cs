@@ -47,6 +47,8 @@ namespace Configurator
         Ratings ratings = new Ratings();
         PermissionDialog waitWin;
         PopupMsg PopUpMsg;
+        public bool KernelModified = false;
+        public static MainWindow Instance;
 
         public MainWindow()
         { 
@@ -59,6 +61,7 @@ namespace Configurator
         }
 
         private void Initialize() {
+            Instance = this;
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
             
             InitializeComponent();
@@ -941,6 +944,7 @@ sortorder: {2}
                     callBack done = new callBack(UpgradeFinished);
                     this.IsEnabled = false;
                     p.InstallPlugin(newPlugin, progress, this, done);
+                    KernelModified = true;
                 }
             }
         }
@@ -1902,8 +1906,9 @@ sortorder: {2}
 
         private void Window_Closing(object sender, EventArgs e)
         {
-            //reload the service so it will pick up any changes we made
-            MBServiceController.RestartService();
+            //if we modified anything in kernel reload the service so it will pick up any changes we made
+            if (KernelModified)
+                MBServiceController.RestartService();
         }
     }
 

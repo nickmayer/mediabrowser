@@ -44,6 +44,7 @@ namespace Configurator {
             PluginInstaller p = new PluginInstaller();
             callBack done = new callBack(InstallFinished);
             p.InstallPlugin(pluginList.SelectedItem as IPlugin, progress, this, done);
+            MainWindow.Instance.KernelModified = true;
 
         }
 
