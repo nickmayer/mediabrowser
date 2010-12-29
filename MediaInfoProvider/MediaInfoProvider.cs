@@ -116,15 +116,37 @@ namespace MediaInfoProvider
                 Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
                 int videoBitRate;
                 Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
+               
                 int audioBitRate;
-                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "BitRate"), out audioBitRate);
+                string aBitRate;
+                int ABindex = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").IndexOf('/');
+                if (ABindex > 0)
+                    aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").Remove(ABindex);
+                else
+                    aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
+                Int32.TryParse(aBitRate, out audioBitRate);
+
                 int runTime;
                 Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
                 int streamCount;
-                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);               
-                string audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
+                Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
+
+                string audioChannels;
+                int ACindex = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").IndexOf('/');                
+                if (ACindex > 0)
+                    audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").Remove(ACindex);
+                else
+                    audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
+
                 string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
                 string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
+
+                string audioProfile;
+                int APindex = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").IndexOf('/');
+                if (APindex > 0)                
+                    audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").Remove(APindex);                
+                else
+                    audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile");
 
 
                 mediaInfoData = new MediaInfoData
@@ -139,8 +161,8 @@ namespace MediaInfoProvider
                     AudioBitRate = audioBitRate,
                     RunTime = (runTime/60000),
                     AudioStreamCount = streamCount,
-                    AudioChannelCount = audioChannels,
-                    AudioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile"),
+                    AudioChannelCount = audioChannels.Trim(),
+                    AudioProfile = audioProfile.Trim(),
                     VideoFPS = videoFrameRate,
                     Subtitles = subtitles                    
                 };
