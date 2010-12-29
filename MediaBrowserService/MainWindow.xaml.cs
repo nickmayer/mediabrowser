@@ -65,15 +65,50 @@ namespace MediaBrowserService
 
         private void CreateNotifyIcon()
         {
+            //create menu
+            System.Windows.Forms.ContextMenu main = new System.Windows.Forms.ContextMenu();
+            System.Windows.Forms.MenuItem restore = new System.Windows.Forms.MenuItem();
+            restore.Text = "Show Interface...";
+            restore.Click += new EventHandler(restore_Click);
+            main.MenuItems.Add(restore);
+            System.Windows.Forms.MenuItem refresh = new System.Windows.Forms.MenuItem();
+            refresh.Text = "Refresh Now";
+            refresh.Click += new EventHandler(refresh_Click);
+            main.MenuItems.Add(refresh);
+            System.Windows.Forms.MenuItem sep = new System.Windows.Forms.MenuItem();
+            sep.Text = "-";
+            main.MenuItems.Add(sep);
+            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem();
+            exit.Text = "Exit";
+            exit.Click += new EventHandler(exit_Click);
+            main.MenuItems.Add(exit);
             //set up our systray icon
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.BalloonTipTitle = "Media Browser Service";
             notifyIcon.BalloonTipText = "Running in background. Click icon to configure...";
             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
             notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-            notifyIcon.Click += notifyIcon_Click;
+            //notifyIcon.Click += notifyIcon_Click;
+            notifyIcon.ContextMenu = main;
             notifyIcon.Visible = true;
             notifyIcon.ShowBalloonTip(2000);
+        }
+
+        void refresh_Click(object sender, EventArgs e)
+        {
+            //re-route
+            btnRefresh_Click(this, null);
+        }
+
+        void restore_Click(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = storedWindowState;
+        }
+
+        void exit_Click(object sender, EventArgs e)
+        {
+            Shutdown();
         }
 
         public void Shutdown()
@@ -84,13 +119,14 @@ namespace MediaBrowserService
             else
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
+                    forceClose = true;
                     Close();
                 }));
         }
 
         void OnClose(object sender, System.ComponentModel.CancelEventArgs args)
         {
-            //if (sender != this || forceClose || MessageBox.Show("Are you sure you want to close the Media Browser Service?  Library Updates may not occur...", "Exit Service", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (forceClose)
             {
                 if (notifyIcon != null)
                 {
@@ -99,7 +135,11 @@ namespace MediaBrowserService
                 }
                 if (hasHandle) mutex.ReleaseMutex();
             }
-            //else args.Cancel = true;
+            else
+            {
+                args.Cancel = true; //don't close
+                this.Hide();
+            }
         }
 
         private WindowState storedWindowState = WindowState.Normal; //we come up minimized
@@ -294,6 +334,8 @@ namespace MediaBrowserService
                     refreshProgress.Value = 0;
                     refreshProgress.Visibility = Visibility.Visible;
                     lblSvcActivity.Content = "Refresh Running...";
+                    notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
+                    notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
                     lblNextSvcRefresh.Content = "";
                 }));
 
@@ -346,6 +388,8 @@ namespace MediaBrowserService
                             refreshProgress.Value = 0;
                             refreshProgress.Visibility = Visibility.Hidden;
                             gbManual.IsEnabled = true;
+                            notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
+                            notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
                         }));
                         refreshRunning = false;
                         if (onSchedule && config.SleepAfterScheduledRefresh)
