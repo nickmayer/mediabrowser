@@ -333,7 +333,7 @@ namespace MediaBrowser.Library.Network {
                     date = DateTime.UtcNow;
                 }
 
-                DateTimeFormatInfo dtfi = CultureInfo.CurrentCulture.DateTimeFormat;
+                DateTimeFormatInfo dtfi = CultureInfo.InvariantCulture.DateTimeFormat;
                 return date.ToString(dtfi.RFC1123Pattern);
             }
 
