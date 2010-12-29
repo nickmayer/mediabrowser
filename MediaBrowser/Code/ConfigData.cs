@@ -213,6 +213,8 @@ namespace MediaBrowser
 
         public void Save() {
             this.settings.Write();
+            //notify of the change
+            MediaBrowser.Library.Threading.Async.Queue("Config notify", () => Kernel.Instance.NotifyConfigChange());
         } 
 
     }
