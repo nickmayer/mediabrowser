@@ -20,6 +20,12 @@ namespace MediaBrowser.Library
         public static bool StartListening()
         {
             if (connected) return false; //only one connection...
+            if (Application.RunningOnExtender)
+            {
+                Logger.ReportInfo("Running on an extender.  Not starting client listener.");
+                return true; //no comms for extenders
+            }
+
             NamedPipeServerStream pipe;
             try
             {
