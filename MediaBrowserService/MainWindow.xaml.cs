@@ -352,6 +352,8 @@ namespace MediaBrowserService
                     lblSvcActivity.Content = "Refresh Running...";
                     notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
                     notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
+                    Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
+                    notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                     lblNextSvcRefresh.Content = "";
                 }));
 
@@ -406,6 +408,8 @@ namespace MediaBrowserService
                             gbManual.IsEnabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
+                            Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
+                            notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                         }));
                         refreshRunning = false;
                         if (onSchedule && config.SleepAfterScheduledRefresh)
