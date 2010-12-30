@@ -17,6 +17,8 @@ namespace MediaBrowser
     [MarkupVisible]
     public class FancyTextHelper : ModelItem
     {
+        public FancyTextHelper() { }
+
         private bool useDynamic = false;
         private string content = string.Empty;
 
@@ -85,7 +87,7 @@ namespace MediaBrowser
             }
         }
 
-        static public int MeasureDisplayStringWidth(Graphics graphics, string text, Font font)
+        public int MeasureDisplayStringWidth(Graphics graphics, string text, Font font)
         {
             text = text.ToUpper();
             System.Drawing.StringFormat format = new StringFormat(StringFormat.GenericTypographic);

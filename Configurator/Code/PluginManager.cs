@@ -69,17 +69,26 @@ namespace Configurator.Code {
                     //we need to set this in the installed plugin here because we didn't have this info the first time we refreshed
                     ip.UpdateAvail |= (plugin.Version > ip.Version && Kernel.Instance.Version >= plugin.RequiredMBVersion);
                 }
-                availablePlugins.Add(plugin);
-                try
+                if (availablePlugins.Find(plugin, plugin.Version) == null) //ignore dups
                 {
-                    string key = plugin.Name + System.IO.Path.GetFileName(plugin.Filename);
-                    if (latestVersions.ContainsKey(key)) {
-                        if (plugin.Version > latestVersions[key]) latestVersions[key] = plugin.Version;
-                    } else latestVersions.Add(key, plugin.Version);
+                    availablePlugins.Add(plugin);
+                    try
+                    {
+                        string key = plugin.Name + System.IO.Path.GetFileName(plugin.Filename);
+                        if (latestVersions.ContainsKey(key))
+                        {
+                            if (plugin.Version > latestVersions[key]) latestVersions[key] = plugin.Version;
+                        }
+                        else latestVersions.Add(key, plugin.Version);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Cannot add plugin latest version. Probably two references to same plugin.", e);
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    Logger.ReportException("Cannot add plugin latest version. Probably two references to same plugin.", e);
+                    Logger.ReportWarning("Duplicate plugin version in main repo: " + plugin.Name + " v" + plugin.Version);
                 }
             }
         }
