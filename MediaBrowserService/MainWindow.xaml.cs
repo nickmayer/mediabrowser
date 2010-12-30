@@ -138,6 +138,9 @@ namespace MediaBrowserService
             }
             else
             {
+                //force updates of any changes
+                tbxRefreshHour_LostFocus(this, null);
+                tbxRefreshInterval_LostFocus(this, null);
                 args.Cancel = true; //don't close
                 this.Hide();
             }
@@ -148,6 +151,9 @@ namespace MediaBrowserService
         {
             if (WindowState == WindowState.Minimized)
             {
+                //force updates of any changes
+                tbxRefreshHour_LostFocus(this, null);
+                tbxRefreshInterval_LostFocus(this, null);
                 Hide();
                 //if (notifyIcon != null)
                 //    notifyIcon.ShowBalloonTip(2000);
