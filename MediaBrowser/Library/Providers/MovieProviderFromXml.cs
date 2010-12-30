@@ -289,7 +289,7 @@ namespace MediaBrowser.Library.Providers
                                 break;
                         }
                     }
-                }                
+                }
                 if (string.IsNullOrEmpty(movie.MediaInfo.AudioChannelCount)) movie.MediaInfo.AudioChannelCount = doc.SafeGetString("Title/MediaInfo/Audio/Channels", "");
                 if (movie.MediaInfo.AudioBitRate == 0) movie.MediaInfo.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec))
@@ -319,8 +319,7 @@ namespace MediaBrowser.Library.Providers
                 if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate","");
                 if (movie.MediaInfo.RunTime == 0) movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/MediaInfo/Video/Duration");
-
-
+                if (string.IsNullOrEmpty(movie.MediaInfo.Subtitles)) movie.MediaInfo.Subtitles = doc.SafeGetString("Title/MediaInfo/Subtitle/Language", ""); 
             }
         }
 
