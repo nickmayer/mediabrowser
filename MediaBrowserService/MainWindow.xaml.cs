@@ -89,7 +89,7 @@ namespace MediaBrowserService
             notifyIcon.BalloonTipText = "Running in background. Click icon to configure...";
             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
             notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-            //notifyIcon.Click += notifyIcon_Click;
+            notifyIcon.DoubleClick += notifyIcon_Click;
             notifyIcon.ContextMenu = main;
             notifyIcon.Visible = true;
             notifyIcon.ShowBalloonTip(2000);
@@ -222,7 +222,7 @@ namespace MediaBrowserService
             cbxSleep.IsChecked = config.SleepAfterScheduledRefresh;
             UpdateStatus();
         }
-
+        
         private void tbxRefreshInterval_LostFocus(object sender, RoutedEventArgs e)
         {
             Int32.TryParse(tbxRefreshInterval.Text, out config.FullRefreshInterval);
