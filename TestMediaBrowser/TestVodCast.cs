@@ -13,6 +13,7 @@ using System.Threading;
 using MediaBrowser.Library.Network;
 using MediaBrowser.Library;
 using System.Globalization;
+using System.Reflection;
 
 
 namespace TestMediaBrowser {
@@ -22,8 +23,16 @@ namespace TestMediaBrowser {
         [Test]
         public void TestParseCrappyDate()
         {
-            var str = "Wed, 22 Dec 2010 12:22:22 +0:00";
-            var date = DateTime.ParseExact(str, "ddd',' dd MMM yyyy HH:mm:ss zzz", null);
+            DateTime date = DateTime.Now;
+            DateTimeFormatInfo dtfi = CultureInfo.InvariantCulture.DateTimeFormat;
+            var dateVal = date.ToString(dtfi.RFC1123Pattern, dtfi);
+
+            MethodInfo objMethod = typeof(Rss20FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Static);
+            objMethod.Invoke(null, new object[] { dateVal, null });
+
+
+          //  var str = "Wed, 22 Dec 2010 12:22:22 +0:00";
+          //  var date = DateTime.ParseExact(str, "ddd',' dd MMM yyyy HH:mm:ss zzz", null);
         }
       
         [Test]

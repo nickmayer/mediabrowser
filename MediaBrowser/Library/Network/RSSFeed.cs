@@ -334,7 +334,7 @@ namespace MediaBrowser.Library.Network {
                 }
 
                 DateTimeFormatInfo dtfi = CultureInfo.InvariantCulture.DateTimeFormat;
-                return date.ToString(dtfi.RFC1123Pattern);
+                dateVal = date.ToString(dtfi.RFC1123Pattern, dtfi);
             }
 
             return dateVal;
