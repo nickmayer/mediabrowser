@@ -21,7 +21,7 @@ namespace MBTrailers {
 
         static readonly Guid TrailersGuid = new Guid("{828DCFEF-AEAF-44f2-B6A8-32AEAF27F3DA}");
         public static PluginConfiguration<PluginOptions>  PluginOptions {get;set;}
-        private bool isMC = false;
+        //private bool isMC = false;
         
         public override void Init(Kernel kernel) {
             PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
@@ -38,8 +38,8 @@ namespace MBTrailers {
 
             kernel.RootFolder.AddVirtualChild(trailers);
 
-            isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
-            if (isMC)  //only want to startup the proxy if we are actually in MediaCenter (not configurator)
+            //isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
+            if (Kernel.LoadContext == PluginInitContext.Service || Kernel.LoadContext == PluginInitContext.Core)  //create proxy in core and service (will only listen in service)
             {
                 string cachePath = PluginOptions.Instance.CacheDir;
                 if (string.IsNullOrEmpty(cachePath) || !System.IO.Directory.Exists(cachePath))
@@ -51,20 +51,19 @@ namespace MBTrailers {
                     }
                 }
 
-                int port = ProxyPort;
-                proxy = new HttpProxy(cachePath, port);
-                while (proxy.AlreadyRunning() && port < ProxyPort + 50)
-                {
-                    //try a different port if already running
-                    port++;
-                    proxy = new HttpProxy(cachePath, port);
+                proxy = new HttpProxy(cachePath, ProxyPort);
+                if (Kernel.LoadContext == PluginInitContext.Service)
+                { //only actually start the proxy in the service
+                    Logger.ReportInfo("MBTrailers starting proxy server on port: " + ProxyPort);
+                    proxy.Start();
                 }
-                if (port >= ProxyPort + 10)
+                else
                 {
-                    Logger.ReportError("MBTrailers failed to start proxy server.");
-                    return;
+                    if (proxy.AlreadyRunning())
+                        Logger.ReportInfo("MBTrailers not starting proxy.  Running in service.");
+                    else
+                        Logger.ReportInfo("MBTrailers - no proxy running.  Start Media Browser Service.");
                 }
-                proxy.Start();
 
                 trailers.RefreshProxy();
 
@@ -108,7 +107,15 @@ namespace MBTrailers {
         {
             get
             {
-                return new Version("2.2.9.0") ;
+                return new Version("2.3.0.0");
+            }
+        }
+
+        public override Version RequiredMBVersion
+        {
+            get
+            {
+                return new Version("2.3.0.0");
             }
         }
 

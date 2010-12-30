@@ -33,7 +33,7 @@ namespace MBTrailers {
             foreach (var item in children)
             {
                 var trailer = item as ITunesTrailer;
-                if (trailer != null)
+                if (trailer != null && Plugin.proxy != null)
                 {
                     Uri uri = new Uri(trailer.RealPath);
                     trailer.Path = Plugin.proxy.ProxyUrl(uri.Host, uri.PathAndQuery, ProxyInfo.ITunesUserAgent, uri.Port);  
