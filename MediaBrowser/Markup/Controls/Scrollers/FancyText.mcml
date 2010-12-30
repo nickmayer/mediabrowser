@@ -11,12 +11,12 @@
       <cor:Int32   Name="AvailableSpaceInt" Int32="250" />
       <cor:Boolean Name="AllowMarquee"      Boolean="true"/>
       <cor:Boolean Name="HasFocus"          Boolean="false"/>
-      <a:FancyTextHelper Name="fth"/>
     </Properties>
 
     <Locals>
       <cor:Single Name="AvailableSpace" />
       <cor:Int32 Name="DynamicDisplay" Int32="0" />
+      <a:FancyTextHelper Name="fth"/>
     </Locals>
 
 
