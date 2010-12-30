@@ -318,7 +318,7 @@ namespace MediaBrowser.Library {
         }
 
         static PluginInitContext? _loadContext;
-        static PluginInitContext LoadContext 
+        public static PluginInitContext LoadContext 
         {
             get 
             {
