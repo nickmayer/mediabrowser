@@ -434,6 +434,28 @@ namespace MediaBrowser.Library {
                 kernel.RootFolder;
         }
 
+        public void ReLoadConfig()
+        {
+            Logger.ReportInfo("Reloading config file (probably due to change in other process).");
+            this.ConfigData = ConfigData.FromFile(ApplicationPaths.ConfigFile);
+        }
+
+        public void NotifyConfigChange()
+        {
+            switch (LoadContext)
+            {
+                case PluginInitContext.Core:
+                case PluginInitContext.Other:
+                    //tell the service to re-load the config
+                    MBServiceController.SendCommandToService(IPCCommands.ReloadConfig);
+                    break;
+                case PluginInitContext.Service:
+                    //tell the core to re-load the config
+                    MBServiceController.SendCommandToCore(IPCCommands.ReloadConfig);
+                    break;
+            }
+        }
+
 
         static System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs args) {
             if (args.Name.StartsWith("MediaBrowser,")) {

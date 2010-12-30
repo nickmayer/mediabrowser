@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Threading;
@@ -42,17 +43,17 @@ namespace MediaBrowser.Library
                             string command = sr.ReadLine();
                             switch (command.ToLower())
                             {
-                                case "reload":
+                                case IPCCommands.ReloadItems:
                                     //refresh just finished, we need to re-load everything
                                     Logger.ReportInfo("Re-loading due to request from service.");
                                     Application.CurrentInstance.ReLoad();
                                     break;
-                                case "shutdown":
+                                case IPCCommands.Shutdown:
                                     //close MB
                                     Logger.ReportInfo("Shutting down due to request from service.");
                                     Application.CurrentInstance.Close();
                                     break;
-                                case "closeconnection":
+                                case IPCCommands.CloseConnection:
                                     //exit this connection
                                     Logger.ReportInfo("Service requested we stop listening.");
                                     process = false;
@@ -118,10 +119,19 @@ namespace MediaBrowser.Library
                 using (Mutex mutex = new Mutex(false, Kernel.MBSERVICE_MUTEX_ID))
                 {
                     //set up so everyone can access
-                    var allowEveryoneRule = new MutexAccessRule("Everyone", MutexRights.FullControl, AccessControlType.Allow);
+                    var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
                     var securitySettings = new MutexSecurity();
-                    securitySettings.AddAccessRule(allowEveryoneRule);
-                    mutex.SetAccessControl(securitySettings);
+                    try
+                    {
+                        //don't bomb if this fails
+                        securitySettings.AddAccessRule(allowEveryoneRule);
+                        mutex.SetAccessControl(securitySettings);
+                    }
+                    catch (Exception e)
+                    {
+                        //just log the exception and go on
+                        Logger.ReportException("Failed setting access rule for mutex.", e);
+                    }
                     try
                     {
                         return !(mutex.WaitOne(5000, false));
@@ -139,7 +149,7 @@ namespace MediaBrowser.Library
 
         public static bool RestartService()
         {
-            SendCommandToService("shutdown");
+            SendCommandToService(IPCCommands.Shutdown);
             //give it time to exit
             Thread.Sleep(1000);
             return StartService();

@@ -119,7 +119,7 @@ namespace Configurator.Code {
             //    }
             //}
 
-            if (BackupPlugin(plugin)) Logger.ReportInfo("Plugin "+plugin.Name+"v"+plugin.Version+" backed up.");
+            if (BackupPlugin(plugin)) Logger.ReportInfo("Plugin "+plugin.Name+" v"+plugin.Version+" backed up.");
 
             if (plugin is RemotePlugin) {
                 try {
@@ -182,6 +182,7 @@ namespace Configurator.Code {
                             Path.Combine(System.Environment.GetEnvironmentVariable("windir"), Path.Combine("ehome", plugin.Filename)) :
                             Path.Combine(ApplicationPaths.AppPluginPath, plugin.Filename);
                     Kernel.Instance.InstallPlugin(source, plugin.InstallGlobally, null, null, null);
+                    MainWindow.Instance.KernelModified = true;
                     UpdateAvailableAttributes(plugin, true);
                     return true;
                 }
@@ -229,6 +230,7 @@ namespace Configurator.Code {
             try {
                 Kernel.Instance.DeletePlugin(plugin);
                 installedPlugins.Remove(plugin);
+                MainWindow.Instance.KernelModified = true;
             } catch (Exception e) {
                 MessageBox.Show("Failed to delete the plugin.  If MediaBrowser is running, Please close it and try again.");
                 Logger.ReportException("Failed to delete plugin", e);

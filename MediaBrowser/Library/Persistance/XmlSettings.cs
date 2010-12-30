@@ -309,6 +309,9 @@ namespace MediaBrowser.Library.Persistance {
             throw new NotImplementedException();
         }
 
+        private int readRetries = 0;
+        private const int MAX_RETRIES = 2;
+
         /// <summary>
         /// Read current config from file
         /// </summary>
@@ -318,23 +321,38 @@ namespace MediaBrowser.Library.Persistance {
             XmlDocument dom = new XmlDocument();
             XmlNode settingsNode = null;
 
-            try {
-              
+            try
+            {
+
                 dom.Load(filename);
+                readRetries = 0; //successful load
                 settingsNode = GetSettingsNode(dom);
-                
-                if (settingsNode == null) {
+
+                if (settingsNode == null)
+                {
                     throw new Exception("Corrupt file can not recover");
                 }
-            } catch (Exception) {
+            }
+            catch (FileNotFoundException)
+            {
                 // corrupt or missing config so create
-                // copy it in case was old format
-                string saveName = Path.Combine(Path.GetDirectoryName(filename),Path.GetFileNameWithoutExtension(filename))+"(old).config";
-                if (File.Exists(saveName)) File.Delete(saveName);
-                if (File.Exists(filename)) File.Copy(filename,saveName); 
                 File.WriteAllText(filename, "<Settings></Settings>");
                 dom.Load(filename);
                 settingsNode = GetSettingsNode(dom);
+            }
+            catch (IOException)
+            {
+                //might be in use somewhere else - retry
+                readRetries++;
+                if (readRetries <= MAX_RETRIES)
+                {
+                    this.Read();
+                }
+                else
+                {
+                    readRetries = 0;
+                    throw new Exception("Max retries exceeded attempting to read file " + filename);
+                }
             }
 
             foreach (AbstractMember member in SettingMembers(typeof(T))) {
@@ -375,6 +393,7 @@ namespace MediaBrowser.Library.Persistance {
         }
 
 
+        private int saveRetries = 0;
 
         /// <summary>
         /// Write current config to file
@@ -409,7 +428,25 @@ namespace MediaBrowser.Library.Persistance {
 
                 serializer.Write(node, v);
             } // for each
-            dom.Save(filename);
+            try
+            {
+                dom.Save(filename);
+                saveRetries = 0; //successful save
+            }
+            catch (IOException)
+            {
+                //might have been locked somewhere else - try again
+                saveRetries++;
+                if (saveRetries <= MAX_RETRIES)
+                {
+                    this.Write();
+                }
+                else
+                {
+                    saveRetries = 0;
+                    throw new Exception("Max retries exceeded attempting to save file " + filename);
+                }
+            }
         }
 
         private string GetComment(MemberInfo field) {

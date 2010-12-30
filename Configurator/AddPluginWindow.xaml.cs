@@ -44,6 +44,7 @@ namespace Configurator {
             PluginInstaller p = new PluginInstaller();
             callBack done = new callBack(InstallFinished);
             p.InstallPlugin(pluginList.SelectedItem as IPlugin, progress, this, done);
+            MainWindow.Instance.KernelModified = true;
 
         }
 
@@ -59,7 +60,12 @@ namespace Configurator {
             pluginList.IsEnabled = true;
             this.progress.Value = 0;
             this.progress.Visibility = Visibility.Hidden;
-            updateAttributes(pluginList.SelectedItem as IPlugin);
+            IPlugin plugin = pluginList.SelectedItem as IPlugin;
+            if (plugin != null)
+            {
+                updateAttributes(plugin);
+                Logger.ReportInfo(plugin.Name + " v" + plugin.Version + " Installed.");
+            }
         }
 
         private void updateAttributes(IPlugin plugin)
