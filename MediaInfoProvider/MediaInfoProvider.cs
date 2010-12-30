@@ -119,7 +119,7 @@ namespace MediaInfoProvider
                
                 int audioBitRate;
                 string aBitRate;
-                int ABindex = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").IndexOf('/');
+                int ABindex = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").IndexOf(" /");
                 if (ABindex > 0)
                     aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").Remove(ABindex);
                 else
@@ -132,7 +132,7 @@ namespace MediaInfoProvider
                 Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
 
                 string audioChannels;
-                int ACindex = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").IndexOf('/');                
+                int ACindex = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").IndexOf(" /");                
                 if (ACindex > 0)
                     audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").Remove(ACindex);
                 else
@@ -142,7 +142,7 @@ namespace MediaInfoProvider
                 string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
 
                 string audioProfile;
-                int APindex = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").IndexOf('/');
+                int APindex = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").IndexOf(" /");
                 if (APindex > 0)                
                     audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").Remove(APindex);                
                 else
