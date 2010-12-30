@@ -34,7 +34,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
             return changed;
         }
 
-        public override void Fetch() {
+        public override void Fetch() 
+        {
             Episode episode = Episode;
             Debug.Assert(episode != null);
 
@@ -111,6 +112,101 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     episode.Actors = new List<Actor>();
                 episode.Actors = actors;
             }
+
+            if (episode.DisplayMediaType == null)
+            {
+                episode.DisplayMediaType = metadataDoc.SafeGetString("Item/Type", "");
+                switch (episode.DisplayMediaType.ToLower())
+                {
+                    case "blu-ray":
+                        episode.DisplayMediaType = MediaType.BluRay.ToString();
+                        break;
+                    case "dvd":
+                        episode.DisplayMediaType = MediaType.DVD.ToString();
+                        break;
+                    case "hd dvd":
+                        episode.DisplayMediaType = MediaType.HDDVD.ToString();
+                        break;
+                    case "":
+                        episode.DisplayMediaType = null;
+                        break;
+                }
+            }
+            if (episode.AspectRatio == null)
+                episode.AspectRatio = metadataDoc.SafeGetString("Item/AspectRatio");
+
+            if (episode.MediaInfo == null) episode.MediaInfo = new MediaInfoData();
+            if (string.IsNullOrEmpty(episode.MediaInfo.AudioFormat))
+            {
+                //we need to decode metabrowser strings to format and profile
+                string audio = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Codec", "");
+                if (audio != "")
+                {
+                    switch (audio.ToLower())
+                    {
+                        case "dts-es":
+                            episode.MediaInfo.AudioFormat = "DTS";
+                            episode.MediaInfo.AudioProfile = "ES";
+                            break;
+                        case "dts-hd hra":
+                            episode.MediaInfo.AudioFormat = "DTS";
+                            episode.MediaInfo.AudioProfile = "HRA";
+                            break;
+                        case "dts-hd ma":
+                            episode.MediaInfo.AudioFormat = "DTS";
+                            episode.MediaInfo.AudioProfile = "MA";
+                            break;
+                        case "dolby digital":
+                            episode.MediaInfo.AudioFormat = "AC-3";
+                            break;
+                        case "dolby digital plus":
+                            episode.MediaInfo.AudioFormat = "E-AC-3";
+                            break;
+                        case "dolby truehd":
+                            episode.MediaInfo.AudioFormat = "AC-3";
+                            episode.MediaInfo.AudioProfile = "TrueHD";
+                            break;
+                        case "mp2":
+                            episode.MediaInfo.AudioFormat = "MPEG Audio";
+                            episode.MediaInfo.AudioProfile = "Layer 2";
+                            break;
+                        default:
+                            episode.MediaInfo.AudioFormat = audio;
+                            break;
+                    }
+                }
+            }
+            if (string.IsNullOrEmpty(episode.MediaInfo.AudioProfile)) episode.MediaInfo.AudioProfile = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Profile", "");
+            if (string.IsNullOrEmpty(episode.MediaInfo.AudioChannelCount)) episode.MediaInfo.AudioChannelCount = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Channels", "");
+            if (episode.MediaInfo.AudioBitRate == 0) episode.MediaInfo.AudioBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Audio/BitRate");
+            if (string.IsNullOrEmpty(episode.MediaInfo.VideoCodec))
+            {
+                string video = metadataDoc.SafeGetString("Item/MediaInfo/Video/Codec", "");
+                if (video != "")
+                {
+                    switch (video.ToLower())
+                    {
+                        case "sorenson h.263":
+                            episode.MediaInfo.VideoCodec = "Sorenson H263";
+                            break;
+                        case "h.262":
+                            episode.MediaInfo.VideoCodec = "MPEG-2 Video";
+                            break;
+                        case "h.264":
+                            episode.MediaInfo.VideoCodec = "AVC";
+                            break;
+                        default:
+                            episode.MediaInfo.VideoCodec = video;
+                            break;
+                    }
+                }
+            }
+            if (episode.MediaInfo.VideoBitRate == 0) episode.MediaInfo.VideoBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/BitRate");
+            if (episode.MediaInfo.Height == 0) episode.MediaInfo.Height = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Height");
+            if (episode.MediaInfo.Width == 0) episode.MediaInfo.Width = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Width");
+            if (string.IsNullOrEmpty(episode.MediaInfo.VideoFPS)) episode.MediaInfo.VideoFPS = metadataDoc.SafeGetString("Item/MediaInfo/Video/FrameRate", "");
+            if (episode.MediaInfo.RunTime == 0) episode.MediaInfo.RunTime = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Duration");
+            if (string.IsNullOrEmpty(episode.MediaInfo.Subtitles)) episode.MediaInfo.Subtitles = metadataDoc.SafeGetString("Item/MediaInfo/Subtitle/Language", "");
         }
 
 
