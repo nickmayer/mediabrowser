@@ -175,7 +175,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
                             break;
                     }
                 }
-            }            
+            }
+            if (episode.MediaInfo.AudioStreamCount == 0) episode.MediaInfo.AudioStreamCount = metadataDoc.SelectNodes("Item/MediaInfo/Audio").Count;
             if (string.IsNullOrEmpty(episode.MediaInfo.AudioChannelCount)) episode.MediaInfo.AudioChannelCount = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Channels", "");
             if (episode.MediaInfo.AudioBitRate == 0) episode.MediaInfo.AudioBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Audio/BitRate");
             if (string.IsNullOrEmpty(episode.MediaInfo.VideoCodec))

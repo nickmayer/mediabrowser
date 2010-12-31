@@ -290,6 +290,7 @@ namespace MediaBrowser.Library.Providers
                         }
                     }
                 }
+                if (movie.MediaInfo.AudioStreamCount == 0) movie.MediaInfo.AudioStreamCount = doc.SelectNodes("Title/MediaInfo/Audio").Count;
                 if (string.IsNullOrEmpty(movie.MediaInfo.AudioChannelCount)) movie.MediaInfo.AudioChannelCount = doc.SafeGetString("Title/MediaInfo/Audio/Channels", "");
                 if (movie.MediaInfo.AudioBitRate == 0) movie.MediaInfo.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec))
