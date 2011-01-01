@@ -437,6 +437,8 @@ namespace MediaBrowserService
         void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, bool includeImages)
         {
             double totalIterations = folder.RecursiveChildren.Count() * 3;
+            if (totalIterations == 0) return; //nothing to do
+
             int currentIteration = 0;
 
             folder.RefreshMetadata(options);
