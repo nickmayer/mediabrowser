@@ -346,5 +346,27 @@ namespace MediaBrowser.Library.Entities {
 
             return changed;
         }
+
+        public void ReCacheAllImages(ThumbSize s)
+        {
+            string ignore;
+            if (this.PrimaryImage != null)
+            {
+                //Logger.ReportInfo("Caching image for " + Name + " at " + s.Width + "x" + s.Height);
+                if (s != null && s.Width > 0 && s.Height > 0)
+                    ignore = this.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
+                else
+                    ignore = this.PrimaryImage.GetLocalImagePath(); //no size - cache at original size
+            }
+
+            foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in this.BackdropImages)
+            {
+                ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
+            }
+            if (this.BannerImage != null)
+            {
+                ignore = this.BannerImage.GetLocalImagePath(); //and, finally, banner
+            }
+        }
     }
 }

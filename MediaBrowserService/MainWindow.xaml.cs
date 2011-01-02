@@ -116,7 +116,10 @@ namespace MediaBrowserService
         {
             //close the app, but wait for refresh to finish if it is going
             if (refreshRunning)
+            {
+                forceClose = true;
                 shutdown = true;
+            }
             else
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
@@ -472,58 +475,8 @@ namespace MediaBrowserService
                     item.RefreshMetadata(MetadataRefreshOptions.Default);
                     if (includeImages)
                     {
-                        string ignore;
-                        if (item.PrimaryImage != null)
-                        {
-                            //get the display size of our primary image if known
-                            if (item.Parent != null)
-                            {
-                                Guid id = item.Parent.Id;
-                                if (Kernel.Instance.ConfigData.EnableSyncViews)
-                                {
-                                    if (item is Folder && item.GetType() != typeof(Folder))
-                                    {
-                                        id = item.GetType().FullName.GetMD5();
-                                    }
-                                }
-
-                                ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
-                                float f = item.PrimaryImage.Aspect;
-                                if (f == 0)
-                                    f = 1;
-                                if (s.Width == 0) s.Width = 1;
-                                float maxAspect = s.Height / s.Width;
-                                if (f > maxAspect)
-                                    s.Width = (int)(s.Height / f);
-                                else
-                                    s.Height = (int)(s.Width * f);
-                                //Logger.ReportInfo("Caching image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
-                                if (s != null && s.Width > 0 && s.Height > 0)
-                                {
-                                    Logger.ReportInfo("Cacheing primary image for " + item.Name + " at "+s.Width+"x"+s.Height);
-                                    ignore = item.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
-                                }
-                                else
-                                {
-                                    Logger.ReportInfo("Cacheing primary image for " + item.Name + " at original size.");
-                                    ignore = item.PrimaryImage.GetLocalImagePath(); //no size - cache at default size
-                                }
-                            }
-                            else
-                            {
-                                Logger.ReportInfo("Cacheing primary image for " + item.Name + " at original size.");
-                                ignore = item.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at original size
-                            }
-
-                        }
-                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in item.BackdropImages)
-                        {
-                            ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
-                        }
-                        if (item.BannerImage != null)
-                        {
-                            ignore = item.BannerImage.GetLocalImagePath(); //and, finally, banner
-                        }
+                        ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                        item.ReCacheAllImages(s);
                     }
                 });
             }
