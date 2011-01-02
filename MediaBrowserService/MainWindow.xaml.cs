@@ -44,6 +44,7 @@ namespace MediaBrowserService
         private bool firstIteration = true;
         public static MainWindow Instance;
         private bool shutdown = false;
+        private bool refreshCanceled = false;
         private DateTime startTime = DateTime.Now;
 
         public MainWindow()
@@ -178,7 +179,14 @@ namespace MediaBrowserService
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateStatus);
                 return;
             }
-            lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
+            if (refreshCanceled)
+            {
+                lblSvcActivity.Content = "Last Refresh was canceled by user...";
+            }
+            else
+            {
+                lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
+            }
             DateTime nextRefresh = config.LastFullRefresh.Date.AddDays(config.FullRefreshInterval);
             if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
             string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Today/Tonight at " + (config.FullRefreshPreferredHour * 100).ToString("00:00") : 
@@ -275,6 +283,15 @@ namespace MediaBrowserService
             includeImagesOption = cbxIncludeImages.IsChecked.Value;
         }
 
+        private void btnCancelRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Canceling a running refresh may leave your library in an incomplete state.  Are you sure you want to cancel?", "Cancel Refresh", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                btnCancelRefresh.IsEnabled = false;
+                refreshCanceled = true;
+            }
+        }
+
         #endregion
 
         private void Go()
@@ -352,6 +369,9 @@ namespace MediaBrowserService
                     gbManual.IsEnabled = false;
                     refreshProgress.Value = 0;
                     refreshProgress.Visibility = Visibility.Visible;
+                    refreshCanceled = false;
+                    btnCancelRefresh.IsEnabled = true;
+                    btnCancelRefresh.Visibility = Visibility.Visible;
                     lblSvcActivity.Content = "Refresh Running...";
                     notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
                     notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
@@ -386,9 +406,11 @@ namespace MediaBrowserService
                                 catch (Exception e) { Logger.ReportException("Error trying to create image cache.", e); } //just log it
                             }
                         }
-                        FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption);
-                        config.LastFullRefresh = DateTime.Now;
-                        config.Save();
+                        if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption))
+                        {
+                            config.LastFullRefresh = DateTime.Now;
+                            config.Save();
+                        }
                         MBServiceController.SendCommandToCore(IPCCommands.ReloadItems);
                         Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                         {
@@ -408,6 +430,7 @@ namespace MediaBrowserService
                         {
                             refreshProgress.Value = 0;
                             refreshProgress.Visibility = Visibility.Hidden;
+                            btnCancelRefresh.Visibility = Visibility.Hidden;
                             gbManual.IsEnabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
@@ -432,15 +455,15 @@ namespace MediaBrowserService
 
         }
 
-        void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
+        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
         {
-            FullRefresh(folder, options, false);
+            return FullRefresh(folder, options, false);
         }
 
-        void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, bool includeImages)
+        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, bool includeImages)
         {
             double totalIterations = folder.RecursiveChildren.Count() * 3;
-            if (totalIterations == 0) return; //nothing to do
+            if (totalIterations == 0) return true; //nothing to do
 
             int currentIteration = 0;
 
@@ -448,27 +471,27 @@ namespace MediaBrowserService
 
             using (new Profiler(Kernel.Instance.GetString("FullValidationProf")))
             {
-                RunActionRecursively(folder, item =>
+                if (!RunActionRecursively(folder, item =>
                 {
                     currentIteration++;
                     UpdateProgress("Validating",currentIteration / totalIterations);
                     Folder f = item as Folder;
                     if (f != null) f.ValidateChildren();
-                });
+                })) return false;
             }
 
             using (new Profiler(Kernel.Instance.GetString("FastRefreshProf")))
             {
-                RunActionRecursively(folder, item => {
+                if (!RunActionRecursively(folder, item => {
                     currentIteration++;
                     UpdateProgress("Fast Metadata",currentIteration / totalIterations);
                     item.RefreshMetadata(MetadataRefreshOptions.FastOnly);
-                });
+                })) return false;
             }
 
             using (new Profiler(Kernel.Instance.GetString("SlowRefresh")))
             {
-                RunActionRecursively(folder, item =>
+                if (!RunActionRecursively(folder, item =>
                 {
                     currentIteration++;
                     UpdateProgress("Slow Metadata",(currentIteration / totalIterations));
@@ -478,18 +501,20 @@ namespace MediaBrowserService
                         ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
                         item.ReCacheAllImages(s);
                     }
-                });
+                })) return false;
             }
-
+            return true;
         }
 
-        void RunActionRecursively(Folder folder, Action<BaseItem> action)
+        bool RunActionRecursively(Folder folder, Action<BaseItem> action)
         {
             action(folder);
             foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateModified))
             {
+                if (refreshCanceled) return false;
                 action(item);
             }
+            return true;
         }
 
     }
