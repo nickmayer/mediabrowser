@@ -831,7 +831,10 @@ namespace MediaBrowser
             }
         }
 
-
+        public static void Reload()
+        {
+            _instance = new Config();
+        }
 
         private static Config _instance = new Config();
         public static Config Instance
