@@ -40,6 +40,9 @@ namespace MediaBrowserService
         private bool hasHandle = false;
         private MediaBrowser.ServiceConfigData config;
         private bool includeImagesOption = false;
+        private bool includeGenresOption = false;
+        private bool includeStudiosOption = false;
+        private bool includePeopleOption = false;
         private bool clearCacheOption = false;
         private bool firstIteration = true;
         public static MainWindow Instance;
@@ -147,6 +150,7 @@ namespace MediaBrowserService
                 tbxRefreshInterval_LostFocus(this, null);
                 args.Cancel = true; //don't close
                 this.Hide();
+                notifyIcon.ShowBalloonTip(1000);
             }
         }
 
@@ -281,6 +285,22 @@ namespace MediaBrowserService
         private void cbxIncludeImages_Checked(object sender, RoutedEventArgs e)
         {
             includeImagesOption = cbxIncludeImages.IsChecked.Value;
+            cbxGenres.IsEnabled = cbxStudios.IsEnabled = cbxPeople.IsEnabled = cbxIncludeImages.IsChecked.Value;
+        }
+
+        private void cbxGenres_Checked(object sender, RoutedEventArgs e)
+        {
+            includeGenresOption = cbxGenres.IsChecked.Value;
+        }
+
+        private void cbxStudios_Checked(object sender, RoutedEventArgs e)
+        {
+            includeStudiosOption = cbxStudios.IsChecked.Value;
+        }
+
+        private void cbxPeople_Checked(object sender, RoutedEventArgs e)
+        {
+            includePeopleOption = cbxPeople.IsChecked.Value;
         }
 
         private void btnCancelRefresh_Click(object sender, RoutedEventArgs e)
@@ -489,6 +509,10 @@ namespace MediaBrowserService
                 })) return false;
             }
 
+            List<string> studiosProcessed = new List<string>();
+            List<string> genresProcessed = new List<string>();
+            List<string> peopleProcessed = new List<string>();
+
             using (new Profiler(Kernel.Instance.GetString("SlowRefresh")))
             {
                 if (!RunActionRecursively(folder, item =>
@@ -500,6 +524,79 @@ namespace MediaBrowserService
                     {
                         ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
                         item.ReCacheAllImages(s);
+                        //cause genre and studio images to cache as well
+                        if (item is Show)
+                        {
+                            Show show = item as Show;
+                            if (includeGenresOption && show.Genres != null)
+                            {
+                                foreach (var genre in show.Genres)
+                                {
+                                    if (!genresProcessed.Contains(genre))
+                                    {
+                                        Genre g = Genre.GetGenre(genre);
+                                        g.RefreshMetadata();
+                                        if (g.PrimaryImage != null) g.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in g.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        genresProcessed.Add(genre);
+                                    }
+                                }
+                            }
+                            if (includeStudiosOption && show.Studios != null)
+                            {
+                                foreach (var studio in show.Studios)
+                                {
+                                    if (!studiosProcessed.Contains(studio))
+                                    {
+                                        Studio st = Studio.GetStudio(studio);
+                                        st.RefreshMetadata();
+                                        if (st.PrimaryImage != null) st.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in st.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        studiosProcessed.Add(studio);
+                                    }
+                                }
+                            }
+                            if (includePeopleOption && show.Actors != null)
+                            {
+                                foreach (var actor in show.Actors)
+                                {
+                                    if (!peopleProcessed.Contains(actor.Name))
+                                    {
+                                        Person p = Person.GetPerson(actor.Name);
+                                        p.RefreshMetadata();
+                                        if (p.PrimaryImage != null) p.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        peopleProcessed.Add(actor.Name);
+                                    }
+                                }
+                            }
+                            if (includePeopleOption && show.Directors != null)
+                            {
+                                foreach (var director in show.Directors)
+                                {
+                                    if (!peopleProcessed.Contains(director))
+                                    {
+                                        Person p = Person.GetPerson(director);
+                                        p.RefreshMetadata();
+                                        if (p.PrimaryImage != null) p.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        peopleProcessed.Add(director);
+                                    }
+                                }
+                            }
+                        }
                     }
                 })) return false;
             }
