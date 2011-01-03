@@ -320,7 +320,25 @@ namespace MediaBrowser.Library.Providers
                 if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate","");
                 if (movie.MediaInfo.RunTime == 0) movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/MediaInfo/Video/Duration");
-                if (string.IsNullOrEmpty(movie.MediaInfo.Subtitles)) movie.MediaInfo.Subtitles = doc.SafeGetString("Title/MediaInfo/Subtitle/Language", ""); 
+                if (string.IsNullOrEmpty(movie.MediaInfo.Subtitles))
+                {
+                    XmlNodeList nodes = doc.SelectNodes("Title/MediaInfo/Subtitle/Language");
+                    List<string> Subs = new List<string>();
+                    foreach (XmlNode node in nodes)
+                    {
+                        string n = node.InnerText;
+                        if (!string.IsNullOrEmpty(n))
+                            Subs.Add(n);
+                    }
+                    if (Subs.Count > 1)
+                    {
+                        movie.MediaInfo.Subtitles = String.Join(" / ", Subs.ToArray());
+                    }
+                    else
+                    {
+                        movie.MediaInfo.Subtitles = doc.SafeGetString("Title/MediaInfo/Subtitle/Language", "");
+                    }
+                }
             }
         }
 
