@@ -471,7 +471,7 @@ namespace MediaBrowser.Library {
             }
         }
         public override void RefreshMetadata() {
-            this.RefreshMetadata(false);
+            this.RefreshMetadata(true);
         }
 
 
@@ -485,10 +485,16 @@ namespace MediaBrowser.Library {
             //first do us
             base.RefreshMetadata(false);
             //and now all our children
-            foreach (Item item in this.Children)
+            Async.Queue("UI Forced Folder Metadata Loader", () =>
             {
-                item.RefreshMetadata(false);
-            }
+                foreach (BaseItem item in this.folder.RecursiveChildren)
+                {
+                    Logger.ReportInfo("refreshing "+item.Name);
+                    item.RefreshMetadata(MetadataRefreshOptions.Force);
+                    ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                    item.ReCacheAllImages(s);
+                }
+            });
 
         }
 

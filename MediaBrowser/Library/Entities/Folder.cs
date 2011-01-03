@@ -476,6 +476,36 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public ThumbSize ThumbDisplaySize
+        {
+            get
+            {
+                if (this.PrimaryImage != null)
+                {
+                    Guid id = this.Id;
+                    if (Config.Instance.EnableSyncViews)
+                    {
+                        if (this.GetType() != typeof(Folder))
+                        {
+                            id = this.GetType().FullName.GetMD5();
+                        }
+                    }
+
+                    ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
+                    float f = this.PrimaryImage.Aspect;
+                    if (f == 0)
+                        f = 1;
+                    if (s.Width == 0) { s.Width = 1; s.Height = 1; }
+                    float maxAspect = s.Height / s.Width;
+                    if (f > maxAspect)
+                        s.Width = (int)(s.Height / f);
+                    else
+                        s.Height = (int)(s.Width * f);
+                    return s;
+                }
+                else return new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
+            }
+        }
 
     }
 }

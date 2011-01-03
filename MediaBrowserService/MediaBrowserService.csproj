@@ -117,6 +117,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "c:\program files (x86)\mediabrowser\mediabrowser"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(ProgramFiles)\mediabrowser\mediabrowser"</PostBuildEvent>
   </PropertyGroup>
 </Project>

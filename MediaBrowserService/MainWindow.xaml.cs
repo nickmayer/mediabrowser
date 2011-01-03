@@ -40,10 +40,14 @@ namespace MediaBrowserService
         private bool hasHandle = false;
         private MediaBrowser.ServiceConfigData config;
         private bool includeImagesOption = false;
+        private bool includeGenresOption = false;
+        private bool includeStudiosOption = false;
+        private bool includePeopleOption = false;
         private bool clearCacheOption = false;
         private bool firstIteration = true;
         public static MainWindow Instance;
         private bool shutdown = false;
+        private bool refreshCanceled = false;
         private DateTime startTime = DateTime.Now;
 
         public MainWindow()
@@ -116,7 +120,10 @@ namespace MediaBrowserService
         {
             //close the app, but wait for refresh to finish if it is going
             if (refreshRunning)
+            {
+                forceClose = true;
                 shutdown = true;
+            }
             else
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
@@ -143,6 +150,7 @@ namespace MediaBrowserService
                 tbxRefreshInterval_LostFocus(this, null);
                 args.Cancel = true; //don't close
                 this.Hide();
+                notifyIcon.ShowBalloonTip(1000);
             }
         }
 
@@ -175,7 +183,14 @@ namespace MediaBrowserService
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateStatus);
                 return;
             }
-            lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
+            if (refreshCanceled)
+            {
+                lblSvcActivity.Content = "Last Refresh was canceled by user...";
+            }
+            else
+            {
+                lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
+            }
             DateTime nextRefresh = config.LastFullRefresh.Date.AddDays(config.FullRefreshInterval);
             if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
             string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Today/Tonight at " + (config.FullRefreshPreferredHour * 100).ToString("00:00") : 
@@ -270,6 +285,31 @@ namespace MediaBrowserService
         private void cbxIncludeImages_Checked(object sender, RoutedEventArgs e)
         {
             includeImagesOption = cbxIncludeImages.IsChecked.Value;
+            cbxGenres.IsEnabled = cbxStudios.IsEnabled = cbxPeople.IsEnabled = cbxIncludeImages.IsChecked.Value;
+        }
+
+        private void cbxGenres_Checked(object sender, RoutedEventArgs e)
+        {
+            includeGenresOption = cbxGenres.IsChecked.Value;
+        }
+
+        private void cbxStudios_Checked(object sender, RoutedEventArgs e)
+        {
+            includeStudiosOption = cbxStudios.IsChecked.Value;
+        }
+
+        private void cbxPeople_Checked(object sender, RoutedEventArgs e)
+        {
+            includePeopleOption = cbxPeople.IsChecked.Value;
+        }
+
+        private void btnCancelRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Canceling a running refresh may leave your library in an incomplete state.  Are you sure you want to cancel?", "Cancel Refresh", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                btnCancelRefresh.IsEnabled = false;
+                refreshCanceled = true;
+            }
         }
 
         #endregion
@@ -349,6 +389,9 @@ namespace MediaBrowserService
                     gbManual.IsEnabled = false;
                     refreshProgress.Value = 0;
                     refreshProgress.Visibility = Visibility.Visible;
+                    refreshCanceled = false;
+                    btnCancelRefresh.IsEnabled = true;
+                    btnCancelRefresh.Visibility = Visibility.Visible;
                     lblSvcActivity.Content = "Refresh Running...";
                     notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
                     notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
@@ -383,9 +426,11 @@ namespace MediaBrowserService
                                 catch (Exception e) { Logger.ReportException("Error trying to create image cache.", e); } //just log it
                             }
                         }
-                        FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption);
-                        config.LastFullRefresh = DateTime.Now;
-                        config.Save();
+                        if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption))
+                        {
+                            config.LastFullRefresh = DateTime.Now;
+                            config.Save();
+                        }
                         MBServiceController.SendCommandToCore(IPCCommands.ReloadItems);
                         Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                         {
@@ -405,6 +450,7 @@ namespace MediaBrowserService
                         {
                             refreshProgress.Value = 0;
                             refreshProgress.Visibility = Visibility.Hidden;
+                            btnCancelRefresh.Visibility = Visibility.Hidden;
                             gbManual.IsEnabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
@@ -429,112 +475,143 @@ namespace MediaBrowserService
 
         }
 
-        void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
+        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
         {
-            FullRefresh(folder, options, false);
+            return FullRefresh(folder, options, false);
         }
 
-        void FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, bool includeImages)
+        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, bool includeImages)
         {
             double totalIterations = folder.RecursiveChildren.Count() * 3;
+            if (totalIterations == 0) return true; //nothing to do
+
             int currentIteration = 0;
 
             folder.RefreshMetadata(options);
 
             using (new Profiler(Kernel.Instance.GetString("FullValidationProf")))
             {
-                RunActionRecursively(folder, item =>
+                if (!RunActionRecursively(folder, item =>
                 {
                     currentIteration++;
                     UpdateProgress("Validating",currentIteration / totalIterations);
                     Folder f = item as Folder;
                     if (f != null) f.ValidateChildren();
-                });
+                })) return false;
             }
 
             using (new Profiler(Kernel.Instance.GetString("FastRefreshProf")))
             {
-                RunActionRecursively(folder, item => {
+                if (!RunActionRecursively(folder, item => {
                     currentIteration++;
                     UpdateProgress("Fast Metadata",currentIteration / totalIterations);
                     item.RefreshMetadata(MetadataRefreshOptions.FastOnly);
-                });
+                })) return false;
             }
+
+            List<string> studiosProcessed = new List<string>();
+            List<string> genresProcessed = new List<string>();
+            List<string> peopleProcessed = new List<string>();
 
             using (new Profiler(Kernel.Instance.GetString("SlowRefresh")))
             {
-                RunActionRecursively(folder, item =>
+                if (!RunActionRecursively(folder, item =>
                 {
                     currentIteration++;
                     UpdateProgress("Slow Metadata",(currentIteration / totalIterations));
                     item.RefreshMetadata(MetadataRefreshOptions.Default);
                     if (includeImages)
                     {
-                        string ignore;
-                        if (item.PrimaryImage != null)
+                        ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                        item.ReCacheAllImages(s);
+                        //cause genre and studio images to cache as well
+                        if (item is Show)
                         {
-                            //get the display size of our primary image if known
-                            if (item.Parent != null)
+                            Show show = item as Show;
+                            if (includeGenresOption && show.Genres != null)
                             {
-                                Guid id = item.Parent.Id;
-                                if (Kernel.Instance.ConfigData.EnableSyncViews)
+                                foreach (var genre in show.Genres)
                                 {
-                                    if (item is Folder && item.GetType() != typeof(Folder))
+                                    if (!genresProcessed.Contains(genre))
                                     {
-                                        id = item.GetType().FullName.GetMD5();
+                                        Genre g = Genre.GetGenre(genre);
+                                        g.RefreshMetadata();
+                                        if (g.PrimaryImage != null) g.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in g.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        genresProcessed.Add(genre);
                                     }
                                 }
-
-                                ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
-                                float f = item.PrimaryImage.Aspect;
-                                if (f == 0)
-                                    f = 1;
-                                if (s.Width == 0) s.Width = 1;
-                                float maxAspect = s.Height / s.Width;
-                                if (f > maxAspect)
-                                    s.Width = (int)(s.Height / f);
-                                else
-                                    s.Height = (int)(s.Width * f);
-                                //Logger.ReportInfo("Caching image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
-                                if (s != null && s.Width > 0 && s.Height > 0)
-                                {
-                                    Logger.ReportInfo("Cacheing primary image for " + item.Name + " at "+s.Width+"x"+s.Height);
-                                    ignore = item.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
-                                }
-                                else
-                                {
-                                    Logger.ReportInfo("Cacheing primary image for " + item.Name + " at original size.");
-                                    ignore = item.PrimaryImage.GetLocalImagePath(); //no size - cache at default size
-                                }
                             }
-                            else
+                            if (includeStudiosOption && show.Studios != null)
                             {
-                                Logger.ReportInfo("Cacheing primary image for " + item.Name + " at original size.");
-                                ignore = item.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at original size
+                                foreach (var studio in show.Studios)
+                                {
+                                    if (!studiosProcessed.Contains(studio))
+                                    {
+                                        Studio st = Studio.GetStudio(studio);
+                                        st.RefreshMetadata();
+                                        if (st.PrimaryImage != null) st.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in st.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        studiosProcessed.Add(studio);
+                                    }
+                                }
                             }
-
-                        }
-                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in item.BackdropImages)
-                        {
-                            ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
-                        }
-                        if (item.BannerImage != null)
-                        {
-                            ignore = item.BannerImage.GetLocalImagePath(); //and, finally, banner
+                            if (includePeopleOption && show.Actors != null)
+                            {
+                                foreach (var actor in show.Actors)
+                                {
+                                    if (!peopleProcessed.Contains(actor.Name))
+                                    {
+                                        Person p = Person.GetPerson(actor.Name);
+                                        p.RefreshMetadata();
+                                        if (p.PrimaryImage != null) p.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        peopleProcessed.Add(actor.Name);
+                                    }
+                                }
+                            }
+                            if (includePeopleOption && show.Directors != null)
+                            {
+                                foreach (var director in show.Directors)
+                                {
+                                    if (!peopleProcessed.Contains(director))
+                                    {
+                                        Person p = Person.GetPerson(director);
+                                        p.RefreshMetadata();
+                                        if (p.PrimaryImage != null) p.PrimaryImage.GetLocalImagePath();
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
+                                        {
+                                            image.GetLocalImagePath();
+                                        }
+                                        peopleProcessed.Add(director);
+                                    }
+                                }
+                            }
                         }
                     }
-                });
+                })) return false;
             }
-
+            return true;
         }
 
-        void RunActionRecursively(Folder folder, Action<BaseItem> action)
+        bool RunActionRecursively(Folder folder, Action<BaseItem> action)
         {
             action(folder);
             foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateModified))
             {
+                if (refreshCanceled) return false;
                 action(item);
             }
+            return true;
         }
 
     }

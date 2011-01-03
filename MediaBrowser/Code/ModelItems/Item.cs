@@ -598,52 +598,8 @@ namespace MediaBrowser.Library
                 primaryImage = null;
                 bannerImage = null;
                 primaryImageSmall = null;
-                string ignore;
-                if (baseItem.PrimaryImage != null)
-                {
-                        //get the display size of our primary image if known
-                    if (PhysicalParent != null)
-                    {
-                        Guid id = PhysicalParent.Id;
-                        if (Config.Instance.EnableSyncViews)
-                        {
-                            if (baseItem is Folder && baseItem.GetType() != typeof(Folder))
-                            {
-                                id = baseItem.GetType().FullName.GetMD5();
-                            }
-                        }
-
-                        ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
-                        float f = baseItem.PrimaryImage.Aspect;
-                        if (f == 0)
-                            f = 1;
-                        if (s.Width == 0) s.Width = 1;
-                        float maxAspect = s.Height / s.Width;
-                        if (f > maxAspect)
-                            s.Width = (int)(s.Height / f);
-                        else
-                            s.Height = (int)(s.Width * f);
-
-                        //Logger.ReportInfo("Caching image for " + baseItem.Name + " at " + s.Width + "x" + s.Height);
-                        if (s != null && s.Width > 0 && s.Height > 0)
-                            ignore = baseItem.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
-                        else
-                            ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no size - cache at original size
-                    }
-                    else
-                    {
-                        ignore = baseItem.PrimaryImage.GetLocalImagePath(); //no parent or display prefs - cache at original size
-                    }
-
-                }
-                foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in baseItem.BackdropImages)
-                {
-                    ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
-                }
-                if (baseItem.BannerImage != null)
-                {
-                    ignore = baseItem.BannerImage.GetLocalImagePath(); //and, finally, banner
-                }
+                ThumbSize s = baseItem.Parent != null ? baseItem.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                baseItem.ReCacheAllImages(s);
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });
         }

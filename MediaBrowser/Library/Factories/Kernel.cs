@@ -438,6 +438,7 @@ namespace MediaBrowser.Library {
         {
             Logger.ReportInfo("Reloading config file (probably due to change in other process).");
             this.ConfigData = ConfigData.FromFile(ApplicationPaths.ConfigFile);
+            Config.Reload();
         }
 
         public void NotifyConfigChange()
