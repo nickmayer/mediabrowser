@@ -65,17 +65,7 @@
       </Directory>
       <Directory Id="DesktopFolder" Name="Desktop"/>
       <Directory Id="StartupFolder" Name="Startup"/>
-      <!-- Quick Launch per-user folder -->
-      <Directory Id="AppDataFolder">
-        <!--<Directory Id="MicrosoftFolder" Name="Microsoft">
-          <Directory Id="InternetExplorerFolder" Name="Internet Explorer">
-            <Directory Id="QuickLaunchFolder" Name="Quick Launch" />
-            <Directory Id="UserPinnedFolder" Name="User Pinned">
-              <Directory Id="TaskBarFolder" Name="TaskBar" />
-            </Directory>
-          </Directory>
-        </Directory>-->
-      </Directory>
+      <Directory Id="AppDataFolder" />
       <Directory Id="TEMPDIR" Name="TempFolder"/>
       <Directory Id="CommonAppDataFolder">
         <Directory Id="MBFolder" Name="MediaBrowser">
@@ -100,6 +90,11 @@
                   Name="Media Browser Configurator"
                   Description="Media Browser Configurator"
                   Target="[APPROOTDIRECTORY]Configurator.exe"
+                  WorkingDirectory="APPROOTDIRECTORY"/>
+        <Shortcut Id="MediaBrowserService"
+                  Name="Media Browser Service"
+                  Description="Media Browser Service"
+                  Target="[APPROOTDIRECTORY]MediaBrowserService.exe"
                   WorkingDirectory="APPROOTDIRECTORY"/>
         <util:InternetShortcut Id="MakeDonation"
                   Name="Make a Donation"
@@ -156,13 +151,12 @@
         <RegistryValue Root="HKCU" Key="Software\GPL\MediaBrowser" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
         </Component>
     </DirectoryRef>
-
-    <!-- Conditionally create a shortcut to Media Browser in the Quick Launch folder (current user only)-->
-    <!--
-    <DirectoryRef Id="QuickLaunchFolder">
-      <Component Id="OptionalQuickLaunchFolderShortcut" Guid="FFA271EC-9051-46d5-82DA-D5896CB6C880" Permanent="yes">
-        <Condition>OPTIONALQUICKLAUNCHSHORTCUT</Condition>
-        <Shortcut Id="MediaBrowerQuickLaunch"
+    
+    <!-- Conditionally create a shortcut to Media Browser in the start menu > startup folder (current user only)-->
+    <DirectoryRef Id="StartupFolder">
+      <Component Id="OptionalMediaBrowserStartupFolderShortcut" Guid="987A0CDA-87F1-455e-9BE3-59AFE185D8DD">
+        <Condition>OPTIONALMBSTARTUPSHORTCUT</Condition>
+        <Shortcut Id="MediaBrowerStartup"
                   Name="Media Browser"
                   Description="Media Browser"
                   Target="[EhomeFolder]ehshell.exe"
@@ -173,20 +167,17 @@
         <RegistryValue Root="HKCU" Key="Software\GPL\MediaBrowser" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
-    -->
-    
-    <!-- Conditionally create a shortcut to Media Browser in the start menu > startup folder (current user only)-->
+
+    <!-- Conditionally create a shortcut to Media Browser Service in the start menu > startup folder (current user only)-->
     <DirectoryRef Id="StartupFolder">
-      <Component Id="OptionalStartupFolderShortcut" Guid="987A0CDA-87F1-455e-9BE3-59AFE185D8DD">
-        <Condition>OPTIONALSTARTUPSHORTCUT</Condition>
-        <Shortcut Id="MediaBrowerStartup"
-                  Name="Media Browser"
-                  Description="Media Browser"
-                  Target="[EhomeFolder]ehshell.exe"
-                  Arguments="/nostartupanimation /entrypoint:{CE32C570-4BEC-4aeb-AD1D-CF47B91DE0B2}\{FC9ABCCC-36CB-47ac-8BAB-03E8EF5F6F22}"
-                  WorkingDirectory="EhomeFolder"
-                  Icon="MediaBrowserIcon.exe"
-                  IconIndex="0"/>
+      <Component Id="OptionalMediaBrowserServiceStartupFolderShortcut" Guid="201B7468-32D2-4622-8756-9BC917818DE6">
+        <Condition>OPTIONALMBSERVICESTARTUPSHORTCUT</Condition>
+        <Shortcut Id="MediaBrowerServiceStartup"
+                  Name="Media Browser Service"
+                  Description="Media Browser Service"
+                  Target="[APPROOTDIRECTORY]MediaBrowserService.exe"
+                  WorkingDirectory="APPROOTDIRECTORY"
+                  />
         <RegistryValue Root="HKCU" Key="Software\GPL\MediaBrowser" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
@@ -264,6 +255,7 @@
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
 		<Feature Id="APPROOTFEATURE" Title="MediaBrowser" Level="1">
       <ComponentRef Id="Configurator.exe" />
+      <ComponentRef Id="MediaBrowserService.exe" />
       <ComponentRef Id="MediaBrowser.dll" />
 			<ComponentRef Id="Application.png" />
       <ComponentRef Id="ApplicationInactive.png" />
@@ -274,9 +266,8 @@
       <ComponentRef Id="DefaultShortcuts" />
       <ComponentRef Id="OptionalStartmenuFolderShortcut" />
       <ComponentRef Id="OptionalDesktopFolderShortcut" />
-      <!--<ComponentRef Id="OptionalQuickLaunchFolderShortcut" />-->
-      <ComponentRef Id="OptionalStartupFolderShortcut" />
-      <ComponentRef Id="MediaBrowserService.exe" />
+      <ComponentRef Id="OptionalMediaBrowserServiceStartupFolderShortcut" />
+      <ComponentRef Id="OptionalMediaBrowserStartupFolderShortcut" />
       
       <!--<ComponentRef Id="RemPlugins" />-->
       <!--<ComponentRef Id="ClearCache" />-->
@@ -499,8 +490,8 @@
     <!-- These properties may be modified in the user interface -->
     <!-- <Property Id="OPTIONALDESKTOPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
     <!-- <Property Id="OPTIONALSTARTMENUSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
-    <!-- <Property Id="OPTIONALSTARTUPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
-    <!-- <Property Id="OPTIONALQUICKLAUNCHSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
+    <!-- <Property Id="OPTIONALMBSTARTUPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
+    <!-- <Property Id="OPTIONALMBSERVICESTARTUPSHORTCUT"></Property> non-declaration is indication of null value (checkbox unchecked) -->
     <Property Id="LAUNCHAPPONEXIT">1</Property>
 
     <!-- CustomAction to condtionally launch the configurator after the setup finishes -->
@@ -571,16 +562,14 @@
         <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
 
         <Control Id="FolderLabel" Type="Text" X="20" Y="60" Width="290" Height="20" NoPrefix="yes" Text="!(loc.InstallDirDlgFolderLabel)" />
-        <Control Id="Folder" Type="PathEdit" X="20" Y="90" Width="260" Height="18" Property="WIXUI_INSTALLDIR" Indirect="yes" />
-        <Control Id="ChangeFolder" Type="PushButton" X="284" Y="90" Width="56" Height="17" Text="!(loc.InstallDirDlgChange)" />
+        <Control Id="Folder" Type="PathEdit" X="20" Y="80" Width="260" Height="18" Property="WIXUI_INSTALLDIR" Indirect="yes" />
+        <Control Id="ChangeFolder" Type="PushButton" X="284" Y="80" Width="56" Height="17" Text="!(loc.InstallDirDlgChange)" />
 
-        <Control Id="DesktopShortcutCheckBox" Type="CheckBox" X="40" Y="120" Width="290" Height="17" Property="OPTIONALDESKTOPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateDesktopShortcut)" />
-        <Control Id="StartmenuShortcutCheckBox" Type="CheckBox" X="40" Y="140" Width="290" Height="17" Property="OPTIONALSTARTMENUSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateStartMenuShortcut)" />
-        <!--<Control Id="QuickLaunchShortcutCheckBox" Type="CheckBox" X="40" Y="160" Width="290" Height="17" Property="OPTIONALQUICKLAUNCHSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateQuickLaunchShortcut)">
-          <Condition Action="show"><![CDATA[VersionNT = 600]]></Condition>
-        </Control>-->
-        <Control Id="UserText1" Type="Text" X="20" Y="180" Width="330" Height="20" Text="!(loc.Dialog_OptionalLaunchAtStartup)" />
-        <Control Id="StartupShortcutCheckBox" Type="CheckBox" X="40" Y="200" Width="290" Height="17" Property="OPTIONALSTARTUPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateStartupShortcut)" />
+        <Control Id="DesktopShortcutCheckBox" Type="CheckBox" X="40" Y="110" Width="290" Height="17" Property="OPTIONALDESKTOPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateDesktopShortcut)" />
+        <Control Id="StartmenuShortcutCheckBox" Type="CheckBox" X="40" Y="130" Width="290" Height="17" Property="OPTIONALSTARTMENUSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateStartMenuShortcut)" />
+        <Control Id="UserText1" Type="Text" X="20" Y="160" Width="330" Height="20" Text="!(loc.Dialog_OptionalLaunchAtStartup)" />
+        <Control Id="MediaBrowserStartupShortcutCheckBox" Type="CheckBox" X="40" Y="180" Width="290" Height="17" Property="OPTIONALMBSTARTUPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateMediaBrowserStartupShortcut)" />
+        <Control Id="MediaBrowserServiceStartupShortcutCheckBox" Type="CheckBox" X="40" Y="200" Width="290" Height="17" Property="OPTIONALMBSERVICESTARTUPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateMediaBrowserServiceStartupShortcut)" />
       </Dialog>
 
       <Dialog Id="MediaBrowserExitDialog" Width="370" Height="270" Title="!(loc.ExitDialog_Title)">
