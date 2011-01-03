@@ -23,8 +23,8 @@ using MediaBrowser.Library.Logging;
 using MediaBrowser.Util;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Metadata;
-using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Configuration;
+using MediaBrowserService.Code;
 
 namespace MediaBrowserService
 {
@@ -34,27 +34,28 @@ namespace MediaBrowserService
     public partial class MainWindow : Window
     {
         private System.Windows.Forms.NotifyIcon notifyIcon;
-        private bool forceClose = false;
-        private Mutex mutex;
-        private Timer mainLoop;
-        private bool hasHandle = false;
-        private MediaBrowser.ServiceConfigData config;
-        private bool includeImagesOption = false;
-        private bool includeGenresOption = false;
-        private bool includeStudiosOption = false;
-        private bool includePeopleOption = false;
-        private bool clearCacheOption = false;
-        private bool firstIteration = true;
+        private MediaBrowser.ServiceConfigData _config;
+        private Mutex _mutex;
+        private Timer _mainLoop;
         public static MainWindow Instance;
-        private bool shutdown = false;
-        private bool refreshCanceled = false;
-        private DateTime startTime = DateTime.Now;
+        
+        private bool _forceClose;
+        private bool _hasHandle;
+        private bool _shutdown;
+        private bool _refreshCanceled;
+        private bool _firstIteration = true;
+        private bool _refreshRunning;
+
+        private readonly DateTime _startTime = DateTime.Now;
+        private readonly ServiceGuiOptions _serviceOptions;
+        private WindowState storedWindowState = WindowState.Normal; //we come up minimized
 
         public MainWindow()
         {
             try
             {
                 InitializeComponent();
+                _serviceOptions = new ServiceGuiOptions();
                 Instance = this;
                 Go();
             }
@@ -71,31 +72,46 @@ namespace MediaBrowserService
         private void CreateNotifyIcon()
         {
             //create menu
-            System.Windows.Forms.ContextMenu main = new System.Windows.Forms.ContextMenu();
-            System.Windows.Forms.MenuItem restore = new System.Windows.Forms.MenuItem();
-            restore.Text = "Show Interface...";
+            var main = new System.Windows.Forms.ContextMenu();
+
+            var restore = new System.Windows.Forms.MenuItem
+                              {
+                                  Text = "Show Interface..."
+                              };
             restore.Click += new EventHandler(restore_Click);
             main.MenuItems.Add(restore);
-            System.Windows.Forms.MenuItem refresh = new System.Windows.Forms.MenuItem();
-            refresh.Text = "Refresh Now";
+            
+            var refresh = new System.Windows.Forms.MenuItem
+                              {
+                                  Text = "Refresh Now"
+                              };
             refresh.Click += new EventHandler(refresh_Click);
             main.MenuItems.Add(refresh);
-            System.Windows.Forms.MenuItem sep = new System.Windows.Forms.MenuItem();
-            sep.Text = "-";
+
+            var sep = new System.Windows.Forms.MenuItem
+                          {
+                              Text = "-"
+                          };
             main.MenuItems.Add(sep);
-            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem();
-            exit.Text = "Exit";
+
+            var exit = new System.Windows.Forms.MenuItem
+                           {
+                               Text = "Exit"
+                           };
             exit.Click += new EventHandler(exit_Click);
             main.MenuItems.Add(exit);
+
             //set up our systray icon
-            notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.BalloonTipTitle = "Media Browser Service";
-            notifyIcon.BalloonTipText = "Running in background. Click icon to configure...";
             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
-            notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+            notifyIcon = new System.Windows.Forms.NotifyIcon
+                             {
+                                 BalloonTipTitle = "Media Browser Service",
+                                 BalloonTipText = "Running in background. Click icon to configure...",
+                                 Icon = new System.Drawing.Icon(iconStream),
+                                 ContextMenu = main,
+                                 Visible = true
+                             };
             notifyIcon.DoubleClick += notifyIcon_Click;
-            notifyIcon.ContextMenu = main;
-            notifyIcon.Visible = true;
             notifyIcon.ShowBalloonTip(2000);
         }
 
@@ -119,29 +135,29 @@ namespace MediaBrowserService
         public void Shutdown()
         {
             //close the app, but wait for refresh to finish if it is going
-            if (refreshRunning)
+            if (_refreshRunning)
             {
-                forceClose = true;
-                shutdown = true;
+                _forceClose = true;
+                _shutdown = true;
             }
             else
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
-                    forceClose = true;
+                    _forceClose = true;
                     Close();
                 }));
         }
 
         void OnClose(object sender, System.ComponentModel.CancelEventArgs args)
         {
-            if (forceClose)
+            if (_forceClose)
             {
                 if (notifyIcon != null)
                 {
                     notifyIcon.Dispose();
                     notifyIcon = null;
                 }
-                if (hasHandle) mutex.ReleaseMutex();
+                if (_hasHandle) _mutex.ReleaseMutex();
             }
             else
             {
@@ -154,7 +170,6 @@ namespace MediaBrowserService
             }
         }
 
-        private WindowState storedWindowState = WindowState.Normal; //we come up minimized
         void OnStateChanged(object sender, EventArgs args)
         {
             if (WindowState == WindowState.Minimized)
@@ -178,36 +193,36 @@ namespace MediaBrowserService
 
         private void UpdateStatus()
         {
-            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+            if (Application.Current.Dispatcher.Thread != Thread.CurrentThread)
             {
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateStatus);
                 return;
             }
-            if (refreshCanceled)
+            if (_refreshCanceled)
             {
                 lblSvcActivity.Content = "Last Refresh was canceled by user...";
             }
             else
             {
-                lblSvcActivity.Content = "Last Refresh was " + config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
+                lblSvcActivity.Content = "Last Refresh was " + _config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
             }
-            DateTime nextRefresh = config.LastFullRefresh.Date.AddDays(config.FullRefreshInterval);
-            if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
-            string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Today/Tonight at " + (config.FullRefreshPreferredHour * 100).ToString("00:00") : 
-                nextRefresh.ToString("yyyy-MM-dd") + " at " + (config.FullRefreshPreferredHour * 100).ToString("00:00");
+            DateTime nextRefresh = _config.LastFullRefresh.Date.AddDays(_config.FullRefreshInterval);
+            if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= _config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
+            string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Today/Tonight at " + (_config.FullRefreshPreferredHour * 100).ToString("00:00") : 
+                nextRefresh.ToString("yyyy-MM-dd") + " at " + (_config.FullRefreshPreferredHour * 100).ToString("00:00");
             lblNextSvcRefresh.Content = "Next Refresh: " + nextRefreshStr;
         }
 
         private void UpdateElapsedTime()
         {
-            if (Application.Current != null && Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+            if (Application.Current != null && Application.Current.Dispatcher.Thread != Thread.CurrentThread)
             {
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateElapsedTime);
                 return;
             }
             //update our elapsed time
-            TimeSpan elapsed = DateTime.Now - startTime;
-            lblElapsed.Content = string.Format("{0} Days {1} Hours and {2} Mins ", (int)elapsed.TotalDays, (int)elapsed.Hours, (int)elapsed.Minutes);
+            TimeSpan elapsed = DateTime.Now - _startTime;
+            lblElapsed.Content = string.Format("{0} Days {1} Hours and {2} Mins ", (int)elapsed.TotalDays, elapsed.Hours, elapsed.Minutes);
         }
 
 
@@ -229,32 +244,32 @@ namespace MediaBrowserService
 
         private void RefreshInterface()
         {
-            if (config == null) return;
+            if (_config == null) return;
 
             lblVersion.Content = "Version " + Kernel.Instance.VersionStr;
-            tbxRefreshHour.Text = config.FullRefreshPreferredHour.ToString();
-            tbxRefreshInterval.Text = config.FullRefreshInterval.ToString();
-            cbxSleep.IsChecked = config.SleepAfterScheduledRefresh;
+            tbxRefreshHour.Text = _config.FullRefreshPreferredHour.ToString();
+            tbxRefreshInterval.Text = _config.FullRefreshInterval.ToString();
+            cbxSleep.IsChecked = _config.SleepAfterScheduledRefresh;
             UpdateStatus();
         }
         
         private void tbxRefreshInterval_LostFocus(object sender, RoutedEventArgs e)
         {
-            Int32.TryParse(tbxRefreshInterval.Text, out config.FullRefreshInterval);
-            config.Save();
+            Int32.TryParse(tbxRefreshInterval.Text, out _config.FullRefreshInterval);
+            _config.Save();
             UpdateStatus();
         }
 
         private void tbxRefreshHour_LostFocus(object sender, RoutedEventArgs e)
         {
-            Int32.TryParse(tbxRefreshHour.Text, out config.FullRefreshPreferredHour);
-            if (config.FullRefreshPreferredHour > 24)
+            Int32.TryParse(tbxRefreshHour.Text, out _config.FullRefreshPreferredHour);
+            if (_config.FullRefreshPreferredHour > 24)
             {
-                config.FullRefreshPreferredHour = 2;
+                _config.FullRefreshPreferredHour = 2;
                 MessageBox.Show("Hour cannot be more than 24. Reset to default.","Invalid Hour");
-                tbxRefreshHour.Text = config.FullRefreshPreferredHour.ToString();
+                tbxRefreshHour.Text = _config.FullRefreshPreferredHour.ToString();
             }
-            config.Save();
+            _config.Save();
             UpdateStatus();
         }
 
@@ -265,42 +280,39 @@ namespace MediaBrowserService
         }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            Async.Queue("Manual Refresh", () =>
-            {
-                FullRefresh(true);
-            });
+            Async.Queue("Manual Refresh", () => FullRefresh(true));
         }
 
         private void cbxSleep_Checked(object sender, RoutedEventArgs e)
         {
-            config.SleepAfterScheduledRefresh = cbxSleep.IsChecked.Value;
-            config.Save();
+            _config.SleepAfterScheduledRefresh = cbxSleep.IsChecked.Value;
+            _config.Save();
         }
 
         private void cbxClearCache_Checked(object sender, RoutedEventArgs e)
         {
-            clearCacheOption = cbxClearCache.IsChecked.Value;
+            _serviceOptions.ClearCacheOption = cbxClearCache.IsChecked.Value;
         }
 
         private void cbxIncludeImages_Checked(object sender, RoutedEventArgs e)
         {
-            includeImagesOption = cbxIncludeImages.IsChecked.Value;
+            _serviceOptions.IncludeImagesOption = cbxIncludeImages.IsChecked.Value;
             cbxGenres.IsEnabled = cbxStudios.IsEnabled = cbxPeople.IsEnabled = cbxIncludeImages.IsChecked.Value;
         }
 
         private void cbxGenres_Checked(object sender, RoutedEventArgs e)
         {
-            includeGenresOption = cbxGenres.IsChecked.Value;
+            _serviceOptions.IncludeGenresOption = cbxGenres.IsChecked.Value;
         }
 
         private void cbxStudios_Checked(object sender, RoutedEventArgs e)
         {
-            includeStudiosOption = cbxStudios.IsChecked.Value;
+            _serviceOptions.IncludeStudiosOption = cbxStudios.IsChecked.Value;
         }
 
         private void cbxPeople_Checked(object sender, RoutedEventArgs e)
         {
-            includePeopleOption = cbxPeople.IsChecked.Value;
+            _serviceOptions.IncludePeopleOption = cbxPeople.IsChecked.Value;
         }
 
         private void btnCancelRefresh_Click(object sender, RoutedEventArgs e)
@@ -308,7 +320,7 @@ namespace MediaBrowserService
             if (MessageBox.Show("Canceling a running refresh may leave your library in an incomplete state.  Are you sure you want to cancel?", "Cancel Refresh", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 btnCancelRefresh.IsEnabled = false;
-                refreshCanceled = true;
+                _refreshCanceled = true;
             }
         }
 
@@ -316,7 +328,7 @@ namespace MediaBrowserService
 
         private void Go()
         {
-            mutex = new Mutex(false, Kernel.MBSERVICE_MUTEX_ID);
+            _mutex = new Mutex(false, Kernel.MBSERVICE_MUTEX_ID);
             {
                 //set up so everyone can access
                 var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
@@ -325,7 +337,7 @@ namespace MediaBrowserService
                 {
                     //don't bomb if this fails
                     securitySettings.AddAccessRule(allowEveryoneRule);
-                    mutex.SetAccessControl(securitySettings);
+                    _mutex.SetAccessControl(securitySettings);
                 }
                 catch (Exception e)
                 {
@@ -336,10 +348,10 @@ namespace MediaBrowserService
                 {
                     try
                     {
-                        hasHandle = mutex.WaitOne(5000, false);
-                        if (hasHandle == false)
+                        _hasHandle = _mutex.WaitOne(5000, false);
+                        if (_hasHandle == false)
                         {
-                            forceClose = true;
+                            _forceClose = true;
                             this.Close(); //another instance exists
                             return;
                         }
@@ -353,43 +365,48 @@ namespace MediaBrowserService
                     this.WindowState = WindowState.Minimized;
                     Hide();
                     Kernel.Init(KernelLoadDirective.LoadServicePlugins);
-                    config = Kernel.Instance.ServiceConfigData;
+                    _config = Kernel.Instance.ServiceConfigData;
                     RefreshInterface();
-                    lblSinceDate.Content = startTime;
+                    lblSinceDate.Content = _startTime;
                     CoreCommunications.StartListening(); //start listening for commands from core/configurator
                     Logger.ReportInfo("Service Started");
-                    mainLoop = Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
+                    _mainLoop = Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
                 }
                 catch  //some sort of error - release
                 {
-                    if (hasHandle)
-                        mutex.ReleaseMutex();
+                    if (_hasHandle)
+                    {
+                        _mutex.ReleaseMutex();
+                    }
                 }
             }
         }
 
-        private bool refreshRunning = false;
 
         private void FullRefresh(bool force)
         {
             UpdateElapsedTime();
-            if (refreshRunning) return; //get out of here fast
-            var verylate = (config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval * 3)) && firstIteration);
-            var overdue = config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(config.FullRefreshInterval));
+            if (_refreshRunning) 
+            {
+                return; //get out of here fast
+            }
 
-            firstIteration = false; //re set this so an interval of 0 doesn't keep firing us off
+            var verylate = (_config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(_config.FullRefreshInterval * 3)) && _firstIteration);
+            var overdue = _config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(_config.FullRefreshInterval));
+
+            _firstIteration = false; //re set this so an interval of 0 doesn't keep firing us off
             UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour >= config.FullRefreshPreferredHour) && config.LastFullRefresh.Date != DateTime.Now.Date))
+            if (!_refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour >= _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
-                refreshRunning = true;
+                _refreshRunning = true;
                 Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
                     gbManual.IsEnabled = false;
                     refreshProgress.Value = 0;
                     refreshProgress.Visibility = Visibility.Visible;
-                    refreshCanceled = false;
+                    _refreshCanceled = false;
                     btnCancelRefresh.IsEnabled = true;
                     btnCancelRefresh.Visibility = Visibility.Visible;
                     lblSvcActivity.Content = "Refresh Running...";
@@ -400,19 +417,19 @@ namespace MediaBrowserService
                     lblNextSvcRefresh.Content = "";
                 }));
 
-                bool onSchedule = (!force && (DateTime.Now.Hour == config.FullRefreshPreferredHour));
+                bool onSchedule = (!force && (DateTime.Now.Hour == _config.FullRefreshPreferredHour));
                 Logger.ReportInfo("Full Refresh Started");
 
                 using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
                 {
                     try
                     {
-                        if (force && clearCacheOption)
+                        if (force && _serviceOptions.ClearCacheOption)
                         {
                             //clear all cache items except displayprefs and playstate
                             Logger.ReportInfo("Clearing Cache on manual refresh...");
                             Kernel.Instance.ItemRepository.ClearEntireCache();
-                            if (includeImagesOption)
+                            if (_serviceOptions.IncludeImagesOption)
                             {
                                 try
                                 {
@@ -426,16 +443,15 @@ namespace MediaBrowserService
                                 catch (Exception e) { Logger.ReportException("Error trying to create image cache.", e); } //just log it
                             }
                         }
-                        if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, includeImagesOption))
+
+                        if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, _serviceOptions.IncludeImagesOption))
                         {
-                            config.LastFullRefresh = DateTime.Now;
-                            config.Save();
+                            _config.LastFullRefresh = DateTime.Now;
+                            _config.Save();
                         }
+
                         MBServiceController.SendCommandToCore(IPCCommands.ReloadItems);
-                        Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-                        {
-                            UpdateStatus();
-                        }));
+                        Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(UpdateStatus));
 
                     }
                     catch (Exception ex)
@@ -457,27 +473,21 @@ namespace MediaBrowserService
                             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
                             notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                         }));
-                        refreshRunning = false;
-                        if (onSchedule && config.SleepAfterScheduledRefresh)
+                        _refreshRunning = false;
+
+                        if (onSchedule && _config.SleepAfterScheduledRefresh)
                         {
                             Logger.ReportInfo("Putting computer to sleep...");
                             System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
                         }
                     }
                 }
-
             }
-            if (shutdown) //we were told to shutdown on next iteration (keeps us from shutting down in the middle of a refresh
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-                {
-                    Close();
-                }));
 
-        }
-
-        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
-        {
-            return FullRefresh(folder, options, false);
+            if (_shutdown) //we were told to shutdown on next iteration (keeps us from shutting down in the middle of a refresh
+            {
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(Close));
+            }
         }
 
         bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, bool includeImages)
@@ -495,8 +505,12 @@ namespace MediaBrowserService
                 {
                     currentIteration++;
                     UpdateProgress("Validating",currentIteration / totalIterations);
-                    Folder f = item as Folder;
-                    if (f != null) f.ValidateChildren();
+                    var f = item as Folder;
+                    if (f != null)
+                    {
+                        f.ValidateChildren();
+                    }
+
                 })) return false;
             }
 
@@ -509,9 +523,9 @@ namespace MediaBrowserService
                 })) return false;
             }
 
-            List<string> studiosProcessed = new List<string>();
-            List<string> genresProcessed = new List<string>();
-            List<string> peopleProcessed = new List<string>();
+            var studiosProcessed = new List<string>();
+            var genresProcessed = new List<string>();
+            var peopleProcessed = new List<string>();
 
             using (new Profiler(Kernel.Instance.GetString("SlowRefresh")))
             {
@@ -527,8 +541,8 @@ namespace MediaBrowserService
                         //cause genre and studio images to cache as well
                         if (item is Show)
                         {
-                            Show show = item as Show;
-                            if (includeGenresOption && show.Genres != null)
+                            var show = item as Show;
+                            if (_serviceOptions.IncludeGenresOption && show.Genres != null)
                             {
                                 foreach (var genre in show.Genres)
                                 {
@@ -545,7 +559,7 @@ namespace MediaBrowserService
                                     }
                                 }
                             }
-                            if (includeStudiosOption && show.Studios != null)
+                            if (_serviceOptions.IncludeStudiosOption && show.Studios != null)
                             {
                                 foreach (var studio in show.Studios)
                                 {
@@ -562,7 +576,7 @@ namespace MediaBrowserService
                                     }
                                 }
                             }
-                            if (includePeopleOption && show.Actors != null)
+                            if (_serviceOptions.IncludePeopleOption && show.Actors != null)
                             {
                                 foreach (var actor in show.Actors)
                                 {
@@ -579,7 +593,7 @@ namespace MediaBrowserService
                                     }
                                 }
                             }
-                            if (includePeopleOption && show.Directors != null)
+                            if (_serviceOptions.IncludePeopleOption && show.Directors != null)
                             {
                                 foreach (var director in show.Directors)
                                 {
@@ -608,7 +622,7 @@ namespace MediaBrowserService
             action(folder);
             foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateModified))
             {
-                if (refreshCanceled) return false;
+                if (_refreshCanceled) return false;
                 action(item);
             }
             return true;
