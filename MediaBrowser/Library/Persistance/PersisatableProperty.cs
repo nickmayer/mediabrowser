@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using System.Reflection;
 
 namespace MediaBrowser.Library.Persistance {
-    class PersisatableProperty : Persistable {
+    public class PersisatableProperty : Persistable {
 
         PropertyInfo propertyInfo;
 
@@ -38,7 +38,7 @@ namespace MediaBrowser.Library.Persistance {
             propertyInfo.SetValue(o, val, null);
         }
 
-        protected override MemberInfo MemberInfo {
+        public override MemberInfo MemberInfo {
             get { return propertyInfo; }
         }
     }

@@ -42,7 +42,7 @@ namespace MediaBrowser.Library.Persistance {
             fieldInfo.SetValue(o, val);
         }
 
-        protected override MemberInfo MemberInfo {
+        public override MemberInfo MemberInfo {
             get { return fieldInfo; }
         }
     }

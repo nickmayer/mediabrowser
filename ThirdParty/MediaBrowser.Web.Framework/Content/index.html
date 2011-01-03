@@ -1,0 +1,26 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>Media Browser Web Interface</title>
+</head>
+<body>
+    <script type="text/javascript" src="jquery.js"></script>
+    <p>
+        This is my magic app .... 
+    </p>
+
+    
+    <script type="text/javascript">
+        alert("hi");
+
+        $().ready(function () {
+
+            $.get("/item", function (result) {
+                alert(result);
+            });
+        });
+    </script>
+
+    <p>This is more</p>
+</body>
+</html>

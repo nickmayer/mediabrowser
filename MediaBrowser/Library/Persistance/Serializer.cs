@@ -237,7 +237,7 @@ namespace MediaBrowser.Library.Persistance {
             GetSerializer(source.GetType()).MergeObjects(source, target, force);
         }
 
-        internal static IEnumerable<Persistable> GetPersistables(object obj) {
+        public static IEnumerable<Persistable> GetPersistables(object obj) {
             return GetSerializer(obj.GetType()).persistables;
         }
   

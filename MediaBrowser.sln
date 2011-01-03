@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBTrailers", "MBTrailers\MB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBrowserService", "MediaBrowserService\MediaBrowserService.csproj", "{769316E2-1B6A-47DD-83F8-F9C274DD83B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBWeb", "MBWeb\MBWeb.csproj", "{AEF6DA92-C07A-498D-95FB-4A26AE526941}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,6 +187,16 @@ Global
 		{769316E2-1B6A-47DD-83F8-F9C274DD83B0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{769316E2-1B6A-47DD-83F8-F9C274DD83B0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{769316E2-1B6A-47DD-83F8-F9C274DD83B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AEF6DA92-C07A-498D-95FB-4A26AE526941}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

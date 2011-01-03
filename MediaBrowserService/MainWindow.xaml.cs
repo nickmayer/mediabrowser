@@ -200,7 +200,7 @@ namespace MediaBrowserService
 
         private void UpdateElapsedTime()
         {
-            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+            if (Application.Current != null && Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
             {
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateElapsedTime);
                 return;

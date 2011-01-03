@@ -8,7 +8,7 @@ using System.IO;
 using System.Collections;
 
 namespace MediaBrowser.Library.Persistance {
-    abstract class Persistable {
+    public abstract class Persistable {
 
         static Dictionary<Type, MethodInfo> readFieldMethods;
         static Dictionary<Type, MethodInfo> writeFieldMethods;
@@ -141,7 +141,7 @@ namespace MediaBrowser.Library.Persistance {
 
         public abstract object GetValue(object o);
         public abstract void SetValue(object o, object val);
-        protected abstract MemberInfo MemberInfo { get;  }
+        public abstract MemberInfo MemberInfo { get;  }
 
         public  T[] GetAttributes<T>() where T : Attribute { 
             // we could cache this ... 

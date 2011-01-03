@@ -1,0 +1,53 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>Media Browser Web Interface</title>
+    <style type="text/css">
+        .name  
+        {
+        	margin-right: 8px;
+        	background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="jquery.js"></script>
+    <p>
+        Browse through your library: 
+    </p>
+
+    <div id="content"></div>
+    
+    <script type="text/javascript">
+
+        function processResult(result) {
+            var content = $("#content");
+            var buffer = "";
+            for (var i = 0; i < result.length; i++) {
+                buffer += "<p>";
+                for (prop in result[i]) {
+                    if (prop == "Id") {
+                        continue;
+                    }
+                    if (prop == "Name") {
+                        buffer += "<h4><a href='#' class='drilldown' id='drilldown-" + result[i]["Id"] + "'>" + result[i]["Name"] + "</a></h4>"
+                    } else {
+                        buffer += "<span class='name'>" + prop + ":</span><span class='value'>" + result[i][prop] + "</span><br>";
+                    }
+                }
+                buffer += "</p>"
+            }
+
+            $("#content").html(buffer);
+        }
+
+        $().ready(function() {
+            $.get("/item", processResult);
+            $(".drilldown").live("click", function() {
+                var id = $(this).attr("id").substring("drilldown-".length);
+                $.get("/item?id=" + id, processResult);
+            });
+        });
+    </script>
+</body>
+</html>
