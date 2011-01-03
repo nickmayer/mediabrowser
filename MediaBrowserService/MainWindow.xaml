@@ -43,7 +43,7 @@
         <Label FontSize="10" Height="21" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,1,13,0" Name="lblVersion" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Width="112">Version 0.0.0.0</Label>
         <Label Height="28" HorizontalAlignment="Left" Margin="18,9.84,0,0" Foreground="Green" Name="label1" VerticalAlignment="Top" Width="114" FontSize="12" FontWeight="Bold">Service Uptime</Label>
         <Label Height="28" HorizontalAlignment="Left" Margin="45,28,0,0" Name="lblSinceDate" VerticalAlignment="Top" Width="194" FontSize="12">Label</Label>
-        <Label Height="28" HorizontalAlignment="Left" Margin="45,46,0,0" Name="lblElapsed" VerticalAlignment="Top" Width="194" FontSize="12">Label</Label>
-        <Rectangle Height="64" HorizontalAlignment="Left" Margin="12,8,0,0" Name="rectangle1" Stroke="Green" VerticalAlignment="Top" Width="241" />
+        <Label Height="28" HorizontalAlignment="Left" Margin="45,49,0,0" Name="lblElapsed" VerticalAlignment="Top" Width="194" FontSize="12">Label</Label>
+        <Rectangle Height="64" HorizontalAlignment="Left" Margin="12,11,0,0" Name="rectangle1" Stroke="Green" VerticalAlignment="Top" Width="241" />
     </Grid>
 </Window>
