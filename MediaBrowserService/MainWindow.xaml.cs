@@ -499,7 +499,7 @@ namespace MediaBrowserService
 
         bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
         {
-            double totalIterations = folder.RecursiveChildren.Count() * 3;
+            double totalIterations = folder.RecursiveChildren.Count() * 2;
             if (totalIterations == 0) return true; //nothing to do
 
             int currentIteration = 0;
@@ -521,14 +521,15 @@ namespace MediaBrowserService
                 })) return false;
             }
 
-            using (new Profiler(Kernel.Instance.GetString("FastRefreshProf")))
-            {
-                if (!RunActionRecursively(folder, item => {
-                    currentIteration++;
-                    UpdateProgress("Fast Metadata",currentIteration / totalIterations);
-                    item.RefreshMetadata(MetadataRefreshOptions.FastOnly);
-                })) return false;
-            }
+            //This is redundant in this context...
+            //using (new Profiler(Kernel.Instance.GetString("FastRefreshProf")))
+            //{
+            //    if (!RunActionRecursively(folder, item => {
+            //        currentIteration++;
+            //        UpdateProgress("Fast Metadata",currentIteration / totalIterations);
+            //        item.RefreshMetadata(MetadataRefreshOptions.FastOnly);
+            //    })) return false;
+            //}
 
             var studiosProcessed = new List<string>();
             var genresProcessed = new List<string>();
@@ -540,7 +541,7 @@ namespace MediaBrowserService
                 if (!RunActionRecursively(folder, item =>
                 {
                     currentIteration++;
-                    UpdateProgress("Slow Metadata",(currentIteration / totalIterations));
+                    UpdateProgress("All Metadata",(currentIteration / totalIterations));
                     item.RefreshMetadata(MetadataRefreshOptions.Default);
                     if (_serviceOptions.IncludeImagesOption) //main images
                     {
