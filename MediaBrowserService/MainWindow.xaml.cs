@@ -371,7 +371,7 @@ namespace MediaBrowserService
                     Kernel.Init(KernelLoadDirective.LoadServicePlugins);
                     _config = Kernel.Instance.ServiceConfigData;
                     RefreshInterface();
-                    lblSinceDate.Content = _startTime;
+                    lblSinceDate.Content = "Since: "+_startTime;
                     CoreCommunications.StartListening(); //start listening for commands from core/configurator
                     Logger.ReportInfo("Service Started");
                     _mainLoop = Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
