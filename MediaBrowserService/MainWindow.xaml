@@ -18,32 +18,36 @@
                 <Button Margin="0,0,2,7" Name="btnCancelRefresh" Click="btnCancelRefresh_Click" Visibility="Hidden" Height="23" VerticalAlignment="Bottom" FontSize="12" HorizontalAlignment="Right" Width="75">Cancel</Button>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Media Collection Refresh Schedule" Margin="12,220,12,0" Name="groupBox9" FontSize="14" Height="128" VerticalAlignment="Top">
+        <GroupBox Header="Media Collection Refresh Schedule" Margin="12,220,12,236" Name="groupBox9" FontSize="14">
             <Grid>
                 <Label Height="28" Margin="6,10,0,0" Name="label14" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="102">Interval (days)</Label>
                 <Label Margin="6,40,0,0" Name="label15" FontSize="14" HorizontalAlignment="Left" Width="131" Height="33.38" VerticalAlignment="Top">Refresh Time (24hr)</Label>
                 <TextBox Height="22" HorizontalAlignment="Left" LostFocus="tbxRefreshInterval_LostFocus" Margin="159,13,0,0" Name="tbxRefreshInterval" PreviewTextInput="NumberOnly_PreviewTextInput" TextAlignment="Right" VerticalAlignment="Top" Width="33" FontSize="14">1</TextBox>
-                <TextBox HorizontalAlignment="Left" LostFocus="tbxRefreshHour_LostFocus" Margin="159,42,0,37.69" Name="tbxRefreshHour" PreviewTextInput="NumberOnly_PreviewTextInput" TextAlignment="Right" Width="33" FontSize="14">2</TextBox>
-                <Label HorizontalAlignment="Left" Margin="191,40,0,37" Name="label16" Width="37" FontSize="14">: 00</Label>
-                <CheckBox Height="27" Margin="10,0,0,1" Name="cbxSleep" VerticalAlignment="Bottom" Checked="cbxSleep_Checked" Unchecked="cbxSleep_Checked" HorizontalAlignment="Left" Width="149" ToolTip="This will only occur on a regularly scheduled refresh">Sleep After Refresh</CheckBox>
+                <TextBox HorizontalAlignment="Left" LostFocus="tbxRefreshHour_LostFocus" Margin="159,42,0,0" Name="tbxRefreshHour" PreviewTextInput="NumberOnly_PreviewTextInput" TextAlignment="Right" Width="33" FontSize="14" Height="22.69" VerticalAlignment="Top">2</TextBox>
+                <Label HorizontalAlignment="Left" Margin="191,40,0,0" Name="label16" Width="37" FontSize="14" Height="25.38" VerticalAlignment="Top">: 00</Label>
+                <CheckBox Margin="0,37.69,96,0" Name="cbxSleep" Checked="cbxSleep_Checked" Unchecked="cbxSleep_Checked" ToolTip="This will only occur on a regularly scheduled refresh" HorizontalAlignment="Right" Width="149" Height="27" VerticalAlignment="Top">Sleep After Refresh</CheckBox>
             </Grid>
         </GroupBox>
         <Image Name="image1" Stretch="None" Source="/MediaBrowserService;component/Images/MB_Service_Logo.png" Height="80" VerticalAlignment="Top" Margin="268,8,8,0" />
-        <GroupBox Header="Manual Refresh" Margin="12,354,12,0" Name="gbManual" FontSize="14" Height="179" VerticalAlignment="Top" IsEnabled="True">
+        <GroupBox Header="Manual Refresh Options" Margin="12,0,12,34" Name="gbManual" FontSize="14" Height="196" VerticalAlignment="Bottom" IsEnabled="True">
             <Grid>
-                <Button Margin="235,0,185,11.38" Name="btnRefresh" FontSize="14" Click="btnRefresh_Click" Height="55.38" VerticalAlignment="Bottom">Refresh Now</Button>
-                <CheckBox Margin="10,10,0,0" Name="cbxClearCache" Checked="cbxClearCache_Checked" Unchecked="cbxClearCache_Checked" HorizontalAlignment="Left" Width="131" Height="24" VerticalAlignment="Top">Clear Cache First</CheckBox>
-                <CheckBox Margin="10,58,0,70" Name="cbxIncludeImages" Checked="cbxIncludeImages_Checked" Unchecked="cbxIncludeImages_Checked" HorizontalAlignment="Left" Width="120">General Images</CheckBox>
-                <CheckBox Margin="30,0,0,54" Name="cbxGenres" IsEnabled="False" HorizontalAlignment="Left" Width="120" Checked="cbxGenres_Checked" Height="18.38" VerticalAlignment="Bottom">Genre Images</CheckBox>
-                <CheckBox Height="25.38" Margin="30,0,0,23" Name="cbxStudios" VerticalAlignment="Bottom" IsEnabled="False" HorizontalAlignment="Left" Width="120" Checked="cbxStudios_Checked">Studio Images</CheckBox>
-                <CheckBox Height="25.38" Margin="30,0,0,2" Name="cbxPeople" VerticalAlignment="Bottom" IsEnabled="False" HorizontalAlignment="Left" Width="120" Checked="cbxPeople_Checked">People Images</CheckBox>
-                <Label Height="28" HorizontalAlignment="Left" Margin="6,31,0,0" Name="lblManualInclude" VerticalAlignment="Top" Width="120">Include in Refresh...</Label>
+                <CheckBox Margin="10,10,0,0" Name="cbxClearCache" Checked="cbxClearCache_Checked" Unchecked="cbxClearCache_Checked" HorizontalAlignment="Left" Width="131" Height="24" VerticalAlignment="Top" ToolTip="Will clear the items cache and, if any image options are selected, the image cache ">Clear Cache First</CheckBox>
+                <GroupBox Header="Include Images" Margin="10,40,164,14" Name="groupBox1">
+                    <Grid>
+                        <CheckBox Margin="14,10,22,0" Name="cbxIncludeImages" Checked="cbxIncludeImages_Checked" Unchecked="cbxIncludeImages_Checked" Height="23.38" VerticalAlignment="Top">Primary Images (Poster, Backdrops, Banner)</CheckBox>
+                        <CheckBox Margin="14,35,0,37" Name="cbxGenres" IsEnabled="True" HorizontalAlignment="Left" Width="120" Checked="cbxGenres_Checked">Genre Images</CheckBox>
+                        <CheckBox Margin="152,36,84,29" Name="cbxPeople" IsEnabled="True" Checked="cbxPeople_Checked">People Images</CheckBox>
+                        <CheckBox Height="25.38" Margin="14,0,0,5.62" Name="cbxStudios" VerticalAlignment="Bottom" IsEnabled="True" HorizontalAlignment="Left" Width="120" Checked="cbxStudios_Checked">Studio Images</CheckBox>
+                        <CheckBox Height="25" Margin="152,0,0,6" Name="cbxYears" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" IsEnabled="True">Year Images</CheckBox>
+                    </Grid>
+                </GroupBox>
+                <Button Margin="0,0,16,20" Name="btnRefresh" FontSize="14" Click="btnRefresh_Click" Height="37" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="102">Refresh Now</Button>
             </Grid>
         </GroupBox>
         <Label FontSize="10" Height="21" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,1,13,0" Name="lblVersion" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Width="112">Version 0.0.0.0</Label>
         <Label Height="28" HorizontalAlignment="Left" Margin="18,9.84,0,0" Foreground="Green" Name="label1" VerticalAlignment="Top" Width="114" FontSize="12" FontWeight="Bold">Service Uptime</Label>
         <Label Height="28" HorizontalAlignment="Left" Margin="45,28,0,0" Name="lblSinceDate" VerticalAlignment="Top" Width="194" FontSize="12">Label</Label>
         <Label Height="28" HorizontalAlignment="Left" Margin="45,49,0,0" Name="lblElapsed" VerticalAlignment="Top" Width="194" FontSize="12">Label</Label>
-        <Rectangle Height="64" HorizontalAlignment="Left" Margin="12,11,0,0" Name="rectangle1" Stroke="Green" VerticalAlignment="Top" Width="241" />
+        <Rectangle Height="71" HorizontalAlignment="Left" Margin="12,11,0,0" Name="rectangle1" Stroke="Green" VerticalAlignment="Top" Width="241" />
     </Grid>
 </Window>

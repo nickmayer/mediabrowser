@@ -10,6 +10,16 @@
 
         public bool IncludePeopleOption { get; set; }
 
+        public bool IncludeYearOption { get; set; }
+
         public bool ClearCacheOption { get; set; }
+
+        public bool AnyImageOptionsSelected
+        {
+            get
+            {
+                return IncludeImagesOption || IncludeGenresOption || IncludePeopleOption || IncludeStudiosOption || IncludeYearOption;
+            }
+        }
     }
 }

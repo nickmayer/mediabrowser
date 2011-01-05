@@ -8,7 +8,7 @@ using MediaBrowser.Library.Extensions;
 
 namespace MediaBrowser.Library.Entities {
     // cause years need metadata too ...
-    class Year : BaseItem {
+    public class Year : BaseItem {
          public static Guid GetYearId(string name) {
             return ("year" + name.Trim()).GetMD5();
         }
