@@ -567,9 +567,9 @@
 
         <Control Id="DesktopShortcutCheckBox" Type="CheckBox" X="40" Y="110" Width="290" Height="17" Property="OPTIONALDESKTOPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateDesktopShortcut)" />
         <Control Id="StartmenuShortcutCheckBox" Type="CheckBox" X="40" Y="130" Width="290" Height="17" Property="OPTIONALSTARTMENUSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateStartMenuShortcut)" />
-        <Control Id="UserText1" Type="Text" X="20" Y="160" Width="330" Height="20" Text="!(loc.Dialog_OptionalLaunchAtStartup)" />
-        <Control Id="MediaBrowserStartupShortcutCheckBox" Type="CheckBox" X="40" Y="180" Width="290" Height="17" Property="OPTIONALMBSTARTUPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateMediaBrowserStartupShortcut)" />
-        <Control Id="MediaBrowserServiceStartupShortcutCheckBox" Type="CheckBox" X="40" Y="200" Width="290" Height="17" Property="OPTIONALMBSERVICESTARTUPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateMediaBrowserServiceStartupShortcut)" />
+        <!--<Control Id="UserText1" Type="Text" X="20" Y="160" Width="330" Height="20" Text="!(loc.Dialog_OptionalLaunchAtStartup)" />-->
+        <Control Id="MediaBrowserStartupShortcutCheckBox" Type="CheckBox" X="40" Y="150" Width="290" Height="17" Property="OPTIONALMBSTARTUPSHORTCUT" CheckBoxValue="0" Text="!(loc.Dialog_CreateMediaBrowserStartupShortcut)" />
+        <Control Id="MediaBrowserServiceStartupShortcutCheckBox" Type="CheckBox" X="40" Y="170" Width="290" Height="17" Property="OPTIONALMBSERVICESTARTUPSHORTCUT" CheckBoxValue="1" Text="!(loc.Dialog_CreateMediaBrowserServiceStartupShortcut)" />
       </Dialog>
 
       <Dialog Id="MediaBrowserExitDialog" Width="370" Height="270" Title="!(loc.ExitDialog_Title)">
