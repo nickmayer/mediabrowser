@@ -137,6 +137,7 @@ namespace MediaBrowserService
             //close the app, but wait for refresh to finish if it is going
             if (_refreshRunning)
             {
+                _refreshCanceled = true;
                 _forceClose = true;
                 _shutdown = true;
             }
@@ -415,6 +416,7 @@ namespace MediaBrowserService
                     btnCancelRefresh.Visibility = Visibility.Visible;
                     lblSvcActivity.Content = "Refresh Running...";
                     notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
+                    notifyIcon.ContextMenu.MenuItems[3].Enabled = false;
                     notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
                     Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
                     notifyIcon.Icon = new System.Drawing.Icon(iconStream);
@@ -472,6 +474,7 @@ namespace MediaBrowserService
                             refreshProgress.Visibility = Visibility.Hidden;
                             btnCancelRefresh.Visibility = Visibility.Hidden;
                             gbManual.IsEnabled = true;
+                            notifyIcon.ContextMenu.MenuItems[3].Enabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
                             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
