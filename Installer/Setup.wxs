@@ -488,7 +488,7 @@
     <WixVariable Id="WixUIDialogBmp" Value="Images\dialog.bmp"/>
 
     <!-- These properties may be modified in the user interface -->
-     <Property Id="OPTIONALDESKTOPSHORTCUT">1</Property>  
+     <Property Id="OPTIONALDESKTOPSHORTCUT">1</Property>
      <Property Id="OPTIONALSTARTMENUSHORTCUT">1</Property>  
      <Property Id="OPTIONALMBSTARTUPSHORTCUT">1</Property>  
      <Property Id="OPTIONALMBSERVICESTARTUPSHORTCUT">1</Property> 

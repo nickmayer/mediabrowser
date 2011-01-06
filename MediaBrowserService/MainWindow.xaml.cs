@@ -430,6 +430,7 @@ namespace MediaBrowserService
 
                 using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
                 {
+                    Kernel.Instance.ReLoadRoot(); // make sure we are dealing with the current state of the library
                     try
                     {
                         if (force && _serviceOptions.ClearCacheOption)
@@ -483,6 +484,7 @@ namespace MediaBrowserService
                             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
                             notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                         }));
+                        Kernel.Instance.ReLoadRoot(); // re-dump this to stay clean
                         _refreshRunning = false;
 
                         if (onSchedule && _config.SleepAfterScheduledRefresh)

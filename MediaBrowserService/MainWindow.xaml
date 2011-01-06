@@ -31,7 +31,7 @@
         <Image Name="image1" Stretch="None" Source="/MediaBrowserService;component/Images/MB_Service_Logo.png" Height="80" VerticalAlignment="Top" Margin="268,8,8,0" />
         <GroupBox Header="Manual Refresh Options" Margin="12,0,12,34" Name="gbManual" FontSize="14" Height="196" VerticalAlignment="Bottom" IsEnabled="True">
             <Grid>
-                <CheckBox Margin="17,14,0,0" Name="cbxClearCache" Checked="cbxClearCache_Checked" Unchecked="cbxClearCache_Checked" HorizontalAlignment="Left" Width="131" Height="24" VerticalAlignment="Top" ToolTip="Will clear the items cache and, if any image options are selected, the image cache ">Clear Cache First</CheckBox>
+                <CheckBox Margin="19,14,0,0" Name="cbxClearCache" Checked="cbxClearCache_Checked" Unchecked="cbxClearCache_Checked" HorizontalAlignment="Left" Width="131" Height="24" VerticalAlignment="Top" ToolTip="Will clear the items cache and, if any image options are selected, the image cache ">Clear Cache First</CheckBox>
                 <GroupBox Header="Include Images" Margin="10,40,164,14" Name="groupBox1">
                     <Grid>
                         <CheckBox Margin="14,10,22,0" Name="cbxIncludeImages" Checked="cbxIncludeImages_Checked" Unchecked="cbxIncludeImages_Checked" Height="23.38" VerticalAlignment="Top">Primary Images (Poster, Backdrops, Banner)</CheckBox>
