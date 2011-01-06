@@ -8,6 +8,7 @@ using System.IO;
 using HttpServer.Messages;
 using HttpServer;
 using HttpServer.Modules;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Web.Framework
 {
@@ -104,7 +105,16 @@ namespace MediaBrowser.Web.Framework
             if (runner != null)
             {
                 var service = (JsonService)runner.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
-                string result = runner.Invoke(service,context.Request);
+                string result = null;
+                try
+                {
+                    result = runner.Invoke(service, context.Request);
+                }
+                catch (Exception e) 
+                {
+                    Logger.ReportException("Failed to execute action in MBWeb: " + context.Request.Uri.AbsolutePath, e);
+                    throw;
+                }
 
                 var body = new MemoryStream();
                 var bytes = Encoding.UTF8.GetBytes(result);

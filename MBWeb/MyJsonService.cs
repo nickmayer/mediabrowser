@@ -6,6 +6,7 @@ using MediaBrowser.Library;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Web.Framework;
 using MediaBrowser.Library.Persistance;
+using System.Collections;
 
 namespace MediaBrowser
 {
@@ -40,18 +41,11 @@ namespace MediaBrowser
                 List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
                 foreach (var child in folder.Children)
                 {
-                    Dictionary<string, object> row = new Dictionary<string, object>();
+                    var row = ToJsonSerializable(child)  as Dictionary<string, object>;
                     row["Name"] = child.Name;
                     row["Id"] = child.Id;
-                    foreach (var persistable in Serializer.GetPersistables(child))
-                    {
-                        row[persistable.MemberInfo.Name] = persistable.GetValue(child);
-                    }
-                   
                     result.Add(row);
                 }
-
-
 
                 lock (ItemMap)
                 {
@@ -61,6 +55,7 @@ namespace MediaBrowser
                     }
                 }
 
+
                 return result;
             }
            
@@ -68,5 +63,31 @@ namespace MediaBrowser
             return new object[] { item };
         }
 
+
+        public object ToJsonSerializable(object input)
+        {
+            Type type = input != null ? input.GetType() : (Type)null;
+            if (input == null || type.IsValueType || type.IsEnum || type == typeof(string))
+            {
+                return input;
+            }
+
+            if (typeof(IList).IsAssignableFrom(type))
+            {
+                var list = new List<object>();
+                foreach (var item in (IList)input)
+                {
+                    list.Add(item);
+                }
+                return list;
+            }
+
+            var rval = new Dictionary<string, object>();
+            foreach (var persistable in Serializer.GetPersistables(input))
+            {
+                rval[persistable.MemberInfo.Name] = ToJsonSerializable(persistable.GetValue(input));
+            }
+            return rval;
+        }
     }
 }
