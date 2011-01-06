@@ -32,7 +32,10 @@ namespace MediaBrowser.Web {
 
             server = new Server();
             server.Add(HttpServer.HttpListener.Create(IPAddress.Any, 9999));
-            server.Add(new TinyWebModule());
+            var module = new TinyWebModule();
+            module.MapPath("/", "/index.html");
+            server.Add(module);
+
             server.Start(5);
         }
 
