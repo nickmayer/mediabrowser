@@ -206,7 +206,7 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (this.VideoFPS != null && this.VideoFPS != "")
+                if (this.VideoFPS != null && this.VideoFPS != "" && this.VideoFPS != "0")
                 {
                     return VideoFPS.ToString() + " " + Kernel.Instance.StringData.GetString("FrameRateStr");
                 }   
@@ -318,7 +318,11 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                return AudioChannelCount.ToString();
+                if (this.AudioChannelCount != null && this.AudioChannelCount != "0")
+                {				
+                    return AudioChannelCount;
+                }   
+                else return "";				
             }
         }
 
