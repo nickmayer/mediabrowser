@@ -16,7 +16,8 @@ namespace MediaBrowser.Library.Persistance {
         Dictionary<Guid, PlaybackStatus> playState = new Dictionary<Guid, PlaybackStatus>();
         Dictionary<Guid, DisplayPreferences> displayPrefs = new Dictionary<Guid, DisplayPreferences>();
 
-        public MemoizingRepository(IItemRepository repository) {
+        public MemoizingRepository(IItemRepository repository)
+        {
             this.repository = repository;
         }
 

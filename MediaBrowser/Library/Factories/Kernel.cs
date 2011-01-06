@@ -337,30 +337,41 @@ namespace MediaBrowser.Library {
             }
         }
 
-        static Kernel GetDefaultKernel(ConfigData config, KernelLoadDirective loadDirective) {
-
+        static IItemRepository GetRepository(ConfigData config)
+        {
             IItemRepository repository = null;
-            if (config.EnableExperimentalSqliteSupport) {
+            if (config.EnableExperimentalSqliteSupport)
+            {
                 string sqliteDb = Path.Combine(ApplicationPaths.AppCachePath, "cache.db");
                 string sqliteDll = Path.Combine(ApplicationPaths.AppConfigPath, "system.data.sqlite.dll");
-                if (File.Exists(sqliteDll)) {
-                    try {
-                        repository = new SafeItemRepository( 
+                if (File.Exists(sqliteDll))
+                {
+                    try
+                    {
+                        repository = new SafeItemRepository(
                             new MemoizingRepository(
-                                SqliteItemRepository.GetRepository(sqliteDb, sqliteDll) 
+                                SqliteItemRepository.GetRepository(sqliteDb, sqliteDll)
                             )
                          );
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         Logger.ReportException("Failed to init sqlite!", e);
                         repository = null;
                     }
                 }
             }
 
-            if (repository == null) {
+            if (repository == null)
+            {
                 repository = new SafeItemRepository(new ItemRepository());
             }
+            return repository;
+        }
 
+        static Kernel GetDefaultKernel(ConfigData config, KernelLoadDirective loadDirective) {
+
+            IItemRepository repository = GetRepository(config);
 
             var kernel = new Kernel()
             {
@@ -432,6 +443,8 @@ namespace MediaBrowser.Library {
             // our root folder needs metadata
             kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
                 kernel.RootFolder;
+
+            ItemRepository = GetRepository(this.ConfigData);
         }
 
         public void ReLoadConfig()
