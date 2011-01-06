@@ -424,6 +424,8 @@ namespace MediaBrowserService
                 }));
 
                 bool onSchedule = (!force && (DateTime.Now.Hour == _config.FullRefreshPreferredHour));
+                MetadataRefreshOptions options = force ? MetadataRefreshOptions.Force : MetadataRefreshOptions.Default;
+
                 Logger.ReportInfo("Full Refresh Started");
 
                 using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
@@ -434,6 +436,7 @@ namespace MediaBrowserService
                         {
                             //clear all cache items except displayprefs and playstate
                             Logger.ReportInfo("Clearing Cache on manual refresh...");
+                            UpdateProgress("Clearing Cache", 0);
                             Kernel.Instance.ItemRepository.ClearEntireCache();
                             if (_serviceOptions.AnyImageOptionsSelected)
                             {
@@ -450,7 +453,7 @@ namespace MediaBrowserService
                             }
                         }
 
-                        if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default))
+                        if (FullRefresh(Kernel.Instance.RootFolder, options))
                         {
                             _config.LastFullRefresh = DateTime.Now;
                             _config.Save();
@@ -542,7 +545,7 @@ namespace MediaBrowserService
                 {
                     currentIteration++;
                     UpdateProgress("All Metadata",(currentIteration / totalIterations));
-                    item.RefreshMetadata(MetadataRefreshOptions.Default);
+                    item.RefreshMetadata(options);
                     if (_serviceOptions.IncludeImagesOption) //main images
                     {
                         ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
