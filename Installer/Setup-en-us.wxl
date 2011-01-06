@@ -20,7 +20,7 @@
   <String Id="Dialog_CreateStartMenuShortcut">Create a shortcut for [ProductName] in the start menu.</String>
   <String Id="Dialog_OptionalLaunchAtStartup">Optionally, you can automatically launch the applications at logon:</String>
   <String Id="Dialog_CreateMediaBrowserStartupShortcut">Launch [ProductName] automatically at log on.</String>
-  <String Id="Dialog_CreateMediaBrowserServiceStartupShortcut">Launch the MB Service automatically at log on.</String>
+  <String Id="Dialog_CreateMediaBrowserServiceStartupShortcut">Launch the MB Service automatically at log on. (Recommended)</String>
   <String Id="Dialog_MakeDonation">If you like [ProductName], please consider making a donation!</String>
   <String Id="Dialog_DonationUrl">http://www.mediabrowser.tv/donate</String>
 </WixLocalization>
