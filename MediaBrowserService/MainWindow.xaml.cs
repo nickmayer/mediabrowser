@@ -569,7 +569,6 @@ namespace MediaBrowserService
                                 {
                                     if (!genresProcessed.Contains(genre))
                                     {
-                                        Logger.ReportInfo("Caching image for genre: " + genre);
                                         Genre g = Genre.GetGenre(genre);
                                         g.RefreshMetadata();
                                         if (g.PrimaryImage != null)
