@@ -7,7 +7,7 @@ using HttpServer;
 
 namespace MediaBrowser.Web.Framework
 {
-    public class ActionRunner
+    public class ActionRunner : IServableContent
     {
         public Type Type { get; set; }
         public MethodInfo Action { get; set; }

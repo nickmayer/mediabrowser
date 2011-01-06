@@ -13,25 +13,10 @@ namespace MediaBrowser.Web.Framework
 {
     public class TinyWebModule : IModule
     {
-        class EmbeddedContent
-        {
-            public ContentTypeHeader ContentTypeHeader { get; set; }
-            public Stream Stream
-            {
-                get
-                {
-                    return Assembly.GetManifestResourceStream(ResourceName);
-                }
-            }
-            public string ResourceName { get; set; }
-            public Assembly Assembly { get; set; }
-        }
-
-        Dictionary<string, ActionRunner> actions = new Dictionary<string, ActionRunner>();
-        Dictionary<string, EmbeddedContent> embeddedContent = new Dictionary<string, EmbeddedContent>();
+        Dictionary<string, IServableContent> content = new Dictionary<string, IServableContent>();
 
         public TinyWebModule()
-            : this(Assembly.GetCallingAssembly())
+            : this(typeof(TinyWebModule).Assembly)
         {
 
         }
@@ -77,7 +62,7 @@ namespace MediaBrowser.Web.Framework
 
                 string fileName = resourceName.Substring(resourceName.ToLower().IndexOf(".content.") + 9);
 
-                embeddedContent["/" + fileName] = new EmbeddedContent
+                content["/" + fileName] = new EmbeddedContent
                 {
                     ResourceName = resourceName,
                     ContentTypeHeader = new ContentTypeHeader(GuessContentHeader(fileName)),
@@ -97,17 +82,26 @@ namespace MediaBrowser.Web.Framework
                         var routes = method.GetCustomAttributes(typeof(RouteAttribute), false);
                         foreach (RouteAttribute route in routes)
                         {
-                            actions[route.Path] = new ActionRunner { Type = type, Action = method };
+                            content[route.Path] = new ActionRunner { Type = type, Action = method };
                         }
                     }
                 }
             }
         }
 
+        public void MapPath(string origin, string target)
+        {
+            content[origin] = content[target];
+        }
+
         public ProcessingResult Process(RequestContext context)
         {
-            ActionRunner runner;
-            if (actions.TryGetValue(context.Request.Uri.AbsolutePath, out runner))
+
+            IServableContent hit = null;
+            content.TryGetValue(context.Request.Uri.AbsolutePath, out hit);
+            var runner = hit as ActionRunner;
+
+            if (runner != null)
             {
                 var service = (JsonService)runner.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
                 string result = runner.Invoke(service,context.Request);
@@ -127,12 +121,12 @@ namespace MediaBrowser.Web.Framework
                 return ProcessingResult.Abort;
             }
 
-            EmbeddedContent content;
-            if (embeddedContent.TryGetValue(context.Request.Uri.AbsolutePath, out content))
+            EmbeddedContent embeddedContent = hit as EmbeddedContent;
+            if (embeddedContent != null)
             {
                 var actual = new MemoryStream();
 
-                using (var body = content.Stream)
+                using (var body = embeddedContent.Stream)
                 {
                     StreamReader reader = new StreamReader(body);
                     var read = reader.ReadToEnd();
@@ -143,7 +137,7 @@ namespace MediaBrowser.Web.Framework
                     actual.Seek(0, SeekOrigin.Begin);
                 }
 
-                context.Response.Add(content.ContentTypeHeader);
+                context.Response.Add(embeddedContent.ContentTypeHeader);
                 var generator = new ResponseWriter();
                 generator.SendHeaders(context.HttpContext, context.Response);
                 generator.SendBody(context.HttpContext, actual);
@@ -151,7 +145,14 @@ namespace MediaBrowser.Web.Framework
                 return ProcessingResult.Abort;
             }
 
-            return ProcessingResult.Continue;
+
+            // fake 404 for now 
+            var badRequest = new MemoryStream(Encoding.UTF8.GetBytes("Not Found : " + context.Request.Uri.AbsolutePath));
+            var rw = new ResponseWriter();
+            context.Response.ContentLength.Value = badRequest.Length;
+            rw.SendHeaders(context.HttpContext, context.Response);
+            rw.SendBody(context.HttpContext, badRequest);
+            return ProcessingResult.Abort;
 
         }
     }
