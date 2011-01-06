@@ -496,7 +496,7 @@ namespace MediaBrowserService
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(Close));
             }
         }
-
+        
         bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
         {
             double totalIterations = folder.RecursiveChildren.Count() * 2;
@@ -548,7 +548,7 @@ namespace MediaBrowserService
                         ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
                         item.ReCacheAllImages(s);
                     }
-                    // optionally cause genre, year and studio images to cache as well
+                    // optionally cause genre, poeple, year and studio images to cache as well
                     if (item is Show)
                     {
                         var show = item as Show;
