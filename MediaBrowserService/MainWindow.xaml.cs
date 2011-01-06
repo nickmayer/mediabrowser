@@ -424,7 +424,6 @@ namespace MediaBrowserService
                 }));
 
                 bool onSchedule = (!force && (DateTime.Now.Hour == _config.FullRefreshPreferredHour));
-                MetadataRefreshOptions options = force ? MetadataRefreshOptions.Force : MetadataRefreshOptions.Default;
 
                 Logger.ReportInfo("Full Refresh Started");
 
@@ -454,7 +453,7 @@ namespace MediaBrowserService
                             }
                         }
 
-                        if (FullRefresh(Kernel.Instance.RootFolder, options))
+                        if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default))
                         {
                             _config.LastFullRefresh = DateTime.Now;
                             _config.Save();
