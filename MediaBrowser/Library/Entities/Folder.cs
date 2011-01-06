@@ -480,7 +480,7 @@ namespace MediaBrowser.Library.Entities {
         {
             get
             {
-                if (this.PrimaryImage != null)
+                if (this.ActualChildren.Count > 0) //if we have no children, nothing to display
                 {
                     Guid id = this.Id;
                     if (Config.Instance.EnableSyncViews)
@@ -492,10 +492,10 @@ namespace MediaBrowser.Library.Entities {
                     }
 
                     ThumbSize s = Kernel.Instance.ItemRepository.RetrieveThumbSize(id) ?? new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
-                    float f = this.PrimaryImage.Aspect;
+                    float f = this.ActualChildren[0].PrimaryImage != null ? this.ActualChildren[0].PrimaryImage.Aspect : 1; //just use the first child as our guide
                     if (f == 0)
                         f = 1;
-                    if (s.Width == 0) { s.Width = 1; s.Height = 1; }
+                    if (s.Width < 10) { s.Width = Config.Instance.DefaultPosterSize.Width; s.Height = Config.Instance.DefaultPosterSize.Height; }
                     float maxAspect = s.Height / s.Width;
                     if (f > maxAspect)
                         s.Width = (int)(s.Height / f);
@@ -503,7 +503,7 @@ namespace MediaBrowser.Library.Entities {
                         s.Height = (int)(s.Width * f);
                     return s;
                 }
-                else return new ThumbSize(Kernel.Instance.ConfigData.DefaultPosterSize.Width, Kernel.Instance.ConfigData.DefaultPosterSize.Height);
+                else return new ThumbSize(Config.Instance.DefaultPosterSize.Width, Config.Instance.DefaultPosterSize.Height);
             }
         }
 

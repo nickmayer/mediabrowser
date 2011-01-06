@@ -26,8 +26,10 @@ namespace MediaBrowser.Library {
     [Serializable]
     public class ThumbSize 
     {
-        public Int32 Width = 0;
-        public Int32 Height = 0;
+        [Persist]
+        public int Width = 0;
+        [Persist]
+        public int Height = 0;
 
         public ThumbSize(int width, int height)
         {
