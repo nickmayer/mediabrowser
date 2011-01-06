@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0017";
+        const string VERSION = "1.0018";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -24,7 +24,7 @@ namespace MediaBrowser.Library.Localization
         //these are our strings keyed by property name
         public string LoggingConfigDesc = "Write messages to a log file at run time.";
         public string EnableInternetProvidersConfigDesc = "Search the Internet for Cover Art, Backdrops and Metadata.";
-        public string AutomaticUpdatesConfigDesc = "Automatically Download and Install Updates to MediaBrowser. (Currently disabled except for plug-in update check)";
+        public string AutomaticUpdatesConfigDesc = "Automatically Download and Install Updates to MediaBrowser and Notify when Plug-in Updates Available.";
         public string BetaUpdatesConfigDesc = "Include Beta Versions in Automatic Updates";
         public string EnableEHSConfigDesc = "Enable the Enhanced Home Screen for Top-Level Items.";
         public string ShowClockConfigDesc = "Show the Current Time in MediaBrowser Screens.";
