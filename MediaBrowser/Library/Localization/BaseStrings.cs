@@ -302,6 +302,7 @@ namespace MediaBrowser.Library.Localization
         public string FullValidationProf = "Full Library Validation";
         public string FastRefreshProf = "Fast Metadata refresh";
         public string SlowRefresh = "Slow Metadata refresh";
+        public string ImageRefresh = "Image refresh";
         public string PluginUpdateProf = "An update is available for plug-in {0}";
         public string NoPluginUpdateProf = "No Plugin Updates Currently Available.";
         public string LibraryUnLockedProf = "Library Temporarily UnLocked. Will Re-Lock in {0} Hour(s)";

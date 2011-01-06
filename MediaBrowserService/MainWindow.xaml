@@ -38,7 +38,7 @@
                         <CheckBox Margin="14,35,0,37" Name="cbxGenres" IsEnabled="True" HorizontalAlignment="Left" Width="120" Checked="cbxGenres_Checked">Genre Images</CheckBox>
                         <CheckBox Margin="152,36,84,29" Name="cbxPeople" IsEnabled="True" Checked="cbxPeople_Checked">People Images</CheckBox>
                         <CheckBox Height="25.38" Margin="14,0,0,5.62" Name="cbxStudios" VerticalAlignment="Bottom" IsEnabled="True" HorizontalAlignment="Left" Width="120" Checked="cbxStudios_Checked">Studio Images</CheckBox>
-                        <CheckBox Height="25" Margin="152,0,0,6" Name="cbxYears" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" IsEnabled="True">Year Images</CheckBox>
+                        <CheckBox Height="25" Margin="152,0,0,6" Name="cbxYears" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" IsEnabled="True" Checked="cbxYears_Checked" Unchecked="cbxYears_Checked" >Year Images</CheckBox>
                     </Grid>
                 </GroupBox>
                 <Button Margin="0,0,16,20" Name="btnRefresh" FontSize="14" Click="btnRefresh_Click" Height="37" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="102">Refresh Now</Button>
