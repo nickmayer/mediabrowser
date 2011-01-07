@@ -14,6 +14,8 @@
 
         public bool ClearCacheOption { get; set; }
 
+        public bool ClearImageCacheOption { get; set; }
+
         public bool AnyImageOptionsSelected
         {
             get

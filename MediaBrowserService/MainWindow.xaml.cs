@@ -298,6 +298,11 @@ namespace MediaBrowserService
             _serviceOptions.ClearCacheOption = cbxClearCache.IsChecked.Value;
         }
 
+        private void cbxClearImageCache_Checked(object sender, RoutedEventArgs e)
+        {
+            _serviceOptions.ClearImageCacheOption = cbxClearImageCache.IsChecked.Value;
+        }
+
         private void cbxIncludeImages_Checked(object sender, RoutedEventArgs e)
         {
             _serviceOptions.IncludeImagesOption = cbxIncludeImages.IsChecked.Value;
@@ -436,22 +441,27 @@ namespace MediaBrowserService
                     Kernel.Instance.ReLoadRoot(); // make sure we are dealing with the current state of the library
                     try
                     {
-                        if (force && _serviceOptions.ClearCacheOption)
+                        if (force)
                         {
-                            //clear all cache items except displayprefs and playstate
-                            Logger.ReportInfo("Clearing Cache on manual refresh...");
-                            UpdateProgress("Clearing Cache", 0);
-                            Kernel.Instance.ItemRepository.ClearEntireCache();
-                            if (_serviceOptions.AnyImageOptionsSelected)
+                            if (_serviceOptions.ClearCacheOption)
+                            {
+                                //clear all cache items except displayprefs and playstate
+                                Logger.ReportInfo("Clearing Cache on manual refresh...");
+                                UpdateProgress("Clearing Cache", 0);
+                                Kernel.Instance.ItemRepository.ClearEntireCache();
+                            }
+                            if (_serviceOptions.ClearImageCacheOption)
                             {
                                 try
                                 {
                                     Directory.Delete(ApplicationPaths.AppImagePath, true);
+                                    Thread.Sleep(1000); //wait for the delete to fiinish
                                 }
                                 catch (Exception e) { Logger.ReportException("Error trying to clear image cache.", e); } //just log it
                                 try
                                 {
                                     Directory.CreateDirectory(ApplicationPaths.AppImagePath);
+                                    Thread.Sleep(1000); //wait for the directory to create
                                 }
                                 catch (Exception e) { Logger.ReportException("Error trying to create image cache.", e); } //just log it
                             }
@@ -574,6 +584,7 @@ namespace MediaBrowserService
                                         if (g.PrimaryImage != null)
                                         {
                                             Logger.ReportInfo("Caching image for genre: " + genre);
+                                            g.PrimaryImage.ClearLocalImages();
                                             g.PrimaryImage.GetLocalImagePath();
                                         }
                                         foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in g.BackdropImages)
@@ -596,10 +607,12 @@ namespace MediaBrowserService
                                         if (st.PrimaryImage != null)
                                         {
                                             Logger.ReportInfo("Caching image for studio: " + studio);
+                                            st.PrimaryImage.ClearLocalImages();
                                             st.PrimaryImage.GetLocalImagePath();
                                         }
                                         foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in st.BackdropImages)
                                         {
+                                            image.ClearLocalImages();
                                             image.GetLocalImagePath();
                                         }
                                         studiosProcessed.Add(studio);
@@ -617,10 +630,12 @@ namespace MediaBrowserService
                                         if (p.PrimaryImage != null)
                                         {
                                             Logger.ReportInfo("Caching image for person: " + actor.Name);
+                                            p.PrimaryImage.ClearLocalImages();
                                             p.PrimaryImage.GetLocalImagePath();
                                         }
                                         foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
                                         {
+                                            image.ClearLocalImages();
                                             image.GetLocalImagePath();
                                         }
                                         peopleProcessed.Add(actor.Name);
@@ -638,10 +653,12 @@ namespace MediaBrowserService
                                         if (p.PrimaryImage != null)
                                         {
                                             Logger.ReportInfo("Caching image for person: " + director);
+                                            p.PrimaryImage.ClearLocalImages();
                                             p.PrimaryImage.GetLocalImagePath();
                                         }
                                         foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
                                         {
+                                            image.ClearLocalImages();
                                             image.GetLocalImagePath();
                                         }
                                         peopleProcessed.Add(director);
@@ -657,10 +674,12 @@ namespace MediaBrowserService
                                     if (yr.PrimaryImage != null)
                                     {
                                         Logger.ReportInfo("Caching image for year: " + yr);
+                                        yr.PrimaryImage.ClearLocalImages();
                                         yr.PrimaryImage.GetLocalImagePath();
                                     }
                                     foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in yr.BackdropImages)
                                     {
+                                        image.ClearLocalImages();
                                         image.GetLocalImagePath();
                                     }
                                     yearsProcessed.Add(show.ProductionYear.ToString());

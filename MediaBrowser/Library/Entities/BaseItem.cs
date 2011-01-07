@@ -353,6 +353,7 @@ namespace MediaBrowser.Library.Entities {
             if (this.PrimaryImage != null)
             {
                 //Logger.ReportInfo("Caching image for " + Name + " at " + s.Width + "x" + s.Height);
+                this.PrimaryImage.ClearLocalImages(); //be sure these are gone and we are sure to re-load
                 if (s != null && s.Width > 0 && s.Height > 0)
                     ignore = this.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
                 else
@@ -361,10 +362,12 @@ namespace MediaBrowser.Library.Entities {
 
             foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in this.BackdropImages)
             {
+                image.ClearLocalImages();
                 ignore = image.GetLocalImagePath(); //force the backdrops to re-cache
             }
             if (this.BannerImage != null)
             {
+                this.BannerImage.ClearLocalImages();
                 ignore = this.BannerImage.GetLocalImagePath(); //and, finally, banner
             }
         }
