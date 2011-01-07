@@ -54,7 +54,7 @@ namespace MediaBrowser
         public float MaximumAspectRatioDistortion = 0.2F;
         public bool EnableTranscode360 = false;
         public string ExtenderNativeTypes = ".dvr-ms,.wmv";
-        public bool ShowThemeBackground = false;
+        public bool ShowThemeBackground = true;
         public bool DimUnselectedPosters = true;
         public bool EnableNestedMovieFolders = true;
         public bool EnableMoviePlaylists = true;
