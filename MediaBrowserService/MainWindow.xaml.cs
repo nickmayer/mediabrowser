@@ -312,6 +312,25 @@ namespace MediaBrowserService
         private void cbxClearImageCache_Checked(object sender, RoutedEventArgs e)
         {
             _serviceOptions.ClearImageCacheOption = cbxClearImageCache.IsChecked.Value;
+            if (_serviceOptions.ClearImageCacheOption)
+            {
+                if (Kernel.Instance.ConfigData.AllowInternetMetadataProviders)
+                {
+                    //always show this warning if IP enabled
+                    WarnDialog.Show("Clearing the Image Cache will delete ALL the locally-cached images in your library - including " +
+                        "posters, backdrops, banners and all IBN-related images.  This can take some time and will cause a MASSIVE download operation " +
+                        "to occur on the next refresh or run of Media Browser.  PLEASE do this only if you really need to.\n\n" +
+                        "You do NOT need to clear the image cache in order for images to re-build on a manual refresh (if selected).", false);
+                }
+                else
+                    if (!_config.DontWarnImageCache)
+                    {
+                        _config.DontWarnImageCache = WarnDialog.Show("Clearing the Image Cache will delete ALL the locally-cached images in your library - including " +
+                            "posters, backdrops, banners and all IBN-related images.  This can cause the next refresh to take quite some time.  Do this only if you really need to.\n\n" +
+                            "You do NOT need to clear the image cache in order for images to re-build on a manual refresh (if selected).");
+                        _config.Save();
+                    }
+            }
         }
 
         private void cbxIncludeImages_Checked(object sender, RoutedEventArgs e)
@@ -332,6 +351,16 @@ namespace MediaBrowserService
         private void cbxPeople_Checked(object sender, RoutedEventArgs e)
         {
             _serviceOptions.IncludePeopleOption = cbxPeople.IsChecked.Value;
+            if (_serviceOptions.IncludePeopleOption)
+            {
+                if (!_config.DontWarnPeopleImages)
+                {
+                    _config.DontWarnPeopleImages = WarnDialog.Show("This option will cause ALL actor and director images that are " +
+                        "referenced in your library to re-build and be processed by any image processors (such as CoverArt).\n\n" +
+                        "This process can take quite some time...");
+                    _config.Save();
+                }
+            }
         }
 
         private void cbxYears_Checked(object sender, RoutedEventArgs e)

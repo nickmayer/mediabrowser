@@ -36,6 +36,12 @@ namespace MediaBrowser
         [Comment("Show balloon tip on close window.")]
         public bool ShowBalloonTip = true;
 
+        [Comment("Suppress warning about the image cache.")]
+        public bool DontWarnImageCache = false;
+
+        [Comment("Suppress warning about people images.")]
+        public bool DontWarnPeopleImages = false;
+
         // for our reset routine
         public ServiceConfigData()
         {
