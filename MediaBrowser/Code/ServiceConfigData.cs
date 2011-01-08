@@ -33,6 +33,9 @@ namespace MediaBrowser
         [Comment("The last time a full refresh was done.")]
         public DateTime LastFullRefresh = DateTime.MinValue;
 
+        [Comment("Show balloon tip on close window.")]
+        public bool ShowBalloonTip = true;
+
         // for our reset routine
         public ServiceConfigData()
         {

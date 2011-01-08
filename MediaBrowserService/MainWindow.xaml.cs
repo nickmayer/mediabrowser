@@ -107,13 +107,20 @@ namespace MediaBrowserService
             notifyIcon = new System.Windows.Forms.NotifyIcon
                              {
                                  BalloonTipTitle = "Media Browser Service",
-                                 BalloonTipText = "Running in background. Click icon to configure...",
+                                 BalloonTipText = "Running in background. Use tray icon to configure...",
                                  Icon = new System.Drawing.Icon(iconStream),
                                  ContextMenu = main,
                                  Visible = true
                              };
             notifyIcon.DoubleClick += notifyIcon_Click;
+            notifyIcon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
             notifyIcon.ShowBalloonTip(2000);
+        }
+
+        void notifyIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            _config.ShowBalloonTip = false;
+            _config.Save();
         }
 
         void refresh_Click(object sender, EventArgs e)
@@ -168,7 +175,11 @@ namespace MediaBrowserService
                 tbxRefreshInterval_LostFocus(this, null);
                 args.Cancel = true; //don't close
                 this.Hide();
-                notifyIcon.ShowBalloonTip(1000);
+                if (_config.ShowBalloonTip)
+                {
+                    notifyIcon.BalloonTipText = "Running in background. Use tray icon to configure.\nClick this message to silence it in the future.";
+                    notifyIcon.ShowBalloonTip(1000);
+                }
             }
         }
 
