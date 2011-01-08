@@ -117,7 +117,7 @@
       <BooleanChoice Name="DefaultVerticalScroll" Value="[Application.Config.DefaultVerticalScroll]" />
       <BooleanChoice Name="UseAutoPlayForIso" Value="[Application.Config.UseAutoPlayForIso]" />
       <BooleanChoice Name="YearSortAsc" Value="[Application.Config.YearSortAsc]" />
-      <BooleanChoice Name="AutoValidate" Value="[Application.Config.AutoValidate]" />
+      <!--<BooleanChoice Name="AutoValidate" Value="[Application.Config.AutoValidate]" />-->
       <EditableText Name="InitialFolder" Value="[Application.Config.InitialFolder]" />
       <EditableText Name="ImageByNameLocation" Value="[Application.Config.ImageByNameLocation]" />
       <EditableText Name="ExtenderNativeTypes" Value="[Application.Config.ExtenderNativeTypes]" />
@@ -396,7 +396,7 @@
       <Binding Source="[SortReplaceCharacters.Value]" Target="[Config.SortReplaceCharacters]" />
       <Binding Source="[SortReplaceWords.Value]" Target="[Config.SortReplaceWords]" />
       <Binding Source="[YearSortAsc.Value]" Target="[Config.YearSortAsc]" />
-      <Binding Source="[AutoValidate.Value]" Target="[Config.AutoValidate]" />
+      <!--<Binding Source="[AutoValidate.Value]" Target="[Config.AutoValidate]" />-->
 
       <Binding Source="[PlaylistLimit.Value]" Target="[Config.PlaylistLimit]" />
       <Binding Source="[BreadcrumbCount.Value]" Target="[Config.BreadcrumbCountLimit]" />
@@ -607,7 +607,7 @@
                       <cb:CheckBox Label="[Application.LocalStrings.#WatchedIndicatoronVideosConfig!cor:String]" Checked="[ShowWatchTickInPosterView]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="[Application.LocalStrings.#WatchedIndicatorinDetailViewConfig!cor:String]" Checked="[EnableListViewTicks]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <cb:CheckBox Label="[Application.LocalStrings.#DefaultToFirstUnwatchedItemConfig!cor:String]" Checked="[DefaultToFirstUnwatched]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
-                      <cb:CheckBox Label="[Application.LocalStrings.#AutoValidateConfig!cor:String]" Checked="[AutoValidate]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <!--<cb:CheckBox Label="[Application.LocalStrings.#AutoValidateConfig!cor:String]" Checked="[AutoValidate]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>-->
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" >
