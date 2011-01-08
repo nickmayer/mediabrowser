@@ -72,6 +72,12 @@ namespace MediaBrowser.Library {
 
         }
 
+        public void ShutdownWriter()
+        {
+            //nothing to do here
+            return;
+        }
+
         public IEnumerable<Guid> RetrieveChildren(Guid id) {
 
             List<Guid> children = new List<Guid>();

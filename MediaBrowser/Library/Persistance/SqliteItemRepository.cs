@@ -90,11 +90,18 @@ namespace MediaBrowser.Library.Persistance {
         SQLiteConnection connection;
         List<SQLiteCommand> delayedCommands = new List<SQLiteCommand>();
 
+        public void ShutdownWriter()
+        {
+            alive = false;
+            Thread.Sleep(1000); //wait for it to shutdown
+        }
 
         ManualResetEvent flushing = new ManualResetEvent(false);
 
+        private bool alive = true;
+
         private void DelayedWriter() {
-            while (true) {
+            while (alive) {
                 flushing.Reset(); 
                 InternalFlush();
                 flushing.Set();
@@ -168,8 +175,8 @@ namespace MediaBrowser.Library.Persistance {
                 }
             }
 
-            
 
+            alive = true; // tell writer to keep going
             Async.Queue("Sqlite Writer", DelayedWriter); 
 
         }

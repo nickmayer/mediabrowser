@@ -342,6 +342,7 @@ namespace MediaBrowser.Library {
             IItemRepository repository = null;
             if (config.EnableExperimentalSqliteSupport)
             {
+                if (kernel != null && kernel.ItemRepository != null) kernel.ItemRepository.ShutdownWriter(); //we need to do this for SQLite
                 string sqliteDb = Path.Combine(ApplicationPaths.AppCachePath, "cache.db");
                 string sqliteDll = Path.Combine(ApplicationPaths.AppConfigPath, "system.data.sqlite.dll");
                 if (File.Exists(sqliteDll))

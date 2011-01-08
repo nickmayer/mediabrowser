@@ -93,6 +93,11 @@ namespace MediaBrowser.Library.Persistance {
             repository.SaveDisplayPreferences(prefs);
         }
 
+        public void ShutdownWriter()
+        {
+            repository.ShutdownWriter();
+        }
+
         public bool ClearEntireCache() {
             return repository.ClearEntireCache();
         }

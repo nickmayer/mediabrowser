@@ -22,7 +22,7 @@ namespace MediaBrowser.Library
         
         void SavePlayState( PlaybackStatus playState);
         void SaveDisplayPreferences(DisplayPreferences prefs);
-
+        void ShutdownWriter();
 
         bool ClearEntireCache();
         
