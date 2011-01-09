@@ -546,18 +546,21 @@ namespace MediaBrowser
                     }
 
                     // we need to validate the library so that changes in the RAL will get picked up without having to navigate
-                    Async.Queue("Startup Library Validator", () =>
+                    if (Config.AutoValidate)
                     {
-                        Kernel.Instance.MajorActivity = true;
-                        foreach (BaseItem item in RootFolder.RecursiveChildren)
+                        Async.Queue("Startup Library Validator", () =>
                         {
-                            if (item is Folder)
+                            Kernel.Instance.MajorActivity = true;
+                            foreach (BaseItem item in RootFolder.RecursiveChildren)
                             {
-                                (item as Folder).ValidateChildren();
+                                if (item is Folder)
+                                {
+                                    (item as Folder).ValidateChildren();
+                                }
                             }
-                        }
-                        Kernel.Instance.MajorActivity = false;
-                    });
+                            Kernel.Instance.MajorActivity = false;
+                        });
+                    }
 
                     //check for alternate entry point
                     this.entryPointPath = EntryPointResolver.EntryPointPath;
