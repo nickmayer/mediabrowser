@@ -41,11 +41,11 @@ namespace MediaBrowser.Web {
 
 
 
-        public override PluginInitContext InitDirective
+        public override MBLoadContext InitDirective
         {
             get
             {
-                  return PluginInitContext.Service;
+                  return MBLoadContext.Service;
             }
         }
 

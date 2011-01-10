@@ -41,7 +41,7 @@ namespace MediaBrowser.Library {
     }
 
     [Flags]
-    public enum PluginInitContext
+    public enum MBLoadContext
     {
         None = 0x0,
         Service = 0x1,
@@ -143,7 +143,7 @@ namespace MediaBrowser.Library {
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
 
-                if (LoadContext != PluginInitContext.Service)
+                if (LoadContext != MBLoadContext.Service)
                 {
                     Async.Queue("Start Service", () =>
                     {
@@ -155,7 +155,7 @@ namespace MediaBrowser.Library {
                         }
                     });
                 }
-                if (LoadContext == PluginInitContext.Core)
+                if (LoadContext == MBLoadContext.Core)
                 {
                     //listen for commands 
                     if (!MBClientConnector.StartListening())
@@ -317,8 +317,8 @@ namespace MediaBrowser.Library {
             }
         }
 
-        static PluginInitContext? _loadContext;
-        public static PluginInitContext LoadContext 
+        static MBLoadContext? _loadContext;
+        public static MBLoadContext LoadContext 
         {
             get 
             {
@@ -326,12 +326,12 @@ namespace MediaBrowser.Library {
                 {
                     string assemblyName = AppDomain.CurrentDomain.FriendlyName.ToLower();
                     if (assemblyName.Contains("mediabrowserservice"))
-                        _loadContext = PluginInitContext.Service;
+                        _loadContext = MBLoadContext.Service;
                     else
                         if (assemblyName.Contains("ehexthost"))
-                            _loadContext = PluginInitContext.Core;
+                            _loadContext = MBLoadContext.Core;
                             else
-                                _loadContext = PluginInitContext.Other;
+                                _loadContext = MBLoadContext.Other;
                 }
                 return _loadContext.Value;
             }
@@ -459,12 +459,12 @@ namespace MediaBrowser.Library {
         {
             switch (LoadContext)
             {
-                case PluginInitContext.Core:
-                case PluginInitContext.Other:
+                case MBLoadContext.Core:
+                case MBLoadContext.Other:
                     //tell the service to re-load the config
                     MBServiceController.SendCommandToService(IPCCommands.ReloadConfig);
                     break;
-                case PluginInitContext.Service:
+                case MBLoadContext.Service:
                     //tell the core to re-load the config
                     MBServiceController.SendCommandToCore(IPCCommands.ReloadConfig);
                     break;

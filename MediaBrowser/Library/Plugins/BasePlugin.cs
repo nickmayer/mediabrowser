@@ -95,13 +95,13 @@ namespace MediaBrowser.Library.Plugins {
             }
         }
 
-        public virtual PluginInitContext InitDirective { 
+        public virtual MBLoadContext InitDirective { 
             get {
                 //by default, any plug-in that produces an interface should only init in core
                 if (InstallGlobally)
-                    return PluginInitContext.Core | PluginInitContext.Other;
+                    return MBLoadContext.Core | MBLoadContext.Other;
                 else
-                    return PluginInitContext.All; 
+                    return MBLoadContext.All; 
             } 
         }
 

@@ -77,7 +77,7 @@ namespace MediaBrowser.Library.Plugins {
             set;
         }
 
-        public virtual PluginInitContext InitDirective { get; set; }
+        public virtual MBLoadContext InitDirective { get; set; }
 		public virtual bool Installed { get; set; }
         public virtual bool UpdateAvail { get; set; }
         public string ListDisplayString { get { return Name + " (v" + Version + ")"; } }

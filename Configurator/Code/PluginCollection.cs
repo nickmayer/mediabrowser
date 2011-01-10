@@ -14,7 +14,7 @@ namespace Configurator.Code {
     // sample data 
     public class SamplePlugin : IPlugin {
 
-        public PluginInitContext InitDirective { get; set; }
+        public MBLoadContext InitDirective { get; set; }
 
         public void Init(Kernel kernel) {
         }

@@ -105,7 +105,7 @@ namespace MediaBrowser.Library.Plugins {
             get { return Path.GetFileName(filename); } 
         }
 
-        public PluginInitContext InitDirective { get { return pluginInterface.InitDirective; } }
+        public MBLoadContext InitDirective { get { return pluginInterface.InitDirective; } }
 
         public void Delete() {
             File.Delete(filename);
