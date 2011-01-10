@@ -251,7 +251,7 @@ namespace MediaBrowserService
                     refreshProgress.Value = pctDone;
                     lblNextSvcRefresh.Content = step;
                     var elapsed = DateTime.Now - _refreshStartTime;
-                    lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}",elapsed.TotalHours,elapsed.Minutes,elapsed.Seconds);
+                    lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}",elapsed.Hours,elapsed.Minutes,elapsed.Seconds);
                 }));
             }
         }
