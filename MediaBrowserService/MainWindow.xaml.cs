@@ -81,13 +81,20 @@ namespace MediaBrowserService
                               };
             restore.Click += new EventHandler(restore_Click);
             main.MenuItems.Add(restore);
-            
+
             var refresh = new System.Windows.Forms.MenuItem
-                              {
-                                  Text = "Refresh Now"
-                              };
+            {
+                Text = "Refresh Now"
+            };
             refresh.Click += new EventHandler(refresh_Click);
             main.MenuItems.Add(refresh);
+
+            var tipOption = new System.Windows.Forms.MenuItem
+            {
+                Text = _config.ShowBalloonTip ? "Disable Balloon" : "Enable Balloon"
+            };
+            tipOption.Click += new EventHandler(notifyIcon_BalloonTipClicked);
+            main.MenuItems.Add(tipOption);
 
             var sep = new System.Windows.Forms.MenuItem
                           {
@@ -114,12 +121,13 @@ namespace MediaBrowserService
                              };
             notifyIcon.DoubleClick += notifyIcon_Click;
             notifyIcon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
-            notifyIcon.ShowBalloonTip(2000);
+            if (_config.ShowBalloonTip) notifyIcon.ShowBalloonTip(2000);
         }
 
         void notifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
-            _config.ShowBalloonTip = false;
+            _config.ShowBalloonTip = !_config.ShowBalloonTip;
+            notifyIcon.ContextMenu.MenuItems[2].Text = _config.ShowBalloonTip ? "Disable Balloon" : "Enable Balloon";
             _config.Save();
         }
 
@@ -414,11 +422,11 @@ namespace MediaBrowserService
                         // Log the fact the mutex was abandoned in another process, it will still get acquired
                         Logger.ReportWarning("Previous instance of service ended abnormally...");
                     }
-                    CreateNotifyIcon();
                     this.WindowState = WindowState.Minimized;
                     Hide();
                     Kernel.Init(KernelLoadDirective.LoadServicePlugins);
                     _config = Kernel.Instance.ServiceConfigData;
+                    CreateNotifyIcon();
                     RefreshInterface();
                     lblSinceDate.Content = "Since: "+_startTime;
                     CoreCommunications.StartListening(); //start listening for commands from core/configurator
@@ -465,7 +473,7 @@ namespace MediaBrowserService
                     btnCancelRefresh.Visibility = Visibility.Visible;
                     lblSvcActivity.Content = "Refresh Running...";
                     notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
-                    notifyIcon.ContextMenu.MenuItems[3].Enabled = false;
+                    notifyIcon.ContextMenu.MenuItems[4].Enabled = false;
                     notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
                     Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
                     notifyIcon.Icon = new System.Drawing.Icon(iconStream);
@@ -531,7 +539,7 @@ namespace MediaBrowserService
                             refreshProgress.Visibility = Visibility.Hidden;
                             btnCancelRefresh.Visibility = Visibility.Hidden;
                             gbManual.IsEnabled = true;
-                            notifyIcon.ContextMenu.MenuItems[3].Enabled = true;
+                            notifyIcon.ContextMenu.MenuItems[4].Enabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
                             notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
                             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
