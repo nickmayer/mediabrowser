@@ -9,6 +9,7 @@ using MediaBrowser.Code.ShadowTypes;
 using System.Diagnostics;
 using System.Collections;
 using MediaBrowser.Util;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library.Persistance {
 
@@ -275,7 +276,17 @@ namespace MediaBrowser.Library.Persistance {
             this.boundObject = boundObject;
             this.filename = filename;
             InitDefaults();
-            Read();
+            try
+            {
+                Read();
+            }
+            catch (Exception e)
+            { 
+                // if the config is corrupt for any reason just skip and log 
+                Logger.ReportException("Configuration file was corrupt ... ignoring", e);
+                File.Delete(filename);
+                Read();
+            }
         }
 
         static List<AbstractMember> SettingMembers(Type type) {

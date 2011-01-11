@@ -9,6 +9,8 @@ using MediaBrowser.Library.Interfaces;
 namespace TestMediaBrowser {
     public class DummyItemRepository : IItemRepository {
 
+        public void ShutdownWriter() { }
+
         public void SaveItem(BaseItem item) {
         }
 
