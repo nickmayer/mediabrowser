@@ -243,7 +243,7 @@ namespace MediaBrowserService
             }
             //update our elapsed time
             TimeSpan elapsed = DateTime.Now - _startTime;
-            lblElapsed.Content = string.Format("{0} Days {1} Hours and {2} Mins ", (int)elapsed.TotalDays, elapsed.Hours, elapsed.Minutes);
+            lblElapsed.Content = string.Format("{0} Days {1} Hours and {2} Mins ", elapsed.Days, elapsed.Hours, elapsed.Minutes);
         }
 
 
