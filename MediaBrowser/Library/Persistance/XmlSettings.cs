@@ -445,9 +445,12 @@ namespace MediaBrowser.Library.Persistance {
             } // for each
             try
             {
-                var tempFile = System.IO.Path.GetTempFileName();
-                dom.Save(tempFile);
-                File.Move(tempFile, filename);
+              
+                using (var pfs = ProtectedFileStream.OpenExclusiveWriter(filename))
+                {
+                    dom.Save(pfs);
+                }
+
                 saveRetries = 0; //successful save
             }
             catch (IOException)
