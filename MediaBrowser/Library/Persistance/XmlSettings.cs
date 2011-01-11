@@ -321,7 +321,7 @@ namespace MediaBrowser.Library.Persistance {
         }
 
         private int readRetries = 0;
-        private const int MAX_RETRIES = 2;
+        private const int MAX_RETRIES = 20;
 
         /// <summary>
         /// Read current config from file
@@ -357,6 +357,7 @@ namespace MediaBrowser.Library.Persistance {
                 readRetries++;
                 if (readRetries <= MAX_RETRIES)
                 {
+                    System.Threading.Thread.Sleep(10);
                     this.Read();
                 }
                 else
@@ -450,6 +451,7 @@ namespace MediaBrowser.Library.Persistance {
                 saveRetries++;
                 if (saveRetries <= MAX_RETRIES)
                 {
+                    System.Threading.Thread.Sleep(10);
                     this.Write();
                 }
                 else
