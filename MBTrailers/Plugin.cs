@@ -39,7 +39,7 @@ namespace MBTrailers {
             kernel.RootFolder.AddVirtualChild(trailers);
 
             //isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
-            if (Kernel.LoadContext == PluginInitContext.Service || Kernel.LoadContext == PluginInitContext.Core)  //create proxy in core and service (will only listen in service)
+            if (Kernel.LoadContext == MBLoadContext.Service || Kernel.LoadContext == MBLoadContext.Core)  //create proxy in core and service (will only listen in service)
             {
                 string cachePath = PluginOptions.Instance.CacheDir;
                 if (string.IsNullOrEmpty(cachePath) || !System.IO.Directory.Exists(cachePath))
@@ -52,7 +52,7 @@ namespace MBTrailers {
                 }
 
                 proxy = new HttpProxy(cachePath, ProxyPort);
-                if (Kernel.LoadContext == PluginInitContext.Service)
+                if (Kernel.LoadContext == MBLoadContext.Service)
                 { //only actually start the proxy in the service
                     Logger.ReportInfo("MBTrailers starting proxy server on port: " + ProxyPort);
                     proxy.Start();
