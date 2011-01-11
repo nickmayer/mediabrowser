@@ -43,7 +43,7 @@ namespace MBTrailers {
 
         public override string Name {
             get {
-                return Plugin.PluginOptions.Instance.MenuName;
+                return Plugin.PluginOptions != null ? Plugin.PluginOptions.Instance.MenuName : "MB Trailers";
             }
             set {
                 
@@ -140,7 +140,7 @@ namespace MBTrailers {
                                         children.Add(trailer);
                                     }
 
-                                    trailer = new ITunesTrailer();
+                                    trailer = new ITunesTrailer() { DisplayMediaType = "Trailer" };
 
                                     // trailer.Id = reader.GetAttribute(0);
                                     break;
