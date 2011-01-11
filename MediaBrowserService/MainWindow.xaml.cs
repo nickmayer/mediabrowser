@@ -115,6 +115,7 @@ namespace MediaBrowserService
                              {
                                  BalloonTipTitle = "Media Browser Service",
                                  BalloonTipText = "Running in background. Use tray icon to configure...",
+                                 Text = "Media Browser Service",
                                  Icon = new System.Drawing.Icon(iconStream),
                                  ContextMenu = main,
                                  Visible = true
