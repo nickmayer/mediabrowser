@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Collections;
 using MediaBrowser.Util;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Filesystem;
 
 namespace MediaBrowser.Library.Persistance {
 
@@ -334,8 +335,10 @@ namespace MediaBrowser.Library.Persistance {
 
             try
             {
-
-                dom.Load(filename);
+                using (var data = ProtectedFileStream.OpenSharedReader(filename))
+                {
+                    dom.Load(data);
+                }
                 readRetries = 0; //successful load
                 settingsNode = GetSettingsNode(dom);
 
@@ -442,7 +445,9 @@ namespace MediaBrowser.Library.Persistance {
             } // for each
             try
             {
-                dom.Save(filename);
+                var tempFile = System.IO.Path.GetTempFileName();
+                dom.Save(tempFile);
+                File.Move(tempFile, filename);
                 saveRetries = 0; //successful save
             }
             catch (IOException)
