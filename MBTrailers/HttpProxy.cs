@@ -7,6 +7,8 @@ using System.Threading;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
+using System.Runtime.Serialization;
 using MediaBrowser.Library.Logging;
 
 namespace WebProxy {
@@ -20,7 +22,49 @@ namespace WebProxy {
         public string Path { get; private set; }
     }
 
-    public class ProxyInfo {
+    [ServiceContract]
+    public interface ITrailerProxy
+    {
+        [OperationContract]
+        ProxyInfo GetProxyInfo(string key);
+        [OperationContract]
+        void SetProxyInfo(ProxyInfo info);
+        [OperationContract]
+        string GetRandomTrailer();
+    }
+
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    public class ProxyService : ITrailerProxy
+    {
+        
+        Dictionary<string, ProxyInfo> proxiedFiles = new Dictionary<string, ProxyInfo>();
+
+        #region ITrailerProxy Members
+
+        public ProxyInfo GetProxyInfo(string key)
+        {
+            if (proxiedFiles.ContainsKey(key))
+                return proxiedFiles[key];
+            else
+                return null;
+        }
+
+        public void SetProxyInfo(ProxyInfo info)
+        {
+            proxiedFiles[info.LocalFilename] = info;
+        }
+
+        public string GetRandomTrailer()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
+    [DataContract]
+    public class ProxyInfo
+    {
         public const string ITunesUserAgent = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 6.1)";
 
         public ProxyInfo(string host, string path, string userAgent, int port) {
@@ -34,27 +78,36 @@ namespace WebProxy {
 
             ContentType = "video/quicktime";
         }
-
+        
+        [DataMember]
         public string UserAgent { get; private set; }
+        [DataMember]
         public string Host { get; private set; }
+        [DataMember]
         public string Path { get; private set; }
 
+        [DataMember]
         public string ContentType { get; private set; }
 
+        [DataMember]
         public int BytesRead { get; set; }
+        [DataMember]
         public bool Completed { get; set; }
 
+        [DataMember]
         public string LocalFilename { get; private set; }
 
 
+        [DataMember]
         public int Port { get; private set; }
     }
+
 
     public class HttpProxy {
 
         const int MAX_CONNECTIONS = 10;
 
-        Dictionary<string, ProxyInfo> proxiedFiles = new Dictionary<string, ProxyInfo>();
+        ITrailerProxy proxyServer;
 
         int port;
         string cacheDir;
@@ -69,7 +122,10 @@ namespace WebProxy {
         public HttpProxy(string cacheDir, int port) {
             this.port = port;
             this.cacheDir = cacheDir;
+            ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetTcpBinding(), "net.tcp://localhost:8745");
+            proxyServer = factory.CreateChannel();
         }
+
 
         public bool AlreadyRunning()
         {
@@ -110,25 +166,27 @@ namespace WebProxy {
             } catch {
                 // well at least we tried
             }
-
-
             listenerThread = new Thread(ThreadProc);
             listenerThread.IsBackground = true;
             listenerThread.Start();
         }
 
-        public string ProxyUrl(string host, string path, string userAgent, int port) {
+        public string ProxyUrl(string host, string path, string userAgent, int port) 
+        {
             ProxyInfo info = new ProxyInfo(host, path, userAgent, port);
-            lock (proxiedFiles) {
-                proxiedFiles[info.LocalFilename] = info;
-            }
+            proxyServer.SetProxyInfo(info);
 
             var target = Path.Combine(cacheDir, info.LocalFilename);
             return File.Exists(target) ? target : string.Format("http://localhost:{0}/{1}", this.port, info.LocalFilename);
-            
+
         }
 
         private void ThreadProc() {
+            //start our wcf service
+            ServiceHost host = new ServiceHost(typeof(ProxyService));
+            host.AddServiceEndpoint(typeof(ITrailerProxy), new NetTcpBinding(), "net.tcp://localhost:8745");
+            host.Open();
+
             TcpListener listener = new TcpListener(IPAddress.Loopback, port);
             listener.Start(10);
             while (true) {
@@ -168,10 +226,8 @@ namespace WebProxy {
 
                         ProxyInfo info;
                         var headers = new HttpHeaders(data.ToString());
-                        lock (proxiedFiles) {
                             requestedPath = headers.Path.Replace("/", "");
-                            info = proxiedFiles[requestedPath];
-                        }
+                            info = proxyServer.GetProxyInfo(requestedPath);
                         var target = Path.Combine(cacheDir, info.LocalFilename);
 
                         if (File.Exists(target)) {
