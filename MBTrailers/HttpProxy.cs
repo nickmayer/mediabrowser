@@ -43,6 +43,7 @@ namespace WebProxy {
 
         public ProxyInfo GetProxyInfo(string key)
         {
+            //Logger.ReportInfo("Looking for proxied file: " + key);
             if (proxiedFiles.ContainsKey(key))
                 return proxiedFiles[key];
             else
@@ -52,6 +53,7 @@ namespace WebProxy {
         public void SetProxyInfo(ProxyInfo info)
         {
             proxiedFiles[info.LocalFilename] = info;
+            //Logger.ReportInfo("Storing proxy for: " + info.LocalFilename);
         }
 
         public string GetRandomTrailer()
@@ -122,7 +124,7 @@ namespace WebProxy {
         public HttpProxy(string cacheDir, int port) {
             this.port = port;
             this.cacheDir = cacheDir;
-            ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetTcpBinding(), "net.tcp://localhost:8745");
+            ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers");
             proxyServer = factory.CreateChannel();
         }
 
@@ -184,7 +186,7 @@ namespace WebProxy {
         private void ThreadProc() {
             //start our wcf service
             ServiceHost host = new ServiceHost(typeof(ProxyService));
-            host.AddServiceEndpoint(typeof(ITrailerProxy), new NetTcpBinding(), "net.tcp://localhost:8745");
+            host.AddServiceEndpoint(typeof(ITrailerProxy), new NetNamedPipeBinding(), "net.pipe://localhost/MBTrailers");
             host.Open();
 
             TcpListener listener = new TcpListener(IPAddress.Loopback, port);
