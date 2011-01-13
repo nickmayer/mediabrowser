@@ -197,6 +197,8 @@ namespace MediaBrowser.Library.Filesystem
                 aFolder = aFolder.PhysicalParent;
                 aFolder.RefreshUI();
             }
+            //finally refresh the root so recent lists will update (we don't have a path to the right foldermodel so we have to do all)
+            if (Application.CurrentInstance.CurrentFolder != Application.CurrentInstance.RootFolderModel) Application.CurrentInstance.RootFolderModel.RefreshUI();
         }
         
     }

@@ -558,6 +558,8 @@ namespace MediaBrowser
                                     (item as Folder).ValidateChildren();
                                 }
                             }
+                            //now force the UI to update
+                            if (this.RootFolderModel != null) this.RootFolderModel.RefreshUI();
                             Kernel.Instance.MajorActivity = false;
                         });
                     }
