@@ -33,6 +33,8 @@ namespace MediaBrowser.Library.Entities
         [Persist]
         public string AudioProfile = "";
         [Persist]
+        public string AudioLanguages = "";
+        [Persist]
         public string Subtitles = "";
         [Persist]
         public string VideoFPS = "";
@@ -325,8 +327,8 @@ namespace MediaBrowser.Library.Entities
                 else return "";				
             }
         }
-
-        public string AudioStreamString
+		
+        public string AudioStreamStr
         {
             get
             {
@@ -334,6 +336,19 @@ namespace MediaBrowser.Library.Entities
                     return AudioStreamCount.ToString();
                 else
                     return "";
+            }
+        }
+
+        public string AudioStreamString
+       {
+            get
+            {
+                if (this.AudioLanguagesString != null && this.AudioLanguagesString != "")
+                {
+                    return AudioLanguagesString;
+                }
+                else
+                    return this.AudioStreamStr;
             }
         }
 
@@ -381,13 +396,30 @@ namespace MediaBrowser.Library.Entities
         #endregion
 
         #region Properties General
+		
+		public string AudioLanguagesString
+        {
+            get
+            {
+                if (this.AudioLanguages != null && this.AudioLanguages != " / ")
+                {				
+                    return AudioLanguages;
+                }   
+                else return "";				
+            }
+        }		
+		
         public string SubtitleString
         {
             get
             {
-                return Subtitles;
+                if (this.Subtitles != null && this.Subtitles != " / ")
+                {				
+                    return Subtitles;
+                }   
+                else return "";				
             }
-        }
+        }		
         #endregion
     }
 }
