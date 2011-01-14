@@ -65,7 +65,8 @@ namespace MBTrailers {
                         Logger.ReportInfo("MBTrailers - no proxy running.  Start Media Browser Service.");
                 }
 
-                trailers.RefreshProxy();
+                //refresh the paths of trailers, but wait a bit in case the service side isn't up yet (we load before the service)
+                MediaBrowser.Library.Threading.Async.Queue("MB Trailers refresh",() => trailers.RefreshProxy(), 3);
 
                 //tell core our types are playable (for menus)
                 kernel.AddExternalPlayableItem(typeof(ITunesTrailer));

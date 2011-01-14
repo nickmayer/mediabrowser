@@ -269,6 +269,8 @@ namespace WebProxy {
 
         private void ProxyRemoteFile(NetworkStream stream, byte[] buffer, ProxyInfo info, string target, string cacheFile) {
 
+            Logger.ReportInfo("Proxying file: " + target);
+
             TcpClient proxy = new TcpClient();
             proxy.Connect(info.Host, info.Port);
             var proxyStream = proxy.GetStream();
@@ -359,6 +361,9 @@ namespace WebProxy {
         }
 
         private void ServeStaticFile(NetworkStream stream, byte[] buffer, ProxyInfo info, string target) {
+
+            Logger.ReportInfo("Serving cached file: " + target);
+
             StringBuilder header = new StringBuilder();
             header.Append("HTTP/1.1 200 OK\r\n");
             header.AppendFormat("Content-Length: {0}\r\n", new FileInfo(target).Length);
@@ -437,6 +442,9 @@ namespace WebProxy {
         }
 
         public void ServeCachedFile(NetworkStream stream, string filename, ProxyInfo info) {
+            
+            Logger.ReportInfo("Serving temp file: " + filename);
+
             byte[] buffer = new byte[8000];
             FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
