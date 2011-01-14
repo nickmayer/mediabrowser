@@ -206,6 +206,25 @@ namespace MediaBrowser.Library.Providers.TVDB {
             if (episode.MediaInfo.Width == 0) episode.MediaInfo.Width = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Width");
             if (string.IsNullOrEmpty(episode.MediaInfo.VideoFPS)) episode.MediaInfo.VideoFPS = metadataDoc.SafeGetString("Item/MediaInfo/Video/FrameRate", "");
             if (episode.MediaInfo.RunTime == 0) episode.MediaInfo.RunTime = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Duration");
+            if (string.IsNullOrEmpty(episode.MediaInfo.AudioLanguages))
+            {
+                XmlNodeList nodes = metadataDoc.SelectNodes("Item/MediaInfo/Audio/Language");
+                List<string> Langs = new List<string>();
+                foreach (XmlNode node in nodes)
+                {
+                    string m = node.InnerText;
+                    if (!string.IsNullOrEmpty(m))
+                        Langs.Add(m);
+                }
+                if (Langs.Count > 1)
+                {
+                    episode.MediaInfo.AudioLanguages = String.Join(" / ", Langs.ToArray());
+                }
+                else
+                {
+                    episode.MediaInfo.AudioLanguages = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Language", "");
+                }
+            }
             if (string.IsNullOrEmpty(episode.MediaInfo.Subtitles))
             {
                 XmlNodeList nodes = metadataDoc.SelectNodes("Item/MediaInfo/Subtitle/Language");

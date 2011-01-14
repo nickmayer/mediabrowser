@@ -319,7 +319,26 @@ namespace MediaBrowser.Library.Providers
                 if (movie.MediaInfo.Height == 0) movie.MediaInfo.Height = doc.SafeGetInt32("Title/MediaInfo/Video/Height");
                 if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate","");
-                if (movie.MediaInfo.RunTime == 0) movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/MediaInfo/Video/Duration");
+                if (movie.MediaInfo.RunTime == 0) movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/MediaInfo/Video/Duration");	
+                if (string.IsNullOrEmpty(movie.MediaInfo.AudioLanguages))
+                {
+                    XmlNodeList nodes = doc.SelectNodes("Title/MediaInfo/Audio/Language");
+                    List<string> Langs = new List<string>();
+                    foreach (XmlNode node in nodes)
+                    {
+                        string m = node.InnerText;
+                        if (!string.IsNullOrEmpty(m))
+                            Langs.Add(m);
+                    }
+                    if (Langs.Count > 1)
+                    {
+                        movie.MediaInfo.AudioLanguages = String.Join(" / ", Langs.ToArray());
+                    }
+                    else
+                    {
+                        movie.MediaInfo.AudioLanguages = doc.SafeGetString("Title/MediaInfo/Audio/Language", "");
+                    }
+                }			
                 if (string.IsNullOrEmpty(movie.MediaInfo.Subtitles))
                 {
                     XmlNodeList nodes = doc.SelectNodes("Title/MediaInfo/Subtitle/Language");

@@ -87,8 +87,9 @@ namespace MediaInfoProvider
                 original.AudioFormat = acquired.AudioFormat;
             }
             if (original.AudioStreamCount == 0) original.AudioStreamCount = acquired.AudioStreamCount;
+            if (original.AudioLanguages == "") original.AudioLanguages = acquired.AudioLanguages;
             if (original.Height == 0) original.Height = acquired.Height;
-            if (original.RunTime == 0) original.RunTime = acquired.RunTime;
+            if (original.RunTime == 0) original.RunTime = acquired.RunTime;			
             if (original.Subtitles == "") original.Subtitles = acquired.Subtitles;
             if (original.VideoBitRate == 0) original.VideoBitRate = acquired.VideoBitRate;
             if (original.VideoCodec == "") original.VideoCodec = acquired.VideoCodec;
@@ -137,7 +138,8 @@ namespace MediaInfoProvider
                     audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").Remove(ACindex);
                 else
                     audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
-
+					
+                string audioLanguages = mediaInfo.Get(StreamKind.General, 0, "Audio_Language_List");
                 string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
                 string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
 
@@ -164,7 +166,8 @@ namespace MediaInfoProvider
                     AudioChannelCount = audioChannels.Trim(),
                     AudioProfile = audioProfile.Trim(),
                     VideoFPS = videoFrameRate,
-                    Subtitles = subtitles                    
+                    AudioLanguages = audioLanguages,
+                    Subtitles = subtitles
                 };
             }
             else
