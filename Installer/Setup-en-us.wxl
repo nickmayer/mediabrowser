@@ -13,14 +13,14 @@
 	<String Id="Property_ProductName">Media Browser</String>
 	<String Id="Property_CompanyName">Media Browser</String>
 
-	<String Id="Package_Description">[ProductName] for Windows Media Center</String>
-	<String Id="Package_Comments">This Installer database contains the logic and data required to install [ProductName].</String>
+	<String Id="Package_Description">Media Browser for Windows Media Center</String>
+	<String Id="Package_Comments">This Installer database contains the logic and data required to install Media Browser.</String>
 
-  <String Id="Dialog_CreateDesktopShortcut">Create a shortcut for [ProductName] on the desktop.</String>
-  <String Id="Dialog_CreateStartMenuShortcut">Create a shortcut for [ProductName] in the start menu.</String>
+  <String Id="Dialog_CreateDesktopShortcut">Create a shortcut for Media Browser on the desktop.</String>
+  <String Id="Dialog_CreateStartMenuShortcut">Create a shortcut for Media Browser in the start menu.</String>
   <String Id="Dialog_OptionalLaunchAtStartup">Optionally, you can automatically launch the applications at logon:</String>
-  <String Id="Dialog_CreateMediaBrowserStartupShortcut">Launch [ProductName] automatically at log on.</String>
+  <String Id="Dialog_CreateMediaBrowserStartupShortcut">Launch Media Browser automatically at log on.</String>
   <String Id="Dialog_CreateMediaBrowserServiceStartupShortcut">Launch the MB Service automatically at log on. (Recommended)</String>
-  <String Id="Dialog_MakeDonation">If you like [ProductName], please consider making a donation!</String>
+  <String Id="Dialog_MakeDonation">If you like Media Browser, please consider making a donation!</String>
   <String Id="Dialog_DonationUrl">http://www.mediabrowser.tv/donate</String>
 </WixLocalization>
