@@ -45,8 +45,18 @@ namespace MediaBrowser.Library {
                     break;
 
                 case SortOrder.Runtime:
-                    var xRuntime = x is IShow ? (x as IShow).RunningTime : null;
-                    var yRuntime = y is IShow ? (y as IShow).RunningTime : null;
+                    int? xRuntime = 0;
+                    int? yRuntime = 0;
+
+                    if (x is Video)
+                        xRuntime = (x as Video).MediaInfo.RunTime != 0 ? (x as Video).MediaInfo.RunTime : int.MaxValue;
+                    else if (x is IShow)
+                        xRuntime = (x as IShow).RunningTime != 0 ? (x as IShow).RunningTime : int.MaxValue;
+
+                    if (y is Video)
+                        yRuntime = (y as Video).MediaInfo.RunTime != 0 ? (y as Video).MediaInfo.RunTime : int.MaxValue;
+                    else if (y is IShow)
+                        yRuntime = (y as IShow).RunningTime != 0 ? (y as IShow).RunningTime : int.MaxValue;
 
                     xRuntime = xRuntime ?? int.MaxValue;
                     yRuntime = yRuntime ?? int.MaxValue;
