@@ -335,6 +335,15 @@ namespace MediaBrowser
             }
         }
 
+        protected virtual void Detach()
+        {
+            var transport = MediaTransport;
+            if (transport != null)
+            {
+                transport.PropertyChanged -= new PropertyChangedEventHandler(TransportPropertyChanged);
+            }
+        }
+
         DateTime lastCall = DateTime.Now;
 
         void TransportPropertyChanged(IPropertyObject sender, string property)
@@ -410,6 +419,7 @@ namespace MediaBrowser
                 Application.CurrentInstance.CurrentItem.UpdateResume();
                 if (state == Microsoft.MediaCenter.PlayState.Finished || state == Microsoft.MediaCenter.PlayState.Stopped)
                 {
+                    Detach(); //we don't want to continue to get updates if play something outside MB
                     //we're done - call post-processor
                     Application.CurrentInstance.RunPostPlayProcesses();
                 }
