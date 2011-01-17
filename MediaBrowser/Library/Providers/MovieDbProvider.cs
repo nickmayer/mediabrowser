@@ -226,6 +226,7 @@ namespace MediaBrowser.Library.Providers
                     movie.ProductionYear = Int32.Parse(release.Substring(0, 4));
 
                 movie.RunningTime = doc.SafeGetInt32("//movie/runtime");
+                if (movie.MediaInfo.RunTime > 0) movie.RunningTime = movie.MediaInfo.RunTime;
 
                 movie.MpaaRating = doc.SafeGetString("//movie/certification");
 

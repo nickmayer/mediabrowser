@@ -116,13 +116,6 @@ namespace MediaBrowser.Library.Providers
                             break;
                     }
                 }
-
-                if (movie.RunningTime == null)
-                {
-                    int rt = doc.SafeGetInt32("Title/RunningTime",0);
-                    if (rt > 0)
-                        movie.RunningTime = rt;
-                }
                 if (movie.ProductionYear == null)
                 {
                     int y = doc.SafeGetInt32("Title/ProductionYear",0);
@@ -319,7 +312,16 @@ namespace MediaBrowser.Library.Providers
                 if (movie.MediaInfo.Height == 0) movie.MediaInfo.Height = doc.SafeGetInt32("Title/MediaInfo/Video/Height");
                 if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate","");
-                if (movie.MediaInfo.RunTime == 0) movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/MediaInfo/Video/Duration");	
+                if (movie.MediaInfo.RunTime == 0)
+                {
+                    int rt = doc.SafeGetInt32("Title/RunningTime", 0);
+                    if (rt > 0)
+                        movie.MediaInfo.RunTime = rt;
+                    else
+                        movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/MediaInfo/Video/Duration", 0);
+                }
+                if (movie.MediaInfo.RunTime > 0) movie.RunningTime = movie.MediaInfo.RunTime;
+
                 if (string.IsNullOrEmpty(movie.MediaInfo.AudioLanguages))
                 {
                     XmlNodeList nodes = doc.SelectNodes("Title/MediaInfo/Audio/Language");

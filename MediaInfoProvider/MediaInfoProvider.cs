@@ -74,6 +74,7 @@ namespace MediaInfoProvider
             if (filename != null) {
                 video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename));
             }
+            if (video.MediaInfo.RunTime > 0) video.RunningTime = video.MediaInfo.RunTime;
         }
 
         private MediaInfoData Merge(MediaInfoData original, MediaInfoData acquired)
