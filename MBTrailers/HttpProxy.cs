@@ -114,7 +114,7 @@ namespace WebProxy {
         int port;
         string cacheDir;
         Thread listenerThread;
-        volatile int incomingConnections = 0;
+        int incomingConnections = 0;
 
         public string CacheDirectory
         {
@@ -176,7 +176,15 @@ namespace WebProxy {
         public string ProxyUrl(string host, string path, string userAgent, int port) 
         {
             ProxyInfo info = new ProxyInfo(host, path, userAgent, port);
-            proxyServer.SetProxyInfo(info);
+            try
+            {
+                proxyServer.SetProxyInfo(info);
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error setting proxy info", e);
+                Logger.ReportError("Inner Exception: " + e.InnerException.Message);
+            }
 
             var target = Path.Combine(cacheDir, info.LocalFilename);
             return File.Exists(target) ? target : string.Format("http://localhost:{0}/{1}", this.port, info.LocalFilename);
@@ -198,7 +206,10 @@ namespace WebProxy {
                 while (incomingConnections >= MAX_CONNECTIONS) {
                     Thread.Sleep(10);
                 }
-                incomingConnections++;
+                
+                Interlocked.Increment(ref incomingConnections);
+
+                Logger.ReportInfo("Request accepted.  Queueing item.");
 
                 ThreadPool.QueueUserWorkItem(_ => ServiceClient(client));
             }
@@ -218,6 +229,8 @@ namespace WebProxy {
                         data.Append(ASCIIEncoding.ASCII.GetString(buffer, 0, bytes_read));
 
                         if (data.ToString().Contains("\r\n\r\n")) {
+                            Logger.ReportInfo("Request complete");
+                            Logger.ReportInfo("Data were: " + data.ToString());
                             httpRequestComplete = true;
                         }
                     } else {
@@ -228,20 +241,26 @@ namespace WebProxy {
 
                         ProxyInfo info;
                         var headers = new HttpHeaders(data.ToString());
-                            requestedPath = headers.Path.Replace("/", "");
-                            info = proxyServer.GetProxyInfo(requestedPath);
+                        requestedPath = headers.Path.Replace("/", "");
+                        info = proxyServer.GetProxyInfo(requestedPath);
+                        if (info == null)
+                        {
+                            //probably a request from the player for art - ignore it
+                            //Logger.ReportError("Unable to get info for item: " + requestedPath);
+                            break;
+                        }
                         var target = Path.Combine(cacheDir, info.LocalFilename);
 
                         if (File.Exists(target)) {
                             ServeStaticFile(stream, buffer, info, target);
-                            return;
+                            break;
                         }
 
                         string cacheFile = Path.Combine(cacheDir, info.LocalFilename + ".tmp");
 
                         if (File.Exists(cacheFile)) {
                             ServeCachedFile(stream, cacheFile, info);
-                            return;
+                            break;
                         }
 
                         try {
@@ -254,11 +273,13 @@ namespace WebProxy {
             } catch (Exception e) {
                 Logger.ReportException("Failed to serve file : " + requestedPath, e);
             } finally {
-                incomingConnections--;
+                Interlocked.Decrement(ref incomingConnections);
 
                 try
                 {
+                    Logger.ReportInfo("MB Trailers closing connections.");
                     stream.Close();
+                    client.Close();
                 } 
                 catch
                 {
@@ -465,7 +486,14 @@ namespace WebProxy {
                     }
 
                 } else {
-                    stream.Write(buffer, 0, bytesRead);
+                    try
+                    {
+                        stream.Write(buffer, 0, bytesRead);
+                    }
+                    catch (IOException)
+                    {
+                        return; //they probably shut down the request before we were finished
+                    }
                 }
 
                 bytesRead = fs.Read(buffer, 0, buffer.Length);

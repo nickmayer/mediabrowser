@@ -304,7 +304,14 @@ namespace MediaBrowserService
         }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            Async.Queue("Manual Refresh", () => FullRefresh(true));
+            //kick off a manual refresh on a high-priority thread
+            Thread manual = new Thread(new ThreadStart(() => FullRefresh(true)));
+            manual.Name = "Manual Refresh";
+            manual.IsBackground = true;
+            manual.Priority = ThreadPriority.Highest;
+            manual.Start();
+
+            //Async.Queue("Manual Refresh", () => FullRefresh(true));
         }
 
         private void cbxSleep_Checked(object sender, RoutedEventArgs e)
@@ -432,7 +439,7 @@ namespace MediaBrowserService
                     lblSinceDate.Content = "Since: "+_startTime;
                     CoreCommunications.StartListening(); //start listening for commands from core/configurator
                     Logger.ReportInfo("Service Started");
-                    _mainLoop = Async.Every(60 * 1000, () => FullRefresh(false)); //repeat every minute
+                    _mainLoop = Async.Every(60 * 1000, () => MainIteration()); //repeat every minute
                 }
                 catch  //some sort of error - release
                 {
@@ -445,7 +452,7 @@ namespace MediaBrowserService
         }
 
 
-        private void FullRefresh(bool force)
+        private void MainIteration()
         {
             UpdateElapsedTime();
             if (_refreshRunning) 
@@ -460,107 +467,112 @@ namespace MediaBrowserService
             UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!_refreshRunning && (force || verylate || (overdue && DateTime.Now.Hour >= _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
+            if (!_refreshRunning && (verylate || (overdue && DateTime.Now.Hour >= _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
-                _refreshRunning = true;
-                Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-                {
-                    gbManual.IsEnabled = false;
-                    refreshProgress.Value = 0;
-                    refreshProgress.Visibility = Visibility.Visible;
-                    _refreshCanceled = false;
-                    _refreshStartTime = DateTime.Now;
-                    btnCancelRefresh.IsEnabled = true;
-                    btnCancelRefresh.Visibility = Visibility.Visible;
-                    lblSvcActivity.Content = "Refresh Running...";
-                    notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
-                    notifyIcon.ContextMenu.MenuItems[4].Enabled = false;
-                    notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
-                    Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
-                    notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-                    lblNextSvcRefresh.Content = "";
-                }));
-
-                bool onSchedule = (!force && (DateTime.Now.Hour == _config.FullRefreshPreferredHour));
-
-                Logger.ReportInfo("Full Refresh Started");
-
-                using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
-                {
-                    Kernel.Instance.ReLoadRoot(); // make sure we are dealing with the current state of the library
-                    try
-                    {
-                        if (force)
-                        {
-                            if (_serviceOptions.ClearCacheOption)
-                            {
-                                //clear all cache items except displayprefs and playstate
-                                Logger.ReportInfo("Clearing Cache on manual refresh...");
-                                UpdateProgress("Clearing Cache", 0);
-                                Kernel.Instance.ItemRepository.ClearEntireCache();
-                            }
-                            if (_serviceOptions.ClearImageCacheOption)
-                            {
-                                try
-                                {
-                                    Directory.Delete(ApplicationPaths.AppImagePath, true);
-                                    Thread.Sleep(1000); //wait for the delete to fiinish
-                                }
-                                catch (Exception e) { Logger.ReportException("Error trying to clear image cache.", e); } //just log it
-                                try
-                                {
-                                    Directory.CreateDirectory(ApplicationPaths.AppImagePath);
-                                    Thread.Sleep(1000); //wait for the directory to create
-                                }
-                                catch (Exception e) { Logger.ReportException("Error trying to create image cache.", e); } //just log it
-                            }
-                        }
-
-                        if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default))
-                        {
-                            _config.LastFullRefresh = DateTime.Now;
-                            _config.Save();
-                        }
-
-                        MBServiceController.SendCommandToCore(IPCCommands.ReloadItems);
-                        Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(UpdateStatus));
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.ReportException("Failed to refresh library! ", ex);
-                        Debug.Assert(false, "Full refresh service should never crash!");
-                    }
-                    finally
-                    {
-                        Logger.ReportInfo("Full Refresh Finished");
-                        Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-                        {
-                            refreshProgress.Value = 0;
-                            refreshProgress.Visibility = Visibility.Hidden;
-                            btnCancelRefresh.Visibility = Visibility.Hidden;
-                            gbManual.IsEnabled = true;
-                            notifyIcon.ContextMenu.MenuItems[4].Enabled = true;
-                            notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
-                            notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
-                            Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
-                            notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-                        }));
-                        Kernel.Instance.ReLoadRoot(); // re-dump this to stay clean
-                        _refreshRunning = false;
-
-                        if (onSchedule && _config.SleepAfterScheduledRefresh)
-                        {
-                            Logger.ReportInfo("Putting computer to sleep...");
-                            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
-                        }
-                    }
-                }
+                FullRefresh(false);
             }
 
             if (_shutdown) //we were told to shutdown on next iteration (keeps us from shutting down in the middle of a refresh
             {
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(Close));
+            }
+        }
+
+        void FullRefresh(bool force)
+        {
+            _refreshRunning = true;
+            Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+            {
+                gbManual.IsEnabled = false;
+                refreshProgress.Value = 0;
+                refreshProgress.Visibility = Visibility.Visible;
+                _refreshCanceled = false;
+                _refreshStartTime = DateTime.Now;
+                btnCancelRefresh.IsEnabled = true;
+                btnCancelRefresh.Visibility = Visibility.Visible;
+                lblSvcActivity.Content = "Refresh Running...";
+                notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
+                notifyIcon.ContextMenu.MenuItems[4].Enabled = false;
+                notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
+                Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
+                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                lblNextSvcRefresh.Content = "";
+            }));
+
+            bool onSchedule = (!force && (DateTime.Now.Hour == _config.FullRefreshPreferredHour));
+
+            Logger.ReportInfo("Full Refresh Started");
+
+            using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
+            {
+                Kernel.Instance.ReLoadRoot(); // make sure we are dealing with the current state of the library
+                try
+                {
+                    if (force)
+                    {
+                        if (_serviceOptions.ClearCacheOption)
+                        {
+                            //clear all cache items except displayprefs and playstate
+                            Logger.ReportInfo("Clearing Cache on manual refresh...");
+                            UpdateProgress("Clearing Cache", 0);
+                            Kernel.Instance.ItemRepository.ClearEntireCache();
+                        }
+                        if (_serviceOptions.ClearImageCacheOption)
+                        {
+                            try
+                            {
+                                Directory.Delete(ApplicationPaths.AppImagePath, true);
+                                Thread.Sleep(1000); //wait for the delete to fiinish
+                            }
+                            catch (Exception e) { Logger.ReportException("Error trying to clear image cache.", e); } //just log it
+                            try
+                            {
+                                Directory.CreateDirectory(ApplicationPaths.AppImagePath);
+                                Thread.Sleep(1000); //wait for the directory to create
+                            }
+                            catch (Exception e) { Logger.ReportException("Error trying to create image cache.", e); } //just log it
+                        }
+                    }
+
+                    if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default))
+                    {
+                        _config.LastFullRefresh = DateTime.Now;
+                        _config.Save();
+                    }
+
+                    MBServiceController.SendCommandToCore(IPCCommands.ReloadItems);
+                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(UpdateStatus));
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Failed to refresh library! ", ex);
+                    Debug.Assert(false, "Full refresh service should never crash!");
+                }
+                finally
+                {
+                    Logger.ReportInfo("Full Refresh Finished");
+                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                    {
+                        refreshProgress.Value = 0;
+                        refreshProgress.Visibility = Visibility.Hidden;
+                        btnCancelRefresh.Visibility = Visibility.Hidden;
+                        gbManual.IsEnabled = true;
+                        notifyIcon.ContextMenu.MenuItems[4].Enabled = true;
+                        notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
+                        notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
+                        Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
+                        notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                    }));
+                    Kernel.Instance.ReLoadRoot(); // re-dump this to stay clean
+                    _refreshRunning = false;
+
+                    if (onSchedule && _config.SleepAfterScheduledRefresh)
+                    {
+                        Logger.ReportInfo("Putting computer to sleep...");
+                        System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+                    }
+                }
             }
         }
         

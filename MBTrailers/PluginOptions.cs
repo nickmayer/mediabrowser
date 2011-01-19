@@ -16,6 +16,12 @@ namespace MBTrailers
         [Label("Use HD Trailers")]
         public bool HDTrailers = false;
 
+        [Label("Show Local 'My Trailers'")]
+        public bool ShowMyTrailers = false;
+
+        [Label("My Trailers Name:")]
+        public string MyTrailerName = "My Trailers";
+
         //[Label("Sort Value")]
         //public string SortOrder = "";
 
