@@ -21,7 +21,8 @@ namespace MBTrailers {
 
         static readonly Guid TrailersGuid = new Guid("{828DCFEF-AEAF-44f2-B6A8-32AEAF27F3DA}");
         public static PluginConfiguration<PluginOptions>  PluginOptions {get;set;}
-        //private bool isMC = false;
+        static readonly Guid MyTrailersGuid = new Guid("d2a2ff50-8d51-4fab-824a-cb9317e9212c");
+        private LocalTrailerFolder localTrailers;
         
         public override void Init(Kernel kernel) {
             PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
@@ -64,9 +65,31 @@ namespace MBTrailers {
                     else
                         Logger.ReportInfo("MBTrailers - no proxy running.  Start Media Browser Service.");
                 }
+                //load mytrailers option if specified
+                if (PluginOptions.Instance.ShowMyTrailers)
+                {
+                    localTrailers = kernel.ItemRepository.RetrieveItem(MyTrailersGuid) as LocalTrailerFolder ?? new LocalTrailerFolder();
+                    localTrailers.Id = MyTrailersGuid;
+                    kernel.RootFolder.AddVirtualChild(localTrailers);
+                    kernel.ItemRepository.SaveItem(localTrailers);
+
+                    //make sure our image cache is there
+                    if (!Directory.Exists(Util.ImageCache))
+                        try
+                        {
+                            Directory.CreateDirectory(Util.ImageCache);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error Creating MyTrailers Image Cache: " + Util.ImageCache, e);
+                        }
+
+                    //Tell the log we loaded.
+                    Logger.ReportInfo("My Trailers Support Loaded.");
+                }
 
                 //refresh the paths of trailers, but wait a bit in case the service side isn't up yet (we load before the service)
-                MediaBrowser.Library.Threading.Async.Queue("MB Trailers refresh",() => trailers.RefreshProxy(), 3);
+                MediaBrowser.Library.Threading.Async.Queue("MB Trailers refresh",() => trailers.RefreshProxy(), 1500);
 
                 //tell core our types are playable (for menus)
                 kernel.AddExternalPlayableItem(typeof(ITunesTrailer));

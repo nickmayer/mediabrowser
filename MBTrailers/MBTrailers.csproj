@@ -88,10 +88,13 @@
     <Compile Include="ITunesTrailer.cs" />
     <Compile Include="ITunesTrailerFolder.cs" />
     <Compile Include="KmpSearch.cs" />
+    <Compile Include="MovieTrailer.cs" />
     <Compile Include="PartialFile.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LocalTrailerFolder.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
