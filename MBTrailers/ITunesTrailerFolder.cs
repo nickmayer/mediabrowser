@@ -13,6 +13,7 @@ using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities.Attributes;
 using WebProxy;
+using WebProxy.WCFInterfaces;
 
 namespace MBTrailers {
     public class MBTrailerFolder : Folder {

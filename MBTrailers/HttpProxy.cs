@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Runtime.Serialization;
+using WebProxy.WCFInterfaces;
 using MediaBrowser.Library.Logging;
 
 namespace WebProxy {
@@ -22,24 +23,23 @@ namespace WebProxy {
         public string Path { get; private set; }
     }
 
-    [ServiceContract]
-    public interface ITrailerProxy
-    {
-        [OperationContract]
-        ProxyInfo GetProxyInfo(string key);
-        [OperationContract]
-        void SetProxyInfo(ProxyInfo info);
-        [OperationContract]
-        string GetRandomTrailer();
-    }
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class ProxyService : ITrailerProxy
     {
         
         Dictionary<string, ProxyInfo> proxiedFiles = new Dictionary<string, ProxyInfo>();
+        string cacheDir = "";
+        int port = 8752;
 
         #region ITrailerProxy Members
+
+        public void Init(string cacheDir, int port)
+        {
+            this.cacheDir = cacheDir;
+            this.port = port;
+        }
+
 
         public ProxyInfo GetProxyInfo(string key)
         {
@@ -62,54 +62,14 @@ namespace WebProxy {
             {
                 int ndx = new Random().Next(proxiedFiles.Count-1);
                 string key = proxiedFiles.Keys.ToList()[ndx];
-                return File.Exists(proxiedFiles[key].LocalFilename) ? proxiedFiles[key].LocalFilename : string.Format("http://localhost:{0}/{1}", "8752", proxiedFiles[key].LocalFilename);
+                string target = Path.Combine(cacheDir, proxiedFiles[key].LocalFilename );
+                return File.Exists(target) ? target : string.Format("http://localhost:{0}/{1}", this.port, proxiedFiles[key].LocalFilename);
             }
             return "";
         }
 
         #endregion
     }
-
-    [DataContract]
-    public class ProxyInfo
-    {
-        public const string ITunesUserAgent = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 6.1)";
-
-        public ProxyInfo(string host, string path, string userAgent, int port) {
-            UserAgent = userAgent;
-            Path = path;
-            Host = host;
-            Port = port;
-
-            LocalFilename = string.Format("{0}{1}{2}", Host, Path, port).GetMD5String() + "_" +
-                System.IO.Path.GetFileName(path);
-
-            ContentType = "video/quicktime";
-        }
-        
-        [DataMember]
-        public string UserAgent { get; private set; }
-        [DataMember]
-        public string Host { get; private set; }
-        [DataMember]
-        public string Path { get; private set; }
-
-        [DataMember]
-        public string ContentType { get; private set; }
-
-        [DataMember]
-        public int BytesRead { get; set; }
-        [DataMember]
-        public bool Completed { get; set; }
-
-        [DataMember]
-        public string LocalFilename { get; private set; }
-
-
-        [DataMember]
-        public int Port { get; private set; }
-    }
-
 
     public class HttpProxy {
 
@@ -207,6 +167,14 @@ namespace WebProxy {
             ServiceHost host = new ServiceHost(typeof(ProxyService));
             host.AddServiceEndpoint(typeof(ITrailerProxy), new NetNamedPipeBinding(), "net.pipe://localhost/MBTrailers");
             host.Open();
+            //and initialize it
+            using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
+            {
+                ITrailerProxy proxyServer = factory.CreateChannel();
+                proxyServer.Init(this.cacheDir, this.port);
+                (proxyServer as ICommunicationObject).Close();
+            }
+
 
             TcpListener listener = new TcpListener(IPAddress.Loopback, port);
             listener.Start(10);
@@ -405,7 +373,8 @@ namespace WebProxy {
             header.Append("HTTP/1.1 200 OK\r\n");
             header.AppendFormat("Content-Length: {0}\r\n", new FileInfo(target).Length);
             header.AppendFormat("Content-Type: {0}\r\n", info.ContentType);
-            header.Append("Connection: keep-alive\r\n\r\n");
+            header.Append("Content-Transfer-Encoding: binary\r\n");
+            header.Append("\r\n");
 
 
             var streamWriter = new StreamWriter(stream);
@@ -417,13 +386,19 @@ namespace WebProxy {
 
                     var bytes_read = p.Read(buffer, 0, buffer.Length);
 
-                    if (bytes_read > 0) {
-                        try {
+                    if (bytes_read > 0)
+                    {
+                        try
+                        {
                             stream.Write(buffer, 0, bytes_read);
-                        } catch {
-                            return;
                         }
-                    } else {
+                        catch (IOException)
+                        {
+                            return; //they probably shut down the request before we were finished
+                        }
+                    }
+                    else
+                    {
                         break;
                     }
                 }
