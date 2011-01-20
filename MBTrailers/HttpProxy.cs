@@ -58,7 +58,13 @@ namespace WebProxy {
 
         public string GetRandomTrailer()
         {
-            throw new NotImplementedException();
+            if (proxiedFiles.Count > 0)
+            {
+                int ndx = new Random().Next(proxiedFiles.Count-1);
+                string key = proxiedFiles.Keys.ToList()[ndx];
+                return File.Exists(proxiedFiles[key].LocalFilename) ? proxiedFiles[key].LocalFilename : string.Format("http://localhost:{0}/{1}", "8752", proxiedFiles[key].LocalFilename);
+            }
+            return "";
         }
 
         #endregion
@@ -109,7 +115,6 @@ namespace WebProxy {
 
         const int MAX_CONNECTIONS = 10;
 
-        ITrailerProxy proxyServer;
 
         int port;
         string cacheDir;
@@ -124,8 +129,6 @@ namespace WebProxy {
         public HttpProxy(string cacheDir, int port) {
             this.port = port;
             this.cacheDir = cacheDir;
-            ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers");
-            proxyServer = factory.CreateChannel();
         }
 
 
@@ -176,14 +179,22 @@ namespace WebProxy {
         public string ProxyUrl(string host, string path, string userAgent, int port) 
         {
             ProxyInfo info = new ProxyInfo(host, path, userAgent, port);
-            try
+            using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
             {
-                proxyServer.SetProxyInfo(info);
-            }
-            catch (Exception e)
-            {
-                Logger.ReportException("Error setting proxy info", e);
-                Logger.ReportError("Inner Exception: " + e.InnerException.Message);
+                ITrailerProxy proxyServer = factory.CreateChannel();
+                try
+                {
+                    proxyServer.SetProxyInfo(info);
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error setting proxy info", e);
+                    Logger.ReportError("Inner Exception: " + e.InnerException.Message);
+                }
+                finally
+                {
+                    (proxyServer as ICommunicationObject).Close();
+                }
             }
 
             var target = Path.Combine(cacheDir, info.LocalFilename);
@@ -242,7 +253,12 @@ namespace WebProxy {
                         ProxyInfo info;
                         var headers = new HttpHeaders(data.ToString());
                         requestedPath = headers.Path.Replace("/", "");
-                        info = proxyServer.GetProxyInfo(requestedPath);
+                        using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
+                        {
+                            ITrailerProxy proxyServer = factory.CreateChannel();
+                            info = proxyServer.GetProxyInfo(requestedPath);
+                            (proxyServer as ICommunicationObject).Close();
+                        }
                         if (info == null)
                         {
                             //probably a request from the player for art - ignore it
