@@ -253,7 +253,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
             List<Actor> actors = null;
             if (unsplit != null) {
                 actors = new List<Actor>();
-                foreach (string name in unsplit.Split('|')) {
+                foreach (string name in unsplit.Trim('|').Split('|')) {
                     actors.Add(new Actor { Name = name });
                 }
             }
