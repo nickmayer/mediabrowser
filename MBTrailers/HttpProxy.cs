@@ -312,7 +312,6 @@ namespace WebProxy {
                         string headerString = header.ToString();
                         if (headerString.Contains("\r\n\r\n"))
                         {
-                            Trace.WriteLine(headerString);
                             gotHeader = true;
                             foreach (var line in headerString.Split('\n'))
                             {

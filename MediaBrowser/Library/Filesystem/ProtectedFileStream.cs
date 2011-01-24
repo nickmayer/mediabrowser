@@ -144,19 +144,20 @@ namespace MediaBrowser.Library.Filesystem {
         }
 
         protected override void Dispose(bool disposing) {
-            try {
-                base.Dispose(disposing);
-            } finally {
-                try {
+            if (disposing)
+            {
+                try
+                {
                     if (stream != null) stream.Dispose();
-                } finally {
+                }
+                finally
+                {
 #if (!DEBUG)
                     if (releaseLock != null) releaseLock();
 #else 
                     // I want to catch double dispose in debug
                     releaseLock();
 #endif
-
                     releaseLock = null;
                 }
             }
