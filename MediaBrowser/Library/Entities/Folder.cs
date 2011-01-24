@@ -140,7 +140,7 @@ namespace MediaBrowser.Library.Entities {
             var items = new Dictionary<Guid,BaseItem>();
 
             foreach (var item in RecursiveChildren) {
-                if (searchFunction(item) && (!Config.Instance.ExcludeRemoteContentInSearch || !item.IsRemoteContent)) {
+                if (searchFunction(item) && !item.IsTrailer && (!Config.Instance.ExcludeRemoteContentInSearch || !item.IsRemoteContent)) {
                     items[item.Id] = item;
                 }
             }

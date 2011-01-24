@@ -265,7 +265,21 @@ namespace MediaBrowser.Library.Entities {
         }
 
 
-        public virtual void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id) {
+        bool? isTrailer = null;
+        public bool IsTrailer
+        {
+            get
+            {
+                if (isTrailer == null)
+                {
+                    isTrailer = DisplayMediaType != null && DisplayMediaType.ToLower() == "trailer";
+                }
+                return isTrailer.Value;
+            }
+        }
+
+        public virtual void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id)
+        {
             this.Id = id;
             this.Path = location.Path;
             this.DateModified = location.DateModified;
