@@ -404,52 +404,69 @@ namespace WebProxy {
             }
         }
 
-        public static void CommitTempFile(FileStream fs, string path) {
-            // read first 64k which should be ample and locate the first \r\n\r\n
+        public static string BinaryReaderReadLine(BinaryReader r)
+        {
+            //keep it simple, BinaryReady has built in support for buffering
+            //so reading char by char has little performance hit
+            //and with this you can also Peek, handy for different types of CRLF
+            //eg  #13 #10 #10#13 #13#10, just in case sender is none compliant
+            //If the sender has used a differnt CRLF this should then still work.
+            string result = "";
+            char b;
+            while (true)
+            {
+                b = r.ReadChar();
+                if (b == '\r')
+                {
+                    if (r.PeekChar() == '\n') r.ReadChar();
+                    break;
+                }
+                else if (b == '\n')
+                {
+                    if (r.PeekChar() == '\r') r.ReadChar();
+                    break;
+                }
+                else
+                {
+                    result = result + b;
+                }
+            }
+            return result;
+        }
 
+        public static void CommitTempFile(FileStream fs, string path)
+        {
+            // first strip the headers
             fs.Seek(0, SeekOrigin.Begin);
-
-            byte[] buffer = new byte[8000];
-            StringBuilder data = new StringBuilder();
-
-            var totalRead = 0;
-            var bytesRead = fs.Read(buffer, 0, buffer.Length);
-            var headerEnd = 0;
-            while (bytesRead > 0 && totalRead < 64 * 1024 && headerEnd == 0) {
-                totalRead += bytesRead;
-                data.Append(ASCIIEncoding.ASCII.GetString(buffer, 0, bytesRead));
-                bytesRead = fs.Read(buffer, 0, buffer.Length);
-                headerEnd = data.ToString().IndexOf("\r\n\r\n");
+            // lets use a BinaryReader as it has buffer support
+            BinaryReader sr = new BinaryReader(fs, Encoding.ASCII);
+            // loops until we get a blank line
+            string line;
+            while (true)
+            {
+                line = BinaryReaderReadLine(sr);
+                if (line.Trim() == "") break;
             }
-
-            if (headerEnd > 0) {
-                fs.Seek(headerEnd + 4, SeekOrigin.Begin);
-            }
-
+            // our file cursor is now at the top of the video file, lets start copying.
+            // first delete tempfile
             var tempFile = path + ".stmp";
-
-            if (File.Exists(tempFile)) {
-                File.Delete(tempFile);
+            if (File.Exists(tempFile)) File.Delete(tempFile);
+            // lets copy
+            byte[] buffer = new byte[1024 * 32]; //32k buffer
+            using (FileStream fw = new FileStream(tempFile, FileMode.CreateNew))
+            {
+                //make sure we stil read from the BinaryReader sr
+                //as they will still be data in it's buffers
+                var bytesRead = sr.Read(buffer, 0, buffer.Length);
+                while (bytesRead > 0)
+                {
+                    fw.Write(buffer, 0, bytesRead);
+                    bytesRead = sr.Read(buffer, 0, buffer.Length);
+                }
             }
-
-            using (var destination = new FileStream(tempFile, FileMode.CreateNew)) {
-                bytesRead = 0;
-                do {
-                    if (bytesRead > 0) {
-                        destination.Write(buffer, 0, bytesRead);
-                    }
-                    bytesRead = fs.Read(buffer, 0, buffer.Length);
-
-                } while (bytesRead > 0);
-
-            }
-
-            if (File.Exists(path)) {
-                File.Delete(path);
-            }
-
+            // ok, everything copied OK, lets rename
+            if (File.Exists(path)) File.Delete(path);
             File.Move(tempFile, path);
-
         }
 
         public void ServeCachedFile(NetworkStream stream, string filename, ProxyInfo info) {
