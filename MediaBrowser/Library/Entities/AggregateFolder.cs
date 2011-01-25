@@ -12,6 +12,14 @@ namespace MediaBrowser.Library.Entities {
 
         List<BaseItem> virtualChildren = new List<BaseItem>();
 
+        public List<BaseItem> VirtualChildren
+        {
+            get
+            {
+                return virtualChildren;
+            }
+        }
+
         public void AddVirtualChild(BaseItem child) {
             virtualChildren.Add(child);
         }

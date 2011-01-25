@@ -438,6 +438,9 @@ namespace MediaBrowser.Library {
 
         public void ReLoadRoot()
         {
+            //save the items added by plugins before we re-load
+            var virtualItems = kernel.RootFolder.VirtualChildren;
+
             var root = kernel.GetLocation(ResolveInitialFolder(kernel.ConfigData.InitialFolder));
             kernel.RootFolder = (AggregateFolder)BaseItemFactory<AggregateFolder>.Instance.CreateInstance(root, null);
 
@@ -445,6 +448,17 @@ namespace MediaBrowser.Library {
             kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
                 kernel.RootFolder;
 
+            //now add back the plug-in children
+            if (virtualItems != null)
+            {
+                foreach (var item in virtualItems)
+                {
+                    Logger.ReportInfo("Adding back " + item.Name);
+                    kernel.RootFolder.AddVirtualChild(item);
+                }
+            }
+
+            //and re-load the repo
             ItemRepository = GetRepository(this.ConfigData);
         }
 
