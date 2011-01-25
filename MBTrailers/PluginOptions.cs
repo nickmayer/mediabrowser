@@ -22,6 +22,9 @@ namespace MBTrailers
         [Label("My Trailers Name:")]
         public string MyTrailerName = "My Trailers";
 
+        [Label("Trailer Suffix:")]
+        public string TrailerSuffix = "Trailer";
+
         //[Label("Sort Value")]
         //public string SortOrder = "";
 

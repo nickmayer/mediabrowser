@@ -53,7 +53,7 @@ namespace MBTrailers
             this.RunningTime = RealMovie.RunningTime;
             this.Actors = RealMovie.Actors;
             this.Directors = RealMovie.Directors;
-            this.Name = RealMovie.Name + " Trailer";
+            this.Name = RealMovie.Name + " " + Plugin.PluginOptions.Instance.TrailerSuffix;
             this.SortName = RealMovie.SortName;
             this.Studios = RealMovie.Studios;
             this.Path = RealMovie.TrailerFiles.First();
