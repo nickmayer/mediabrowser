@@ -579,7 +579,7 @@ namespace MediaBrowserService
         bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
         {
             int phases = _serviceOptions.AnyImageOptionsSelected ? 3 : 2;
-            double totalIterations = folder.RecursiveChildren.Count() * phases;
+            double totalIterations = folder.AllRecursiveChildren.Count() * phases;
             if (totalIterations == 0) return true; //nothing to do
 
             int currentIteration = 0;
@@ -757,7 +757,7 @@ namespace MediaBrowserService
         bool RunActionRecursively(Folder folder, Action<BaseItem> action)
         {
             action(folder);
-            foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateModified))
+            foreach (var item in folder.AllRecursiveChildren.OrderByDescending(i => i.DateModified))
             {
                 if (_refreshCanceled) return false;
                 action(item);

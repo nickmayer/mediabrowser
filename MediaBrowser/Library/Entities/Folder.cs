@@ -250,7 +250,8 @@ namespace MediaBrowser.Library.Entities {
         }
 
         /// <summary>
-        /// A recursive enumerator that walks through all the sub children 
+        /// A recursive enumerator that walks through all the sub children
+        /// that are not hidden by parental controls.  Use for UI operations.
         ///   Safe for multithreaded use, since it operates on list clones
         /// </summary>
         public IEnumerable<BaseItem> RecursiveChildren {
@@ -265,6 +266,33 @@ namespace MediaBrowser.Library.Entities {
                             foreach (var subitem in folder.RecursiveChildren) {
                                 yield return subitem;
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// A recursive enumerator that walks through all the sub children
+        /// ignoring parental controls (use only from refresh operations)
+        ///   Safe for multithreaded use, since it operates on list clones
+        /// </summary>
+        public IEnumerable<BaseItem> AllRecursiveChildren
+        {
+            get
+            {
+                List<BaseItem> childCopy;
+                lock(ActualChildren)
+                    childCopy = ActualChildren.ToList();
+                foreach (var item in childCopy)
+                {
+                    yield return item;
+                    var folder = item as Folder;
+                    if (folder != null)
+                    {
+                        foreach (var subitem in folder.RecursiveChildren)
+                        {
+                            yield return subitem;
                         }
                     }
                 }
