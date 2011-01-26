@@ -78,7 +78,7 @@ namespace DvrmsMetadataProvider {
 
                 if (image != null) {
                     lock (typeof(BaseMetadataProvider)) {
-                        var imagePath = Path.Combine(ApplicationPaths.AppImagePath, Item.Id.ToString() + ".png");
+                        var imagePath = Path.Combine(ApplicationPaths.AppImagePath, Item.Id.ToString() + "-orig.png");
                         image.Picture.Save(imagePath, ImageFormat.Png);
                         Item.PrimaryImagePath = imagePath;
                     }
