@@ -484,6 +484,8 @@ namespace MediaBrowser.Library {
             }
             //first do us
             base.RefreshMetadata(false);
+            ThumbSize size = this.folder.Parent != null ? this.folder.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+            this.folder.ReCacheAllImages(size);
             //and now all our children
             Async.Queue("UI Forced Folder Metadata Loader", () =>
             {
