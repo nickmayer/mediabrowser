@@ -708,6 +708,7 @@
     </Compile>
     <Compile Include="Library\Entities\IndexFolder.cs" />
     <Compile Include="Library\EntryPoint\EntryPointResolver.cs" />
+    <Compile Include="Library\Extensions\BinaryLineReader.cs" />
     <Compile Include="Library\Filesystem\MBDirectoryWatcher.cs" />
     <None Include="Library\ImageManagement\FilesystemProcessedImage.cs" />
     <Compile Include="Library\ImageManagement\ImageCache.cs" />

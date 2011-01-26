@@ -11,6 +11,7 @@ using System.ServiceModel;
 using System.Runtime.Serialization;
 using WebProxy.WCFInterfaces;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Extensions;
 
 namespace WebProxy {
 
@@ -404,49 +405,15 @@ namespace WebProxy {
             }
         }
 
-        public static string BinaryReaderReadLine(BinaryReader r)
-        {
-            //keep it simple, BinaryReady has built in support for buffering
-            //so reading char by char has little performance hit
-            //and with this you can also Peek, handy for different types of CRLF
-            //eg  #13 #10 #10#13 #13#10, just in case sender is none compliant
-            //If the sender has used a differnt CRLF this should then still work.
-            string result = "";
-            char b;
-            while (true)
-            {
-                b = r.ReadChar();
-                if (b == '\r')
-                {
-                    if (r.PeekChar() == '\n') r.ReadChar();
-                    break;
-                }
-                else if (b == '\n')
-                {
-                    if (r.PeekChar() == '\r') r.ReadChar();
-                    break;
-                }
-                else
-                {
-                    result = result + b;
-                }
-            }
-            return result;
-        }
-
         public static void CommitTempFile(FileStream fs, string path)
         {
             // first strip the headers
             fs.Seek(0, SeekOrigin.Begin);
-            // lets use a BinaryReader as it has buffer support
-            BinaryReader sr = new BinaryReader(fs, Encoding.ASCII);
+            // lets use a BinaryReader with special line handling support
+            BinaryLineReader sr = new BinaryLineReader(fs);
+
             // loops until we get a blank line
-            string line;
-            while (true)
-            {
-                line = BinaryReaderReadLine(sr);
-                if (line.Trim() == "") break;
-            }
+            while (sr.ReadLine().Trim() != "") ;
             // our file cursor is now at the top of the video file, lets start copying.
             // first delete tempfile
             var tempFile = path + ".stmp";
