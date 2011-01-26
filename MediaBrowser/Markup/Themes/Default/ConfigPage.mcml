@@ -51,6 +51,7 @@
       <EditableText Name="PIN" Value="" />
       <Choice Name="RatingsStrings">
         <Options>
+          <cor:String String="None" />
           <cor:String String="G" />
           <cor:String String="PG" />
           <cor:String String="PG-13" />
@@ -61,6 +62,7 @@
       </Choice>
       <Choice Name="RatingsValues">
         <Options>
+          <cor:Int32 Int32="-1" />
           <cor:Int32 Int32="1" />
           <cor:Int32 Int32="2" />
           <cor:Int32 Int32="3" />
@@ -71,6 +73,7 @@
       </Choice>
       <Choice Name="RatingsDescs">
         <Options>
+          <cor:String String="Block All Content." />
           <cor:String String="General Audiences - Appropriate for all.  Also Includes TV-Y and TV-Y7." />
           <cor:String String="Parental Guidance Suggested.  Also Includes TV-PG." />
           <cor:String String="Parental Guidance Suggested - Some content may not be appropriate for children under 13.  Also Includes TV-14." />

@@ -195,11 +195,16 @@ namespace MediaBrowser.Library.Entities {
         public string CustomPIN { get; set; }
 
         public bool ParentalAllowed { get { return Kernel.Instance.ParentalControls.Allowed(this); } }
-        public string ParentalRating
+        public virtual string ParentalRating
         {
             get
             {
                 if (string.IsNullOrEmpty(this.CustomRating)) {
+                    if (this == Kernel.Instance.RootFolder)
+                    {
+                        //never want to block the root
+                        return "None";
+                    }
                     var aShow = this as IShow;
                     if (aShow != null)
                         if (string.IsNullOrEmpty(aShow.MpaaRating))

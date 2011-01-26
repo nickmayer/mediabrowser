@@ -42,7 +42,16 @@ namespace MBTrailers {
             }
         }
 
-        public override string Name {
+        public override string ParentalRating
+        {
+            get
+            {
+                return "None"; //only way this can be assigned
+            }
+        }
+
+        public override string Name
+        {
             get {
                 return Plugin.PluginOptions != null ? Plugin.PluginOptions.Instance.MenuName : "MB Trailers";
             }

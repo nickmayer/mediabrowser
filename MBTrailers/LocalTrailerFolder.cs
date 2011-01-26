@@ -26,6 +26,14 @@ namespace MBTrailers
             }
         }
 
+        public override string ParentalRating
+        {
+            get
+            {
+                return "None"; //only way this can be assigned
+            }
+        }
+
         protected override List<BaseItem> GetNonCachedChildren()
         {
             //build our list of trailers

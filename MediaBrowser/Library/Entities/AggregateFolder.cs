@@ -37,6 +37,7 @@ namespace MediaBrowser.Library.Entities {
         }
 
         
+        
         //public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options) {
         //    // these are root folders they support no metadata
         //    return false;

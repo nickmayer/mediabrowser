@@ -32,6 +32,7 @@ namespace MediaBrowser.Library
             {
                 ratings.Add("", 0);
             }
+            ratings.Add("None", -1);
             ratings.Add("G", 1);
             ratings.Add("TV-G", 1);
             ratings.Add("TV-Y", 1);
@@ -49,6 +50,7 @@ namespace MediaBrowser.Library
             ratings.Add("XXX", 100);
             ratings.Add("CS", 1000);
             //and rating reverse lookup dictionary (don't need the unrated or redundant ones)
+            ratingsStrings.Add(-1, "None");
             ratingsStrings.Add(1, "G");
             ratingsStrings.Add(2, "PG");
             ratingsStrings.Add(3, "PG-13");
