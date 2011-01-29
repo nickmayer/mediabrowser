@@ -646,7 +646,7 @@ namespace MediaBrowser.Library
         {
             get
             {
-                FolderModel blank = new FolderModel() { baseItem = new Series() { Name = "Unknown", Studios = new List<string>()} };
+                FolderModel blank = new FolderModel() { baseItem = new Series() { Name = "Unknown", Studios = new List<string>(), MpaaRating = ""} };
                 FolderModel series = blank;
 
                 Episode episode = baseItem as Episode;
