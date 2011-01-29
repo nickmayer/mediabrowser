@@ -467,8 +467,9 @@ namespace MediaBrowserService
             UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!_refreshRunning && (verylate || (overdue && DateTime.Now.Hour >= _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
+            if (!_refreshRunning && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
+                Thread.Sleep(20000); //in case we just came out of sleep mode - let's be sure everything is up first...
                 FullRefresh(false);
             }
 
