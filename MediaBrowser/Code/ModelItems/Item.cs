@@ -646,8 +646,8 @@ namespace MediaBrowser.Library
         {
             get
             {
-
-                FolderModel series = (FolderModel)Item.BlankItem;
+                FolderModel blank = new FolderModel();
+                FolderModel series = blank;
 
                 Episode episode = baseItem as Episode;
                 Season season = baseItem as Season;
@@ -664,7 +664,7 @@ namespace MediaBrowser.Library
                     series = parent;
                 }
                 */
-                if (series == Item.BlankItem)
+                if (series == blank)
                 {
 
                     if (episode != null)
