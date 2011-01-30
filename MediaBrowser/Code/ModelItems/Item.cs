@@ -681,7 +681,7 @@ namespace MediaBrowser.Library
                         }
 
                     }
-                    else if (series != null)
+                    else if (series != blank)
                     {
                         series = ItemFactory.Instance.Create(season.Parent) as FolderModel;
 
