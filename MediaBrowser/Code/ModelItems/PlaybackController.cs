@@ -411,17 +411,24 @@ namespace MediaBrowser
 
             if (state != PlayState)
             {
+                Logger.ReportVerbose("Playstate changed to "+state+" for " + title);
                 PlayState = state;
+                Logger.ReportVerbose("Invoking Playstate changed events...");
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => PlayStateChanged());
+                Logger.ReportVerbose("Setting now playing status...");
                 Application.CurrentInstance.ShowNowPlaying = (
                     (state == Microsoft.MediaCenter.PlayState.Playing) ||
                     (state == Microsoft.MediaCenter.PlayState.Paused));
+                Logger.ReportVerbose("Updating Resume status...");
                 Application.CurrentInstance.CurrentItem.UpdateResume();
                 if (state == Microsoft.MediaCenter.PlayState.Finished || state == Microsoft.MediaCenter.PlayState.Stopped)
                 {
+                    Logger.ReportVerbose("Stopped so detaching...");
                     Detach(); //we don't want to continue to get updates if play something outside MB
                     //we're done - call post-processor
+                    Logger.ReportVerbose("Calling post play...");
                     Application.CurrentInstance.RunPostPlayProcesses();
+                    Logger.ReportVerbose("Finished all playstate events");
                 }
             }
 
@@ -430,6 +437,7 @@ namespace MediaBrowser
             {
                 if (lastWasDVD && !returnedToApp && state == PlayState.Stopped)
                 {
+                    Logger.ReportVerbose("Ensuring MB is front-most app");
                     Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                     {
                         AddInHost.Current.ApplicationContext.ReturnToApplication();
@@ -437,6 +445,7 @@ namespace MediaBrowser
                     returnedToApp = true;
                 }
             }
+            Logger.ReportVerbose("Out of updatestatus");
         }
 
         static bool? isWindows7;
