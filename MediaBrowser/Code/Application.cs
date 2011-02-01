@@ -563,34 +563,8 @@ namespace MediaBrowser
                             Kernel.Instance.MajorActivity = false;
                         });
                     }
-
-                    //check for alternate entry point
-                    this.entryPointPath = EntryPointResolver.EntryPointPath;
-
-                    if (IsInEntryPoint)
-                    {
-                        //add in a fake breadcrumb so they will show properly
-                        session.AddBreadcrumb("DIRECTENTRY");
-                    }
-
-                    if (this.EntryPointPath.ToLower() == ConfigEntryPointVal) //specialized case for config page
-                    {
-                        //OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
-                        OpenConfiguration(true);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            this.RootFolderModel = (MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath));
-                            Navigate(this.RootFolderModel);
-                        }
-                        catch (Exception ex)
-                        {
-                            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentInstance.StringData("EntryPointErrorDial") + this.EntryPointPath + ". " + ex.ToString() + " " + ex.StackTrace.ToString(), CurrentInstance.StringData("EntryPointErrorCapDial"), DialogButtons.Ok, 30, true);
-                            Close();
-                        }
-                    }
+                    //Launch into our entrypoint
+                    LaunchEntryPoint(EntryPointResolver.EntryPointPath);
                 }
             }
             catch (Exception e)
@@ -599,6 +573,37 @@ namespace MediaBrowser
                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
             }
         }
+
+        public void LaunchEntryPoint(string entryPointPath)
+        {
+            this.entryPointPath = entryPointPath;
+
+            if (IsInEntryPoint)
+            {
+                //add in a fake breadcrumb so they will show properly
+                session.AddBreadcrumb("DIRECTENTRY");
+            }
+
+            if (this.EntryPointPath.ToLower() == ConfigEntryPointVal) //specialized case for config page
+            {
+                //OpenFolderPage((MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(this.RootFolder));
+                OpenConfiguration(true);
+            }
+            else
+            {
+                try
+                {
+                    this.RootFolderModel = (MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath));
+                    Navigate(this.RootFolderModel);
+                }
+                catch (Exception ex)
+                {
+                    Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentInstance.StringData("EntryPointErrorDial") + this.EntryPointPath + ". " + ex.ToString() + " " + ex.StackTrace.ToString(), CurrentInstance.StringData("EntryPointErrorCapDial"), DialogButtons.Ok, 30, true);
+                    Close();
+                }
+            }
+        }
+
         void FirstRunForVersion(string thisVersion)
         {
             switch (thisVersion)
@@ -634,7 +639,7 @@ namespace MediaBrowser
             }
         }
 
-        bool IsInEntryPoint
+        public bool IsInEntryPoint
         {
             get
             {

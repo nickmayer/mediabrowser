@@ -35,7 +35,16 @@ namespace MediaBrowser.Library
             {
                 Logger.ReportInfo("Client listener already going - activating that instance of MB...");
                 //already started - must be another instance of MB Core - tell it to come to front
-                SendCommandToCore("activate");
+                string entryPoint = EntryPointResolver.EntryPointPath;
+                if (string.IsNullOrEmpty(entryPoint))
+                {
+                    SendCommandToCore("activate");
+                }
+                else //nav to the proper entrypoint
+                {
+                    Logger.ReportInfo("Navigating current instance to entrypoint " + entryPoint);
+                    SendCommandToCore("activateentrypoint," + entryPoint);
+                }
                 //and exit
                 return false;
             }
@@ -53,7 +62,7 @@ namespace MediaBrowser.Library
                     // Read the request from the client. 
                     StreamReader sr = new StreamReader(pipe);
 
-                    string[] commandAndArgs = sr.ReadLine().Split(' ');
+                    string[] commandAndArgs = sr.ReadLine().Split(',');
                     string command = commandAndArgs[0];
                     switch (command.ToLower())
                     {
@@ -62,6 +71,16 @@ namespace MediaBrowser.Library
                             Guid id = new Guid(commandAndArgs[1]);
                             Logger.ReportInfo("Playing ...");
                             //to be implemented...
+                            break;
+                        case "activateentrypoint":
+                            //re-load ourselves and nav to the entrypoint
+                            Kernel.Instance.ReLoadRoot();
+                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                            {
+                                MediaBrowser.Application.CurrentInstance.LaunchEntryPoint(commandAndArgs[1]);
+                            });
+                            //and tell MC to navigate to us
+                            Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
                             break;
                         case "activate":
                             //tell MC to navigate to us
