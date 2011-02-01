@@ -488,7 +488,7 @@ namespace MediaBrowser
             {
                 if (Parent is FolderModel)
                 {
-                    (Parent as FolderModel).Folder.ValidateChildren(); //update parent info
+                    Async.Queue("Post delete validate", () => (Parent as FolderModel).Folder.ValidateChildren()); //update parent info
                 }
             }
         }
