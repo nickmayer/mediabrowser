@@ -486,16 +486,9 @@ namespace MediaBrowser
             Back(); // Back to the Parent Item; This parent still contains old data.
             if (Parent != null) //if we came from a recent list parent may not be valid
             {
-
-                // These tricks are required in order to load the parent item with "fresh" data.
-                if (session.BackPage()) // Double Back to the GrandParent because history still has old parent.
+                if (Parent is FolderModel)
                 {
-                    Navigate(Parent);  // Navigate forward to Parent 
-                }
-                else // No GrandParent to go back to.
-                {
-                    Navigate(Parent); // Navigate to the parent again - this will refresh the objects
-                    session.BackPage(); // Now safe to go back to previous parent, and keep session history valid
+                    (Parent as FolderModel).Folder.ValidateChildren(); //update parent info
                 }
             }
         }
