@@ -24,13 +24,20 @@ namespace MediaBrowser.Library.EntityDiscovery {
                 bool containsIfo;
                 bool isDvd = IsDvd(location, out containsIfo);
                 bool isIso = Helper.IsIso(location.Path); 
+                bool isBD = Helper.IsFolder(location.Path) ? Helper.IsBluRayFolder(location.Path, null) : false;
                 bool isVideo = !(location is IFolderMediaLocation) &&
-                    (Helper.IsVideo(location.Path) || isIso || location.IsVob());
+                    (Helper.IsVideo(location.Path) || isIso || isBD || location.IsVob());
 
-                if ( (isDvd || isVideo ) &&
+                if ( (isDvd || isBD || isVideo ) &&
                     TVUtils.IsEpisode(location.Path)) {
 
-                    if (containsIfo || isIso) {
+                    if (isBD)
+                    {
+                        setup = new List<InitializationParameter>() {
+                            new MediaTypeInitializationParameter() {MediaType = MediaType.BluRay}
+                        };
+                    }
+                    else if (containsIfo || isIso) {
                         MediaType mt = isIso ? MediaType.ISO : MediaType.DVD;
                         setup = new List<InitializationParameter>() {
                             new MediaTypeInitializationParameter() {MediaType = mt}

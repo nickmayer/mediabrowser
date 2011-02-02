@@ -183,14 +183,22 @@ namespace MediaBrowser.LibraryManagement
                 return false;
         }
 
-        public static bool IsFolder(string path)
-        {  
-          return (Directory.Exists(path)); 
-        }
-
         public static bool IsFolder(FileSystemInfo fsi)
         {
             return ((fsi.Attributes & FileAttributes.Directory) == FileAttributes.Directory);
+        }
+
+        public static bool IsFolder(string path)
+        {
+            //faster than directory.exists?
+            try
+            {
+                return (File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
