@@ -85,31 +85,39 @@ namespace MediaBrowser.Library
 
         private static bool SendCommand(string pipeName, string command)
         {
-            NamedPipeClientStream pipeClient =
-                new NamedPipeClientStream("localhost", pipeName,
-                PipeDirection.Out, PipeOptions.None);
-            StreamWriter sw = new StreamWriter(pipeClient);
             try
             {
-                pipeClient.Connect(2000);
-            }
-            catch (TimeoutException)
-            {
-                Logger.ReportWarning("Unable to send command (may not be running).");
-                return false;
-            }
-            try
-            {
-                sw.AutoFlush = true;
-                sw.WriteLine(command);
-                pipeClient.Close();
+                NamedPipeClientStream pipeClient =
+                    new NamedPipeClientStream("localhost", pipeName,
+                    PipeDirection.Out, PipeOptions.None);
+                StreamWriter sw = new StreamWriter(pipeClient);
+                try
+                {
+                    pipeClient.Connect(2000);
+                }
+                catch (TimeoutException)
+                {
+                    Logger.ReportWarning("Unable to send command (may not be running).");
+                    return false;
+                }
+                try
+                {
+                    sw.AutoFlush = true;
+                    sw.WriteLine(command);
+                    pipeClient.Close();
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error sending commmand ", e);
+                    return false;
+                }
+                return true;
             }
             catch (Exception e)
             {
-                Logger.ReportException("Error sending commmand ", e);
+                Logger.ReportException("Unable to open pipe: " + pipeName, e);
                 return false;
             }
-            return true;
         }
 
         public static bool IsRunning
@@ -149,10 +157,13 @@ namespace MediaBrowser.Library
 
         public static bool RestartService()
         {
-            SendCommandToService(IPCCommands.Shutdown);
-            //give it time to exit
-            Thread.Sleep(1000);
-            return StartService();
+            if (SendCommandToService(IPCCommands.Shutdown))
+            {
+                //give it time to exit
+                Thread.Sleep(1000);
+                return StartService();
+            }
+            else return false;
         }
 
         public static bool StartService()
