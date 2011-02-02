@@ -6,6 +6,7 @@ using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.EntityDiscovery;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Threading;
 using System.Collections;
 using System.Diagnostics;
 
@@ -239,6 +240,15 @@ namespace MediaBrowser.Library.Entities {
             sortedIndex.Sort((x, y) =>
             {
                 return x.Name.CompareTo(y.Name);
+            });
+
+            //build in images
+            Async.Queue("Index image builder", () =>
+            {
+                foreach (Index item in sortedIndex)
+                {
+                    item.RefreshMetadata();
+                }
             });
 
             return sortedIndex;
