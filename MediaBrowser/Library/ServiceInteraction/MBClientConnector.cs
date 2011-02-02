@@ -83,6 +83,16 @@ namespace MediaBrowser.Library
                             Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
                             break;
                         case "activate":
+                            //if we were in an entrypoint and we just got told to activate - we need to re-load and go to real root
+                            if (Application.CurrentInstance.IsInEntryPoint)
+                            {
+                                Kernel.Instance.ReLoadRoot();
+                                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                                {
+                                    MediaBrowser.Application.CurrentInstance.LaunchEntryPoint(""); //this will start at root
+                                });
+                            }
+
                             //tell MC to navigate to us
                             Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
                             break;
