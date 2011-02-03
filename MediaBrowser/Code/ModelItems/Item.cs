@@ -675,7 +675,7 @@ namespace MediaBrowser.Library
                             series = grandParent;
                         }
 
-                        if (series == null)
+                        if (series == blank)
                         {
                             series = ItemFactory.Instance.Create(episode.Series) as FolderModel;
                         }
