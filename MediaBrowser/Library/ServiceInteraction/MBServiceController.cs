@@ -100,6 +100,12 @@ namespace MediaBrowser.Library
                     Logger.ReportWarning("Unable to send command (may not be running).");
                     return false;
                 }
+                catch (Exception e)
+                {
+                Logger.ReportException("Unable to connect to pipe: " + pipeName, e);
+                Logger.ReportException("Inner Exception", e.InnerException);
+                return false;
+                }
                 try
                 {
                     sw.AutoFlush = true;
