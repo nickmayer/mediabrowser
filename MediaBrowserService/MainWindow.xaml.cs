@@ -602,18 +602,26 @@ namespace MediaBrowserService
                 })) return false;
             }
 
+            var processedItems = new HashSet<Guid>();
             using (new Profiler(Kernel.Instance.GetString("SlowRefresh")))
             {
                 if (!RunActionRecursively(folder, item =>
                 {
                     currentIteration++;
                     UpdateProgress("All Metadata",(currentIteration / totalIterations));
-                    item.RefreshMetadata(options);
+                    if (!processedItems.Contains(item.Id)) //only process any given item once (could be multiple refs to same item)
+                    {
+                        item.RefreshMetadata(options);
+                        processedItems.Add(item.Id);
+                        //Logger.ReportInfo(item.Name + " id: " + item.Id);
+                    }
+                    else Logger.ReportInfo("Not refreshing " + item.Name +"("+item.Id+ ") again.");
                 })) return false;
             }
 
             if (_serviceOptions.AnyImageOptionsSelected)
             {
+                processedItems.Clear();
                 using (new Profiler(Kernel.Instance.GetString("ImageRefresh")))
                 {
                     var studiosProcessed = new List<string>();
@@ -625,130 +633,136 @@ namespace MediaBrowserService
                     {
                         currentIteration++;
                         UpdateProgress("Images",(currentIteration / totalIterations));
-                        if (_serviceOptions.IncludeImagesOption) //main images
+                        if (!processedItems.Contains(item.Id))
                         {
-                            ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-                            Logger.ReportInfo("Caching all images for " + item.Name + ". Stored primary image size: " + s.Width + "x" + s.Height);
-                            item.ReCacheAllImages(s);
-                        }
-                        // optionally cause genre, poeple, year and studio images to cache as well
-                        if (item is Show)
-                        {
-                            var show = item as Show;
-                            if (_serviceOptions.IncludeGenresOption && show.Genres != null)
+                            if (_serviceOptions.IncludeImagesOption) //main images
                             {
-                                foreach (var genre in show.Genres)
+                                ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                                Logger.ReportInfo("Caching all images for " + item.Name + ". Stored primary image size: " + s.Width + "x" + s.Height);
+                                item.ReCacheAllImages(s);
+                            }
+                            // optionally cause genre, poeple, year and studio images to cache as well
+                            if (item is Show)
+                            {
+                                var show = item as Show;
+                                if (_serviceOptions.IncludeGenresOption && show.Genres != null)
                                 {
-                                    if (!genresProcessed.Contains(genre))
+                                    foreach (var genre in show.Genres)
                                     {
-                                        Genre g = Genre.GetGenre(genre);
-                                        g.RefreshMetadata();
-                                        if (g.PrimaryImage != null)
+                                        if (!genresProcessed.Contains(genre))
                                         {
-                                            Logger.ReportInfo("Caching image for genre: " + genre);
-                                            g.PrimaryImage.ClearLocalImages();
-                                            g.PrimaryImage.GetLocalImagePath();
+                                            Genre g = Genre.GetGenre(genre);
+                                            g.RefreshMetadata();
+                                            if (g.PrimaryImage != null)
+                                            {
+                                                Logger.ReportInfo("Caching image for genre: " + genre);
+                                                g.PrimaryImage.ClearLocalImages();
+                                                g.PrimaryImage.GetLocalImagePath();
+                                            }
+                                            foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in g.BackdropImages)
+                                            {
+                                                image.GetLocalImagePath();
+                                            }
+                                            genresProcessed.Add(genre);
                                         }
-                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in g.BackdropImages)
-                                        {
-                                            image.GetLocalImagePath();
-                                        }
-                                        genresProcessed.Add(genre);
                                     }
                                 }
-                            }
-                            if (_serviceOptions.IncludeStudiosOption && show.Studios != null)
-                            {
-                                foreach (var studio in show.Studios)
+                                if (_serviceOptions.IncludeStudiosOption && show.Studios != null)
                                 {
-                                    if (!studiosProcessed.Contains(studio))
+                                    foreach (var studio in show.Studios)
                                     {
-                                        Logger.ReportInfo("Caching image for studio: " + studio);
-                                        Studio st = Studio.GetStudio(studio);
-                                        st.RefreshMetadata();
-                                        if (st.PrimaryImage != null)
+                                        if (!studiosProcessed.Contains(studio))
                                         {
                                             Logger.ReportInfo("Caching image for studio: " + studio);
-                                            st.PrimaryImage.ClearLocalImages();
-                                            st.PrimaryImage.GetLocalImagePath();
+                                            Studio st = Studio.GetStudio(studio);
+                                            st.RefreshMetadata();
+                                            if (st.PrimaryImage != null)
+                                            {
+                                                Logger.ReportInfo("Caching image for studio: " + studio);
+                                                st.PrimaryImage.ClearLocalImages();
+                                                st.PrimaryImage.GetLocalImagePath();
+                                            }
+                                            foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in st.BackdropImages)
+                                            {
+                                                image.ClearLocalImages();
+                                                image.GetLocalImagePath();
+                                            }
+                                            studiosProcessed.Add(studio);
                                         }
-                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in st.BackdropImages)
+                                    }
+                                }
+                                if (_serviceOptions.IncludePeopleOption && show.Actors != null)
+                                {
+                                    foreach (var actor in show.Actors)
+                                    {
+                                        if (!peopleProcessed.Contains(actor.Name))
+                                        {
+                                            Person p = Person.GetPerson(actor.Name);
+                                            p.RefreshMetadata();
+                                            if (p.PrimaryImage != null)
+                                            {
+                                                Logger.ReportInfo("Caching image for person: " + actor.Name);
+                                                p.PrimaryImage.ClearLocalImages();
+                                                p.PrimaryImage.GetLocalImagePath();
+                                            }
+                                            foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
+                                            {
+                                                image.ClearLocalImages();
+                                                image.GetLocalImagePath();
+                                            }
+                                            peopleProcessed.Add(actor.Name);
+                                        }
+                                    }
+                                }
+                                if (_serviceOptions.IncludePeopleOption && show.Directors != null)
+                                {
+                                    foreach (var director in show.Directors)
+                                    {
+                                        if (!peopleProcessed.Contains(director))
+                                        {
+                                            Person p = Person.GetPerson(director);
+                                            p.RefreshMetadata();
+                                            if (p.PrimaryImage != null)
+                                            {
+                                                Logger.ReportInfo("Caching image for person: " + director);
+                                                p.PrimaryImage.ClearLocalImages();
+                                                p.PrimaryImage.GetLocalImagePath();
+                                            }
+                                            foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
+                                            {
+                                                image.ClearLocalImages();
+                                                image.GetLocalImagePath();
+                                            }
+                                            peopleProcessed.Add(director);
+                                        }
+                                    }
+                                }
+                                if (_serviceOptions.IncludeYearOption && show.ProductionYear != null)
+                                {
+                                    if (!yearsProcessed.Contains(show.ProductionYear.ToString()))
+                                    {
+                                        Year yr = Year.GetYear(show.ProductionYear.ToString());
+                                        yr.RefreshMetadata();
+                                        if (yr.PrimaryImage != null)
+                                        {
+                                            Logger.ReportInfo("Caching image for year: " + yr);
+                                            yr.PrimaryImage.ClearLocalImages();
+                                            yr.PrimaryImage.GetLocalImagePath();
+                                        }
+                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in yr.BackdropImages)
                                         {
                                             image.ClearLocalImages();
                                             image.GetLocalImagePath();
                                         }
-                                        studiosProcessed.Add(studio);
+                                        yearsProcessed.Add(show.ProductionYear.ToString());
                                     }
-                                }
-                            }
-                            if (_serviceOptions.IncludePeopleOption && show.Actors != null)
-                            {
-                                foreach (var actor in show.Actors)
-                                {
-                                    if (!peopleProcessed.Contains(actor.Name))
-                                    {
-                                        Person p = Person.GetPerson(actor.Name);
-                                        p.RefreshMetadata();
-                                        if (p.PrimaryImage != null)
-                                        {
-                                            Logger.ReportInfo("Caching image for person: " + actor.Name);
-                                            p.PrimaryImage.ClearLocalImages();
-                                            p.PrimaryImage.GetLocalImagePath();
-                                        }
-                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
-                                        {
-                                            image.ClearLocalImages();
-                                            image.GetLocalImagePath();
-                                        }
-                                        peopleProcessed.Add(actor.Name);
-                                    }
-                                }
-                            }
-                            if (_serviceOptions.IncludePeopleOption && show.Directors != null)
-                            {
-                                foreach (var director in show.Directors)
-                                {
-                                    if (!peopleProcessed.Contains(director))
-                                    {
-                                        Person p = Person.GetPerson(director);
-                                        p.RefreshMetadata();
-                                        if (p.PrimaryImage != null)
-                                        {
-                                            Logger.ReportInfo("Caching image for person: " + director);
-                                            p.PrimaryImage.ClearLocalImages();
-                                            p.PrimaryImage.GetLocalImagePath();
-                                        }
-                                        foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
-                                        {
-                                            image.ClearLocalImages();
-                                            image.GetLocalImagePath();
-                                        }
-                                        peopleProcessed.Add(director);
-                                    }
-                                }
-                            }
-                            if (_serviceOptions.IncludeYearOption && show.ProductionYear != null)
-                            {
-                                if (!yearsProcessed.Contains(show.ProductionYear.ToString()))
-                                {
-                                    Year yr = Year.GetYear(show.ProductionYear.ToString());
-                                    yr.RefreshMetadata();
-                                    if (yr.PrimaryImage != null)
-                                    {
-                                        Logger.ReportInfo("Caching image for year: " + yr);
-                                        yr.PrimaryImage.ClearLocalImages();
-                                        yr.PrimaryImage.GetLocalImagePath();
-                                    }
-                                    foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in yr.BackdropImages)
-                                    {
-                                        image.ClearLocalImages();
-                                        image.GetLocalImagePath();
-                                    }
-                                    yearsProcessed.Add(show.ProductionYear.ToString());
-                                }
 
+                                }
                             }
+                            processedItems.Add(item.Id);
+
                         }
+                        else Logger.ReportInfo("Not processing " + item.Name + " again.");
                     })) return false;
                 }
             }
