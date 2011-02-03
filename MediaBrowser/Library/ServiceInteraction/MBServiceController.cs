@@ -116,6 +116,7 @@ namespace MediaBrowser.Library
             catch (Exception e)
             {
                 Logger.ReportException("Unable to open pipe: " + pipeName, e);
+                Logger.ReportException("Inner Exception", e.InnerException);
                 return false;
             }
         }

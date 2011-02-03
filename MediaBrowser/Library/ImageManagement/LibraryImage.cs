@@ -47,7 +47,7 @@ namespace MediaBrowser.Library.ImageManagement {
         /// </summary>
         public bool Corrupt { private set; get; }
 
-        Guid Id { get { return Path.GetMD5(); } }
+        Guid Id { get { return Path.ToLower().GetMD5(); } }
 
         public virtual void Init(bool canBeProcessed, BaseItem item) {
             this.item = item;

@@ -20,7 +20,7 @@ namespace MediaBrowser.Library.Factories {
         }
 
         public Guid GetId(IMediaLocation location) {
-            return (TypeName + location.Path).GetMD5();
+            return (TypeName + location.Path.ToLower()).GetMD5();
         }
 
         private static Type MyType = typeof(T);
