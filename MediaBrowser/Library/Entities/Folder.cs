@@ -201,7 +201,7 @@ namespace MediaBrowser.Library.Entities {
                 default:
                     break;
             }
-            BaseItem unknown = UnknownItem();
+            BaseItem unknown = UnknownItem(indexType);
 
             var index = new Dictionary<BaseItem, List<BaseItem>>(new BaseItemIndexComparer());
             foreach (var item in RecursiveChildren) {
@@ -254,9 +254,22 @@ namespace MediaBrowser.Library.Entities {
             return sortedIndex;
         }
 
-        private static BaseItem UnknownItem() {
-            // there is a bit of work we need to do to ensure Name is not source from providers 
-            return Genre.GetGenre("<Unknown>");
+        private static BaseItem UnknownItem(IndexType indexType) {
+
+            const string unknown = "<Unknown>";
+
+            switch (indexType)
+            {
+                case IndexType.Director:
+                case IndexType.Actor:
+                    return Person.GetPerson(unknown);
+                case IndexType.Studio:
+                    return Studio.GetStudio(unknown);
+                case IndexType.Year:
+                    return Year.GetYear(unknown);
+                default:
+                    return Genre.GetGenre(unknown);
+            }
         }
 
         /// <summary>
