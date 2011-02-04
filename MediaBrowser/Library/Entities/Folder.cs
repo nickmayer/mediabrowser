@@ -475,17 +475,18 @@ namespace MediaBrowser.Library.Entities {
             {
                 //we want to group these by series - find or create a series head
                 Episode episode = child as Episode;
-                IndexFolder series = (IndexFolder)index[item].Find(i => i.Id == (item.Name+episode.Series.Name).GetMD5());
+                Folder currentSeries = episode.Parent is IndexFolder ? episode.Parent : episode.Series; //may already be indexed
+                IndexFolder series = (IndexFolder)index[item].Find(i => i.Id == (item.Name+currentSeries.Name).GetMD5());
                 if (series == null)
                 {
                     series = new IndexFolder() { 
-                        Id = (item.Name+episode.Series.Name).GetMD5(), 
-                        Name = episode.Series.Name, 
-                        Overview = episode.Series.Overview, 
-                        PrimaryImagePath = episode.Series.PrimaryImagePath,
-                        SecondaryImagePath = episode.Series.SecondaryImagePath,
-                        BannerImagePath = episode.Series.BannerImagePath,
-                        BackdropImagePaths = episode.Series.BackdropImagePaths
+                        Id = (item.Name+currentSeries.Name).GetMD5(),
+                        Name = currentSeries.Name,
+                        Overview = currentSeries.Overview,
+                        PrimaryImagePath = currentSeries.PrimaryImagePath,
+                        SecondaryImagePath = currentSeries.SecondaryImagePath,
+                        BannerImagePath = currentSeries.BannerImagePath,
+                        BackdropImagePaths = currentSeries.BackdropImagePaths
                     };
                     index[item].Add(series);
                 }

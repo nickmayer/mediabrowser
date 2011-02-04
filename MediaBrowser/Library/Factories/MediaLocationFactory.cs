@@ -17,7 +17,7 @@ namespace MediaBrowser.Library.Factories {
 
         public IMediaLocation Create(string path) {
 
-            Debug.Assert(path != null);
+            //Debug.Assert(path != null); (null path okay sometimes)
             if (path == null) return null;
 
             if (Helper.IsShortcut(path)) {

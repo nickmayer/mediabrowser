@@ -301,7 +301,7 @@ namespace MediaBrowser.Library.Entities {
         public virtual bool AssignFromItem(BaseItem item) {
             // we should never reasign identity 
             Debug.Assert(item.Id == this.Id);
-            Debug.Assert(item.Path == this.Path);
+            Debug.Assert(item.Path.ToLower() == this.Path.ToLower());
             Debug.Assert(item.GetType() == this.GetType());
 
             bool changed = this.DateModified != item.DateModified;
