@@ -34,16 +34,23 @@ namespace MediaBrowser.Library
             }
             ratings.Add("None", -1);
             ratings.Add("G", 1);
+            ratings.Add("E", 1);
+            ratings.Add("EC", 1);
             ratings.Add("TV-G", 1);
             ratings.Add("TV-Y", 1);
             ratings.Add("TV-Y7", 1);
             ratings.Add("PG", 2);
+            ratings.Add("10+", 2);
             ratings.Add("TV-PG", 2);
             ratings.Add("PG-13", 3);
+            ratings.Add("T", 3);
             ratings.Add("TV-14", 3);
             ratings.Add("R", 4);
+            ratings.Add("M", 4);
             ratings.Add("TV-MA", 4);
             ratings.Add("NC-17", 5);
+            ratings.Add("AO", 5);
+            ratings.Add("RP", 5);
             ratings.Add("UR", 5);
             ratings.Add("NR", 5);
             ratings.Add("X", 10);

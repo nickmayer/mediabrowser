@@ -74,11 +74,11 @@
       <Choice Name="RatingsDescs">
         <Options>
           <cor:String String="Block All Content." />
-          <cor:String String="General Audiences - Appropriate for all.  Also Includes TV-Y and TV-Y7." />
-          <cor:String String="Parental Guidance Suggested.  Also Includes TV-PG." />
-          <cor:String String="Parental Guidance Suggested - Some content may not be appropriate for children under 13.  Also Includes TV-14." />
-          <cor:String String="Restricted. Under 17 should have parent or guardian approval. Also Includes TV-MA" />
-          <cor:String String="Not appropriate for anyone under 17." />
+          <cor:String String="General Audiences - Appropriate for all.  Also Includes E, EC, TV-Y and TV-Y7." />
+          <cor:String String="Parental Guidance Suggested.  Also Includes 10+ and TV-PG." />
+          <cor:String String="Parental Guidance Suggested - Some content may not be appropriate for children under 13.  Also Includes T and TV-14." />
+          <cor:String String="Restricted. Under 17 should have parent or guardian approval. Also Includes M and TV-MA" />
+          <cor:String String="Not appropriate for anyone under 17. Also Includes AO and Unrated (explicit rating of Unrated)" />
           <cor:String String="Custom Security Level. Use for securing folders only." />
         </Options>
       </Choice>
