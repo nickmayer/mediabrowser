@@ -29,7 +29,7 @@
       <Binding Target="[Directors.Item]" Source="[Model]"/>
       <Binding Target="[Writers.Item]" Source="[Model]"/>
       <Binding Target="[ProductionYear.Content]" Source="[Model.ProductionYearString]"/>
-      <Binding Target="[MPAARating.Value]" Source="[Model.MpaaRating]"/>
+      <Binding Target="[MPAARating.Value]" Source="[Model.OfficialRating]"/>
       
       <!--Get localized text for First Aired-->
       <Binding Source="[Application.LocalStrings.#FirstAiredDetail!cor:String]" Target="[FirstAiredText.Content]"/>

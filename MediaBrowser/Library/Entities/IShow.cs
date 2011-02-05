@@ -7,6 +7,7 @@ namespace MediaBrowser.Library.Entities {
         List<string> Genres { get; set; }
         float? ImdbRating { get; set; }
         string MpaaRating { get; set; }
+        string OfficialRating { get; }
         int? RunningTime { get; set; }
         List<string> Studios { get; set; }
         string AspectRatio { get; set; }

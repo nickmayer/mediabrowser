@@ -162,11 +162,20 @@ namespace MediaBrowser.Library {
             get { return (ImdbRating).ToString("0.##"); }
         }
 
+        /// <summary>
+        /// DEPRICATED - Use Item.OfficialRating instead
+        /// </summary>
         public string MpaaRating {
             get {
-                IShow show = baseItem as IShow;
-                return show != null ? show.MpaaRating ?? "" : "";
+                return baseItem.OfficialRating;
+                //IShow show = baseItem as IShow;
+                //return show != null ? show.MpaaRating ?? "" : "";
             }
+        }
+
+        public string OfficialRating
+        {
+            get { return baseItem.OfficialRating; }
         }
 
         public string AspectRatioString

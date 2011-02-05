@@ -13,5 +13,23 @@ namespace MediaBrowser.Library.Entities {
 
         [Persist]
         public string SeasonNumber { get; set; }
+
+        public override string OfficialRating
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(MpaaRating))
+                {
+                    var aSeries = this.Parent as Series;
+                    if (aSeries != null)
+                    {
+                        return aSeries.OfficialRating;
+                    }
+                    else return "None";
+                }
+                else 
+                    return MpaaRating;
+            }
+        }
     }
 }

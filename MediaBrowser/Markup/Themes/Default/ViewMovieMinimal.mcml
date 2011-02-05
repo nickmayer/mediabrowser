@@ -594,7 +594,7 @@
       <Binding Source="[Item]" Target="[MediaInfoPanel.Item]"  />
       <Binding Source="[Item.ImdbRatingString]" Target="[IMDBRating.Content]" />
       <Binding Source="[Item.ImdbRating]" Target="[StarRating.Value]" />
-      <Binding Source="[Item.MpaaRating]" Target="[MPAARating.Value]" />
+      <Binding Source="[Item.OfficialRating]" Target="[MPAARating.Value]" />
       <Binding Source="[Item.RunningTimeString]" Target="[Runtime.Content]" />
       <Binding Source="[Item.Genres]" Target="[GenreRepeater.Source]" />
       <Binding Source="[Item.Directors]" Target="[DirectorRepeater.Source]"/>

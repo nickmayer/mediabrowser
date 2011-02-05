@@ -61,5 +61,17 @@ namespace MediaBrowser.Library.Entities {
                 return longName;
             }
         }
+
+        public override string OfficialRating
+        {
+            get
+            {
+                if (Series != null)
+                {
+                    return Series.OfficialRating;
+                }
+                else return "None";
+            }
+        }
     }
 }

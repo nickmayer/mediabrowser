@@ -96,7 +96,7 @@
       <Binding Target="[AutoScrollOverview.Text]" Source="[SelectedItem.Overview]"/>
       <Binding Target="[LastWatched.Content]" Source="[SelectedItem.LastPlayedString]"/>
       <Binding Target="[LastWatched.Visible]" Source="[SelectedItem.HaveWatched]"/>
-      <Binding Target="[MPAARating.Value]" Source="[SelectedItem.MpaaRating]" />
+      <Binding Target="[MPAARating.Value]" Source="[SelectedItem.OfficialRating]" />
       <Binding Target="[MediaInfo.Item]" Source="[SelectedItem]" />
 
       <!-- Show Proper Overview Panel -->

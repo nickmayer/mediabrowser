@@ -194,6 +194,14 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public string CustomPIN { get; set; }
 
+        public virtual string OfficialRating
+        {
+            get
+            {
+                return "None"; //will be implemented by sub-classes
+            }
+        }
+
         public bool ParentalAllowed { get { return Kernel.Instance.ParentalControls.Allowed(this); } }
         public virtual string ParentalRating
         {
@@ -205,38 +213,10 @@ namespace MediaBrowser.Library.Entities {
                         //never want to block the root
                         return "None";
                     }
-                    var aShow = this as IShow;
-                    if (aShow != null)
-                        if (string.IsNullOrEmpty(aShow.MpaaRating))
-                        {
-                            //see if we are an episode or a season of a TV series and inherit their ratings
-                            if (this is Season)
-                            {
-                                var aSeries = this.Parent as Series;
-                                if (aSeries != null)
-                                {
-                                    return aSeries.ParentalRating;
-                                }
-                                else return "";
-                            }
-                            else
-                                if (this is Episode)
-                                {
-                                    var anEpisode = this as Episode;
-                                    if (anEpisode.Series != null)
-                                    {
-                                        return anEpisode.Series.ParentalRating;
-                                    }
-                                    else return "";
-                                }
-                                else
-                                {
-                                    return "";
-                                }
-                        }
-                        else return aShow.MpaaRating;
                     else
-                        return "G"; //if not a show and no custom rating return something valid that will always be allowed
+                    {
+                        return OfficialRating;
+                    }
                 }           
                 else
                     return this.CustomRating;

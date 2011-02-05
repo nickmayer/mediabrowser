@@ -33,5 +33,7 @@ namespace MediaBrowser.Library.Entities {
 
         [Persist]
         public string AspectRatio { get; set; }
+
+        public override string OfficialRating { get { return MpaaRating ?? ""; }}
     }
 }
