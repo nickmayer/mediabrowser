@@ -61,6 +61,11 @@ namespace MediaBrowserService
                                     //cancel any running refresh
                                     MainWindow.Instance.CancelRefresh();
                                     break;
+                                case IPCCommands.ForceRebuild:
+                                    //force a re-build of the library - used with new version that requires it
+                                    Logger.ReportInfo("Forcing re-build of library due to request from client.");
+                                    MainWindow.Instance.ForceRebuild();
+                                    break;
                                 case IPCCommands.CloseConnection:
                                     //exit this connection
                                     Logger.ReportInfo("Client requested we stop listening.");

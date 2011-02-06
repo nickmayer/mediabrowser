@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0019";
+        const string VERSION = "1.0020";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -282,6 +282,10 @@ namespace MediaBrowser.Library.Localization
         public string FontsMissingDial = "CustomFonts.mcml as been patched with missing values";
         public string StyleMissingDial = "{0} has been patched with missing values";
         public string ManualRefreshDial = "Library Update Started.  Will proceed in the background.";
+        public string ForcedRebuildDial = "Your library is currently being re-built by the service.  Please allow it to finish before running Media Browser.";
+        public string ForcedRebuildCapDial = "Library Rebuild";
+        public string RebuildNecDial = "This version of Media Browser requires a re-build of your library.  It has started automatically in the service.  Please allow it to finish before running Media Browser.";
+        public string RebuildFailedDial = "There was an error attempting to tell the service to re-build your library.  Please run the service and do a manual refresh with the cache clear options selected.";
 
         //Generic
         public string Restartstr = "Restart";

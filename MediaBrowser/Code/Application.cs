@@ -507,6 +507,13 @@ namespace MediaBrowser
                 }
                 else
                 {
+                    //if the service is currently re-building our library - don't allow entry
+                    if (Kernel.Instance.ServiceConfigData.ForceRebuildInProgress)
+                    {
+                        MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                        ev.Dialog(CurrentInstance.StringData("ForcedRebuildDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        return;
+                    }
                     //Check to see if this is the first time this version is run
                     string currentVersion = Kernel.Instance.Version.ToString();
                     if (Config.MBVersion != currentVersion )
@@ -615,6 +622,29 @@ namespace MediaBrowser
                     break;
                 case "2.3.0.0":
                     //re-set plugin source if not already done by configurator...
+                    MigratePluginSource();
+                    break;
+                case "2.3.1.0":
+                    MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
+                    //we need to do a cache clear and full re-build (item guids may have changed)
+                    if (MBServiceController.SendCommandToService(IPCCommands.ForceRebuild))
+                    {
+                        MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                        ev.Dialog(CurrentInstance.StringData("RebuildNecDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                    }
+                    else
+                    {
+                        MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                        ev.Dialog(CurrentInstance.StringData("RebuildFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                    }
+                    Config.MBVersion = thisVersion;
+                    Application.CurrentInstance.Close();
+                    break;
+            }
+        }
+
+        private void MigratePluginSource()
+        {
                     try
                     {
                         Config.PluginSources.RemoveAt(Config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
@@ -628,8 +658,6 @@ namespace MediaBrowser
                         Config.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
                         Logger.ReportInfo("Plug-in Source migrated to multi-version source");
                     }
-                    break;
-            }
         }
 
         public bool IsInEntryPoint

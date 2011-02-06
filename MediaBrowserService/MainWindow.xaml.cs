@@ -328,7 +328,7 @@ namespace MediaBrowserService
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             //kick off a manual refresh on a high-priority thread
-            Thread manual = new Thread(new ThreadStart(() => FullRefresh(true)));
+            Thread manual = new Thread(new ThreadStart(() => FullRefresh(true, _serviceOptions)));
             manual.Name = "Manual Refresh";
             manual.IsBackground = true;
             manual.Priority = ThreadPriority.Highest;
@@ -475,6 +475,35 @@ namespace MediaBrowserService
             }
         }
 
+        public void ForceRebuild()
+        {
+            //force a re-build of the entire library - used when new version requires cache clear
+            //first create options - everything but people which just takes too long
+            var options = new ServiceGuiOptions() 
+            { 
+                ClearCacheOption = true,
+                ClearImageCacheOption = true, 
+                IncludeImagesOption = true, 
+                IncludeGenresOption = true, 
+                IncludeStudiosOption = true,
+                IncludeYearOption = true,
+            };
+
+            //kick off a manual refresh on a high-priority thread
+            Thread manual = new Thread(new ThreadStart(() =>
+            {
+                _config.ForceRebuildInProgress = true;
+                _config.Save();
+                FullRefresh(true, options);
+                _config.ForceRebuildInProgress = false;
+                _config.Save();
+            }));
+            manual.Name = "Force Rebuild";
+            manual.IsBackground = true;
+            manual.Priority = ThreadPriority.Highest;
+            manual.Start();
+        }
+
 
         private void MainIteration()
         {
@@ -494,7 +523,7 @@ namespace MediaBrowserService
             if (!_refreshRunning && !_refreshFailed && (_refreshCanceledTime.Date < DateTime.Now.Date) && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
                 Thread.Sleep(20000); //in case we just came out of sleep mode - let's be sure everything is up first...
-                FullRefresh(false);
+                FullRefresh(false, new ServiceGuiOptions());
             }
 
             if (_shutdown) //we were told to shutdown on next iteration (keeps us from shutting down in the middle of a refresh
@@ -503,7 +532,7 @@ namespace MediaBrowserService
             }
         }
 
-        void FullRefresh(bool force)
+        void FullRefresh(bool force, ServiceGuiOptions manualOptions)
         {
             _refreshRunning = true;
             Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
@@ -537,14 +566,14 @@ namespace MediaBrowserService
                 {
                     if (force)
                     {
-                        if (_serviceOptions.ClearCacheOption)
+                        if (manualOptions.ClearCacheOption)
                         {
                             //clear all cache items except displayprefs and playstate
                             Logger.ReportInfo("Clearing Cache on manual refresh...");
                             UpdateProgress("Clearing Cache", 0);
                             Kernel.Instance.ItemRepository.ClearEntireCache();
                         }
-                        if (_serviceOptions.ClearImageCacheOption)
+                        if (manualOptions.ClearImageCacheOption)
                         {
                             try
                             {
@@ -561,7 +590,7 @@ namespace MediaBrowserService
                         }
                     }
 
-                    if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default))
+                    if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, manualOptions))
                     {
                         _config.LastFullRefresh = DateTime.Now;
                         _lastRefreshElapsedTime = DateTime.Now - _refreshStartTime;
@@ -604,9 +633,9 @@ namespace MediaBrowserService
             }
         }
         
-        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options)
+        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, ServiceGuiOptions manualOptions)
         {
-            int phases = _serviceOptions.AnyImageOptionsSelected ? 3 : 2;
+            int phases = manualOptions.AnyImageOptionsSelected ? 3 : 2;
             double totalIterations = folder.AllRecursiveChildren.Count() * phases;
             if (totalIterations == 0) return true; //nothing to do
 
@@ -646,7 +675,7 @@ namespace MediaBrowserService
                 })) return false;
             }
 
-            if (_serviceOptions.AnyImageOptionsSelected)
+            if (manualOptions.AnyImageOptionsSelected)
             {
                 processedItems.Clear();
                 using (new Profiler(Kernel.Instance.GetString("ImageRefresh")))
@@ -662,7 +691,7 @@ namespace MediaBrowserService
                         UpdateProgress("Images",(currentIteration / totalIterations));
                         if (!processedItems.Contains(item.Id))
                         {
-                            if (_serviceOptions.IncludeImagesOption) //main images
+                            if (manualOptions.IncludeImagesOption) //main images
                             {
                                 ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
                                 Logger.ReportInfo("Caching all images for " + item.Name + ". Stored primary image size: " + s.Width + "x" + s.Height);
@@ -672,7 +701,7 @@ namespace MediaBrowserService
                             if (item is Show)
                             {
                                 var show = item as Show;
-                                if (_serviceOptions.IncludeGenresOption && show.Genres != null)
+                                if (manualOptions.IncludeGenresOption && show.Genres != null)
                                 {
                                     foreach (var genre in show.Genres)
                                     {
@@ -694,7 +723,7 @@ namespace MediaBrowserService
                                         }
                                     }
                                 }
-                                if (_serviceOptions.IncludeStudiosOption && show.Studios != null)
+                                if (manualOptions.IncludeStudiosOption && show.Studios != null)
                                 {
                                     foreach (var studio in show.Studios)
                                     {
@@ -718,7 +747,7 @@ namespace MediaBrowserService
                                         }
                                     }
                                 }
-                                if (_serviceOptions.IncludePeopleOption && show.Actors != null)
+                                if (manualOptions.IncludePeopleOption && show.Actors != null)
                                 {
                                     foreach (var actor in show.Actors)
                                     {
@@ -741,7 +770,7 @@ namespace MediaBrowserService
                                         }
                                     }
                                 }
-                                if (_serviceOptions.IncludePeopleOption && show.Directors != null)
+                                if (manualOptions.IncludePeopleOption && show.Directors != null)
                                 {
                                     foreach (var director in show.Directors)
                                     {
@@ -764,7 +793,7 @@ namespace MediaBrowserService
                                         }
                                     }
                                 }
-                                if (_serviceOptions.IncludeYearOption && show.ProductionYear != null)
+                                if (manualOptions.IncludeYearOption && show.ProductionYear != null)
                                 {
                                     if (!yearsProcessed.Contains(show.ProductionYear.ToString()))
                                     {

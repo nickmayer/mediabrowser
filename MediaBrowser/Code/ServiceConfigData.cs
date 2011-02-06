@@ -42,6 +42,9 @@ namespace MediaBrowser
         [Comment("Suppress warning about people images.")]
         public bool DontWarnPeopleImages = false;
 
+        [Comment("A forced rebuild is underway.")]
+        public bool ForceRebuildInProgress = false;
+
         // for our reset routine
         public ServiceConfigData()
         {
