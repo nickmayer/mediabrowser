@@ -42,10 +42,12 @@ namespace MediaBrowserService
         private bool _forceClose;
         private bool _hasHandle;
         private bool _shutdown;
-        private bool _refreshCanceled;
+        private bool _refreshCanceled = false;
+        private bool _refreshFailed = false;
         private bool _firstIteration = true;
         private bool _refreshRunning;
         private DateTime _refreshStartTime;
+        private TimeSpan _lastRefreshElapsedTime;
 
         private readonly DateTime _startTime = DateTime.Now;
         private readonly ServiceGuiOptions _serviceOptions;
@@ -220,19 +222,28 @@ namespace MediaBrowserService
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)UpdateStatus);
                 return;
             }
+            string elapsed = _lastRefreshElapsedTime.Ticks > 0 ? "(" + String.Format("{0:00}:{1:00}:{2:00}", _lastRefreshElapsedTime.Hours, _lastRefreshElapsedTime.Minutes, _lastRefreshElapsedTime.Seconds) + ")" : "";
+            string activity = "Last Successful Refresh"+elapsed+": " + _config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
             if (_refreshCanceled)
             {
-                lblSvcActivity.Content = "Last Refresh was canceled by user...";
+                activity += ".  Last attempt canceled.";
+            }
+            if (_refreshFailed)
+            {
+                activity += ". Last attempt failed!";
+                lblNextSvcRefresh.Content = "Auto refresh dis-abled. Please run a manual refresh.";
+                lblNextSvcRefresh.Foreground = lblSvcActivity.Foreground = Brushes.Red;
             }
             else
             {
-                lblSvcActivity.Content = "Last Refresh was " + _config.LastFullRefresh.ToString("yyyy-MM-dd HH:mm:ss");
+                lblNextSvcRefresh.Foreground = lblSvcActivity.Foreground = Brushes.Black;
+                DateTime nextRefresh = _config.LastFullRefresh.Date.AddDays(_config.FullRefreshInterval);
+                if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= _config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
+                string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Today/Tonight at " + (_config.FullRefreshPreferredHour * 100).ToString("00:00") :
+                    nextRefresh.ToString("yyyy-MM-dd") + " at " + (_config.FullRefreshPreferredHour * 100).ToString("00:00");
+                lblNextSvcRefresh.Content = "Next Refresh: " + nextRefreshStr;
             }
-            DateTime nextRefresh = _config.LastFullRefresh.Date.AddDays(_config.FullRefreshInterval);
-            if (DateTime.Now.Date >= nextRefresh && DateTime.Now.Hour >= _config.FullRefreshPreferredHour) nextRefresh = nextRefresh.AddDays(1);
-            string nextRefreshStr = (DateTime.Now > nextRefresh) ? "Today/Tonight at " + (_config.FullRefreshPreferredHour * 100).ToString("00:00") : 
-                nextRefresh.ToString("yyyy-MM-dd") + " at " + (_config.FullRefreshPreferredHour * 100).ToString("00:00");
-            lblNextSvcRefresh.Content = "Next Refresh: " + nextRefreshStr;
+            lblSvcActivity.Content = activity;
         }
 
         private void UpdateElapsedTime()
@@ -467,7 +478,7 @@ namespace MediaBrowserService
             UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!_refreshRunning && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
+            if (!_refreshRunning && !_refreshFailed && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
                 Thread.Sleep(20000); //in case we just came out of sleep mode - let's be sure everything is up first...
                 FullRefresh(false);
@@ -488,6 +499,7 @@ namespace MediaBrowserService
                 refreshProgress.Value = 0;
                 refreshProgress.Visibility = Visibility.Visible;
                 _refreshCanceled = false;
+                _refreshFailed = false;
                 _refreshStartTime = DateTime.Now;
                 btnCancelRefresh.IsEnabled = true;
                 btnCancelRefresh.Visibility = Visibility.Visible;
@@ -538,6 +550,7 @@ namespace MediaBrowserService
                     if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default))
                     {
                         _config.LastFullRefresh = DateTime.Now;
+                        _lastRefreshElapsedTime = DateTime.Now - _refreshStartTime;
                         _config.Save();
                     }
 
@@ -615,7 +628,7 @@ namespace MediaBrowserService
                         processedItems.Add(item.Id);
                         //Logger.ReportInfo(item.Name + " id: " + item.Id);
                     }
-                    else Logger.ReportInfo("Not refreshing " + item.Name +"("+item.Id+ ") again.");
+                    else Logger.ReportInfo("Not refreshing " + item.Name + " again.");
                 })) return false;
             }
 
@@ -771,13 +784,21 @@ namespace MediaBrowserService
 
         bool RunActionRecursively(Folder folder, Action<BaseItem> action)
         {
-            action(folder);
-            foreach (var item in folder.AllRecursiveChildren.OrderByDescending(i => i.DateModified))
+            try
             {
-                if (_refreshCanceled) return false;
-                action(item);
+                action(folder);
+                foreach (var item in folder.AllRecursiveChildren.OrderByDescending(i => i.DateModified))
+                {
+                    if (_refreshCanceled) return false;
+                    action(item);
+                }
+                return true;
             }
-            return true;
+            catch
+            {
+                _refreshFailed = true;
+                return false;
+            }
         }
 
     }
