@@ -1533,7 +1533,8 @@ sortorder: {2}
             if (pluginList.SelectedItem != null)            
                 ((Plugin)pluginList.SelectedItem).Configure();
             
-            this.RefreshEntryPoints(true);  
+            this.RefreshEntryPoints(true);
+            KernelModified = true;
         }
 
         private void podcastDetails(bool display)
