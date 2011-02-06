@@ -1160,9 +1160,15 @@ namespace MediaBrowser
                     item.Queue();
                 else
                 {
+                    //async this so it doesn't slow us down if the service isn't responding for some reason
+                    MediaBrowser.Library.Threading.Async.Queue("Cancel Svc Refresh", () =>
+                    {
+                        MBServiceController.SendCommandToService(IPCCommands.CancelRefresh); //tell service to stop
+                    });
                     //put this on a thread so that we can run it sychronously, but not tie up the UI
                     MediaBrowser.Library.Threading.Async.Queue("Play Action", () =>
                     {
+                        MBServiceController.SendCommandToService(IPCCommands.CancelRefresh); //tell service to stop
                         if (Application.CurrentInstance.RunPrePlayProcesses(item, intros))
                         {
                             item.Play();

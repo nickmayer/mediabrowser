@@ -48,6 +48,7 @@ namespace MediaBrowserService
         private bool _refreshRunning;
         private DateTime _refreshStartTime;
         private TimeSpan _lastRefreshElapsedTime;
+        private DateTime _refreshCanceledTime = DateTime.MinValue;
 
         private readonly DateTime _startTime = DateTime.Now;
         private readonly ServiceGuiOptions _serviceOptions;
@@ -166,6 +167,17 @@ namespace MediaBrowserService
                     _forceClose = true;
                     Close();
                 }));
+        }
+
+        public void CancelRefresh()
+        {
+            //this will cause a running refresh to stop
+            if (_refreshRunning)
+            {
+                _refreshCanceled = true;
+                _refreshCanceledTime = DateTime.Now;
+                Logger.ReportInfo("Refresh canceled by request (probably playing something in MB)");
+            }
         }
 
         void OnClose(object sender, System.ComponentModel.CancelEventArgs args)
@@ -401,6 +413,7 @@ namespace MediaBrowserService
             {
                 btnCancelRefresh.IsEnabled = false;
                 _refreshCanceled = true;
+                _refreshCanceledTime = DateTime.Now;
             }
         }
 
@@ -478,7 +491,7 @@ namespace MediaBrowserService
             UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!_refreshRunning && !_refreshFailed && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
+            if (!_refreshRunning && !_refreshFailed && (_refreshCanceledTime.Date < DateTime.Now.Date) && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
                 Thread.Sleep(20000); //in case we just came out of sleep mode - let's be sure everything is up first...
                 FullRefresh(false);
@@ -499,6 +512,7 @@ namespace MediaBrowserService
                 refreshProgress.Value = 0;
                 refreshProgress.Visibility = Visibility.Visible;
                 _refreshCanceled = false;
+                _refreshCanceledTime = DateTime.MinValue;
                 _refreshFailed = false;
                 _refreshStartTime = DateTime.Now;
                 btnCancelRefresh.IsEnabled = true;

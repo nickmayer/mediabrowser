@@ -57,6 +57,10 @@ namespace MediaBrowserService
                                     Logger.ReportInfo("Shutting down due to request from client.");
                                     MainWindow.Instance.Shutdown();
                                     break;
+                                case IPCCommands.CancelRefresh:
+                                    //cancel any running refresh
+                                    MainWindow.Instance.CancelRefresh();
+                                    break;
                                 case IPCCommands.CloseConnection:
                                     //exit this connection
                                     Logger.ReportInfo("Client requested we stop listening.");

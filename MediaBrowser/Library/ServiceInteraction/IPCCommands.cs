@@ -16,6 +16,7 @@ namespace MediaBrowser.Library
         public const string ReloadItems = "reloaditems";
         public const string CloseConnection = "closeconnection";
         public const string ReloadConfig = "reloadconfig";
+        public const string CancelRefresh = "cancelrefresh";
 
     }
 }
