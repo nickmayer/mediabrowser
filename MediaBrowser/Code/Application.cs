@@ -518,11 +518,6 @@ namespace MediaBrowser
                     string currentVersion = Kernel.Instance.Version.ToString();
                     if (Config.MBVersion != currentVersion )
                     {
-                        if (new System.Version(Config.MBVersion) < new System.Version(2, 0, 0, 0))
-                        {
-                            Logger.ReportInfo("First run of Media Browser.  Initiating a full refresh of the library.");
-                            Async.Queue("First run full refresh", () => FullRefresh(RootFolder, MetadataRefreshOptions.Force));
-                        }
                         //first time with this version - run routine
                         Logger.ReportInfo("First run for version " + currentVersion);
                         FirstRunForVersion(currentVersion);
@@ -606,6 +601,12 @@ namespace MediaBrowser
 
         void FirstRunForVersion(string thisVersion)
         {
+            if (new System.Version(Config.MBVersion) < new System.Version(2, 0, 0, 0))
+            {
+                Logger.ReportInfo("First run of Media Browser.  Initiating a full refresh of the library.");
+                Async.Queue("First run full refresh", () => FullRefresh(RootFolder, MetadataRefreshOptions.Force));
+                return;
+            }
             switch (thisVersion)
             {
                 case "2.2.4.0":
