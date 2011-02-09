@@ -547,6 +547,8 @@ namespace MediaBrowserService
                 btnCancelRefresh.IsEnabled = true;
                 btnCancelRefresh.Visibility = Visibility.Visible;
                 lblSvcActivity.Content = "Refresh Running...";
+                lblSvcActivity.Foreground = Brushes.Black;
+                lblNextSvcRefresh.Foreground = Brushes.Black;
                 notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
                 notifyIcon.ContextMenu.MenuItems[4].Enabled = false;
                 notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
