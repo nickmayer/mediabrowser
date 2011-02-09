@@ -43,23 +43,27 @@ namespace MBTrailers
             foreach (Folder folder in Kernel.Instance.RootFolder.Children)
             {
                 if (folder != this && folder is Folder) {
-                    foreach (BaseItem item in folder.RecursiveChildren)
+                    foreach (BaseItem item in folder.AllRecursiveChildren) //parental controls will kick in on the trailers so don't exclude now
                     {
                         if (item is Movie)
                         {
                             Movie movie = item as Movie;
                             if (movie.ContainsTrailers && !actualMovieRefs.Contains(movie.Path.ToLower()))
                             {
-                                //start with copy of the actual movie
+                                //create our movie item
                                 MovieTrailer trailer = new MovieTrailer();
-                                //now re-assign the id and fill in metadata - pointing to trailer as actual movie
-                                trailer.Id = movie.TrailerFiles.First().GetMD5();
+                                //now assign the id and fill in essentials - pointing to trailer as actual movie
+                                trailer.Id = ("MBTrailers.MovieTrailer" + movie.TrailerFiles.First().ToLower()).GetMD5();
                                 trailer.RealMovie = movie;
+                                trailer.Overview = movie.Overview;
+                                trailer.Genres = movie.Genres;
+                                trailer.MpaaRating = movie.MpaaRating;
                                 trailer.Path = movie.TrailerFiles.First();
                                 trailer.Parent = this;
                                 //and add to our children
                                 validChildren.Add(trailer);
                                 actualMovieRefs.Add(movie.Path.ToLower()); //we keep track so we don't get dups
+                                //Plugin.proxy.SetTrailerInfo(trailer);
                             }
                         }
                     }

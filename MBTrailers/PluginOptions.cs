@@ -25,6 +25,12 @@ namespace MBTrailers
         [Label("Trailer Suffix:")]
         public string TrailerSuffix = "Trailer";
 
+        [Label("Auto Download")]
+        public bool AutoDownload = false;
+
+        [Label("Max Bandwidth (KBps)")]
+        public string MaxBandWidth = "";
+
         //[Label("Sort Value")]
         //public string SortOrder = "";
 

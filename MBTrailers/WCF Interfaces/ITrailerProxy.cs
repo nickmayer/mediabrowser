@@ -8,6 +8,11 @@ using System.Runtime.Serialization;
 
 namespace WebProxy.WCFInterfaces
 {
+    public class TrailerType {
+        public const int Remote = 1;
+        public const int Local = 2;
+    }
+
     [ServiceContract]
     public interface ITrailerProxy
     {
@@ -18,7 +23,33 @@ namespace WebProxy.WCFInterfaces
         [OperationContract]
         void SetProxyInfo(ProxyInfo info);
         [OperationContract]
-        string GetRandomTrailer();
+        void SetTrailerInfo(TrailerInfo info);
+        [OperationContract]
+        List<string> GetMatchingTrailers(TrailerInfo info);
+        [OperationContract]
+        List<ProxyInfo> GetProxiedFileList();
+        [OperationContract]
+        List<TrailerInfo> GetTrailerList();
+    }
+
+    [DataContract]
+    public class TrailerInfo
+    {
+        public TrailerInfo(int type, string path, string rating, List<string> genres)
+        {
+            this.Type = type;
+            this.Path = path;
+            this.Rating = rating;
+            this.Genres = genres;
+        }
+        [DataMember]
+        public int Type { get; private set; }
+        [DataMember]
+        public string Path { get; set; }
+        [DataMember]
+        public string Rating { get; private set; }
+        [DataMember]
+        public List<string> Genres { get; private set; }
     }
 
     [DataContract]
@@ -38,7 +69,6 @@ namespace WebProxy.WCFInterfaces
 
             ContentType = "video/quicktime";
         }
-
         [DataMember]
         public string UserAgent { get; private set; }
         [DataMember]

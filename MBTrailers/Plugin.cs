@@ -52,11 +52,18 @@ namespace MBTrailers {
                     }
                 }
 
+                long maxBandwidth = 1000 * 1024;
+                long.TryParse(PluginOptions.Instance.MaxBandWidth, out maxBandwidth);
+                if (maxBandwidth < 0)
+                    maxBandwidth = 1000 * 1024;
+                else 
+                    maxBandwidth = maxBandwidth * 1024L;
+
                 proxy = new HttpProxy(cachePath, ProxyPort);
                 if (Kernel.LoadContext == MBLoadContext.Service)
                 { //only actually start the proxy in the service
                     Logger.ReportInfo("MBTrailers starting proxy server on port: " + ProxyPort);
-                    proxy.Start();
+                    proxy.Start(PluginOptions.Instance.AutoDownload, maxBandwidth);
                 }
                 else
                 {
