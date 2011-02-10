@@ -83,6 +83,11 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 }
             }
 
+            //if added date is in xml override the file/folder date
+            DateTime added = DateTime.MinValue;
+            DateTime.TryParse(metadataDoc.SafeGetString("Title/Added"), out added);
+            if (added > DateTime.MinValue) episode.DateCreated = added;
+               
 
             episode.Overview = metadataDoc.SafeGetString("Item/Overview");
             episode.EpisodeNumber = metadataDoc.SafeGetString("Item/EpisodeNumber");

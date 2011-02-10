@@ -11,7 +11,6 @@ using System.ServiceModel;
 using System.Runtime.Serialization;
 using WebProxy.WCFInterfaces;
 using MediaBrowser.Library.Logging;
-using MediaBrowser.Library.Extensions;
 
 namespace WebProxy {
 
@@ -25,11 +24,16 @@ namespace WebProxy {
     }
 
 
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults=true)]
     public class ProxyService : ITrailerProxy
     {
         
         Dictionary<string, ProxyInfo> proxiedFiles = new Dictionary<string, ProxyInfo>();
+        Dictionary<string, TrailerInfo> myTrailers = new Dictionary<string, TrailerInfo>();
+        Dictionary<string, TrailerInfo> mbTrailers = new Dictionary<string, TrailerInfo>();
+
+        MediaBrowser.Library.Ratings ratings = new MediaBrowser.Library.Ratings();
+
         string cacheDir = "";
         int port = 8752;
 
@@ -44,7 +48,6 @@ namespace WebProxy {
 
         public ProxyInfo GetProxyInfo(string key)
         {
-            //Logger.ReportInfo("Looking for proxied file: " + key);
             if (proxiedFiles.ContainsKey(key))
                 return proxiedFiles[key];
             else
@@ -54,19 +57,60 @@ namespace WebProxy {
         public void SetProxyInfo(ProxyInfo info)
         {
             proxiedFiles[info.LocalFilename] = info;
-            //Logger.ReportInfo("Storing proxy for: " + info.LocalFilename);
         }
 
-        public string GetRandomTrailer()
+        public void SetTrailerInfo(TrailerInfo info)
         {
-            if (proxiedFiles.Count > 0)
+            if (info != null)
+                switch (info.Type) {
+                    case TrailerType.Remote:
+                        //convert remote paths to full uri if not cached
+                        string key = info.Path;
+                        string target = Path.Combine(cacheDir, info.Path);
+                        info.Path = File.Exists(target) ? target : string.Format("http://localhost:{0}/{1}", this.port, key);
+                        mbTrailers[key] = info;
+                        break;
+                    case TrailerType.Local:
+                        myTrailers[info.Path] = info;
+                        break;
+                }
+        }
+
+        public List<string> GetMatchingTrailers(TrailerInfo searchInfo)
+        {
+            List<TrailerInfo> trailers = searchInfo.Type == TrailerType.Remote ? 
+                trailers = mbTrailers.Values.ToList() :
+                trailers = myTrailers.Values.ToList();
+            List<string> foundTrailers = new List<string>();
+            foreach (var info in trailers)
             {
-                int ndx = new Random().Next(proxiedFiles.Count-1);
-                string key = proxiedFiles.Keys.ToList()[ndx];
-                string target = Path.Combine(cacheDir, proxiedFiles[key].LocalFilename );
-                return File.Exists(target) ? target : string.Format("http://localhost:{0}/{1}", this.port, proxiedFiles[key].LocalFilename);
+                if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info))
+                {
+                    foundTrailers.Add(info.Path);
+                }
             }
-            return "";
+            return foundTrailers;
+        }
+
+        private bool GenreMatches(TrailerInfo searchInfo, TrailerInfo info)
+        {
+            if (searchInfo.Genres.Count == 0) return true; //no search genres - everything matches
+
+            foreach (var genre in searchInfo.Genres){
+                if (info.Genres.Contains(genre))
+                    return true;
+            }
+            return false;
+        }
+ 
+        public List<ProxyInfo> GetProxiedFileList()
+        {
+            return proxiedFiles.Values.ToList();
+        }
+
+        public List<TrailerInfo> GetTrailerList()
+        {
+            return myTrailers.Values.ToList();
         }
 
         #endregion
@@ -81,6 +125,12 @@ namespace WebProxy {
         string cacheDir;
         Thread listenerThread;
         int incomingConnections = 0;
+
+        Thread backgroundDownloader;
+        Timer downloadGoverner;
+        long maxBandwidth = 0;
+        DateTime lastAutoDownload = DateTime.MinValue;
+        bool downloadInProgress = false;
 
         public string CacheDirectory
         {
@@ -117,8 +167,161 @@ namespace WebProxy {
             }
         }
 
+        private void DownloadProcGoverner()
+        {
+            //this thread will re-kick off the download every day
+            Thread.Sleep(60000); //wait for proxy info to get filled in
+            if (!downloadInProgress && DateTime.Now.Date > lastAutoDownload.Date)
+            {
+                backgroundDownloader = new Thread(DownloadProc);
+                backgroundDownloader.IsBackground = true;
+                backgroundDownloader.Start();
+            }
 
-        public void Start() {
+        }
+
+        private void DownloadProc()
+        {
+            //background thread to download all the trailers - with throttling
+            downloadInProgress = true;
+            Logger.ReportInfo("MBTrailers Starting process to background download all trailers.  Max Bandwidth: " + maxBandwidth);
+            List<ProxyInfo> proxiedFiles = new List<ProxyInfo>();
+            using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
+            {
+                ITrailerProxy proxyServer = factory.CreateChannel();
+                try
+                {
+                    proxiedFiles = proxyServer.GetProxiedFileList();
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error getting proxy files in background downloader", e);
+                    Logger.ReportError("Inner Exception: " + e.InnerException.Message);
+                }
+                finally
+                {
+                    (proxyServer as ICommunicationObject).Close();
+                }
+            }
+            string target;
+            foreach (var info in proxiedFiles)
+            {
+                target = Path.Combine(cacheDir, info.LocalFilename);
+
+                if (File.Exists(target + ".tmp")) continue; //already downloaded or downloading
+                if (File.Exists(target)) continue; //already downloaded and committed
+
+                //none of the local copies exist - go get it
+                Logger.ReportInfo("MBTrailers Background downloading file: " + target + " Bytes per Second: "+maxBandwidth);
+
+                TcpClient server = new TcpClient();
+                server.Connect(info.Host, info.Port);
+                
+                var serverStream = server.GetStream();
+                var writer = new StreamWriter(serverStream);
+
+                writer.Write(string.Format("GET {0} HTTP/1.1\r\n", info.Path));
+                if (info.UserAgent != null)
+                {
+                    writer.Write(string.Format("User-Agent: {0}\r\n", info.UserAgent));
+                }
+                writer.Write(string.Format("Host: {0}\r\n", info.Host));
+                writer.Write("Cache-Control: no-cache\r\n");
+                writer.Write("\r\n");
+                writer.Flush();
+
+
+
+                FileStream fs;
+                long bufferSize = maxBandwidth > 8000 ? 8000 : maxBandwidth;
+                byte[] buffer = new byte[bufferSize];
+
+                using (fs = new FileStream(target + ".tmp", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
+                {
+
+                    var bytesRead = serverStream.Read(buffer, 0, buffer.Length);
+                    long readThisSecond = bytesRead;
+
+
+                    StringBuilder header = new StringBuilder();
+                    bool gotHeader = false;
+                    int contentLength = -1;
+                    int totalRead = 0;
+                    int headerLength = 0;
+                    DateTime start = DateTime.Now;
+
+                    while (bytesRead > 0)
+                    {
+                        if (!gotHeader)
+                        {
+                            header.Append(ASCIIEncoding.ASCII.GetString(buffer, 0, bytesRead));
+                            string headerString = header.ToString();
+                            if (headerString.Contains("\r\n\r\n"))
+                            {
+                                gotHeader = true;
+                                foreach (var line in headerString.Split('\n'))
+                                {
+                                    if (line.StartsWith("Content-Length:"))
+                                    //                   123456789123456
+                                    {
+                                        contentLength = int.Parse(line.Substring(16).Trim());
+                                        //Logger.ReportInfo("Content Length " + contentLength);
+                                    }
+                                }
+
+                                headerLength = headerString.IndexOf("\r\n\r\n") + 4;
+                            }
+                        }
+
+
+                        lock (info)
+                        {
+                            info.BytesRead += bytesRead;
+                        }
+                        totalRead += bytesRead;
+
+                        fs.Write(buffer, 0, bytesRead);
+
+                        var amountToRead = buffer.Length;
+                        if (contentLength > 0)
+                        {
+                            amountToRead = Math.Min(buffer.Length, (contentLength + headerLength) - totalRead);
+                        }
+                        if (amountToRead == 0)
+                        {
+                            break;
+                        }
+                        if (readThisSecond >= maxBandwidth)
+                        {
+                            var sleepTime = (int)(1000 - (DateTime.Now - start).TotalMilliseconds);
+                            if (sleepTime > 0)
+                            {
+                                //Logger.ReportInfo(readThisSecond+"bytes read. Throttling... for " + sleepTime + "ms");
+                                Thread.Sleep(sleepTime); //poor-man's throttling...
+                            }
+                            readThisSecond = 0;
+                            start = DateTime.Now;
+                        }
+                        bytesRead = serverStream.Read(buffer, 0, amountToRead);
+                        readThisSecond += bytesRead;
+                    }
+
+                    Logger.ReportInfo("Finished Downloading " + target);
+                    // file was completely read ... rename it and strip header
+                    CommitTempFile(fs, target);
+
+                }
+            }
+            downloadInProgress = false;
+            lastAutoDownload = DateTime.Now;
+        }
+
+        public void Start()
+        {
+            Start(false, 0);
+        }
+
+        public void Start(bool backgroundDL, long maxBW) {
             Debug.Assert(listenerThread == null);
             if (listenerThread != null) {
                 throw new InvalidOperationException("Trying to start an already started server!");
@@ -135,17 +338,27 @@ namespace WebProxy {
             listenerThread = new Thread(ThreadProc);
             listenerThread.IsBackground = true;
             listenerThread.Start();
+
+            //start our background downloader if asked
+            if (backgroundDL)
+            {
+                maxBandwidth = maxBW > 0 ? maxBW : 1000 * 1024;
+                downloadGoverner = MediaBrowser.Library.Threading.Async.Every(3600000, () => DownloadProcGoverner());
+            }
         }
 
-        public string ProxyUrl(string host, string path, string userAgent, int port) 
+        public string ProxyUrl(MBTrailers.ITunesTrailer trailer) 
         {
-            ProxyInfo info = new ProxyInfo(host, path, userAgent, port);
+            Uri uri = new Uri(trailer.RealPath);
+            ProxyInfo proxyInfo = new ProxyInfo(uri.Host, uri.PathAndQuery, ProxyInfo.ITunesUserAgent, uri.Port);
+            TrailerInfo trailerInfo = new TrailerInfo(TrailerType.Remote, proxyInfo.LocalFilename, trailer.ParentalRating, trailer.Genres);
             using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
             {
                 ITrailerProxy proxyServer = factory.CreateChannel();
                 try
                 {
-                    proxyServer.SetProxyInfo(info);
+                    proxyServer.SetProxyInfo(proxyInfo);
+                    proxyServer.SetTrailerInfo(trailerInfo);
                 }
                 catch (Exception e)
                 {
@@ -158,12 +371,58 @@ namespace WebProxy {
                 }
             }
 
-            var target = Path.Combine(cacheDir, info.LocalFilename);
-            return File.Exists(target) ? target : string.Format("http://localhost:{0}/{1}", this.port, info.LocalFilename);
+            var target = Path.Combine(cacheDir, proxyInfo.LocalFilename);
+            return File.Exists(target) ? target : string.Format("http://localhost:{0}/{1}", this.port, proxyInfo.LocalFilename);
 
         }
 
-        private void ThreadProc() {
+        public void SetTrailerInfo(MediaBrowser.Library.Entities.Show trailer)
+        {
+            TrailerInfo trailerInfo = new TrailerInfo(TrailerType.Local, trailer.Path, trailer.ParentalRating, trailer.Genres);
+            using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
+            {
+                ITrailerProxy proxyServer = factory.CreateChannel();
+                try
+                {
+                    proxyServer.SetTrailerInfo(trailerInfo);
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error setting trailer info", e);
+                    Logger.ReportError("Inner Exception: " + e.InnerException.Message);
+                }
+                finally
+                {
+                    (proxyServer as ICommunicationObject).Close();
+                }
+            }
+        }
+
+        public List<TrailerInfo> GetTrailers() {
+            List<TrailerInfo> list = new List<TrailerInfo>();
+            using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
+            {
+                ITrailerProxy proxyServer = factory.CreateChannel();
+                try
+                {
+                    list = proxyServer.GetTrailerList();
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error setting trailer info", e);
+                    Logger.ReportError("Inner Exception: " + e.InnerException.Message);
+                }
+                finally
+                {
+                    (proxyServer as ICommunicationObject).Close();
+                }
+            }
+            return list;
+        }
+
+
+        private void ThreadProc()
+        {
             //start our wcf service
             ServiceHost host = new ServiceHost(typeof(ProxyService));
             host.AddServiceEndpoint(typeof(ITrailerProxy), new NetNamedPipeBinding(), "net.pipe://localhost/MBTrailers");
@@ -175,7 +434,6 @@ namespace WebProxy {
                 proxyServer.Init(this.cacheDir, this.port);
                 (proxyServer as ICommunicationObject).Close();
             }
-
 
             TcpListener listener = new TcpListener(IPAddress.Loopback, port);
             listener.Start(10);

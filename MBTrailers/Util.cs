@@ -18,16 +18,21 @@ namespace MBTrailers
 
         public static string CloneImage(string path)
         {
-            string newPath = Path.Combine(ImageCache, path.GetMD5().ToString()+Path.GetExtension(path));
-            try
+            if (!String.IsNullOrEmpty(path))
             {
-                File.Copy(path, newPath, true);
+                string newPath = Path.Combine(ImageCache, path.GetMD5().ToString() + Path.GetExtension(path));
+                try
+                {
+                    File.Copy(path, newPath, true);
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error trying to create image: " + newPath, e);
+                }
+                return newPath;
             }
-            catch (Exception e)
-            {
-                Logger.ReportException("Error trying to create image: " + newPath, e);
-            }
-            return newPath;
+            else
+                return path;
         }
     }
 }

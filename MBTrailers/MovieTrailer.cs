@@ -16,12 +16,15 @@ namespace MBTrailers
 
         public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options)
         {
-            bool changed = false;
+            MediaBrowser.Library.Logging.Logger.ReportInfo("Refreshing trailer for " + RealMovie.Name);
             this.PrimaryImagePath = Util.CloneImage(RealMovie.PrimaryImagePath);
             this.BackdropImagePaths = new List<string>();
-            foreach (string backdrop in RealMovie.BackdropImagePaths)
+            if (RealMovie.BackdropImagePaths != null)
             {
-                this.BackdropImagePaths.Add(backdrop);
+                foreach (string backdrop in RealMovie.BackdropImagePaths)
+                {
+                    this.BackdropImagePaths.Add(backdrop);
+                }
             }
             if ((options & MetadataRefreshOptions.Force) == MetadataRefreshOptions.Force)
             {
