@@ -11,7 +11,7 @@ namespace MediaInfoProvider {
 
         internal const string PluginName = "MediaInfo Provider";
         internal const string PluginDescription = "This plugin uses the MediaInfo project to provide rich information about your media, such as codecs, aspect ratio, resolution, etc..\n\nFolder rips, ISO's and WTV files are currently not supported.\n\nThis version includes MediaInfo.dll version " + Plugin.includedMediaInfoDLL + ".";
-        internal const string includedMediaInfoDLL = "0.7.38.0"; 
+        internal const string includedMediaInfoDLL = "0.7.41.0"; 
 
         public override void Init(Kernel kernel) {
             kernel.MetadataProviderFactories.Add(MetadataProviderFactory.Get<MediaInfoProvider>()); 
