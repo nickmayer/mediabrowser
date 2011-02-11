@@ -627,11 +627,13 @@ namespace MediaBrowser.Library {
         //method for external entities (plug-ins) to add a new theme - only support replacing detail areas for now...
         public void AddTheme(string name, string pageArea, string detailArea)
         {
+            if (AvailableThemes.ContainsKey(name)) AvailableThemes.Remove(name); //clear it if previously was there
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea));
         }
 
         public void AddTheme(string name, string pageArea, string detailArea, ModelItem config)
         {
+            if (AvailableThemes.ContainsKey(name)) AvailableThemes.Remove(name); //clear it if previously was there
             AvailableThemes.Add(name, new ViewTheme(name, pageArea, detailArea, config));
         }
 
