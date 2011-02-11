@@ -60,6 +60,7 @@ namespace PluginInfoGenerator {
                     if (plugin.InstallGlobally) {
                         writer.WriteElementString("InstallGlobally", plugin.InstallGlobally.ToString().ToLower());
                     }
+                    writer.WriteElementString("PluginClass", plugin.PluginClass);
                     writer.WriteEndElement();
 
                 } catch (Exception e) {
