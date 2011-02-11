@@ -16,6 +16,8 @@ namespace Configurator.Code {
 
         public MBLoadContext InitDirective { get; set; }
 
+        public string PluginClass { get { return PluginClasses.Themes; } }
+
         public void Init(Kernel kernel) {
         }
 

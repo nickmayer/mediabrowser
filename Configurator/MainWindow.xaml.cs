@@ -63,7 +63,7 @@ namespace Configurator
         private void Initialize() {
             Instance = this;
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
-            
+           
             InitializeComponent();
             PopUpMsg = new PopupMsg(alertText);
             config = Kernel.Instance.ConfigData;
@@ -134,7 +134,13 @@ namespace Configurator
             SaveConfig();
 
             PluginManager.Instance.Init();
-            pluginList.Items.Refresh();
+            CollectionViewSource src = new CollectionViewSource();
+            src.Source = PluginManager.Instance.InstalledPlugins;
+            src.GroupDescriptions.Add(new PropertyGroupDescription("PluginClass"));
+
+            pluginList.ItemsSource = src.View;
+
+            //pluginList.Items.Refresh();
 
             Async.Queue("Plugin Update Check", () =>
             {

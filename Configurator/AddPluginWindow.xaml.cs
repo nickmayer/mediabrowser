@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
 using Configurator.Code;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library.Threading;
@@ -28,6 +29,14 @@ namespace Configurator {
             InitializeComponent();
             progress.Minimum = 0;
             progress.Maximum = 100;
+            CollectionViewSource src = new CollectionViewSource();
+            src.Source = PluginManager.Instance.AvailablePlugins;
+            src.GroupDescriptions.Add(new PropertyGroupDescription("PluginClass"));
+            src.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
+            src.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            src.SortDescriptions.Add(new SortDescription("Version", ListSortDirection.Descending));
+
+            pluginList.ItemsSource = src.View;
             pluginList_SelectionChanged(null, null); //make sure first description loads
         }
 

@@ -105,7 +105,13 @@ namespace MediaBrowser.Library.Plugins {
             } 
         }
 
-        public virtual void Configure() {
+        public virtual string PluginClass
+        {
+            get { return InstallGlobally ? PluginClasses.Themes : PluginClasses.Other; }
+        }
+
+        public virtual void Configure()
+        {
             if (PluginConfiguration != null) {
                 if (PluginConfiguration.BuildUI() == true)
                     PluginConfiguration.Save();
@@ -116,5 +122,6 @@ namespace MediaBrowser.Library.Plugins {
 
 
         #endregion
+
     }
 }

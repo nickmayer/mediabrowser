@@ -107,6 +107,8 @@ namespace MediaBrowser.Library.Plugins {
 
         public MBLoadContext InitDirective { get { return pluginInterface.InitDirective; } }
 
+        public string PluginClass { get { return pluginInterface.PluginClass; } }
+
         public void Delete() {
             File.Delete(filename);
             if (this.InstallGlobally)

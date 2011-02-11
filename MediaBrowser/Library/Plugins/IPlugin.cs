@@ -26,8 +26,15 @@ namespace MediaBrowser.Library.Plugins {
         /// Context in which this plugin should be intialized
         /// </summary>
         MBLoadContext InitDirective { get; }
+        string PluginClass { get; }
         bool UpdateAvail { get; set; }
         bool Installed { get; set; }
         string ListDisplayString { get; }
+    }
+
+    public static class PluginClasses
+    {
+        public const string Themes = "Themes";
+        public const string Other = "Other";
     }
 }
