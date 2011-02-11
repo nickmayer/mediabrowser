@@ -6,6 +6,7 @@ using MediaBrowser.LibraryManagement;
 using MediaInfoLib;
 using System.IO;
 using System.Diagnostics;
+using MediaBrowser.Library;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Providers.Attributes;
@@ -69,6 +70,8 @@ namespace MediaInfoProvider
             if (video == null || !enabled) return;
 
             if (video.ContainsRippedMedia) return; //can't process rips
+
+            if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
             filename = FindVideoFile();
             if (filename != null) {
