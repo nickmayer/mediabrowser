@@ -161,6 +161,7 @@
       <DependentUpon>AddPodcastForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Code\BrowseForFolder.cs" />
+    <Compile Include="Code\Converters.cs" />
     <Compile Include="Code\EntryPointManager.cs" />
     <Compile Include="Code\PluginInstaller.cs" />
     <Compile Include="Code\Constants.cs" />

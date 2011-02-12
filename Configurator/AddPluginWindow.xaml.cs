@@ -37,7 +37,7 @@ namespace Configurator {
             src.SortDescriptions.Add(new SortDescription("Version", ListSortDirection.Descending));
 
             pluginList.ItemsSource = src.View;
-            pluginList_SelectionChanged(null, null); //make sure first description loads
+            pluginList.SelectedItem = null; //since we're collapsed, come up with no selectio
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
@@ -61,9 +61,7 @@ namespace Configurator {
 
         public void InstallFinished()
         {
-            //called when the install is finished - we want to close
-            //don't close anymore - leave open for another plugin
-            //this.Close();
+            //called when the install is finished 
             InstallButton.IsEnabled = true;
             btnDone.IsEnabled = true;
             pluginList.IsEnabled = true;
@@ -91,8 +89,11 @@ namespace Configurator {
         private void pluginList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //validate the required MB version for this plug-in
-            if (pluginList.SelectedItem != null && InstallButton != null && MessageLine != null)
+            if (e != null && pluginList.SelectedItem != null && InstallButton != null && MessageLine != null)
             {
+                txtNoSelection.Visibility = Visibility.Hidden;
+                lblVer.Visibility = lblReq.Visibility = Visibility.Visible;
+
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 if (plugin.RequiredMBVersion > Kernel.Instance.Version)
                 {
@@ -108,15 +109,21 @@ namespace Configurator {
                 {
                     if (!String.IsNullOrEmpty(plugin.RichDescURL))
                     {
-                            RichDescFrame.Navigate(new Uri(plugin.RichDescURL, UriKind.Absolute));
-                            RichDescFrame.Visibility = Visibility.Visible;
+                        RichDescFrame.Navigate(new Uri(plugin.RichDescURL, UriKind.Absolute));
                     }
                     else
                     {
                         RichDescFrame.Visibility = Visibility.Hidden;
+                        
                     }
                 }
-                    
+
+            }
+            else // no selection
+            {
+                RichDescFrame.Visibility = lblReq.Visibility = lblVer.Visibility = Visibility.Hidden;
+                txtNoSelection.Visibility = Visibility.Visible;
+                InstallButton.IsEnabled = false;
             }
         }
 
@@ -147,7 +154,19 @@ namespace Configurator {
             {
                 Logger.ReportError("Rich Description Not Found.");
                 RichDescFrame.Visibility = Visibility.Hidden;
-            }            
+            }
+            else
+            {
+                if (pluginList.SelectedItem != null)
+                    RichDescFrame.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void pluginList_Collapse(object sender, RoutedEventArgs e)
+        {
+            //un-select in case current item was collapsed from view
+            pluginList.SelectedIndex = -1;
+
         }
 
 
