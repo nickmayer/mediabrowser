@@ -97,28 +97,26 @@
             <TabControl Margin="10,90,10,10" x:Name="tabControl1" Background="{x:Null}" SelectionChanged="tabControl1_SelectionChanged">
             <TabItem Header="media" x:Name="mediacollectionTab" FontSize="14" FontWeight="Normal" Foreground="#FF323232" IsSelected="True">
                 <Grid>
-                    <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="folderList" Width="260" SelectionChanged="folderList_SelectionChanged" FontSize="14" ItemTemplate="{StaticResource folderListTemplate}" SelectedIndex="0"/>
+                    <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="folderList" Width="260" SelectionChanged="folderList_SelectionChanged" FontSize="14" ItemTemplate="{StaticResource folderListTemplate}" SelectedIndex="0" ToolTip="These are the items that define your media library.  They will appear as the top-level options in MB." />
                         <Button Height="32" HorizontalAlignment="Left" Margin="20,0,0,20" x:Name="btnAddFolder" VerticalAlignment="Bottom" Width="80" Click="btnAddFolder_Click" FontSize="14" ToolTip="Add a new media collection" Content="Add"/>
                         <Button Height="32" HorizontalAlignment="Left" Margin="110,0,0,20" x:Name="btnRename" VerticalAlignment="Bottom" Width="80" Click="btnRename_Click" ToolTip="Rename media collection" Content="Rename" FontSize="14" IsEnabled="False" />
                         <Button Height="32" HorizontalAlignment="Left" Margin="200,0,0,20" x:Name="btnRemoveFolder" VerticalAlignment="Bottom" Width="80" Click="btnRemoveFolder_Click" FontSize="14" ToolTip="Remove media collection" Content="Remove" IsEnabled="False"/>
                         <Grid Margin="300,0,20,20" x:Name="infoPanel">
-                            <ListBox Height="115" x:Name="internalFolder" FontSize="14" Margin="0,0,0,40" VerticalAlignment="Bottom" ToolTip="All folder locations for the selected media collection are shown here" />
+                            <ListBox Height="96" x:Name="internalFolder" FontSize="14" Margin="0,0,0,40" VerticalAlignment="Bottom" ToolTip="Media items from these physical folders will make up this Media Collection.  It can span multiple folders on multiple drives or servers.  Use UNC paths for best results." />
                             <Button Height="32" x:Name="btnAddSubFolder" Click="btnAddSubFolder_Click" FontSize="14" ToolTip="Add another folder inside your media collection" Content="Add" Margin="0,0,90,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="80" />
                             <Button Height="32" x:Name="btnRemoveSubFolder" Width="80" Click="btnRemoveSubFolder_Click" FontSize="14" ToolTip="Remove folder from your media collection" Content="Remove" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" />
-                            <Button Height="32" x:Name="btnChangeImage" Width="115" Margin="0,6,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Click="btnChangeImage_Click" FontSize="14" Content="Change Image..." ToolTip="Change the default image for the media collection" />
-                            <Image x:Name="folderImage" HorizontalAlignment="Right" Margin="0,45,0,180" VerticalAlignment="Top" />
-                            <Label Height="34" x:Name="lblStep2" Width="34" Foreground="#FFA8A8A8" Content="❷" HorizontalAlignment="Left" Margin="0,6,0,0" VerticalAlignment="Top" />
-                            <Label Height="34" x:Name="lblStep2b" Foreground="#FF000000" Content="Configure details" Margin="34,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" />
-                            <Label Height="28" x:Name="label1" FontSize="14" Content="A media collection can span across multiple folders" Margin="0,0,0,155" VerticalAlignment="Bottom"/>
+                            <Button x:Name="btnChangeImage" Height="32" Margin="0,200,90,0" Click="btnChangeImage_Click" FontSize="14" Content="Change..." ToolTip="Change the default image for the media collection" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top" />
+                            <Image x:Name="folderImage" HorizontalAlignment="Right" Margin="0,12,6,0" VerticalAlignment="Top" Height="182.38" Width="182.38" />
+                            <Label Height="34" x:Name="lblStep2b" Foreground="#FF000000" Content="Collection Image" Margin="110,12,195,0" VerticalAlignment="Top" />
+                            <Label Height="28" x:Name="label1" FontSize="14" Content="Physical folders that make up this collection" Margin="0,0,0,140" VerticalAlignment="Bottom"/>
+                            <Button FontSize="14" Height="32" Margin="0,201,0,0" Name="btnRemoveImage" ToolTip="Remove the image for the collection" Click="btnRemoveImage_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top">Remove</Button>
                         </Grid>
-                    <Label Height="34" HorizontalAlignment="Left" Margin="20,6,0,0" x:Name="lblStep1" VerticalAlignment="Top" Width="34" Foreground="#FFA8A8A8" Opacity="1" Content="❶"/>
-                    <Label Height="34" HorizontalAlignment="Left" Margin="54,6,0,0" x:Name="lblStep1b" VerticalAlignment="Top" Width="226" Foreground="#FF030303" Content="Add your media"/>
+                        <Label Height="34" HorizontalAlignment="Left" Margin="23,5,0,0" x:Name="lblStep1b" VerticalAlignment="Top" Width="226" Foreground="#FF030303" Content="Media Collections"/>
                 </Grid>
             </TabItem>
             <TabItem Header="podcasts" x:Name="podcastsTab" FontSize="14" IsSelected="True">
                 <Grid>
-                    <Label Height="34" HorizontalAlignment="Left" Margin="20,6,0,0" x:Name="lblPodcastStep1" VerticalAlignment="Top" Width="34" Foreground="#FFA8A8A8" Opacity="1" Content="❶"/>
-                    <Label Height="34" HorizontalAlignment="Left" Margin="54,6,0,0" x:Name="lblPodcastStep1b" VerticalAlignment="Top" Width="226" Foreground="#FF030303" Content="Add your podcasts"/>
+                        <Label Height="34" HorizontalAlignment="Left" Margin="23,5,0,0" x:Name="lblPodcastStep1b" VerticalAlignment="Top" Width="226" Foreground="#FF030303" Content="Podcasts"/>
                     <ListBox IsSynchronizedWithCurrentItem="True" Margin="20,45,0,60" x:Name="podcastList" DisplayMemberPath="Name" HorizontalAlignment="Left" Width="260" SelectionChanged="podcastList_SelectionChanged"/>
                     <Button HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Add" x:Name="addPodcast" Click="addPodcast_Click" ToolTip="Add a video RSS feed" />
                     <Button HorizontalAlignment="Left" Margin="200,0,0,20" VerticalAlignment="Bottom" Width="80" Height="32" Content="Remove" x:Name="removePodcast" Click="removePodcast_Click" ToolTip="Remove selected video RSS feed" IsEnabled="False" />

@@ -827,6 +827,17 @@ sortorder: {2}
             }
         }
 
+        private void btnRemoveImage_Click(object sender, RoutedEventArgs e)
+        {
+            var virtualFolder = folderList.SelectedItem as VirtualFolder;
+            if (virtualFolder == null) return;
+            if (MessageBox.Show("Remove association to this image.  Are you sure? \n\n(The image itself will not be deleted)", "Remove Image", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                virtualFolder.ImagePath = "";
+                folderImage.Source = null;
+            }
+        }
+
         private void btnAddSubFolder_Click(object sender, RoutedEventArgs e)
         {
             var virtualFolder = folderList.SelectedItem as VirtualFolder;
@@ -1923,6 +1934,7 @@ sortorder: {2}
             if (KernelModified)
                 MBServiceController.RestartService();
         }
+
     }
 
     #region FormatParser Class
