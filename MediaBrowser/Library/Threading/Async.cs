@@ -170,6 +170,22 @@ namespace MediaBrowser.Library.Threading {
             }
             return currentPool;
         }
+
+        /// <summary>
+        /// Run an action with given timeout - WON"T Stop the action but will return
+        /// </summary>
+        /// <param name="action">Action to perform</param>
+        /// <param name="timeout">timeout in milliseconds</param>
+        public static void RunWithTimeout(Action action, int timeout)
+        {
+            IAsyncResult ar = action.BeginInvoke(null, null);
+            if (ar.AsyncWaitHandle.WaitOne(timeout))
+                action.EndInvoke(ar); // This is necesary so that any exceptions thrown by action delegate is rethrown on completion         
+            else
+                throw new TimeoutException("MediaInfo extraction failed to complete in " + timeout / 1000 + " seconds.");
+        }
+    
+
     }
    
 }
