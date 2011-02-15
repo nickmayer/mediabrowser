@@ -82,11 +82,22 @@ namespace WebProxy {
                 trailers = mbTrailers.Values.ToList() :
                 trailers = myTrailers.Values.ToList();
             List<string> foundTrailers = new List<string>();
-            foreach (var info in trailers)
+            if (string.IsNullOrEmpty(searchInfo.Rating) && searchInfo.Genres == null)
             {
-                if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info))
+                // no search info - return all
+                foreach (var info in trailers)
                 {
                     foundTrailers.Add(info.Path);
+                }
+            }
+            else
+            {
+                foreach (var info in trailers)
+                {
+                    if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info))
+                    {
+                        foundTrailers.Add(info.Path);
+                    }
                 }
             }
             return foundTrailers;
