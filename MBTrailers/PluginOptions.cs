@@ -37,8 +37,11 @@ namespace MBTrailers
         [Label("Cache Directory")] 
         public string CacheDir = "";
 
-        [Label("Force Reload")]
-        [Hidden]
-        public bool Changed = false;
+        private bool _changed = false;
+        public bool Changed
+        {
+            get { return _changed; }
+            set { _changed = value; }
+        }
     }
 }
