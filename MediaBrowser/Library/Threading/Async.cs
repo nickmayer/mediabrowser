@@ -182,7 +182,7 @@ namespace MediaBrowser.Library.Threading {
             if (ar.AsyncWaitHandle.WaitOne(timeout))
                 action.EndInvoke(ar); // This is necesary so that any exceptions thrown by action delegate is rethrown on completion         
             else
-                throw new TimeoutException("MediaInfo extraction failed to complete in " + timeout / 1000 + " seconds.");
+                throw new TimeoutException("Operation failed to complete in " + timeout / 1000 + " seconds.");
         }
     
 
