@@ -101,7 +101,8 @@ namespace MediaBrowser.Library.Metadata {
         /// <param name="item"></param>
         private static void ClearItem(object item) {
             foreach (var persistable in Serializer.GetPersistables(item)) {
-                if (persistable.GetAttributes<NotSourcedFromProviderAttribute>() == null) {
+                if (persistable.GetAttributes<NotSourcedFromProviderAttribute>() == null && 
+                    persistable.GetAttributes<DontClearOnForcedRefreshAttribute>() == null) {
                     persistable.SetValue(item, null);
                 }
             }

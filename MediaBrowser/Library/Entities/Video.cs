@@ -35,6 +35,7 @@ namespace MediaBrowser.Library.Entities {
         public int? RunningTime { get; set; }
 
         [Persist]
+        [DontClearOnForcedRefresh]
         public MediaInfoData MediaInfo { get; set; }
 
         public override void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id) {

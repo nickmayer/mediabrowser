@@ -706,6 +706,7 @@
     <Compile Include="Code\Updater.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Library\Entities\Attributes\DontClearOnForcedRefresh.cs" />
     <Compile Include="Library\Entities\IndexFolder.cs" />
     <Compile Include="Library\EntryPoint\EntryPointResolver.cs" />
     <Compile Include="Library\Extensions\BinaryLineReader.cs" />
