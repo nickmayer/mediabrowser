@@ -14,6 +14,7 @@ using System.Linq;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Providers;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Threading;
 
 namespace MediaInfoProvider
 {
@@ -69,13 +70,25 @@ namespace MediaInfoProvider
             Video video = Item as Video;
             if (video == null || !enabled) return;
 
-            if (video.ContainsRippedMedia) return; //can't process rips
-
+            if (video.MediaType != MediaType.BluRay && video.ContainsRippedMedia) return; //can't process rips
             if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
-            filename = FindVideoFile();
-            if (filename != null) {
-                video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename));
+            using (new MediaBrowser.Util.Profiler("Media Info extraction"))
+            {
+                filename = FindVideoFile();
+                int timeout = Kernel.LoadContext == MBLoadContext.Core ? 500 : 12000; //only allow 1/2 second in core but 12 secs in service
+                if (filename != null)
+                {
+                    try
+                    {
+                        Async.RunWithTimeout(() => video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename)), timeout);
+                    }
+                    catch (TimeoutException)
+                    {
+                        Logger.ReportError("MediaInfo extraction timed-out ("+timeout+"ms) for " + Item.Name + " file: " + filename);
+                    }
+
+                }
             }
             if (video.MediaInfo.RunTime > 0) video.RunningTime = video.MediaInfo.RunTime;
         }
@@ -103,10 +116,48 @@ namespace MediaInfoProvider
         }
 
         private string FindVideoFile() {
-            return (Item as Video).VideoFiles.First();
+            var video = Item as Video;
+            if (video.MediaType == MediaType.BluRay)
+            {
+                //find the largest stream file
+                DirectoryInfo dirInfo = new DirectoryInfo(Path.Combine(Item.Path, "bdmv\\stream\\"));
+                IEnumerable<System.IO.FileInfo> fileList = dirInfo.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+
+                FileInfo largestFile =
+                    (from file in fileList
+                     let len = GetFileLength(file)
+                     where len > 0
+                     orderby len descending
+                     select file)
+                    .First();
+                return largestFile.FullName;
+            }
+            else
+            {
+                return (Item as Video).VideoFiles.First();
+            }
         }
 
-        private MediaInfoData GetMediaInfo(string location)
+        // This method is used to swallow the possible exception
+        // that can be raised when accessing the FileInfo.Length property.
+        // In this particular case, it is safe to swallow the exception.
+        static long GetFileLength(System.IO.FileInfo fi)
+        {
+            long retval;
+            try
+            {
+                retval = fi.Length;
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                // If a file is no longer present,
+                // just add zero bytes to the total.
+                retval = 0;
+            }
+            return retval;
+        }
+
+    private MediaInfoData GetMediaInfo(string location)
         {
             Logger.ReportInfo("getting media info from " + location);
             MediaInfo mediaInfo = new MediaInfo();
