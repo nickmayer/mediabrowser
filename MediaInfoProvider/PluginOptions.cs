@@ -16,5 +16,10 @@ namespace MediaInfoProvider
         [Label("Timeout (ms)")]
         public string ServiceTimeout = "15000";
 
+        [Label("Clear Bad File List")]
+        public bool ClearBadFiles = false;
+
+        public List<string> BadFiles = new List<string>();
+
     }
 }

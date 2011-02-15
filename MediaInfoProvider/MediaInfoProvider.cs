@@ -25,6 +25,8 @@ namespace MediaInfoProvider
         [DllImport("kernel32")]
         static extern IntPtr LoadLibrary(string lpFileName);
 
+        private static bool hasTimedOut = false;
+
         private static bool enabled = CheckForLib();
 
         private static bool Is64Bit {
@@ -71,12 +73,16 @@ namespace MediaInfoProvider
             if (video == null || !enabled) return;
             if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
-            if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && video.MediaType == MediaType.BluRay))
+            if (!video.ContainsRippedMedia || video.MediaType == MediaType.DVD || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && video.MediaType == MediaType.BluRay))
             {
 
                 using (new MediaBrowser.Util.Profiler("Media Info extraction"))
                 {
                     filename = FindVideoFile();
+                    if (Plugin.PluginOptions.Instance.BadFiles.Contains(filename)) {
+                        Logger.ReportInfo("Mediainfo not scanning known bad file: "+filename);
+                        return;
+                    }
                     int timeout = Kernel.LoadContext == MBLoadContext.Core ? 500 : Plugin.ServiceTimeout; //only allow 1/2 second in core but configurable for service
                     if (filename != null)
                     {
@@ -87,8 +93,18 @@ namespace MediaInfoProvider
                         catch (TimeoutException)
                         {
                             Logger.ReportError("MediaInfo extraction timed-out (" + timeout + "ms) for " + Item.Name + " file: " + filename);
+                            //if this is the first timeout we've had, add this file to the bad file list
+                            if (!hasTimedOut)
+                            {
+                                Plugin.PluginOptions.Instance.BadFiles.Add(filename);
+                                Plugin.PluginOptions.Save();
+                                hasTimedOut = true;
+                            }
                         }
-
+                    }
+                    else
+                    {
+                        Logger.ReportInfo("MediaInfo unable to find file to process for " + Item.Name);
                     }
                 }
                 if (video.MediaInfo.RunTime > 0) video.RunningTime = video.MediaInfo.RunTime;
@@ -121,9 +137,11 @@ namespace MediaInfoProvider
             var video = Item as Video;
             if (video.MediaType == MediaType.BluRay)
             {
+                string subDir =  "bdmv\\stream\\";
+                string filePattern =  "*.m2ts";
                 //find the largest stream file
-                DirectoryInfo dirInfo = new DirectoryInfo(Path.Combine(Item.Path, "bdmv\\stream\\"));
-                IEnumerable<System.IO.FileInfo> fileList = dirInfo.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+                DirectoryInfo dirInfo = new DirectoryInfo(Path.Combine(Item.Path, subDir));
+                IEnumerable<System.IO.FileInfo> fileList = dirInfo.GetFiles(filePattern, System.IO.SearchOption.AllDirectories);
 
                 FileInfo largestFile =
                     (from file in fileList
@@ -133,6 +151,22 @@ namespace MediaInfoProvider
                      select file)
                     .First();
                 return largestFile.FullName;
+            }
+            else if (video.MediaType == MediaType.DVD)
+            {
+                //find the IFO with the longest duration
+                Int32 longestDuration = 0;
+                string longestIFO = null;
+                foreach (var file in Directory.GetFiles(Path.Combine(Item.Path, "video_ts\\"), "*.ifo"))
+                {
+                    Int32 duration = GetDuration(file);
+                    if (duration > longestDuration)
+                    {
+                        longestDuration = duration;
+                        longestIFO = file;
+                    }
+                }
+                return longestIFO;
             }
             else
             {
@@ -158,6 +192,21 @@ namespace MediaInfoProvider
             }
             return retval;
         }
+
+        private Int32 GetDuration(string location)
+        {
+            MediaInfo mediaInfo = new MediaInfo();
+            mediaInfo.Option("ParseSpeed", "0.3");
+            int i = mediaInfo.Open(location);
+            int runTime = 0;
+            if (i != 0)
+            {
+                Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
+            }
+            mediaInfo.Close();
+            return runTime;
+        }
+
 
     private MediaInfoData GetMediaInfo(string location)
         {

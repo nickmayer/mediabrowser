@@ -19,6 +19,12 @@ namespace MediaInfoProvider {
         public override void Init(Kernel kernel) {
             PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
             PluginOptions.Load();
+            if (PluginOptions.Instance.ClearBadFiles)
+            {
+                PluginOptions.Instance.BadFiles.Clear();
+                PluginOptions.Save();
+            }
+
             int.TryParse(PluginOptions.Instance.ServiceTimeout, out ServiceTimeout);
             kernel.MetadataProviderFactories.Add(MetadataProviderFactory.Get<MediaInfoProvider>()); 
         }
