@@ -69,28 +69,30 @@ namespace MediaInfoProvider
         {
             Video video = Item as Video;
             if (video == null || !enabled) return;
-
-            if (video.MediaType != MediaType.BluRay && video.ContainsRippedMedia) return; //can't process rips
             if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
-            using (new MediaBrowser.Util.Profiler("Media Info extraction"))
+            if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && video.MediaType == MediaType.BluRay))
             {
-                filename = FindVideoFile();
-                int timeout = Kernel.LoadContext == MBLoadContext.Core ? 500 : 12000; //only allow 1/2 second in core but 12 secs in service
-                if (filename != null)
-                {
-                    try
-                    {
-                        Async.RunWithTimeout(() => video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename)), timeout);
-                    }
-                    catch (TimeoutException)
-                    {
-                        Logger.ReportError("MediaInfo extraction timed-out ("+timeout+"ms) for " + Item.Name + " file: " + filename);
-                    }
 
+                //using (new MediaBrowser.Util.Profiler("Media Info extraction"))
+                {
+                    filename = FindVideoFile();
+                    int timeout = Kernel.LoadContext == MBLoadContext.Core ? 500 : Plugin.ServiceTimeout; //only allow 1/2 second in core but configurable for service
+                    if (filename != null)
+                    {
+                        try
+                        {
+                            Async.RunWithTimeout(() => video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename)), timeout);
+                        }
+                        catch (TimeoutException)
+                        {
+                            Logger.ReportError("MediaInfo extraction timed-out (" + timeout + "ms) for " + Item.Name + " file: " + filename);
+                        }
+
+                    }
                 }
+                if (video.MediaInfo.RunTime > 0) video.RunningTime = video.MediaInfo.RunTime;
             }
-            if (video.MediaInfo.RunTime > 0) video.RunningTime = video.MediaInfo.RunTime;
         }
 
         private MediaInfoData Merge(MediaInfoData original, MediaInfoData acquired)

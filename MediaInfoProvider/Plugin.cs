@@ -5,16 +5,38 @@ using System.Text;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Configuration;
 
 namespace MediaInfoProvider {
     public class Plugin : BasePlugin {
 
         internal const string PluginName = "MediaInfo Provider";
         internal const string PluginDescription = "This plugin uses the MediaInfo project to provide rich information about your media, such as codecs, aspect ratio, resolution, etc..\n\nFolder rips, ISO's and WTV files are currently not supported.\n\nThis version includes MediaInfo.dll version " + Plugin.includedMediaInfoDLL + ".";
-        internal const string includedMediaInfoDLL = "0.7.41.0"; 
+        internal const string includedMediaInfoDLL = "0.7.41.0";
+        public static PluginConfiguration<PluginOptions> PluginOptions { get; set; }
+        public static int ServiceTimeout = 12000;
 
         public override void Init(Kernel kernel) {
+            PluginOptions = new PluginConfiguration<PluginOptions>(kernel, this.GetType().Assembly);
+            PluginOptions.Load();
+            int.TryParse(PluginOptions.Instance.ServiceTimeout, out ServiceTimeout);
             kernel.MetadataProviderFactories.Add(MetadataProviderFactory.Get<MediaInfoProvider>()); 
+        }
+
+        public override bool IsConfigurable
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override IPluginConfiguration PluginConfiguration
+        {
+            get
+            {
+                return PluginOptions;
+            }
         }
 
         public override string Name {

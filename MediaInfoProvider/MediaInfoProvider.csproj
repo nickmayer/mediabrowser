@@ -52,6 +52,7 @@
     <Compile Include="LibraryLoader.cs" />
     <Compile Include="MediaInfoProvider.cs" />
     <Compile Include="Plugin.cs" />
+    <Compile Include="PluginOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
