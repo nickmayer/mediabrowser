@@ -347,19 +347,14 @@ namespace MediaBrowser.Library {
             FindNewestChildren(folder, foundNames, maxSize, Config.Instance.RecentItemDays);
         }
 
-        public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize, int maxDays) {
+        public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize, int maxDays) 
+        {
             DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
             FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
             folderModel.PhysicalParent = this;
-            foreach (var item in folder.Children) {
+            foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateCreated)) {
                 // skip folders
-                if (item is Folder) {
-                    //don't return items inside protected folders
-                    if (item.ParentalAllowed)
-                    {
-                        FindNewestChildren(item as Folder, foundNames, maxSize);
-                    }
-                } else {
+                if (!(item is Folder)) {
                     DateTime creationTime = item.DateCreated;
                     //only if added less than specified ago
                     if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
@@ -373,9 +368,9 @@ namespace MediaBrowser.Library {
                         modelItem.PhysicalParent = folderModel;
                         item.Parent = folder;
                         foundNames.Add(creationTime, modelItem);
-                        if (foundNames.Count > maxSize)
+                        if (foundNames.Count >= maxSize)
                         {
-                            foundNames.RemoveAt(0);
+                            return; //we're done
                         }
                     }
                 }
