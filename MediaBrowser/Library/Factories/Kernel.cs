@@ -93,7 +93,7 @@ namespace MediaBrowser.Library {
         }
 
         private static MultiLogger GetDefaultLogger(ConfigData config) {
-            var logger = new MultiLogger();
+            var logger = new MultiLogger(config.MinLoggingSeverity);
 
             if (config.EnableTraceLogging) {
                 logger.AddLogger(new FileLogger(ApplicationPaths.AppLogPath));

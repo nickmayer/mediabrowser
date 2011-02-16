@@ -6,7 +6,7 @@ using System.Text;
 namespace MediaBrowser.Library.Logging {
     public class MultiLogger : LoggerBase{
 
-        public MultiLogger(): base() {
+        public MultiLogger(LogSeverity severity): base(severity) {
             Loggers = new List<ILogger>();
         }
 

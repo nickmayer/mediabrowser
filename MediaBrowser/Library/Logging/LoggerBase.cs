@@ -15,6 +15,12 @@ namespace MediaBrowser.Library.Logging
             Enabled = true;
         }
 
+        public LoggerBase(LogSeverity severity)
+        {
+            Enabled = true;
+            Severity = severity;
+        }
+
         public bool Enabled { get; set; }
 
         public LogSeverity Severity { get; set; }
@@ -89,7 +95,7 @@ namespace MediaBrowser.Library.Logging
         void LogMessage(LogSeverity severity, string message, string category)
         {
 
-            if (!Enabled) return;
+            if (!Enabled || severity < this.Severity) return;
 
             string threadName = Thread.CurrentThread.Name;
             int threadId = Thread.CurrentThread.ManagedThreadId;

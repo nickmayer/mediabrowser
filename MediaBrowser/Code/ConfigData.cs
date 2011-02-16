@@ -14,6 +14,7 @@ using MediaBrowser.Library.Playables;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Plugins;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser
 {
@@ -155,6 +156,8 @@ namespace MediaBrowser
         public int AutoScrollSpeed = 1; //Scroll Speed for scrolling Text
 
         public bool AutoValidate = true; //automatically validate and refresh items as we access them
+
+        public LogSeverity MinLoggingSeverity = LogSeverity.Info;
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;

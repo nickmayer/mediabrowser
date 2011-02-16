@@ -16,6 +16,7 @@ using System.Diagnostics;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Code;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser
 {
@@ -798,6 +799,12 @@ namespace MediaBrowser
         {
             get { return this.data.AutoValidate; }
             set { if (this.data.AutoValidate != value) { this.data.AutoValidate = value; Save(); FirePropertyChanged("AutoValidate"); } }
+        }
+
+        public LogSeverity MinLoggingSeverity
+        {
+            get { return this.data.MinLoggingSeverity; }
+            set { if (this.data.MinLoggingSeverity != value) { this.data.MinLoggingSeverity = value; Save(); FirePropertyChanged("MinLoggingSeverity"); } }
         }
         /* End of app specific settings*/
 
