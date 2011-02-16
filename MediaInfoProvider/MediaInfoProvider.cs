@@ -96,8 +96,12 @@ namespace MediaInfoProvider
                             //if this is the first timeout we've had, add this file to the bad file list
                             if (!hasTimedOut)
                             {
-                                Plugin.PluginOptions.Instance.BadFiles.Add(filename);
-                                Plugin.PluginOptions.Save();
+                                if (Kernel.LoadContext == MBLoadContext.Service)
+                                {
+                                    //only blacklist files that hung with the longer timeout
+                                    Plugin.PluginOptions.Instance.BadFiles.Add(filename);
+                                    Plugin.PluginOptions.Save();
+                                }
                                 hasTimedOut = true;
                                 enabled = false;  //no telling how long the MI dll is going to be hung.  Best to not try it again this session
                             }
