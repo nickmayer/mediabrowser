@@ -56,7 +56,7 @@ namespace MediaInfoProvider {
         {
             get
             {
-                return new System.Version(2, 3, 0, 0);
+                return new System.Version(2, 3, 1, 0);
             }
         }
         public override System.Version TestedMBVersion

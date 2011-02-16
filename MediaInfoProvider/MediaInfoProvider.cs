@@ -83,7 +83,7 @@ namespace MediaInfoProvider
                         Logger.ReportInfo("Mediainfo not scanning known bad file: "+filename);
                         return;
                     }
-                    int timeout = Kernel.LoadContext == MBLoadContext.Core ? 500 : Plugin.ServiceTimeout; //only allow 1/2 second in core but configurable for service
+                    int timeout = Kernel.LoadContext == MBLoadContext.Core ? 1000 : Plugin.ServiceTimeout; //only allow 1 second in core but configurable for service
                     if (filename != null)
                     {
                         try
@@ -99,7 +99,7 @@ namespace MediaInfoProvider
                                 Plugin.PluginOptions.Instance.BadFiles.Add(filename);
                                 Plugin.PluginOptions.Save();
                                 hasTimedOut = true;
-                                enabled = false;  //no telling how long the MI dll is giong to be hung.  Best to not try it again this session
+                                enabled = false;  //no telling how long the MI dll is going to be hung.  Best to not try it again this session
                             }
                         }
                     }
