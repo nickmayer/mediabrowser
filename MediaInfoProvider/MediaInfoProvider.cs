@@ -99,6 +99,7 @@ namespace MediaInfoProvider
                                 Plugin.PluginOptions.Instance.BadFiles.Add(filename);
                                 Plugin.PluginOptions.Save();
                                 hasTimedOut = true;
+                                enabled = false;  //no telling how long the MI dll is giong to be hung.  Best to not try it again this session
                             }
                         }
                     }
