@@ -76,7 +76,12 @@ namespace MediaBrowser.Library.ImageManagement {
                         ext = "png";
                     } else if (this.ImageFormat.Guid == ImageFormat.Jpeg.Guid) {
                         ext = "jpg";
-                    } else {
+                    } else if (this.ImageFormat.Guid == ImageFormat.Bmp.Guid)
+                    {
+                        ext = "bmp";
+                    }
+                    else
+                    {
                         throw new ApplicationException("Unsupported Image type!");
                     }
                     return ext;
@@ -169,7 +174,13 @@ namespace MediaBrowser.Library.ImageManagement {
                 imageFormat = ImageFormat.Jpeg;
             } else if (extension == ".gif") {
                 imageFormat = ImageFormat.Gif;
-            } else {
+            }
+            else if (extension == ".bmp")
+            {
+                imageFormat = ImageFormat.Bmp;
+            }
+            else
+            {
                 // bad file in image cache
                 File.Delete(item.Path);
                 return;
@@ -292,7 +303,7 @@ namespace MediaBrowser.Library.ImageManagement {
                 ImageInfo info = new ImageInfo(imageSet);
                 info.Width = image.Width;
                 info.Height = image.Height;
-                info.ImageFormat = image.RawFormat;
+                info.ImageFormat = (Kernel.Instance.ConfigData.UseBMPsInCache && image.Width > 1000) ? ImageFormat.Bmp : image.RawFormat;
                 info.Date = DateTime.UtcNow;
                 imageSet.PrimaryImage = info;
                 try {

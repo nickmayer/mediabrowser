@@ -159,6 +159,8 @@ namespace MediaBrowser
 
         public LogSeverity MinLoggingSeverity = LogSeverity.Info;
 
+        public bool UseBMPsInCache = false; //experimental option to use bmps for backdrops to increase speed
+
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 
