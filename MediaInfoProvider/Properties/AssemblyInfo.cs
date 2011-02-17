@@ -34,8 +34,8 @@ using MediaInfoProvider;
 
 
 
-[assembly: AssemblyVersion("1.2.0.1")]
-[assembly: AssemblyFileVersion("1.2.0.1")]
+[assembly: AssemblyVersion("1.2.0.2")]
+[assembly: AssemblyFileVersion("1.2.0.2")]
 
 [assembly: AssemblyTitle(Plugin.PluginName)]
 [assembly: AssemblyDescription(Plugin.PluginDescription)]

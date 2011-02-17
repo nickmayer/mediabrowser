@@ -162,16 +162,24 @@ namespace MediaInfoProvider
                 //find the IFO with the longest duration
                 Int32 longestDuration = 0;
                 string longestIFO = null;
-                foreach (var file in Directory.GetFiles(Path.Combine(Item.Path, "video_ts\\"), "*.ifo"))
+                try
                 {
-                    Int32 duration = GetDuration(file);
-                    if (duration > longestDuration)
+                    foreach (var file in Directory.GetFiles(Path.Combine(Item.Path, "video_ts\\"), "*.ifo"))
                     {
-                        longestDuration = duration;
-                        longestIFO = file;
+                        Int32 duration = GetDuration(file);
+                        if (duration > longestDuration)
+                        {
+                            longestDuration = duration;
+                            longestIFO = file;
+                        }
                     }
+                    return longestIFO;
                 }
-                return longestIFO;
+                catch (Exception e)
+                {
+                    Logger.ReportException("MediaInfo error dealing with IFO", e);
+                    return null;
+                }
             }
             else
             {
@@ -217,7 +225,7 @@ namespace MediaInfoProvider
         {
             Logger.ReportInfo("getting media info from " + location);
             MediaInfo mediaInfo = new MediaInfo();
-            mediaInfo.Option("ParseSpeed", "0.3");
+            mediaInfo.Option("ParseSpeed", "0.2");
             int i = mediaInfo.Open(location);
             MediaInfoData mediaInfoData = null;
             if (i != 0)
