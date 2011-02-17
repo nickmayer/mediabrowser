@@ -14,6 +14,10 @@ namespace MBTrailers
 {
     class LocalTrailerFolder : Folder
     {
+        [Persist]
+        [NotSourcedFromProvider]
+        DateTime lastUpdated = DateTime.MinValue;
+
         public override string Name
         {
             get
@@ -31,6 +35,20 @@ namespace MBTrailers
             get
             {
                 return "None"; //only way this can be assigned
+            }
+        }
+
+        public override void ValidateChildren()
+        {
+            //only validate once per day or when forced or on service refresh
+            if (Kernel.LoadContext == MBLoadContext.Service || Plugin.PluginOptions.Instance.Changed || DateTime.Now > lastUpdated.AddHours(23))
+            {
+                Logger.ReportInfo("MBTrailers validating MyTrailers " + lastUpdated);
+                Plugin.PluginOptions.Instance.Changed = false;
+                Plugin.PluginOptions.Save();
+                lastUpdated = DateTime.Now;
+                base.ValidateChildren();
+                Kernel.Instance.ItemRepository.SaveItem(this);
             }
         }
 
@@ -63,7 +81,6 @@ namespace MBTrailers
                                 //and add to our children
                                 validChildren.Add(trailer);
                                 actualMovieRefs.Add(movie.Path.ToLower()); //we keep track so we don't get dups
-                                //Plugin.proxy.SetTrailerInfo(trailer);
                             }
                         }
                     }

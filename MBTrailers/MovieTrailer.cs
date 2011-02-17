@@ -5,12 +5,14 @@ using System.Text;
 using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Metadata;
 using MediaBrowser.Library.Persistance;
+using MediaBrowser.Library.Entities.Attributes;
 
 namespace MBTrailers
 {
     class MovieTrailer : Movie
     {
         [Persist]
+        [NotSourcedFromProvider]
         public Movie RealMovie;
 
 
@@ -63,6 +65,7 @@ namespace MBTrailers
             this.MediaInfo = RealMovie.MediaInfo;
             this.DateCreated = System.IO.File.GetCreationTime(this.Path);
             this.DisplayMediaType = "Trailer";
+            Plugin.proxy.SetTrailerInfo(this);
 
             return true;
         }

@@ -12,6 +12,7 @@ using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities.Attributes;
+using MediaBrowser.Library;
 using WebProxy;
 using WebProxy.WCFInterfaces;
 
@@ -95,6 +96,7 @@ namespace MBTrailers {
                 // clean old files out of the cache - this is causing some sort of concurrency issue - take out for now
                 //CleanCache();
                 lastUpdated = DateTime.Now;
+                Kernel.Instance.ItemRepository.SaveItem(this);
             } catch (Exception err) {
                 Logger.ReportException("Failed to update trailers", err);
             }
