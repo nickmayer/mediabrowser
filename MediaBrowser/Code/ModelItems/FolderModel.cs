@@ -350,11 +350,11 @@ namespace MediaBrowser.Library {
         public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize, int maxDays) 
         {
             DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
-            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
-            folderModel.PhysicalParent = this;
             foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateCreated)) {
                 // skip folders
                 if (!(item is Folder)) {
+                    FolderModel folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
+                    folderModel.PhysicalParent = this;
                     DateTime creationTime = item.DateCreated;
                     //only if added less than specified ago
                     if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
@@ -366,7 +366,7 @@ namespace MediaBrowser.Library {
                         }
                         Item modelItem = ItemFactory.Instance.Create(item);
                         modelItem.PhysicalParent = folderModel;
-                        item.Parent = folder;
+                        item.Parent = folderModel.Folder;
                         foundNames.Add(creationTime, modelItem);
                         if (foundNames.Count >= maxSize)
                         {
