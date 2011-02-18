@@ -85,12 +85,13 @@ namespace MediaBrowser.Code.ModelItems {
 
                 bool changed = false;
                 var handler = new EventHandler<ChildrenChangedEventArgs>(
-                    (source, args) => {
+                    (source, args) =>
+                    {
                         if (args != null && args.FolderContentChanged)
                         {
                             changed = true;
                         }
-                        return; 
+                        return;
                     }
                  );
 
@@ -102,16 +103,18 @@ namespace MediaBrowser.Code.ModelItems {
                 //  by design .... 
                 if (!changed) { return; }
 
-                // we may want to consider some pause APIs on the queues so we can ensure the correct ordering
-                // its not a big fuss, cause it will be picked up next time around anyway
+                //I don't understand why we refresh the entire folder if one item changed - I put the refresh in the validate to see what happens -ebr
 
-                // the reverse isn't really needed, but it means that metadata is acquired in the order the children are in. 
-                foreach (var item in children.folder.Children.Reverse())
-                {
-                    fastMetadataRefresher.Inject(item);
-                    // this ensures images are cached earlier 
-                    var ignore = item.PrimaryImage;
-                }
+                //// we may want to consider some pause APIs on the queues so we can ensure the correct ordering
+                //// its not a big fuss, cause it will be picked up next time around anyway
+
+                //// the reverse isn't really needed, but it means that metadata is acquired in the order the children are in. 
+                //foreach (var item in children.folder.Children.Reverse())
+                //{
+                //    fastMetadataRefresher.Inject(item);
+                //    // this ensures images are cached earlier 
+                //    var ignore = item.PrimaryImage;
+                //}
 
                 fastMetadataRefresher.Inject(children.folder);
                 bool isSeason = children.folder.GetType() == typeof(Season) && children.folder.Parent != null;

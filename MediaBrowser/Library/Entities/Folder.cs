@@ -371,7 +371,10 @@ namespace MediaBrowser.Library.Entities {
                 BaseItem currentChild;
                 if (currentChildren.TryGetValue(item.Id, out currentChild)) {
                     if (currentChild != null) {
-                        changed |= currentChild.AssignFromItem(item);
+                        bool thisItemChanged = currentChild.AssignFromItem(item);
+                        if (thisItemChanged)
+                            item.RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions.Default);
+                        changed |= thisItemChanged;
                         currentChildren[item.Id] = null;
                     }
                 } else {
