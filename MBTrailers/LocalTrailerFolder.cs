@@ -9,6 +9,8 @@ using MediaBrowser;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Entities.Attributes;
+using System.ServiceModel;
+using WebProxy.WCFInterfaces;
 
 namespace MBTrailers
 {
@@ -50,6 +52,32 @@ namespace MBTrailers
                 base.ValidateChildren();
                 Kernel.Instance.ItemRepository.SaveItem(this);
             }
+            else
+            {
+                //just go through our existing children and be sure the proxy has them in the list
+                using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
+                {
+                    ITrailerProxy proxyServer = factory.CreateChannel();
+                    try
+                    {
+                        foreach (Movie item in this.Children)
+                        {
+                            var trailerInfo = new TrailerInfo(TrailerType.Local, item.Path.ToLower(), item.ParentalRating, item.Genres);
+                            proxyServer.SetTrailerInfo(trailerInfo);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Error setting trailer info", e);
+                        Logger.ReportError("Inner Exception: " + e.InnerException.Message);
+                    }
+                    finally
+                    {
+                        (proxyServer as ICommunicationObject).Close();
+                    }
+                }
+            }
+
         }
 
         protected override List<BaseItem> GetNonCachedChildren()
@@ -72,7 +100,7 @@ namespace MBTrailers
                                 MovieTrailer trailer = new MovieTrailer();
                                 //now assign the id and fill in essentials - pointing to trailer as actual movie
                                 trailer.Id = ("MBTrailers.MovieTrailer" + movie.TrailerFiles.First().ToLower()).GetMD5();
-                                trailer.RealMovie = movie;
+                                trailer.RealMovieID = movie.Id;
                                 trailer.Overview = movie.Overview;
                                 trailer.Genres = movie.Genres;
                                 trailer.MpaaRating = movie.MpaaRating;

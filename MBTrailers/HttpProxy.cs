@@ -87,14 +87,14 @@ namespace WebProxy {
                 // no search info - return all
                 foreach (var info in trailers)
                 {
-                    foundTrailers.Add(info.Path);
+                    if (!info.Path.StartsWith(searchInfo.Path)) foundTrailers.Add(info.Path);
                 }
             }
             else
             {
                 foreach (var info in trailers)
                 {
-                    if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info))
+                    if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info) && !info.Path.StartsWith(searchInfo.Path))
                     {
                         foundTrailers.Add(info.Path);
                     }
@@ -389,7 +389,7 @@ namespace WebProxy {
 
         public void SetTrailerInfo(MediaBrowser.Library.Entities.Show trailer)
         {
-            TrailerInfo trailerInfo = new TrailerInfo(TrailerType.Local, trailer.Path, trailer.ParentalRating, trailer.Genres);
+            TrailerInfo trailerInfo = new TrailerInfo(TrailerType.Local, trailer.Path.ToLower(), trailer.ParentalRating, trailer.Genres);
             using (ChannelFactory<ITrailerProxy> factory = new ChannelFactory<ITrailerProxy>(new NetNamedPipeBinding(), "net.pipe://localhost/mbtrailers"))
             {
                 ITrailerProxy proxyServer = factory.CreateChannel();

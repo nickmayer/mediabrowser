@@ -6,6 +6,7 @@ using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Metadata;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Entities.Attributes;
+using MediaBrowser.Library;
 
 namespace MBTrailers
 {
@@ -13,11 +14,13 @@ namespace MBTrailers
     {
         [Persist]
         [NotSourcedFromProvider]
-        public Movie RealMovie;
+        public Guid RealMovieID;
+        private Movie RealMovie;
 
 
         public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options)
         {
+            if (RealMovie == null) RealMovie = (Movie)Kernel.Instance.ItemRepository.RetrieveItem(RealMovieID);
             MediaBrowser.Library.Logging.Logger.ReportInfo("Refreshing trailer for " + RealMovie.Name);
             this.PrimaryImagePath = Util.CloneImage(RealMovie.PrimaryImagePath);
             this.BackdropImagePaths = new List<string>();
