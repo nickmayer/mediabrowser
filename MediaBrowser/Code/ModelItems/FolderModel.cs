@@ -353,8 +353,17 @@ namespace MediaBrowser.Library {
             foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateCreated)) {
                 // skip folders
                 if (!(item is Folder)) {
-                    FolderModel folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
-                    folderModel.PhysicalParent = this;
+                    FolderModel folderModel = null;
+                    if (item.Parent == null)
+                    {
+                        //we don't know what to attach to so attach to us
+                        folderModel = this;
+                    }
+                    else
+                    {
+                        folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
+                        folderModel.PhysicalParent = this;
+                    }
                     DateTime creationTime = item.DateCreated;
                     //only if added less than specified ago
                     if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
