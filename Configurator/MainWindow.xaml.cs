@@ -1181,6 +1181,7 @@ sortorder: {2}
                 {
                     txtPlayerCommand.Text = mediaPlayer.Command;
                     lblPlayerArgs.Text = mediaPlayer.Args;
+                    cbxMinMCE.IsChecked = mediaPlayer.MinimizeMCE;
                     infoPlayerPanel.Visibility = Visibility.Visible;
                     btnRemovePlayer.IsEnabled = true;
                 }
@@ -1317,6 +1318,16 @@ sortorder: {2}
         {
             config.AutoEnterSingleDirs = (bool)cbxOptionAutoEnter.IsChecked;
             SaveConfig();
+        }
+
+        private void cbxMinMCE_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigData.ExternalPlayer player = lstExternalPlayers.SelectedItem as ConfigData.ExternalPlayer;
+            if (player != null)
+            {
+                player.MinimizeMCE = (bool)cbxMinMCE.IsChecked;
+                SaveConfig();
+            }
         }
 
         private void cbxAutoValidate_Click(object sender, RoutedEventArgs e)

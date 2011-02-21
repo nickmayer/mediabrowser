@@ -87,8 +87,12 @@ namespace MediaBrowser.Library.Playables
             string args = string.Format(p.Args, path);
             Process player = Process.Start(p.Command, args);
             MarkWatched();
-            //alesbal: begin
-            ThreadPool.QueueUserWorkItem(new WaitCallback(MinimizeMCE), player);
+            //make this optional
+            if (p.MinimizeMCE)
+            {
+                //alesbal: begin
+                ThreadPool.QueueUserWorkItem(new WaitCallback(MinimizeMCE), player);
+            }
         }
 
         private void MinimizeMCE(object player)
