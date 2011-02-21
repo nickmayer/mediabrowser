@@ -49,6 +49,8 @@
 
       <Color Name="FilterColor" Color="color://s:FilterColor" />
 
+      <ShortcutHandler Name="PlayBtn" Handle="true" Shortcut="Play" HandlerStage="Bubbled"/>
+      <KeyHandler Name="PlayShortcut" Handle="true" HandlerStage="Bubbled" Key="P" Modifiers="Control"/>
       <Command Name="NextItemCommand" />
       <Command Name="PreviousItemCommand" />
       
@@ -116,6 +118,16 @@
       <Condition Source="[Item.Actors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[Model]" Value="[ModelWithActors]" />
       <Condition Source="[Item.Actors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[FullConfigNav.Model]" Value="[ModelWithActors]" />
 
+      <!-- Play Rules -->
+      <Rule ConditionLogicalOp ="Or">
+        <Conditions>
+          <Modified Source="[PlayBtn.Invoked]"/>
+          <Modified Source="[PlayShortcut.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Application.Play]" item="[Item]"  />
+        </Actions>
+      </Rule>
 
       <!-- Show and hide Selectors -->
       <Condition Source="[Model.ChosenIndex]" SourceValue="0" ConditionOp="Equals" Target="[Info.Visible]" Value="true" />
