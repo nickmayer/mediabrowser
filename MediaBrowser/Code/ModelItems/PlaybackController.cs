@@ -342,6 +342,7 @@ namespace MediaBrowser
             {
                 transport.PropertyChanged -= new PropertyChangedEventHandler(TransportPropertyChanged);
             }
+            progressHandler = null; //also detatch the playble item so we won't keep trying to track progress when stopped
         }
 
         DateTime lastCall = DateTime.Now;
