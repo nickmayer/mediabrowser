@@ -42,6 +42,8 @@ namespace MBTrailers
 
         public override void ValidateChildren()
         {
+            System.Threading.Thread.Sleep(5000); //wait to be sure the service process is up...
+
             //only validate once per day or when forced or on service refresh
             if (Kernel.LoadContext == MBLoadContext.Service || Plugin.PluginOptions.Instance.Changed || DateTime.Now > lastUpdated.AddHours(23))
             {
