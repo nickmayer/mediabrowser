@@ -91,7 +91,7 @@ namespace MBTrailers
             foreach (Folder folder in Kernel.Instance.RootFolder.Children)
             {
                 if (folder != this && folder is Folder) {
-                    foreach (BaseItem item in folder.AllRecursiveChildren) //parental controls will kick in on the trailers so don't exclude now
+                    foreach (BaseItem item in folder.RecursiveChildren) //change this to AllRecursiveChildren with Titan...
                     {
                         if (item is Movie)
                         {
