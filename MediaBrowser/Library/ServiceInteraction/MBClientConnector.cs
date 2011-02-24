@@ -58,57 +58,93 @@ namespace MediaBrowser.Library
                 while (process)
                 {
                     pipe.WaitForConnection(); //wait for someone to tell us something
-
-                    // Read the request from the client. 
-                    StreamReader sr = new StreamReader(pipe);
-
-                    string[] commandAndArgs = sr.ReadLine().Split(',');
-                    string command = commandAndArgs[0];
-                    switch (command.ToLower())
+                    string[] commandAndArgs;
+                    try
                     {
-                        case "play":
-                            //request to play something - our argument will be the GUID of the item to play
-                            Guid id = new Guid(commandAndArgs[1]);
-                            Logger.ReportInfo("Playing ...");
-                            //to be implemented...
-                            break;
-                        case "activateentrypoint":
-                            //re-load ourselves and nav to the entrypoint
-                            Kernel.Instance.ReLoadRoot();
-                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
-                            {
-                                MediaBrowser.Application.CurrentInstance.LaunchEntryPoint(commandAndArgs[1]);
-                            });
-                            //and tell MC to navigate to us
-                            Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
-                            break;
-                        case "activate":
-                            //if we were in an entrypoint and we just got told to activate - we need to re-load and go to real root
-                            if (Application.CurrentInstance.IsInEntryPoint)
-                            {
+                        // Read the request from the client. 
+                        StreamReader sr = new StreamReader(pipe);
+
+                        commandAndArgs = sr.ReadLine().Split(',');
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Error during IPC communication.  Attempting to re-start listener", e);
+                        try
+                        {
+                            //be sure we're cleaned up
+                            pipe.Disconnect();
+                            pipe.Close();
+                        }
+                        catch
+                        { //we don't care if these fail now - and they very well may
+                        }
+                        finally
+                        {
+                            connected = false;
+                        }
+                        StartListening();
+                        return;
+                    }
+                    try
+                    {
+                        string command = commandAndArgs[0];
+                        switch (command.ToLower())
+                        {
+                            case "play":
+                                //request to play something - our argument will be the GUID of the item to play
+                                Guid id = new Guid(commandAndArgs[1]);
+                                Logger.ReportInfo("Playing ...");
+                                //to be implemented...
+                                break;
+                            case "activateentrypoint":
+                                //re-load ourselves and nav to the entrypoint
                                 Kernel.Instance.ReLoadRoot();
                                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                                 {
-                                    MediaBrowser.Application.CurrentInstance.LaunchEntryPoint(""); //this will start at root
+                                    MediaBrowser.Application.CurrentInstance.LaunchEntryPoint(commandAndArgs[1]);
                                 });
-                            }
+                                //and tell MC to navigate to us
+                                Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
+                                break;
+                            case "activate":
+                                //if we were in an entrypoint and we just got told to activate - we need to re-load and go to real root
+                                if (Application.CurrentInstance.IsInEntryPoint)
+                                {
+                                    Kernel.Instance.ReLoadRoot();
+                                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                                    {
+                                        MediaBrowser.Application.CurrentInstance.LaunchEntryPoint(""); //this will start at root
+                                    });
+                                }
 
-                            //tell MC to navigate to us
-                            Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
-                            break;
-                        case "shutdown":
-                            //close MB
-                            Logger.ReportInfo("Shutting down due to request from a client (possibly new instance of MB).");
-                            Application.CurrentInstance.Close();
-                            break;
-                        case "closeconnection":
-                            //exit this connection
-                            Logger.ReportInfo("Service requested we stop listening.");
-                            process = false;
-                            break;
+                                //tell MC to navigate to us
+                                Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
+                                break;
+                            case "shutdown":
+                                //close MB
+                                Logger.ReportInfo("Shutting down due to request from a client (possibly new instance of MB).");
+                                Application.CurrentInstance.Close();
+                                break;
+                            case "closeconnection":
+                                //exit this connection
+                                Logger.ReportInfo("Service requested we stop listening.");
+                                process = false;
+                                break;
 
+                        }
                     }
-                    pipe.Disconnect();
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Error trying to process IPC command", e);
+                    }
+                    try
+                    {
+                        pipe.Disconnect();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Unexpected Error trying to close IPC connection", e);
+                    }
                 }
                 pipe.Close();
                 connected = false;
@@ -140,6 +176,7 @@ namespace MediaBrowser.Library
             {
                 sw.AutoFlush = true;
                 sw.WriteLine(command);
+                pipeClient.Flush();
                 pipeClient.Close();
             }
             catch (Exception e)
