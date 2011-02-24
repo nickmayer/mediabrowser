@@ -1,6 +1,6 @@
 ﻿namespace MediaBrowserService.Code
 {
-    public class ServiceGuiOptions
+    public class ServiceRefreshOptions
     {
         public bool IncludeImagesOption { get; set; }
 
@@ -15,6 +15,8 @@
         public bool ClearCacheOption { get; set; }
 
         public bool ClearImageCacheOption { get; set; }
+
+        public bool MigrateOption { get; set; }
 
         public bool AnyImageOptionsSelected
         {

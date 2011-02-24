@@ -516,7 +516,8 @@ namespace MediaBrowser
                     }
                     //Check to see if this is the first time this version is run
                     string currentVersion = Kernel.Instance.Version.ToString();
-                    if (Config.MBVersion != currentVersion )
+                    //string currentVersion = "2.3.1.0"; //test
+                    if (Config.MBVersion != currentVersion)
                     {
                         //first time with this version - run routine
                         Logger.ReportInfo("First run for version " + currentVersion);

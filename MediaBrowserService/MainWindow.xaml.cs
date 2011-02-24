@@ -22,6 +22,7 @@ using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Util;
 using MediaBrowser.Library.Entities;
+using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Metadata;
 using MediaBrowser.Library.Configuration;
 using MediaBrowserService.Code;
@@ -51,7 +52,7 @@ namespace MediaBrowserService
         private DateTime _refreshCanceledTime = DateTime.MinValue;
 
         private readonly DateTime _startTime = DateTime.Now;
-        private readonly ServiceGuiOptions _serviceOptions;
+        private readonly ServiceRefreshOptions _serviceOptions;
         private WindowState storedWindowState = WindowState.Normal; //we come up minimized
 
         public MainWindow()
@@ -59,7 +60,7 @@ namespace MediaBrowserService
             try
             {
                 InitializeComponent();
-                _serviceOptions = new ServiceGuiOptions();
+                _serviceOptions = new ServiceRefreshOptions();
                 Instance = this;
                 Go();
             }
@@ -479,7 +480,7 @@ namespace MediaBrowserService
         {
             //force a re-build of the entire library - used when new version requires cache clear
             //first create options - everything but people which just takes too long
-            var options = new ServiceGuiOptions() 
+            var options = new ServiceRefreshOptions() 
             { 
                 ClearCacheOption = true,
                 ClearImageCacheOption = true, 
@@ -487,6 +488,7 @@ namespace MediaBrowserService
                 IncludeGenresOption = true, 
                 IncludeStudiosOption = true,
                 IncludeYearOption = true,
+                MigrateOption = true
             };
 
             //kick off a manual refresh on a high-priority thread
@@ -523,7 +525,7 @@ namespace MediaBrowserService
             if (!_refreshRunning && !_refreshFailed && (_refreshCanceledTime.Date < DateTime.Now.Date) && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
                 Thread.Sleep(20000); //in case we just came out of sleep mode - let's be sure everything is up first...
-                FullRefresh(false, new ServiceGuiOptions());
+                FullRefresh(false, new ServiceRefreshOptions());
             }
 
             if (_shutdown) //we were told to shutdown on next iteration (keeps us from shutting down in the middle of a refresh
@@ -532,7 +534,7 @@ namespace MediaBrowserService
             }
         }
 
-        void FullRefresh(bool force, ServiceGuiOptions manualOptions)
+        void FullRefresh(bool force, ServiceRefreshOptions manualOptions)
         {
             _refreshRunning = true;
             Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
@@ -635,7 +637,7 @@ namespace MediaBrowserService
             }
         }
         
-        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, ServiceGuiOptions manualOptions)
+        bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, ServiceRefreshOptions manualOptions)
         {
             int phases = manualOptions.AnyImageOptionsSelected ? 3 : 2;
             double totalIterations = folder.AllRecursiveChildren.Count() * phases;
@@ -669,6 +671,10 @@ namespace MediaBrowserService
                     UpdateProgress("All Metadata",(currentIteration / totalIterations));
                     if (!processedItems.Contains(item.Id)) //only process any given item once (could be multiple refs to same item)
                     {
+                        if (manualOptions.MigrateOption)
+                        {
+                            MigratePlayState(item);
+                        }
                         item.RefreshMetadata(options);
                         processedItems.Add(item.Id);
                         //Logger.ReportInfo(item.Name + " id: " + item.Id);
@@ -846,5 +852,16 @@ namespace MediaBrowserService
             }
         }
 
+        private void MigratePlayState(BaseItem item)
+        {
+            Guid oldID = (item.GetType().FullName + item.Path).GetMD5();
+            PlaybackStatus status = Kernel.Instance.ItemRepository.RetrievePlayState(oldID);
+            if (status != null)
+            {
+                Logger.ReportInfo("Migrating playstate for: " + item.Name);
+                status.Id = item.Id;
+                status.Save();
+            }
+        }
     }
 }
