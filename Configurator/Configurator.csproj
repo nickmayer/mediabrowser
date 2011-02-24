@@ -251,7 +251,7 @@
     <Resource Include="Images\configurator.ico" />
   </ItemGroup>
   <ItemGroup>
-    <SplashScreen Include="Images\configsplash.jpg" />
+    <Resource Include="Images\configsplash.jpg" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="MSHTML">
@@ -282,6 +282,9 @@
   <ItemGroup>
     <Resource Include="Images\Collapse.png" />
     <Resource Include="Images\Expand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Images\splash1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
