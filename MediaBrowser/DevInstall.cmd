@@ -94,7 +94,8 @@ goto unregister
     copy /y ".\Images\%ProgramInActiveImage%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
     ECHO.
 
-    ECHO.Register the DLL with the global assembly cache
+    ECHO.Register the DLL with the global assembly cache - %AssemblyName%
+    ECHO."%ProgramFilesPath%\Microsoft SDKs\Windows\v6.0A\Bin\gacutil.exe" /if "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%AssemblyName%.dll"
     "%ProgramFilesPath%\Microsoft SDKs\Windows\v6.0A\Bin\gacutil.exe" /if "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%AssemblyName%.dll"
     ECHO.
 

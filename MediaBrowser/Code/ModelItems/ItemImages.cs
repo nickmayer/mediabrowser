@@ -52,7 +52,7 @@ namespace MediaBrowser.Library
                     bannerImage = new AsyncImageLoader(
                         () => baseItem.BannerImage,
                         null,
-                        () => this.FirePropertiesChanged("PreferredImage", "BannerImage"));
+                        () => this.FirePropertiesChanged("PreferredImage", "PreferredImageSmall", "BannerImage"));
                 }
                 return bannerImage.Image;
             }
