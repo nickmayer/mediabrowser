@@ -34,6 +34,18 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public string AspectRatio { get; set; }
 
+        [Persist]
+        public override string TagLine { get; set; }
+
+        [Persist]
+        public string Plot { get; set; }
+
+        public override string ShortDescription
+        {
+            get { return Plot; }
+            set { Plot = value; }
+        }
+
         public override string OfficialRating { get { return MpaaRating ?? ""; }}
     }
 }

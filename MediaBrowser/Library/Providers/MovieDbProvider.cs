@@ -219,6 +219,8 @@ namespace MediaBrowser.Library.Providers
                 if (movie.Overview != null)
                     movie.Overview = movie.Overview.Replace("\n\n", "\n");
 
+                movie.TagLine = doc.SafeGetString("//movie/tagline");
+
                 movie.ImdbRating = doc.SafeGetSingle("//movie/rating", -1, 10);
 
                 string release = doc.SafeGetString("//movie/released");

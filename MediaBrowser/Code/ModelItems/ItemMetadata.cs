@@ -176,6 +176,14 @@ namespace MediaBrowser.Library {
         public string OfficialRating
         {
             get { return baseItem.OfficialRating; }
+            set
+            {
+                if (baseItem.OfficialRating != value)
+                {
+                    baseItem.OfficialRating = value;
+                    FirePropertyChanged("OfficialRating");
+                }
+            }
         }
 
         public string AspectRatioString
@@ -407,8 +415,40 @@ namespace MediaBrowser.Library {
             }
         }
 
+        public string ShortDescription
+        {
+            get
+            {
+                return baseItem.ShortDescription;
+            }
+            set
+            {
+                if (baseItem.ShortDescription != value)
+                {
+                    baseItem.ShortDescription = value;
+                    FirePropertyChanged("ShortDescription");
+                }
+            }
+        }
 
-        public bool HasSubTitle {
+        public string TagLine
+        {
+            get
+            {
+                return baseItem.TagLine;
+            }
+            set
+            {
+                if (baseItem.TagLine != value)
+                {
+                    baseItem.TagLine = value;
+                    FirePropertyChanged("TagLine");
+                }
+            }
+        }
+
+        public bool HasSubTitle
+        {
             get {
                 return !string.IsNullOrEmpty(baseItem.SubTitle);
             }

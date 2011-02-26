@@ -200,6 +200,25 @@ namespace MediaBrowser.Library.Entities {
             {
                 return "None"; //will be implemented by sub-classes
             }
+            set { }
+        }
+
+        public virtual string ShortDescription
+        {
+            get
+            {
+                return ""; //will be implemented by sub-classes
+            }
+            set { }
+        }
+
+        public virtual string TagLine
+        {
+            get
+            {
+                return ""; //will be implemented by sub-classes
+            }
+            set { }
         }
 
         public bool ParentalAllowed { get { return Kernel.Instance.ParentalControls.Allowed(this); } }

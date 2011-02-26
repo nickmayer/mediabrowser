@@ -78,6 +78,9 @@ namespace MediaBrowser.Library.Providers
                 if (movie.Overview != null)
                     movie.Overview = movie.Overview.Replace("\n\n", "\n");
 
+                movie.TagLine = doc.SafeGetString("Title/TagLine");
+                movie.Plot = doc.SafeGetString("Title/Plot");
+
                 //if added date is in xml override the file/folder date
                 DateTime added = DateTime.MinValue;
                 DateTime.TryParse(doc.SafeGetString("Title/Added"), out added);
