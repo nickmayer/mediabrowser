@@ -114,7 +114,7 @@ namespace MediaBrowser.Library.Metadata {
                     if ((provider.IsSlow || provider.RequiresInternet) && fastOnly) continue;
                     if (provider.NeedsRefresh())
                     {
-                        //Logger.ReportInfo("Provider " + provider.GetType() + " reports need refresh");
+                        Logger.ReportInfo("Provider " + provider.GetType() + " reports need refresh");
                         return true;
                     }
                 } catch (Exception e) {

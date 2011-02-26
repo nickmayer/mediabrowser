@@ -96,6 +96,7 @@ namespace WebProxy {
                 {
                     if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info) && !info.Path.StartsWith(searchInfo.Path))
                     {
+                        Logger.ReportInfo(info.Path + " matched. Rating: " + info.Rating + " SearchRating: " + searchInfo.Rating);
                         foundTrailers.Add(info.Path);
                     }
                 }
