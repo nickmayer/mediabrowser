@@ -260,18 +260,24 @@ namespace MediaBrowser.Library.Providers
                         switch (audio.ToLower())
                         {
                             case "dts-es":
+                            case "dts-es matrix":
+                            case "dts-es discrete":
                                 movie.MediaInfo.AudioFormat = "DTS";
                                 movie.MediaInfo.AudioProfile = "ES";
                                 break;
                             case "dts-hd hra":
+                            case "dts-hd high resolution":
                                 movie.MediaInfo.AudioFormat = "DTS";
                                 movie.MediaInfo.AudioProfile = "HRA";
                                 break;
                             case "dts-hd ma":
+                            case "dts-hd master":
                                 movie.MediaInfo.AudioFormat = "DTS";
                                 movie.MediaInfo.AudioProfile = "MA";
                                 break;
                             case "dolby digital":
+                            case "dolby digital surround ex":
+                            case "dolby surround":
                                 movie.MediaInfo.AudioFormat = "AC-3";
                                 break;
                             case "dolby digital plus":
@@ -284,6 +290,8 @@ namespace MediaBrowser.Library.Providers
                             case "mp2":
                                 movie.MediaInfo.AudioFormat = "MPEG Audio";
                                 movie.MediaInfo.AudioProfile = "Layer 2";
+                                break;
+                            case "other":
                                 break;
                             default:
                                 movie.MediaInfo.AudioFormat = audio;
@@ -319,6 +327,7 @@ namespace MediaBrowser.Library.Providers
                 if (movie.MediaInfo.VideoBitRate == 0) movie.MediaInfo.VideoBitRate = doc.SafeGetInt32("Title/MediaInfo/Video/BitRate");
                 if (movie.MediaInfo.Height == 0) movie.MediaInfo.Height = doc.SafeGetInt32("Title/MediaInfo/Video/Height");
                 if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
+                if (string.IsNullOrEmpty(movie.MediaInfo.ScanType)) movie.MediaInfo.ScanType = doc.SafeGetString("Title/MediaInfo/Video/ScanType", "");
                 if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate","");
                 if (movie.MediaInfo.RunTime == 0)
                 {

@@ -38,6 +38,8 @@ namespace MediaBrowser.Library.Entities
         public string Subtitles = "";
         [Persist]
         public string VideoFPS = "";
+        [Persist]
+        public string ScanType = "";
 
         string SizeStr
         {
@@ -148,6 +150,31 @@ namespace MediaBrowser.Library.Entities
             {
                 if (Height > 0 && Width > 0)
                     return string.Format("{0}x{1}", this.Width, this.Height);
+                else
+                    return "";
+            }
+        }
+
+        public string ScanTypeString
+        {
+            get
+            {
+                if (this != Empty)
+                    return string.Format("{0}", this.ScanType);
+                else
+                    return "";
+            }
+        }
+        public string ScanTypeChar
+        {
+            get
+            {
+                if (this != Empty)
+                {
+                    if (this.ScanType == "Progressive") return "p";
+                    if (this.ScanType == "Interlaced") return "i";
+                    else return "";
+                }
                 else
                     return "";
             }
