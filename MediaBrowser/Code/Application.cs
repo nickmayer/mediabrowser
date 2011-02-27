@@ -511,8 +511,8 @@ namespace MediaBrowser
                     if (Kernel.Instance.ServiceConfigData.ForceRebuildInProgress)
                     {
                         MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                        ev.Dialog(CurrentInstance.StringData("ForcedRebuildDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
-                        return;
+                        ev.Dialog(CurrentInstance.StringData("ForcedRebuildDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 15, true);
+                        
                     }
                     //Check to see if this is the first time this version is run
                     string currentVersion = Kernel.Instance.Version.ToString();

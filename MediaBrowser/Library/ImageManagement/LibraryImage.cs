@@ -49,11 +49,58 @@ namespace MediaBrowser.Library.ImageManagement {
 
         Guid Id { get { return Path.ToLower().GetMD5(); } }
 
-        public virtual void Init(bool canBeProcessed, BaseItem item) {
+        Guid OldId { get { return Path.GetMD5(); } }
+
+        public virtual void Init(bool canBeProcessed, BaseItem item)
+        {
             this.item = item;
             this.canBeProcessed = canBeProcessed;
         }
-       
+
+        public bool MigrateFromOldID()
+        {
+            lock (Lock)
+            {
+                try
+                {
+                    var info = ImageCache.Instance.GetPrimaryImage(OldId);
+                    if (info != null)
+                    {
+                        try
+                        {
+                            var image = Image.FromFile(info.Path);
+                            if (image == null)
+                            {
+                                Logger.ReportError("Could not migrate image " + info.Path);
+                                return false;
+                            }
+                            ImageCache.Instance.CacheImage(Id, image);
+                            image.Dispose();
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            //this is okay - it may have already been migrated
+                            return false;
+                        }
+                        try
+                        {
+                            File.Delete(info.Path);
+                        }
+                        catch (Exception e)
+                        {
+                            //we tried...
+                            Logger.ReportException("Unable to delete old cache file " + info.Path, e);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Failed to migrate image " + this.Path, e);
+                    return false;
+                }
+                return true;
+            }
+        }
 
         bool loaded = false;
         private void EnsureLoaded() {

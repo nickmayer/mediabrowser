@@ -390,5 +390,22 @@ namespace MediaBrowser.Library.Entities {
                 ignore = this.BannerImage.GetLocalImagePath(); //and, finally, banner
             }
         }
+        public void MigrateAllImages()
+        {
+            if (this.PrimaryImage != null)
+            {
+                Logger.ReportInfo("Migrating primary image for " + Name );
+                    this.PrimaryImage.MigrateFromOldID(); 
+            }
+
+            foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in this.BackdropImages)
+            {
+                image.MigrateFromOldID(); 
+            }
+            if (this.BannerImage != null)
+            {
+                this.BannerImage.MigrateFromOldID(); 
+            }
+        }
     }
 }
