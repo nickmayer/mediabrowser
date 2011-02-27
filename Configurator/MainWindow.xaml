@@ -180,7 +180,7 @@
                         </Grid>
                 </Grid>
             </TabItem>
-                <TabItem Header="display/playback" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Collapsed" IsSelected="True">
+                <TabItem Header="display/playback" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Visible" IsSelected="True">
                     <Grid>
                         <GroupBox Header="General Display Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,35,0,0" Height="170" Name="groupBox1" Width="270">
                             <Grid>
