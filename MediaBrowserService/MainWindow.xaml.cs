@@ -494,8 +494,8 @@ namespace MediaBrowserService
             //kick off a manual refresh on a high-priority thread
             Thread manual = new Thread(new ThreadStart(() =>
             {
-                _config.ForceRebuildInProgress = true;
-                _config.Save();
+                //_config.ForceRebuildInProgress = true;
+                //_config.Save();
                 FullRefresh(true, options);
                 _config.ForceRebuildInProgress = false;
                 _config.Save();

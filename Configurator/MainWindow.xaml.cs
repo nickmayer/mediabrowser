@@ -806,7 +806,7 @@ sortorder: {2}
                     infoPanel.IsEnabled = false;
                     RefreshEntryPoints(false);
                 }
-            }            
+            }
         }
 
         private void btnChangeImage_Click(object sender, RoutedEventArgs e)

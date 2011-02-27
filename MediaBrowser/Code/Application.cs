@@ -640,7 +640,7 @@ namespace MediaBrowser
                         ev.Dialog(CurrentInstance.StringData("RebuildFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
                     }
                     Config.MBVersion = thisVersion;
-                    Application.CurrentInstance.Close();
+                    //Application.CurrentInstance.Close();
                     break;
             }
         }
