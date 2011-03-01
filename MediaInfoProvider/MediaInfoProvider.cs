@@ -73,7 +73,7 @@ namespace MediaInfoProvider
             if (video == null || !enabled) return;
             if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
-            if (!video.ContainsRippedMedia || video.MediaType == MediaType.DVD || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && video.MediaType == MediaType.BluRay))
+            if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && (video.MediaType == MediaType.BluRay || video.MediaType == MediaType.DVD)))
             {
 
                 using (new MediaBrowser.Util.Profiler("Media Info extraction"))
