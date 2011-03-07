@@ -97,7 +97,7 @@ namespace MediaBrowser.Library
                 }
                 catch (TimeoutException)
                 {
-                    Logger.ReportWarning("Unable to send command (may not be running).");
+                    Logger.ReportInfo("Unable to send command (may not be running).");
                     return false;
                 }
                 catch (Exception e)
@@ -164,13 +164,7 @@ namespace MediaBrowser.Library
 
         public static bool RestartService()
         {
-            if (SendCommandToService(IPCCommands.Shutdown))
-            {
-                //give it time to exit
-                Thread.Sleep(1000);
-                return StartService();
-            }
-            else return false;
+            return SendCommandToService(IPCCommands.Restart);
         }
 
         public static bool StartService()

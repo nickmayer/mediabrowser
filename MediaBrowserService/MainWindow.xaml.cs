@@ -153,15 +153,51 @@ namespace MediaBrowserService
             Shutdown();
         }
 
+        public void Restart()
+        {
+            if (_refreshRunning)
+            {
+                if (!(MessageBox.Show("The Media Browser Service needs to re-start but there is a refresh in progress.\n\n" +
+                    "Press OK to cancel the refresh and re-start now or Cancel to not shut down and allow the refresh to finish " +
+                    "(you will need to re-start the service manually).", "Re-Start", MessageBoxButton.OKCancel) == MessageBoxResult.OK))
+                {
+                    return;
+                }
+            }
+            //the below code doesn't appear to be necessary as we close down in time for the next instance to get the mutex
+            //first release our mutex so that we can start another instance of ourselves
+            //try
+            //{
+            //    if (_mutex != null)
+            //    {
+            //            _mutex.ReleaseMutex();
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Logger.ReportException("Unable to release mutex in restart", e);
+            //}
+
+            //now start another instance of ourselves
+            MBServiceController.StartService();
+            //and force close
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+            {
+                _forceClose = true;
+                Close();
+            }));
+        }
+
         public void Shutdown()
         {
-            //close the app, but wait for refresh to finish if it is going
+            //close - canceling any running refresh
             if (_refreshRunning)
             {
                 _refreshCanceled = true;
                 _forceClose = true;
                 _shutdown = true;
             }
+            
             else
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
