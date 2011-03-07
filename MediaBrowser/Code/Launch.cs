@@ -87,7 +87,6 @@ namespace MediaBrowser
 
                             app.GoToMenu();
                         }
-                        Thread.Sleep(5000); //hold our mutex a bit longer - to be sure everything is up and going
                         mutex.ReleaseMutex();
                     }
                     else
