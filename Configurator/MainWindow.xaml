@@ -381,13 +381,14 @@
 
                     <GroupBox Header="About Media Browser" Margin="220,265,20,20" Height="142" FontSize="14" VerticalAlignment="Top">
                     <Grid>
-                        <TextBlock Margin="10,10,0,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Left" Width="146"><Hyperlink NavigateUri="http://www.mediabrowser.tv" RequestNavigate="HandleRequestNavigate" Name="h5">www.mediabrowser.tv</Hyperlink></TextBlock>
-                        <TextBlock Margin="10,35,0,56.38" HorizontalAlignment="Left" Width="177">Visit the official website...</TextBlock>
-                        <TextBlock Margin="10,0,0,31.38" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="95"><Hyperlink NavigateUri="http://www.mediabrowser.tv/donate" TextDecorations="None" RequestNavigate="HandleRequestNavigate" Name="h6"><Image Source="./Images/btn_donate.png"/></Hyperlink></TextBlock>
+                        <TextBlock Margin="10,29,0,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Left" Width="146"><Hyperlink NavigateUri="http://www.mediabrowser.tv" RequestNavigate="HandleRequestNavigate" Name="h5">www.mediabrowser.tv</Hyperlink></TextBlock>
+                        <TextBlock Margin="6,10,0,0" HorizontalAlignment="Left" Width="177" Height="25" VerticalAlignment="Top">Visit the official website...</TextBlock>
+                        <TextBlock Margin="28,57,0,34" HorizontalAlignment="Left" Width="95"><Hyperlink NavigateUri="http://www.mediabrowser.tv/donate" TextDecorations="None" RequestNavigate="HandleRequestNavigate" Name="h6"><Image Source="./Images/btn_donate.png"/></Hyperlink></TextBlock>
                         <TextBlock Margin="10,85,10,0" VerticalAlignment="Top" Height="25">If you like Media Browser, please consider making a donation!</TextBlock>
                                 <Label Margin="0,5,165,0" Name="label9" HorizontalAlignment="Right" Width="120" Height="27.38" VerticalAlignment="Top">Supporter Key</Label>
                                 <TextBox Margin="0,31,31,0" Name="tbxSupporterKey" ToolTip="Paste the key from the email you received when you donated" Height="22.38" VerticalAlignment="Top" HorizontalAlignment="Right" Width="254" />
                                 <Button Margin="0,59,31,0" Name="btnValidateKey" HorizontalAlignment="Right" Width="75" Height="22.38" VerticalAlignment="Top" Click="btnValidateKey_Click">Save</Button>
+                                <TextBlock Margin="216,0,134,31" Height="25.38" VerticalAlignment="Bottom"><Hyperlink Name="lostKey" NavigateUri="http://www.mediabrowser.tv/lost-key" RequestNavigate="HandleRequestNavigate">Retrieve My Key</Hyperlink></TextBlock>
                             </Grid>
                     </GroupBox>
                 </Grid>
