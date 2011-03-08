@@ -73,7 +73,13 @@ namespace Configurator.Code {
         public virtual bool Installed
         {
             get { return true; }
-            set {}
+            set { }
+        }
+
+        public virtual bool IsLatestVersion
+        {
+            get { return true; }
+            set { }
         }
 
         public virtual bool UpdateAvail

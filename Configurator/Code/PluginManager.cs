@@ -91,6 +91,16 @@ namespace Configurator.Code {
                     Logger.ReportWarning("Duplicate plugin version in main repo: " + plugin.Name + " v" + plugin.Version);
                 }
             }
+            //now go back through and indicate which one is the latest version
+            foreach (var plugin in availablePlugins)
+            {
+                string key = plugin.Name + System.IO.Path.GetFileName(plugin.Filename);
+                System.Version v;
+                if (latestVersions.TryGetValue(key, out v))
+                {
+                    plugin.IsLatestVersion = (plugin.Version == v) ? true : false;
+                }
+            }
         }
 
         private void RefreshBackedUpPlugins()
