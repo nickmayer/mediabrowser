@@ -92,6 +92,7 @@ namespace MediaBrowser
                     else
                     {
                         //another instance running and in initialization - just blow out of here
+                        Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.CloseApplication();
                         return;
                     }
 

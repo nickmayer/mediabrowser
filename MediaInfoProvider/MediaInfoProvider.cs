@@ -19,7 +19,8 @@ using MediaBrowser.Library.Threading;
 namespace MediaInfoProvider
 {
     [SlowProvider]
-    [SupportedType(typeof(Video))]
+    [SupportedType(typeof(Movie))]
+    [SupportedType(typeof(Episode))]
     class MediaInfoProvider : BaseMetadataProvider
     {
         [DllImport("kernel32")]

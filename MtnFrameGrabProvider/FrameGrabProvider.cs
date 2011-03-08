@@ -11,7 +11,8 @@ using MediaBrowser.Library;
 namespace MtnFrameGrabProvider {
     // we mark this as slow, so we ensure it only runs at the end of the chain
     [SlowProvider]
-    [SupportedType(typeof(Video))]
+    [SupportedType(typeof(Movie))]
+    [SupportedType(typeof(Episode))]
     class FrameGrabProvider : BaseMetadataProvider {
         static MediaType[] supportedMediaTypes = new MediaType[] { MediaType.Avi, MediaType.Mkv, MediaType.Mpg, MediaType.Unknown };
 
