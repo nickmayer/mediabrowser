@@ -73,5 +73,16 @@ namespace MediaBrowser.Library.Entities {
                 else return "None";
             }
         }
+
+        public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options)
+        {
+            bool changed = base.RefreshMetadata(options);
+            if (this.Series != null && this.Series.BannerImage != null && (options & MediaBrowser.Library.Metadata.MetadataRefreshOptions.Force) == MediaBrowser.Library.Metadata.MetadataRefreshOptions.Force)
+            {
+                //we cleared our our series banner image - re-cache it
+                var ignore = this.Series.BannerImage.GetLocalImagePath();
+            }
+            return changed;
+        }
     }
 }
