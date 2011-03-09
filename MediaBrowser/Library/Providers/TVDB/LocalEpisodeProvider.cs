@@ -150,18 +150,24 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     switch (audio.ToLower())
                     {
                         case "dts-es":
+                        case "dts-es matrix":
+                        case "dts-es discrete":
                             episode.MediaInfo.AudioFormat = "DTS";
                             episode.MediaInfo.AudioProfile = "ES";
                             break;
                         case "dts-hd hra":
+                        case "dts-hd high resolution":
                             episode.MediaInfo.AudioFormat = "DTS";
                             episode.MediaInfo.AudioProfile = "HRA";
                             break;
                         case "dts-hd ma":
+                        case "dts-hd master":
                             episode.MediaInfo.AudioFormat = "DTS";
                             episode.MediaInfo.AudioProfile = "MA";
                             break;
                         case "dolby digital":
+                        case "dolby digital surround ex":
+                        case "dolby surround":
                             episode.MediaInfo.AudioFormat = "AC-3";
                             break;
                         case "dolby digital plus":
@@ -174,6 +180,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         case "mp2":
                             episode.MediaInfo.AudioFormat = "MPEG Audio";
                             episode.MediaInfo.AudioProfile = "Layer 2";
+                            break;
+                        case "other":
                             break;
                         default:
                             episode.MediaInfo.AudioFormat = audio;
@@ -209,6 +217,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
             if (episode.MediaInfo.VideoBitRate == 0) episode.MediaInfo.VideoBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/BitRate");
             if (episode.MediaInfo.Height == 0) episode.MediaInfo.Height = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Height");
             if (episode.MediaInfo.Width == 0) episode.MediaInfo.Width = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Width");
+            if (string.IsNullOrEmpty(episode.MediaInfo.ScanType)) episode.MediaInfo.ScanType = metadataDoc.SafeGetString("Item/MediaInfo/Video/ScanType", "");
             if (string.IsNullOrEmpty(episode.MediaInfo.VideoFPS)) episode.MediaInfo.VideoFPS = metadataDoc.SafeGetString("Item/MediaInfo/Video/FrameRate", "");
             if (episode.MediaInfo.RunTime == 0) episode.MediaInfo.RunTime = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Duration");
             if (episode.MediaInfo.RunTime > 0) episode.RunningTime = episode.MediaInfo.RunTime;

@@ -153,15 +153,51 @@ namespace MediaBrowserService
             Shutdown();
         }
 
+        public void Restart()
+        {
+            if (_refreshRunning)
+            {
+                if (!(MessageBox.Show("The Media Browser Service needs to re-start but there is a refresh in progress.\n\n" +
+                    "Press OK to cancel the refresh and re-start now or Cancel to not shut down and allow the refresh to finish " +
+                    "(you will need to re-start the service manually).", "Re-Start", MessageBoxButton.OKCancel) == MessageBoxResult.OK))
+                {
+                    return;
+                }
+            }
+            //the below code doesn't appear to be necessary as we close down in time for the next instance to get the mutex
+            //first release our mutex so that we can start another instance of ourselves
+            //try
+            //{
+            //    if (_mutex != null)
+            //    {
+            //            _mutex.ReleaseMutex();
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Logger.ReportException("Unable to release mutex in restart", e);
+            //}
+
+            //now start another instance of ourselves
+            MBServiceController.StartService();
+            //and force close
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+            {
+                _forceClose = true;
+                Close();
+            }));
+        }
+
         public void Shutdown()
         {
-            //close the app, but wait for refresh to finish if it is going
+            //close - canceling any running refresh
             if (_refreshRunning)
             {
                 _refreshCanceled = true;
                 _forceClose = true;
                 _shutdown = true;
             }
+            
             else
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
@@ -479,23 +515,23 @@ namespace MediaBrowserService
         public void ForceRebuild()
         {
             //force a re-build of the entire library - used when new version requires cache clear
-            //first create options - everything but people which just takes too long
+            //first create options - just the items as we will attempt to migrate the old images
             var options = new ServiceRefreshOptions() 
             { 
                 ClearCacheOption = true,
-                ClearImageCacheOption = true, 
-                IncludeImagesOption = true, 
-                IncludeGenresOption = true, 
-                IncludeStudiosOption = true,
-                IncludeYearOption = true,
+                ClearImageCacheOption = false, 
+                IncludeImagesOption = false, 
+                IncludeGenresOption = false, 
+                IncludeStudiosOption = false,
+                IncludeYearOption = false,
                 MigrateOption = true
             };
 
             //kick off a manual refresh on a high-priority thread
             Thread manual = new Thread(new ThreadStart(() =>
             {
-                _config.ForceRebuildInProgress = true;
-                _config.Save();
+                //_config.ForceRebuildInProgress = true;
+                //_config.Save();
                 FullRefresh(true, options);
                 _config.ForceRebuildInProgress = false;
                 _config.Save();
@@ -639,7 +675,7 @@ namespace MediaBrowserService
         
         bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, ServiceRefreshOptions manualOptions)
         {
-            int phases = manualOptions.AnyImageOptionsSelected ? 3 : 2;
+            int phases = manualOptions.AnyImageOptionsSelected || manualOptions.MigrateOption ? 3 : 2;
             double totalIterations = folder.AllRecursiveChildren.Count() * phases;
             if (totalIterations == 0) return true; //nothing to do
 
@@ -683,7 +719,7 @@ namespace MediaBrowserService
                 })) return false;
             }
 
-            if (manualOptions.AnyImageOptionsSelected)
+            if (manualOptions.AnyImageOptionsSelected || manualOptions.MigrateOption)
             {
                 processedItems.Clear();
                 using (new Profiler(Kernel.Instance.GetString("ImageRefresh")))
@@ -705,11 +741,15 @@ namespace MediaBrowserService
                                 Logger.ReportInfo("Caching all images for " + item.Name + ". Stored primary image size: " + s.Width + "x" + s.Height);
                                 item.ReCacheAllImages(s);
                             }
+                            if (manualOptions.MigrateOption) //migrate main images
+                            {
+                                item.MigrateAllImages();
+                            }
                             // optionally cause genre, poeple, year and studio images to cache as well
                             if (item is Show)
                             {
                                 var show = item as Show;
-                                if (manualOptions.IncludeGenresOption && show.Genres != null)
+                                if ((manualOptions.IncludeGenresOption || manualOptions.MigrateOption) && show.Genres != null)
                                 {
                                     foreach (var genre in show.Genres)
                                     {
@@ -719,43 +759,76 @@ namespace MediaBrowserService
                                             g.RefreshMetadata();
                                             if (g.PrimaryImage != null)
                                             {
-                                                Logger.ReportInfo("Caching image for genre: " + genre);
-                                                g.PrimaryImage.ClearLocalImages();
-                                                g.PrimaryImage.GetLocalImagePath();
+                                                if (manualOptions.IncludeGenresOption)
+                                                {
+                                                    Logger.ReportInfo("Caching image for genre: " + genre);
+                                                    g.PrimaryImage.ClearLocalImages();
+                                                    g.PrimaryImage.GetLocalImagePath();
+                                                }
+                                                if (manualOptions.MigrateOption)
+                                                {
+                                                    Logger.ReportInfo("Migrating image for genre: " + genre);
+                                                    g.PrimaryImage.MigrateFromOldID();
+                                                }
+                                                  
                                             }
                                             foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in g.BackdropImages)
                                             {
-                                                image.GetLocalImagePath();
+                                                if (manualOptions.IncludeGenresOption)
+                                                {
+                                                    image.GetLocalImagePath();
+                                                }
+                                                if (manualOptions.MigrateOption)
+                                                {
+                                                    image.MigrateFromOldID();
+                                                }
                                             }
                                             genresProcessed.Add(genre);
                                         }
                                     }
                                 }
-                                if (manualOptions.IncludeStudiosOption && show.Studios != null)
+                                if ((manualOptions.IncludeStudiosOption || manualOptions.MigrateOption) && show.Studios != null)
                                 {
                                     foreach (var studio in show.Studios)
                                     {
                                         if (!studiosProcessed.Contains(studio))
                                         {
-                                            Logger.ReportInfo("Caching image for studio: " + studio);
-                                            Studio st = Studio.GetStudio(studio);
-                                            st.RefreshMetadata();
-                                            if (st.PrimaryImage != null)
-                                            {
                                                 Logger.ReportInfo("Caching image for studio: " + studio);
-                                                st.PrimaryImage.ClearLocalImages();
-                                                st.PrimaryImage.GetLocalImagePath();
-                                            }
+                                                Studio st = Studio.GetStudio(studio);
+                                                st.RefreshMetadata();
+                                                if (st.PrimaryImage != null)
+                                                {
+                                                    if (manualOptions.IncludeStudiosOption)
+                                                    {
+                                                        Logger.ReportInfo("Caching image for studio: " + studio);
+                                                        st.PrimaryImage.ClearLocalImages();
+                                                        st.PrimaryImage.GetLocalImagePath();
+                                                    }
+                                                    if (manualOptions.MigrateOption)
+                                                    {
+                                                        Logger.ReportInfo("Migrating image for studio: " + studio);
+                                                        st.PrimaryImage.MigrateFromOldID();
+                                                    }
+                                                }
+                                                
+                                                
                                             foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in st.BackdropImages)
                                             {
-                                                image.ClearLocalImages();
-                                                image.GetLocalImagePath();
+                                                if (manualOptions.IncludeStudiosOption)
+                                                {
+                                                    image.ClearLocalImages();
+                                                    image.GetLocalImagePath();
+                                                }
+                                                if (manualOptions.MigrateOption)
+                                                {
+                                                    image.MigrateFromOldID();
+                                                }
                                             }
                                             studiosProcessed.Add(studio);
                                         }
                                     }
                                 }
-                                if (manualOptions.IncludePeopleOption && show.Actors != null)
+                                if ((manualOptions.IncludePeopleOption || manualOptions.MigrateOption) && show.Actors != null)
                                 {
                                     foreach (var actor in show.Actors)
                                     {
@@ -765,14 +838,30 @@ namespace MediaBrowserService
                                             p.RefreshMetadata();
                                             if (p.PrimaryImage != null)
                                             {
-                                                Logger.ReportInfo("Caching image for person: " + actor.Name);
-                                                p.PrimaryImage.ClearLocalImages();
-                                                p.PrimaryImage.GetLocalImagePath();
+                                                if (manualOptions.IncludePeopleOption)
+                                                {
+                                                    Logger.ReportInfo("Caching image for person: " + actor.Name);
+                                                    p.PrimaryImage.ClearLocalImages();
+                                                    p.PrimaryImage.GetLocalImagePath();
+                                                }
+                                                if (manualOptions.MigrateOption)
+                                                {
+                                                    Logger.ReportInfo("Migrating image for person: " + actor.Name);
+                                                    p.PrimaryImage.MigrateFromOldID();
+                                                }
+                                                    
                                             }
                                             foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in p.BackdropImages)
                                             {
-                                                image.ClearLocalImages();
-                                                image.GetLocalImagePath();
+                                                if (manualOptions.IncludePeopleOption)
+                                                {
+                                                    image.ClearLocalImages();
+                                                    image.GetLocalImagePath();
+                                                }
+                                                if (manualOptions.MigrateOption)
+                                                {
+                                                    image.MigrateFromOldID();
+                                                }
                                             }
                                             peopleProcessed.Add(actor.Name);
                                         }

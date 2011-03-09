@@ -29,15 +29,32 @@ namespace Configurator {
             InitializeComponent();
             progress.Minimum = 0;
             progress.Maximum = 100;
+            FilterPluginList();
+        }
+
+        private void PluginFilter(object sender, FilterEventArgs e)
+        {
+            var plugin = e.Item as IPlugin;
+            e.Accepted = plugin.IsLatestVersion;
+        }
+
+        private void FilterPluginList()
+        {
             CollectionViewSource src = new CollectionViewSource();
             src.Source = PluginManager.Instance.AvailablePlugins;
             src.GroupDescriptions.Add(new PropertyGroupDescription("PluginClass"));
-            src.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
             src.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
             src.SortDescriptions.Add(new SortDescription("Version", ListSortDirection.Descending));
-
+            if (cbxShowAll.IsChecked == true)
+            {
+                src.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
+            }
+            else
+            {
+                src.Filter += PluginFilter;
+            }
             pluginList.ItemsSource = src.View;
-            pluginList.SelectedItem = null; //since we're collapsed, come up with no selectio
+            pluginList.SelectedItem = null; //since we're collapsed, come up with no selection
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
@@ -167,6 +184,11 @@ namespace Configurator {
             //un-select in case current item was collapsed from view
             pluginList.SelectedIndex = -1;
 
+        }
+
+        private void cbxShowAll_Checked(object sender, RoutedEventArgs e)
+        {
+            FilterPluginList();
         }
 
 

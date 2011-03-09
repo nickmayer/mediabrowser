@@ -54,7 +54,7 @@
 				<MenuItem Header="Sources..." Click="MenuItem_Click"/> 
 			</MenuItem>
 		</Menu>
-        <Label Height="28" Margin="0,0,20,60" Name="MessageLine" VerticalAlignment="Bottom" FontWeight="Bold" HorizontalAlignment="Right" Width="396">Select a Plug-in to Add</Label>
+        <Label Height="28" Margin="359,0,12,22" Name="MessageLine" VerticalAlignment="Bottom" FontWeight="Bold">Select a Plug-in to Add</Label>
 		<Label Margin="20,35,0,0" VerticalAlignment="Top" Height="28" Content="Choose a Plug-in from the list below" HorizontalAlignment="Left" FontSize="12" FontWeight="Bold" />
 		<Button Margin="150,0,0,22" Content="Install" Height="32" VerticalAlignment="Bottom" Click="InstallClick" Name="InstallButton" HorizontalAlignment="Left" Width="90" />
         <ListBox ItemTemplate="{DynamicResource PluginListTemplate}" IsSynchronizedWithCurrentItem="True" Margin="20,85,0,60" Width="316" HorizontalAlignment="Left" Name="pluginList" SelectionChanged="pluginList_SelectionChanged" FontSize="12" ToolTip="Items in bold are installed on your system." >
@@ -94,7 +94,7 @@
 
                                                 <TextBlock Grid.Column="1" Text="{Binding Path=Name}" Margin="3.5,0" />
                                                 <!--<TextBlock Grid.Column="2" Text="Total:" />-->
-                                                <TextBlock Grid.Column="3" Text="{Binding Path=ItemCount}" TextAlignment="Right" Margin="0,0,11,0" Visibility="{Binding Path=IsBottomLevel, Converter={StaticResource booleanToVisibilityConverter }, ConverterParameter=Inverted}" />
+                                                <TextBlock Grid.Column="3" Text="{Binding Path=ItemCount}" TextAlignment="Right" Margin="0,0,11,0"  />
                                                 
                                             </Grid>
 
@@ -119,6 +119,6 @@
         <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="516,0,469,56" Name="reqdMBVersion" Height="28" VerticalAlignment="Bottom" FontSize="14" />
         <TextBlock Height="107" HorizontalAlignment="Right" Margin="200,250,326,0" Name="txtNoSelection" VerticalAlignment="Top" Width="300" Text="Please Select a Plug-in" FontSize="22" Foreground="LightGray" FontWeight="Bold" TextWrapping="Wrap" TextAlignment="Center" />
         <WebBrowser Name="RichDescFrame" Margin="359,35,20,120"  Navigating="RichDescFrame_Navigating" LoadCompleted="RichDescFrame_LoadCompleted" Visibility="Hidden"/>
-        <Label Height="28" HorizontalAlignment="Left" Margin="31,51,0,0" Name="label1" VerticalAlignment="Top" Width="242">(When multiple versions select the latest)</Label>
+        <CheckBox Height="16" HorizontalAlignment="Left" Margin="37,63,0,0" Name="cbxShowAll" VerticalAlignment="Top" Width="181" ToolTip="If not checked, only the latest version of each plugin will appear in the list." Checked="cbxShowAll_Checked" Unchecked="cbxShowAll_Checked">Show All Versions</CheckBox>
     </Grid>
 </Window>

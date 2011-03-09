@@ -29,6 +29,7 @@ namespace MediaBrowser.Library.Plugins {
         string PluginClass { get; }
         bool UpdateAvail { get; set; }
         bool Installed { get; set; }
+        bool IsLatestVersion { get; set; }
         string ListDisplayString { get; }
     }
 

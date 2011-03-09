@@ -130,8 +130,14 @@ namespace MediaBrowser.Library.Plugins {
 
         public bool Installed
         {
-            get { return pluginInterface.InstallGlobally; }
+            get { return pluginInterface.Installed; }
             set { pluginInterface.Installed = value; }
+        }
+
+        public bool IsLatestVersion
+        {
+            get { return pluginInterface.IsLatestVersion; }
+            set { pluginInterface.IsLatestVersion = value; }
         }
 
         public bool UpdateAvail

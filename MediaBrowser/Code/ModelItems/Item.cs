@@ -231,7 +231,7 @@ namespace MediaBrowser.Library
             get
             {
 
-                return Helper.GetMediaInfoImage("HDType_" + this.HDType.ToString());
+                return Helper.GetMediaInfoImage("HDType_" + this.HDType.ToString() + this.MediaInfo.ScanTypeChar);
             }
         }
 

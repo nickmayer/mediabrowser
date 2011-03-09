@@ -19,7 +19,8 @@ using MediaBrowser.Library.Threading;
 namespace MediaInfoProvider
 {
     [SlowProvider]
-    [SupportedType(typeof(Video))]
+    [SupportedType(typeof(Movie))]
+    [SupportedType(typeof(Episode))]
     class MediaInfoProvider : BaseMetadataProvider
     {
         [DllImport("kernel32")]
@@ -73,7 +74,7 @@ namespace MediaInfoProvider
             if (video == null || !enabled) return;
             if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
-            if (!video.ContainsRippedMedia || video.MediaType == MediaType.DVD || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && video.MediaType == MediaType.BluRay))
+            if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && (video.MediaType == MediaType.BluRay || video.MediaType == MediaType.DVD)))
             {
 
                 using (new MediaBrowser.Util.Profiler("Media Info extraction"))
@@ -83,12 +84,12 @@ namespace MediaInfoProvider
                         Logger.ReportInfo("Mediainfo not scanning known bad file: "+filename);
                         return;
                     }
-                    int timeout = Kernel.LoadContext == MBLoadContext.Core ? 1000 : Plugin.ServiceTimeout; //only allow 1 second in core but configurable for service
+                    int timeout = Kernel.LoadContext == MBLoadContext.Core ? 30000 : Plugin.ServiceTimeout; //only allow 30 seconds in core but configurable for service
                     if (filename != null)
                     {
                         try
                         {
-                            Async.RunWithTimeout(() => video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename)), timeout);
+                            Async.RunWithTimeout(() => video.MediaInfo = Merge(video.MediaInfo, GetMediaInfo(filename,video.MediaType)), timeout);
                         }
                         catch (TimeoutException)
                         {
@@ -134,6 +135,7 @@ namespace MediaInfoProvider
             if (original.VideoBitRate == 0) original.VideoBitRate = acquired.VideoBitRate;
             if (original.VideoCodec == "") original.VideoCodec = acquired.VideoCodec;
             if (original.VideoFPS == "") original.VideoFPS = acquired.VideoFPS;
+            if (original.ScanType == "") original.ScanType = acquired.ScanType;
             if (original.Width == 0) original.Width = acquired.Width;
             return original;
         }
@@ -221,15 +223,17 @@ namespace MediaInfoProvider
         }
 
 
-    private MediaInfoData GetMediaInfo(string location)
+    private MediaInfoData GetMediaInfo(string location, MediaType mediaType)
         {
-            Logger.ReportInfo("getting media info from " + location);
+            Logger.ReportInfo("Getting media info from " + location);
             MediaInfo mediaInfo = new MediaInfo();
             mediaInfo.Option("ParseSpeed", "0.2");
             int i = mediaInfo.Open(location);
             MediaInfoData mediaInfoData = null;
             if (i != 0)
             {
+                string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
+                string scanType = mediaInfo.Get(StreamKind.Video, 0, "ScanType");
                 int width;
                 Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
                 int height;
@@ -238,12 +242,10 @@ namespace MediaInfoProvider
                 Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
                
                 int audioBitRate;
-                string aBitRate;
-                int ABindex = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").IndexOf(" /");
+                string aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
+                int ABindex = aBitRate.IndexOf(" /");
                 if (ABindex > 0)
-                    aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").Remove(ABindex);
-                else
-                    aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
+                    aBitRate = aBitRate.Remove(ABindex);
                 Int32.TryParse(aBitRate, out audioBitRate);
 
                 int runTime;
@@ -251,23 +253,20 @@ namespace MediaInfoProvider
                 int streamCount;
                 Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
 
-                string audioChannels;
-                int ACindex = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").IndexOf(" /");                
+                string audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
+                int ACindex = audioChannels.IndexOf(" /");                
                 if (ACindex > 0)
-                    audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").Remove(ACindex);
-                else
-                    audioChannels = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
+                    audioChannels = audioChannels.Remove(ACindex);
 					
                 string audioLanguages = mediaInfo.Get(StreamKind.General, 0, "Audio_Language_List");
-                string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
+                
                 string videoFrameRate = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
 
-                string audioProfile;
-                int APindex = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").IndexOf(" /");
-                if (APindex > 0)                
-                    audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").Remove(APindex);                
-                else
-                    audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile");
+                string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile");
+                int APindex = audioProfile.IndexOf(" /");
+                if (APindex > 0)
+                    audioProfile = audioProfile.Remove(APindex);
+                
 
 
                 mediaInfoData = new MediaInfoData
@@ -286,12 +285,42 @@ namespace MediaInfoProvider
                     AudioProfile = audioProfile.Trim(),
                     VideoFPS = videoFrameRate,
                     AudioLanguages = audioLanguages,
-                    Subtitles = subtitles
+                    Subtitles = subtitles,
+                    ScanType = scanType
                 };
             }
             else
             {
                 Logger.ReportInfo("Could not extract media information from " + location);
+            }
+            if (mediaType == MediaType.DVD && i != 0)
+            {
+                mediaInfo.Close();
+                location = location.Replace("0.IFO", "1.vob");
+                Logger.ReportInfo("Getting additional media info from " + location);
+                mediaInfo.Option("ParseSpeed", "0.0");
+                i = mediaInfo.Open(location);
+                if (i != 0)
+                {
+                    int videoBitRate;
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
+
+                    int audioBitRate;
+                    string aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
+                    int ABindex = aBitRate.IndexOf(" /");
+                    if (ABindex > 0)
+                        aBitRate = aBitRate.Remove(ABindex);
+                    Int32.TryParse(aBitRate, out audioBitRate);
+                    string scanType = mediaInfo.Get(StreamKind.Video, 0, "ScanType");
+
+                    mediaInfoData.AudioBitRate = audioBitRate;
+                    mediaInfoData.VideoBitRate = videoBitRate;
+                    mediaInfoData.ScanType = scanType;
+                }
+                else
+                {
+                    Logger.ReportInfo("Could not extract additional media info from " + location);
+                }
             }
             mediaInfo.Close();
             return mediaInfoData;

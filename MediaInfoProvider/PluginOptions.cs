@@ -10,7 +10,7 @@ namespace MediaInfoProvider
 {
     public class PluginOptions : PluginConfigurationOptions
     {
-        [Label("Allow BD Rips (service)")]
+        [Label("Allow Rips  (service)")]
         public bool AllowBDRips = false;
 
         [Label("Timeout (ms)")]

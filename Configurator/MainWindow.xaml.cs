@@ -806,7 +806,7 @@ sortorder: {2}
                     infoPanel.IsEnabled = false;
                     RefreshEntryPoints(false);
                 }
-            }            
+            }
         }
 
         private void btnChangeImage_Click(object sender, RoutedEventArgs e)
@@ -1417,8 +1417,8 @@ sortorder: {2}
         private void hdrBasic_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrBasic);
-            cacheTab.Visibility = externalPlayersTab.Visibility = displayTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = helpTab.Visibility = Visibility.Collapsed;
-            mediacollectionTab.Visibility = podcastsTab.Visibility = plugins.Visibility = Visibility.Visible;
+            cacheTab.Visibility = externalPlayersTab.Visibility = extendersTab.Visibility = parentalControlTab.Visibility = helpTab.Visibility = Visibility.Collapsed;
+            mediacollectionTab.Visibility = podcastsTab.Visibility = displayTab.Visibility = plugins.Visibility = Visibility.Visible;
         }
 
         private void hdrAdvanced_MouseDown(object sender, MouseButtonEventArgs e)

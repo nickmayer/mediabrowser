@@ -12,6 +12,7 @@ namespace MediaBrowser.Library
     public static class IPCCommands
     {
         public const string Shutdown = "shutdown";
+        public const string Restart = "restart";
         public const string ReloadKernel = "reloadkernel";
         public const string ReloadItems = "reloaditems";
         public const string CloseConnection = "closeconnection";

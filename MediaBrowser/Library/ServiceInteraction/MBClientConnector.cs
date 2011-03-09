@@ -107,6 +107,7 @@ namespace MediaBrowser.Library
                                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
                                 break;
                             case "activate":
+                                Logger.ReportInfo("Asked to activate by another process..");
                                 //if we were in an entrypoint and we just got told to activate - we need to re-load and go to real root
                                 if (Application.CurrentInstance.IsInEntryPoint)
                                 {
