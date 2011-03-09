@@ -139,7 +139,9 @@
 
       <IntRangedValue Name="BackdropRotationInterval" Value="[Application.Config.BackdropRotationInterval]" MaxValue="15" MinValue="1" Step="1"/>
       <RangedValue Name="BackdropTransitionInterval" Value="[Application.Config.BackdropTransitionInterval]" MaxValue="3" MinValue=".1" Step=".1"/>
+      <IntRangedValue Name="BackdropLoadDelay" Value="[Application.Config.BackdropLoadDelay]" MaxValue="1000" MinValue="300" Step="10"/>
       <BooleanChoice Name="AutoScrollText" Value="[Application.Config.AutoScrollText]" />
+      
 
       <ScrollingData Name="SD" BeginPadding="150" EndPadding="150"/>
       <Inset Name="SMargin" Inset="10,0,0,0" />
@@ -409,6 +411,7 @@
 
       <Binding Source="[BackdropRotationInterval.Value]" Target="[Config.BackdropRotationInterval]" />
       <Binding Source="[BackdropTransitionInterval.Value]" Target="[Config.BackdropTransitionInterval]" />
+      <Binding Source="[BackdropLoadDelay.Value]" Target="[Config.BackdropLoadDelay]" />
       <Binding Source="[AutoScrollText.Value]" Target="[Config.AutoScrollText]" />
 
 
@@ -661,6 +664,7 @@
                   <me:TextHeader Text="[Application.LocalStrings.#BackdropSettingsConfig!cor:String]" />
                   <ss:SimpleSpinner  Label="[Application.LocalStrings.#BackdropRotationIntervalConfig!cor:String]" Model="[BackdropRotationInterval]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                   <ss:SimpleSpinner  Label="[Application.LocalStrings.#BackdropTransitionIntervalConfig!cor:String]" Model="[BackdropTransitionInterval]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
+                  <ss:SimpleSpinner  Label="[Application.LocalStrings.#BackdropLoadDelayConfig!cor:String]" Model="[BackdropLoadDelay]" FocusItem="[FocusItem]"  Margins="[CMargin]" Font="font://f:CP_ConfigItemFont" ValueFont="font://f:CP_ConfigItemFont"  />
                   <cb:CheckBox Label="[Application.LocalStrings.#ShowFanArtonViewsConfig!cor:String]" Checked="[ShowBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
                   <cb:CheckBox Padding="40,0,0,0" Label="[Application.LocalStrings.#RotateBackdropConfig!cor:String]" Checked="[RotateBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>
                   <cb:CheckBox Padding="40,0,0,0" Label="[Application.LocalStrings.#RandomizeBackdropConfig!cor:String]" Checked="[RandomizeBackdrop]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="font://f:CP_ConfigItemFont"/>

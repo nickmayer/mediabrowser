@@ -736,6 +736,12 @@ namespace MediaBrowser
             get { return this.data.BackdropTransitionInterval; }
             set { if (this.data.BackdropTransitionInterval != value) { this.data.BackdropTransitionInterval = (float)Math.Round(value, 1); Save(); FirePropertyChanged("BackdropTransitionInterval"); } }
         }
+
+        public int BackdropLoadDelay
+        {
+            get { return this.data.BackdropLoadDelay; }
+            set { if (this.data.BackdropLoadDelay != value) { this.data.BackdropLoadDelay = value; Save(); FirePropertyChanged("BackdropLoadDelay"); } }
+        }
         
         public int FullRefreshInterval
         {
