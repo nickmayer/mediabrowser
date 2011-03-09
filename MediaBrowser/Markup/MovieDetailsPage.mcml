@@ -37,13 +37,6 @@
             </LayoutInput>
           </vd:ViewMovieDefault>
 
-          <!-- Background brightening (creates the darker strips on top/bottom -->
-          <ColorFill Content="White" Alpha="0.1">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,.0" Top="Parent,0,130" Bottom="Parent,1,-80" Right="Parent,1"/>
-            </LayoutInput>
-          </ColorFill>
-
           <Graphic Name="MainBG" Content="image://i:Background" Margins="-50,-20,-150,-20" Layout="Fill"/>
 
         </Children>

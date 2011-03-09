@@ -80,6 +80,7 @@ namespace MediaBrowser.Library.Localization
         public string UpdateLibraryConfigDesc = "Update information on the items in your library.";
         public string BackdropRotationIntervalConfigDesc = "Seconds between Backdrop Rotations.";
         public string BackdropTransitionIntervalConfigDesc = "Fade in seconds for the backdrop transition animation.";
+        public string BackdropLoadDelayConfigDesc = "Time to wait before loading initial backdrop, in milliseconds.";
         public string AutoScrollTextConfigDesc = "Turn on Automatically Scrolling Overviews.";
         public string SortYearsAscConfigDesc = "When sorting by 'year' order from lowest to highest (default is highest to lowest).";
         public string AutoValidateConfigDesc = "Automatically validate and refresh while navigating. WARNING. Turning this off may cause the library to be inaccurate and you may need to manually refresh.";
@@ -160,6 +161,7 @@ namespace MediaBrowser.Library.Localization
         public string BackdropSettingsConfig = "Backdrop Settings";
         public string BackdropRotationIntervalConfig = "Rotation Time";
         public string BackdropTransitionIntervalConfig = "Transition Time";
+        public string BackdropLoadDelayConfig = "Load Delay";
         public string AutoScrollTextConfig = "Auto Scroll Overview";
         public string SortYearsAscConfig = "Sort by Year in Ascending Order";
         public string AutoValidateConfig = "Automatically Validate Items";
