@@ -142,6 +142,7 @@ namespace MediaBrowser
         public bool RotateBackdrops = true;
         public int BackdropRotationInterval = 8; //Controls time delay, in seconds, between backdrops during rotation
         public float BackdropTransitionInterval = 1.5F; //Controls animation fade time, in seconds
+        public int BackdropLoadDelay = 300; //Delays loading of the first backdrop on new item in milliseconds. Helps with performance
 
         public bool ProcessBanners = false; //hook to allow future processing of banners
 
