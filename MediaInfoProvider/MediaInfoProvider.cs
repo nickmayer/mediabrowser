@@ -71,7 +71,12 @@ namespace MediaInfoProvider
         public override void Fetch()
         {
             Video video = Item as Video;
-            if (video == null || !enabled) return;
+            if (video == null ) return;
+            if (!enabled)
+            {
+                Logger.ReportInfo("MediaInfo is disabled - probably due to previous error");
+                return;
+            }
             if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
             if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && (video.MediaType == MediaType.BluRay || video.MediaType == MediaType.DVD)))
