@@ -74,10 +74,11 @@ namespace MediaBrowser.LibraryManagement
 
             switch (extension)
             {
-                // special case so DVD files are never considered videos
+                // special case so DVD files are never considered videos and ISOs not
                 case ".vob":
                 case ".bup":
                 case ".ifo":
+                case ".iso":
                     return false; 
                 case ".rmvb":
                 case ".mov":
