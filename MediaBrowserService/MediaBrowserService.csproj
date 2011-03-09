@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\CoreCommunications.cs" />
-    <Compile Include="Code\ServiceGuiOptions.cs" />
+    <Compile Include="Code\ServiceRefreshOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

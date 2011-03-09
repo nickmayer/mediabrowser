@@ -524,7 +524,8 @@ namespace MediaBrowserService
                 IncludeGenresOption = false, 
                 IncludeStudiosOption = false,
                 IncludeYearOption = false,
-                MigrateOption = true
+                MigrateOption = true,
+                AllowCancel = false
             };
 
             //kick off a manual refresh on a high-priority thread
@@ -582,8 +583,11 @@ namespace MediaBrowserService
                 _refreshCanceledTime = DateTime.MinValue;
                 _refreshFailed = false;
                 _refreshStartTime = DateTime.Now;
-                btnCancelRefresh.IsEnabled = true;
-                btnCancelRefresh.Visibility = Visibility.Visible;
+                if (manualOptions.AllowCancel)
+                {
+                    btnCancelRefresh.IsEnabled = true;
+                    btnCancelRefresh.Visibility = Visibility.Visible;
+                }
                 lblSvcActivity.Content = "Refresh Running...";
                 lblSvcActivity.Foreground = Brushes.Black;
                 lblNextSvcRefresh.Foreground = Brushes.Black;

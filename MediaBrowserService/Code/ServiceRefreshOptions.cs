@@ -18,6 +18,8 @@
 
         public bool MigrateOption { get; set; }
 
+        public bool AllowCancel = true;
+
         public bool AnyImageOptionsSelected
         {
             get
