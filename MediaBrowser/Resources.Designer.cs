@@ -2295,6 +2295,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap splashscreen_blue {
+            get {
+                object obj = ResourceManager.GetObject("splashscreen_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Star_Empty {
             get {
                 object obj = ResourceManager.GetObject("Star_Empty", resourceCulture);

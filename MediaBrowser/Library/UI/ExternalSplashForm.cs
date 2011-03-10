@@ -40,8 +40,8 @@ namespace MediaBrowser.Library
             {
                 theForm = new Form();
                 theForm.BackColor = Color.Black;
-                theForm.BackgroundImageLayout = ImageLayout.Center;
-                theForm.BackgroundImage = new Bitmap(Resources.splashscreen);
+                theForm.BackgroundImageLayout = ImageLayout.Stretch;
+                theForm.BackgroundImage = Config.Instance.Theme == "Black" ? new Bitmap(Resources.splashscreen) : new Bitmap(Resources.splashscreen_blue);
                 theForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                 theForm.WindowState = System.Windows.Forms.FormWindowState.Maximized;
                 Cursor.Hide();

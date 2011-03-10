@@ -605,9 +605,9 @@ namespace MediaBrowserService
 
             using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
             {
-                Kernel.Instance.ReLoadRoot(); // make sure we are dealing with the current state of the library
                 try
                 {
+                    Kernel.Instance.ReLoadRoot(); // make sure we are dealing with the current state of the library
                     if (force)
                     {
                         if (manualOptions.ClearCacheOption)
