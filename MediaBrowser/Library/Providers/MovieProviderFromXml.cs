@@ -81,7 +81,7 @@ namespace MediaBrowser.Library.Providers
                 movie.TagLine = doc.SafeGetString("Title/TagLine");
                 movie.Plot = doc.SafeGetString("Title/Plot");
 
-                //if added date is in xml override the file/folder date
+                //if added date is in xml override the file/folder date - this isn't gonna work cuz it's already filled in...
                 DateTime added = DateTime.MinValue;
                 DateTime.TryParse(doc.SafeGetString("Title/Added"), out added);
                 if (added > DateTime.MinValue) movie.DateCreated = added;

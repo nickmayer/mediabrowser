@@ -81,7 +81,7 @@ namespace MediaBrowser.Library.Playables
             if (PlaybackController.IsPlaying) {
                 PlaybackController.Pause();
             }
-              
+            //throw up a form to show we are starting the player
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);
@@ -90,6 +90,7 @@ namespace MediaBrowser.Library.Playables
             //make this optional
             if (p.MinimizeMCE)
             {
+                ExternalSplashForm.Display();
                 //alesbal: begin
                 ThreadPool.QueueUserWorkItem(new WaitCallback(MinimizeMCE), player);
             }
@@ -113,6 +114,7 @@ namespace MediaBrowser.Library.Playables
             wp.showCmd = 1; // 1- Normal; 2 - Minimize; 3 - Maximize;
             SetWindowPlacement(mceWnd, ref wp);
             SetForegroundWindow(mceWnd);
+            ExternalSplashForm.Hide();
         }
 
         private void GiveFocusToExtPlayer(object player)
