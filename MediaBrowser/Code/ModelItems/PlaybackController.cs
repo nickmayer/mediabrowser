@@ -422,7 +422,7 @@ namespace MediaBrowser
                     (state == Microsoft.MediaCenter.PlayState.Paused));
                 Logger.ReportVerbose("Updating Resume status...");
                 Application.CurrentInstance.CurrentItem.UpdateResume();
-                if (state == Microsoft.MediaCenter.PlayState.Finished || state == Microsoft.MediaCenter.PlayState.Stopped)
+                if (state == Microsoft.MediaCenter.PlayState.Finished || state == Microsoft.MediaCenter.PlayState.Stopped || state == Microsoft.MediaCenter.PlayState.Undefined)
                 {
                     Logger.ReportVerbose("Stopped so detaching...");
                     Detach(); //we don't want to continue to get updates if play something outside MB
