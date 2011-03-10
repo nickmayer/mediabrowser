@@ -1784,6 +1784,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap mblogo1000 {
+            get {
+                object obj = ResourceManager.GetObject("mblogo1000", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_3gp {
             get {
                 object obj = ResourceManager.GetObject("media_3gp", resourceCulture);
@@ -2285,20 +2292,6 @@ namespace MediaBrowser {
             get {
                 object obj = ResourceManager.GetObject("SpinnerText", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap splashscreen {
-            get {
-                object obj = ResourceManager.GetObject("splashscreen", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap splashscreen_blue {
-            get {
-                object obj = ResourceManager.GetObject("splashscreen_blue", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -348,6 +348,7 @@
     <None Include="Images\MediaInfo\codec_xvid.png" />
     <None Include="Images\MediaInfo\codec_aac.png" />
     <None Include="Images\MediaInfo\codec_mpeg1video.png" />
+    <Content Include="Images\mblogo1000.png" />
     <Content Include="Images\MediaInfo\Diamond\d_aspect_169.png" />
     <Content Include="Images\MediaInfo\Diamond\d_aspect_1851.png" />
     <Content Include="Images\MediaInfo\Diamond\d_aspect_2391.png" />
@@ -494,8 +495,6 @@
     <Content Include="Images\Special\Tab_Selected.png" />
     <Content Include="Images\Special\Tab_SelectedF.png" />
     <Content Include="Images\Special\Underline.png" />
-    <Content Include="Images\splashscreen.png" />
-    <Content Include="Images\splashscreen_blue.png" />
     <Content Include="Images\Star\Star_Full.png" />
     <Content Include="Images\Star\Star_Empty.png" />
     <Content Include="Images\Star\Star_Half.png" />
