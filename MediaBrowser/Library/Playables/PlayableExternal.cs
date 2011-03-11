@@ -90,14 +90,16 @@ namespace MediaBrowser.Library.Playables
             //make this optional
             if (p.MinimizeMCE)
             {
-                ExternalSplashForm.Display();
-                //alesbal: begin
                 ThreadPool.QueueUserWorkItem(new WaitCallback(MinimizeMCE), player);
             }
         }
 
         private void MinimizeMCE(object player)
         {
+            //throw up a form to cover the desktop when we minimize
+            ExternalSplashForm.Display();
+            ExternalSplashForm.Activate(); //bring it on top
+
             Debug.WriteLine("minimizeMCE and then give focus to external player");
             Process extPlayer = (Process)player;
 

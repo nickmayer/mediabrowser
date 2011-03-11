@@ -34,6 +34,17 @@ namespace MediaBrowser.Library
             }
         }
 
+        public static void Activate()
+        {
+            if (theForm != null)
+            {
+                theForm.Invoke(new VoidDelegate(delegate()
+                {
+                    theForm.Activate();
+                }));
+            }
+        }
+
         void Show()
         {
             try
