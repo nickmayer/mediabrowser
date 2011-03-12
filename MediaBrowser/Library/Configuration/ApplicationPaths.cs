@@ -4,9 +4,30 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MediaBrowser.Library.Configuration {
     public static class ApplicationPaths {
+
+        [DllImport("MSI.DLL", CharSet = CharSet.Auto)]
+        private static extern UInt32 MsiGetComponentPath(
+            string szProduct,
+            string szComponent,
+            StringBuilder lpPathBuf,
+            ref int pcchBuf);
+
+        private const string INSTALL_PRODUCT_CODE = "A8BBB56E-9C7E-4b91-9E1B-98B19B353400";
+        private const string SERVICE_COMPONENT_ID = "D19774DD-253A-47E2-94FA-3EFB220E2B77";
+        private const string CONFIGURATOR_COMPONENT_ID = "3186FBE0-641C-45f9-AA16-7EAA85B7405C";
+
+        private static string GetComponentPath(string product, string component)
+        {
+            int pathLength = 1024;
+            StringBuilder path = new StringBuilder(pathLength);
+            MsiGetComponentPath(product, component, path, ref pathLength);
+            return path.ToString();
+        }
+
         static Dictionary<string, string> pathMap;
 
         static string[,] tree = { 
@@ -138,11 +159,22 @@ namespace MediaBrowser.Library.Configuration {
         {
             get
             {
-                return Path.Combine(Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MediaBrowser\\MediaBrowser\\MediaBrowserService.exe");
+                string serviceEXE = GetComponentPath(INSTALL_PRODUCT_CODE, SERVICE_COMPONENT_ID);
+                return serviceEXE.Length > 0 ? serviceEXE : Path.Combine(Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MediaBrowser\\MediaBrowser\\MediaBrowserService.exe");
             }
         }
 
-        public static string AppRSSPath {
+        public static string ConfiguratorExecutableFile
+        {
+            get
+            {
+                string configEXE = GetComponentPath(INSTALL_PRODUCT_CODE, CONFIGURATOR_COMPONENT_ID);
+                return configEXE.Length > 0 ? configEXE : Path.Combine(Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MediaBrowser\\MediaBrowser\\configurator.exe");
+            }
+        }
+
+        public static string AppRSSPath
+        {
             get {
                 return pathMap["AppRSSPath"];
             }
