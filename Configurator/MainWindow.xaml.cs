@@ -906,7 +906,8 @@ sortorder: {2}
             {
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
                 System.Version v = PluginManager.Instance.GetLatestVersion(plugin);
-                System.Version rv = plugin.RequiredMBVersion;
+                var latest = PluginManager.Instance.AvailablePlugins.Find(plugin, v);
+                System.Version rv = latest != null ? latest.RequiredMBVersion : plugin.RequiredMBVersion;
                 System.Version bv = PluginManager.Instance.GetBackedUpVersion(plugin);
                 //enable the remove button if a plugin is selected.
                 removePlugin.IsEnabled = true;
@@ -916,7 +917,7 @@ sortorder: {2}
                 if (v != null)
                 {
                     if (v > plugin.Version && rv <= Kernel.Instance.Version)
-                    {
+                        {
                         upgradePlugin.IsEnabled = true;
                     }
                     else
