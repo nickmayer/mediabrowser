@@ -88,6 +88,7 @@ namespace MediaBrowserService
 
             var refresh = new System.Windows.Forms.MenuItem
             {
+                Name = "refresh",
                 Text = "Refresh Now"
             };
             refresh.Click += new EventHandler(refresh_Click);
@@ -100,6 +101,14 @@ namespace MediaBrowserService
             tipOption.Click += new EventHandler(notifyIcon_BalloonTipClicked);
             main.MenuItems.Add(tipOption);
 
+            var configureOption = new System.Windows.Forms.MenuItem
+            {
+                Name = "configure",
+                Text = "Configure..."
+            };
+            configureOption.Click += new EventHandler(configure_Click);
+            main.MenuItems.Add(configureOption);
+
             var sep = new System.Windows.Forms.MenuItem
                           {
                               Text = "-"
@@ -108,6 +117,7 @@ namespace MediaBrowserService
 
             var exit = new System.Windows.Forms.MenuItem
                            {
+                               Name = "exit",
                                Text = "Exit"
                            };
             exit.Click += new EventHandler(exit_Click);
@@ -151,6 +161,20 @@ namespace MediaBrowserService
         void exit_Click(object sender, EventArgs e)
         {
             Shutdown();
+        }
+
+        void configure_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(ApplicationPaths.ConfiguratorExecutableFile);
+            }
+            catch (Exception ex)
+            {
+                Logger.ReportException("Could not start Configurator: "+ApplicationPaths.ConfiguratorExecutableFile, ex);
+                MessageBox.Show("Error attempting to start configurator.  File is: " + ApplicationPaths.ConfiguratorExecutableFile, "Error");
+            }
+
         }
 
         public void Restart()
@@ -591,9 +615,9 @@ namespace MediaBrowserService
                 lblSvcActivity.Content = "Refresh Running...";
                 lblSvcActivity.Foreground = Brushes.Black;
                 lblNextSvcRefresh.Foreground = Brushes.Black;
-                notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
-                notifyIcon.ContextMenu.MenuItems[4].Enabled = false;
-                notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Running...";
+                notifyIcon.ContextMenu.MenuItems["refresh"].Enabled = false;
+                notifyIcon.ContextMenu.MenuItems["exit"].Enabled = false;
+                notifyIcon.ContextMenu.MenuItems["refresh"].Text = "Refresh Running...";
                 Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
                 notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                 lblNextSvcRefresh.Content = "";
@@ -659,9 +683,9 @@ namespace MediaBrowserService
                         refreshProgress.Visibility = Visibility.Hidden;
                         btnCancelRefresh.Visibility = Visibility.Hidden;
                         gbManual.IsEnabled = true;
-                        notifyIcon.ContextMenu.MenuItems[4].Enabled = true;
-                        notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
-                        notifyIcon.ContextMenu.MenuItems[1].Text = "Refresh Now";
+                        notifyIcon.ContextMenu.MenuItems["exit"].Enabled = true;
+                        notifyIcon.ContextMenu.MenuItems["refresh"].Enabled = true;
+                        notifyIcon.ContextMenu.MenuItems["refresh"].Text = "Refresh Now";
                         Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
                         notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                     }));
