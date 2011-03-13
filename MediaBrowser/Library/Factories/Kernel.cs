@@ -401,8 +401,7 @@ namespace MediaBrowser.Library {
             kernel.RootFolder = (AggregateFolder)BaseItemFactory<AggregateFolder>.Instance.CreateInstance(root, null);
 
             // our root folder needs metadata
-            kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??
-                kernel.RootFolder;
+            kernel.RootFolder = kernel.ItemRepository.RetrieveItem(kernel.RootFolder.Id) as AggregateFolder ??  kernel.RootFolder;
 
             //create our default config panels with localized names
             kernel.AddConfigPanel(kernel.StringData.GetString("GeneralConfig"), "");

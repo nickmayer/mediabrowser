@@ -551,6 +551,7 @@ namespace MediaBrowser
                             {
                                 if (item is Folder)
                                 {
+                                    item.RefreshMetadata(MetadataRefreshOptions.Force); // refresh all the top-level folders to pick up any changes
                                     (item as Folder).ValidateChildren();
                                 }
                             }
