@@ -21,6 +21,10 @@ namespace MediaInfoProvider {
             PluginOptions.Load();
             if (PluginOptions.Instance.ClearBadFiles)
             {
+                foreach (var badFile in PluginOptions.Instance.BadFiles)
+                {
+                    if (!PluginOptions.Instance.FormerBadFiles.Contains(badFile)) PluginOptions.Instance.FormerBadFiles.Add(badFile);
+                }
                 PluginOptions.Instance.BadFiles.Clear();
                 PluginOptions.Instance.ClearBadFiles = false;
                 PluginOptions.Save();

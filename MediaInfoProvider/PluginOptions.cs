@@ -20,6 +20,7 @@ namespace MediaInfoProvider
         public bool ClearBadFiles = false;
 
         public List<string> BadFiles = new List<string>();
+        public List<string> FormerBadFiles = new List<string>();
 
     }
 }

@@ -333,7 +333,14 @@ namespace MediaInfoProvider
 
         public override bool NeedsRefresh()
         {
-            return enabled && Item is Video && filename != FindVideoFile();
+            string videoFilename = FindVideoFile();
+            if (Plugin.PluginOptions.Instance.FormerBadFiles.Contains(videoFilename))
+            {
+                Plugin.PluginOptions.Instance.FormerBadFiles.Remove(videoFilename);
+                Plugin.PluginOptions.Save();
+                return true; //force if we are a former bad file
+            }
+            return enabled && Item is Video && filename != videoFilename;
         }
 
     }
