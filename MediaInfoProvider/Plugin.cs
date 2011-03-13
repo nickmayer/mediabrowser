@@ -12,7 +12,7 @@ namespace MediaInfoProvider {
 
         internal const string PluginName = "MediaInfo Provider";
         internal const string PluginDescription = "This plugin uses the MediaInfo project to provide rich information about your media, such as codecs, bitrates, resolution, etc..\n\nISO's and WTV files are currently not supported.\n\nThis version includes MediaInfo.dll version " + Plugin.includedMediaInfoDLL + ".";
-        internal const string includedMediaInfoDLL = "0.7.41.0";
+        internal const string includedMediaInfoDLL = "0.7.42.0";
         public static PluginConfiguration<PluginOptions> PluginOptions { get; set; }
         public static int ServiceTimeout = 12000;
 
