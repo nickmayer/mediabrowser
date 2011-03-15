@@ -452,7 +452,7 @@ namespace MediaBrowser.Library {
             {
                 foreach (var item in virtualItems)
                 {
-                    Logger.ReportInfo("Adding back " + item.Name);
+                    Logger.ReportVerbose("Adding back " + item.Name);
                     kernel.RootFolder.AddVirtualChild(item);
                 }
             }
@@ -463,7 +463,7 @@ namespace MediaBrowser.Library {
 
         public void ReLoadConfig()
         {
-            Logger.ReportInfo("Reloading config file (probably due to change in other process).");
+            Logger.ReportVerbose("Reloading config file (probably due to change in other process).");
             this.ConfigData = ConfigData.FromFile(ApplicationPaths.ConfigFile);
             Config.Reload();
         }

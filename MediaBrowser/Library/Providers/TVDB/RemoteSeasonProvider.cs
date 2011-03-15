@@ -52,8 +52,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
         private bool FetchSeasonData() {
             Season season = Season;
             string name = Item.Name;
-            
-            Logger.ReportInfo("TvDbProvider: Fetching season data: " + name);
+
+            Logger.ReportVerbose("TvDbProvider: Fetching season data: " + name);
             string seasonNum = TVUtils.SeasonNumberFromFolderName(Item.Path);
             int seasonNumber = Int32.Parse(seasonNum);
 
@@ -104,7 +104,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     }
 
                 }
-                Logger.ReportInfo("TvDbProvider: Success");
+                Logger.ReportVerbose("TvDbProvider: Success");
                 return true;
             }
 

@@ -71,7 +71,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
             Series series = Item as Series;
 
             string name = Item.Name;
-            Logger.ReportInfo("TvDbProvider: Fetching series data: " + name);
+            Logger.ReportVerbose("TvDbProvider: Fetching series data: " + name);
 
             if (string.IsNullOrEmpty(seriesId)) {
                 seriesId = FindSeries(name);

@@ -134,7 +134,7 @@ namespace MediaBrowser
         public virtual void Seek(long position)
         {
             var mce = AddInHost.Current.MediaCenterEnvironment;
-            Logger.ReportInfo("Trying to seek position :" + new TimeSpan(position).ToString());
+            Logger.ReportVerbose("Trying to seek position :" + new TimeSpan(position).ToString());
             WaitForStream(mce);
             mce.MediaExperience.Transport.Position = new TimeSpan(position);
         }
@@ -486,7 +486,7 @@ namespace MediaBrowser
         protected override void Dispose(bool isDisposing)
         {
 
-            Logger.ReportInfo("Playback controller is being disposed");
+            Logger.ReportVerbose("Playback controller is being disposed");
 
             if (isDisposing)
             {

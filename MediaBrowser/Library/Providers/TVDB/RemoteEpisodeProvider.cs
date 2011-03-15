@@ -58,7 +58,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
             string name = Item.Name;
             string location = Item.Path;
-            Logger.ReportInfo("TvDbProvider: Fetching episode data: " + name);
+            Logger.ReportVerbose("TvDbProvider: Fetching episode data: " + name);
             string epNum = TVUtils.EpisodeNumberFromFile(location);
 
             if (epNum == null)
@@ -133,7 +133,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         episode.Writers = new List<string>(writers.Trim('|').Split('|'));
                     }
 
-                    Logger.ReportInfo("TvDbProvider: Success");
+                    Logger.ReportVerbose("TvDbProvider: Success");
                     return true;
                 }
 

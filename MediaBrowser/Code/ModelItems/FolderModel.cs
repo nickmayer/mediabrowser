@@ -833,7 +833,7 @@ namespace MediaBrowser.Library {
 
 
         protected virtual void LoadDisplayPreferences() {
-            Logger.ReportInfo("Loading display prefs for " + this.Path);
+            Logger.ReportVerbose("Loading display prefs for " + this.Path);
 
             Guid id = Id;
 

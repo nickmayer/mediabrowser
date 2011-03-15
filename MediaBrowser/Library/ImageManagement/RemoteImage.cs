@@ -27,7 +27,7 @@ namespace MediaBrowser.Library.ImageManagement {
         }
 
         internal Image DownloadImage() {
-            Logger.ReportInfo("Fetching image: " + Path);
+            Logger.ReportVerbose("Fetching image: " + Path);
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(Path);
             req.Timeout = 60000;
             using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse()) {

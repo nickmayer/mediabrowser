@@ -132,7 +132,7 @@ namespace MediaBrowser.Library
 
         public virtual void Play(string file)
         {
-            Logger.ReportInfo("About to play : " + file);
+            Logger.ReportVerbose("About to play : " + file);
             if (QueueItem && this.PlayableItems != null && this.PlayableItems.Count() > 0)
                 PlaybackController.QueueMedia(this.PlayableItems);
             else if (QueueItem)

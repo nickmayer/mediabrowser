@@ -155,7 +155,7 @@ namespace MediaBrowser.Library.Providers
 
                         if (matchedName != null)
                         {
-                            Logger.ReportInfo("Match " + matchedName + " for " + name);
+                            Logger.ReportVerbose("Match " + matchedName + " for " + name);
                             if (year != null)
                             {
                                 string r = node.SafeGetString("released");
@@ -169,7 +169,7 @@ namespace MediaBrowser.Library.Providers
                                         {
                                             if (Math.Abs(db - y) > 1) // allow a 1 year tollerance on release date
                                             {
-                                                Logger.ReportInfo("Result " + matchedName + " release on " + r + " did not match year " + year);
+                                                Logger.ReportVerbose("Result " + matchedName + " release on " + r + " did not match year " + year);
                                                 continue;
                                             }
                                         }
@@ -186,7 +186,7 @@ namespace MediaBrowser.Library.Providers
                             foreach (var title in titles)
                             {
                                 possibleTitles.Add(title);
-                                Logger.ReportInfo("Result " + title + " did not match " + name);
+                                Logger.ReportVerbose("Result " + title + " did not match " + name);
                             }
                         }
                     }
