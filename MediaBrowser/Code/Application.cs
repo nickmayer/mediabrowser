@@ -549,7 +549,7 @@ namespace MediaBrowser
                             Kernel.Instance.MajorActivity = true;
                             foreach (BaseItem item in RootFolder.RecursiveChildren)
                             {
-                                if (item is Folder)
+                                if (item is Folder && item.Parent == RootFolder)
                                 {
                                     item.RefreshMetadata(MetadataRefreshOptions.Force); // refresh all the top-level folders to pick up any changes
                                     (item as Folder).ValidateChildren();
