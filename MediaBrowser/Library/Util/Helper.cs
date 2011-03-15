@@ -7,6 +7,7 @@ using System.IO;
 using System.Security.Cryptography;
 using Microsoft.Win32;
 using System.Reflection;
+using System.Management;
 //using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -487,6 +488,34 @@ namespace MediaBrowser.LibraryManagement
             string theRest = aStr.Substring(1);
             return first.ToUpper() + theRest.ToLower();
         }
-       
+
+        /// <summary>
+        /// Returns MAC Address from first Network Card in Computer
+        /// </summary>
+        /// <returns>[string] MAC Address</returns>
+        public static string GetMACAddress()
+        {
+            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection moc = mc.GetInstances();
+            string MACAddress = String.Empty;
+            foreach (ManagementObject mo in moc)
+            {
+                if (MACAddress == String.Empty)  // only return MAC Address from first card
+                {
+                    try
+                    {
+                        if ((bool)mo["IPEnabled"] == true) MACAddress = mo["MacAddress"].ToString();
+                    }
+                    catch
+                    {
+                        mo.Dispose();
+                        return "";
+                    }
+                }
+                mo.Dispose();
+            }
+            MACAddress = MACAddress.Replace(":", "");
+            return MACAddress;
+        }
     }
 }

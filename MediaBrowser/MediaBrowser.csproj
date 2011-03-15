@@ -70,6 +70,7 @@
       <HintPath>..\Sqlite\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.ServiceModel.Web">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -717,6 +718,7 @@
     <Compile Include="Library\ImageManagement\ImageCache.cs" />
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
     <Compile Include="Library\Interfaces\ITrailerProvider.cs" />
+    <Compile Include="Library\Registration\MBRegistration.cs" />
     <Compile Include="Library\ServiceInteraction\IPCCommands.cs" />
     <Compile Include="Library\ServiceInteraction\MBClientConnector.cs" />
     <Compile Include="Library\Localization\BaseStrings.cs" />

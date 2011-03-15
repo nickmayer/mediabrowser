@@ -15,12 +15,35 @@ using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Code;
 
 namespace MediaBrowser
 {
     [Serializable]
     public class ConfigData
     {
+        //moved keyfile re-routing to here so can be accessed from service (outside MC) -ebr
+        [SkipField]
+        private KeyFile _keyFile;
+        private KeyFile keyFile //only want to create this file if we try to access it
+        {
+            get
+            {
+                if (_keyFile == null)
+                {
+                    _keyFile = new KeyFile(Path.Combine(ApplicationPaths.AppConfigPath, "MB.lic"));
+                }
+                return _keyFile;
+            }
+        }
+
+        //this is re-routed to a separate file
+        [SkipField]
+        public string SupporterKey
+        {
+            get { return this.keyFile.SupporterKey; }
+            set { if (this.keyFile.SupporterKey != value) { this.keyFile.SupporterKey = value; this.keyFile.Save(); } }
+        }
 
         [Comment(@"The version is used to determine if this is the first time a particular version has been run")]
         public string MBVersion = "1.0.0.0"; //default value will tell us if it is a brand new install
