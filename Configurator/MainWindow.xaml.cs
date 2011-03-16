@@ -409,6 +409,8 @@ namespace Configurator
             sldrMinResumePct.Value = config.MinResumePct;
             sldrMaxResumePct.Value = config.MaxResumePct;
 
+            ddlLoglevel.SelectedItem = config.MinLoggingSeverity;
+
             //Parental Control
             cbxEnableParentalControl.IsChecked = config.ParentalControlEnabled;
             cbxOptionBlockUnrated.IsChecked = config.ParentalBlockUnrated;
@@ -468,6 +470,8 @@ namespace Configurator
             // Parental Ratings
             ddlOptionMaxAllowedRating.ItemsSource = ratings.ToString();
             ddlFolderRating.ItemsSource = ratings.ToString();
+
+            ddlLoglevel.ItemsSource = Enum.GetValues(typeof(LogSeverity));
 
         }
         #endregion
@@ -1945,6 +1949,15 @@ sortorder: {2}
             //if we modified anything in kernel reload the service so it will pick up any changes we made
             if (KernelModified)
                 MBServiceController.RestartService();
+        }
+
+        private void ddlLoglevel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ddlLoglevel.SelectedItem != null)
+            {
+                config.MinLoggingSeverity = (LogSeverity)ddlLoglevel.SelectedItem;
+                config.Save();
+            }
         }
 
     }
