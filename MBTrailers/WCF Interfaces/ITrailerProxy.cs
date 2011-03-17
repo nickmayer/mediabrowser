@@ -25,7 +25,7 @@ namespace WebProxy.WCFInterfaces
         [OperationContract]
         void SetTrailerInfo(TrailerInfo info);
         [OperationContract]
-        List<string> GetMatchingTrailers(TrailerInfo info);
+        List<string> GetMatchingTrailers(TrailerInfo info, float threshhold);
         [OperationContract]
         List<ProxyInfo> GetProxiedFileList();
         [OperationContract]

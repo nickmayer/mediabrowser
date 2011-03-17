@@ -76,7 +76,7 @@ namespace WebProxy {
                 }
         }
 
-        public List<string> GetMatchingTrailers(TrailerInfo searchInfo)
+        public List<string> GetMatchingTrailers(TrailerInfo searchInfo, float threshhold)
         {
             List<TrailerInfo> trailers = searchInfo.Type == TrailerType.Remote ? 
                 trailers = mbTrailers.Values.ToList() :
@@ -94,7 +94,7 @@ namespace WebProxy {
             {
                 foreach (var info in trailers)
                 {
-                    if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info) && !info.Path.StartsWith(searchInfo.Path))
+                    if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info, threshhold) && !info.Path.StartsWith(searchInfo.Path))
                     {
                         Logger.ReportInfo(info.Path + " matched. Rating: " + info.Rating + " SearchRating: " + searchInfo.Rating);
                         foundTrailers.Add(info.Path);
@@ -104,15 +104,16 @@ namespace WebProxy {
             return foundTrailers;
         }
 
-        private bool GenreMatches(TrailerInfo searchInfo, TrailerInfo info)
+        private bool GenreMatches(TrailerInfo searchInfo, TrailerInfo info, float threshhold)
         {
             if (searchInfo.Genres.Count == 0) return true; //no search genres - everything matches
 
+            float matches = 0;
             foreach (var genre in searchInfo.Genres){
                 if (info.Genres.Contains(genre))
-                    return true;
+                    matches++;
             }
-            return false;
+            return (matches / searchInfo.Genres.Count) > threshhold;
         }
  
         public List<ProxyInfo> GetProxiedFileList()
