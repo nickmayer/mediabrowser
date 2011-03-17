@@ -22,6 +22,7 @@ namespace MediaBrowser.Library
             {
                 us.Show();
             });
+            Thread.Sleep(100); //give it time to come up
         }
 
         public static void Hide() {
@@ -38,10 +39,14 @@ namespace MediaBrowser.Library
         {
             if (theForm != null)
             {
-                theForm.Invoke(new VoidDelegate(delegate()
+                try
                 {
-                    theForm.Activate();
-                }));
+                    theForm.Invoke(new VoidDelegate(delegate()
+                    {
+                        theForm.Activate();
+                    }));
+                }
+                catch { } //we tried...
             }
         }
 
