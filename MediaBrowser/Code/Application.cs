@@ -507,7 +507,7 @@ namespace MediaBrowser
                 }
                 else
                 {
-                    //if the service is currently re-building our library - don't allow entry
+                    //if the service is currently re-building our library - warn them
                     if (Kernel.Instance.ServiceConfigData.ForceRebuildInProgress)
                     {
                         MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;

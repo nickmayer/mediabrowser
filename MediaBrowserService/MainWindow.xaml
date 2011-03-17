@@ -25,7 +25,8 @@
                 <TextBox Height="22" HorizontalAlignment="Left" LostFocus="tbxRefreshInterval_LostFocus" Margin="159,13,0,0" Name="tbxRefreshInterval" PreviewTextInput="NumberOnly_PreviewTextInput" TextAlignment="Right" VerticalAlignment="Top" Width="33" FontSize="14">1</TextBox>
                 <TextBox HorizontalAlignment="Left" LostFocus="tbxRefreshHour_LostFocus" Margin="159,42,0,0" Name="tbxRefreshHour" PreviewTextInput="NumberOnly_PreviewTextInput" TextAlignment="Right" Width="33" FontSize="14" Height="22.69" VerticalAlignment="Top">2</TextBox>
                 <Label HorizontalAlignment="Left" Margin="191,40,0,0" Name="label16" Width="37" FontSize="14" Height="25.38" VerticalAlignment="Top">: 00</Label>
-                <CheckBox Margin="0,37.69,96,0" Name="cbxSleep" Checked="cbxSleep_Checked" Unchecked="cbxSleep_Checked" ToolTip="This will only occur on a regularly scheduled refresh" HorizontalAlignment="Right" Width="149" Height="27" VerticalAlignment="Top">Sleep After Refresh</CheckBox>
+                <CheckBox Margin="0,45,74,0" Name="cbxSleep" Checked="cbxSleep_Checked" Unchecked="cbxSleep_Checked" ToolTip="This will only occur on a regularly scheduled refresh" HorizontalAlignment="Right" Width="149" Height="27.38" VerticalAlignment="Top">Sleep After Refresh</CheckBox>
+                <CheckBox HorizontalAlignment="Right" Margin="0,19,74,0" Name="cbxSlowProviderSched" Checked="cbxSlowProviderSched_Checked" Unchecked="cbxSlowProviderSched_Checked" ToolTip="Allow internet and other slow providers on scheduled refresh" Width="149" Height="27" VerticalAlignment="Top">Allow Slow Providers</CheckBox>
             </Grid>
         </GroupBox>
         <Image Name="image1" Stretch="None" Source="/MediaBrowserService;component/Images/MB_Service_Logo.png" Height="80" VerticalAlignment="Top" Margin="268,8,8,0" />
@@ -43,6 +44,7 @@
                     </Grid>
                 </GroupBox>
                 <Button Margin="0,0,16,20" Name="btnRefresh" FontSize="14" Click="btnRefresh_Click" Height="37" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="102">Refresh Now</Button>
+                <CheckBox Height="27" HorizontalAlignment="Right" Margin="0,14,74,0" Name="cbxSlowProviderManual" Checked="cbxSlowProvidersManual_Checked" Unchecked="cbxSlowProvidersManual_Checked" ToolTip="Allow internet and other slow providers on a manual refresh" VerticalAlignment="Top" Width="149">Allow Slow Providers</CheckBox>
             </Grid>
         </GroupBox>
         <Label FontSize="10" Height="21" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,1,13,0" Name="lblVersion" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Width="112">Version 0.0.0.0</Label>

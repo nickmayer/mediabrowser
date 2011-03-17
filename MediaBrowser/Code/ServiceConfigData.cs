@@ -30,6 +30,9 @@ namespace MediaBrowser
         [Comment("Option to put the computer to sleep after a refresh.  Will only do it if the refresh is running at it's normal time.")]
         public bool SleepAfterScheduledRefresh = false;
 
+        [Comment("Option to allow internet and other slow providers in scheduled refresh")]
+        public bool AllowSlowProviders = false;
+
         [Comment("The last time a full refresh was done.")]
         public DateTime LastFullRefresh = DateTime.MinValue;
 

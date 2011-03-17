@@ -358,6 +358,7 @@ namespace MediaBrowserService
             tbxRefreshHour.Text = _config.FullRefreshPreferredHour.ToString();
             tbxRefreshInterval.Text = _config.FullRefreshInterval.ToString();
             cbxSleep.IsChecked = _config.SleepAfterScheduledRefresh;
+            cbxSlowProviderSched.IsChecked = _config.AllowSlowProviders;
             UpdateStatus();
         }
         
@@ -404,9 +405,20 @@ namespace MediaBrowserService
             _config.Save();
         }
 
+        private void cbxSlowProviderSched_Checked(object sender, RoutedEventArgs e)
+        {
+            _config.AllowSlowProviders = cbxSlowProviderSched.IsChecked.Value;
+            _config.Save();
+        }
+
         private void cbxClearCache_Checked(object sender, RoutedEventArgs e)
         {
             _serviceOptions.ClearCacheOption = cbxClearCache.IsChecked.Value;
+        }
+
+        private void cbxSlowProvidersManual_Checked(object sender, RoutedEventArgs e)
+        {
+            _serviceOptions.AllowSlowProviderOption = cbxSlowProviderManual.IsChecked.Value;
         }
 
         private void cbxClearImageCache_Checked(object sender, RoutedEventArgs e)
@@ -549,14 +561,15 @@ namespace MediaBrowserService
                 IncludeStudiosOption = false,
                 IncludeYearOption = false,
                 MigrateOption = true,
+                AllowSlowProviderOption = true,
                 AllowCancel = false
             };
 
             //kick off a manual refresh on a high-priority thread
             Thread manual = new Thread(new ThreadStart(() =>
             {
-                //_config.ForceRebuildInProgress = true;
-                //_config.Save();
+                _config.ForceRebuildInProgress = true;
+                _config.Save();
                 FullRefresh(true, options);
                 _config.ForceRebuildInProgress = false;
                 _config.Save();
@@ -586,7 +599,7 @@ namespace MediaBrowserService
             if (!_refreshRunning && !_refreshFailed && (_refreshCanceledTime.Date < DateTime.Now.Date) && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
                 Thread.Sleep(20000); //in case we just came out of sleep mode - let's be sure everything is up first...
-                FullRefresh(false, new ServiceRefreshOptions());
+                FullRefresh(false, new ServiceRefreshOptions() { AllowSlowProviderOption = _config.AllowSlowProviders });
             }
 
             if (_shutdown) //we were told to shutdown on next iteration (keeps us from shutting down in the middle of a refresh
@@ -658,7 +671,9 @@ namespace MediaBrowserService
                         }
                     }
 
-                    if (FullRefresh(Kernel.Instance.RootFolder, MetadataRefreshOptions.Default, manualOptions))
+                    MetadataRefreshOptions refreshOptions = manualOptions.AllowSlowProviderOption ? MetadataRefreshOptions.Default : MetadataRefreshOptions.FastOnly;
+
+                    if (FullRefresh(Kernel.Instance.RootFolder, refreshOptions, manualOptions))
                     {
                         _config.LastFullRefresh = DateTime.Now;
                         _lastRefreshElapsedTime = DateTime.Now - _refreshStartTime;
@@ -726,6 +741,10 @@ namespace MediaBrowserService
                 })) return false;
             }
 
+            string msg = (options | MetadataRefreshOptions.FastOnly) == MetadataRefreshOptions.FastOnly ?
+                "Not allowing internet and other slow providers." :
+                "Allowing internet and other slow providers.";
+            Logger.ReportInfo(msg);
             var processedItems = new HashSet<Guid>();
             using (new Profiler(Kernel.Instance.GetString("SlowRefresh")))
             {

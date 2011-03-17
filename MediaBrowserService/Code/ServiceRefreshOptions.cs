@@ -20,6 +20,8 @@
 
         public bool AllowCancel = true;
 
+        public bool AllowSlowProviderOption = false;
+
         public bool AnyImageOptionsSelected
         {
             get
