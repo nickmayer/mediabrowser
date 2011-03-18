@@ -115,6 +115,12 @@ namespace MediaBrowser
             set { if (this.data.ProcessBanners != value) { this.data.ProcessBanners = value; Save(); FirePropertyChanged("ProcessBanners"); } }
         }
 
+        public bool ProcessBackdrops
+        {
+            get { return this.data.ProcessBackdrops; }
+            set { if (this.data.ProcessBackdrops != value) { this.data.ProcessBackdrops = value; Save(); FirePropertyChanged("ProcessBackdrops"); } }
+        }
+
         public bool IsFirstRun
         {
             get { return this.data.IsFirstRun; }

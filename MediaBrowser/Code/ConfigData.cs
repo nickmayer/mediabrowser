@@ -168,6 +168,7 @@ namespace MediaBrowser
         public int BackdropLoadDelay = 300; //Delays loading of the first backdrop on new item in milliseconds. Helps with performance
 
         public bool ProcessBanners = false; //hook to allow future processing of banners
+        public bool ProcessBackdrops = false; //hook to allow future processing of backdrops
 
         public int MinResumeDuration = 0; //minimum duration of video to have resume functionality
         public int MinResumePct = 1; //if this far or less into video, don't resume

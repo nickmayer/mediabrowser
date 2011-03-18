@@ -77,7 +77,7 @@ namespace MediaBrowser.Library.Entities {
         // banner images will fall back to parent
         public LibraryImage BannerImage {
             get {
-                return SearchParents<LibraryImage>(this, item => item.GetImage(item.BannerImagePath, Config.Instance.ProcessBanners));
+                return SearchParents<LibraryImage>(this, item => item.GetImage(item.BannerImagePath, Kernel.Instance.ConfigData.ProcessBanners));
             }
         }
 
@@ -91,7 +91,7 @@ namespace MediaBrowser.Library.Entities {
 
         public LibraryImage BackdropImage {
             get {
-                return GetImage(BackdropImagePath);
+                return GetImage(BackdropImagePath, Kernel.Instance.ConfigData.ProcessBackdrops);
             }
         }
 
@@ -108,7 +108,7 @@ namespace MediaBrowser.Library.Entities {
                 }
                 if (BackdropImagePaths != null) {
                     foreach (var path in BackdropImagePaths) {
-                        var image = GetImage(path);
+                        var image = GetImage(path, Kernel.Instance.ConfigData.ProcessBackdrops);
                         if (image != null) images.Add(image);
                     }
                 }  
