@@ -981,8 +981,9 @@ namespace MediaBrowserService
                 }
                 return true;
             }
-            catch
+            catch (Exception e)
             {
+                Logger.ReportException("Error during refresh", e);
                 _refreshFailed = true;
                 return false;
             }
