@@ -220,6 +220,7 @@ namespace MediaBrowser.Library.Providers
                     movie.Overview = movie.Overview.Replace("\n\n", "\n");
 
                 movie.TagLine = doc.SafeGetString("//movie/tagline");
+                movie.ImdbID = doc.SafeGetString("//movie/imdb_id");
 
                 movie.ImdbRating = doc.SafeGetSingle("//movie/rating", -1, 10);
 

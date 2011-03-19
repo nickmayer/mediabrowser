@@ -152,46 +152,46 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         case "dts-es":
                         case "dts-es matrix":
                         case "dts-es discrete":
-                            episode.MediaInfo.AudioFormat = "DTS";
-                            episode.MediaInfo.AudioProfile = "ES";
+                            episode.MediaInfo.OverrideData.AudioFormat = "DTS";
+                            episode.MediaInfo.OverrideData.AudioProfile = "ES";
                             break;
                         case "dts-hd hra":
                         case "dts-hd high resolution":
-                            episode.MediaInfo.AudioFormat = "DTS";
-                            episode.MediaInfo.AudioProfile = "HRA";
+                            episode.MediaInfo.OverrideData.AudioFormat = "DTS";
+                            episode.MediaInfo.OverrideData.AudioProfile = "HRA";
                             break;
                         case "dts-hd ma":
                         case "dts-hd master":
-                            episode.MediaInfo.AudioFormat = "DTS";
-                            episode.MediaInfo.AudioProfile = "MA";
+                            episode.MediaInfo.OverrideData.AudioFormat = "DTS";
+                            episode.MediaInfo.OverrideData.AudioProfile = "MA";
                             break;
                         case "dolby digital":
                         case "dolby digital surround ex":
                         case "dolby surround":
-                            episode.MediaInfo.AudioFormat = "AC-3";
+                            episode.MediaInfo.OverrideData.AudioFormat = "AC-3";
                             break;
                         case "dolby digital plus":
-                            episode.MediaInfo.AudioFormat = "E-AC-3";
+                            episode.MediaInfo.OverrideData.AudioFormat = "E-AC-3";
                             break;
                         case "dolby truehd":
-                            episode.MediaInfo.AudioFormat = "AC-3";
-                            episode.MediaInfo.AudioProfile = "TrueHD";
+                            episode.MediaInfo.OverrideData.AudioFormat = "AC-3";
+                            episode.MediaInfo.OverrideData.AudioProfile = "TrueHD";
                             break;
                         case "mp2":
-                            episode.MediaInfo.AudioFormat = "MPEG Audio";
-                            episode.MediaInfo.AudioProfile = "Layer 2";
+                            episode.MediaInfo.OverrideData.AudioFormat = "MPEG Audio";
+                            episode.MediaInfo.OverrideData.AudioProfile = "Layer 2";
                             break;
                         case "other":
                             break;
                         default:
-                            episode.MediaInfo.AudioFormat = audio;
+                            episode.MediaInfo.OverrideData.AudioFormat = audio;
                             break;
                     }
                 }
             }
-            if (episode.MediaInfo.AudioStreamCount == 0) episode.MediaInfo.AudioStreamCount = metadataDoc.SelectNodes("Item/MediaInfo/Audio").Count;
-            if (string.IsNullOrEmpty(episode.MediaInfo.AudioChannelCount)) episode.MediaInfo.AudioChannelCount = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Channels", "");
-            if (episode.MediaInfo.AudioBitRate == 0) episode.MediaInfo.AudioBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Audio/BitRate");
+            if (episode.MediaInfo.AudioStreamCount == 0) episode.MediaInfo.OverrideData.AudioStreamCount = metadataDoc.SelectNodes("Item/MediaInfo/Audio").Count;
+            if (string.IsNullOrEmpty(episode.MediaInfo.AudioChannelCount)) episode.MediaInfo.OverrideData.AudioChannelCount = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Channels", "");
+            if (episode.MediaInfo.AudioBitRate == 0) episode.MediaInfo.OverrideData.AudioBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Audio/BitRate");
             if (string.IsNullOrEmpty(episode.MediaInfo.VideoCodec))
             {
                 string video = metadataDoc.SafeGetString("Item/MediaInfo/Video/Codec", "");
@@ -200,26 +200,26 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     switch (video.ToLower())
                     {
                         case "sorenson h.263":
-                            episode.MediaInfo.VideoCodec = "Sorenson H263";
+                            episode.MediaInfo.OverrideData.VideoCodec = "Sorenson H263";
                             break;
                         case "h.262":
-                            episode.MediaInfo.VideoCodec = "MPEG-2 Video";
+                            episode.MediaInfo.OverrideData.VideoCodec = "MPEG-2 Video";
                             break;
                         case "h.264":
-                            episode.MediaInfo.VideoCodec = "AVC";
+                            episode.MediaInfo.OverrideData.VideoCodec = "AVC";
                             break;
                         default:
-                            episode.MediaInfo.VideoCodec = video;
+                            episode.MediaInfo.OverrideData.VideoCodec = video;
                             break;
                     }
                 }
             }
-            if (episode.MediaInfo.VideoBitRate == 0) episode.MediaInfo.VideoBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/BitRate");
-            if (episode.MediaInfo.Height == 0) episode.MediaInfo.Height = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Height");
-            if (episode.MediaInfo.Width == 0) episode.MediaInfo.Width = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Width");
-            if (string.IsNullOrEmpty(episode.MediaInfo.ScanType)) episode.MediaInfo.ScanType = metadataDoc.SafeGetString("Item/MediaInfo/Video/ScanType", "");
-            if (string.IsNullOrEmpty(episode.MediaInfo.VideoFPS)) episode.MediaInfo.VideoFPS = metadataDoc.SafeGetString("Item/MediaInfo/Video/FrameRate", "");
-            if (episode.MediaInfo.RunTime == 0) episode.MediaInfo.RunTime = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Duration");
+            if (episode.MediaInfo.VideoBitRate == 0) episode.MediaInfo.OverrideData.VideoBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/BitRate");
+            if (episode.MediaInfo.Height == 0) episode.MediaInfo.OverrideData.Height = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Height");
+            if (episode.MediaInfo.Width == 0) episode.MediaInfo.OverrideData.Width = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Width");
+            if (string.IsNullOrEmpty(episode.MediaInfo.ScanType)) episode.MediaInfo.OverrideData.ScanType = metadataDoc.SafeGetString("Item/MediaInfo/Video/ScanType", "");
+            if (string.IsNullOrEmpty(episode.MediaInfo.VideoFPS)) episode.MediaInfo.OverrideData.VideoFPS = metadataDoc.SafeGetString("Item/MediaInfo/Video/FrameRate", "");
+            if (episode.MediaInfo.RunTime == 0) episode.MediaInfo.OverrideData.RunTime = metadataDoc.SafeGetInt32("Item/MediaInfo/Video/Duration");
             if (episode.MediaInfo.RunTime > 0) episode.RunningTime = episode.MediaInfo.RunTime;
             if (string.IsNullOrEmpty(episode.MediaInfo.AudioLanguages))
             {
@@ -233,11 +233,11 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 }
                 if (Langs.Count > 1)
                 {
-                    episode.MediaInfo.AudioLanguages = String.Join(" / ", Langs.ToArray());
+                    episode.MediaInfo.OverrideData.AudioLanguages = String.Join(" / ", Langs.ToArray());
                 }
                 else
                 {
-                    episode.MediaInfo.AudioLanguages = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Language", "");
+                    episode.MediaInfo.OverrideData.AudioLanguages = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Language", "");
                 }
             }
             if (string.IsNullOrEmpty(episode.MediaInfo.Subtitles))
@@ -252,11 +252,11 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 }
                 if (Subs.Count > 1)
                 {
-                    episode.MediaInfo.Subtitles = String.Join(" / ", Subs.ToArray());
+                    episode.MediaInfo.OverrideData.Subtitles = String.Join(" / ", Subs.ToArray());
                 }
                 else
                 {
-                    episode.MediaInfo.Subtitles = metadataDoc.SafeGetString("Item/MediaInfo/Subtitle/Language", "");
+                    episode.MediaInfo.OverrideData.Subtitles = metadataDoc.SafeGetString("Item/MediaInfo/Subtitle/Language", "");
                 }
             }
         }

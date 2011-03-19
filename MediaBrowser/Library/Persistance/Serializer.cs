@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Reflection;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using MediaBrowser.Library.Entities.Attributes;
 
 namespace MediaBrowser.Library.Persistance {
 
@@ -214,7 +215,17 @@ namespace MediaBrowser.Library.Persistance {
             foreach (var persistable in persistables) {
                 if (persistable.GetValue(target) == null || force) {
                     persistable.SetValue(target, persistable.GetValue(source));
-                }
+                } else
+                    if (persistable.GetAttributes<DontClearOnForcedRefreshAttribute>() != null &&
+                        persistable.GetValue(target) != null &&
+                        persistable is object)
+                    {
+                        // go another level on the merge if this item was not cleared
+                        var innerSource = persistable.GetValue(source);
+                        var innerTarget = persistable.GetValue(target);
+                        GetSerializer(innerSource.GetType()).MergeObjects(innerSource, innerTarget, force);
+                    }
+
             }
         }
 

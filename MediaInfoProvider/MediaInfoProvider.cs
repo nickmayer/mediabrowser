@@ -125,23 +125,23 @@ namespace MediaInfoProvider
         private MediaInfoData Merge(MediaInfoData original, MediaInfoData acquired)
         {
             if (original == null) return acquired;
-            if (original.AudioBitRate == 0) original.AudioBitRate = acquired.AudioBitRate;
-            if (original.AudioChannelCount == "") original.AudioChannelCount = acquired.AudioChannelCount;
-            if (original.AudioFormat == "")
+            if (original.PluginData.AudioBitRate == 0) original.PluginData.AudioBitRate = acquired.AudioBitRate;
+            if (original.PluginData.AudioChannelCount == "") original.PluginData.AudioChannelCount = acquired.AudioChannelCount;
+            if (original.PluginData.AudioFormat == "")
             {
-                original.AudioProfile = acquired.AudioProfile;
-                original.AudioFormat = acquired.AudioFormat;
+                original.PluginData.AudioProfile = acquired.AudioProfile;
+                original.PluginData.AudioFormat = acquired.AudioFormat;
             }
-            if (original.AudioStreamCount == 0) original.AudioStreamCount = acquired.AudioStreamCount;
-            if (original.AudioLanguages == "") original.AudioLanguages = acquired.AudioLanguages;
-            if (original.Height == 0) original.Height = acquired.Height;
-            if (original.RunTime == 0) original.RunTime = acquired.RunTime;			
-            if (original.Subtitles == "") original.Subtitles = acquired.Subtitles;
-            if (original.VideoBitRate == 0) original.VideoBitRate = acquired.VideoBitRate;
-            if (original.VideoCodec == "") original.VideoCodec = acquired.VideoCodec;
-            if (original.VideoFPS == "") original.VideoFPS = acquired.VideoFPS;
-            if (original.ScanType == "") original.ScanType = acquired.ScanType;
-            if (original.Width == 0) original.Width = acquired.Width;
+            if (original.PluginData.AudioStreamCount == 0) original.PluginData.AudioStreamCount = acquired.AudioStreamCount;
+            if (original.PluginData.AudioLanguages == "") original.PluginData.AudioLanguages = acquired.AudioLanguages;
+            if (original.PluginData.Height == 0) original.PluginData.Height = acquired.Height;
+            if (original.PluginData.RunTime == 0) original.PluginData.RunTime = acquired.RunTime;
+            if (original.PluginData.Subtitles == "") original.PluginData.Subtitles = acquired.Subtitles;
+            if (original.PluginData.VideoBitRate == 0) original.PluginData.VideoBitRate = acquired.VideoBitRate;
+            if (original.PluginData.VideoCodec == "") original.PluginData.VideoCodec = acquired.VideoCodec;
+            if (original.PluginData.VideoFPS == "") original.PluginData.VideoFPS = acquired.VideoFPS;
+            if (original.PluginData.ScanType == "") original.PluginData.ScanType = acquired.ScanType;
+            if (original.PluginData.Width == 0) original.PluginData.Width = acquired.Width;
             return original;
         }
 
@@ -215,7 +215,7 @@ namespace MediaInfoProvider
 
         private Int32 GetDuration(string location)
         {
-            MediaInfo mediaInfo = new MediaInfo();
+            MediaInfoLib.MediaInfo mediaInfo = new MediaInfoLib.MediaInfo();
             mediaInfo.Option("ParseSpeed", "0.3");
             int i = mediaInfo.Open(location);
             int runTime = 0;
@@ -231,7 +231,7 @@ namespace MediaInfoProvider
     private MediaInfoData GetMediaInfo(string location, MediaType mediaType)
         {
             Logger.ReportInfo("Getting media info from " + location);
-            MediaInfo mediaInfo = new MediaInfo();
+            MediaInfoLib.MediaInfo mediaInfo = new MediaInfoLib.MediaInfo();
             mediaInfo.Option("ParseSpeed", "0.2");
             int i = mediaInfo.Open(location);
             MediaInfoData mediaInfoData = null;
@@ -271,27 +271,30 @@ namespace MediaInfoProvider
                 int APindex = audioProfile.IndexOf(" /");
                 if (APindex > 0)
                     audioProfile = audioProfile.Remove(APindex);
-                
+
 
 
                 mediaInfoData = new MediaInfoData
                 {
-                    VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "Codec/String"),
-                    VideoBitRate = videoBitRate,
-                    //MI.Get(StreamKind.Video, 0, "DisplayAspectRatio")),
-                    Height = height,
-                    Width = width,
-                    //MI.Get(StreamKind.Video, 0, "Duration/String3")),
-                    AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
-                    AudioBitRate = audioBitRate,
-                    RunTime = (runTime/60000),
-                    AudioStreamCount = streamCount,
-                    AudioChannelCount = audioChannels.Trim(),
-                    AudioProfile = audioProfile.Trim(),
-                    VideoFPS = videoFrameRate,
-                    AudioLanguages = audioLanguages,
-                    Subtitles = subtitles,
-                    ScanType = scanType
+                    PluginData = new MediaInfoData.MIData()
+                    {
+                        VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "Codec/String"),
+                        VideoBitRate = videoBitRate,
+                        //MI.Get(StreamKind.Video, 0, "DisplayAspectRatio")),
+                        Height = height,
+                        Width = width,
+                        //MI.Get(StreamKind.Video, 0, "Duration/String3")),
+                        AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
+                        AudioBitRate = audioBitRate,
+                        RunTime = (runTime / 60000),
+                        AudioStreamCount = streamCount,
+                        AudioChannelCount = audioChannels.Trim(),
+                        AudioProfile = audioProfile.Trim(),
+                        VideoFPS = videoFrameRate,
+                        AudioLanguages = audioLanguages,
+                        Subtitles = subtitles,
+                        ScanType = scanType
+                    }
                 };
             }
             else
@@ -318,9 +321,9 @@ namespace MediaInfoProvider
                     Int32.TryParse(aBitRate, out audioBitRate);
                     string scanType = mediaInfo.Get(StreamKind.Video, 0, "ScanType");
 
-                    mediaInfoData.AudioBitRate = audioBitRate;
-                    mediaInfoData.VideoBitRate = videoBitRate;
-                    mediaInfoData.ScanType = scanType;
+                    mediaInfoData.PluginData.AudioBitRate = audioBitRate;
+                    mediaInfoData.PluginData.VideoBitRate = videoBitRate;
+                    mediaInfoData.PluginData.ScanType = scanType;
                 }
                 else
                 {

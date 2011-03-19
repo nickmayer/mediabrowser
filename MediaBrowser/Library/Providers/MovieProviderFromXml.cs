@@ -55,7 +55,7 @@ namespace MediaBrowser.Library.Providers
         public override void Fetch()
         {
             var movie = Item as Movie;
-             Debug.Assert(movie != null);
+            Debug.Assert(movie != null);
 
             string mfile = XmlLocation();
             string location = Path.GetDirectoryName(mfile);
@@ -73,7 +73,7 @@ namespace MediaBrowser.Library.Providers
                     s = doc.SafeGetString("Title/OriginalTitle");
                 movie.Name = s;
                 movie.SortName = doc.SafeGetString("Title/SortTitle");
-                
+
                 movie.Overview = doc.SafeGetString("Title/Description");
                 if (movie.Overview != null)
                     movie.Overview = movie.Overview.Replace("\n\n", "\n");
@@ -85,8 +85,8 @@ namespace MediaBrowser.Library.Providers
                 DateTime added = DateTime.MinValue;
                 DateTime.TryParse(doc.SafeGetString("Title/Added"), out added);
                 if (added > DateTime.MinValue) movie.DateCreated = added;
-               
-             
+
+
                 string front = doc.SafeGetString("Title/Covers/Front");
                 if ((front != null) && (front.Length > 0))
                 {
@@ -94,8 +94,8 @@ namespace MediaBrowser.Library.Providers
                     if (File.Exists(front))
                         Item.PrimaryImagePath = front;
                 }
-                
-                
+
+
                 string back = doc.SafeGetString("Title/Covers/Back");
                 if ((back != null) && (back.Length > 0))
                 {
@@ -107,7 +107,7 @@ namespace MediaBrowser.Library.Providers
 
                 if (movie.DisplayMediaType == null)
                 {
-                    movie.DisplayMediaType = doc.SafeGetString("Title/Type","");
+                    movie.DisplayMediaType = doc.SafeGetString("Title/Type", "");
                     switch (movie.DisplayMediaType.ToLower())
                     {
                         case "blu-ray":
@@ -126,7 +126,7 @@ namespace MediaBrowser.Library.Providers
                 }
                 if (movie.ProductionYear == null)
                 {
-                    int y = doc.SafeGetInt32("Title/ProductionYear",0);
+                    int y = doc.SafeGetInt32("Title/ProductionYear", 0);
                     if (y > 1900)
                         movie.ProductionYear = y;
                 }
@@ -136,7 +136,11 @@ namespace MediaBrowser.Library.Providers
                     if (i >= 0)
                         movie.ImdbRating = i;
                 }
-                
+                if (movie.ImdbID == null)
+                {
+                    movie.ImdbID = doc.SafeGetString("Title/IMDbId");
+                }
+
 
                 foreach (XmlNode node in doc.SelectNodes("Title/Persons/Person[Type='Actor']"))
                 {
@@ -147,7 +151,7 @@ namespace MediaBrowser.Library.Providers
 
                         var name = node.SelectSingleNode("Name").InnerText;
                         var role = node.SafeGetString("Role", "");
-                        var actor = new Actor() {Name = name, Role = role};
+                        var actor = new Actor() { Name = name, Role = role };
 
                         movie.Actors.Add(actor);
                     }
@@ -156,8 +160,8 @@ namespace MediaBrowser.Library.Providers
                         // fall through i dont care, one less actor
                     }
                 }
-                
-                
+
+
                 foreach (XmlNode node in doc.SelectNodes("Title/Persons/Person[Type='Director']"))
                 {
                     try
@@ -171,7 +175,7 @@ namespace MediaBrowser.Library.Providers
                         // fall through i dont care, one less director
                     }
                 }
-                
+
 
                 foreach (XmlNode node in doc.SelectNodes("Title/Genres/Genre"))
                 {
@@ -185,9 +189,9 @@ namespace MediaBrowser.Library.Providers
                     {
                         // fall through i dont care, one less genre
                     }
-                }   
+                }
 
-               
+
                 foreach (XmlNode node in doc.SelectNodes("Title/Studios/Studio"))
                 {
                     try
@@ -202,7 +206,7 @@ namespace MediaBrowser.Library.Providers
                         // fall through i dont care, one less actor
                     }
                 }
-                
+
                 if (movie.TrailerPath == null)
                     movie.TrailerPath = doc.SafeGetString("Title/LocalTrailer/URL");
 
@@ -212,13 +216,14 @@ namespace MediaBrowser.Library.Providers
                 if (movie.MpaaRating == null)
                 {
                     int i = doc.SafeGetInt32("Title/ParentalRating/Value", (int)7);
-                    switch (i) {
+                    switch (i)
+                    {
                         case -1:
                             movie.MpaaRating = "NR";
                             break;
                         case 0:
                             movie.MpaaRating = "UR";
-                            break; 
+                            break;
                         case 1:
                             movie.MpaaRating = "G";
                             break;
@@ -251,131 +256,116 @@ namespace MediaBrowser.Library.Providers
 
                 //MetaBrowser Custom MediaInfo Support
                 if (movie.MediaInfo == null) movie.MediaInfo = new MediaInfoData();
-                if (string.IsNullOrEmpty(movie.MediaInfo.AudioFormat))
+                //we need to decode metabrowser strings to format and profile
+                string audio = doc.SafeGetString("Title/MediaInfo/Audio/Codec", "");
+                if (audio != "")
                 {
-                    //we need to decode metabrowser strings to format and profile
-                    string audio = doc.SafeGetString("Title/MediaInfo/Audio/Codec","");
-                    if (audio != "")
+                    switch (audio.ToLower())
                     {
-                        switch (audio.ToLower())
-                        {
-                            case "dts-es":
-                            case "dts-es matrix":
-                            case "dts-es discrete":
-                                movie.MediaInfo.AudioFormat = "DTS";
-                                movie.MediaInfo.AudioProfile = "ES";
-                                break;
-                            case "dts-hd hra":
-                            case "dts-hd high resolution":
-                                movie.MediaInfo.AudioFormat = "DTS";
-                                movie.MediaInfo.AudioProfile = "HRA";
-                                break;
-                            case "dts-hd ma":
-                            case "dts-hd master":
-                                movie.MediaInfo.AudioFormat = "DTS";
-                                movie.MediaInfo.AudioProfile = "MA";
-                                break;
-                            case "dolby digital":
-                            case "dolby digital surround ex":
-                            case "dolby surround":
-                                movie.MediaInfo.AudioFormat = "AC-3";
-                                break;
-                            case "dolby digital plus":
-                                movie.MediaInfo.AudioFormat = "E-AC-3";
-                                break;
-                            case "dolby truehd":
-                                movie.MediaInfo.AudioFormat = "AC-3";
-                                movie.MediaInfo.AudioProfile = "TrueHD";
-                                break;
-                            case "mp2":
-                                movie.MediaInfo.AudioFormat = "MPEG Audio";
-                                movie.MediaInfo.AudioProfile = "Layer 2";
-                                break;
-                            case "other":
-                                break;
-                            default:
-                                movie.MediaInfo.AudioFormat = audio;
-                                break;
-                        }
+                        case "dts-es":
+                        case "dts-es matrix":
+                        case "dts-es discrete":
+                            movie.MediaInfo.OverrideData.AudioFormat = "DTS";
+                            movie.MediaInfo.OverrideData.AudioProfile = "ES";
+                            break;
+                        case "dts-hd hra":
+                        case "dts-hd high resolution":
+                            movie.MediaInfo.OverrideData.AudioFormat = "DTS";
+                            movie.MediaInfo.OverrideData.AudioProfile = "HRA";
+                            break;
+                        case "dts-hd ma":
+                        case "dts-hd master":
+                            movie.MediaInfo.OverrideData.AudioFormat = "DTS";
+                            movie.MediaInfo.OverrideData.AudioProfile = "MA";
+                            break;
+                        case "dolby digital":
+                        case "dolby digital surround ex":
+                        case "dolby surround":
+                            movie.MediaInfo.OverrideData.AudioFormat = "AC-3";
+                            break;
+                        case "dolby digital plus":
+                            movie.MediaInfo.OverrideData.AudioFormat = "E-AC-3";
+                            break;
+                        case "dolby truehd":
+                            movie.MediaInfo.OverrideData.AudioFormat = "AC-3";
+                            movie.MediaInfo.OverrideData.AudioProfile = "TrueHD";
+                            break;
+                        case "mp2":
+                            movie.MediaInfo.OverrideData.AudioFormat = "MPEG Audio";
+                            movie.MediaInfo.OverrideData.AudioProfile = "Layer 2";
+                            break;
+                        case "other":
+                            break;
+                        default:
+                            movie.MediaInfo.OverrideData.AudioFormat = audio;
+                            break;
                     }
                 }
-                if (movie.MediaInfo.AudioStreamCount == 0) movie.MediaInfo.AudioStreamCount = doc.SelectNodes("Title/MediaInfo/Audio").Count;
-                if (string.IsNullOrEmpty(movie.MediaInfo.AudioChannelCount)) movie.MediaInfo.AudioChannelCount = doc.SafeGetString("Title/MediaInfo/Audio/Channels", "");
-                if (movie.MediaInfo.AudioBitRate == 0) movie.MediaInfo.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
-                if (string.IsNullOrEmpty(movie.MediaInfo.VideoCodec))
+                movie.MediaInfo.OverrideData.AudioStreamCount = doc.SelectNodes("Title/MediaInfo/Audio").Count;
+                movie.MediaInfo.OverrideData.AudioChannelCount = doc.SafeGetString("Title/MediaInfo/Audio/Channels", "");
+                movie.MediaInfo.OverrideData.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
+                string video = doc.SafeGetString("Title/MediaInfo/Video/Codec", "");
+                if (video != "")
                 {
-                    string video = doc.SafeGetString("Title/MediaInfo/Video/Codec", "");
-                    if (video != "")
+                    switch (video.ToLower())
                     {
-                        switch (video.ToLower())
-                        {
-                            case "sorenson h.263":
-                                movie.MediaInfo.VideoCodec = "Sorenson H263";
-                                break;
-                            case "h.262":
-                                movie.MediaInfo.VideoCodec = "MPEG-2 Video";
-                                break;
-                            case "h.264":
-                                movie.MediaInfo.VideoCodec = "AVC";
-                                break;
-                            default:
-                                movie.MediaInfo.VideoCodec = video;
-                                break;
-                        }
+                        case "sorenson h.263":
+                            movie.MediaInfo.OverrideData.VideoCodec = "Sorenson H263";
+                            break;
+                        case "h.262":
+                            movie.MediaInfo.OverrideData.VideoCodec = "MPEG-2 Video";
+                            break;
+                        case "h.264":
+                            movie.MediaInfo.OverrideData.VideoCodec = "AVC";
+                            break;
+                        default:
+                            movie.MediaInfo.OverrideData.VideoCodec = video;
+                            break;
                     }
                 }
-                if (movie.MediaInfo.VideoBitRate == 0) movie.MediaInfo.VideoBitRate = doc.SafeGetInt32("Title/MediaInfo/Video/BitRate");
-                if (movie.MediaInfo.Height == 0) movie.MediaInfo.Height = doc.SafeGetInt32("Title/MediaInfo/Video/Height");
-                if (movie.MediaInfo.Width == 0) movie.MediaInfo.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
-                if (string.IsNullOrEmpty(movie.MediaInfo.ScanType)) movie.MediaInfo.ScanType = doc.SafeGetString("Title/MediaInfo/Video/ScanType", "");
-                if (string.IsNullOrEmpty(movie.MediaInfo.VideoFPS)) movie.MediaInfo.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate","");
-                if (movie.MediaInfo.RunTime == 0)
-                {
-                    int rt = doc.SafeGetInt32("Title/MediaInfo/Video/Duration", 0);
-                    if (rt > 0)
-                        movie.MediaInfo.RunTime = rt;
-                    else
-                        movie.MediaInfo.RunTime = doc.SafeGetInt32("Title/RunningTime", 0);
-                }
+                movie.MediaInfo.OverrideData.VideoBitRate = doc.SafeGetInt32("Title/MediaInfo/Video/BitRate");
+                movie.MediaInfo.OverrideData.Height = doc.SafeGetInt32("Title/MediaInfo/Video/Height");
+                movie.MediaInfo.OverrideData.Width = doc.SafeGetInt32("Title/MediaInfo/Video/Width");
+                movie.MediaInfo.OverrideData.ScanType = doc.SafeGetString("Title/MediaInfo/Video/ScanType", "");
+                movie.MediaInfo.OverrideData.VideoFPS = doc.SafeGetString("Title/MediaInfo/Video/FrameRate", "");
+                int rt = doc.SafeGetInt32("Title/MediaInfo/Video/Duration", 0);
+                if (rt > 0)
+                    movie.MediaInfo.OverrideData.RunTime = rt;
+                else
+                    movie.MediaInfo.OverrideData.RunTime = doc.SafeGetInt32("Title/RunningTime", 0);
                 if (movie.MediaInfo.RunTime > 0) movie.RunningTime = movie.MediaInfo.RunTime;
 
-                if (string.IsNullOrEmpty(movie.MediaInfo.AudioLanguages))
+                XmlNodeList nodes = doc.SelectNodes("Title/MediaInfo/Audio/Language");
+                List<string> Langs = new List<string>();
+                foreach (XmlNode node in nodes)
                 {
-                    XmlNodeList nodes = doc.SelectNodes("Title/MediaInfo/Audio/Language");
-                    List<string> Langs = new List<string>();
-                    foreach (XmlNode node in nodes)
-                    {
-                        string m = node.InnerText;
-                        if (!string.IsNullOrEmpty(m))
-                            Langs.Add(m);
-                    }
-                    if (Langs.Count > 1)
-                    {
-                        movie.MediaInfo.AudioLanguages = String.Join(" / ", Langs.ToArray());
-                    }
-                    else
-                    {
-                        movie.MediaInfo.AudioLanguages = doc.SafeGetString("Title/MediaInfo/Audio/Language", "");
-                    }
-                }			
-                if (string.IsNullOrEmpty(movie.MediaInfo.Subtitles))
+                    string m = node.InnerText;
+                    if (!string.IsNullOrEmpty(m))
+                        Langs.Add(m);
+                }
+                if (Langs.Count > 1)
                 {
-                    XmlNodeList nodes = doc.SelectNodes("Title/MediaInfo/Subtitle/Language");
-                    List<string> Subs = new List<string>();
-                    foreach (XmlNode node in nodes)
-                    {
-                        string n = node.InnerText;
-                        if (!string.IsNullOrEmpty(n))
-                            Subs.Add(n);
-                    }
-                    if (Subs.Count > 1)
-                    {
-                        movie.MediaInfo.Subtitles = String.Join(" / ", Subs.ToArray());
-                    }
-                    else
-                    {
-                        movie.MediaInfo.Subtitles = doc.SafeGetString("Title/MediaInfo/Subtitle/Language", "");
-                    }
+                    movie.MediaInfo.OverrideData.AudioLanguages = String.Join(" / ", Langs.ToArray());
+                }
+                else
+                {
+                    movie.MediaInfo.OverrideData.AudioLanguages = doc.SafeGetString("Title/MediaInfo/Audio/Language", "");
+                }
+                nodes = doc.SelectNodes("Title/MediaInfo/Subtitle/Language");
+                List<string> Subs = new List<string>();
+                foreach (XmlNode node in nodes)
+                {
+                    string n = node.InnerText;
+                    if (!string.IsNullOrEmpty(n))
+                        Subs.Add(n);
+                }
+                if (Subs.Count > 1)
+                {
+                    movie.MediaInfo.OverrideData.Subtitles = String.Join(" / ", Subs.ToArray());
+                }
+                else
+                {
+                    movie.MediaInfo.OverrideData.Subtitles = doc.SafeGetString("Title/MediaInfo/Subtitle/Language", "");
                 }
             }
         }

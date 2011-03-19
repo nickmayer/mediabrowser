@@ -5,41 +5,189 @@ using System.Text;
 using Microsoft.MediaCenter.UI;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.LibraryManagement;
+using MediaBrowser.Library.Entities.Attributes;
 
 namespace MediaBrowser.Library.Entities
 {
     public class MediaInfoData
     {
-        public readonly static MediaInfoData Empty = new MediaInfoData { AudioFormat = "", VideoCodec = "" };
+        public class MIData
+        {
+            [Persist]
+            public int Height = 0;
+            [Persist]
+            public int Width = 0;
+            [Persist]
+            public string VideoCodec = "";
+            [Persist]
+            public string AudioFormat = "";
+            [Persist]
+            public int VideoBitRate = 0;
+            [Persist]
+            public int AudioBitRate = 0;
+            [Persist]
+            public int RunTime = 0;
+            [Persist]
+            public int AudioStreamCount = 0;
+            [Persist]
+            public string AudioChannelCount = "";
+            [Persist]
+            public string AudioProfile = "";
+            [Persist]
+            public string AudioLanguages = "";
+            [Persist]
+            public string Subtitles = "";
+            [Persist]
+            public string VideoFPS = "";
+            [Persist]
+            public string ScanType = "";
+        }
 
+        [DontClearOnForcedRefresh]
         [Persist]
-        public int Height = 0;
+        private MIData _pluginData = new MIData();
         [Persist]
-        public int Width = 0;
-        [Persist]
-        public string VideoCodec = "";
-        [Persist]
-        public string AudioFormat = "";
-        [Persist]
-        public int VideoBitRate = 0;
-        [Persist]
-        public int AudioBitRate = 0;
-        [Persist]
-        public int RunTime = 0;
-        [Persist]
-        public int AudioStreamCount = 0;
-        [Persist]
-        public string AudioChannelCount = "";
-        [Persist]
-        public string AudioProfile = "";
-        [Persist]
-        public string AudioLanguages = "";
-        [Persist]
-        public string Subtitles = "";
-        [Persist]
-        public string VideoFPS = "";
-        [Persist]
-        public string ScanType = "";
+        private MIData _overrideData = new MIData();
+
+        public MIData PluginData
+        {
+            get
+            {
+                if (_pluginData == null) _pluginData = new MIData();
+                return _pluginData;
+            }
+            set
+            {
+                _pluginData = value;
+            }
+        }
+
+        public MIData OverrideData
+        {
+            get
+            {
+                if (_overrideData == null) _overrideData = new MIData();
+                return _overrideData;
+            }
+            set
+            {
+                _overrideData = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return OverrideData.Height > 0 ? OverrideData.Height : PluginData.Height;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return OverrideData.Width > 0 ? OverrideData.Width : PluginData.Width;
+            }
+        }
+
+        public string VideoCodec
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.VideoCodec) ? OverrideData.VideoCodec : PluginData.VideoCodec;
+            }
+        }
+
+        public string AudioFormat
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.AudioFormat) ? OverrideData.AudioFormat : PluginData.AudioFormat;
+            }
+        }
+
+        public int VideoBitRate
+        {
+            get
+            {
+                return OverrideData.VideoBitRate > 0 ? OverrideData.VideoBitRate : PluginData.VideoBitRate;
+            }
+        }
+
+        public int AudioBitRate
+        {
+            get
+            {
+                return OverrideData.AudioBitRate > 0 ? OverrideData.AudioBitRate : PluginData.AudioBitRate;
+            }
+        }
+
+        public int RunTime
+        {
+            get
+            {
+                return OverrideData.RunTime > 0 ? OverrideData.RunTime : PluginData.RunTime;
+            }
+        }
+
+        public int AudioStreamCount
+        {
+            get
+            {
+                return OverrideData.AudioStreamCount > 0 ? OverrideData.AudioStreamCount : PluginData.AudioStreamCount;
+            }
+        }
+
+        public string AudioChannelCount
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.AudioChannelCount) ? OverrideData.AudioChannelCount : PluginData.AudioChannelCount;
+            }
+        }
+
+        public string AudioProfile
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.AudioProfile) ? OverrideData.AudioProfile : PluginData.AudioProfile;
+            }
+        }
+
+        public string AudioLanguages
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.AudioLanguages) ? OverrideData.AudioLanguages : PluginData.AudioLanguages;
+            }
+        }
+
+        public string Subtitles
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.Subtitles) ? OverrideData.Subtitles : PluginData.Subtitles;
+            }
+        }
+
+        public string VideoFPS
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.VideoFPS) ? OverrideData.VideoFPS : PluginData.VideoFPS;
+            }
+        }
+
+        public string ScanType
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.ScanType) ? OverrideData.ScanType : PluginData.ScanType;
+            }
+        }
+
+        public readonly static MediaInfoData Empty = new MediaInfoData();
 
         string SizeStr
         {

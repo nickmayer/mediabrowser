@@ -104,7 +104,22 @@ namespace MediaBrowser.Library.Metadata {
                 if (persistable.GetAttributes<NotSourcedFromProviderAttribute>() == null && 
                     persistable.GetAttributes<DontClearOnForcedRefreshAttribute>() == null) {
                     persistable.SetValue(item, null);
-                }
+                } else
+                    if (persistable.GetAttributes<DontClearOnForcedRefreshAttribute>() != null &&
+                        persistable.GetValue(item) != null &&
+                        persistable is object)
+                    {
+                        // in case this object itself has persistables that need clearing - only one level, not recursive
+                        var innerItem = persistable.GetValue(item);
+                        foreach (var innerPersistable in Serializer.GetPersistables(innerItem))
+                        {
+                            if (innerPersistable.GetAttributes<NotSourcedFromProviderAttribute>() == null &&
+                                innerPersistable.GetAttributes<DontClearOnForcedRefreshAttribute>() == null)
+                            {
+                                innerPersistable.SetValue(innerItem, null);
+                            }
+                        }
+                    }
             }
         }
 
