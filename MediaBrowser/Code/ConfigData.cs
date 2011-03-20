@@ -191,6 +191,8 @@ namespace MediaBrowser
 
         [Comment("The delay (in seconds) before we start validating library items. This allows sleeping drives and servers to come alive")]
         public int ValidationDelay = 0;
+        [Comment("The number of days to retain log files.  Files older than this will be deleted periodically")]
+        public int LogFileRetentionDays = 30;
 
         public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 

@@ -707,10 +707,14 @@ namespace MediaBrowserService
                     Kernel.Instance.ReLoadRoot(); // re-dump this to stay clean
                     _refreshRunning = false;
 
-                    if (onSchedule && _config.SleepAfterScheduledRefresh)
+                    if (onSchedule)
                     {
-                        Logger.ReportInfo("Putting computer to sleep...");
-                        System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+                        ClearLogFiles(Kernel.Instance.ConfigData.LogFileRetentionDays);
+                        if (_config.SleepAfterScheduledRefresh)
+                        {
+                            Logger.ReportInfo("Putting computer to sleep...");
+                            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+                        }
                     }
                 }
             }
@@ -998,6 +1002,21 @@ namespace MediaBrowserService
                 Logger.ReportInfo("Migrating playstate for: " + item.Name);
                 status.Id = item.Id;
                 status.Save();
+            }
+        }
+
+        private void ClearLogFiles(int daysOld)
+        {
+            Logger.ReportInfo("Clearing log files older than " + daysOld + " days.");
+            try
+            {
+                (from f in new DirectoryInfo(ApplicationPaths.AppLogPath).GetFiles()
+                 where f.LastWriteTime < DateTime.Now.Subtract(TimeSpan.FromDays(daysOld))
+                 select f).ToList().ForEach(f => f.Delete());
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error trying to clear log files.", e);
             }
         }
     }
