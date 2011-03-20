@@ -629,6 +629,7 @@ namespace MediaBrowser
                     break;
                 case "2.3.1.0":
                     MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
+                    Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
                     //we need to do a cache clear and full re-build (item guids may have changed)
                     if (MBServiceController.SendCommandToService(IPCCommands.ForceRebuild))
                     {
