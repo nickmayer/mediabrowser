@@ -152,17 +152,25 @@ namespace MediaInfoProvider
                 string subDir =  "bdmv\\stream\\";
                 string filePattern =  "*.m2ts";
                 //find the largest stream file
-                DirectoryInfo dirInfo = new DirectoryInfo(Path.Combine(Item.Path, subDir));
-                IEnumerable<System.IO.FileInfo> fileList = dirInfo.GetFiles(filePattern, System.IO.SearchOption.AllDirectories);
+                try
+                {
+                    DirectoryInfo dirInfo = new DirectoryInfo(Path.Combine(Item.Path, subDir));
+                    IEnumerable<System.IO.FileInfo> fileList = dirInfo.GetFiles(filePattern, System.IO.SearchOption.AllDirectories);
 
-                FileInfo largestFile =
-                    (from file in fileList
-                     let len = GetFileLength(file)
-                     where len > 0
-                     orderby len descending
-                     select file)
-                    .First();
-                return largestFile.FullName;
+                    FileInfo largestFile =
+                        (from file in fileList
+                         let len = GetFileLength(file)
+                         where len > 0
+                         orderby len descending
+                         select file)
+                        .First();
+                    return largestFile.FullName;
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("MediaInfo error dealing with m2ts file.", e);
+                    return null;
+                }
             }
             else if (video.MediaType == MediaType.DVD)
             {
