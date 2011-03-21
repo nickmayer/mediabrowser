@@ -531,6 +531,9 @@ namespace MediaBrowserService
                     Hide();
                     Kernel.Init(KernelLoadDirective.LoadServicePlugins);
                     _config = Kernel.Instance.ServiceConfigData;
+                    //in case we crashed during a re-build...
+                    _config.ForceRebuildInProgress = false;
+                    _config.Save();
                     CreateNotifyIcon();
                     RefreshInterface();
                     lblSinceDate.Content = "Since: "+_startTime;
