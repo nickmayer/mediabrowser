@@ -165,7 +165,7 @@ namespace Configurator
         {
             //any of these plugins with older versions than defined here are incompatable with this version
             Dictionary<string, System.Version> requiredPluginVersions = new Dictionary<string, System.Version>() {
-                {"coverart",new System.Version(2,3,1,0)},
+                {"coverart",new System.Version(2,3,1,1)},
                 {"mediainfo provider", new System.Version(1,3,0)}
             };
 
