@@ -14,7 +14,7 @@ namespace MediaInfoProvider
         public bool AllowBDRips = false;
 
         [Label("Timeout (ms)")]
-        public string ServiceTimeout = "15000";
+        public string ServiceTimeout = "60000";
 
         [Label("Clear Bad File List")]
         public bool ClearBadFiles = false;
