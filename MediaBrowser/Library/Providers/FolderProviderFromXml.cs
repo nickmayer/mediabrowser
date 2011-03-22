@@ -90,7 +90,7 @@ namespace MediaBrowser.Library.Providers
                 folder.Overview = doc.SafeGetString("Title/Description");
                 if (folder.Overview != null)
                     folder.Overview = folder.Overview.Replace("\n\n", "\n");
-               
+                               
              
                 string front = doc.SafeGetString("Title/Covers/Front");
                 if ((front != null) && (front.Length > 0))

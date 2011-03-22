@@ -198,7 +198,7 @@ namespace MediaBrowser.Library.Entities {
         {
             get
             {
-                return "None"; //will be implemented by sub-classes
+                return ""; //will be implemented by sub-classes
             }
             set { }
         }
