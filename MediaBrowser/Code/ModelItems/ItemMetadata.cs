@@ -197,15 +197,9 @@ namespace MediaBrowser.Library {
                     {
                         return show.AspectRatio;
                     }
-                    else
-                    {
-                        return this.MediaInfo.AspectRatioString;
-                    }
                 }
-                else
-                {
-                    return this.MediaInfo.AspectRatioString;
-                }
+                //calculated aspect ratios on ripped media are garbage
+                return (baseItem is Video && !(baseItem as Video).ContainsRippedMedia) ? this.MediaInfo.AspectRatioString : "";
             }
         }
 
