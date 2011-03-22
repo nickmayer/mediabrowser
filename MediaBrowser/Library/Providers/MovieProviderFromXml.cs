@@ -105,7 +105,7 @@ namespace MediaBrowser.Library.Providers
                 }
 
 
-                if (movie.DisplayMediaType == null)
+                if (!string.IsNullOrEmpty(movie.DisplayMediaType))
                 {
                     movie.DisplayMediaType = doc.SafeGetString("Title/Type", "");
                     switch (movie.DisplayMediaType.ToLower())
