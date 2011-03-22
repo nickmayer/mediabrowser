@@ -604,6 +604,14 @@ namespace MediaBrowser.Library
             });
         }
 
+        public void ClearImages()
+        {
+            //clear our our images so they will re-load
+            primaryImage = null;
+            bannerImage = null;
+            backdropImage = null;
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
+        }
         #endregion
 
 

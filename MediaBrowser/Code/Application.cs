@@ -547,16 +547,13 @@ namespace MediaBrowser
                         Async.Queue("Startup Library Validator", () =>
                         {
                             Kernel.Instance.MajorActivity = true;
-                            foreach (BaseItem item in RootFolder.RecursiveChildren)
+                            foreach (BaseItem item in RootFolder.Children)
                             {
-                                if (item is Folder && item.Parent == RootFolder)
+                                if (item is Folder)
                                 {
-                                    item.RefreshMetadata(MetadataRefreshOptions.FastOnly); // refresh all the top-level folders to pick up any changes
                                     (item as Folder).ValidateChildren();
                                 }
                             }
-                            //now force the UI to update
-                            if (this.RootFolderModel != null) this.RootFolderModel.RefreshUI();
                             Kernel.Instance.MajorActivity = false;
                         });
                     }
@@ -591,6 +588,16 @@ namespace MediaBrowser
                 try
                 {
                     this.RootFolderModel = (MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath));
+                    Async.Queue("Top Level Refresher", () =>
+                    {
+                        foreach (var item in RootFolderModel.Children)
+                        {
+                            if (item.BaseItem.RefreshMetadata(MetadataRefreshOptions.FastOnly))
+                                item.ClearImages(); // refresh all the top-level folders to pick up any changes
+                        }
+                        RootFolderModel.Children.Sort(); //make sure sort is right
+                    },2000);
+
                     Navigate(this.RootFolderModel);
                 }
                 catch (Exception ex)

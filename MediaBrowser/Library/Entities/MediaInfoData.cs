@@ -53,12 +53,14 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (_pluginData == null) _pluginData = new MIData();
+                lock(_pluginData)
+                    if (_pluginData == null) _pluginData = new MIData();
                 return _pluginData;
             }
             set
             {
-                _pluginData = value;
+                lock(_pluginData)
+                    _pluginData = value;
             }
         }
 
@@ -66,12 +68,14 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                if (_overrideData == null) _overrideData = new MIData();
+                lock(_overrideData)
+                    if (_overrideData == null) _overrideData = new MIData();
                 return _overrideData;
             }
             set
             {
-                _overrideData = value;
+                lock(_overrideData)
+                    _overrideData = value;
             }
         }
 
@@ -544,20 +548,24 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                switch (this.AudioFormat.ToLower())
+                if (this.AudioFormat != null)
                 {
-                    case "ac-3":
-                    case "dts":
-                    case "mpeg audio":
-                        {
-                            if (this.AudioProfile != null && this.AudioProfile != "")
-                                return string.Format("{0} {1}", this.AudioFormat, this.AudioProfile);
-                            else
-                                return this.AudioFormat;
-                        }
-                    default:
-                        return this.AudioFormat;
+                    switch (this.AudioFormat.ToLower())
+                    {
+                        case "ac-3":
+                        case "dts":
+                        case "mpeg audio":
+                            {
+                                if (this.AudioProfile != null && this.AudioProfile != "")
+                                    return string.Format("{0} {1}", this.AudioFormat, this.AudioProfile);
+                                else
+                                    return this.AudioFormat;
+                            }
+                        default:
+                            return this.AudioFormat;
+                    }
                 }
+                else return "";
             }
         }
 
