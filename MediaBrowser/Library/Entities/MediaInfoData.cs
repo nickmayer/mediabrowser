@@ -53,14 +53,12 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                lock(_pluginData)
-                    if (_pluginData == null) _pluginData = new MIData();
+                if (_pluginData == null) _pluginData = new MIData();
                 return _pluginData;
             }
             set
             {
-                lock(_pluginData)
-                    _pluginData = value;
+                _pluginData = value;
             }
         }
 
@@ -68,14 +66,12 @@ namespace MediaBrowser.Library.Entities
         {
             get
             {
-                lock(_overrideData)
-                    if (_overrideData == null) _overrideData = new MIData();
+                if (_overrideData == null) _overrideData = new MIData();
                 return _overrideData;
             }
             set
             {
-                lock(_overrideData)
-                    _overrideData = value;
+                _overrideData = value;
             }
         }
 
