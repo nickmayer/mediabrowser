@@ -174,6 +174,11 @@ namespace MediaBrowser.Library.Metadata {
 
                 try {
                     if (provider.NeedsRefresh() | force) {
+                        //I HATE this but I guess we're already tied to MIP by having a specific property for it...
+                        if (provider.GetType().FullName.ToLower() == "mediainfoprovider.mediainfoprovider" && item is Show && (item as Show).MediaInfo != null)
+                        {
+                            (item as Show).MediaInfo.PluginData = null; //clear this out only if it actually needs a refresh
+                        }
                         provider.Fetch();
                         Serializer.Merge(provider.Item, item);
                         changed = true;
