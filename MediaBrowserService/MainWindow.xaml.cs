@@ -344,7 +344,7 @@ namespace MediaBrowserService
                     refreshProgress.Value = pctDone;
                     lblNextSvcRefresh.Content = step;
                     var elapsed = DateTime.Now - _refreshStartTime;
-                    var estCompl = TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds);
+                    var estCompl = pctDone > .55 ? TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds) : TimeSpan.MaxValue;
                     string estString = pctDone > .55 ? " Est. Remaining Time: " + String.Format("{0:00}:{1:00}:{2:00}", estCompl.Hours, estCompl.Minutes, estCompl.Seconds) : "";
                     lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}",elapsed.Hours,elapsed.Minutes,elapsed.Seconds)+estString
                         ;
@@ -658,7 +658,14 @@ namespace MediaBrowserService
                             //clear all cache items except displayprefs and playstate
                             Logger.ReportInfo("Clearing Cache on manual refresh...");
                             UpdateProgress("Clearing Cache", 0);
-                            Kernel.Instance.ItemRepository.ClearEntireCache();
+                            try
+                            {
+                                Kernel.Instance.ItemRepository.ClearEntireCache();
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Error attempting to clear cache.", e);
+                            }
                         }
                         if (manualOptions.ClearImageCacheOption)
                         {
