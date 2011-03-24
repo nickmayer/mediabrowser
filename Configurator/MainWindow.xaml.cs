@@ -166,7 +166,8 @@ namespace Configurator
             //any of these plugins with older versions than defined here are incompatable with this version
             Dictionary<string, System.Version> requiredPluginVersions = new Dictionary<string, System.Version>() {
                 {"coverart",new System.Version(2,3,1,1)},
-                {"mediainfo provider", new System.Version(1,3,0)}
+                {"mediainfo provider", new System.Version(1,3,0)},
+                {"media browser trailers", new System.Version(1,3,0,6)}
             };
 
             List<IPlugin> foundPlugins = new List<IPlugin>();
@@ -185,7 +186,9 @@ namespace Configurator
             {
                 string plugins = "";
                 foreach (var plugin in foundPlugins)
-                    plugins += plugin.Name+" version "+plugin.Version+"\n";
+                {
+                    plugins += plugin.Name + " version " + plugin.Version + "\n";
+                }
                 Dispatcher.Invoke(DispatcherPriority.Normal, (System.Windows.Forms.MethodInvoker)(() =>
                 {
                     MessageBox.Show("The following plugin versions are not compatable with this version of MB." +
