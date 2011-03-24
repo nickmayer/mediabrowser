@@ -1913,14 +1913,15 @@ sortorder: {2}
         private void btnValidateKey_Click(object sender, RoutedEventArgs e)
         {
             Config.Instance.SupporterKey = tbxSupporterKey.Text.Trim();
-            if (ValidateKey("trailers")) //use trailers because it is the lowest level
-            {
-                MessageBox.Show("Supporter key saved and validated.  Thank you for your support.", "Save Key");
-            }
-            else
-            {
-                MessageBox.Show("Supporter key does not appear to be valid.  Please double check. Copy and paste from the email for best results.", "Supporter Key Invalid");
-            }
+            //with new store there is no one item we can validate.  Just save the key
+            //if (ValidateKey("trailers")) //use trailers because it is the lowest level
+            //{
+                MessageBox.Show("Supporter key saved.  Thank you for your support.", "Save Key");
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Supporter key does not appear to be valid.  Please double check. Copy and paste from the email for best results.", "Supporter Key Invalid");
+            //}
         }
 
         private bool ValidateKey(string feature)
