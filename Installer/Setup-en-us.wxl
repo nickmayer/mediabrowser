@@ -21,6 +21,6 @@
   <String Id="Dialog_OptionalLaunchAtStartup">Optionally, you can automatically launch the applications at logon:</String>
   <String Id="Dialog_CreateMediaBrowserStartupShortcut">Launch Media Browser automatically at log on.</String>
   <String Id="Dialog_CreateMediaBrowserServiceStartupShortcut">Launch the MB Service automatically at log on. (Recommended)</String>
-  <String Id="Dialog_MakeDonation">If you like Media Browser, please consider making a donation!</String>
-  <String Id="Dialog_DonationUrl">http://www.mediabrowser.tv/donate</String>
+  <String Id="Dialog_MakeDonation">Be sure to check out the new Media Browser Store!</String>
+  <String Id="Dialog_DonationUrl">http://www.mediabrowser.tv/store</String>
 </WixLocalization>
