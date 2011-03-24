@@ -516,7 +516,6 @@ namespace MediaBrowser
                     }
                     //Check to see if this is the first time this version is run
                     string currentVersion = Kernel.Instance.Version.ToString();
-                    //string currentVersion = "2.3.1.0"; //test
                     if (Config.MBVersion != currentVersion)
                     {
                         //first time with this version - run routine
@@ -637,6 +636,7 @@ namespace MediaBrowser
                 case "2.3.1.0":
                     MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
                     Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
+                    if (Config.MetadataCheckForUpdateAge < 30) Config.MetadataCheckForUpdateAge = 30; //bump this up
                     //we need to do a cache clear and full re-build (item guids may have changed)
                     if (MBServiceController.SendCommandToService(IPCCommands.ForceRebuild))
                     {
@@ -648,8 +648,6 @@ namespace MediaBrowser
                         MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
                         ev.Dialog(CurrentInstance.StringData("RebuildFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
                     }
-                    Config.MBVersion = thisVersion;
-                    //Application.CurrentInstance.Close();
                     break;
             }
         }
