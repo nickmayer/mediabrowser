@@ -769,7 +769,7 @@ namespace MediaBrowserService
                         processedItems.Add(item.Id);
                         //Logger.ReportInfo(item.Name + " id: " + item.Id);
                     }
-                    else Logger.ReportInfo("Not refreshing " + item.Name + " again.");
+                    else Logger.ReportVerbose("Not refreshing " + item.Name + " again.");
                 })) return false;
             }
 
