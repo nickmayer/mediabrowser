@@ -379,6 +379,7 @@ namespace MediaBrowser.Library.Entities {
                     }
                 } else {
                     changed = true;
+                    Logger.ReportInfo("Adding new item to library: " + item.Path);
                     lock (ActualChildren) {
                         item.Parent = this;
                         ActualChildren.Add(item);
@@ -389,6 +390,7 @@ namespace MediaBrowser.Library.Entities {
 
             foreach (var item in currentChildren.Values.Where(item => item != null)) {
                 changed = true;
+                Logger.ReportInfo("Removing missing item from library: "+item.Path);
                 lock (ActualChildren) {
                     ActualChildren.RemoveAll(current => current.Id == item.Id);
                 }
