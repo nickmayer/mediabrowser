@@ -44,7 +44,16 @@ namespace Configurator.Code {
 
         Dictionary<string, System.Version> latestVersions = new Dictionary<string, System.Version>();
 
-        public PluginManager() {
+        //any of these plugins with older versions than defined here are incompatable with this version
+        public static Dictionary<string, System.Version> RequiredVersions = new Dictionary<string, System.Version>() {
+                {"coverart",new System.Version(2,3,1,2)},
+                {"mediainfo provider", new System.Version(1,3,0)},
+                {"gametime", new System.Version(6,0,0)},
+                {"media browser trailers", new System.Version(1,3,0,6)}
+            };
+
+        public PluginManager()
+        {
             instance = this;
         }
 

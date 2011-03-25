@@ -112,10 +112,15 @@ namespace Configurator {
                 lblVer.Visibility = lblReq.Visibility = Visibility.Visible;
 
                 IPlugin plugin = pluginList.SelectedItem as IPlugin;
+                System.Version rpv = new System.Version(0, 0, 0, 0);
+                PluginManager.RequiredVersions.TryGetValue(plugin.Name.ToLower(), out rpv);
                 if (plugin.RequiredMBVersion > Kernel.Instance.Version)
                 {
                     InstallButton.IsEnabled = false;
                     MessageLine.Content = plugin.Name + " requires at least version " + plugin.RequiredMBVersion + ".  Current MB version installed is " + Kernel.Instance.Version;
+                } else if (plugin.Version < rpv) {
+                    InstallButton.IsEnabled = false;
+                    MessageLine.Content = plugin.Name + " version " + plugin.Version + " is not compatable with this version of MB (" + Kernel.Instance.Version+")";
                 }
                 else
                 {

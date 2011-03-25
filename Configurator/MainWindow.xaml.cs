@@ -163,16 +163,9 @@ namespace Configurator
 
         private void ForceUpgradeCheck()
         {
-            //any of these plugins with older versions than defined here are incompatable with this version
-            Dictionary<string, System.Version> requiredPluginVersions = new Dictionary<string, System.Version>() {
-                {"coverart",new System.Version(2,3,1,1)},
-                {"mediainfo provider", new System.Version(1,3,0)},
-                {"media browser trailers", new System.Version(1,3,0,6)}
-            };
-
             List<IPlugin> foundPlugins = new List<IPlugin>();
 
-            foreach (var entry in requiredPluginVersions)
+            foreach (var entry in PluginManager.RequiredVersions)
             {
                 foreach (var plugin in PluginManager.Instance.InstalledPlugins)
                 {
