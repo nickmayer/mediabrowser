@@ -189,6 +189,11 @@ namespace MediaBrowser.Library.Filesystem
         private void RefreshFolder()
         {
             Logger.ReportInfo("Refreshing " + Application.CurrentInstance.CurrentFolder.Name + " due to change in "+folder.Name);
+            folder.ValidateChildren();
+            foreach (var item in folder.RecursiveChildren)
+            {
+                if (item is Folder) (item as Folder).ValidateChildren();
+            }
             //Refresh whatever folder we are currently viewing plus all parents up the tree
             FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
             aFolder.RefreshUI();
