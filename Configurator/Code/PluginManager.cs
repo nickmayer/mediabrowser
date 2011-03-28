@@ -49,6 +49,7 @@ namespace Configurator.Code {
                 {"coverart",new System.Version(2,3,1,2)},
                 {"mediainfo provider", new System.Version(1,3,0)},
                 {"gametime", new System.Version(6,0,0)},
+                {"high quality thumbnails", new System.Version(1,2,0)},
                 {"media browser trailers", new System.Version(1,3,0,6)}
             };
 
