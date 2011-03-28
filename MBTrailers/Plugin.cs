@@ -13,7 +13,7 @@ namespace MBTrailers {
     public class Plugin : BasePlugin {
 
         internal const string PluginName = "Media Browser Trailers";
-        internal const string PluginDescription = "HD Trailers for MediaBrowser.\n\nUnrestricted version is available to supporters.";
+        internal const string PluginDescription = "HD Trailers for MediaBrowser.\n\nUnrestricted version is available to supporters.\n\nBETA version for Titan (MB 2.3.1)";
 
         internal const int ProxyPort = 8752;
 
@@ -138,7 +138,7 @@ namespace MBTrailers {
         {
             get
             {
-                return new Version("2.3.0.0");
+                return new Version("2.3.1.0");
             }
         }
 
@@ -146,7 +146,7 @@ namespace MBTrailers {
         {
             get
             {
-                return new Version("2.3.0.0");
+                return new Version("2.3.1.0");
             }
         }
 

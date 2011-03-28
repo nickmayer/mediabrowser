@@ -69,6 +69,7 @@ namespace MBTrailers
             this.DateCreated = System.IO.File.GetCreationTime(this.Path);
             this.DisplayMediaType = "Trailer";
             Plugin.proxy.SetTrailerInfo(this);
+            Kernel.Instance.ItemRepository.SaveItem(this);
 
             return true;
         }
