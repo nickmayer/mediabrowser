@@ -120,7 +120,7 @@ namespace Configurator {
                     MessageLine.Content = plugin.Name + " requires at least version " + plugin.RequiredMBVersion + ".  Current MB version installed is " + Kernel.Instance.Version;
                 } else if (plugin.Version < rpv) {
                     InstallButton.IsEnabled = false;
-                    MessageLine.Content = plugin.Name + " version " + plugin.Version + " is not compatable with this version of MB (" + Kernel.Instance.Version+")";
+                    MessageLine.Content = plugin.Name + " version " + plugin.Version + " is not compatible with this version of MB (" + Kernel.Instance.Version+")";
                 }
                 else
                 {

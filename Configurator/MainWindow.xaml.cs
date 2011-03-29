@@ -184,9 +184,9 @@ namespace Configurator
                 }
                 Dispatcher.Invoke(DispatcherPriority.Normal, (System.Windows.Forms.MethodInvoker)(() =>
                 {
-                    MessageBox.Show("The following plugin versions are not compatable with this version of MB." +
-                        "They will be un-installed.\n\nYou can re-install compatable versions through the plug-ins tab.\n\n" +
-                        plugins, "Incompatable Plug-ins");
+                    MessageBox.Show("The following plugin versions are not compatible with this version of MB." +
+                        "They will be un-installed.\n\nYou can re-install compatible versions through the plug-ins tab.\n\n" +
+                        plugins, "Incompatible Plug-ins");
                     foreach (var plugin in foundPlugins)
                     {
                         try
