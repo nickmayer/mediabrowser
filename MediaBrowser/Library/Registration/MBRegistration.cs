@@ -23,8 +23,6 @@ namespace MediaBrowser.Library.Registration
             {
                 if (isInTrial == null)
                 {
-                    // be sure we are comparing dates consistently
-                    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
                     isInTrial = ExpirationDate > DateTime.Now;
                 }
                 return (isInTrial.Value && !IsRegistered);
@@ -77,19 +75,21 @@ namespace MediaBrowser.Library.Registration
         {
             try
             {
-                string path = "http://www.mediabrowser.tv/registration/hits?feature="+feature+"&version="+version.ToString() + "&key="+Kernel.Instance.ConfigData.SupporterKey+"&mac_addr="+Helper.GetMACAddress();
+                string path = "http://www.mediabrowser.tv/registration/hits?feature=" + feature + "&version=" + version.ToString() + "&key=" + Kernel.Instance.ConfigData.SupporterKey + "&mac_addr=" + Helper.GetMACAddress();
                 WebRequest request = WebRequest.Create(path);
                 var response = request.GetResponse();
-                Stream stream = response.GetResponseStream();
-                byte[] buffer = new byte[11];
-                stream.Read(buffer, 0, 11);
-                response.Close();
-                stream.Close();
-                return DateTime.ParseExact(System.Text.Encoding.ASCII.GetString(buffer).Trim(), "yyyy-MM-dd", new System.Globalization.CultureInfo("en-US"));
+                using (Stream stream = response.GetResponseStream())
+                {
+                    byte[] buffer = new byte[11];
+                    stream.Read(buffer, 0, 11);
+                    response.Close();
+                    stream.Close();
+                    return DateTime.ParseExact(System.Text.Encoding.ASCII.GetString(buffer).Trim(), "yyyy-MM-dd", new System.Globalization.CultureInfo("en-US"));
+                }
             }
             catch (Exception ex)
-            { 
-                Logger.ReportException("Error obtaining expiration date for feature: "+feature, ex);
+            {
+                Logger.ReportException("Error obtaining expiration date for feature: " + feature, ex);
                 throw new ApplicationException();
             }
         }
@@ -102,16 +102,19 @@ namespace MediaBrowser.Library.Registration
             {
                 WebRequest request = WebRequest.Create(path);
                 var response = request.GetResponse();
-                Stream stream = response.GetResponseStream();
-                byte[] buffer = new byte[5];
-                stream.Read(buffer, 0, 5);
-                response.Close();
-                stream.Close();
-                string res = System.Text.Encoding.ASCII.GetString(buffer).Trim();
-                //Logger.ReportInfo("MB validation result: " + res);
-                valid = (res.StartsWith("true"));
+                using (Stream stream = response.GetResponseStream())
+                {
+                    byte[] buffer = new byte[5];
+                    stream.Read(buffer, 0, 5);
+                    response.Close();
+                    stream.Close();
+                    string res = System.Text.Encoding.ASCII.GetString(buffer).Trim();
+                    //Logger.ReportInfo("MB validation result: " + res);
+                    valid = (res.StartsWith("true"));
+                }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Logger.ReportException("Error checking registration status of " + feature, e);
                 throw new ApplicationException();
             }
