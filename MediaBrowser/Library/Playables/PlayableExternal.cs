@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using MediaBrowser.Library.Entities;
+using MediaBrowser.Library.Threading;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -81,42 +82,40 @@ namespace MediaBrowser.Library.Playables
             if (PlaybackController.IsPlaying) {
                 PlaybackController.Pause();
             }
-            //throw up a form to show we are starting the player
+            //feedback that something happened
+            System.Media.SystemSounds.Beep.Play();
+
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);
             Process player = Process.Start(p.Command, args);
             MarkWatched();
-            //make this optional
-            if (p.MinimizeMCE)
-            {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(MinimizeMCE), player);
-            }
+            Async.Queue("Ext Player Mgmt", () => ManageExtPlayer(player, p.MinimizeMCE));
         }
 
-        private void MinimizeMCE(object player)
+        private void ManageExtPlayer(Process player, bool minimizeMCE)
         {
-            //throw up a form to cover the desktop when we minimize
-            ExternalSplashForm.Display();
-            ExternalSplashForm.Activate(); //bring it on top
 
-            Debug.WriteLine("minimizeMCE and then give focus to external player");
-            Process extPlayer = (Process)player;
-
-            //minimize MCE
+            //minimize MCE if indicated
             IntPtr mceWnd = FindWindow(null, "Windows Media Center");
             WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
             GetWindowPlacement(mceWnd, ref wp);
-            wp.showCmd = 2; // 1- Normal; 2 - Minimize; 3 - Maximize;
-            SetWindowPlacement(mceWnd, ref wp);
-
-            ThreadPool.QueueUserWorkItem(new WaitCallback(GiveFocusToExtPlayer), player);
-            extPlayer.WaitForExit();
-
+            if (minimizeMCE)
+            {
+                //throw up a form to cover the desktop if we minimize
+                ExternalSplashForm.Display();
+                wp.showCmd = 2; // 1- Normal; 2 - Minimize; 3 - Maximize;
+                SetWindowPlacement(mceWnd, ref wp);
+            }
+            //give the player focus
+            Async.Queue("Ext Player Focus",() => GiveFocusToExtPlayer(player));
+            //and wait for it to exit
+            player.WaitForExit();
+            //now re-store MCE 
             wp.showCmd = 1; // 1- Normal; 2 - Minimize; 3 - Maximize;
             SetWindowPlacement(mceWnd, ref wp);
-            SetForegroundWindow(mceWnd);
             ExternalSplashForm.Hide();
+            SetForegroundWindow(mceWnd);
         }
 
         private void GiveFocusToExtPlayer(object player)

@@ -22,7 +22,7 @@ namespace MediaBrowser.Library
             {
                 us.Show();
             });
-            Thread.Sleep(100); //give it time to come up
+            //Thread.Sleep(100); //give it time to come up
         }
 
         public static void Hide() {
@@ -34,19 +34,27 @@ namespace MediaBrowser.Library
                     }));
             }
         }
-
+        private static int retried = 0;
         public static void Activate()
         {
             if (theForm != null)
             {
-                try
+                if (retried < 3)
                 {
-                    theForm.Invoke(new VoidDelegate(delegate()
+                    try
                     {
-                        theForm.Activate();
-                    }));
+                        theForm.Invoke(new VoidDelegate(delegate()
+                        {
+                            theForm.Activate();
+                            retried = 0;
+                        }));
+                    }
+                    catch {
+                        //probably wasn't up - try again
+                        retried++;
+                        Activate();
+                    } 
                 }
-                catch { } //we tried...
             }
         }
 
