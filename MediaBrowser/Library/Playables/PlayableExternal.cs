@@ -118,13 +118,12 @@ namespace MediaBrowser.Library.Playables
             SetForegroundWindow(mceWnd);
         }
 
-        private void GiveFocusToExtPlayer(object player)
+        private void GiveFocusToExtPlayer(Process player)
         {
             //set external player to foreground
-            Process extPlayer = (Process)player;
-            extPlayer.Refresh();
-            extPlayer.WaitForInputIdle(5000); //give the external player 5 secs to show up and then minimize MCE
-            SetForegroundWindow(extPlayer.MainWindowHandle);
+            player.Refresh();
+            player.WaitForInputIdle(5000); //give the external player 5 secs to show up and then minimize MCE
+            SetForegroundWindow(player.MainWindowHandle);
         }
 
 

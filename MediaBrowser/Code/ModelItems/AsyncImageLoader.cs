@@ -157,7 +157,7 @@ namespace MediaBrowser.Code.ModelItems {
 
             Image newImage = null;
             if (Kernel.Instance.ConfigData.CacheAllImagesInMemory) {
-                Logger.ReportVerbose("Loading image (cacheall true) : " + localPath);
+                //Logger.ReportVerbose("Loading image (cacheall true) : " + localPath);
                 byte[] bytes;
                 lock (ProtectedFileStream.GetLock(localPath)) {
                     bytes = File.ReadAllBytes(localPath);
@@ -172,7 +172,7 @@ namespace MediaBrowser.Code.ModelItems {
             {
 
                 if (newImage == null) {
-                    Logger.ReportVerbose("Loading image : " + localPath);
+                    //Logger.ReportVerbose("Loading image : " + localPath);
                     newImage = new Image("file://" + localPath);
                 }
 
