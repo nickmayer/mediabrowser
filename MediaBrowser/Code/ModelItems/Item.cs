@@ -397,6 +397,15 @@ namespace MediaBrowser.Library
                 return PlayState == null ? false : PlayState.CanResume;
             }
         }
+
+        public TimeSpan WatchedTime
+        {
+            get
+            {
+                return new TimeSpan(this.PlayState.PositionTicks);
+            }
+        }
+
         public string RecentDateString
         {
             get
