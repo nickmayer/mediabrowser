@@ -612,7 +612,8 @@ namespace MediaBrowser
 
         void FirstRunForVersion(string thisVersion)
         {
-            if (new System.Version(Config.MBVersion) < new System.Version(2, 0, 0, 0))
+            var oldVerion = new System.Version(Config.MBVersion);
+            if (oldVerion < new System.Version(2, 0, 0, 0))
             {
                 Logger.ReportInfo("First run of Media Browser.  Initiating a full refresh of the library.");
                 Async.Queue("First run full refresh", () => FullRefresh(RootFolder, MetadataRefreshOptions.Force));
@@ -637,19 +638,26 @@ namespace MediaBrowser
                     MigratePluginSource();
                     break;
                 case "2.3.1.0":
-                    MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
-                    Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
-                    if (Config.MetadataCheckForUpdateAge < 30) Config.MetadataCheckForUpdateAge = 30; //bump this up
-                    //we need to do a cache clear and full re-build (item guids may have changed)
-                    if (MBServiceController.SendCommandToService(IPCCommands.ForceRebuild))
+                case "2.3.2.0":
+                    if (oldVerion < new System.Version(2, 3, 0))
                     {
-                        MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                        ev.Dialog(CurrentInstance.StringData("RebuildNecDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
                     }
-                    else
+                    if (oldVerion < new System.Version(2, 3, 1))
                     {
-                        MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                        ev.Dialog(CurrentInstance.StringData("RebuildFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
+                        if (Config.MetadataCheckForUpdateAge < 30) Config.MetadataCheckForUpdateAge = 30; //bump this up
+                        //we need to do a cache clear and full re-build (item guids may have changed)
+                        if (MBServiceController.SendCommandToService(IPCCommands.ForceRebuild))
+                        {
+                            MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                            ev.Dialog(CurrentInstance.StringData("RebuildNecDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        }
+                        else
+                        {
+                            MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                            ev.Dialog(CurrentInstance.StringData("RebuildFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        }
                     }
                     break;
             }
