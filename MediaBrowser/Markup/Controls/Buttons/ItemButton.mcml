@@ -66,6 +66,7 @@
           <Modified Source="[PlayShortcut.Invoked]"/>
         </Conditions>
         <Actions>
+          <PlaySound Sound="sound://sounds:Miniselect" />
           <Invoke Target="[Item.PlayAction]"  />          
         </Actions>
       </Rule>
