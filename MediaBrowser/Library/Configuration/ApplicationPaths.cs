@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Configuration {
             StringBuilder lpPathBuf,
             ref int pcchBuf);
 
-        private const string INSTALL_PRODUCT_CODE = "A8BBB56E-9C7E-4b91-9E1B-98B19B353400";
+        private const string INSTALL_PRODUCT_CODE = "89A08369-DD80-41c6-966E-A8A057B03FFF";
         private const string SERVICE_COMPONENT_ID = "D19774DD-253A-47E2-94FA-3EFB220E2B77";
         private const string CONFIGURATOR_COMPONENT_ID = "3186FBE0-641C-45f9-AA16-7EAA85B7405C";
 

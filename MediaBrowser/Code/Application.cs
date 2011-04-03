@@ -639,11 +639,11 @@ namespace MediaBrowser
                     break;
                 case "2.3.1.0":
                 case "2.3.2.0":
-                    if (oldVerion < new System.Version(2, 3, 0))
+                    if (oldVerion < new System.Version(2, 3, 0, 0))
                     {
                         MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
                     }
-                    if (oldVerion < new System.Version(2, 3, 1))
+                    if (oldVerion < new System.Version(2, 3, 1, 0))
                     {
                         Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
                         if (Config.MetadataCheckForUpdateAge < 30) Config.MetadataCheckForUpdateAge = 30; //bump this up
