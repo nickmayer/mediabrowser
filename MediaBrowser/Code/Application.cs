@@ -587,15 +587,18 @@ namespace MediaBrowser
                 try
                 {
                     this.RootFolderModel = (MediaBrowser.Library.FolderModel)ItemFactory.Instance.Create(EntryPointResolver.EntryPoint(this.EntryPointPath));
-                    Async.Queue("Top Level Refresher", () =>
+                    if (!IsInEntryPoint)
                     {
-                        foreach (var item in RootFolderModel.Children)
+                        Async.Queue("Top Level Refresher", () =>
                         {
-                            if (item.BaseItem.RefreshMetadata(MetadataRefreshOptions.FastOnly))
-                                item.ClearImages(); // refresh all the top-level folders to pick up any changes
-                        }
-                        RootFolderModel.Children.Sort(); //make sure sort is right
-                    },2000);
+                            foreach (var item in RootFolderModel.Children)
+                            {
+                                if (item.BaseItem.RefreshMetadata(MetadataRefreshOptions.FastOnly))
+                                    item.ClearImages(); // refresh all the top-level folders to pick up any changes
+                            }
+                            RootFolderModel.Children.Sort(); //make sure sort is right
+                        }, 2000);
+                    }
 
                     Navigate(this.RootFolderModel);
                 }
