@@ -82,9 +82,6 @@ namespace MediaBrowser.Library.Playables
             if (PlaybackController.IsPlaying) {
                 PlaybackController.Pause();
             }
-            //feedback that something happened
-            System.Media.SystemSounds.Beep.Play();
-
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);
