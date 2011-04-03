@@ -67,7 +67,7 @@
 
       <Binding Source="[Item.ProductionYearString]" Target="[ProductionYear.Content]" >
         <Conditions>
-          <Equality Source="[Item.ProductionYear]" ConditionOp="GreaterThan" Value="1900" />
+          <Equality Source="[Item.ProductionYear]" ConditionOp="GreaterThan" Value="1850" />
         </Conditions>
         <Transformer>
           <FormatTransformer Format="({0})" />

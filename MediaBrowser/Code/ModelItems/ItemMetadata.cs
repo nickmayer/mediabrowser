@@ -456,7 +456,7 @@ namespace MediaBrowser.Library {
             get 
             { 
                 string pys = string.Empty;
-                if (ProductionYear > 1900)
+                if (ProductionYear > 1850)
                     pys = string.Format(" ({0})", ProductionYear.ToString());
                 return baseItem.Name + pys;
             }

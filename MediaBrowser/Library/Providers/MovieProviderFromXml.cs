@@ -127,7 +127,7 @@ namespace MediaBrowser.Library.Providers
                 if (movie.ProductionYear == null)
                 {
                     int y = doc.SafeGetInt32("Title/ProductionYear", 0);
-                    if (y > 1900)
+                    if (y > 1850)
                         movie.ProductionYear = y;
                 }
                 if (movie.ImdbRating == null)
