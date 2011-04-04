@@ -99,8 +99,11 @@ namespace MediaBrowser.Library.Playables
             GetWindowPlacement(mceWnd, ref wp);
             if (minimizeMCE)
             {
-                //throw up a form to cover the desktop if we minimize
-                ExternalSplashForm.Display();
+                //throw up a form to cover the desktop if we minimize and we are in the primary monitor
+                if (System.Windows.Forms.Screen.FromHandle(mceWnd).Primary)
+                {
+                    ExternalSplashForm.Display();
+                }
                 wp.showCmd = 2; // 1- Normal; 2 - Minimize; 3 - Maximize;
                 SetWindowPlacement(mceWnd, ref wp);
             }

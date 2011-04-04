@@ -22,7 +22,6 @@ namespace MediaBrowser.Library
             {
                 us.Show();
             });
-            //Thread.Sleep(100); //give it time to come up
         }
 
         public static void Hide() {
