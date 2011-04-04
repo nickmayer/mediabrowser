@@ -50,8 +50,8 @@ namespace MediaBrowser.Library.Providers
             bool changed = false;
             var virtualFolder = VirtualFolder;
             if (virtualFolder != null) {
-                changed = firstTime; // we need to refresh once per entry to be sure sort is right
-                firstTime = false;
+                //changed = firstTime; // we need to refresh once per entry to be sure sort is right
+                //firstTime = false;
                 changed |= imagePath != virtualFolder.ImagePath;
                 changed |= Item.PrimaryImagePath == null && virtualFolder.ImagePath != null;
             }
