@@ -6,6 +6,7 @@ using System.IO;
 using Microsoft.MediaCenter.UI;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Entities;
+using MediaBrowser.Library.Threading;
 
 namespace MediaBrowser.Library.Filesystem
 {
@@ -188,22 +189,25 @@ namespace MediaBrowser.Library.Filesystem
 
         private void RefreshFolder()
         {
-            Logger.ReportInfo("Refreshing " + Application.CurrentInstance.CurrentFolder.Name + " due to change in "+folder.Name);
-            folder.ValidateChildren();
-            foreach (var item in folder.RecursiveChildren)
+            Async.Queue("File Watcher Refresher", () =>
             {
-                if (item is Folder) (item as Folder).ValidateChildren();
-            }
-            //Refresh whatever folder we are currently viewing plus all parents up the tree
-            FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
-            aFolder.RefreshUI();
-            while (aFolder != Application.CurrentInstance.RootFolderModel && aFolder.PhysicalParent != null)
-            {
-                aFolder = aFolder.PhysicalParent;
+                Logger.ReportInfo("Refreshing " + Application.CurrentInstance.CurrentFolder.Name + " due to change in " + folder.Name);
+                folder.ValidateChildren();
+                foreach (var item in folder.RecursiveChildren)
+                {
+                    if (item is Folder) (item as Folder).ValidateChildren();
+                }
+                //Refresh whatever folder we are currently viewing plus all parents up the tree
+                FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
                 aFolder.RefreshUI();
-            }
-            //finally refresh the root so recent lists will update (we don't have a path to the right foldermodel so we have to do all)
-            if (Application.CurrentInstance.CurrentFolder != Application.CurrentInstance.RootFolderModel) Application.CurrentInstance.RootFolderModel.RefreshUI();
+                while (aFolder != Application.CurrentInstance.RootFolderModel && aFolder.PhysicalParent != null)
+                {
+                    aFolder = aFolder.PhysicalParent;
+                    aFolder.RefreshUI();
+                }
+                //finally refresh the root so recent lists will update (we don't have a path to the right foldermodel so we have to do all)
+                if (Application.CurrentInstance.CurrentFolder != Application.CurrentInstance.RootFolderModel) Application.CurrentInstance.RootFolderModel.RefreshUI();
+            });
         }
         
     }
