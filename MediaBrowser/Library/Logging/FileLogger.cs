@@ -18,14 +18,17 @@ namespace MediaBrowser.Library.Logging {
                     return "Configurator-";
                 }
                 else
-                    if (AppDomain.CurrentDomain.FriendlyName.ToLower().Contains("mediabrowserservice"))
+                {
+                    switch (Kernel.LoadContext)
                     {
-                        return "MBService-";
+                        case MBLoadContext.Service:
+                            return "MBService-";
+                        case MBLoadContext.Core:
+                            return "MBCore-";
+                        default:
+                            return "Unknown-";
                     }
-                    else
-                    {
-                        return "MBCore-";
-                    }
+                }
             }
         }
 
