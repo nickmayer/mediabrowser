@@ -117,6 +117,11 @@ namespace MediaBrowser.Library
                                         MediaBrowser.Application.CurrentInstance.LaunchEntryPoint(""); //this will start at root
                                     });
                                 }
+                                else
+                                {
+                                    //just need to back up to the root
+                                    Application.CurrentInstance.BackToRoot();
+                                }
 
                                 //tell MC to navigate to us
                                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
