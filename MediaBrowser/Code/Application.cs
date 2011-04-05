@@ -1087,7 +1087,7 @@ namespace MediaBrowser
 
         public void OpenMCMLPage(string page, Dictionary<string, object> properties)
         {
-            session.GoToPage(page, properties);
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => session.GoToPage(page, properties));
         }
 
         public void Shuffle(Item item)

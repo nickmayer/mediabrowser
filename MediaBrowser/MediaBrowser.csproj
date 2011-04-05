@@ -832,6 +832,7 @@
     <Content Include="Markup\FontsSmall.mcml" />
     <Content Include="Markup\FontsDefault.mcml" />
     <Content Include="Markup\StylesBlack.mcml" />
+    <Content Include="Markup\Themes\Default\Splash.mcml" />
     <Content Include="Markup\Themes\Default\ParentalPINEntry.mcml" />
     <Content Include="Markup\Themes\Default\Selectors\PageDefault.mcml" />
     <Content Include="Markup\Themes\Default\ViewMovieDefault.mcml" />
