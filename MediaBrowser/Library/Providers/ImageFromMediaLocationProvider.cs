@@ -27,7 +27,7 @@ namespace MediaBrowser.Library.Providers
         string primaryPath;
 
 
-        protected virtual string Location { get { return Item.Path; } }
+        protected virtual string Location { get { return Item.Path == null ? "" : Item.Path.ToLower(); } }
 
         public override void Fetch()
         {
