@@ -10,17 +10,23 @@ using System.Drawing;
 
 namespace MediaBrowser.Library
 {
-    class ExternalSplashForm
+    public class ExternalSplashForm
     {
         private delegate void VoidDelegate();
         static Form theForm;
+        private static Bitmap _backgroundImage = new Bitmap(Resources.mblogo1000);
 
         public static void Display()
+        {
+            Display(_backgroundImage);
+        }
+
+        public static void Display(Bitmap bgImage)
         {
             var us = new ExternalSplashForm();
             Async.Queue("Ext Splash Show", () =>
             {
-                us.Show();
+                us.Show(bgImage);
             });
         }
 
@@ -57,14 +63,14 @@ namespace MediaBrowser.Library
             }
         }
 
-        void Show()
+        void Show(Bitmap bgImage)
         {
             try
             {
                 theForm = new Form();
                 theForm.BackColor = Color.Black;
                 theForm.BackgroundImageLayout = ImageLayout.Center;
-                theForm.BackgroundImage = new Bitmap(Resources.mblogo1000);
+                theForm.BackgroundImage = bgImage;
                 theForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                 theForm.WindowState = System.Windows.Forms.FormWindowState.Maximized;
                 Cursor.Hide();
