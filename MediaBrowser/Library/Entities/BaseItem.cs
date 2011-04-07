@@ -70,7 +70,7 @@ namespace MediaBrowser.Library.Entities {
 
         public LibraryImage SecondaryImage {
             get {
-                return GetImage(SecondaryImagePath) ?? GetImage(PrimaryImagePath);
+                return GetImage(SecondaryImagePath) ?? PrimaryImage;
             }
         }
 
