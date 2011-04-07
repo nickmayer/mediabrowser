@@ -267,6 +267,37 @@ namespace MediaBrowser.Library
             FirePropertiesChanged("PrimaryImage", "PreferredImage", "PrimaryImageSmall", "PreferredImageSmall");
         }
 
+        AsyncImageLoader secondaryImage = null;
+        public Image SecondaryImage
+        {
+            get
+            {
+                if (baseItem.SecondaryImagePath == null)
+                {
+                    return PrimaryImage;
+                }
+                EnsureSecondaryImageIsSet();
+                return secondaryImage.Image;
+            }
+        }
+
+        private void EnsureSecondaryImageIsSet()
+        {
+            if (secondaryImage == null)
+            {
+                secondaryImage = new AsyncImageLoader(
+                    () => baseItem.SecondaryImage,
+                    DefaultImage,
+                    SecondaryImageChanged);
+                var ignore = secondaryImage.Image;
+            }
+        }
+
+        void SecondaryImageChanged()
+        {
+            FirePropertiesChanged("SecondaryImage");
+        }
+
         AsyncImageLoader primaryImageSmall = null;
         // these all come in from the ui thread so no sync is required. 
         public Image PrimaryImageSmall
