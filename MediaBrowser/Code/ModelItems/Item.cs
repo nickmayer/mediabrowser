@@ -201,7 +201,7 @@ namespace MediaBrowser.Library
         {
             get
             {
-                if (!string.IsNullOrEmpty(this.BaseItem.DisplayMediaType))
+                if (!string.IsNullOrEmpty(this.BaseItem.DisplayMediaType) && this.baseItem.DisplayMediaType != "None")
                 {
                     return this.BaseItem.DisplayMediaType;
                 }
