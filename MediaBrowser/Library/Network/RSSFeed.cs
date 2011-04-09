@@ -15,6 +15,7 @@ using MediaBrowser.Library.Logging;
 using System.Reflection;
 using System.Globalization;
 using System.Net;
+using System.Xml.Linq;
 
 namespace MediaBrowser.Library.Network {
     public class RSSFeed {
@@ -66,7 +67,9 @@ namespace MediaBrowser.Library.Network {
         } 
 
         private static IEnumerable<BaseItem> GetChildren(SyndicationFeed feed) {
-            if (feed == null) yield break;
+            var videos = new List<BaseItem>();
+            
+            if (feed == null) return videos;
 
             foreach (var item in feed.Items) {
                 VodCastVideo video = new VodCastVideo();
@@ -85,16 +88,69 @@ namespace MediaBrowser.Library.Network {
                 }
 
                 foreach (var link in item.Links) {
-                    if (link.RelationshipType == "enclosure") {
+                    if (link.RelationshipType == "enclosure")
+                    {
                         video.Path = (link.Uri.AbsoluteUri);
                     }
                 }
-                if (video.Path != null) {
+
+                foreach (var extension in item.ElementExtensions.Where(e => e.OuterNamespace == "http://search.yahoo.com/mrss/" && e.OuterName == "thumbnail"))
+                {
+                    var attr = extension.GetObject<XElement>();
+                    if (attr != null)
+                    {
+                        var url = attr.Attribute("url");
+                        if (url != null)
+                        {
+                            video.PrimaryImagePath = url.Value;
+                        }
+                    }
+                
+                }
+
+                if (video.Path != null)
+                {
                     video.Id = video.Path.GetMD5();
-                    yield return video;
+                    videos.Add(video);
+                }
+            }
+
+            // TED Talks appends the same damn string on each title, fix it
+            if (videos.Count > 5)
+            {
+                string common = videos[0].Name;
+
+                foreach (var video in videos.Skip(1))
+                {
+                    while (!video.Name.StartsWith(common))
+                    {
+                        if (common.Length < 2)
+                        {
+                            break;
+                        }
+                        common = common.Substring(0, common.Length - 1);
+                    }
+
+                    if (common.Length < 2)
+                    {
+                        break;
+                    }
+                }
+                
+                if (common.Length > 2)
+                {
+                    foreach (var video in videos)
+                    {
+                        if (video.Name.Length > common.Length)
+                        {
+                            video.Name = video.Name.Substring(common.Length);
+                        }
+                    }
                 }
 
             }
+
+            return videos;
         }
 
         public IEnumerable<BaseItem> Children {
