@@ -506,12 +506,13 @@ namespace MediaBrowser.Library {
 
         public void RefreshUI()
         {
+            Logger.ReportVerbose("Forced Refresh of UI on "+this.Name+" called from: "+new StackTrace().GetFrame(1).GetMethod().Name);
             //this could take a bit so kick this off in the background
             Async.Queue("Refresh UI", () =>
             {
                 //turn on our auto validate while we do this
                 bool autoValidateSetting = Config.Instance.AutoValidate;
-                Config.Instance.AutoValidate = true;
+                Kernel.Instance.ConfigData.AutoValidate = true;
                 //force an update of the children
                 this.folder.ValidateChildren();
                 this.folderChildren.RefreshChildren();
@@ -546,7 +547,7 @@ namespace MediaBrowser.Library {
                     }
                     this.SelectedChildChanged(); //make sure recent list changes
                 }
-                FireChildrenChangedEvents(); //force UI to update
+                //FireChildrenChangedEvents(); //force UI to update
                 Config.Instance.AutoValidate = autoValidateSetting; //reset
             }, null, true);
         }
