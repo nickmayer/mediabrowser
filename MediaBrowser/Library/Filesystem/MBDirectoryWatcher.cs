@@ -199,14 +199,11 @@ namespace MediaBrowser.Library.Filesystem
                 }
                 //Refresh whatever folder we are currently viewing plus all parents up the tree
                 FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
-                aFolder.RefreshUI();
-                while (aFolder != Application.CurrentInstance.RootFolderModel && aFolder.PhysicalParent != null)
+                while (aFolder != Application.CurrentInstance.RootFolderModel && aFolder != null)
                 {
-                    aFolder = aFolder.PhysicalParent;
                     aFolder.RefreshUI();
+                    aFolder = aFolder.PhysicalParent;
                 }
-                //finally refresh the root so recent lists will update (we don't have a path to the right foldermodel so we have to do all)
-                if (Application.CurrentInstance.CurrentFolder != Application.CurrentInstance.RootFolderModel) Application.CurrentInstance.RootFolderModel.RefreshUI();
             });
         }
         

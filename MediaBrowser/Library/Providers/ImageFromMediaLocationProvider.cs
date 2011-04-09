@@ -126,14 +126,18 @@ namespace MediaBrowser.Library.Providers
 
             // image moved or image deleted
             bool changed = FindImage(Primary) != primaryPath;
+            //if (changed) MediaBrowser.Library.Logging.Logger.ReportVerbose("primary image changed. primaryPath: "+primaryPath);
             changed |= FindImage(Banner) != bannerPath;
+            //if (changed) MediaBrowser.Library.Logging.Logger.ReportVerbose("banner changed");
 
             var realBackdrops = FindImages(Backdrop);
             changed |= realBackdrops.Except(backdropPaths ?? new List<string> ()).Count() != 0;
+            //if (changed) MediaBrowser.Library.Logging.Logger.ReportVerbose("backdrops changed");
 
             // Basic item corruption fix
             if (!changed) {
                 changed |= primaryPath != null && Item.PrimaryImagePath == null;
+                //if (changed) MediaBrowser.Library.Logging.Logger.ReportVerbose("provider and item paths don't match:");
             }
 
             return changed;
