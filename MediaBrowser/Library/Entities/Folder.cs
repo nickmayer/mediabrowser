@@ -384,6 +384,10 @@ namespace MediaBrowser.Library.Entities {
                         item.Parent = this;
                         ActualChildren.Add(item);
                         item.RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions.Force); //necessary to get it to show up without user intervention
+                        if (item is Folder)
+                        {
+                            (item as Folder).ValidateChildren();
+                        }
                     }
                 }
             }
