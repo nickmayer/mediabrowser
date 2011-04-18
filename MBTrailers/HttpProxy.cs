@@ -92,12 +92,31 @@ namespace WebProxy {
             }
             else
             {
+                Logger.ReportVerbose("Searching for matches.  Rating: " + searchInfo.Rating);
+                foreach (var genre in searchInfo.Genres)
+                {
+                    Logger.ReportVerbose("Genre: " + genre);
+                }
                 foreach (var info in trailers)
                 {
+                    if (info == null || info.Path == null)
+                    {
+                        Logger.ReportWarning("MBTrailers - Null item in trailer list...");
+                        continue;
+                    }
                     if (!string.IsNullOrEmpty(searchInfo.Rating) && ratings.Level(info.Rating) <= ratings.Level(searchInfo.Rating) && GenreMatches(searchInfo, info, threshhold) && !info.Path.StartsWith(searchInfo.Path))
                     {
-                        Logger.ReportVerbose(info.Path + " matched. Rating: " + info.Rating + " SearchRating: " + searchInfo.Rating);
+                        Logger.ReportVerbose("MATCH FOUND: "+info.Path + " Rating: " + info.Rating);
                         foundTrailers.Add(info.Path);
+                    }
+                    else
+                    {
+                        Logger.ReportVerbose(info.Path + " doesn't match.  Rating: " + info.Rating);
+                        if (info.Genres != null)
+                            foreach (var genre in info.Genres)
+                            {
+                                Logger.ReportVerbose("Genre: " + genre);
+                            }
                     }
                 }
             }

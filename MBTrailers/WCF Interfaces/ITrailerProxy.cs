@@ -38,8 +38,8 @@ namespace WebProxy.WCFInterfaces
         public TrailerInfo(int type, string path, string rating, List<string> genres)
         {
             this.Type = type;
-            this.Path = path;
-            this.Rating = rating;
+            this.Path = path ?? "";
+            this.Rating = rating ?? "";
             this.Genres = genres;
         }
         [DataMember]

@@ -73,6 +73,7 @@
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -88,6 +89,7 @@
     <Compile Include="ITunesTrailer.cs" />
     <Compile Include="ITunesTrailerFolder.cs" />
     <Compile Include="KmpSearch.cs" />
+    <Compile Include="BackdropProvider.cs" />
     <Compile Include="MovieTrailer.cs" />
     <Compile Include="PartialFile.cs" />
     <Compile Include="Plugin.cs" />

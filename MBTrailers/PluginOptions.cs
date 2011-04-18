@@ -37,6 +37,12 @@ namespace MBTrailers
         [Label("Cache Directory")] 
         public string CacheDir = "";
 
+        [Label("Clear Old Downloads")]
+        public bool AutoClearCache = false;
+
+        [Label("Fetch Backdrops")]
+        public bool FetchBackdrops = false;
+
         private bool _changed = false;
         public bool Changed
         {

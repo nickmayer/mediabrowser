@@ -22,9 +22,9 @@ namespace MBTrailers {
         const int UpdateMinuteInterval = 60 * 24;
         const string MBTrailerUrl = @"http://www.mediabrowser.tv/trailers?key={0}&hidef={1}";
 
-        [Persist]
-        [NotSourcedFromProvider]
-        List<BaseItem> children = new List<BaseItem>();
+        //[Persist]
+        //[NotSourcedFromProvider]
+        //List<BaseItem> children = new List<BaseItem>();
 
         [Persist]
         [NotSourcedFromProvider]
@@ -32,12 +32,13 @@ namespace MBTrailers {
 
         internal void RefreshProxy()
         {
-            foreach (var item in children)
+            foreach (var item in ActualChildren)
             {
                 var trailer = item as ITunesTrailer;
                 if (trailer != null && Plugin.proxy != null)
                 {
-                    trailer.Path = Plugin.proxy.ProxyUrl(trailer);  
+                    trailer.Path = Plugin.proxy.ProxyUrl(trailer);
+                    Kernel.Instance.ItemRepository.SaveItem(trailer);
                 }
             }
         }
@@ -60,14 +61,14 @@ namespace MBTrailers {
             }
         }
 
-        protected override List<BaseItem> ActualChildren {
-            get {
-                if (lastUpdated == DateTime.MinValue) {
-                    ValidateChildren();
-                }
-                return children;
-            }
-        }
+        //protected override List<BaseItem> ActualChildren {
+        //    get {
+        //        if (lastUpdated == DateTime.MinValue) {
+        //            ValidateChildren();
+        //        }
+        //        return children;
+        //    }
+        //}
 
         public override void  ValidateChildren()
         {
@@ -82,6 +83,15 @@ namespace MBTrailers {
             {
                 Logger.ReportInfo("Unable to save MBTrailers configuration");
             }
+            base.ValidateChildren();
+            RefreshProxy();
+            lastUpdated = DateTime.Now;
+            Kernel.Instance.ItemRepository.SaveItem(this);
+
+        }
+
+        protected override List<BaseItem> GetNonCachedChildren()
+        {
 
             try {
                 // load the xml
@@ -89,37 +99,38 @@ namespace MBTrailers {
                 if (newChildren.Count == 0) //probably just a problem getting to the site - don't blow away what we have
                 {
                     Logger.ReportError("MB Trailers returned zero children - not updating existing trailers.");
-                    return;
+                    return newChildren;
                 }
-                children = newChildren;
-                RefreshProxy();
-                // clean old files out of the cache - this is causing some sort of concurrency issue - take out for now
-                //CleanCache();
-                lastUpdated = DateTime.Now;
-                Kernel.Instance.ItemRepository.SaveItem(this);
+                return newChildren;
+                
             } catch (Exception err) {
                 Logger.ReportException("Failed to update trailers", err);
+                return new List<BaseItem>();
             }
         }
 
-        private void CleanCache()
+        public void CleanCache()
         {
+            //some safety validations to be sure we don't accidentally clear out downloaded trailers because of a load failure
+            if (this.ActualChildren.Count < 5) return;
             //clear files no longer referenced from our cache
             //first build a list of files that are there
-            string[] cacheFiles = Directory.GetFiles(Plugin.proxy.CacheDirectory);
+            var cacheFiles = new DirectoryInfo(Plugin.proxy.CacheDirectory).GetFiles();
             //then go through and match them up to current items
-            foreach (string file in cacheFiles)
+            Logger.ReportInfo("MBTrailers - Clearing cache of old trailers.");
+            foreach (var file in cacheFiles)
             {
-                MediaBrowser.Library.Entities.BaseItem item = this.ActualChildren.Find(i => System.IO.Path.GetFileName(i.Path) == System.IO.Path.GetFileName(file));
-                if (item == null)
+                MediaBrowser.Library.Entities.BaseItem item = this.ActualChildren.Find(i => System.IO.Path.GetFileName(i.Path) == file.Name);
+                if (item == null && (DateTime.UtcNow - file.CreationTimeUtc) > TimeSpan.FromDays(60)) //if not there and old
                 {
                     try
                     {
-                        File.Delete(file); // not in our children anymore clean it up
+                        File.Delete(file.FullName); // not in our children anymore clean it up
+                        Logger.ReportInfo("MBTrailers deleted old trailer download from cache: " + file.FullName);
                     }
                     catch (Exception e)
                     {
-                        Logger.ReportException("Unable to clear file from trailercache: " + file, e);
+                        Logger.ReportException("Unable to clear file from trailercache: " + file.FullName, e);
                     }
                 }
             }

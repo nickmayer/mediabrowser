@@ -13,7 +13,7 @@ namespace MBTrailers {
     public class Plugin : BasePlugin {
 
         internal const string PluginName = "Media Browser Trailers";
-        internal const string PluginDescription = "HD Trailers for MediaBrowser.\n\nUnrestricted version is available to supporters.\n\nBETA version for Titan (MB 2.3.1)";
+        internal const string PluginDescription = "HD Trailers for MediaBrowser (Titan SP1). Now includes cache management and backdrop fetching.\n\nUnrestricted version is available to supporters.";
 
         internal const int ProxyPort = 8752;
 
@@ -39,7 +39,6 @@ namespace MBTrailers {
 
             kernel.RootFolder.AddVirtualChild(trailers);
 
-            //isMC = AppDomain.CurrentDomain.FriendlyName.Contains("ehExtHost");
             if (Kernel.LoadContext == MBLoadContext.Service || Kernel.LoadContext == MBLoadContext.Core)  //create proxy in core and service (will only listen in service)
             {
                 string cachePath = PluginOptions.Instance.CacheDir;
@@ -64,6 +63,19 @@ namespace MBTrailers {
                 { //only actually start the proxy in the service
                     Logger.ReportInfo("MBTrailers starting proxy server on port: " + ProxyPort);
                     proxy.Start(PluginOptions.Instance.AutoDownload, maxBandwidth);
+                    //and clean up the cache if requested
+                    if (PluginOptions.Instance.AutoClearCache)
+                    {
+                        MediaBrowser.Library.Threading.Async.Queue("MBTrailers cache clear", () =>
+                        {
+                             while (true)
+                             {
+                                 trailers.CleanCache();
+                                 System.Threading.Thread.Sleep(24 * 60 * 60000); //once per day
+                             }
+
+                        });
+                    }
                 }
                 else
                 {
@@ -96,7 +108,7 @@ namespace MBTrailers {
                 }
 
                 //refresh the paths of trailers, but wait a bit in case the service side isn't up yet (we load before the service)
-                MediaBrowser.Library.Threading.Async.Queue("MB Trailers refresh",() => trailers.RefreshProxy(), 1500);
+                MediaBrowser.Library.Threading.Async.Queue("MB Trailers refresh",() => trailers.RefreshProxy(), 3000);
 
                 //tell core our types are playable (for menus)
                 kernel.AddExternalPlayableItem(typeof(ITunesTrailer));
@@ -138,7 +150,7 @@ namespace MBTrailers {
         {
             get
             {
-                return new Version("2.3.1.0");
+                return new Version("2.3.2.0");
             }
         }
 
@@ -146,7 +158,7 @@ namespace MBTrailers {
         {
             get
             {
-                return new Version("2.3.1.0");
+                return new Version("2.3.2.0");
             }
         }
 
