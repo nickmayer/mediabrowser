@@ -168,8 +168,10 @@ namespace MediaBrowser.Library.Providers.TVDB {
             while (attempt < 2) {
                 attempt++;
                 try {
-                    WebRequest req = HttpWebRequest.Create(url);
+                    var req = (HttpWebRequest)HttpWebRequest.Create(url);
                     req.Timeout = 60000;
+                    req.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate");
+                    req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
                     WebResponse resp = req.GetResponse();
                     try {
                         using (Stream s = resp.GetResponseStream()) {

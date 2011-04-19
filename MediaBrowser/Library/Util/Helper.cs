@@ -355,8 +355,10 @@ namespace MediaBrowser.LibraryManagement
                 while (attempt < 2) {
                     attempt++;
                     try {
-                        WebRequest req = HttpWebRequest.Create(url);
+                        var req = (HttpWebRequest)HttpWebRequest.Create(url);
                         req.Timeout = 15000;
+                        req.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate");
+                        req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
                         using (WebResponse resp = req.GetResponse())
                             try
