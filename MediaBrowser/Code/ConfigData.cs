@@ -185,6 +185,8 @@ namespace MediaBrowser
         public LogSeverity MinLoggingSeverity = LogSeverity.Info;
 
         public bool UseBMPsInCache = false; //experimental option to use bmps for backdrops to increase speed
+        public bool EnableScreenSaver = true; //enable default screen saver functionality
+        public int ScreenSaverTimeOut = 10; //minutes of inactivity for screen saver to kick in
 
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;

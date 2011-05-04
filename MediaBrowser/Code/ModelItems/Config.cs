@@ -805,6 +805,20 @@ namespace MediaBrowser
             get { return this.data.MinLoggingSeverity; }
             set { if (this.data.MinLoggingSeverity != value) { this.data.MinLoggingSeverity = value; Save(); FirePropertyChanged("MinLoggingSeverity"); } }
         }
+
+        [Comment(@"Enable screen Saver.")]
+        public bool EnableScreenSaver
+        {
+            get { return this.data.EnableScreenSaver; }
+            set { if (this.data.EnableScreenSaver != value) { this.data.EnableScreenSaver = value; Save(); FirePropertyChanged("EnableScreenSaver"); } }
+        }
+
+        public int ScreenSaverTimeOut
+        {
+            get { return this.data.ScreenSaverTimeOut; }
+            set { if (this.data.ScreenSaverTimeOut != value) { this.data.ScreenSaverTimeOut = value; Save(); FirePropertyChanged("ScreenSaverTimeOut"); } }
+        }
+
         /* End of app specific settings*/
 
         private string[] _SortRemoveCharactersArray;

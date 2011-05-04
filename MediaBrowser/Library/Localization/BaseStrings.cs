@@ -16,13 +16,15 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0021";
+        const string VERSION = "1.0022";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
 
         //these are our strings keyed by property name
         public string LoggingConfigDesc = "Write messages to a log file at run time.";
+        public string EnableScreenSaverConfigDesc = "Enable Screen Saver functionality after defined time out.";
+        public string SSTimeOutConfigDesc = "Minutes Before Screen Saver is Activated.";
         public string EnableInternetProvidersConfigDesc = "Search the Internet for Cover Art, Backdrops and Metadata.";
         public string AutomaticUpdatesConfigDesc = "Automatically Download and Install Updates to MediaBrowser and Notify when Plug-in Updates Available.";
         public string BetaUpdatesConfigDesc = "Include Beta Versions in Automatic Updates";
@@ -97,6 +99,8 @@ namespace MediaBrowser.Library.Localization
         public string ClearCacheConfig = "Clear Cache";
         public string UnlockConfig = "Unlock";
         public string GeneralConfig = "General";
+        public string EnableScreenSaverConfig = "Screen Saver";
+        public string SSTimeOutConfig = "Timeout (mins)";
         public string TrackingConfig = "Tracking";
         public string AssumeWatchedIfOlderThanConfig = "Assume Watched If Older Than";
         public string MetadataConfig = "Metadata";

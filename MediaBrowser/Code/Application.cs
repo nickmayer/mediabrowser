@@ -65,6 +65,7 @@ namespace MediaBrowser
         private bool navigatingForward;
         private IPlaybackController currentPlaybackController = null;
         private static string _background;
+        private static Timer ScreenSaverTimer;
         //tracks whether to show recently added or watched items
         public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; } }
         private bool pluginUpdatesAvailable = false;
@@ -80,6 +81,14 @@ namespace MediaBrowser
                 pluginUpdatesAvailable = value;
                 FirePropertyChanged("PluginUpdatesAvailable");
             }
+        }
+
+        private bool _ScreenSaverActive = false;
+
+        public bool ScreenSaverActive
+        {
+            get { return _ScreenSaverActive; }
+            set { if (_ScreenSaverActive != value) { _ScreenSaverActive = value; FirePropertyChanged("ScreenSaverActive"); } }
         }
 
         public List<string> ConfigPanelNames
@@ -292,6 +301,28 @@ namespace MediaBrowser
             //initialize our menu manager
             menuManager = new MenuManager();
 
+            //initialize screen saver
+            ScreenSaverTimer = new Timer() { AutoRepeat = true, Enabled = true, Interval = 60000 };
+            ScreenSaverTimer.Tick += new EventHandler(ScreenSaverTimer_Tick);
+
+        }
+
+        void ScreenSaverTimer_Tick(object sender, EventArgs e)
+        {
+            if (Config.EnableScreenSaver && !this.PlaybackController.IsPlaying)
+            {
+                if (Helper.SystemIdleTime > Config.ScreenSaverTimeOut * 60000)
+                {
+                    this.ScreenSaverActive = true;
+                    //increase the frequency of this tick so we will turn off quickly
+                    ScreenSaverTimer.Interval = 500;
+                }
+                else
+                {
+                    this.ScreenSaverActive = false;
+                    ScreenSaverTimer.Interval = 60000; //move back to every minute
+                }
+            }
         }
 
 

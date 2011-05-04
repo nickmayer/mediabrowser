@@ -182,7 +182,7 @@
             </TabItem>
                 <TabItem Header="display/playback" x:Name="displayTab" Foreground="#FF323232" FontSize="14" FontWeight="Normal" Visibility="Visible" IsSelected="True">
                     <Grid>
-                        <GroupBox Header="General Display Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,35,0,0" Height="170" Name="groupBox1" Width="270">
+                        <GroupBox Header="General Display Settings" HorizontalAlignment="Left" Margin="20,35,0,189" Name="groupBox1" Width="270">
                             <Grid>
                                 <CheckBox Height="22" Margin="10,10,10,0" Name="cbxOptionClock" ToolTip="Display time clock within Media Browser" VerticalAlignment="Top" Click="cbxOptionClock_Click">Show Clock</CheckBox>
                                 <CheckBox Margin="10,32,10,0" Name="cbxOptionDimPoster" ToolTip="Dim unselected items" Click="cbxOptionDimPoster_Click" Height="22" VerticalAlignment="Top">Dim Unselected Posters</CheckBox>
@@ -190,15 +190,18 @@
                                 <CheckBox Height="22" Margin="10,76,10,0" Name="cbxOptionAspectRatio" VerticalAlignment="Top" ToolTip="Stretch folder image to fill display area" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
                                 <CheckBox Height="22" Margin="10,98,10,0" Name="cbxOptionHideFrame" VerticalAlignment="Top" ToolTip="Hide focus frame around posters." Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
                                 <CheckBox Height="22" Margin="10,120,10,0" Name="cbxOptionAutoEnter" VerticalAlignment="Top" Click="cbxOptionAutoEnter_Click" ToolTip="Automatically bypass an item with only one folder in it and continue to the contents of that folder." >Auto Enter Single Folder Items</CheckBox>
+                                <CheckBox Height="22" Margin="10,0,0,13" Name="cbxScreenSaver" ToolTip="Activate a screen saver after configured minutes of inactivity." VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="115">Screen Saver</CheckBox>
+                                <TextBox Height="23.38" HorizontalContentAlignment="Right" Margin="125,0,0,12" Name="tbxSSTimeout" ToolTip="Minutes of inactivity required for screen saver to activate." VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="33" />
+                                <Label Height="28" HorizontalAlignment="Right" Margin="0,0,47,12" Name="label15" VerticalAlignment="Bottom" Width="47">Mins</Label>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Media Tracking" HorizontalAlignment="Left" Margin="20,210,0,0" Name="groupBox2" Height="180" Width="270" VerticalAlignment="Top">
+                        <GroupBox Header="Media Tracking" HorizontalAlignment="Left" Margin="20,0,0,37.38" Name="groupBox2" Width="270" Height="145.38" VerticalAlignment="Bottom">
                             <Grid>
-                                <CheckBox Margin="10,10,10,0" Name="cbxOptionUnwatchedCount" Content="Show Unwatched Count" Height="22" VerticalAlignment="Top" Click="cbxOptionUnwatchedCount_Click" ToolTip="Show unwatched counter on top of poster art" />
-                                <CheckBox Margin="10,36,10,0" Name="cbxOptionUnwatchedOnFolder" Content="Watched Indicator on Folders" Height="22" VerticalAlignment="Top" Click="cbxOptionUnwatchedOnFolder_Click" ToolTip="Display indicator for previously viewed folders" />
-                                <CheckBox Margin="10,65,10,67" Name="cbxOptionUnwatchedOnVideo" Content="Watched Indicator on Videos" Click="cbxOptionUnwatchedOnVideo_Click" ToolTip="Display indicator for previously viewed items" />
-                                <CheckBox Margin="10,0,10,38" Name="cbxOptionUnwatchedDetailView" Content="Watched Indicator in Detail View" Height="22" VerticalAlignment="Bottom" Click="cbxOptionUnwatchedDetailView_Click" ToolTip="Display indicator in detail view for previously viewed items" />
-                                <CheckBox Margin="10,0,10,12" Name="cbxOptionDefaultToUnwatched" Content="Default to First Unwatched Item" Click="cbxOptionDefaultToUnwatched_Click" Height="22" VerticalAlignment="Bottom" ToolTip="Automatically highlight the first unwatched item" />
+                                <CheckBox Margin="10,0,10,83.38" Name="cbxOptionUnwatchedCount" Content="Show Unwatched Count" Height="22" VerticalAlignment="Bottom" Click="cbxOptionUnwatchedCount_Click" ToolTip="Show unwatched counter on top of poster art" />
+                                <CheckBox Margin="10,0,10,63" Name="cbxOptionUnwatchedOnFolder" Content="Watched Indicator on Folders" Click="cbxOptionUnwatchedOnFolder_Click" ToolTip="Display indicator for previously viewed folders" Height="20.38" VerticalAlignment="Bottom" />
+                                <CheckBox Margin="10,0,10,40" Name="cbxOptionUnwatchedOnVideo" Content="Watched Indicator on Videos" Click="cbxOptionUnwatchedOnVideo_Click" ToolTip="Display indicator for previously viewed items" Height="22.38" VerticalAlignment="Bottom" />
+                                <CheckBox Margin="10,0,10,20" Name="cbxOptionUnwatchedDetailView" Content="Watched Indicator in Detail View" Height="22" VerticalAlignment="Bottom" Click="cbxOptionUnwatchedDetailView_Click" ToolTip="Display indicator in detail view for previously viewed items" />
+                                <CheckBox Margin="10,0,10,0.24" Name="cbxOptionDefaultToUnwatched" Content="Default to First Unwatched Item" Click="cbxOptionDefaultToUnwatched_Click" Height="22" VerticalAlignment="Bottom" ToolTip="Automatically highlight the first unwatched item" />
                             </Grid>
                         </GroupBox>
                         <GroupBox Header="Theme Settings" Margin="300,35,0,0" HorizontalAlignment="Left" Name="groupBox3" Height="125" Width="430" VerticalAlignment="Top">

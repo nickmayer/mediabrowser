@@ -426,6 +426,8 @@ namespace Configurator
             cbxOptionDimPoster.IsChecked = config.DimUnselectedPosters;
             cbxOptionHideFrame.IsChecked = config.HideFocusFrame;
             cbxOptionAutoEnter.IsChecked = config.AutoEnterSingleDirs;
+            cbxScreenSaver.IsChecked = config.EnableScreenSaver;
+            tbxSSTimeout.Text = config.ScreenSaverTimeOut.ToString();
 
             cbxOptionUnwatchedCount.IsChecked      = config.ShowUnwatchedCount;
             cbxOptionUnwatchedOnFolder.IsChecked   = config.ShowWatchedTickOnFolders;
@@ -1959,6 +1961,18 @@ sortorder: {2}
         }
 
         private void tbxMinResumeDuration_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Char.IsDigit(e.Text[0]);
+            base.OnPreviewTextInput(e);
+        }
+
+        private void tbxSSTimeout_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Int32.TryParse(tbxSSTimeout.Text, out config.ScreenSaverTimeOut);
+            SaveConfig();
+        }
+
+        private void tbxSSTimeout_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !Char.IsDigit(e.Text[0]);
             base.OnPreviewTextInput(e);

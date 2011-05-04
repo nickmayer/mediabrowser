@@ -24,6 +24,8 @@
       <Default Target="[ViewDefault.Source]" Value="[Application.CurrentTheme.PageArea]" />
 
       <!-- END Configuration Checks & Display Setup -->
+
+      <Binding Source="[Application.ScreenSaverActive]" Target="[ScreenSaver.Visible]" />
     </Rules>
 
     <Content>
@@ -32,6 +34,26 @@
           <Animation Animation="animation://an:PageHide" />
         </Animations>
         <Children>
+          <Panel Name="ScreenSaver" Visible="[Application.ScreenSaverActive]">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
+            </LayoutInput>
+            <Children>
+              <ColorFill Content="Black" >
+                <Children>
+                  <Graphic Content="image://i:MBLogo" Scale="0.25,.18,0" Alpha=".7">
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,.33" Top="Parent,.45"/>
+                    </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://an:FloatAround"/>
+                    </Animations>
+                  </Graphic>
+                </Children>
+              </ColorFill>
+            </Children>
+         
+          </Panel>
           <pd:Page Name="ViewDefault" Folder="[Folder]" Application="[Application]" ThemeConfig ="[ThemeConfig]" Visible="true" >
             <LayoutInput>
               <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>

@@ -168,4 +168,17 @@
     </Keyframes>
   </Animation>
 
+  <!-- Create an animation that will loop forever -->
+  <Animation Name="FloatAround" Loop="-1">
+    <Keyframes>
+      <!-- Move in a diamond pattern -->
+      <PositionKeyframe Time="0.0" Value="400,0,0" Interpolation="Log"/>
+      <PositionKeyframe Time="8.0" Value="0,400,0" Interpolation="Log"/>
+      <PositionKeyframe Time="16.0" Value="1000,0,0" Interpolation="Log"/>
+      <PositionKeyframe Time="24.0" Value="0,0,700" Interpolation="Log"/>
+      <PositionKeyframe Time="32.0" Value="400,0,0" Interpolation="Log"/>
+    </Keyframes>
+  </Animation>
+
+
 </Mcml>

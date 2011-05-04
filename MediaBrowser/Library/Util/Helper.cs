@@ -14,6 +14,7 @@ using System.Linq;
 using MediaBrowser.Library.Configuration;
 using MediaBrowser.Library;
 using Microsoft.MediaCenter.UI;
+using MediaBrowser.Interop;
 
 
 namespace MediaBrowser.LibraryManagement
@@ -519,5 +520,42 @@ namespace MediaBrowser.LibraryManagement
             MACAddress = MACAddress.Replace(":", "");
             return MACAddress;
         }
+
+        public static int SystemIdleTime
+        {
+            get
+            {
+                // Get the system uptime
+                int systemUptime = Environment.TickCount;
+
+                // The tick at which the last input was recorded
+                int LastInputTicks = 0;
+
+                // The number of ticks that passed since last input
+                int IdleTicks = 0;
+
+                // Set the struct
+                ShellNativeMethods.LASTINPUTINFO LastInputInfo = new ShellNativeMethods.LASTINPUTINFO();
+
+                LastInputInfo.cbSize = (uint)Marshal.SizeOf(LastInputInfo);
+
+                LastInputInfo.dwTime = 0;
+
+
+
+                // If we have a value from the function
+
+                if (ShellNativeMethods.GetLastInputInfo(ref LastInputInfo))
+                {
+                    // Get the number of ticks at the point when the last activity was seen
+                    LastInputTicks = (int)LastInputInfo.dwTime;
+                    // Number of idle ticks = system uptime ticks - number of ticks at last input
+                    IdleTicks = systemUptime - LastInputTicks;
+
+                }
+                return IdleTicks;
+            }
+        }
+
     }
 }
