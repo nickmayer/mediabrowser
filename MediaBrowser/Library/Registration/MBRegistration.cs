@@ -84,7 +84,7 @@ namespace MediaBrowser.Library.Registration
                     stream.Read(buffer, 0, 11);
                     response.Close();
                     stream.Close();
-                    return DateTime.ParseExact(System.Text.Encoding.ASCII.GetString(buffer).Trim(), "yyyy-MM-dd", new System.Globalization.CultureInfo("en-US"));
+                    return DateTime.ParseExact(System.Text.Encoding.ASCII.GetString(buffer).Trim(), "yyyy-MM-d", new System.Globalization.CultureInfo("en-US"));
                 }
             }
             catch (Exception ex)
