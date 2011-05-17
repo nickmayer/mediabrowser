@@ -721,6 +721,7 @@
     <Compile Include="Library\ImageManagement\ImageCache.cs" />
     <Compile Include="Library\Input\IsMouseActiveHooker.cs" />
     <Compile Include="Library\Interfaces\ITrailerProvider.cs" />
+    <Compile Include="Library\Persistance\SQLiteRepository.cs" />
     <Compile Include="Library\Registration\MBRegistration.cs" />
     <Compile Include="Library\ServiceInteraction\IPCCommands.cs" />
     <Compile Include="Library\ServiceInteraction\MBClientConnector.cs" />
