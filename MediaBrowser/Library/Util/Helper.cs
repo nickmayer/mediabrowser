@@ -557,5 +557,24 @@ namespace MediaBrowser.LibraryManagement
             }
         }
 
+        /// <summary>
+        /// check the availability of the location and wait for it to be valid up to the timeout (BLOCKING)
+        /// </summary>
+        /// <param name="location">the location to check (assumed to be a network location)</param>
+        /// <param name="timeout">milliseconds to wait if not avail</param>
+        internal static bool WaitForLocation(string location, int timeout)
+        {
+            int elapsed = 0;
+            string dir = Path.GetDirectoryName(location); //this will allow us to be sure it is a directory (will give parent if already directory)
+            DateTime started = DateTime.Now;
+            while (elapsed < timeout && !Directory.Exists(dir))
+            {
+                Logger.ReportInfo("Unable to access location: " + dir + ". Waiting for it to be available...");
+                System.Threading.Thread.Sleep(1000);
+                elapsed = (DateTime.Now - started).Milliseconds;
+            }
+            if (elapsed >= timeout) Logger.ReportWarning("Timed out attempting to access " + dir);
+            return elapsed < timeout;
+        }
     }
 }

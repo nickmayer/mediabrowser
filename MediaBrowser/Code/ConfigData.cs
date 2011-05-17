@@ -188,6 +188,8 @@ namespace MediaBrowser
         public bool EnableScreenSaver = true; //enable default screen saver functionality
         public int ScreenSaverTimeOut = 10; //minutes of inactivity for screen saver to kick in
 
+        public int NetworkAvailableTimeOut = 60000; //milliseconds to wait for network to be available on validations
+
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 

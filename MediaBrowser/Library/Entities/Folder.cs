@@ -7,6 +7,7 @@ using MediaBrowser.Library.EntityDiscovery;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Threading;
+using MediaBrowser.LibraryManagement;
 using System.Collections;
 using System.Diagnostics;
 
@@ -445,11 +446,20 @@ namespace MediaBrowser.Library.Entities {
         protected virtual List<BaseItem> GetNonCachedChildren() {
 
             List<BaseItem> items = new List<BaseItem>();
+            bool networkChecked = false;
 
             // don't bomb out on invalid folders - its correct to say we have no children
             if (this.FolderMediaLocation != null) {
+                //if we point to a network location, be sure it is available first
+                //if this.FolderMediaLocation.Path
                 foreach (var location in this.FolderMediaLocation.Children) {
                     if (location != null) {
+                        if (!networkChecked && location.Path.StartsWith("\\\\"))
+                        {
+                            //network location - test to be sure it is accessible
+                            Helper.WaitForLocation(location.Path, Kernel.Instance.ConfigData.NetworkAvailableTimeOut);
+                            networkChecked = true;
+                        }
                         var item = Kernel.Instance.GetItem(location);
                         if (item != null) {
                             items.Add(item);
