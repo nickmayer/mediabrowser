@@ -307,6 +307,7 @@ namespace MediaBrowser.Library.Entities {
             bool changed = this.DateModified != item.DateModified;
             changed |= this.DateCreated != item.DateCreated;
             changed |= this.defaultName != item.defaultName;
+            //if (changed && Debugger.IsAttached) Debugger.Break();
 
             this.Path = item.Path;
             this.DateModified = item.DateModified;

@@ -22,88 +22,106 @@ namespace MediaBrowser.Library.ImageManagement {
         public int Height {get; set;} 
     }
 
+    public class ImageInfo
+    {
+        public ImageInfo(ImageSet parent)
+        {
+            this.Parent = parent;
+        }
+        public ImageSet Parent { get; private set; }
+        public DateTime Date { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public ImageFormat ImageFormat;
 
-    public class ImageCache {
+
+        public ImageSize Size
+        {
+            get
+            {
+                return new ImageSize(Width, Height);
+            }
+        }
+
+        private string ImageFormatExtension
+        {
+            get
+            {
+                string ext;
+                if (this.ImageFormat.Guid == ImageFormat.Gif.Guid)
+                {
+                    ext = "gif";
+                }
+                else if (this.ImageFormat.Guid == ImageFormat.Png.Guid)
+                {
+                    ext = "png";
+                }
+                else if (this.ImageFormat.Guid == ImageFormat.Jpeg.Guid)
+                {
+                    ext = "jpg";
+                }
+                else if (this.ImageFormat.Guid == ImageFormat.Bmp.Guid)
+                {
+                    ext = "bmp";
+                }
+                else
+                {
+                    throw new ApplicationException("Unsupported Image type!");
+                }
+                return ext;
+            }
+        }
+
+        public string Path
+        {
+            get
+            {
+                var filename = new StringBuilder();
+                if (Parent.PrimaryImage == this)
+                {
+                    filename.Append("z");
+                }
+                filename.Append(Parent.Id.ToString())
+                    .Append(".")
+                    .Append(Width)
+                    .Append("x")
+                    .Append(Height)
+                    .Append(".")
+                    .Append(ImageFormatExtension);
+
+                return System.IO.Path.Combine(Parent.Owner.Path, filename.ToString());
+            }
+        }
+    }
+
+    public class ImageSet
+    {
+        public ImageSet(ImageCache owner, Guid id)
+        {
+            this.Id = id;
+            this.Owner = owner;
+            this.ResizedImages = new List<ImageInfo>();
+        }
+        public Guid Id { get; set; }
+        public ImageInfo PrimaryImage { get; set; }
+        public List<ImageInfo> ResizedImages { get; set; }
+        public ImageCache Owner { get; private set; }
+    }
+
+
+    public class ImageCache : IImageCache
+    {
 
         static Dictionary<Guid, object> FileLocks = new Dictionary<Guid, object>();
 
         class Instansiator {
-            public static ImageCache Instance = new ImageCache(ApplicationPaths.AppImagePath);
+            public static IImageCache Instance = Kernel.Instance.ConfigData.UseSQLImageCache ? (IImageCache)new SQLiteImageCache(System.IO.Path.Combine(ApplicationPaths.AppCachePath,"imagecache.db")) : (IImageCache)new ImageCache(ApplicationPaths.AppImagePath);
         }
        
 
-        public static ImageCache Instance {
+        public static IImageCache Instance {
             get {
                 return Instansiator.Instance;
-            }
-        }
-
-        public class ImageSet {
-            public ImageSet(ImageCache owner, Guid id) {
-                this.Id = id;
-                this.Owner = owner;
-                this.ResizedImages = new List<ImageInfo>();
-            }
-            public Guid Id {get; set;}
-            public ImageInfo PrimaryImage { get; set; }
-            public List<ImageInfo> ResizedImages { get; set; }
-            public ImageCache Owner {get; private set;} 
-        }
-
-        public class ImageInfo {
-            public ImageInfo(ImageSet parent) {
-                this.Parent = parent;
-            }
-            public ImageSet Parent {get; private set;}
-            public DateTime Date { get; set; }
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public ImageFormat ImageFormat;
-
-
-            public ImageSize Size {
-                get {
-                    return new ImageSize(Width, Height);
-                }
-            }
-
-            private string ImageFormatExtension {
-                get {
-                    string ext;
-                    if (this.ImageFormat.Guid == ImageFormat.Gif.Guid) {
-                        ext = "gif";
-                    } else if (this.ImageFormat.Guid == ImageFormat.Png.Guid) {
-                        ext = "png";
-                    } else if (this.ImageFormat.Guid == ImageFormat.Jpeg.Guid) {
-                        ext = "jpg";
-                    } else if (this.ImageFormat.Guid == ImageFormat.Bmp.Guid)
-                    {
-                        ext = "bmp";
-                    }
-                    else
-                    {
-                        throw new ApplicationException("Unsupported Image type!");
-                    }
-                    return ext;
-                }
-            }
-
-            public string Path {
-                get {
-                    var filename = new StringBuilder();
-                    if (Parent.PrimaryImage == this) {
-                        filename.Append("z"); 
-                    }
-                    filename.Append(Parent.Id.ToString())
-                        .Append(".")
-                        .Append(Width)
-                        .Append("x")
-                        .Append(Height)
-                        .Append(".")
-                        .Append(ImageFormatExtension);
-
-                    return System.IO.Path.Combine(Parent.Owner.Path, filename.ToString());
-                } 
             }
         }
 
@@ -274,7 +292,7 @@ namespace MediaBrowser.Library.ImageManagement {
             }
         }
 
-        public ImageInfo GetPrimaryImage(Guid id) { 
+        public ImageInfo GetPrimaryImageInfo(Guid id) { 
             var set = GetImageSet(id); 
             if (set != null) {
                 return set.PrimaryImage;
@@ -415,13 +433,23 @@ namespace MediaBrowser.Library.ImageManagement {
         }
 
 
-        internal void ClearCache(Guid id) {
+        public void ClearCache(Guid id) {
             var set = GetImageSet(id); 
             if (set != null) {
                 lock (set) {
                     DeleteImageSet(set);
                 }
             }
+        }
+
+        public MemoryStream GetImageStream(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MemoryStream GetImageStream(Guid id, int width)
+        {
+            throw new NotImplementedException();
         }
     }
 }

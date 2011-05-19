@@ -190,6 +190,8 @@ namespace MediaBrowser
 
         public int NetworkAvailableTimeOut = 60000; //milliseconds to wait for network to be available on validations
 
+        public bool UseSQLImageCache = false; //switch to use the new SQLite image cache
+
         [Comment("Cache all images in memory so navigation is faster, consumes a lot more memory")]
         public bool CacheAllImagesInMemory = false;
 

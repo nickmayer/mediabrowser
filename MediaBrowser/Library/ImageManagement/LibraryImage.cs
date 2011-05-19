@@ -47,7 +47,7 @@ namespace MediaBrowser.Library.ImageManagement {
         /// </summary>
         public bool Corrupt { private set; get; }
 
-        Guid Id { get { return Path.ToLower().GetMD5(); } }
+        public Guid Id { get { return Path.ToLower().GetMD5(); } }
 
         Guid OldId { get { return Path.GetMD5(); } }
 
@@ -59,47 +59,49 @@ namespace MediaBrowser.Library.ImageManagement {
 
         public bool MigrateFromOldID()
         {
-            lock (Lock)
-            {
-                try
-                {
-                    var info = ImageCache.Instance.GetPrimaryImage(OldId);
-                    if (info != null)
-                    {
-                        try
-                        {
-                            var image = Image.FromFile(info.Path);
-                            if (image == null)
-                            {
-                                Logger.ReportError("Could not migrate image " + info.Path);
-                                return false;
-                            }
-                            ImageCache.Instance.CacheImage(Id, image);
-                            image.Dispose();
-                        }
-                        catch (FileNotFoundException)
-                        {
-                            //this is okay - it may have already been migrated
-                            return false;
-                        }
-                        try
-                        {
-                            File.Delete(info.Path);
-                        }
-                        catch (Exception e)
-                        {
-                            //we tried...
-                            Logger.ReportException("Unable to delete old cache file " + info.Path, e);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.ReportException("Failed to migrate image " + this.Path, e);
-                    return false;
-                }
+            //deprecated
+
+            //lock (Lock)
+            //{
+            //    try
+            //    {
+            //        var info = ImageCache.Instance.GetPrimaryImage(OldId);
+            //        if (info != null)
+            //        {
+            //            try
+            //            {
+            //                var image = Image.FromFile(info.Path);
+            //                if (image == null)
+            //                {
+            //                    Logger.ReportError("Could not migrate image " + info.Path);
+            //                    return false;
+            //                }
+            //                ImageCache.Instance.CacheImage(Id, image);
+            //                image.Dispose();
+            //            }
+            //            catch (FileNotFoundException)
+            //            {
+            //                //this is okay - it may have already been migrated
+            //                return false;
+            //            }
+            //            try
+            //            {
+            //                File.Delete(info.Path);
+            //            }
+            //            catch (Exception e)
+            //            {
+            //                //we tried...
+            //                Logger.ReportException("Unable to delete old cache file " + info.Path, e);
+            //            }
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Logger.ReportException("Failed to migrate image " + this.Path, e);
+            //        return false;
+            //    }
                 return true;
-            }
+            //}
         }
 
         bool loaded = false;
@@ -108,7 +110,7 @@ namespace MediaBrowser.Library.ImageManagement {
             lock (Lock) {
                 try {
                     if (!loaded) {
-                        var info = ImageCache.Instance.GetPrimaryImage(Id);
+                        var info = ImageCache.Instance.GetPrimaryImageInfo(Id);
                         if (info == null) {
                             var image = OriginalImage;
                             if (image == null) {
@@ -117,7 +119,7 @@ namespace MediaBrowser.Library.ImageManagement {
                             }
                             ImageCache.Instance.CacheImage(Id, ProcessImage(image));
                         }
-                        info = ImageCache.Instance.GetPrimaryImage(Id);
+                        info = ImageCache.Instance.GetPrimaryImageInfo(Id);
                         if (info != null) {
                             _width = info.Width;
                             _height = info.Height;

@@ -34,11 +34,13 @@ namespace MediaBrowserService
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const int imagePort = 8755;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private MediaBrowser.ServiceConfigData _config;
         private Mutex _mutex;
         private Timer _mainLoop;
         public static MainWindow Instance;
+        private ImageCacheProxy imageServer;
         
         private bool _forceClose;
         private bool _hasHandle;
@@ -541,6 +543,13 @@ namespace MediaBrowserService
                     RefreshInterface();
                     lblSinceDate.Content = "Since: "+_startTime;
                     CoreCommunications.StartListening(); //start listening for commands from core/configurator
+                    if (Kernel.Instance.ConfigData.UseSQLImageCache)
+                    {
+                        //start the image server
+                        Logger.ReportInfo("Starting SQL Image server on port: " + imagePort);
+                        imageServer = new ImageCacheProxy(imagePort, 10);
+                        imageServer.Start();
+                    }
                     Logger.ReportInfo("Service Started");
                     _mainLoop = Async.Every(60 * 1000, () => MainIteration()); //repeat every minute
                 }

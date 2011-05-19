@@ -142,6 +142,7 @@ namespace MediaBrowser.Code.ModelItems {
             }
 
             if (localImage.Corrupt) {
+                Logger.ReportWarning("Image " + localPath + " is Corrupt.");
                 doneProcessing = true;
                 IsLoaded = true;
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
@@ -156,24 +157,40 @@ namespace MediaBrowser.Code.ModelItems {
           
 
             Image newImage = null;
-            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory) {
-                //Logger.ReportVerbose("Loading image (cacheall true) : " + localPath);
-                byte[] bytes;
-                lock (ProtectedFileStream.GetLock(localPath)) {
-                    bytes = File.ReadAllBytes(localPath);
+            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory)
+            {
+                if (Kernel.Instance.ConfigData.UseSQLImageCache)
+                {
+                    Logger.ReportVerbose("Loading image (from sql): " + localPath);
+                    var imageStream = ImageCache.Instance.GetImageStream(localImage.Id, localImage.Width);
+                    //System.Drawing.Image test = System.Drawing.Image.FromStream(imageStream);
+                    //test.Save("c:\\users\\eric\\my documents\\imagetest\\" + localImage.Id + localImage.Width + ".png");
+                    //test.Dispose();
+                    newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
                 }
+                else
+                {
+                    Logger.ReportVerbose("Loading image (cacheall true) : " + localPath);
+                    byte[] bytes;
+                    lock (ProtectedFileStream.GetLock(localPath))
+                    {
+                        bytes = File.ReadAllBytes(localPath);
+                    }
 
-                MemoryStream imageStream = new MemoryStream(bytes);
-                imageStream.Position = 0;
-                newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
+                    MemoryStream imageStream = new MemoryStream(bytes);
+                    imageStream.Position = 0;
+                    newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
+                }
             }
+
 
             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
             {
 
                 if (newImage == null) {
                     //Logger.ReportVerbose("Loading image : " + localPath);
-                    newImage = new Image("file://" + localPath);
+                    string imageRef = Kernel.Instance.ConfigData.UseSQLImageCache ? localPath : "file://" + localPath;
+                    newImage = new Image(imageRef);
                 }
 
                 lock (this) {
