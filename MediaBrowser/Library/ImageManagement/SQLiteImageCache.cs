@@ -113,7 +113,11 @@ namespace MediaBrowser.Library.ImageManagement
             updatedParam.Value = DateTime.UtcNow;
             dataParam.Value = ms.ToArray();
 
-            QueueCommand(cmd);
+            lock (connection)
+            {
+                //don't use our delayed writer here cuz we need to block until this is done
+                cmd.ExecuteNonQuery();
+            }
             return ImagePath(id, width);
 
         }
@@ -237,7 +241,7 @@ namespace MediaBrowser.Library.ImageManagement
 
         public void ClearCache(Guid id)
         {
-            var cmd = new SQLiteCommand();
+            var cmd = connection.CreateCommand();
             cmd.CommandText = "delete from images where guid = @guid";
             cmd.AddParam("@guid", id.ToString());
             cmd.ExecuteNonQuery();
