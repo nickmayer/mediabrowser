@@ -55,10 +55,9 @@ namespace MediaBrowser.Library.ImageManagement
             //return "http://www.mediabrowser.tv/images/apps.png";
         }
 
-        private System.Drawing.Image ResizeImage(System.Drawing.Image image, int width, int height)
+        private MemoryStream ResizeImage(System.Drawing.Image image, int width, int height)
         {
-            var newBmp = new System.Drawing.Bitmap(width, height);
-
+            using (var newBmp = new System.Drawing.Bitmap(width, height))
             using (System.Drawing.Bitmap bmp = (System.Drawing.Bitmap)image)
             using (System.Drawing.Graphics graphic = System.Drawing.Graphics.FromImage(newBmp))
             {
@@ -69,8 +68,10 @@ namespace MediaBrowser.Library.ImageManagement
                 graphic.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
 
                 graphic.DrawImage(bmp, 0, 0, width, height);
-                
-                return newBmp;
+
+                var ms = new MemoryStream();
+                newBmp.Save(ms, image.RawFormat);
+                return ms;
             }
         }
 
@@ -85,8 +86,12 @@ namespace MediaBrowser.Library.ImageManagement
         {
             var ms = new MemoryStream();
             //test
-            //image.Save("c:\\users\\eric\\my documents\\imagetest\\" + DateTime.Now.Millisecond + image.Width + "x" + image.Height + ".png", System.Drawing.Imaging.ImageFormat.Png);
-            image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //string fn = "c:\\users\\eric\\my documents\\imagetest\\" + DateTime.Now.Millisecond + image.Width + "x" + image.Height + ".jpg";
+            //image.Save(fn, image.RawFormat);
+            //Logger.ReportVerbose("Image file size: " + new FileInfo(fn).Length);
+            System.Drawing.Imaging.ImageFormat format = image.Width < 1100 ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg;
+            image.Save(ms, format);
+            Logger.ReportVerbose("Image memory size: " + ms.Length);
             return CacheImage(id, ms, image.Width, image.Height);
         }
 
@@ -112,6 +117,7 @@ namespace MediaBrowser.Library.ImageManagement
             heightParam.Value = height;
             updatedParam.Value = DateTime.UtcNow;
             dataParam.Value = ms.ToArray();
+            Logger.ReportVerbose("Memory stream array size("+id+"): " + ms.ToArray().Length);
 
             lock (connection)
             {
@@ -155,7 +161,7 @@ namespace MediaBrowser.Library.ImageManagement
                         }
                         else
                         {
-                            CacheImage(id, ResizeImage(System.Drawing.Image.FromStream(ms), width, height));
+                            CacheImage(id, ResizeImage(System.Drawing.Image.FromStream(ms), width, height), width, height);
                         }
                     }
                 } 
@@ -220,6 +226,7 @@ namespace MediaBrowser.Library.ImageManagement
                 {
                     var data = reader.GetBytes(0);
                     var ms = new MemoryStream(data);
+                    Logger.ReportVerbose("Memorystream size on read from db("+id+"): " + ms.Length);
                     return ms;
                 }
                 else

@@ -91,6 +91,11 @@ namespace MediaBrowserService.Code
             string id = parms[1];
             int width = 0;
             Int32.TryParse(parms[2], out width);
+            if (string.IsNullOrEmpty(id))
+            {
+                Logger.ReportWarning("Image Proxy invalid request: " + target);
+                return;
+            }
 
             //get the image and send it to the client
             var image = MediaBrowser.Library.ImageManagement.ImageCache.Instance.GetImageStream(new Guid(id), width);
@@ -99,7 +104,7 @@ namespace MediaBrowserService.Code
             StringBuilder header = new StringBuilder();
             header.Append("HTTP/1.1 200 OK\r\n");
             header.AppendFormat("Content-Length: {0}\r\n", image.Length);
-            header.AppendFormat("Content-Type: image/png\r\n");
+            header.AppendFormat("Content-Type: image/jpeg\r\n");
             //header.AppendFormat("Content-Disposition: inline;filename=\"image.jpg;\"\r\n");
             //header.Append("Content-Transfer-Encoding: binary\r\n");
             header.Append("\r\n");
