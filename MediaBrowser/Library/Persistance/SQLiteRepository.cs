@@ -89,8 +89,13 @@ namespace MediaBrowser.Library.Persistance
         protected SQLiteConnection connection;
         protected List<SQLiteCommand> delayedCommands = new List<SQLiteCommand>();
 
-        public void ShutdownWriter()
+        public void ShutdownDatabase()
         {
+            try
+            {
+                connection.Close();
+            }
+            catch { }
             alive = false;
             Thread.Sleep(1000); //wait for it to shutdown
         }

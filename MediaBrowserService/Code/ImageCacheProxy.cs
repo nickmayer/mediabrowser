@@ -99,6 +99,11 @@ namespace MediaBrowserService.Code
 
             //get the image and send it to the client
             var image = MediaBrowser.Library.ImageManagement.ImageCache.Instance.GetImageStream(new Guid(id), width);
+            if (image == null)
+            {
+                Logger.ReportError("Unable to retrieve image: " + target + ". Aborting.");
+                return;
+            }
             Logger.ReportVerbose("Serving image: " + id + " width: " + width + " image size: " + image.Length);
 
             StringBuilder header = new StringBuilder();

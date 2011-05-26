@@ -154,14 +154,18 @@ namespace MediaBrowser.Library.ImageManagement
                 {
                     using (var ms = GetImageStream(id))
                     {
-                        if (ms == null)
+                        if (ms == null || ms.Length == 0)
                         {
                             //no image is cached
                             return null;
                         }
                         else
                         {
-                            CacheImage(id, ResizeImage(System.Drawing.Image.FromStream(ms), width, height), width, height);
+                            if (width > 0)
+                            {
+                                Logger.ReportVerbose("Resizing image " + id + " to " + width + "x" + height);
+                                CacheImage(id, ResizeImage(System.Drawing.Image.FromStream(ms), width, height), width, height);
+                            } 
                         }
                     }
                 } 
@@ -231,7 +235,8 @@ namespace MediaBrowser.Library.ImageManagement
                 }
                 else
                 {
-                    return null;
+                    //not found - return an empty stream
+                    return new MemoryStream();
                 }
             }
         }

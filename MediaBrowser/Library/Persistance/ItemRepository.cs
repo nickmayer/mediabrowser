@@ -72,7 +72,7 @@ namespace MediaBrowser.Library {
 
         }
 
-        public void ShutdownWriter()
+        public void ShutdownDatabase()
         {
             //nothing to do here
             return;

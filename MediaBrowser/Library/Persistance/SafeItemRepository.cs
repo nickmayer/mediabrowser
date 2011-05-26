@@ -83,9 +83,9 @@ namespace MediaBrowser.Library.Persistance {
             SafeAction(() => repository.SaveDisplayPreferences(prefs));
         }
 
-        public void ShutdownWriter()
+        public void ShutdownDatabase()
         {
-            SafeAction(() => repository.ShutdownWriter());
+            SafeAction(() => repository.ShutdownDatabase());
         }
 
         public bool ClearEntireCache() {
