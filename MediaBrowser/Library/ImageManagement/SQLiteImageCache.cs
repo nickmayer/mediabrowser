@@ -29,8 +29,8 @@ namespace MediaBrowser.Library.ImageManagement
             connection = new SQLiteConnection(connectionstr.ConnectionString);
             connection.Open();
 
-            string[] queries = {"create table if not exists images (guid, width, height, updated, data blob)",
-                                "create unique index if not exists idx_images on images(guid, width, height)",
+            string[] queries = {"create table if not exists images (guid, width, height, updated, stream_size, data blob)",
+                                "create unique index if not exists idx_images on images(guid, width)",
                                };
 
 
@@ -49,9 +49,9 @@ namespace MediaBrowser.Library.ImageManagement
 
         }
 
-        private string ImagePath(Guid id, int width)
+        private string ImagePath(Guid id, int width, long streamSize)
         {
-            return "http://localhost:8755/" + id.ToString() + "/" + width;
+            return "http://localhost:8755/" + id.ToString() + "/" + width + "/" + streamSize;
             //return "http://www.mediabrowser.tv/images/apps.png";
         }
 
@@ -98,24 +98,27 @@ namespace MediaBrowser.Library.ImageManagement
         public string CacheImage(Guid id, MemoryStream ms, int width, int height) 
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "replace into images(guid, width, height, updated, data) values (@guid, @width, @height, @updated, @data)";
+            cmd.CommandText = "replace into images(guid, width, height, updated, stream_size, data) values (@guid, @width, @height, @updated, @size, @data)";
 
             SQLiteParameter guidParam = new SQLiteParameter("@guid");
             SQLiteParameter widthParam = new SQLiteParameter("@width");
             SQLiteParameter heightParam = new SQLiteParameter("@height");
             SQLiteParameter updatedParam = new SQLiteParameter("@updated");
+            SQLiteParameter sizeParam = new SQLiteParameter("@size");
             SQLiteParameter dataParam = new SQLiteParameter("@data");
 
             cmd.Parameters.Add(guidParam);
             cmd.Parameters.Add(widthParam);
             cmd.Parameters.Add(heightParam);
             cmd.Parameters.Add(updatedParam);
+            cmd.Parameters.Add(sizeParam);
             cmd.Parameters.Add(dataParam);
 
             guidParam.Value = id.ToString();
             widthParam.Value = width;
             heightParam.Value = height;
             updatedParam.Value = DateTime.UtcNow;
+            sizeParam.Value = ms.Length;
             dataParam.Value = ms.ToArray();
             Logger.ReportVerbose("Memory stream array size("+id+"): " + ms.ToArray().Length);
 
@@ -124,7 +127,7 @@ namespace MediaBrowser.Library.ImageManagement
                 //don't use our delayed writer here cuz we need to block until this is done
                 cmd.ExecuteNonQuery();
             }
-            return ImagePath(id, width);
+            return ImagePath(id, width, ms.Length);
 
         }
 
@@ -138,20 +141,25 @@ namespace MediaBrowser.Library.ImageManagement
             var cmd = connection.CreateCommand();
             if (width > 0)
             {
-                cmd.CommandText = "select width from images where guid = @guid and width = @width";
+                cmd.CommandText = "select stream_size from images where guid = @guid and width = @width";
                 cmd.AddParam("@guid", id.ToString());
                 cmd.AddParam("@width", width);
             }
             else
             {
-                cmd.CommandText = "select width from images where guid = @guid order by width desc";
+                cmd.CommandText = "select stream_size from images where guid = @guid order by width desc";
                 cmd.AddParam("@guid", id.ToString());
             }
 
+            int size = 0;
 
             using (var reader = cmd.ExecuteReader()) {
-                if (!reader.HasRows) //need to cache it
+                if (reader.Read())
                 {
+                    size = Convert.ToInt32(reader[0]);
+                }
+                else
+                { //need to cache it
                     using (var ms = GetImageStream(id))
                     {
                         if (ms == null || ms.Length == 0)
@@ -164,15 +172,17 @@ namespace MediaBrowser.Library.ImageManagement
                             if (width > 0)
                             {
                                 Logger.ReportVerbose("Resizing image " + id + " to " + width + "x" + height);
-                                CacheImage(id, ResizeImage(System.Drawing.Image.FromStream(ms), width, height), width, height);
-                            } 
+                                var newImage = ResizeImage(System.Drawing.Image.FromStream(ms), width, height);
+                                size = (int)newImage.Length;
+                                CacheImage(id, newImage, width, height);
+                            }
                         }
                     }
-                } 
+                }
 
                 reader.Close();
             }
-            return ImagePath(id, width);
+            return ImagePath(id, width, size);
         }
 
         public string GetImagePath(Guid id)

@@ -96,6 +96,8 @@ namespace MediaBrowserService.Code
                 Logger.ReportWarning("Image Proxy invalid request: " + target);
                 return;
             }
+            int size = 0;
+            Int32.TryParse(parms[3], out size);
 
             //get the image and send it to the client
             var image = MediaBrowser.Library.ImageManagement.ImageCache.Instance.GetImageStream(new Guid(id), width);
@@ -104,11 +106,12 @@ namespace MediaBrowserService.Code
                 Logger.ReportError("Unable to retrieve image: " + target + ". Aborting.");
                 return;
             }
-            Logger.ReportVerbose("Serving image: " + id + " width: " + width + " image size: " + image.Length);
+            if (size == 0) size = (int)image.Length;
+            Logger.ReportVerbose("Serving image: " + id + " width: " + width + " actual size: "+size+" block size: " + image.Length);
 
             StringBuilder header = new StringBuilder();
             header.Append("HTTP/1.1 200 OK\r\n");
-            header.AppendFormat("Content-Length: {0}\r\n", image.Length);
+            header.AppendFormat("Content-Length: {0}\r\n", size);
             header.AppendFormat("Content-Type: image/jpeg\r\n");
             //header.AppendFormat("Content-Disposition: inline;filename=\"image.jpg;\"\r\n");
             //header.Append("Content-Transfer-Encoding: binary\r\n");
@@ -116,7 +119,7 @@ namespace MediaBrowserService.Code
 
             var streamWriter = new StreamWriter(stream, System.Text.Encoding.ASCII);
             stream.Write(new ASCIIEncoding().GetBytes(header.ToString()),0, header.Length);
-            stream.Write(image.ToArray(), 0, (int)image.Length);
+            stream.Write(image.ToArray(), 0, size);
 
             image.Close();
 
