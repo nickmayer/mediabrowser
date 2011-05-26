@@ -157,18 +157,19 @@ namespace MediaBrowser.Code.ModelItems {
           
 
             Image newImage = null;
-            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory)
+            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory && !Kernel.Instance.ConfigData.UseSQLImageCache)
             {
-                if (Kernel.Instance.ConfigData.UseSQLImageCache)
-                {
-                    Logger.ReportVerbose("Loading image (from sql): " + localPath);
-                    var imageStream = ImageCache.Instance.GetImageStream(localImage.Id, localImage.Width);
-                    //System.Drawing.Image test = System.Drawing.Image.FromStream(imageStream);
-                    //test.Save("c:\\users\\eric\\my documents\\imagetest\\" + localImage.Id + localImage.Width + ".png");
-                    //test.Dispose();
-                    newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
-                }
-                else
+                //defunct code..
+                //if (Kernel.Instance.ConfigData.UseSQLImageCache)
+                //{
+                //    Logger.ReportVerbose("Loading image (from sql): " + localPath);
+                //    var imageStream = ImageCache.Instance.GetImageStream(localImage.Id, localImage.Width);
+                //    //System.Drawing.Image test = System.Drawing.Image.FromStream(imageStream);
+                //    //test.Save("c:\\users\\eric\\my documents\\imagetest\\" + localImage.Id + localImage.Width + ".png");
+                //    //test.Dispose();
+                //    newImage = (Image)ImageFromStream.Invoke(null, new object[] { null, imageStream });
+                //}
+                //else
                 {
                     Logger.ReportVerbose("Loading image (cacheall true) : " + localPath);
                     byte[] bytes;
