@@ -70,7 +70,6 @@ namespace MediaBrowserService.Code
                 {
                     Logger.ReportVerbose("Image proxy closing connections.");
                     stream.Close();
-                    client.Close();
                 }
                 catch
                 {

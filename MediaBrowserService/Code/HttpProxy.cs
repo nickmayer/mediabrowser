@@ -100,6 +100,7 @@ namespace MediaBrowserService.Code {
             }
             finally
             {
+                client.Close();
                 Interlocked.Decrement(ref incomingConnections);
             }
         }
