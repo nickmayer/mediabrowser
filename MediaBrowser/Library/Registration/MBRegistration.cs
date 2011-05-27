@@ -23,6 +23,7 @@ namespace MediaBrowser.Library.Registration
             {
                 if (isInTrial == null)
                 {
+                    if (!RegChecked) return false; //don't set this until we've successfully obtained exp date
                     isInTrial = ExpirationDate > DateTime.Now;
                 }
                 return (isInTrial.Value && !IsRegistered);
