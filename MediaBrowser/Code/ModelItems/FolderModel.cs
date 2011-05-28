@@ -481,24 +481,30 @@ namespace MediaBrowser.Library {
 
         public override void RefreshMetadata(bool displayMsg)
         {
-            if (displayMsg) Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("RefreshFolderProf") + " " + this.Name);
-            if (!Config.Instance.AutoValidate)
-            {
-                this.folder.ValidateChildren(); //need to look for new/deleted items if not auto
-            }
+            bool includeChildren = Application.DisplayDialog("Refresh all children too?", "Refresh Folder", Microsoft.MediaCenter.DialogButtons.Yes | Microsoft.MediaCenter.DialogButtons.No, 10000) == Microsoft.MediaCenter.DialogResult.Yes;
+
             //first do us
             base.RefreshMetadata(false);
-            ThumbSize size = this.folder.Parent != null ? this.folder.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-            this.folder.ReCacheAllImages(size);
-            //and now all our children
+            string msg = includeChildren ? "RefreshFolderProf" : "RefreshProf";
+            if (displayMsg) Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData(msg) + " " + this.Name);
             Async.Queue("UI Forced Folder Metadata Loader", () =>
             {
-                foreach (BaseItem item in this.folder.RecursiveChildren)
+                if (!Config.Instance.AutoValidate)
                 {
-                    Logger.ReportInfo("refreshing "+item.Name);
-                    item.RefreshMetadata(MetadataRefreshOptions.Force);
-                    ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-                    item.ReCacheAllImages(s);
+                    this.folder.ValidateChildren(); //need to look for new/deleted items if not auto
+                }
+                ThumbSize size = this.folder.Parent != null ? this.folder.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                this.folder.ReCacheAllImages(size);
+                if (includeChildren)
+                {
+                    //and now all our children
+                    foreach (BaseItem item in this.folder.RecursiveChildren)
+                    {
+                        Logger.ReportInfo("refreshing " + item.Name);
+                        item.RefreshMetadata(MetadataRefreshOptions.Force);
+                        ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                        item.ReCacheAllImages(s);
+                    }
                 }
             });
 
