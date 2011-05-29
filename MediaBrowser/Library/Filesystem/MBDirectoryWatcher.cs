@@ -96,7 +96,7 @@ namespace MediaBrowser.Library.Filesystem
             this.secondaryTimer = new Timer();
             this.secondaryTimer.Enabled = false;
             this.secondaryTimer.Tick += new EventHandler(SecondaryTimer_Timeout);
-            this.secondaryTimer.Interval = 60000; // 60 seconds            
+            this.secondaryTimer.Interval = 90000; // 90 seconds            
         }        
 
         private void InitFileSystemWatcher(string[] watchedFolders, bool watchChanges)
@@ -131,7 +131,7 @@ namespace MediaBrowser.Library.Filesystem
             {
                 if (Directory.Exists(FullPath))
                 {
-                    if (System.DateTime.Now > lastRefresh.AddMilliseconds(60000))
+                    if (System.DateTime.Now > lastRefresh.AddMilliseconds(120000))
                     {
                         //initial change event - wait 5 seconds and then update
                         this.initialTimer.Enabled = true;
@@ -140,11 +140,18 @@ namespace MediaBrowser.Library.Filesystem
                     }
                     else
                     {
-                        //another change within 60 seconds kick off timer if not already
+                        //another change within 120 seconds kick off timer if not already
                         if (!secondaryTimer.Enabled)
                         {
                             this.secondaryTimer.Enabled = true;
-                            Logger.ReportInfo("Another change within 60 seconds on " + FullPath);
+                            Logger.ReportInfo("Another change within 120 seconds on " + FullPath);
+                        }
+                        else
+                        {
+                            //multiple changes - reset timer so that we wait 90 seconds after last change
+                            this.secondaryTimer.Stop();
+                            this.secondaryTimer.Enabled = false;
+                            this.secondaryTimer.Enabled = true;
                         }
                     }
                 }
