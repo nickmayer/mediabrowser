@@ -91,7 +91,7 @@ namespace MediaBrowser.Library.ImageManagement
             //Logger.ReportVerbose("Image file size: " + new FileInfo(fn).Length);
             System.Drawing.Imaging.ImageFormat format = image.Width < 1100 ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg;
             image.Save(ms, format);
-            Logger.ReportVerbose("Image memory size: " + ms.Length);
+            //Logger.ReportVerbose("Image memory size: " + ms.Length);
             return CacheImage(id, ms, image.Width, image.Height);
         }
 
@@ -120,7 +120,7 @@ namespace MediaBrowser.Library.ImageManagement
             updatedParam.Value = DateTime.UtcNow;
             sizeParam.Value = ms.Length;
             dataParam.Value = ms.ToArray();
-            Logger.ReportVerbose("Memory stream array size("+id+"): " + ms.ToArray().Length);
+            Logger.ReportVerbose("Caching image("+id+") size: " + ms.ToArray().Length);
 
             lock (connection)
             {
@@ -195,7 +195,7 @@ namespace MediaBrowser.Library.ImageManagement
         public ImageInfo GetPrimaryImageInfo(Guid id)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "select width, height, updated from images where width = (select max(width) from images where guid = @guid)";
+            cmd.CommandText = "select width, height, updated from images where guid = @guid order by width desc";
             cmd.AddParam("@guid", id.ToString());
 
             ImageInfo info = null;
@@ -240,7 +240,7 @@ namespace MediaBrowser.Library.ImageManagement
                 {
                     var data = reader.GetBytes(0);
                     var ms = new MemoryStream(data);
-                    Logger.ReportVerbose("Memorystream size on read from db("+id+"): " + ms.Length);
+                    //Logger.ReportVerbose("Memorystream size on read from db("+id+"): " + ms.Length);
                     return ms;
                 }
                 else

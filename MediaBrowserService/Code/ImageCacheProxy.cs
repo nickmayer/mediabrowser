@@ -68,7 +68,7 @@ namespace MediaBrowserService.Code
 
                 try
                 {
-                    Logger.ReportVerbose("Image proxy closing connections.");
+                    //Logger.ReportVerbose("Image proxy closing connections.");
                     stream.Close();
                 }
                 catch
@@ -106,7 +106,7 @@ namespace MediaBrowserService.Code
                 return;
             }
             if (size == 0) size = (int)image.Length;
-            Logger.ReportVerbose("Serving image: " + id + " width: " + width + " actual size: "+size+" block size: " + image.Length);
+            //Logger.ReportVerbose("Serving image: " + id + " width: " + width + " actual size: "+size+" block size: " + image.Length + " Num connections: " + incomingConnections);
 
             StringBuilder header = new StringBuilder();
             header.Append("HTTP/1.1 200 OK\r\n");

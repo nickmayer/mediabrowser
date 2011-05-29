@@ -157,7 +157,7 @@ namespace MediaBrowser.Code.ModelItems {
           
 
             Image newImage = null;
-            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory && !Kernel.Instance.ConfigData.UseSQLImageCache)
+            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory && !Kernel.Instance.ConfigData.UseSQLImageCache )
             {
                 //defunct code..
                 //if (Kernel.Instance.ConfigData.UseSQLImageCache)
