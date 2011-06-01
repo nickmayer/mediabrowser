@@ -97,6 +97,7 @@ namespace WebProxy {
                 {
                     Logger.ReportVerbose("Genre: " + genre);
                 }
+                Logger.ReportVerbose(trailers.Count + " " + searchInfo.Type + " trailers being searched.");
                 foreach (var info in trailers)
                 {
                     if (info == null || info.Path == null)
@@ -120,12 +121,14 @@ namespace WebProxy {
                     }
                 }
             }
+            Logger.ReportVerbose("Found " + foundTrailers.Count + " trailers.  Returning...");
             return foundTrailers;
         }
 
         private bool GenreMatches(TrailerInfo searchInfo, TrailerInfo info, float threshhold)
         {
             if (searchInfo.Genres.Count == 0) return true; //no search genres - everything matches
+            if (info.Genres == null || info.Genres.Count == 0) return false; //no target genres - no match
 
             float matches = 0;
             foreach (var genre in searchInfo.Genres){

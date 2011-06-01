@@ -28,7 +28,7 @@ namespace MediaBrowserService.Code {
 
         int port;
         Thread listenerThread;
-        int incomingConnections = 0;
+        protected int incomingConnections = 0;
 
         public HttpProxy(int port, int maxConnections) {
             this.port = port;
