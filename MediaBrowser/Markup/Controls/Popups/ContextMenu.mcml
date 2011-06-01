@@ -51,6 +51,7 @@
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+      <Binding Target="[ListRepeater.Source]" Source="[Application.ContextMenu]" />
 
       <Default Target="[Title.Content]" Value="[Application.LocalStrings.#PlayMenuCMenu!cor:String]" >
         <Conditions>
@@ -77,6 +78,16 @@
         </Actions>
       </Changed>
 
+      <Changed Source="[Application.ContextMenu]" >
+        <Conditions>
+          <Equality Source="[MenuType]" Value="Context" />
+          <Equality ConditionOp="GreaterThan" Source="[Application.ContextMenu.Count]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ListRepeater.NavigateIntoIndex]" index="0" />
+        </Actions>
+      </Changed>
+
       <Changed Source="[ItemCount]"  InitialEvaluate="true">
         <Conditions>
           <Equality Source="[ItemCount]" Value="0" />
@@ -95,14 +106,14 @@
       </Changed>
 
 
-      <Changed Source="[Input.DeepKeyFocus]" >
+      <!--<Changed Source="[Input.DeepKeyFocus]" >
         <Conditions>
           <Equality Source="[Input.DeepKeyFocus]" Value="false" />
         </Conditions>
         <Actions>
           <Invoke Target="[Close.Invoke]" />
         </Actions>
-      </Changed>
+      </Changed>-->
     </Rules>
 
     <Content>
@@ -119,7 +130,7 @@
                   <FlowLayout Orientation="Vertical" ItemAlignment="Near"/>
                 </Layout>
                 <Children>
-                  <Text Name="Title" Content="[Application.LocalStrings.#ItemMenuCMenu!cor:String]" Font="font://f:VM_ConfigItemFont" Color="color://s:FontColorLight"/>
+                  <Text Name="Title" Content="[Application.LocalStrings.#ItemMenuCMenu!cor:String]" Font="font://f:CP_ConfigTitleFont" Color="color://s:FontColorLight"/>
                   <ColorFill Content="DimGray" Alpha="0.8" Layout="Fill" MaximumSize="300,2" />
                   <Text Content=" "/>
                   <Text Name="Empty" Content="No Available Options" Font="font://f:MI_NotAvailableFont" Alpha=".7" Color="color://s:FontColorLight" Visible="false" />
@@ -159,12 +170,24 @@
 
     <Rules>
       <Changed Source="[DoAction.Invoked]">
+        <Conditions>
+          <Equality Source="[option.ItemType]" Value="action" />
+        </Conditions>
         <Actions>
           <Invoke Target="[Close.Invoke]" />
           <Invoke Target="[option.DoCommand]"  item="[Application.CurrentItem]"/>
         </Actions>
       </Changed>
 
+      <Changed Source="[DoAction.Invoked]">
+        <Conditions>
+          <Equality Source="[option.ItemType]" Value="menu" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[option.DoCommand]"  item="[Application.CurrentItem]"/>
+        </Actions>
+      </Changed>
+      
       <Changed Source="[Application.CurrentItem]" InitialEvaluate="true">
         <Actions>
           <Set Target="[OptionButton.Icon]" Value="[option.Icon]" />

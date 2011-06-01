@@ -24,6 +24,9 @@ namespace MediaBrowser.Library
         protected aResource dynamicImage;
         protected List<Type> supportedTypes;
         protected List<MenuType> supportedMenus = new List<MenuType>() { MenuType.Item, MenuType.Detail };  //default supports item/detail as play is special case
+        protected string itemType = "action";
+
+        public string ItemType { get { return itemType; } }
 
         public int SortOrder { get { return sortOrder; } }
 
@@ -200,4 +203,103 @@ namespace MediaBrowser.Library
             command.Invoke(item);
         }
     }
+
+    public class SubMenu : MenuItem
+    {
+        protected List<MenuItem> menuItems;
+
+        public SubMenu(string name, string image, List<MenuItem> items)
+            : base(name, image, null)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(string name, string image, List<MenuItem> items, List<MenuType> supports)
+            : base(name, image, null, supports)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(string name, string image, List<MenuItem> items, List<Type> supportsTypes, List<MenuType> supportsMenus)
+            : base(name, image, null, supportsTypes, supportsMenus)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(aResource name, string image, List<MenuItem> items)
+            : base(name, image, null)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(aResource name, string image, List<MenuItem> items, List<Type> supportsTypes, List<MenuType> supportsMenus)
+            : base(name, image, null, supportsTypes, supportsMenus)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(string name, string image, List<MenuItem> items, List<Type> supports)
+            : base(name, image, null, supports)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(string name, string image, List<MenuItem> items, int sort)
+            : base(name, image, null, sort)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(aResource name, string image, List<MenuItem> items, int sort)
+            : base(name, image, null, sort)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(aResource name, aResource image, List<MenuItem> items, int sort)
+            : base(name, image, null, sort)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public SubMenu(aResource name, aResource image, List<MenuItem> items)
+            : base(name, image, null)
+        {
+            menuItems = items;
+            command = this.SetMenu;
+            itemType = "menu";
+        }
+
+        public List<MenuItem> Items
+        {
+            get
+            {
+                return menuItems;
+            }
+        }
+
+        private void SetMenu(Item ignore)
+        {
+            Application.CurrentInstance.ContextMenu = menuItems;
+        }
+    }
+
 }

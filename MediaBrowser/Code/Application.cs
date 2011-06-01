@@ -216,12 +216,26 @@ namespace MediaBrowser
             FirePropertyChanged("CurrentItem");
         }
 
+        private List<MenuItem> currentContextMenu;
+
         public List<MenuItem> ContextMenu
         {
             get
             {
-                return Kernel.Instance.ContextMenuItems;
+                if (currentContextMenu == null) currentContextMenu = Kernel.Instance.ContextMenuItems;
+                return currentContextMenu;
             }
+            set
+            {
+                currentContextMenu = value;
+                Logger.ReportVerbose("Context Menu Changed.  Items: " + currentContextMenu.Count);
+                FirePropertyChanged("ContextMenu");
+            }
+        }
+
+        public void ResetContextMenu()
+        {
+            ContextMenu = Kernel.Instance.ContextMenuItems;
         }
 
         public List<MenuItem> PlayMenu

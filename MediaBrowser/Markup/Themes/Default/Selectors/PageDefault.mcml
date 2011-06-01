@@ -127,6 +127,7 @@
         <Actions>
           <Invoke Target="[ViewPanel.NavigateInto]" />
           <Set Target="[ContextMenu.Visible]" Value="false" />
+          <Invoke Target="[Application.ResetContextMenu]" />
           <Set Target="[FindAsYouTypePanel.Visible]" Value="true" />
         </Actions>
       </Changed>

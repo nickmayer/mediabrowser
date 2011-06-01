@@ -260,6 +260,7 @@
     <Content Include="Images\BlockedCover.png" />
     <Content Include="Images\Button\ButtonLeftFocusBlack.png" />
     <Content Include="Images\Button\ButtonLeftFocusDefault.png" />
+    <Content Include="Images\Button\ButtonNewFocus.png" />
     <Content Include="Images\Checkbox\CheckBoxCheckedFocus.png" />
     <Content Include="Images\Checkbox\CheckBoxCheckedNoFocus.png" />
     <Content Include="Images\Checkbox\CheckBoxUncheckedFocus.png" />
