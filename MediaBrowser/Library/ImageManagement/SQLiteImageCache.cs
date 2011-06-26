@@ -70,7 +70,7 @@ namespace MediaBrowser.Library.ImageManagement
                 graphic.DrawImage(bmp, 0, 0, width, height);
 
                 var ms = new MemoryStream();
-                newBmp.Save(ms, image.RawFormat);
+                newBmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                 return ms;
             }
         }
@@ -85,18 +85,32 @@ namespace MediaBrowser.Library.ImageManagement
         public string CacheImage(Guid id, System.Drawing.Image image)
         {
             var ms = new MemoryStream();
-            //test
-            //string fn = "c:\\users\\eric\\my documents\\imagetest\\" + DateTime.Now.Millisecond + image.Width + "x" + image.Height + ".jpg";
-            //image.Save(fn, image.RawFormat);
-            //Logger.ReportVerbose("Image file size: " + new FileInfo(fn).Length);
-            System.Drawing.Imaging.ImageFormat format = image.Width < 1100 ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg;
-            image.Save(ms, format);
+            //translate to our cached size - just cache a single size and allow the interface to scale it
+            int height = image.Height;
+            Logger.ReportVerbose("Height is: " + height);
+            int width = image.Width;
+            Logger.ReportVerbose("Width is: " + width);
+            int storedWidth = TranslateWidth(width);
+            Logger.ReportVerbose("TranslatedWidth is: " + storedWidth);
+            if (storedWidth != width)
+            {
+                height = (int)((height * (storedWidth / (float)width)));
+                width = storedWidth;
+                Logger.ReportVerbose("Resizing to: " + width + "x" + height);
+                ms = ResizeImage(image, width, height);
+            }
+            else
+            {
+                System.Drawing.Imaging.ImageFormat format = image.Width < 1100 ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg;
+                image.Save(ms, format);
+            }
             //Logger.ReportVerbose("Image memory size: " + ms.Length);
-            return CacheImage(id, ms, image.Width, image.Height);
+            return CacheImage(id, ms, width, height);
         }
 
         public string CacheImage(Guid id, MemoryStream ms, int width, int height) 
         {
+
             var cmd = connection.CreateCommand();
             cmd.CommandText = "replace into images(guid, width, height, updated, stream_size, data) values (@guid, @width, @height, @updated, @size, @data)";
 
@@ -136,16 +150,24 @@ namespace MediaBrowser.Library.ImageManagement
             throw new NotImplementedException();
         }
 
+        private int TranslateWidth(int realWidth)
+        {
+            if (realWidth > 1100)
+                return realWidth;
+            else return 570;
+        }
+
         public string GetImagePath(Guid id, int width, int height)
         {
             var cmd = connection.CreateCommand();
-            if (width > 0)
-            {
-                cmd.CommandText = "select stream_size from images where guid = @guid and width = @width";
-                cmd.AddParam("@guid", id.ToString());
-                cmd.AddParam("@width", width);
-            }
-            else
+            int storedWidth = TranslateWidth(width);
+            //if (width > 0)
+            //{
+            //    cmd.CommandText = "select stream_size from images where guid = @guid and width = @width";
+            //    cmd.AddParam("@guid", id.ToString());
+            //    cmd.AddParam("@width", storedWidth);
+            //}
+            //else
             {
                 cmd.CommandText = "select stream_size from images where guid = @guid order by width desc";
                 cmd.AddParam("@guid", id.ToString());
@@ -171,6 +193,8 @@ namespace MediaBrowser.Library.ImageManagement
                         {
                             if (width > 0)
                             {
+                                height = (int)((height * storedWidth) / width);
+                                width = storedWidth;
                                 Logger.ReportVerbose("Resizing image " + id + " to " + width + "x" + height);
                                 var newImage = ResizeImage(System.Drawing.Image.FromStream(ms), width, height);
                                 size = (int)newImage.Length;
@@ -224,6 +248,7 @@ namespace MediaBrowser.Library.ImageManagement
             var cmd = connection.CreateCommand();
             if (width > 0)
             {
+                width = TranslateWidth(width);
                 cmd.CommandText = "select data from images where guid = @guid and width = @width";
                 cmd.AddParam("@guid", id.ToString());
                 cmd.AddParam("@width", width);
