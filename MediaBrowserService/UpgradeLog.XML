@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="MediaBrowserService">
+</Property><Property Name="Solution File" Value="C:\Users\Eric\Documents\MB Trunk\MediaBrowserService\MediaBrowserService.sln">
+</Property><Property Name="Date" Value="Sunday, June 26, 2011">
+</Property><Property Name="Time" Value="13:30 PM">
+</Property></Properties><Event ErrorLevel="0" Project="MediaBrowserService" Source="MediaBrowserService.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MediaBrowserService" Source="MediaBrowserService.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MediaBrowser" Source="..\MediaBrowser\MediaBrowser.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MediaBrowser" Source="..\MediaBrowser\MediaBrowser.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="MediaBrowserService.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="MediaBrowserService.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MediaBrowserService" Source="MediaBrowserService.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MediaBrowser" Source="..\MediaBrowser\MediaBrowser.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

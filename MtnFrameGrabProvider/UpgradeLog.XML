@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="MtnFrameGrabProvider">
+</Property><Property Name="Solution File" Value="C:\Users\Eric\Documents\MB Trunk\MtnFrameGrabProvider\MtnFrameGrabProvider.sln">
+</Property><Property Name="Date" Value="Sunday, June 26, 2011">
+</Property><Property Name="Time" Value="14:01 PM">
+</Property></Properties><Event ErrorLevel="0" Project="MtnFrameGrabProvider" Source="MtnFrameGrabProvider.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MtnFrameGrabProvider" Source="MtnFrameGrabProvider.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="MtnFrameGrabProvider.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="MtnFrameGrabProvider.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MtnFrameGrabProvider" Source="MtnFrameGrabProvider.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

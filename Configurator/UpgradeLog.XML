@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Configurator">
+</Property><Property Name="Solution File" Value="C:\Users\Eric\Documents\MB Trunk\Configurator\Configurator.sln">
+</Property><Property Name="Date" Value="Sunday, June 26, 2011">
+</Property><Property Name="Time" Value="13:42 PM">
+</Property></Properties><Event ErrorLevel="0" Project="Configurator" Source="Configurator.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Configurator" Source="Configurator.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MediaBrowser" Source="..\MediaBrowser\MediaBrowser.csproj" Description="The project file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="MediaBrowser" Source="..\MediaBrowser\MediaBrowser.csproj" Description="No Conversion Required">
+</Event><Event ErrorLevel="0" Project="" Source="Configurator.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Configurator.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Configurator" Source="app.config" Description="File converted successfully. All &lt;supportedRuntime&gt; and &lt;requiredRuntime&gt; tags were removed to enable the project to build and run with Visual Studio 2005.">
+</Event><Event ErrorLevel="3" Project="Configurator" Source="app.config" Description="Converted">
+</Event></UpgradeLog>

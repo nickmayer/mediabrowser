@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Installer">
+</Property><Property Name="Solution File" Value="C:\Users\Eric\Documents\MB Trunk\Installer\Installer.sln">
+</Property><Property Name="Date" Value="Sunday, June 26, 2011">
+</Property><Property Name="Time" Value="13:57 PM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Installer.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Installer.sln" Description="Converted">
+</Event></UpgradeLog>
