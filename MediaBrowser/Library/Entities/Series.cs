@@ -50,7 +50,19 @@ namespace MediaBrowser.Library.Entities {
         }
 
         //used as a valid blank item so MCML won't blow chow
-        public static Series BlankSeries = new Series() { Name = "Unknown", Studios = new List<string>(), MpaaRating = "" };
+        public static Series BlankSeries = new Series() { 
+            Name = "Unknown", 
+            Studios = new List<string>(), 
+            Genres = new List<string>(), 
+            Directors = new List<string>(),
+            Actors = new List<Actor>(),
+            ImdbRating = 0,
+            Status = "Unknown",
+            RunningTime = 0,
+            TVDBSeriesId = "",
+            ProductionYear = 1950,
+            AspectRatio = "",
+            MpaaRating = "" };
 
         public override Series OurSeries
         {
