@@ -15,6 +15,7 @@ namespace MediaBrowser.Library.RemoteControl {
         void QueueMedia(string path);
         void Seek(long position);
         void Pause();
+        void Stop();
         bool CanPlay(string filename);
         void ProcessCommand(RemoteCommand command);
         bool CanPlay(IEnumerable<string> files);

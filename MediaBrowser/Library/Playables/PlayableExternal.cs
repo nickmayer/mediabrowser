@@ -79,9 +79,9 @@ namespace MediaBrowser.Library.Playables
 
         protected override void PlayInternal(bool resume)
         {
-            if (PlaybackController.IsPlaying) {
-                PlaybackController.Pause();
-            }
+            
+            PlaybackController.Stop(); //stop whatever is playing
+            
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);

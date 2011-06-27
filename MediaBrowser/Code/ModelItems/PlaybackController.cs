@@ -483,6 +483,15 @@ namespace MediaBrowser
         }
 
 
+        public virtual void Stop()
+        {
+            var transport = MediaTransport;
+            if (transport != null)
+            {
+                transport.PlayRate = 0;
+            }
+        }
+
         protected override void Dispose(bool isDisposing)
         {
 
