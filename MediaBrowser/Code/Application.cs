@@ -1322,6 +1322,12 @@ namespace MediaBrowser
         }
         public void BackToRoot()
         {
+            //be sure we are on the app thread for session access
+            if (Microsoft.MediaCenter.UI.Application.ApplicationThread != System.Threading.Thread.CurrentThread)
+            {
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => BackToRoot());
+                return;
+            }
             //back up the app to the root page - used when library re-locks itself
             while (session.BackPage()) { };
         }
