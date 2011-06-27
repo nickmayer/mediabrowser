@@ -268,6 +268,14 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public virtual Series OurSeries
+        {
+            get
+            {
+                //default baseItem has no series - return a valid blank item so MCML won't blow chow
+                return Series.BlankSeries;
+            }
+        }
 
         bool? isTrailer = null;
         public bool IsTrailer

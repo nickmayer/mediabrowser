@@ -31,5 +31,13 @@ namespace MediaBrowser.Library.Entities {
                     return MpaaRating;
             }
         }
+
+        public override Series OurSeries
+        {
+            get
+            {
+                return this.Parent as Series ?? Series.BlankSeries;
+            }
+        }
     }
 }

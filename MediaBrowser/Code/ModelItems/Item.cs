@@ -663,48 +663,7 @@ namespace MediaBrowser.Library
         {
             get
             {
-                FolderModel blank = new FolderModel() { baseItem = new Series() { Name = "Unknown", Studios = new List<string>(), MpaaRating = ""} };
-                FolderModel series = blank;
-
-                Episode episode = baseItem as Episode;
-                Season season = baseItem as Season;
-
-                FolderModel parent = PhysicalParent;
-                FolderModel grandParent = null;
-
-                if (parent != null)
-                {
-                    grandParent = PhysicalParent.PhysicalParent;
-                }
-                /*
-                if (parent != null && parent.baseItem is Series) {
-                    series = parent;
-                }
-                */
-                if (series == blank)
-                {
-
-                    if (episode != null)
-                    {
-
-                        if (grandParent != null && grandParent.baseItem is Series)
-                        {
-                            series = grandParent;
-                        }
-
-                        if (series == blank)
-                        {
-                            series = ItemFactory.Instance.Create(episode.Series) as FolderModel;
-                        }
-
-                    }
-                    else if (series != blank)
-                    {
-                        series = ItemFactory.Instance.Create(season.Parent) as FolderModel;
-
-                    }
-                }
-                return series;
+                return new FolderModel() { baseItem = this.baseItem.OurSeries};
             }
         }
 

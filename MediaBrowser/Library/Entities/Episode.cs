@@ -49,6 +49,14 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public override Series OurSeries
+        {
+            get
+            {
+                return Series ?? Series.BlankSeries;
+            }
+        }
+
         public override string LongName {
             get {
                 string longName = base.LongName;

@@ -48,5 +48,16 @@ namespace MediaBrowser.Library.Entities {
                 return MpaaRating ?? "";
             }
         }
+
+        //used as a valid blank item so MCML won't blow chow
+        public static Series BlankSeries = new Series() { Name = "Unknown", Studios = new List<string>(), MpaaRating = "" };
+
+        public override Series OurSeries
+        {
+            get
+            {
+                return this;
+            }
+        }
     }
 }
