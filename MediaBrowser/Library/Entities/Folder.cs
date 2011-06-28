@@ -8,6 +8,7 @@ using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.LibraryManagement;
+using MediaBrowser.Library.Localization;
 using System.Collections;
 using System.Diagnostics;
 
@@ -31,6 +32,33 @@ namespace MediaBrowser.Library.Entities {
             : base() {
             children = new Lazy<List<BaseItem>>(() => GetChildren(true), () => OnChildrenChanged(null));
         }
+
+        //Dynamic Choice Items - these can be overidden or added to by sub-classes to provide for different options for different item types
+        /// <summary>
+        /// Dictionary of sort options - consists of a localized display string and an IComparer(Baseitem) for the sort
+        /// </summary>
+        public Dictionary<string, IComparer<BaseItem>> SortOrderOptions = new Dictionary<string,IComparer<BaseItem>>() { 
+            {LocalizedStrings.Instance.GetString("NameDispPref"), new BaseItemComparer(SortOrder.Name)},
+            {LocalizedStrings.Instance.GetString("DateDispPref"), new BaseItemComparer(SortOrder.Date)},
+            {LocalizedStrings.Instance.GetString("RatingDispPref"), new BaseItemComparer(SortOrder.Rating)},
+            {LocalizedStrings.Instance.GetString("RuntimeDispPref"), new BaseItemComparer(SortOrder.Runtime)},
+            {LocalizedStrings.Instance.GetString("UnWatchedDispPref"), new BaseItemComparer(SortOrder.Unwatched)},
+            {LocalizedStrings.Instance.GetString("YearDispPref"), new BaseItemComparer(SortOrder.Year)}
+        };
+        /// <summary>
+        /// ArrayList of index options for display - should be localized and must match IndexByOptions positionally
+        /// </summary>
+        public ArrayList IndexByDisplayOptions = new ArrayList() { LocalizedStrings.Instance.GetString("NoneDispPref"), 
+                                                   LocalizedStrings.Instance.GetString("ActorDispPref"), 
+                                                   LocalizedStrings.Instance.GetString("GenreDispPref"), 
+                                                   LocalizedStrings.Instance.GetString("DirectorDispPref"),
+                                                   LocalizedStrings.Instance.GetString("YearDispPref"), 
+                                                   LocalizedStrings.Instance.GetString("StudioDispPref") };
+
+        /// <summary>
+        /// List of index by field names - must match exactly the object property names and match up positionally with IndexByDisplayOptions
+        /// </summary>
+        public List<string> IndexByOptions = new List<string>() { "None", "Actors", "Genres", "Directors", "ProductionYear", "Studios" };
 
         /// <summary>
         /// By default children are loaded on first access, this operation is slow. So sometimes you may

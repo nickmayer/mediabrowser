@@ -6,6 +6,7 @@ using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Collections;
 using MediaBrowser.Code.ModelItems;
+using MediaBrowser.Library.Entities;
 
 namespace MediaBrowser.Library
 {
@@ -28,7 +29,7 @@ namespace MediaBrowser.Library
 
         public Guid Id { get; set; }
 
-        public DisplayPreferences(Guid id, FolderModel folder)
+        public DisplayPreferences(Guid id, Folder folder)
         {
             this.Id = id;
 

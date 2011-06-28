@@ -45,33 +45,6 @@ namespace MediaBrowser.Library {
             }
         }
 
-        //Dynamic Choice Items - these can be overidden or added to by sub-classes to provide for different options for different item types
-        /// <summary>
-        /// Dictionary of sort options - consists of a localized display string and an IComparer(Baseitem) for the sort
-        /// </summary>
-        public Dictionary<string, IComparer<BaseItem>> SortOrderOptions = new Dictionary<string,IComparer<BaseItem>>() { 
-            {Kernel.Instance.StringData.GetString("NameDispPref"), new BaseItemComparer(SortOrder.Name)},
-            {Kernel.Instance.StringData.GetString("DateDispPref"), new BaseItemComparer(SortOrder.Date)},
-            {Kernel.Instance.StringData.GetString("RatingDispPref"), new BaseItemComparer(SortOrder.Rating)},
-            {Kernel.Instance.StringData.GetString("RuntimeDispPref"), new BaseItemComparer(SortOrder.Runtime)},
-            {Kernel.Instance.StringData.GetString("UnWatchedDispPref"), new BaseItemComparer(SortOrder.Unwatched)},
-            {Kernel.Instance.StringData.GetString("YearDispPref"), new BaseItemComparer(SortOrder.Year)}
-        };
-        /// <summary>
-        /// ArrayList of index options for display - should be localized and must match IndexByOptions positionally
-        /// </summary>
-        public ArrayList IndexByDisplayOptions = new ArrayList() { Kernel.Instance.StringData.GetString("NoneDispPref"), 
-                                                   Kernel.Instance.StringData.GetString("ActorDispPref"), 
-                                                   Kernel.Instance.StringData.GetString("GenreDispPref"), 
-                                                   Kernel.Instance.StringData.GetString("DirectorDispPref"),
-                                                   Kernel.Instance.StringData.GetString("YearDispPref"), 
-                                                   Kernel.Instance.StringData.GetString("StudioDispPref") };
-
-        /// <summary>
-        /// List of index by field names - must match exactly the object property names and match up positionally with IndexByDisplayOptions
-        /// </summary>
-        public List<string> IndexByOptions = new List<string>() { "None", "Actors", "Genres", "Directors", "ProductionYear", "Studios" };
-
         public override void NavigatingInto() {
             // force display prefs to reload.
             displayPrefs = null;
@@ -878,7 +851,7 @@ namespace MediaBrowser.Library {
                 }
             }
 
-            DisplayPreferences dp = new DisplayPreferences(id, this);
+            DisplayPreferences dp = new DisplayPreferences(id, this.Folder);
             dp = Kernel.Instance.ItemRepository.RetrieveDisplayPreferences(dp);
             if (dp == null) {
                 LoadDefaultDisplayPreferences(ref id, ref dp);
@@ -889,7 +862,7 @@ namespace MediaBrowser.Library {
 
         protected void LoadDefaultDisplayPreferences(ref Guid id, ref DisplayPreferences dp)
         {
-            dp = new DisplayPreferences(id, this);
+            dp = new DisplayPreferences(id, this.Folder);
             dp.LoadDefaults();
             if ((this.PhysicalParent != null) && (Config.Instance.InheritDefaultView))
             {
