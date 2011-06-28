@@ -380,7 +380,7 @@ namespace MediaBrowser.Library {
              MetadataProviderFactories = MetadataProviderHelper.DefaultProviders(),
              ConfigData = config,
              ServiceConfigData = ServiceConfigData.FromFile(ApplicationPaths.ServiceConfigFile),
-             StringData = new LocalizedStrings(),
+             StringData = LocalizedStrings.Instance,
              ImageResolvers = DefaultImageResolvers(config.EnableProxyLikeCaching),
              ItemRepository = repository,
              MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory(),

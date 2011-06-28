@@ -24,6 +24,9 @@ namespace MediaBrowser.Library.Localization
         private List<object> data = new List<object>();
         public MBPropertySet LocalStrings = new MBPropertySet();
         private MBPropertySet localStringsReverse = new MBPropertySet();
+        private static LocalizedStrings _instance = new LocalizedStrings();
+
+        public static LocalizedStrings Instance { get { return _instance; } }
 
 
         public LocalizedStrings()
