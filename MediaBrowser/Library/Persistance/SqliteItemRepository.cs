@@ -154,8 +154,8 @@ namespace MediaBrowser.Library.Persistance {
             return children.Count == 0 ? null : children;
         }
 
-        public DisplayPreferences RetrieveDisplayPreferences(Guid id) {
-            return itemRepo.RetrieveDisplayPreferences(id);
+        public DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp) {
+            return itemRepo.RetrieveDisplayPreferences(dp);
         }
 
 

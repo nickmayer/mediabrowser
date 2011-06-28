@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0022";
+        const string VERSION = "1.0024";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -216,23 +216,23 @@ namespace MediaBrowser.Library.Localization
         public string DetailDispPref = "Detail";
         public string PosterDispPref = "Poster";
         public string ThumbDispPref = "Thumb";
-        public string ThumbStripDispPref = "Thumb Strip";
+        public string ThumbStripDispPref = "ThumbStrip";
         public string ShowLabelsDispPref = "Show Labels";
         public string VerticalScrollDispPref = "Vertical Scroll";
         public string UseBannersDispPref = "Use Banners";
         public string UseCoverflowDispPref = "Use Coverflow Style";
         public string ThumbSizeDispPref = "Thumb Size";
-        public string NameDispPref = "name";
-        public string DateDispPref = "date";
-        public string RatingDispPref = "rating";
-        public string RuntimeDispPref = "runtime";
-        public string UnWatchedDispPref = "unwatched";
-        public string YearDispPref = "year";
-        public string NoneDispPref = "none";
-        public string ActorDispPref = "actor";
-        public string GenreDispPref = "genre";
-        public string DirectorDispPref = "director";
-        public string StudioDispPref = "studio";
+        public string NameDispPref = "Name";
+        public string DateDispPref = "Date";
+        public string RatingDispPref = "Rating";
+        public string RuntimeDispPref = "Runtime";
+        public string UnWatchedDispPref = "Unwatched";
+        public string YearDispPref = "Year";
+        public string NoneDispPref = "None";
+        public string ActorDispPref = "Actor";
+        public string GenreDispPref = "Genre";
+        public string DirectorDispPref = "Director";
+        public string StudioDispPref = "Studio";
 
         //Dialog boxes
         public string BrokenEnvironmentDial = "Application will now close due to broken MediaCenterEnvironment object, possibly due to 5 minutes of idle time and/or running with TVPack installed.";

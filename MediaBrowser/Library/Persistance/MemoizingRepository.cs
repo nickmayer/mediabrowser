@@ -79,8 +79,8 @@ namespace MediaBrowser.Library.Persistance {
 
         }
 
-        public DisplayPreferences RetrieveDisplayPreferences(Guid id) {
-            return repository.RetrieveDisplayPreferences(id);
+        public DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp) {
+            return repository.RetrieveDisplayPreferences(dp);
         }
 
         public ThumbSize RetrieveThumbSize(Guid id)

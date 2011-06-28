@@ -17,7 +17,7 @@ namespace MediaBrowser.Library
         IEnumerable<Guid> RetrieveChildren(Guid id);
 
         PlaybackStatus RetrievePlayState(Guid id);
-        DisplayPreferences RetrieveDisplayPreferences(Guid id);
+        DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp);
         ThumbSize RetrieveThumbSize(Guid id);
         
         void SavePlayState( PlaybackStatus playState);

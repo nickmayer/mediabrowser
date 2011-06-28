@@ -64,9 +64,9 @@ namespace MediaBrowser.Library.Persistance {
             return SafeFunc(() => repository.RetrievePlayState(id));
         }
 
-        public DisplayPreferences RetrieveDisplayPreferences(Guid id)
+        public DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp)
         {
-            return SafeFunc(() => repository.RetrieveDisplayPreferences(id));
+            return SafeFunc(() => repository.RetrieveDisplayPreferences(dp));
         }
 
         public ThumbSize RetrieveThumbSize(Guid id)

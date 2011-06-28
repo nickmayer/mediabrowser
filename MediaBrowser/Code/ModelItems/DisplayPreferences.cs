@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.MediaCenter.UI;
 using System.IO;
@@ -27,7 +28,7 @@ namespace MediaBrowser.Library
 
         public Guid Id { get; set; }
 
-        public DisplayPreferences(Guid id)
+        public DisplayPreferences(Guid id, FolderModel folder)
         {
             this.Id = id;
 
@@ -38,6 +39,10 @@ namespace MediaBrowser.Library
 
             this.viewType.Chosen = ViewTypeNames.GetName(Config.Instance.DefaultViewType);
 
+            //set our dynamic choice options
+            this.sortOrders.Options = folder.SortOrderOptions.Keys.ToArray();
+            this.indexBy.Options = folder.IndexByDisplayOptions;
+ 
             showLabels = new BooleanChoice();
             showLabels.Value = Config.Instance.DefaultShowLabels;
 
@@ -52,16 +57,6 @@ namespace MediaBrowser.Library
 
             useBackdrop = new BooleanChoice();
             useBackdrop.Value = Config.Instance.ShowBackdrop;
-
-            ArrayList al = new ArrayList();
-            foreach (SortOrder v in Enum.GetValues(typeof(SortOrder)))
-                al.Add(SortOrderNames.GetName(v));
-            sortOrders.Options = al;
-
-            al = new ArrayList();
-            foreach (IndexType v in Enum.GetValues(typeof(IndexType)))
-                al.Add(IndexTypeNames.GetName(v));
-            indexBy.Options = al;
 
             sortOrders.ChosenChanged += new EventHandler(sortOrders_ChosenChanged);
             indexBy.ChosenChanged += new EventHandler(indexBy_ChosenChanged);
@@ -140,40 +135,39 @@ namespace MediaBrowser.Library
             bw.Write(this.useBackdrop.Value);
         }
 
-        public static DisplayPreferences ReadFromStream(Guid id, BinaryReader br)
+        public DisplayPreferences ReadFromStream(BinaryReader br)
         {
-            DisplayPreferences dp = new DisplayPreferences(id);
-            dp.saveEnabled = false;
+            this.saveEnabled = false;
             byte version = br.ReadByte();
             try
             {
-                dp.viewType.Chosen = ViewTypeNames.GetName((ViewType)Enum.Parse(typeof(ViewType), br.SafeReadString()));
+                this.viewType.Chosen = ViewTypeNames.GetName((ViewType)Enum.Parse(typeof(ViewType), br.SafeReadString()));
             }
             catch
             {
-                dp.viewType.Chosen = ViewTypeNames.GetName(MediaBrowser.Library.ViewType.Poster);
+                this.viewType.Chosen = ViewTypeNames.GetName(MediaBrowser.Library.ViewType.Poster);
             }
-            dp.showLabels.Value = br.ReadBoolean();
-            dp.verticalScroll.Value = br.ReadBoolean();
+            this.showLabels.Value = br.ReadBoolean();
+            this.verticalScroll.Value = br.ReadBoolean();
             try
             {
-                dp.SortOrder = (SortOrder)Enum.Parse(typeof(SortOrder), br.SafeReadString());
+                this.SortOrder = (SortOrder)Enum.Parse(typeof(SortOrder), br.SafeReadString());
             }
             catch { }
-            dp.IndexBy = (IndexType)Enum.Parse(typeof(IndexType), br.SafeReadString());
+            this.IndexBy = (IndexType)Enum.Parse(typeof(IndexType), br.SafeReadString());
             if (!Config.Instance.RememberIndexing)
-                dp.IndexBy = IndexType.None;
-            dp.useBanner.Value = br.ReadBoolean();
-            dp.thumbConstraint.Value = new Size(br.ReadInt32(), br.ReadInt32());
+                this.IndexBy = IndexType.None;
+            this.useBanner.Value = br.ReadBoolean();
+            this.thumbConstraint.Value = new Size(br.ReadInt32(), br.ReadInt32());
 
             if (version >= 2)
-                dp.useCoverflow.Value = br.ReadBoolean();
+                this.useCoverflow.Value = br.ReadBoolean();
 
             if (version >= 3)
-                dp.useBackdrop.Value = br.ReadBoolean();
+                this.useBackdrop.Value = br.ReadBoolean();
 
-            dp.saveEnabled = true;
-            return dp;
+            this.saveEnabled = true;
+            return this;
         }
 
         public Choice SortOrders
@@ -196,7 +190,7 @@ namespace MediaBrowser.Library
             get { return IndexTypeNames.GetEnum(indexBy.Chosen.ToString()); }
             set
             {
-                this.IndexByChoice.Chosen = IndexTypeNames.GetName(value);
+                this.IndexByChoice.Chosen = value.ToString();
                 this.IndexByChoice.Default = this.IndexByChoice.Chosen;
             }
         }
@@ -205,7 +199,7 @@ namespace MediaBrowser.Library
         {
             get
             {
-                return IndexTypeNames.GetEnum((string)this.indexBy.Chosen).ToString();
+                return this.indexBy.Chosen.ToString();
             }
         }
 

@@ -120,12 +120,12 @@ namespace MediaBrowser.Library {
             return thumbSizes[id];
         }
 
-        public DisplayPreferences RetrieveDisplayPreferences(Guid id) {
-            string file = GetDisplayPrefsFile(id);
+        public DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp) {
+            string file = GetDisplayPrefsFile(dp.Id);
 
             if (File.Exists(file)) {
                 using (Stream fs = ReadFileStream(file)) {
-                    DisplayPreferences dp = DisplayPreferences.ReadFromStream(id, new BinaryReader(fs));
+                    dp.ReadFromStream(new BinaryReader(fs));
                     return dp;
                 }
             } 
