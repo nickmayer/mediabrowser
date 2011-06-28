@@ -522,7 +522,10 @@ namespace MediaBrowser.Library.Entities {
             lock (ActualChildren) {
                 ActualChildren.Sort(new BaseItemComparer(sortOrder));
             }
-            if (notifyChange) OnChildrenChanged(null);
+            if (notifyChange && ChildrenChanged != null)
+                {
+                    ChildrenChanged(this, null);
+                }
         }
 
         List<BaseItem> GetCachedChildren() {
