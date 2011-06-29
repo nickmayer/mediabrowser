@@ -39,7 +39,7 @@ namespace MediaBrowser.Code.ModelItems {
         Action onChildrenChanged;
         bool folderIsIndexed = false;
         float childImageAspect = 1;
-        SortOrder sortOrder = SortOrder.Name;
+        IComparer<BaseItem> sortFunction = new BaseItemComparer(SortOrder.Name);
 
         public void Assign(FolderModel folderModel, Action onChildrenChanged) {
 
@@ -174,7 +174,7 @@ namespace MediaBrowser.Code.ModelItems {
                 clone.onChildrenChanged = onChildrenChanged;
                 clone.folderIsIndexed = folderIsIndexed;
                 clone.childImageAspect = childImageAspect;
-                clone.sortOrder = sortOrder;
+                clone.sortFunction = sortFunction;
                 return clone;
             }
             
@@ -197,13 +197,14 @@ namespace MediaBrowser.Code.ModelItems {
 
         // trigger a re-sort
         public void Sort() {
-            Sort(sortOrder);
+            Sort(sortFunction);
         }
 
-        public void Sort(SortOrder sortOrder) {
+        public void Sort(IComparer<BaseItem> sortFunction)
+        {
             if (folder != null && !folderIsIndexed) {
-                this.sortOrder = sortOrder;
-                Async.Queue("Background Sorter", () => folder.Sort(sortOrder));
+                this.sortFunction = sortFunction;
+                Async.Queue("Background Sorter", () => folder.Sort(sortFunction));
             }
         }
 

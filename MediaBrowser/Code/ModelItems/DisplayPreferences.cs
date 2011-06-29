@@ -26,6 +26,7 @@ namespace MediaBrowser.Library
         readonly BooleanChoice useBackdrop;
         private bool saveEnabled = true;
         SizeRef thumbConstraint = new SizeRef(Config.Instance.DefaultPosterSize);
+        private Dictionary<string, IComparer<BaseItem>> sortDict;
 
         public Guid Id { get; set; }
 
@@ -41,7 +42,8 @@ namespace MediaBrowser.Library
             this.viewType.Chosen = ViewTypeNames.GetName(Config.Instance.DefaultViewType);
 
             //set our dynamic choice options
-            this.sortOrders.Options = folder.SortOrderOptions.Keys.ToArray();
+            this.sortDict = folder.SortOrderOptions;
+            this.sortOrders.Options = sortDict.Keys.ToArray();
             this.indexBy.Options = folder.IndexByDisplayOptions;
  
             showLabels = new BooleanChoice();
@@ -152,7 +154,7 @@ namespace MediaBrowser.Library
             this.verticalScroll.Value = br.ReadBoolean();
             try
             {
-                this.SortOrder = (SortOrder)Enum.Parse(typeof(SortOrder), br.SafeReadString());
+                this.SortOrder = br.SafeReadString();
             }
             catch { }
             this.IndexBy = (IndexType)Enum.Parse(typeof(IndexType), br.SafeReadString());
@@ -176,12 +178,20 @@ namespace MediaBrowser.Library
             get { return this.sortOrders; }
         }
 
-        public SortOrder SortOrder
+        public IComparer<BaseItem> SortFunction
         {
-            get { return SortOrderNames.GetEnum(sortOrders.Chosen.ToString()); }
+            get
+            {
+                return sortDict[sortOrders.Chosen.ToString()];
+            }
+        }
+
+        public string SortOrder
+        {
+            get { return sortOrders.Chosen.ToString(); }
             set
             {
-                this.SortOrders.Chosen = SortOrderNames.GetName(value);
+                this.SortOrders.Chosen = value.ToString();
                 this.SortOrders.Default = this.SortOrders.Chosen;
             }
         }

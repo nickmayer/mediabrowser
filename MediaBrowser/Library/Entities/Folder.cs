@@ -24,7 +24,7 @@ namespace MediaBrowser.Library.Entities {
 
         Lazy<List<BaseItem>> children;
         protected IFolderMediaLocation location;
-        SortOrder sortOrder = SortOrder.Name;
+        IComparer<BaseItem> sortFunction = new BaseItemComparer(SortOrder.Name);
         object validateChildrenLock = new object();
         public MBDirectoryWatcher directoryWatcher;
 
@@ -112,8 +112,8 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        public void Sort(SortOrder sortOrder) {
-            Sort(sortOrder, true);
+        public void Sort(IComparer<BaseItem> sortFunction) {
+            Sort(sortFunction, true);
         }
 
 
@@ -374,7 +374,7 @@ namespace MediaBrowser.Library.Entities {
         }
 
         protected void OnChildrenChanged(ChildrenChangedEventArgs args) {
-            Sort(sortOrder, false);
+            Sort(sortFunction, false);
 
             if (ChildrenChanged != null) {
                 ChildrenChanged(this, args);
@@ -545,10 +545,10 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        void Sort(SortOrder sortOrder, bool notifyChange) {
-            this.sortOrder = sortOrder;
+        void Sort(IComparer<BaseItem> sortFunction, bool notifyChange) {
+            this.sortFunction = sortFunction;
             lock (ActualChildren) {
-                ActualChildren.Sort(new BaseItemComparer(sortOrder));
+                ActualChildren.Sort(sortFunction);
             }
             if (notifyChange && ChildrenChanged != null)
                 {

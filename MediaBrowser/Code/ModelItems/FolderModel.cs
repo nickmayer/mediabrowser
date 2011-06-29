@@ -603,27 +603,27 @@ namespace MediaBrowser.Library {
         void ChildMetadataPropertyChanged(IPropertyObject sender, string property) {
             if (this.displayPrefs != null) {
                 switch (this.displayPrefs.SortOrder) {
-                    case SortOrder.Year:
+                    case "Year":
                         if (property != "ProductionYear")
                             return;
                         break;
-                    case SortOrder.Name:
+                    case "Name":
                         if (property != "Name")
                             return;
                         break;
-                    case SortOrder.Rating:
+                    case "Rating":
                         if (property != "ImdbRating")
                             return;
                         break;
-                    case SortOrder.Runtime:
+                    case "Runtime":
                         if (property != "RunningTime")
                             return;
                         break;
 
-                    case SortOrder.Date:
+                    case "Date":
                         // date sorting is not affected by metadata
                         return;
-                    case SortOrder.Unwatched:
+                    case "Unwatched":
                         if (property != "Name")
                             return;
                         break;
@@ -644,7 +644,7 @@ namespace MediaBrowser.Library {
                 // note: need to be careful this doesn't trigger the load of the prefs 
                 // that can then trigger a cascade that loads metadata, prefs should only be loaded by 
                 // functions that are required when the item is the current item displayed
-                if ((this.displayPrefs != null) && (this.DisplayPrefs.SortOrder == SortOrder.Unwatched)) {
+                if ((this.displayPrefs != null) && (this.DisplayPrefs.SortOrder == "Unwatched")) {
                     FirePropertyChanged("Children");
                 }
             } else if (property == "ThumbAspectRatio")
@@ -797,7 +797,7 @@ namespace MediaBrowser.Library {
         }
 
         protected virtual void SortOrders_ChosenChanged(object sender, EventArgs e) {
-            folderChildren.Sort(this.displayPrefs.SortOrder);
+            folderChildren.Sort(this.displayPrefs.SortFunction);
         }
 
         public virtual DisplayPreferences DisplayPrefs {

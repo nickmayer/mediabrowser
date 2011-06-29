@@ -8,7 +8,7 @@ namespace MediaBrowser.Library.Entities {
         IList<Index> IndexBy(IndexType indexType);
         IEnumerable<BaseItem> RecursiveChildren { get; }
         Index Search(Func<BaseItem, bool> searchFunction, string name);
-        void Sort(MediaBrowser.Library.SortOrder sortOrder);
+        void Sort(IComparer<BaseItem> sortFunction);
         void ValidateChildren();
         int UnwatchedCount { get; }
         bool Watched { set; }
