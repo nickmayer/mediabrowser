@@ -187,6 +187,17 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
+        public IEnumerable<object> AllItems
+        {
+            get
+            {
+                foreach (var obj in dictionary.Values)
+                {
+                    yield return obj.Data;
+                }
+            }
+        }
+
         private T GetData(Guid guid) {
             DatedObject dataObject;
             if (dictionary.TryGetValue(guid, out dataObject)) {

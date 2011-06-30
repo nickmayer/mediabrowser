@@ -52,6 +52,19 @@ namespace MediaBrowser.Library {
         FileBasedDictionary<PlaybackStatus> playbackStatus;
         FileBasedDictionary<ThumbSize> thumbSizes;
 
+        public List<PlaybackStatus> AllPlayStates
+        { //for migration
+            get
+            {
+                var ret = new List<PlaybackStatus>();
+                foreach (var ps in playbackStatus.AllItems)
+                {
+                    ret.Add(ps as PlaybackStatus);
+                }
+                return ret;
+            }
+        }
+
         #region IItemCacheProvider Members
 
         public void SaveChildren(Guid id, IEnumerable<Guid> children) {

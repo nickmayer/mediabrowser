@@ -18,6 +18,8 @@ namespace MediaBrowser.Library.Persistance {
 
     public class SqliteItemRepository : SQLiteRepository, IItemRepository {
 
+        private static Guid MIGRATE_MARKER = new Guid("0FD78B4C-B9DA-4249-B880-3696761AE3B4");
+
 
         public static SqliteItemRepository GetRepository(string dbPath, string sqlitePath) {
             if (sqliteAssembly == null) {
@@ -45,13 +47,16 @@ namespace MediaBrowser.Library.Persistance {
 
             itemRepo = new ItemRepository();
 
-            MigratePlayState();
+
+            string playStateDBPath = Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate.db");
 
             string[] queries = {"create table if not exists provider_data (guid, full_name, data)",
                                 "create unique index if not exists idx_provider on provider_data(guid, full_name)",
                                 "create table if not exists items (guid primary key, data)",
                                 "create table if not exists children (guid, child)", 
                                 "create unique index if not exists idx_children on children(guid, child)",
+                                "attach database '"+playStateDBPath+"' as playstate_db",
+                                "create table if not exists playstate_db.play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)"
                                // @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll 
                                //        sort_order, index_by, use_banner, thumb_constraint_width, thumb_constraint_height, use_coverflow, use_backdrop )" 
                                 //,   "create table play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)"
@@ -69,36 +74,60 @@ namespace MediaBrowser.Library.Persistance {
 
 
             alive = true; // tell writer to keep going
-            Async.Queue("Sqlite Writer", DelayedWriter); 
+            Async.Queue("Sqlite Writer", DelayedWriter);
+ 
+            if (Kernel.LoadContext == MBLoadContext.Service) MigratePlayState(); //don't want to be migrating simultaneously in service and core...
 
         }
 
+        private string GetPath(string type, string root) {
+            string path = Path.Combine(root, type);
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            return path;
+        }
+
         private void MigratePlayState() {
-            if (connection.TableExists("play_states")) {
-                var cmd = connection.CreateCommand();
-                cmd.CommandText = "select guid, play_count, position_ticks, playlist_position, last_played from play_states";
-                using (var reader = cmd.ExecuteReader()) {
-                    while (reader.Read()) {
-                        var state = new PlaybackStatus();
-                        state.Id = reader.GetGuid(0);
-                        state.PlayCount = reader.GetInt32(1);
-                        state.PositionTicks = reader.GetInt64(2);
-                        state.PlaylistPosition = reader.GetInt32(3);
-                        state.LastPlayed = reader.GetDateTime(4);
-                        try {
-                            SavePlayState(state);
-                        } catch (Exception e) {
-                            Logger.ReportException("Failed to migrate playstate for : " + state.Id.ToString(), e);
-                        }
+            if (RetrievePlayState(MIGRATE_MARKER).Id != MIGRATE_MARKER) { //haven't migrated
+                //delay this to allow playstate dictionary to load in old repo
+                Async.Queue("Playstate Migration", () =>
+                //using (ItemRepository repo = new ItemRepository())
+                {
+                    Logger.ReportInfo("Attempting to migrate playstates to SQL");
+                    int cnt = 0;
+                    foreach (PlaybackStatus ps in itemRepo.AllPlayStates)
+                    {
+                        //Logger.ReportVerbose("Saving playstate for " + ps.Id);
+                        SavePlayState(ps);
+                        cnt++;
                     }
-                }
-                connection.Exec("drop table play_states");
-                Logger.ReportInfo("Successfully migrated Sqlite display state to Item Cache");
+                    Logger.ReportInfo("Successfully migrated " + cnt + " playstate items.");
+                    var migrateMarker = new PlaybackStatus();
+                    migrateMarker.Id = MIGRATE_MARKER;
+                    SavePlayState(migrateMarker);
+                }, 5000);
             }
         }
 
         public PlaybackStatus RetrievePlayState(Guid id) {
-            return itemRepo.RetrievePlayState(id);
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "select guid, play_count, position_ticks, playlist_position, last_played from playstate_db.play_states where guid = @guid";
+            cmd.AddParam("@guid", id);
+
+            var state = new PlaybackStatus();
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    state.Id = reader.GetGuid(0);
+                    state.PlayCount = reader.GetInt32(1);
+                    state.PositionTicks = reader.GetInt64(2);
+                    state.PlaylistPosition = reader.GetInt32(3);
+                    state.LastPlayed = reader.GetDateTime(4);
+                }
+            }
+
+            return state;
         }
 
         public ThumbSize RetrieveThumbSize(Guid id)
@@ -107,7 +136,15 @@ namespace MediaBrowser.Library.Persistance {
         }
 
         public void SavePlayState(PlaybackStatus playState) {
-            itemRepo.SavePlayState(playState);
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "replace into playstate_db.play_states(guid, play_count, position_ticks, playlist_position, last_played) values(@guid, @playCount, @positionTicks, @playlistPosition, @lastPlayed)";
+            cmd.AddParam("@guid", playState.Id);
+            cmd.AddParam("@playCount", playState.PlayCount);
+            cmd.AddParam("@positionTicks", playState.PositionTicks);
+            cmd.AddParam("@playlistPosition", playState.PlaylistPosition);
+            cmd.AddParam("@lastPlayed", playState.LastPlayed);
+
+            QueueCommand(cmd);
         }
 
 
