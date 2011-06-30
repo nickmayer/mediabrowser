@@ -188,7 +188,7 @@ namespace MediaBrowser
         public bool EnableScreenSaver = true; //enable default screen saver functionality
         public int ScreenSaverTimeOut = 10; //minutes of inactivity for screen saver to kick in
 
-        public int NetworkAvailableTimeOut = 60000; //milliseconds to wait for network to be available on validations
+        public int NetworkAvailableTimeOut = 5000; //milliseconds to wait for network to be available on validations
 
         public bool UseSQLImageCache = false; //switch to use the new SQLite image cache
 

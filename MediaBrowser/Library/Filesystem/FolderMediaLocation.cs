@@ -7,6 +7,7 @@ using MediaBrowser.Library.Util;
 using MediaBrowser.LibraryManagement;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Interop;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library.Filesystem {
     public class FolderMediaLocation : MediaLocation, IFolderMediaLocation  {
@@ -32,8 +33,8 @@ namespace MediaBrowser.Library.Filesystem {
             }
         }
 
-
-        protected override void SetName() {
+        protected override void SetName()
+        {
             Name = Helper.GetNameFromFile(Path);
         }
 

@@ -564,14 +564,15 @@ namespace MediaBrowser.LibraryManagement
         /// <param name="timeout">milliseconds to wait if not avail</param>
         internal static bool WaitForLocation(string location, int timeout)
         {
-            int elapsed = 0;
+            double elapsed = 0;
             string dir = Path.GetDirectoryName(location); //this will allow us to be sure it is a directory (will give parent if already directory)
             DateTime started = DateTime.Now;
             while (elapsed < timeout && !Directory.Exists(dir))
             {
-                Logger.ReportInfo("Unable to access location: " + dir + ". Waiting for it to be available...");
+                Logger.ReportInfo("Unable to access location: " + dir + ". Waiting "+timeout+"ms for it to be available..."+elapsed.ToString("0")+"ms so far...");
                 System.Threading.Thread.Sleep(1000);
-                elapsed = (DateTime.Now - started).Milliseconds;
+                var now = DateTime.Now;
+                elapsed = (now - started).TotalMilliseconds;
             }
             if (elapsed >= timeout) Logger.ReportWarning("Timed out attempting to access " + dir);
             return elapsed < timeout;

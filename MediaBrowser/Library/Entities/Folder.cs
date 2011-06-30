@@ -485,7 +485,10 @@ namespace MediaBrowser.Library.Entities {
                         if (!networkChecked && location.Path.StartsWith("\\\\"))
                         {
                             //network location - test to be sure it is accessible
-                            Helper.WaitForLocation(location.Path, Kernel.Instance.ConfigData.NetworkAvailableTimeOut);
+                            if (!Helper.WaitForLocation(location.Path, Kernel.Instance.ConfigData.NetworkAvailableTimeOut))
+                            {
+                                throw new Exception("Network location unavailable attempting to validate " + this.Name + ". ABORTING to avoid cache corruption.");
+                            }
                             networkChecked = true;
                         }
                         var item = Kernel.Instance.GetItem(location);

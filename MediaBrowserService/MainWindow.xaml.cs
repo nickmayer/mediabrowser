@@ -346,8 +346,8 @@ namespace MediaBrowserService
                     refreshProgress.Value = pctDone;
                     lblNextSvcRefresh.Content = step;
                     var elapsed = DateTime.Now - _refreshStartTime;
-                    var estCompl = pctDone > .55 ? TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds) : TimeSpan.MaxValue;
-                    string estString = pctDone > .55 ? " Est. Remaining Time: " + String.Format("{0:00}:{1:00}:{2:00}", estCompl.Hours, estCompl.Minutes, estCompl.Seconds) : "";
+                    var estCompl = pctDone > .75 ? TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds) : TimeSpan.MaxValue;
+                    string estString = pctDone > .75 ? " Est. Remaining Time: " + String.Format("{0:00}:{1:00}:{2:00}", estCompl.Hours, estCompl.Minutes, estCompl.Seconds) : "";
                     lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}",elapsed.Hours,elapsed.Minutes,elapsed.Seconds)+estString
                         ;
                 }));
