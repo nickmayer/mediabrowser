@@ -565,7 +565,7 @@ namespace MediaBrowser.LibraryManagement
         internal static bool WaitForLocation(string location, int timeout)
         {
             double elapsed = 0;
-            string dir = Path.GetDirectoryName(location); //this will allow us to be sure it is a directory (will give parent if already directory)
+            string dir = Path.HasExtension(location) ? Path.GetDirectoryName(location) : location; //try and be sure it is a directory (will give parent if already directory)
             DateTime started = DateTime.Now;
             while (elapsed < timeout && !Directory.Exists(dir))
             {
