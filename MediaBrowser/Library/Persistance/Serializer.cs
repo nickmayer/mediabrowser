@@ -137,6 +137,35 @@ namespace MediaBrowser.Library.Persistance {
         } 
 
 
+        /// <summary>
+        /// Create an instance of the passed object
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static T Instantiate<T>(string aType) where T : class, new() { 
+            Type type = GetCachedType(aType);
+
+            T instance;
+
+            MethodInfo method;
+            if (Persistable.TryGetBinaryRead(type, out method)) {
+                
+                if (method.IsStatic) {
+                    instance = (T)method.Invoke(null, new object[] { aType } );
+                } else {
+                    instance = (T)method.Invoke(aType, null);
+                }
+            } else {
+                if (typeof(T) == type) {
+                    instance = GenericSerializer<T>.Instantiate(aType);
+                } else {
+                    instance = (T)Serializer.GetSerializer(type).InstantiateInternal(aType);
+                }
+            }
+
+            return instance;
+        } 
+
         internal static Type GetCachedType(string typeName) {
             Type type;
             // tip for the reader: Dictonary gets will go in to a tail spin
@@ -208,6 +237,16 @@ namespace MediaBrowser.Library.Persistance {
                 return obj;
             } catch (Exception exception) {
                 throw new SerializationException("Failed to deserialize object, corrupt stream.", exception);
+            }
+        }
+
+        private object InstantiateInternal(string aType) {
+            try {
+                object obj = constructor.DynamicInvoke();
+
+                return obj;
+            } catch (Exception exception) {
+                throw new SerializationException("Failed to instantiate object: "+aType, exception);
             }
         }
 
