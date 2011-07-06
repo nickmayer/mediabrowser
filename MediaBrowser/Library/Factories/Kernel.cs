@@ -75,6 +75,10 @@ namespace MediaBrowser.Library {
         static object sync = new object();
         static Kernel kernel;
 
+        //test
+        public static bool UseNewSQLRepo = false;
+        //
+
         public bool MajorActivity
         {
             get
@@ -142,6 +146,13 @@ namespace MediaBrowser.Library {
                 
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
+
+                //test
+                //using (new Profiler("============Root children load=========="))
+                //{
+                //    List<BaseItem> ignore = kernel.RootFolder.AllRecursiveChildren.ToList();
+                //}
+                //
 
                 if (LoadContext != MBLoadContext.Service)
                 {
@@ -386,6 +397,11 @@ namespace MediaBrowser.Library {
              MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory(),
              TrailerProviders = new List<ITrailerProvider>() { new LocalTrailerProvider()}
              };
+
+            //test
+            Kernel.UseNewSQLRepo = config.UseNewSQLRepo;
+            Logger.ReportInfo(Kernel.UseNewSQLRepo ? "==========Using new SQL Repo========" : "========Using OLD SQL Repo=====");
+            //
 
             // kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
             kernel.PlaybackControllers.Add(new PlaybackController());

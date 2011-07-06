@@ -37,7 +37,7 @@ namespace MediaBrowser.Util
         {
             stopwatch.Stop();
             string message = string.Format("{1} took {2} seconds.",
-                caller, name, ((float)stopwatch.ElapsedMilliseconds / 1000).ToString("F"));
+                caller, name, ((float)stopwatch.ElapsedMilliseconds / 1000).ToString("0.0000"));
             Logger.ReportInfo(message);
 
             // DO NOT hook this into the UI, we use this for internal diagnostics

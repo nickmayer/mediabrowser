@@ -38,11 +38,11 @@ namespace MediaBrowser.Library.Persistance {
 
             public static void Init(string path)
             {
-                if (serviceStackAssembly == null)
-                {
-                    serviceStackAssembly = System.Reflection.Assembly.LoadFile(path);
-                    AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ServiceStackResolver);
-                }
+                //if (serviceStackAssembly == null)
+                //{
+                //    serviceStackAssembly = System.Reflection.Assembly.LoadFile(path);
+                //    AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ServiceStackResolver);
+                //}
             }
 
             public static object Extract(SQLiteDataReader reader, SQLInfo.ColDef col) 
@@ -58,12 +58,12 @@ namespace MediaBrowser.Library.Persistance {
                     if (col.ColType == typeof(MediaType))
                         return Enum.Parse(typeof(MediaType), (string)data);
                     else
-                        if (col.ColType.Name == "Guid")
+                        if (col.ColType == typeof(Guid))
                         {
                             return new Guid((string)data);
                         }
                         else
-                            return data.ToString();
+                            return data;
                 } else
                     if (typ == typeof(Int64)) {
                         if (col.ColType == typeof(DateTime))
@@ -74,7 +74,7 @@ namespace MediaBrowser.Library.Persistance {
                             return data;
                     } else
                         if (typ == typeof(Double)) {
-                            if (col.InternalType == typeof(Single) || col.ColType == typeof(Single))
+                            if (col.ColType == typeof(Single) || col.InternalType == typeof(Single))
                                 return Convert.ToSingle(data);
                             else
                                 return data;
@@ -98,7 +98,7 @@ namespace MediaBrowser.Library.Persistance {
                     case "guid":
                         return data.ToString();
                     case "string":
-                        return (string)data;
+                        return data;
 
                     case "datetime":
                         return ((DateTime)data).Ticks;
@@ -141,7 +141,7 @@ namespace MediaBrowser.Library.Persistance {
             }
 
             protected string ObjType;
-            protected List<ColDef> Columns = new List<ColDef>();
+            public List<ColDef> Columns = new List<ColDef>();
 
             public void FixUpSchema(SQLiteConnection connection)
             {
@@ -230,12 +230,15 @@ namespace MediaBrowser.Library.Persistance {
                 }
             }
 
-
+            private List<ColDef> _atomicColumns;
             public List<ColDef> AtomicColumns
             {
                 get
                 {
-                    return this.Columns.Where(c => !c.ListType).ToList();
+                    if (_atomicColumns == null) {
+                        _atomicColumns = this.Columns.Where(c => !c.ListType).ToList();
+                    }
+                    return _atomicColumns;
                 }
             }
 
@@ -328,6 +331,7 @@ namespace MediaBrowser.Library.Persistance {
             connectionstr.CacheSize = 4096;
             connectionstr.SyncMode = SynchronizationModes.Normal;
             connectionstr.DataSource = dbPath;
+            connectionstr.JournalMode = SQLiteJournalModeEnum.Persist; //maybe better performance...?
             connection = new SQLiteConnection(connectionstr.ConnectionString);
             connection.Open();
 
@@ -514,173 +518,212 @@ namespace MediaBrowser.Library.Persistance {
 
         public BaseItem RetrieveItem(Guid id) {
 
-            //var cmd = connection.CreateCommand();
-            //cmd.CommandText = "select data from items where guid = @guid";
-            //cmd.AddParam("@guid", id);
-
             BaseItem item = null;
-
-            //using (var reader = cmd.ExecuteReader()) {
-            //    if (reader.Read()) {
-            //        var data = reader.GetBytes(0);
-            //        using (var stream = new MemoryStream(data)) {
-            //            item = Serializer.Deserialize<BaseItem>(stream);
-            //        }
-            //    }
-            //}
-            //test
-            var cmd2 = connection.CreateCommand();
-            cmd2.CommandText = "select * from items where guid = @guid";
-            cmd2.AddParam("@guid", id);
-            using (var reader = cmd2.ExecuteReader())
+            //using (new MediaBrowser.Util.Profiler("===========RetrieveItem============="))
             {
-                if (reader.Read())
+                if (!Kernel.UseNewSQLRepo)
                 {
-                    //for (int i = 0; i < reader.FieldCount; i++)
-                    //{
-                    //    Logger.ReportVerbose("Col: " + reader.GetName(i)+" Type: "+reader.GetFieldType(i).FullName);
-                    //}
-                    string itemType = reader["obj_type"].ToString();
-                    //Logger.ReportVerbose("obj_type: "+itemType+" type: " + itemType.GetType().FullName);
-                    if (!string.IsNullOrEmpty(itemType))
+                    var cmd = connection.CreateCommand();
+                    cmd.CommandText = "select data from items where guid = @guid";
+                    cmd.AddParam("@guid", id);
+
+
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        try
+                        if (reader.Read())
                         {
-                            //item = (BaseItem)Activator.CreateInstance(Type.GetType(itemType,true));
-                            item = Serializer.Instantiate<BaseItem>(itemType);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.ReportException("Error trying to create instance of type: " + itemType, e);
-                            return null;
-                        }
-                        item.Id = id;
-                        if (!ItemSQL.ContainsKey(item.GetType()))
-                        {
-                            ItemSQL.Add(item.GetType(), new SQLInfo(item));
-                            //make sure our schema matches
-                            ItemSQL[item.GetType()].FixUpSchema(connection);
-                        }
-                        foreach (var col in ItemSQL[item.GetType()].AtomicColumns)
-                        {
-                            var data = SQLizer.Extract(reader, col);
-                            if (data != null)
-                                if (col.MemberType == MemberTypes.Property)
-                                    col.PropertyInfo.SetValue(item, data, null);
-                                else
-                                    col.FieldInfo.SetValue(item, data);
-
-                        }
-
-                        // and our list columns
-                        foreach (var col in ItemSQL[item.GetType()].ListColumns)
-                        {
-                            System.Collections.IList list = (System.Collections.IList)col.ColType.GetConstructor(new Type[] { }).Invoke(null);
-                            var listCmd = connection.CreateCommand();
-                            listCmd.CommandText = "select value from list_items where guid = @guid and property = @property";
-                            listCmd.AddParam("@guid", item.Id);
-                            listCmd.AddParam("@property", col.ColName);
-                            using (var listReader = listCmd.ExecuteReader())
+                            var data = reader.GetBytes(0);
+                            using (var stream = new MemoryStream(data))
                             {
-                                while (listReader.Read())
-                                {
-                                    list.Add(SQLizer.Extract(listReader, new SQLInfo.ColDef(){ColName = "value", ColType = col.InternalType}));
-                                    //Logger.ReportVerbose("Added list item '" + listReader[0] + "' to " + col.ColName);
-                                }
+                                item = Serializer.Deserialize<BaseItem>(stream);
                             }
-                            if (col.MemberType == MemberTypes.Property)
-                                col.PropertyInfo.SetValue(item, list, null);
-                            else
-                                col.FieldInfo.SetValue(item, list);
+                        }
+                    }
+                }
+                else
+                {
+                    //test
+                    var cmd2 = connection.CreateCommand();
+                    cmd2.CommandText = "select * from items where guid = @guid";
+                    cmd2.AddParam("@guid", id);
+                    using (var reader = cmd2.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string itemType = reader["obj_type"].ToString();
+
+                            if (!string.IsNullOrEmpty(itemType))
+                            {
+                                item = GetItem(reader, itemType);
+                            }
                         }
                     }
                 }
             }
             
             //
+            //Logger.ReportInfo("Item: " + item.Name);
+            return item;
+        }
+
+        protected BaseItem GetItem(SQLiteDataReader reader, string itemType)
+        {
+            BaseItem item = null;
+            try
+            {
+                item = Serializer.Instantiate<BaseItem>(itemType);
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error trying to create instance of type: " + itemType, e);
+                return null;
+            }
+            SQLInfo itemSQL;
+            if (!ItemSQL.TryGetValue(item.GetType(), out itemSQL))
+            {
+                itemSQL = new SQLInfo(item);
+                ItemSQL.Add(item.GetType(), itemSQL);
+                //make sure our schema matches
+                itemSQL.FixUpSchema(connection);
+            }
+            foreach (var col in itemSQL.AtomicColumns)
+            {
+                var data = SQLizer.Extract(reader, col);
+                if (data != null)
+                    if (col.MemberType == MemberTypes.Property)
+                        col.PropertyInfo.SetValue(item, data, null);
+                    else
+                        col.FieldInfo.SetValue(item, data);
+
+            }
+            // and our list columns
+            //this is an optimization - we go get all the list values for this item in one statement
+            var listCmd = connection.CreateCommand();
+            listCmd.CommandText = "select property, value from list_items where guid = @guid order by property";
+            listCmd.AddParam("@guid", item.Id);
+            string currentProperty = "";
+            System.Collections.IList list = null;
+            SQLInfo.ColDef column = new SQLInfo.ColDef();
+            using (var listReader = listCmd.ExecuteReader())
+            {
+                while (listReader.Read())
+                {
+                    string property = listReader.GetString(0);
+                    if (property != currentProperty)
+                    {
+                        //new column...
+                        if (list != null)
+                        {
+                            //fill in the last one
+                            if (column.MemberType == MemberTypes.Property)
+                                column.PropertyInfo.SetValue(item, list, null);
+                            else
+                                column.FieldInfo.SetValue(item, list);
+                        }
+                        currentProperty = property;
+                        column = itemSQL.Columns.Find(c => c.ColName == property);
+                        list = (System.Collections.IList)column.ColType.GetConstructor(new Type[] { }).Invoke(null);
+                        //Logger.ReportVerbose("Added list item '" + listReader[0] + "' to " + col.ColName);
+                    }
+                    list.Add(SQLizer.Extract(listReader, new SQLInfo.ColDef() { ColName = "value", ColType = column.InternalType }));
+                }
+                if (list != null)
+                {
+                    //fill in the last one
+                    if (column.MemberType == MemberTypes.Property)
+                        column.PropertyInfo.SetValue(item, list, null);
+                    else
+                        column.FieldInfo.SetValue(item, list);
+                }
+            }
             return item;
         }
 
         public void SaveItem(BaseItem item) {
             if (item == null) return;
 
-            if (!ItemSQL.ContainsKey(item.GetType()))
+            if (!Kernel.UseNewSQLRepo)
             {
-                ItemSQL.Add(item.GetType(), new SQLInfo(item));
-                //make sure our schema matches
-                ItemSQL[item.GetType()].FixUpSchema(connection);
-            }
-            //using (var fs = new MemoryStream())
-            //{
-            //    BinaryWriter bw = new BinaryWriter(fs);
-            //    Serializer.Serialize(bw.BaseStream, item);
-
-            //    var cmd = connection.CreateCommand();
-            //    cmd.CommandText = "replace into items(guid, data) values (@guid, @data)";
-
-            //    SQLiteParameter guidParam = new SQLiteParameter("@guid");
-            //    SQLiteParameter dataParam = new SQLiteParameter("@data");
-
-            //    cmd.Parameters.Add(guidParam);
-            //    cmd.Parameters.Add(dataParam);
-
-            //    guidParam.Value = item.Id;
-            //    dataParam.Value = fs.ToArray();
-
-            //    QueueCommand(cmd);
-            //}
-
-            //test
-            var cmd2 = connection.CreateCommand();
-            cmd2.CommandText = ItemSQL[item.GetType()].UpdateStmt;
-
-                
-            cmd2.AddParam("@0",item.Id);
-            cmd2.AddParam("@1",item.GetType().FullName);
-            int colNo = 2; //id was 0 type was 1...
-            foreach (var col in ItemSQL[item.GetType()].AtomicColumns)
-            {
-                if (col.MemberType == MemberTypes.Property)
-                    cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.PropertyInfo.GetValue(item, null)));
-                else
-                    cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.FieldInfo.GetValue(item)));
-                colNo++;
-            }
-            QueueCommand(cmd2);
-            
-            //and now each of our list members
-            foreach (var col in ItemSQL[item.GetType()].ListColumns)
-            {
-                var delCmd = connection.CreateCommand();
-                delCmd.CommandText = "delete from list_items where guid = @guid and property = @property";
-                delCmd.AddParam("@guid", item.Id);
-                delCmd.AddParam("@property", col.ColName);
-                delCmd.ExecuteNonQuery();
-
-                System.Collections.IEnumerable list = null;
-
-                if (col.MemberType == MemberTypes.Property)
+                using (var fs = new MemoryStream())
                 {
-                    //var it = col.PropertyInfo.GetValue(item, null);
-                    //Type ittype = it.GetType();
-                    list = col.PropertyInfo.GetValue(item, null) as System.Collections.IEnumerable;
+                    BinaryWriter bw = new BinaryWriter(fs);
+                    Serializer.Serialize(bw.BaseStream, item);
+
+                    var cmd = connection.CreateCommand();
+                    cmd.CommandText = "replace into items(guid, data) values (@guid, @data)";
+
+                    SQLiteParameter guidParam = new SQLiteParameter("@guid");
+                    SQLiteParameter dataParam = new SQLiteParameter("@data");
+
+                    cmd.Parameters.Add(guidParam);
+                    cmd.Parameters.Add(dataParam);
+
+                    guidParam.Value = item.Id;
+                    dataParam.Value = fs.ToArray();
+
+                    QueueCommand(cmd);
                 }
-                else
-                    list = col.FieldInfo.GetValue(item) as System.Collections.IEnumerable;
-
-                if (list != null)
+            }
+            else
+            {
+                //test
+                if (!ItemSQL.ContainsKey(item.GetType()))
                 {
-                    var insCmd = connection.CreateCommand();
-                    insCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, @property, @value)";
-                    insCmd.AddParam("@guid", item.Id);
-                    insCmd.AddParam("@property", col.ColName);
-                    SQLiteParameter val = new SQLiteParameter("@value");
-                    insCmd.Parameters.Add(val);
+                    ItemSQL.Add(item.GetType(), new SQLInfo(item));
+                    //make sure our schema matches
+                    ItemSQL[item.GetType()].FixUpSchema(connection);
+                }
+                var cmd2 = connection.CreateCommand();
+                cmd2.CommandText = ItemSQL[item.GetType()].UpdateStmt;
 
-                    foreach (var listItem in list)
+
+                cmd2.AddParam("@0", item.Id);
+                cmd2.AddParam("@1", item.GetType().FullName);
+                int colNo = 2; //id was 0 type was 1...
+                foreach (var col in ItemSQL[item.GetType()].AtomicColumns)
+                {
+                    if (col.MemberType == MemberTypes.Property)
+                        cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.PropertyInfo.GetValue(item, null)));
+                    else
+                        cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.FieldInfo.GetValue(item)));
+                    colNo++;
+                }
+                QueueCommand(cmd2);
+
+                //and now each of our list members
+                foreach (var col in ItemSQL[item.GetType()].ListColumns)
+                {
+                    var delCmd = connection.CreateCommand();
+                    delCmd.CommandText = "delete from list_items where guid = @guid and property = @property";
+                    delCmd.AddParam("@guid", item.Id);
+                    delCmd.AddParam("@property", col.ColName);
+                    delCmd.ExecuteNonQuery();
+
+                    System.Collections.IEnumerable list = null;
+
+                    if (col.MemberType == MemberTypes.Property)
                     {
-                        val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
-                        insCmd.ExecuteNonQuery();
+                        //var it = col.PropertyInfo.GetValue(item, null);
+                        //Type ittype = it.GetType();
+                        list = col.PropertyInfo.GetValue(item, null) as System.Collections.IEnumerable;
+                    }
+                    else
+                        list = col.FieldInfo.GetValue(item) as System.Collections.IEnumerable;
+
+                    if (list != null)
+                    {
+                        var insCmd = connection.CreateCommand();
+                        insCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, @property, @value)";
+                        insCmd.AddParam("@guid", item.Id);
+                        insCmd.AddParam("@property", col.ColName);
+                        SQLiteParameter val = new SQLiteParameter("@value");
+                        insCmd.Parameters.Add(val);
+
+                        foreach (var listItem in list)
+                        {
+                            val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
+                            insCmd.ExecuteNonQuery();
+                        }
                     }
                 }
             }
