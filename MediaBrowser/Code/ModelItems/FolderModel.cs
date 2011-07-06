@@ -150,19 +150,23 @@ namespace MediaBrowser.Library {
         List<Item> newestItems = null; 
         public List<Item> GetNewestItems(int count) {
             if (newestItems == null) {
-                newestItems = new List<Item>();
-                if (folder != null) {
-                    Async.Queue("Newest Item Loader", () =>
+                using (new MediaBrowser.Util.Profiler("Get Newest Items"))
+                {
+                    newestItems = new List<Item>();
+                    if (folder != null)
                     {
-                        var items = new SortedList<DateTime, Item>();
-                        FindNewestChildren(folder, items, count);
-                        newestItems = items.Values.Select(i => i).Reverse().ToList();
-                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                        Async.Queue("Newest Item Loader", () =>
                         {
-                            FirePropertyChanged("NewestItems");
-                            FirePropertyChanged("QuickListItems");
-                        });
-                    }, null, true);
+                            var items = new SortedList<DateTime, Item>();
+                            FindNewestChildren(folder, items, count);
+                            newestItems = items.Values.Select(i => i).Reverse().ToList();
+                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                            {
+                                FirePropertyChanged("NewestItems");
+                                FirePropertyChanged("QuickListItems");
+                            });
+                        }, null, true);
+                    }
                 }
             }
             return newestItems;
@@ -173,20 +177,23 @@ namespace MediaBrowser.Library {
         {
             if (recentWatchedItems == null)
             {
-                recentWatchedItems = new List<Item>();
-                if (folder != null)
+                using (new MediaBrowser.Util.Profiler("Get Recent Watched"))
                 {
-                    Async.Queue("Recent Watched Loader", () =>
+                    recentWatchedItems = new List<Item>();
+                    if (folder != null)
                     {
-                        var items = new SortedList<DateTime, Item>();
-                        FindRecentWatchedChildren(folder, items, count);
-                        recentWatchedItems = items.Values.Select(i => i).Reverse().ToList();
-                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                        Async.Queue("Recent Watched Loader", () =>
                         {
-                            FirePropertyChanged("RecentItems");
-                            FirePropertyChanged("QuickListItems");
-                        });
-                    },null, true);
+                            var items = new SortedList<DateTime, Item>();
+                            FindRecentWatchedChildren(folder, items, count);
+                            recentWatchedItems = items.Values.Select(i => i).Reverse().ToList();
+                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                            {
+                                FirePropertyChanged("RecentItems");
+                                FirePropertyChanged("QuickListItems");
+                            });
+                        }, null, true);
+                    }
                 }
             }
             return recentWatchedItems;
@@ -197,20 +204,23 @@ namespace MediaBrowser.Library {
         {
             if (recentUnwatchedItems == null)
             {
-                recentUnwatchedItems = new List<Item>();
-                if (folder != null)
+                using (new MediaBrowser.Util.Profiler("Get Recent Unwatched"))
                 {
-                    Async.Queue("Recent Watched Loader", () =>
+                    recentUnwatchedItems = new List<Item>();
+                    if (folder != null)
                     {
-                        var items = new SortedList<DateTime, Item>();
-                        FindRecentUnwatchedChildren(folder, items, count);
-                        recentUnwatchedItems = items.Values.Select(i => i).Reverse().ToList();
-                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                        Async.Queue("Recent Watched Loader", () =>
                         {
-                            FirePropertyChanged("RecentItems");
-                            FirePropertyChanged("QuickListItems");
-                        });
-                    }, null, true);
+                            var items = new SortedList<DateTime, Item>();
+                            FindRecentUnwatchedChildren(folder, items, count);
+                            recentUnwatchedItems = items.Values.Select(i => i).Reverse().ToList();
+                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                            {
+                                FirePropertyChanged("RecentItems");
+                                FirePropertyChanged("QuickListItems");
+                            });
+                        }, null, true);
+                    }
                 }
             }
             return recentUnwatchedItems;
