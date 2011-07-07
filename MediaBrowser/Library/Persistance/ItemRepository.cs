@@ -91,34 +91,34 @@ namespace MediaBrowser.Library {
             return;
         }
 
-        public IEnumerable<BaseItem> RetrieveChildren(Guid id) {
+        public IEnumerable<Guid> RetrieveChildren(Guid id) {
 
-            List<BaseItem> children = new List<BaseItem>();
-//            string file = GetChildrenFilename(id);
-//            if (!File.Exists(file)) return null;
+            List<Guid> children = new List<Guid>();
+            string file = GetChildrenFilename(id);
+            if (!File.Exists(file)) return null;
 
-//            try {
+            try {
 
-//                using (Stream fs = ReadFileStream(file)) {
-//                    BinaryReader br = new BinaryReader(fs);
-//                    lock (children) {
-//                        var count = br.ReadInt32();
-//                        var itemsRead = 0;
-//                        while (itemsRead < count) {
-//                            children.Add(br.ReadGuid());
-//                            itemsRead++;
-//                        }
-//                    }
-//                }
-//            } catch (Exception e) {
-//                Logger.ReportException("Failed to retrieve children:", e);
-//#if DEBUG
-//                throw;
-//#else 
-//                return null;
-//#endif
+                using (Stream fs = ReadFileStream(file)) {
+                    BinaryReader br = new BinaryReader(fs);
+                    lock (children) {
+                        var count = br.ReadInt32();
+                        var itemsRead = 0;
+                        while (itemsRead < count) {
+                            children.Add(br.ReadGuid());
+                            itemsRead++;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Logger.ReportException("Failed to retrieve children:", e);
+#if DEBUG
+                throw;
+#else 
+                return null;
+#endif
 
-//            }
+            }
 
             return children.Count == 0 ? null : children;
         }

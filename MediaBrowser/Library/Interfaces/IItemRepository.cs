@@ -14,7 +14,7 @@ namespace MediaBrowser.Library
         void SaveItem(BaseItem item);
         BaseItem RetrieveItem(Guid name);
         void SaveChildren(Guid ownerName, IEnumerable<Guid> children);
-        IEnumerable<BaseItem> RetrieveChildren(Guid id);
+        IEnumerable<Guid> RetrieveChildren(Guid id);
 
         PlaybackStatus RetrievePlayState(Guid id);
         DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp);
