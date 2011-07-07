@@ -13,7 +13,6 @@ namespace MediaBrowser.Library.Persistance {
         Dictionary<Guid, IEnumerable<IMetadataProvider>> providers = new Dictionary<Guid, IEnumerable<IMetadataProvider>>();
         Dictionary<Guid, BaseItem> items = new Dictionary<Guid, BaseItem>();
         Dictionary<Guid, IEnumerable<Guid>> children = new Dictionary<Guid, IEnumerable<Guid>>();
-        Dictionary<Guid, IEnumerable<BaseItem>> fullChildren = new Dictionary<Guid, IEnumerable<BaseItem>>();
         Dictionary<Guid, PlaybackStatus> playState = new Dictionary<Guid, PlaybackStatus>();
         Dictionary<Guid, DisplayPreferences> displayPrefs = new Dictionary<Guid, DisplayPreferences>();
 
@@ -66,8 +65,8 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
-        public IEnumerable<BaseItem> RetrieveChildren(Guid id) {
-            return Memoize(id, fullChildren, repository.RetrieveChildren);
+        public IEnumerable<Guid> RetrieveChildren(Guid id) {
+            return Memoize(id, children, repository.RetrieveChildren);
         }
 
         // Do not memoize these calls, as they are shared.
