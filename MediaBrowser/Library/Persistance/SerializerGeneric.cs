@@ -103,15 +103,6 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
-        public static T Instantiate(string type) {
-            try {
-                T obj = new T();
-
-                return obj;
-            } catch (Exception exception) {
-                throw new SerializationException("Failed to instantiate object: "+type, exception);
-            }
-        }
     
     }
 }

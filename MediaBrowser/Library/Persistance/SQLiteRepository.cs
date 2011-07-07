@@ -142,7 +142,6 @@ namespace MediaBrowser.Library.Persistance
                     foreach (var command in copy)
                     {
                         command.Transaction = tran;
-                        //Logger.ReportVerbose("About to execute " + command.CommandText);
                         command.ExecuteNonQuery();
                     }
                     tran.Commit();
@@ -151,7 +150,7 @@ namespace MediaBrowser.Library.Persistance
             }
             catch (Exception e)
             {
-                Logger.ReportException("Critical Exception Failed to Flush: ", e);
+                Logger.ReportException("Critical Exception Failed to Flush:", e);
             }
         }
 
