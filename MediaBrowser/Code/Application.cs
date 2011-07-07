@@ -585,6 +585,12 @@ namespace MediaBrowser
                         }, 60000);
                     }
 
+                    // set npv visibility according to current state
+                    if (MediaCenterEnvironment.MediaExperience != null && MediaCenterEnvironment.MediaExperience.Transport != null)
+                    {
+                        ShowNowPlaying = MediaCenterEnvironment.MediaExperience.Transport.PlayState == Microsoft.MediaCenter.PlayState.Playing;
+                    }
+
                     // we need to validate the library so that changes in the RAL will get picked up without having to navigate
                     if (Config.AutoValidate)
                     {
