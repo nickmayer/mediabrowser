@@ -347,8 +347,6 @@ namespace MediaBrowser.Library.Persistance {
                                 "create unique index if not exists idx_children on children(guid, child)",
                                 "create table if not exists list_items(guid, property, value)",
                                 "create index if not exists idx_list on list_items(guid, property)",
-                                "create table if not exists recent_list(top_parent, child, date_added)",
-                                "create index if not exists idx_recent on recent_list(top_parent, child)",
                                 "attach database '"+playStateDBPath+"' as playstate_db",
                                 "create table if not exists playstate_db.play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)"
                                // @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll 
@@ -693,12 +691,14 @@ namespace MediaBrowser.Library.Persistance {
                 QueueCommand(cmd2);
 
                 //and now each of our list members
-                var delCmd = connection.CreateCommand();
-                delCmd.CommandText = "delete from list_items where guid = @guid";
-                delCmd.AddParam("@guid", item.Id);
-                delCmd.ExecuteNonQuery();
                 foreach (var col in ItemSQL[item.GetType()].ListColumns)
                 {
+                    var delCmd = connection.CreateCommand();
+                    delCmd.CommandText = "delete from list_items where guid = @guid and property = @property";
+                    delCmd.AddParam("@guid", item.Id);
+                    delCmd.AddParam("@property", col.ColName);
+                    delCmd.ExecuteNonQuery();
+
                     System.Collections.IEnumerable list = null;
 
                     if (col.MemberType == MemberTypes.Property)
@@ -726,45 +726,12 @@ namespace MediaBrowser.Library.Persistance {
                         }
                     }
                 }
-                //finally, update the recent list
-                if (item is Media) //don't need to track non-media items
-                {
-                    var recCmd = connection.CreateCommand();
-                    recCmd.CommandText = "replace into recent_list(top_parent, child, date_added) values(@top, @child, @date)";
-                    recCmd.AddParam("@top", item.TopParent);
-                    recCmd.AddParam("@child", item.Id);
-                    recCmd.AddParam("@date", item.DateCreated);
-                    recCmd.ExecuteNonQuery();
-                }
             }
                     
             //
         }
 
-        /// <summary>
-        /// Generic routine to retrieve a list of items
-        /// </summary>
-        /// <param name="selectStmt"></param>
-        /// <param name="parms"></param>
-        /// <returns></returns>
-        private IEnumerable<BaseItem> GetItems(string selectStmt, SQLiteParameter[] parms)
-        {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = selectStmt;
-            cmd.Parameters.AddRange(parms);
-            using (var reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    string itemType = reader["obj_type"].ToString();
 
-                    if (!string.IsNullOrEmpty(itemType))
-                    {
-                        yield return GetItem(reader, itemType);
-                    }
-                }
-            }
-        }
 
         public IEnumerable<IMetadataProvider> RetrieveProviders(Guid guid) {
             var providers = new List<IMetadataProvider>();

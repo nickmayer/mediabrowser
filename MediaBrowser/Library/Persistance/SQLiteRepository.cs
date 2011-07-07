@@ -132,7 +132,6 @@ namespace MediaBrowser.Library.Persistance
                 List<SQLiteCommand> copy;
                 lock (delayedCommands)
                 {
-                    if (delayedCommands.Count == 0) return;  //no reason to go through this if no cmds...
                     copy = delayedCommands.ToList();
                     delayedCommands.Clear();
                 }

@@ -577,7 +577,7 @@ namespace MediaBrowser.Library.Entities {
                 //    }
                 //}
                 var children = Kernel.Instance.ItemRepository.RetrieveChildren(Id);
-                items = children != null ? children.ToList() : null;
+                items = children.Count() > 0 ? children.ToList() : null;
             }
             return items;
         }
