@@ -27,6 +27,19 @@ namespace MediaBrowser.Library.Entities {
 
         public Folder Parent { get; set; }
 
+        public Guid TopParent
+        {
+            get
+            {
+                Folder parent = this.Parent;
+                while (parent.Parent != null && parent.Parent != Kernel.Instance.RootFolder)
+                {
+                    parent = parent.Parent;
+                }
+                return parent != null ? parent.Id : Guid.Empty;
+            }
+        }
+
         #region Images
 
         [Persist]
