@@ -563,19 +563,6 @@ namespace MediaBrowser.Library.Entities {
             List<BaseItem> items = null;
             using (new MediaBrowser.Util.Profiler(this.Name + " child retrieval"))
             {
-                //var cached = Kernel.Instance.ItemRepository.RetrieveChildren(Id);
-                //if (cached != null)
-                //{
-                //    items = new List<BaseItem>();
-                //    foreach (var guid in cached)
-                //    {
-                //        var item = Kernel.Instance.ItemRepository.RetrieveItem(guid);
-                //        if (item != null)
-                //        {
-                //            items.Add(item);
-                //        }
-                //    }
-                //}
                 var children = Kernel.Instance.ItemRepository.RetrieveChildren(Id);
                 items = children != null ? children.ToList() : null;
             }

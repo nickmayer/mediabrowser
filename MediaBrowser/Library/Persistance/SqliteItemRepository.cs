@@ -491,21 +491,58 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
+        public IEnumerable<Guid> RetrieveChildrenOld(Guid id) {
 
-        public IEnumerable<BaseItem> RetrieveChildren(Guid id) {
-
-            List<BaseItem> children = new List<BaseItem>();
+            List<Guid> children = new List<Guid>();
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "select * from items where guid in (select child from children where guid = @guid)";
+            cmd.CommandText = "select child from children where guid = @guid";
             var guidParam = cmd.Parameters.Add("@guid", System.Data.DbType.Guid);
             guidParam.Value = id;
 
             using (var reader = cmd.ExecuteReader()) {
                 while (reader.Read()) {
-                    children.Add(GetItem(reader, (string)reader["obj_type"]));
+                    children.Add(reader.GetGuid(0));
                 }
             }
 
+            return children.Count == 0 ? null : children;
+        }
+
+
+        public IEnumerable<BaseItem> RetrieveChildren(Guid id) {
+
+            List<BaseItem> children = new List<BaseItem>();
+
+            if (!Kernel.UseNewSQLRepo)
+            {
+                var cached = RetrieveChildrenOld(id);
+                if (cached != null)
+                {
+                    foreach (var guid in cached)
+                    {
+                        var item = RetrieveItem(guid);
+                        if (item != null)
+                        {
+                            children.Add(item);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = "select * from items where guid in (select child from children where guid = @guid)";
+                var guidParam = cmd.Parameters.Add("@guid", System.Data.DbType.Guid);
+                guidParam.Value = id;
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        children.Add(GetItem(reader, (string)reader["obj_type"]));
+                    }
+                }
+            }
             return children.Count == 0 ? null : children;
         }
 

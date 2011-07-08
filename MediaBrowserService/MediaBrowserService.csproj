@@ -135,13 +135,13 @@
     <Resource Include="MBServiceRefresh.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\MB_Service_Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
       <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
       <Name>MediaBrowser</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\MB_Service_Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
