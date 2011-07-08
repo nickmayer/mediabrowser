@@ -240,23 +240,31 @@ namespace MediaBrowser.Code.ModelItems {
             return item;
         }
 
-        public void IndexBy(IndexType indexType) {
+        public void IndexBy(IndexType indexType)
+        {
 
             if (folder == null) return;
+            using (new Profiler("==== Index " + folder.Name + " by " + indexType.ToString()))
+            {
+                if (indexType == IndexType.None)
+                {
+                    folderIsIndexed = false;
+                    lock (this)
+                    {
+                        currentChildren = folder.Children;
+                    }
+                }
+                else
+                {
+                    folderIsIndexed = true;
+                    lock (this)
+                    {
+                        currentChildren = folder.IndexBy(indexType).Select(i => (BaseItem)i).ToList();
+                    }
+                }
 
-            if (indexType == IndexType.None) {
-                folderIsIndexed = false;
-                lock (this) {
-                    currentChildren = folder.Children;
-                }
-            } else {
-                folderIsIndexed = true;
-                lock (this) {
-                    currentChildren = folder.IndexBy(indexType).Select(i => (BaseItem)i).ToList();
-                }
+                folder_ChildrenChanged(this, null);
             }
-            
-            folder_ChildrenChanged(this, null);
         }
 
         public int Count {
