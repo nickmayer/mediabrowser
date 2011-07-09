@@ -48,6 +48,9 @@ namespace MediaBrowser
         [Comment("A forced rebuild is underway.")]
         public bool ForceRebuildInProgress = false;
 
+        [Comment("The refresh process failed.")]
+        public bool RefreshFailed = false;
+
         // for our reset routine
         public ServiceConfigData()
         {

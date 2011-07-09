@@ -303,7 +303,7 @@ namespace MediaBrowserService
             {
                 activity += ".  Last attempt canceled.";
             }
-            if (_refreshFailed)
+            if (_config.RefreshFailed)
             {
                 activity += ". Last attempt failed!";
                 lblNextSvcRefresh.Content = "Auto refresh dis-abled. Please run a manual refresh.";
@@ -538,6 +538,7 @@ namespace MediaBrowserService
                     _config = Kernel.Instance.ServiceConfigData;
                     //in case we crashed during a re-build...
                     _config.ForceRebuildInProgress = false;
+                    _config.RefreshFailed = false; //reset this too
                     _config.Save();
                     CreateNotifyIcon();
                     RefreshInterface();
@@ -611,7 +612,7 @@ namespace MediaBrowserService
             UpdateStatus(); // do this so the info will be correct if we were sleeping through our scheduled time
 
             //Logger.ReportInfo("Ping...verylate: " + verylate + " overdue: " + overdue);
-            if (!_refreshRunning && !_refreshFailed && (_refreshCanceledTime.Date < DateTime.Now.Date) && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
+            if (!_refreshRunning && !_config.RefreshFailed && (_refreshCanceledTime.Date < DateTime.Now.Date) && (verylate || (overdue && DateTime.Now.Hour == _config.FullRefreshPreferredHour) && _config.LastFullRefresh.Date != DateTime.Now.Date))
             {
                 Thread.Sleep(20000); //in case we just came out of sleep mode - let's be sure everything is up first...
                 FullRefresh(false, new ServiceRefreshOptions() { AllowSlowProviderOption = _config.AllowSlowProviders });
@@ -633,7 +634,8 @@ namespace MediaBrowserService
                 refreshProgress.Visibility = Visibility.Visible;
                 _refreshCanceled = false;
                 _refreshCanceledTime = DateTime.MinValue;
-                _refreshFailed = false;
+                _config.RefreshFailed = false;
+                _config.Save();
                 _refreshStartTime = DateTime.Now;
                 if (manualOptions.AllowCancel)
                 {
@@ -767,7 +769,7 @@ namespace MediaBrowserService
                 })) return false;
             }
 
-            string msg = (options | MetadataRefreshOptions.FastOnly) == MetadataRefreshOptions.FastOnly ?
+            string msg = (options & MetadataRefreshOptions.FastOnly) == MetadataRefreshOptions.FastOnly ?
                 "Not allowing internet and other slow providers." :
                 "Allowing internet and other slow providers.";
             Logger.ReportInfo(msg);
@@ -787,6 +789,8 @@ namespace MediaBrowserService
                         item.RefreshMetadata(options);
                         processedItems.Add(item.Id);
                         //Logger.ReportInfo(item.Name + " id: " + item.Id);
+                        //test
+                        //throw new InvalidOperationException("Test Error...");
                     }
                     else Logger.ReportVerbose("Not refreshing " + item.Name + " again.");
                 })) return false;
@@ -986,7 +990,6 @@ namespace MediaBrowserService
                                 }
                             }
                             processedItems.Add(item.Id);
-
                         }
                         else Logger.ReportInfo("Not processing " + item.Name + " again.");
                     })) return false;
@@ -1010,7 +1013,8 @@ namespace MediaBrowserService
             catch (Exception e)
             {
                 Logger.ReportException("Error during refresh", e);
-                _refreshFailed = true;
+                _config.RefreshFailed = true;
+                _config.Save();
                 return false;
             }
         }
