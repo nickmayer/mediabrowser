@@ -569,6 +569,13 @@ namespace MediaBrowser
                         //and update
                         Config.MBVersion = currentVersion;
                     }
+                    //if the service refresh failed - notify them
+                    if (Kernel.Instance.ServiceConfigData.RefreshFailed)
+                    {
+                        MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                        ev.Dialog(CurrentInstance.StringData("RefreshFailedDial"), CurrentInstance.StringData("RefreshFailedCapDial"), DialogButtons.Ok, 15, true);
+                        
+                    }
                     // We check config here instead of in the Updater class because the Config class 
                     // CANNOT be instantiated outside of the application thread.
                     if (Config.EnableUpdates)
