@@ -26,6 +26,7 @@ namespace MediaBrowser.Library.Plugins {
         /// Context in which this plugin should be intialized
         /// </summary>
         MBLoadContext InitDirective { get; }
+        string UpgradeInfo { get; }
         string PluginClass { get; }
         bool UpdateAvail { get; set; }
         bool Installed { get; set; }

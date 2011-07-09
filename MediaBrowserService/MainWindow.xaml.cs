@@ -46,7 +46,6 @@ namespace MediaBrowserService
         private bool _hasHandle;
         private bool _shutdown;
         private bool _refreshCanceled = false;
-        private bool _refreshFailed = false;
         private bool _firstIteration = true;
         private bool _refreshRunning;
         private DateTime _refreshStartTime;

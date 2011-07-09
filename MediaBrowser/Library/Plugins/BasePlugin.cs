@@ -111,6 +111,11 @@ namespace MediaBrowser.Library.Plugins {
             get { return InstallGlobally ? PluginClasses.Themes : PluginClasses.Other; }
         }
 
+        public virtual string UpgradeInfo
+        {
+            get { return ""; }
+        }
+
         public virtual void Configure()
         {
             if (PluginConfiguration != null) {

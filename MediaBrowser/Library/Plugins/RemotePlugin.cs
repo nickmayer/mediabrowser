@@ -71,6 +71,12 @@ namespace MediaBrowser.Library.Plugins {
         {
         }
 
+        public virtual string UpgradeInfo
+        {
+            get;
+            set;
+        }
+
         public virtual bool InstallGlobally
         {
             get;

@@ -155,5 +155,11 @@ namespace MediaBrowser.Library.Plugins {
         {
             pluginInterface.Configure();
         }
+
+        public virtual string UpgradeInfo
+        {
+            get { return pluginInterface.UpgradeInfo; }
+        }
+
     }
 }

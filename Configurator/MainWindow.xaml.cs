@@ -1008,6 +1008,15 @@ sortorder: {2}
                 IPlugin newPlugin = PluginManager.Instance.AvailablePlugins.Find(plugin, PluginManager.Instance.GetLatestVersion(plugin));
                 if (newPlugin != null)
                 {
+                    if (!string.IsNullOrEmpty(newPlugin.UpgradeInfo))
+                    {
+                        //confirm upgrade
+                        if (MessageBox.Show("This upgrade has the following information:\n\n" + newPlugin.UpgradeInfo + "\n\nDo you still wish to upgrade?", "Upgrade " + plugin.Name, MessageBoxButton.YesNo) == MessageBoxResult.No)
+                        {
+                            PopUpMsg.DisplayMessage("Upgrade Cancelled");
+                            return;
+                        }
+                    }
                     PluginInstaller p = new PluginInstaller();
                     callBack done = new callBack(UpgradeFinished);
                     this.IsEnabled = false;
