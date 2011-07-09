@@ -347,8 +347,8 @@ namespace MediaBrowser.Library.Persistance {
                                 "create unique index if not exists idx_children on children(guid, child)",
                                 "create table if not exists list_items(guid, property, value)",
                                 "create index if not exists idx_list on list_items(guid, property)",
-                                "create table if not exists recent_list(top_parent, child, date_added)",
-                                "create index if not exists idx_recent on recent_list(top_parent, child)",
+                                //"create table if not exists recent_list(top_parent, child, date_added)",
+                                //"create index if not exists idx_recent on recent_list(top_parent, child)",
                                 "attach database '"+playStateDBPath+"' as playstate_db",
                                 "create table if not exists playstate_db.play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)"
                                // @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll 
@@ -764,15 +764,15 @@ namespace MediaBrowser.Library.Persistance {
                     }
                 }
                 //finally, update the recent list
-                if (item is Media) //don't need to track non-media items
-                {
-                    var recCmd = connection.CreateCommand();
-                    recCmd.CommandText = "replace into recent_list(top_parent, child, date_added) values(@top, @child, @date)";
-                    recCmd.AddParam("@top", item.TopParent);
-                    recCmd.AddParam("@child", item.Id);
-                    recCmd.AddParam("@date", item.DateCreated);
-                    recCmd.ExecuteNonQuery();
-                }
+                //if (item is Media) //don't need to track non-media items
+                //{
+                //    var recCmd = connection.CreateCommand();
+                //    recCmd.CommandText = "replace into recent_list(top_parent, child, date_added) values(@top, @child, @date)";
+                //    recCmd.AddParam("@top", item.TopParent);
+                //    recCmd.AddParam("@child", item.Id);
+                //    recCmd.AddParam("@date", item.DateCreated);
+                //    recCmd.ExecuteNonQuery();
+                //}
             }
                     
             //

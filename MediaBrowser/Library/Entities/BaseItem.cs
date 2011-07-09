@@ -32,7 +32,7 @@ namespace MediaBrowser.Library.Entities {
             get
             {
                 Folder parent = this.Parent;
-                while (parent.Parent != null && parent.Parent != Kernel.Instance.RootFolder)
+                while (parent != null && parent.Parent != null && parent.Parent != Kernel.Instance.RootFolder)
                 {
                     parent = parent.Parent;
                 }
