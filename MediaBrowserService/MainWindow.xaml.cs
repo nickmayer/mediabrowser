@@ -52,6 +52,10 @@ namespace MediaBrowserService
         private TimeSpan _lastRefreshElapsedTime;
         private DateTime _refreshCanceledTime = DateTime.MinValue;
 
+        private System.Drawing.Icon[] RefreshIcons = new System.Drawing.Icon[2];
+        private int currentRefreshIcon = 0;
+        private Timer refreshElapsed;
+
         private readonly DateTime _startTime = DateTime.Now;
         private readonly ServiceRefreshOptions _serviceOptions;
         private WindowState storedWindowState = WindowState.Normal; //we come up minimized
@@ -138,6 +142,12 @@ namespace MediaBrowserService
             notifyIcon.DoubleClick += notifyIcon_Click;
             notifyIcon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
             if (_config.ShowBalloonTip) notifyIcon.ShowBalloonTip(2000);
+
+            //create our refresh icons
+            iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
+            RefreshIcons[0] = new System.Drawing.Icon(iconStream);
+            iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh2.ico")).Stream;
+            RefreshIcons[1] = new System.Drawing.Icon(iconStream);
         }
 
         void notifyIcon_BalloonTipClicked(object sender, EventArgs e)
@@ -335,6 +345,26 @@ namespace MediaBrowserService
 
         #region Interface Handlers
 
+        private void UpdateRefreshElapsed()
+        {
+            //this is called in a timer loop while refresh running
+            if (this.Visibility == Visibility.Visible && _refreshRunning)
+            {
+                //we only care about this if the interface is actually visible
+                Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+                {
+                    double pctDone = refreshProgress.Value;
+                    var elapsed = DateTime.Now - _refreshStartTime;
+                    var estCompl = pctDone > .75 ? TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds) : TimeSpan.MaxValue;
+                    string estString = pctDone > .75 ? " Est. Remaining Time: " + String.Format("{0:00}:{1:00}:{2:00}", estCompl.Hours, estCompl.Minutes, estCompl.Seconds) : "";
+                    lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}", elapsed.Hours, elapsed.Minutes, elapsed.Seconds) + estString;
+                    currentRefreshIcon = currentRefreshIcon == 0 ? 1 : 0;
+                    notifyIcon.Icon = RefreshIcons[currentRefreshIcon];
+                }));
+            }
+        }
+
+
         private void UpdateProgress(string step, double pctDone)
         {
             if (this.Visibility == Visibility.Visible)
@@ -342,13 +372,8 @@ namespace MediaBrowserService
                 //we only care about this if the interface is actually visible
                 Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
-                    refreshProgress.Value = pctDone;
                     lblNextSvcRefresh.Content = step;
-                    var elapsed = DateTime.Now - _refreshStartTime;
-                    var estCompl = pctDone > .75 ? TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds) : TimeSpan.MaxValue;
-                    string estString = pctDone > .75 ? " Est. Remaining Time: " + String.Format("{0:00}:{1:00}:{2:00}", estCompl.Hours, estCompl.Minutes, estCompl.Seconds) : "";
-                    lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}",elapsed.Hours,elapsed.Minutes,elapsed.Seconds)+estString
-                        ;
+                    refreshProgress.Value = pctDone;
                 }));
             }
         }
@@ -647,14 +672,16 @@ namespace MediaBrowserService
                 notifyIcon.ContextMenu.MenuItems["refresh"].Enabled = false;
                 notifyIcon.ContextMenu.MenuItems["exit"].Enabled = false;
                 notifyIcon.ContextMenu.MenuItems["refresh"].Text = "Refresh Running...";
-                Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
-                notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                //Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBServiceRefresh.ico")).Stream;
+                notifyIcon.Icon = RefreshIcons[0];
                 lblNextSvcRefresh.Content = "";
             }));
 
             bool onSchedule = (!force && (DateTime.Now.Hour == _config.FullRefreshPreferredHour));
 
             Logger.ReportInfo("Full Refresh Started");
+
+            refreshElapsed = Async.Every(1000, UpdateRefreshElapsed);
 
             using (new Profiler(Kernel.Instance.GetString("FullRefreshProf")))
             {
@@ -721,6 +748,7 @@ namespace MediaBrowserService
                         refreshProgress.Visibility = Visibility.Hidden;
                         btnCancelRefresh.Visibility = Visibility.Hidden;
                         gbManual.IsEnabled = true;
+                        refreshElapsed = null;
                         notifyIcon.ContextMenu.MenuItems["exit"].Enabled = true;
                         notifyIcon.ContextMenu.MenuItems["refresh"].Enabled = true;
                         notifyIcon.ContextMenu.MenuItems["refresh"].Text = "Refresh Now";
@@ -750,6 +778,8 @@ namespace MediaBrowserService
             if (totalIterations == 0) return true; //nothing to do
 
             int currentIteration = 0;
+
+            UpdateProgress("Validating Root", 0);
 
             folder.RefreshMetadata(options);
 
