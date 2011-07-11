@@ -508,6 +508,73 @@ namespace MediaBrowser.Library.Persistance {
             return children.Count == 0 ? null : children;
         }
 
+        public IList<Index> RetrieveIndex(Folder folder, string property, Func<string, BaseItem> constructor)
+        {
+            List<Index> children = new List<Index>();
+            var cmd = connection.CreateCommand();
+
+            SQLInfo.ColDef col = ItemSQL[folder.GetType()].Columns.Find(c => c.ColName == property);
+            if (col.ColType == null)
+            {
+                Logger.ReportError("Attempt to index " + folder.Name + " by invalid property: " + property);
+                return null;
+            }
+
+            //create a temporary table of this folder's recursive children to use in the retrievals
+            string tableName = folder.Id.ToString()+"_"+property;
+            if (connection.TableExists(tableName))
+            {
+                connection.Exec("delete from " + tableName);
+            }
+            else
+            {
+                connection.Exec("create temporary table if not exists " + tableName + "(parent, child)");
+            }
+
+            bool allowEpisodes = property == "Year"; //only go to episode level for year index
+
+            cmd.CommandText = "Insert into "+tableName+" (parent, child) values(@1, @2)";
+            cmd.AddParam("@1",folder.Id);
+            var childParam = cmd.Parameters.Add("@2", DbType.Guid);
+
+            lock (connection)
+            {
+                var tran = connection.BeginTransaction();
+
+                foreach (var child in folder.RecursiveChildren)
+                {
+                    if (child is IShow && (allowEpisodes && !(child is Series)) || (!allowEpisodes && !(child is Episode)))
+                    {
+                        childParam.Value = child.Id;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                tran.Commit();
+            }
+
+            //now retrieve the values for the main indicies
+            cmd = connection.CreateCommand(); //new command
+            property = property == "Actor" ? "ActorName" : property; //re-map to our name entry
+
+            if (col.ListType)
+            {
+                //need to get values from list table
+                cmd.CommandText = "select distinct value from list_items where property = '" + property + "' and guid in (select child from " + tableName + ")";
+            }
+            else
+            {
+                cmd.CommandText = "select distinct " + property + " where guid in (select child from " + tableName + ")";
+            }
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    children.Add(new Index(constructor(reader[0].ToString()), null));
+                }
+            }
+            return children.Count == 0 ? null : children;
+        }
 
         public IEnumerable<BaseItem> RetrieveChildren(Guid id) {
 
@@ -638,7 +705,7 @@ namespace MediaBrowser.Library.Persistance {
             // and our list columns
             //this is an optimization - we go get all the list values for this item in one statement
             var listCmd = connection.CreateCommand();
-            listCmd.CommandText = "select property, value from list_items where guid = @guid order by property";
+            listCmd.CommandText = "select property, value from list_items where guid = @guid and property != 'ActorName' order by property";
             listCmd.AddParam("@guid", item.Id);
             string currentProperty = "";
             System.Collections.IList list = null;
@@ -678,104 +745,129 @@ namespace MediaBrowser.Library.Persistance {
             return item;
         }
 
-        public void SaveItem(BaseItem item) {
+        public void SaveItem(BaseItem item)
+        {
             if (item == null) return;
 
-            if (!Kernel.UseNewSQLRepo)
+            //using (new MediaBrowser.Util.Profiler("==== Save Item: " + item.Name))
             {
-                using (var fs = new MemoryStream())
+                if (!Kernel.UseNewSQLRepo)
                 {
-                    BinaryWriter bw = new BinaryWriter(fs);
-                    Serializer.Serialize(bw.BaseStream, item);
-
-                    var cmd = connection.CreateCommand();
-                    cmd.CommandText = "replace into items(guid, data) values (@guid, @data)";
-
-                    SQLiteParameter guidParam = new SQLiteParameter("@guid");
-                    SQLiteParameter dataParam = new SQLiteParameter("@data");
-
-                    cmd.Parameters.Add(guidParam);
-                    cmd.Parameters.Add(dataParam);
-
-                    guidParam.Value = item.Id;
-                    dataParam.Value = fs.ToArray();
-
-                    QueueCommand(cmd);
-                }
-            }
-            else
-            {
-                //test
-                if (!ItemSQL.ContainsKey(item.GetType()))
-                {
-                    ItemSQL.Add(item.GetType(), new SQLInfo(item));
-                    //make sure our schema matches
-                    ItemSQL[item.GetType()].FixUpSchema(connection);
-                }
-                var cmd2 = connection.CreateCommand();
-                cmd2.CommandText = ItemSQL[item.GetType()].UpdateStmt;
-
-
-                cmd2.AddParam("@0", item.Id);
-                cmd2.AddParam("@1", item.GetType().FullName);
-                int colNo = 2; //id was 0 type was 1...
-                foreach (var col in ItemSQL[item.GetType()].AtomicColumns)
-                {
-                    if (col.MemberType == MemberTypes.Property)
-                        cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.PropertyInfo.GetValue(item, null)));
-                    else
-                        cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.FieldInfo.GetValue(item)));
-                    colNo++;
-                }
-                QueueCommand(cmd2);
-
-                //and now each of our list members
-                var delCmd = connection.CreateCommand();
-                delCmd.CommandText = "delete from list_items where guid = @guid";
-                delCmd.AddParam("@guid", item.Id);
-                delCmd.ExecuteNonQuery();
-                foreach (var col in ItemSQL[item.GetType()].ListColumns)
-                {
-                    System.Collections.IEnumerable list = null;
-
-                    if (col.MemberType == MemberTypes.Property)
+                    using (var fs = new MemoryStream())
                     {
-                        //var it = col.PropertyInfo.GetValue(item, null);
-                        //Type ittype = it.GetType();
-                        list = col.PropertyInfo.GetValue(item, null) as System.Collections.IEnumerable;
+                        BinaryWriter bw = new BinaryWriter(fs);
+                        Serializer.Serialize(bw.BaseStream, item);
+
+                        var cmd = connection.CreateCommand();
+                        cmd.CommandText = "replace into items(guid, data) values (@guid, @data)";
+
+                        SQLiteParameter guidParam = new SQLiteParameter("@guid");
+                        SQLiteParameter dataParam = new SQLiteParameter("@data");
+
+                        cmd.Parameters.Add(guidParam);
+                        cmd.Parameters.Add(dataParam);
+
+                        guidParam.Value = item.Id;
+                        dataParam.Value = fs.ToArray();
+
+                        QueueCommand(cmd);
                     }
-                    else
-                        list = col.FieldInfo.GetValue(item) as System.Collections.IEnumerable;
-
-                    if (list != null)
+                }
+                else
+                {
+                    //test
+                    if (!ItemSQL.ContainsKey(item.GetType()))
                     {
-                        var insCmd = connection.CreateCommand();
-                        insCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, @property, @value)";
-                        insCmd.AddParam("@guid", item.Id);
-                        insCmd.AddParam("@property", col.ColName);
-                        SQLiteParameter val = new SQLiteParameter("@value");
-                        insCmd.Parameters.Add(val);
+                        ItemSQL.Add(item.GetType(), new SQLInfo(item));
+                        //make sure our schema matches
+                        ItemSQL[item.GetType()].FixUpSchema(connection);
+                    }
+                    var cmd2 = connection.CreateCommand();
+                    cmd2.CommandText = ItemSQL[item.GetType()].UpdateStmt;
 
-                        foreach (var listItem in list)
+
+                    cmd2.AddParam("@0", item.Id);
+                    cmd2.AddParam("@1", item.GetType().FullName);
+                    int colNo = 2; //id was 0 type was 1...
+                    foreach (var col in ItemSQL[item.GetType()].AtomicColumns)
+                    {
+                        if (col.MemberType == MemberTypes.Property)
+                            cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.PropertyInfo.GetValue(item, null)));
+                        else
+                            cmd2.AddParam("@" + colNo, SQLizer.Encode(col, col.FieldInfo.GetValue(item)));
+                        colNo++;
+                    }
+                    QueueCommand(cmd2);
+
+                    //and now each of our list members
+                    //lock (connection)
+                    {
+                        //var tran = connection.BeginTransaction(); //more for performance than consistency...
+                        var delCmd = connection.CreateCommand();
+                        delCmd.CommandText = "delete from list_items where guid = @guid";
+                        delCmd.AddParam("@guid", item.Id);
+                        delCmd.ExecuteNonQuery();
+                        foreach (var col in ItemSQL[item.GetType()].ListColumns)
                         {
-                            val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
-                            insCmd.ExecuteNonQuery();
+                            System.Collections.IEnumerable list = null;
+
+                            if (col.MemberType == MemberTypes.Property)
+                            {
+                                //var it = col.PropertyInfo.GetValue(item, null);
+                                //Type ittype = it.GetType();
+                                list = col.PropertyInfo.GetValue(item, null) as System.Collections.IEnumerable;
+                            }
+                            else
+                                list = col.FieldInfo.GetValue(item) as System.Collections.IEnumerable;
+
+                            if (list != null)
+                            {
+                                var insCmd = connection.CreateCommand();
+                                insCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, @property, @value)";
+                                insCmd.AddParam("@guid", item.Id);
+                                insCmd.AddParam("@property", col.ColName);
+                                SQLiteParameter val = new SQLiteParameter("@value");
+                                insCmd.Parameters.Add(val);
+
+                                //special handling for actors because they are saved serialized - we also need to save them in a query-able form...
+                                var insActorCmd = connection.CreateCommand();
+                                bool isActor = col.InternalType == typeof(Actor);
+                                SQLiteParameter val2 = new SQLiteParameter("@value2");
+                                if (isActor)
+                                {
+                                    insActorCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, 'ActorName', @value2)";
+                                    insActorCmd.AddParam("@guid", item.Id);
+                                    insActorCmd.Parameters.Add(val2);
+                                }
+
+                                foreach (var listItem in list)
+                                {
+                                    val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
+                                    insCmd.ExecuteNonQuery();
+                                    if (isActor)
+                                    {
+                                        val2.Value = (listItem as Actor).Name;
+                                        insActorCmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
                         }
+                        //tran.Commit();
                     }
+                    //finally, update the recent list
+                    //if (item is Media) //don't need to track non-media items
+                    //{
+                    //    var recCmd = connection.CreateCommand();
+                    //    recCmd.CommandText = "replace into recent_list(top_parent, child, date_added) values(@top, @child, @date)";
+                    //    recCmd.AddParam("@top", item.TopParent);
+                    //    recCmd.AddParam("@child", item.Id);
+                    //    recCmd.AddParam("@date", item.DateCreated);
+                    //    recCmd.ExecuteNonQuery();
+                    //}
                 }
-                //finally, update the recent list
-                //if (item is Media) //don't need to track non-media items
-                //{
-                //    var recCmd = connection.CreateCommand();
-                //    recCmd.CommandText = "replace into recent_list(top_parent, child, date_added) values(@top, @child, @date)";
-                //    recCmd.AddParam("@top", item.TopParent);
-                //    recCmd.AddParam("@child", item.Id);
-                //    recCmd.AddParam("@date", item.DateCreated);
-                //    recCmd.ExecuteNonQuery();
-                //}
+
+                //
             }
-                    
-            //
         }
 
         /// <summary>
@@ -860,6 +952,7 @@ namespace MediaBrowser.Library.Persistance {
                 connection.Exec("delete from provider_data"); 
                 connection.Exec("delete from items");
                 connection.Exec("delete from children");
+                connection.Exec("delete from list_items");
                 //connection.Exec("delete from display_prefs");
                 // People will get annoyed if this is lost
                 // connection.Exec("delete from play_states");
