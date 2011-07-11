@@ -402,8 +402,11 @@ namespace MediaBrowser.Library.Entities {
                     if (currentChild != null) {
                         bool thisItemChanged = currentChild.AssignFromItem(item);
                         if (thisItemChanged)
+                        {
                             item.RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions.Default);
-                        changed |= thisItemChanged;
+                            Kernel.Instance.ItemRepository.SaveItem(item);
+                        }
+                        
                         currentChildren[item.Id] = null;
                     }
                 } else {
@@ -413,6 +416,7 @@ namespace MediaBrowser.Library.Entities {
                         item.Parent = this;
                         ActualChildren.Add(item);
                         item.RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions.Force); //necessary to get it to show up without user intervention
+                        Kernel.Instance.ItemRepository.SaveItem(item);
                         if (item is Folder)
                         {
                             (item as Folder).ValidateChildren();
@@ -504,9 +508,10 @@ namespace MediaBrowser.Library.Entities {
 
         void SaveChildren(IList<BaseItem> items) {
             Kernel.Instance.ItemRepository.SaveChildren(Id, items.Select(i => i.Id));
-            foreach (var item in items) {
-                Kernel.Instance.ItemRepository.SaveItem(item);
-            }
+            //this is unecessary and very expensive - no reason to save every child because one of them changed...
+            //foreach (var item in items) {
+            //    Kernel.Instance.ItemRepository.SaveItem(item);
+            //}
         }
 
         void SetParent(List<BaseItem> items) {
@@ -561,8 +566,9 @@ namespace MediaBrowser.Library.Entities {
 
         List<BaseItem> GetCachedChildren() {
             List<BaseItem> items = null;
-            using (new MediaBrowser.Util.Profiler(this.Name + " child retrieval"))
+            //using (new MediaBrowser.Util.Profiler(this.Name + " child retrieval"))
             {
+                //Logger.ReportInfo("Getting Children for: "+this.Name);
                 var children = Kernel.Instance.ItemRepository.RetrieveChildren(Id);
                 items = children != null ? children.ToList() : null;
             }
