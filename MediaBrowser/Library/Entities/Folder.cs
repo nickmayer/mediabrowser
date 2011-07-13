@@ -205,6 +205,16 @@ namespace MediaBrowser.Library.Entities {
 
             switch (indexType) {
                 case IndexType.Actor:
+                    var ret2 = Kernel.Instance.ItemRepository.RetrieveIndex(this, "Actors", a => Person.GetPerson(a));
+                    //build in images
+                    Async.Queue("Index image builder", () =>
+                    {
+                        foreach (Index item in ret2)
+                        {
+                            item.RefreshMetadata();
+                        }
+                    });
+                    return ret2;
                     indexingFunction = show =>
                         show.Actors == null ? null : show.Actors.Select(a => (BaseItem)a.Person);
                     break;
@@ -215,6 +225,16 @@ namespace MediaBrowser.Library.Entities {
 
 
                 case IndexType.Genre:
+                    var ret = Kernel.Instance.ItemRepository.RetrieveIndex(this, "Genres", g => Genre.GetGenre(g));
+                    //build in images
+                    Async.Queue("Index image builder", () =>
+                    {
+                        foreach (Index item in ret)
+                        {
+                            item.RefreshMetadata();
+                        }
+                    });
+                    return ret;
                     indexingFunction = show => MapStringsToBaseItems(show.Genres, g => Genre.GetGenre(g));
                     break;
 

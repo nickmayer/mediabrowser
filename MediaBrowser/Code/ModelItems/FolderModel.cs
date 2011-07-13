@@ -513,10 +513,11 @@ namespace MediaBrowser.Library {
                     //and now all our children
                     foreach (BaseItem item in this.folder.RecursiveChildren)
                     {
-                        Logger.ReportInfo("refreshing " + item.Name);
-                        item.RefreshMetadata(MetadataRefreshOptions.Force);
-                        ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-                        item.ReCacheAllImages(s);
+                        Kernel.Instance.ItemRepository.SaveItem(item);
+                        //Logger.ReportInfo("refreshing " + item.Name);
+                        //item.RefreshMetadata(MetadataRefreshOptions.Force);
+                        //ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                        //item.ReCacheAllImages(s);
                     }
                 }
             });

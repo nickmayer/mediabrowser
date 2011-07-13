@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MediaBrowser.Library.Persistance;
+using MediaBrowser.Library.Entities.Attributes;
 
 namespace MediaBrowser.Library.Entities {
     public class Episode : Show {
@@ -15,6 +16,10 @@ namespace MediaBrowser.Library.Entities {
 
         [Persist]
         public string FirstAired { get; set; }
+
+        [NotSourcedFromProvider]
+        [Persist]
+        public Guid SeriesId {get; set;}
 
         public override string SortName {
             get {

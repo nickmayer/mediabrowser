@@ -70,6 +70,17 @@ namespace MediaBrowser.Library.Persistance {
             return Memoize(id, fullChildren, repository.RetrieveChildren);
         }
 
+        public IList<Index> RetrieveIndex(Folder folder, string property, Func<string, BaseItem> constructor)
+        {
+            return repository.RetrieveIndex(folder, property, constructor);
+        }
+
+        public List<BaseItem> RetrieveSubIndex(string childTable, string property, object value)
+        {
+            return repository.RetrieveSubIndex(childTable, property, value);
+        }
+
+
         // Do not memoize these calls, as they are shared.
         public PlaybackStatus RetrievePlayState(Guid id) {
             return repository.RetrievePlayState(id); 

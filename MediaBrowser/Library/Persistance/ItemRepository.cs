@@ -149,6 +149,17 @@ namespace MediaBrowser.Library {
             return children.Count == 0 ? null : children;
         }
 
+        public IList<Index> RetrieveIndex(Folder folder, string property, Func<string, BaseItem> constructor)
+        {
+            //compatability with new repo
+            return null;
+        }
+
+        public List<BaseItem> RetrieveSubIndex(string childTable, string property, object value)
+        {
+            return null;
+        }
+
 
         public PlaybackStatus RetrievePlayState(Guid id) {
             return playbackStatus[id]; 
