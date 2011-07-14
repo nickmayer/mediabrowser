@@ -509,21 +509,24 @@ namespace MediaBrowser.Library.Persistance {
             return children.Count == 0 ? null : children;
         }
 
+        // used to track series objects during indexing so we can group episodes in their series
+        private Dictionary<string, Dictionary<Guid, Series>> SeriesDict = new Dictionary<string, Dictionary<Guid, Series>>();
+
         public IList<Index> RetrieveIndex(Folder folder, string property, Func<string, BaseItem> constructor)
         {
             List<Index> children = new List<Index>();
             var cmd = connection.CreateCommand();
 
-            bool listColumn = false;
-            try
-            {
-                connection.Exec("Select " + property + " from items");
-            }
-            catch (SQLiteException)
-            {
-                //must be a list column as it doesn't exist in items...
-                listColumn = true;
-            }
+            //bool listColumn = false;
+            //try
+            //{
+            //    connection.Exec("Select " + property + " from items");
+            //}
+            //catch (SQLiteException)
+            //{
+            //    //must be a list column as it doesn't exist in items...
+            //    listColumn = true;
+            //}
 
             //we'll build the unknown items as we go through the children the first time
             List<BaseItem> unknownItems = new List<BaseItem>();
@@ -539,10 +542,12 @@ namespace MediaBrowser.Library.Persistance {
                 connection.Exec("create temporary table if not exists " + tableName + "(child)");
             }
 
-            bool allowEpisodes = property == "Year"; //only go to episode level for year index
-
             cmd.CommandText = "Insert into "+tableName+" (child) values(@1)";
             var childParam = cmd.Parameters.Add("@1", DbType.Guid);
+
+            var seriesList = new Dictionary<Guid, Series>();  //initialize this for our index
+            SQLInfo.ColDef col = new SQLInfo.ColDef();
+            Type currentType = null;
 
             lock (connection)
             {
@@ -552,8 +557,18 @@ namespace MediaBrowser.Library.Persistance {
                 {
                     if (child is IShow && !(child is Season)) // && (allowEpisodes && !(child is Series)) || (!allowEpisodes && !(child is Episode)))
                     {
+                        if (child is Episode)
+                        {
+                            //add the series object
+                            seriesList[child.Id] = child.OurSeries;
+                        }
+
                         //determine if property has any value
-                        SQLInfo.ColDef col = ItemSQL[child.GetType()].Columns.Find(c => c.ColName == property);
+                        if (child.GetType() != currentType)
+                        {
+                            currentType = child.GetType();
+                            col = ItemSQL[currentType].Columns.Find(c => c.ColName == property);
+                        }
                         object data = null;
                         if (col.MemberType == MemberTypes.Property)
                         {
@@ -572,13 +587,15 @@ namespace MediaBrowser.Library.Persistance {
                         else
                         {
                             //add to Unknown
-                            AddItemToIndex("<Unknown>", unknownItems, child);
+                            AddItemToIndex("<Unknown>", unknownItems, seriesList, child);
                         }
                     }
                 }
                 tran.Commit();
             }
 
+            //fill in series
+            SeriesDict[tableName] = seriesList;
             //create our Unknown Index
             children.Add(new Index(constructor("<Unknown>"), unknownItems));
 
@@ -586,7 +603,7 @@ namespace MediaBrowser.Library.Persistance {
             cmd = connection.CreateCommand(); //new command
             property = property == "Actors" ? "ActorName" : property; //re-map to our name entry
 
-            if (listColumn)
+            if (col.ListType)
             {
                 //need to get values from list table
                 cmd.CommandText = "select distinct value from list_items where property = '" + property + "' and guid in (select child from " + tableName + ") order by value";
@@ -610,6 +627,7 @@ namespace MediaBrowser.Library.Persistance {
         public List<BaseItem> RetrieveSubIndex(string childTable, string property, object value)
         {
             List<BaseItem> children = new List<BaseItem>();
+            Dictionary<Guid, Series> seriesList = SeriesDict[childTable];
 
             bool listColumn = false;
             try
@@ -638,19 +656,20 @@ namespace MediaBrowser.Library.Persistance {
             {
                 while (reader.Read())
                 {
-                    AddItemToIndex(value.ToString(), children, GetItem(reader, (string)reader["obj_type"]));
+                    AddItemToIndex(value.ToString(), children, seriesList, GetItem(reader, (string)reader["obj_type"]));
                 }
             }
             return children;
         }
 
-        private void AddItemToIndex(string indexName, List<BaseItem> index, BaseItem child)
+        private void AddItemToIndex(string indexName, List<BaseItem> index, Dictionary<Guid, Series> seriesList, BaseItem child)
         {
             if (child is Episode)
             {
                 //we want to group these by series - find or create a series head
                 Episode episode = child as Episode;
-                BaseItem currentSeries = RetrieveItem(episode.SeriesID);
+                Series currentSeries = seriesList[child.Id];
+
                 if (currentSeries == null)
                 {
                     //couldn't find our series...
@@ -668,6 +687,10 @@ namespace MediaBrowser.Library.Persistance {
                         Id = (indexName + currentSeries.Name).GetMD5(),
                         Name = currentSeries.Name,
                         Overview = currentSeries.Overview,
+                        MpaaRating = currentSeries.MpaaRating,
+                        Genres = currentSeries.Genres,
+                        ImdbRating = currentSeries.ImdbRating,
+                        Studios = currentSeries.Studios,
                         PrimaryImagePath = currentSeries.PrimaryImagePath,
                         SecondaryImagePath = currentSeries.SecondaryImagePath,
                         BannerImagePath = currentSeries.BannerImagePath,

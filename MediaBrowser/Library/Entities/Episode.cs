@@ -17,10 +17,6 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public string FirstAired { get; set; }
 
-        [NotSourcedFromProvider]
-        [Persist]
-        public Guid SeriesId {get; set;}
-
         public override string SortName {
             get {
                 if (EpisodeNumber != null && EpisodeNumber.Length < 3) {

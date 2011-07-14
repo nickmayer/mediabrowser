@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MediaBrowser.Library.Entities
 {
-    class IndexFolder : Folder
+    class IndexFolder : Series
     {
         public override void ValidateChildren()
         {
@@ -15,6 +15,11 @@ namespace MediaBrowser.Library.Entities
         public void AddChild(BaseItem child)
         {
             this.ActualChildren.Add(child);
+        }
+
+        public override bool RefreshMetadata(Metadata.MetadataRefreshOptions options)
+        {
+            return false; //we don't have real metadata...
         }
     }
 }
