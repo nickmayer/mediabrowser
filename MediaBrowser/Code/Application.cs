@@ -1092,7 +1092,7 @@ namespace MediaBrowser
             {
                 if (!Config.Instance.RememberIndexing)
                 {
-                    folder.DisplayPrefs.IndexBy = IndexType.None;
+                    folder.DisplayPrefs.IndexBy = "None";
                 }
                 if (Config.Instance.AutoEnterSingleDirs && (folder.Folder.Children.Count == 1))
                 {

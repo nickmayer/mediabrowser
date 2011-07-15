@@ -294,6 +294,8 @@ namespace MediaBrowser.Library.Localization
         public string RefreshFailedCapDial = "Service Refresh Failed";
         public string RebuildNecDial = "This version of Media Browser requires a re-build of your library.  It has started automatically in the service.  Some information may be incomplete until this process finishes.";
         public string RebuildFailedDial = "There was an error attempting to tell the service to re-build your library.  Please run the service and do a manual refresh with the cache clear options selected.";
+        public string RefreshFolderDial = "Refresh all contents too?";
+        public string RefreshFolderCapDial = "Refresh Folder";
 
         //Generic
         public string Restartstr = "Restart";

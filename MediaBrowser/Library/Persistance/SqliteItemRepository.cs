@@ -198,7 +198,13 @@ namespace MediaBrowser.Library.Persistance {
                 type = type.BaseType;
                 while (type != typeof(object) && type != null)
                 {
-                    Columns.AddRange(GetFields(type));
+                    foreach (var field in GetFields(type)) //iterate explicitly to eliminate duplicate (overridden) fields
+                    {
+                        if (Columns.FindIndex(c => c.ColName == field.ColName) == -1)
+                        {
+                            Columns.Add(field);
+                        }
+                    }
                     type = type.BaseType;
                 }
 
@@ -610,7 +616,7 @@ namespace MediaBrowser.Library.Persistance {
             }
             else
             {
-                cmd.CommandText = "select distinct " + property + " where guid in (select child from " + tableName + ") order by "+property;
+                cmd.CommandText = "select distinct " + property + " from items where guid in (select child from " + tableName + ") order by "+property;
             }
 
             using (var reader = cmd.ExecuteReader())
@@ -618,7 +624,8 @@ namespace MediaBrowser.Library.Persistance {
                 while (reader.Read())
                 {
                     //Logger.ReportInfo("Creating index " + reader[0].ToString() + " on " + folder.Name);
-                    children.Add(new Index(constructor(reader[0].ToString()), tableName, property));
+                    object value = reader[0];
+                    children.Add(new Index(constructor(value.ToString()), tableName, property, value));
                 }
             }
             return children;
@@ -861,7 +868,14 @@ namespace MediaBrowser.Library.Persistance {
                         list = (System.Collections.IList)column.ColType.GetConstructor(new Type[] { }).Invoke(null);
                         //Logger.ReportVerbose("Added list item '" + listReader[0] + "' to " + col.ColName);
                     }
-                    list.Add(SQLizer.Extract(listReader, new SQLInfo.ColDef() { ColName = "value", ColType = column.InternalType }));
+                    try
+                    {
+                        list.Add(SQLizer.Extract(listReader, new SQLInfo.ColDef() { ColName = "value", ColType = column.InternalType }));
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Error adding item to list " + column.ColName + " on item " + item.Name, e);
+                    }
                 }
                 if (list != null)
                 {
@@ -905,7 +919,6 @@ namespace MediaBrowser.Library.Persistance {
                 }
                 else
                 {
-                    //test
                     if (!ItemSQL.ContainsKey(item.GetType()))
                     {
                         ItemSQL.Add(item.GetType(), new SQLInfo(item));
@@ -930,59 +943,60 @@ namespace MediaBrowser.Library.Persistance {
                     QueueCommand(cmd2);
 
                     //and now each of our list members
-                    lock (connection)
+                    var delCmd = connection.CreateCommand();
+                    delCmd.CommandText = "delete from list_items where guid = @guid";
+                    delCmd.AddParam("@guid", item.Id);
+                    delCmd.ExecuteNonQuery();
+                    foreach (var col in ItemSQL[item.GetType()].ListColumns)
                     {
-                        var tran = connection.BeginTransaction(); //more for performance than consistency...
-                        var delCmd = connection.CreateCommand();
-                        delCmd.CommandText = "delete from list_items where guid = @guid";
-                        delCmd.AddParam("@guid", item.Id);
-                        delCmd.ExecuteNonQuery();
-                        foreach (var col in ItemSQL[item.GetType()].ListColumns)
+                        System.Collections.IEnumerable list = null;
+
+                        if (col.MemberType == MemberTypes.Property)
                         {
-                            System.Collections.IEnumerable list = null;
+                            //var it = col.PropertyInfo.GetValue(item, null);
+                            //Type ittype = it.GetType();
+                            list = col.PropertyInfo.GetValue(item, null) as System.Collections.IEnumerable;
+                        }
+                        else
+                            list = col.FieldInfo.GetValue(item) as System.Collections.IEnumerable;
 
-                            if (col.MemberType == MemberTypes.Property)
+                        if (list != null)
+                        {
+                            var insCmd = connection.CreateCommand();
+                            insCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, @property, @value)";
+                            insCmd.AddParam("@guid", item.Id);
+                            insCmd.AddParam("@property", col.ColName);
+                            SQLiteParameter val = new SQLiteParameter("@value");
+                            insCmd.Parameters.Add(val);
+
+                            //special handling for actors because they are saved serialized - we also need to save them in a query-able form...
+                            var insActorCmd = connection.CreateCommand();
+                            bool isActor = col.InternalType == typeof(Actor);
+                            SQLiteParameter val2 = new SQLiteParameter("@value2");
+                            if (isActor)
                             {
-                                //var it = col.PropertyInfo.GetValue(item, null);
-                                //Type ittype = it.GetType();
-                                list = col.PropertyInfo.GetValue(item, null) as System.Collections.IEnumerable;
+                                insActorCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, 'ActorName', @value2)";
+                                insActorCmd.AddParam("@guid", item.Id);
+                                insActorCmd.Parameters.Add(val2);
                             }
-                            else
-                                list = col.FieldInfo.GetValue(item) as System.Collections.IEnumerable;
 
-                            if (list != null)
+                            lock (connection)
                             {
-                                var insCmd = connection.CreateCommand();
-                                insCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, @property, @value)";
-                                insCmd.AddParam("@guid", item.Id);
-                                insCmd.AddParam("@property", col.ColName);
-                                SQLiteParameter val = new SQLiteParameter("@value");
-                                insCmd.Parameters.Add(val);
-
-                                //special handling for actors because they are saved serialized - we also need to save them in a query-able form...
-                                var insActorCmd = connection.CreateCommand();
-                                bool isActor = col.InternalType == typeof(Actor);
-                                SQLiteParameter val2 = new SQLiteParameter("@value2");
-                                if (isActor)
-                                {
-                                    insActorCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, 'ActorName', @value2)";
-                                    insActorCmd.AddParam("@guid", item.Id);
-                                    insActorCmd.Parameters.Add(val2);
-                                }
-
+                                var tran = connection.BeginTransaction(); //more for performance than consistency...
                                 foreach (var listItem in list)
                                 {
                                     val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
                                     insCmd.ExecuteNonQuery();
                                     if (isActor)
                                     {
-                                        val2.Value = (listItem as Actor).Name.Trim();
+                                        //Logger.ReportInfo("Saving Actor Name '" + (listItem as Actor).Person.Name+"'");
+                                        val2.Value = (listItem as Actor).Person.Name;
                                         insActorCmd.ExecuteNonQuery();
                                     }
                                 }
+                                tran.Commit();
                             }
                         }
-                        tran.Commit();
                     }
                     //finally, update the recent list
                     //if (item is Media) //don't need to track non-media items
@@ -995,8 +1009,6 @@ namespace MediaBrowser.Library.Persistance {
                     //    recCmd.ExecuteNonQuery();
                     //}
                 }
-
-                //
             }
         }
 

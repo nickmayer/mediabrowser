@@ -46,19 +46,16 @@ namespace MediaBrowser.Library.Entities {
             {LocalizedStrings.Instance.GetString("YearDispPref"), new BaseItemComparer(SortOrder.Year)}
         };
         /// <summary>
-        /// ArrayList of index options for display - should be localized and must match IndexByOptions positionally
+        /// Dictionary of index options - consists of a display value and a property name (must match the property exactly)
         /// </summary>
-        public ArrayList IndexByDisplayOptions = new ArrayList() { LocalizedStrings.Instance.GetString("NoneDispPref"), 
-                                                   LocalizedStrings.Instance.GetString("ActorDispPref"), 
-                                                   LocalizedStrings.Instance.GetString("GenreDispPref"), 
-                                                   LocalizedStrings.Instance.GetString("DirectorDispPref"),
-                                                   LocalizedStrings.Instance.GetString("YearDispPref"), 
-                                                   LocalizedStrings.Instance.GetString("StudioDispPref") };
-
-        /// <summary>
-        /// List of index by field names - must match exactly the object property names and match up positionally with IndexByDisplayOptions
-        /// </summary>
-        public List<string> IndexByOptions = new List<string>() { "None", "Actors", "Genres", "Directors", "ProductionYear", "Studios" };
+        public Dictionary<string, string> IndexByOptions = new Dictionary<string, string>() { 
+            {LocalizedStrings.Instance.GetString("NoneDispPref"), ""}, 
+            {LocalizedStrings.Instance.GetString("ActorDispPref"), "Actors"},
+            {LocalizedStrings.Instance.GetString("GenreDispPref"), "Genres"},
+            {LocalizedStrings.Instance.GetString("DirectorDispPref"), "Directors"},
+            {LocalizedStrings.Instance.GetString("YearDispPref"), "ProductionYear"},
+            {LocalizedStrings.Instance.GetString("StudioDispPref"), "Studios"}
+        };
 
         /// <summary>
         /// By default children are loaded on first access, this operation is slow. So sometimes you may
@@ -197,110 +194,40 @@ namespace MediaBrowser.Library.Entities {
                 .Select(s => func(s));
         }
 
-        public IList<Index> IndexBy(IndexType indexType) {
+        protected virtual Func<string, BaseItem> GetConstructor(string property) {
+            switch (property) {
+                case "Actors":
+                case "Directors":
+                    return a => Person.GetPerson(a);
 
-            if (indexType == IndexType.None) throw new ArgumentException("Index type should not be none!");
-            Func<IShow, IEnumerable<BaseItem>> indexingFunction = null;
-            bool allowEpisodes = false;
+                case "Genres":
+                    return g => Genre.GetGenre(g);
 
-            switch (indexType) {
-                case IndexType.Actor:
-                    var ret2 = Kernel.Instance.ItemRepository.RetrieveIndex(this, "Actors", a => Person.GetPerson(a));
-                    //build in images
-                    Async.Queue("Index image builder", () =>
-                    {
-                        foreach (Index item in ret2)
-                        {
-                            item.RefreshMetadata();
-                        }
-                    });
-                    return ret2;
-                    indexingFunction = show =>
-                        show.Actors == null ? null : show.Actors.Select(a => (BaseItem)a.Person);
-                    break;
+                case "ProductionYear":
+                    return y => Year.GetYear(y);
 
-                case IndexType.Director:
-                    indexingFunction = show => MapStringsToBaseItems(show.Directors, d => Person.GetPerson(d));
-                    break;
-
-
-                case IndexType.Genre:
-                    var ret = Kernel.Instance.ItemRepository.RetrieveIndex(this, "Genres", g => Genre.GetGenre(g));
-                    //build in images
-                    Async.Queue("Index image builder", () =>
-                    {
-                        foreach (Index item in ret)
-                        {
-                            item.RefreshMetadata();
-                        }
-                    });
-                    return ret;
-                    indexingFunction = show => MapStringsToBaseItems(show.Genres, g => Genre.GetGenre(g));
-                    break;
-
-                case IndexType.Year:
-                    indexingFunction = show =>
-                        show.ProductionYear == null ? null : new BaseItem[] { Year.GetYear(show.ProductionYear.ToString()) };
-                    allowEpisodes = true;
-                    break;
-                case IndexType.Studio:
-                    indexingFunction = show => MapStringsToBaseItems(show.Studios, s => Studio.GetStudio(s));
-                    break;
-
-                default:
-                    break;
-            }
-            BaseItem unknown = UnknownItem(indexType);
-
-            var index = new Dictionary<BaseItem, List<BaseItem>>(new BaseItemIndexComparer());
-            foreach (var item in RecursiveChildren) {
-                IShow show = item as IShow;
-                IEnumerable<BaseItem> subIndex = null;
-                if (show != null) {
-                    subIndex = indexingFunction(show);
-                }
-                bool added = false;
-
-                if (subIndex != null) {
-                    foreach (BaseItem innerItem in subIndex) {
-                        if ((allowEpisodes && !(innerItem is Series)) || (!(innerItem is Episode) && !(innerItem is Season))) //exclude episodes/seasons as their series will be there
-                        {
-                            AddItemToIndex(index, innerItem, item);
-                            added = true;
-                        }
-                    }
-                }
-
-                if (!added && item is IShow && ((allowEpisodes && !(item is Series)) || (!allowEpisodes && !(item is Episode) && !(item is Season))))
-                {
-                    AddItemToIndex(index, unknown, item);
-                }
+                case "Studios":
+                    return s => Studio.GetStudio(s);
 
             }
+            return null;
+        }
 
-            List<Index> sortedIndex = new List<Index>();
+        public IList<Index> IndexBy(string property)
+        {
 
-            sortedIndex.AddRange(
-                index
-                    .Select(pair => new Index(pair.Key, pair.Value.Distinct(i => i.Id).ToList()))
-                );
-
-
-            sortedIndex.Sort((x, y) =>
-            {
-                return x.Name.CompareTo(y.Name);
-            });
-
+            if (string.IsNullOrEmpty(property)) throw new ArgumentException("Index type should not be none!");
+            var index = Kernel.Instance.ItemRepository.RetrieveIndex(this, property, GetConstructor(property));
             //build in images
             Async.Queue("Index image builder", () =>
             {
-                foreach (Index item in sortedIndex)
+                foreach (var item in index)
                 {
                     item.RefreshMetadata();
                 }
             });
 
-            return sortedIndex;
+            return index;
         }
 
         private static BaseItem UnknownItem(IndexType indexType) {

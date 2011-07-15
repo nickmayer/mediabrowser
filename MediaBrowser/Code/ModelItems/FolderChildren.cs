@@ -240,13 +240,13 @@ namespace MediaBrowser.Code.ModelItems {
             return item;
         }
 
-        public void IndexBy(IndexType indexType)
+        public void IndexBy(string property)
         {
 
             if (folder == null) return;
-            using (new Profiler("==== Index " + folder.Name + " by " + indexType.ToString()))
+            using (new Profiler("==== Index " + folder.Name + " by " + property))
             {
-                if (indexType == IndexType.None)
+                if (string.IsNullOrEmpty(property))
                 {
                     folderIsIndexed = false;
                     lock (this)
@@ -259,7 +259,7 @@ namespace MediaBrowser.Code.ModelItems {
                     folderIsIndexed = true;
                     lock (this)
                     {
-                        currentChildren = folder.IndexBy(indexType).Select(i => (BaseItem)i).ToList();
+                        currentChildren = folder.IndexBy(property).Select(i => (BaseItem)i).ToList();
                     }
                 }
 

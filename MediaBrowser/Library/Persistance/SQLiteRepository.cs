@@ -143,7 +143,7 @@ namespace MediaBrowser.Library.Persistance
                     foreach (var command in copy)
                     {
                         command.Transaction = tran;
-                        //Logger.ReportVerbose("About to execute " + command.CommandText);
+                        //Logger.ReportInfo("About to execute for:  "+ command.Parameters[1].Value+"  "+command.Parameters[14].Value + command.CommandText);
                         command.ExecuteNonQuery();
                     }
                     tran.Commit();

@@ -14,6 +14,7 @@ namespace MediaBrowser.Library.Entities {
         BaseItem shadowItem;
         string indexProperty;
         string childTableName;
+        object propertyValue;
 
         public override string Name {
             get {
@@ -77,12 +78,13 @@ namespace MediaBrowser.Library.Entities {
             this.shadowItem = item;
         }
 
-        public Index(BaseItem item, string childTable, string property)
+        public Index(BaseItem item, string childTable, string property, object value)
         {
             this.children = null;
             this.Id = Guid.NewGuid();
             this.indexProperty = property;
             this.childTableName = childTable;
+            this.propertyValue = value;
             this.shadowItem = item;
         }
 
@@ -92,7 +94,7 @@ namespace MediaBrowser.Library.Entities {
             {
                 if (children == null)
                 {
-                    children = Kernel.Instance.ItemRepository.RetrieveSubIndex(childTableName, indexProperty, this.Name);
+                    children = Kernel.Instance.ItemRepository.RetrieveSubIndex(childTableName, indexProperty, propertyValue);
                 }
 
                 return children;

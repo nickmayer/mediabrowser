@@ -494,7 +494,7 @@ namespace MediaBrowser.Library {
 
         public override void RefreshMetadata(bool displayMsg)
         {
-            bool includeChildren = Application.DisplayDialog("Refresh all children too?", "Refresh Folder", Microsoft.MediaCenter.DialogButtons.Yes | Microsoft.MediaCenter.DialogButtons.No, 10000) == Microsoft.MediaCenter.DialogResult.Yes;
+            bool includeChildren = Application.DisplayDialog(Localization.LocalizedStrings.Instance.GetString("RefreshFolderDial"), Localization.LocalizedStrings.Instance.GetString("RefreshFolderCapDial"), Microsoft.MediaCenter.DialogButtons.Yes | Microsoft.MediaCenter.DialogButtons.No, 10000) == Microsoft.MediaCenter.DialogResult.Yes;
 
             //first do us
             base.RefreshMetadata(false);
@@ -513,10 +513,9 @@ namespace MediaBrowser.Library {
                     //and now all our children
                     foreach (BaseItem item in this.folder.RecursiveChildren)
                     {
-                        Kernel.Instance.ItemRepository.SaveItem(item);
-                        //Logger.ReportInfo("refreshing " + item.Name);
-                        //item.RefreshMetadata(MetadataRefreshOptions.Force);
-                        //ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
+                        Logger.ReportInfo("refreshing " + item.Name);
+                        item.RefreshMetadata(MetadataRefreshOptions.Force);
+                        ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
                         //item.ReCacheAllImages(s);
                     }
                 }
@@ -835,7 +834,7 @@ namespace MediaBrowser.Library {
                     if (this.actualThumbSize.Value.Height != 1)
                         ThumbConstraint_PropertyChanged(null, null);
 
-                    if (displayPrefs.IndexBy != IndexType.None) {
+                    if (displayPrefs.IndexBy != "None") {
                         IndexByChoice_ChosenChanged(this, null);
                     }
                 }
