@@ -132,13 +132,18 @@ namespace MediaBrowser.Library.Persistance
                 List<SQLiteCommand> copy;
                 lock (delayedCommands)
                 {
-                    if (delayedCommands.Count == 0) return;  //no reason to go through this if no cmds...
+                    if (delayedCommands.Count == 0)
+                    {
+                       // Logger.ReportInfo("Delayed writer idle");
+                        return;  //no reason to go through this if no cmds...
+                    }
                     copy = delayedCommands.ToList();
                     delayedCommands.Clear();
                 }
 
                 lock (connection)
                 {
+                    //Logger.ReportInfo("Executing " + copy.Count + " commands");
                     var tran = connection.BeginTransaction();
                     foreach (var command in copy)
                     {

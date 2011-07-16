@@ -349,6 +349,7 @@ namespace MediaBrowser.Library.Persistance {
             string[] queries = {"create table if not exists provider_data (guid, full_name, data)",
                                 "create unique index if not exists idx_provider on provider_data(guid, full_name)",
                                 "create table if not exists items (guid primary key, data)",
+                                "create index if not exists idx_items(guid)",
                                 "create table if not exists children (guid, child)", 
                                 "create unique index if not exists idx_children on children(guid, child)",
                                 "create table if not exists list_items(guid, property, value)",
@@ -357,7 +358,7 @@ namespace MediaBrowser.Library.Persistance {
                                 //"create index if not exists idx_recent on recent_list(top_parent, child)",
                                 "attach database '"+playStateDBPath+"' as playstate_db",
                                 "create table if not exists playstate_db.play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)",
-                                "pragma temp_store = memory"
+                                "pragma temp_store = memory",
                                // @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll 
                                //        sort_order, index_by, use_banner, thumb_constraint_width, thumb_constraint_height, use_coverflow, use_backdrop )" 
                                 //,   "create table play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)"
@@ -523,18 +524,7 @@ namespace MediaBrowser.Library.Persistance {
             List<Index> children = new List<Index>();
             var cmd = connection.CreateCommand();
 
-            //bool listColumn = false;
-            //try
-            //{
-            //    connection.Exec("Select " + property + " from items");
-            //}
-            //catch (SQLiteException)
-            //{
-            //    //must be a list column as it doesn't exist in items...
-            //    listColumn = true;
-            //}
-
-            //we'll build the unknown items as we go through the children the first time
+            //we'll build the unknown items now and leave them out of child table
             List<BaseItem> unknownItems = new List<BaseItem>();
 
             //create a temporary table of this folder's recursive children to use in the retrievals
@@ -555,7 +545,7 @@ namespace MediaBrowser.Library.Persistance {
             SQLInfo.ColDef col = new SQLInfo.ColDef();
             Type currentType = null;
 
-            lock (connection)
+            lock (connection) //can't use delayed writer here - need this table now...
             {
                 var tran = connection.BeginTransaction();
 
@@ -980,22 +970,18 @@ namespace MediaBrowser.Library.Persistance {
                                 insActorCmd.Parameters.Add(val2);
                             }
 
-                            lock (connection)
+                            foreach (var listItem in list)
                             {
-                                var tran = connection.BeginTransaction(); //more for performance than consistency...
-                                foreach (var listItem in list)
+                                val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
+                                QueueCommand(insCmd);
+                                if (isActor)
                                 {
-                                    val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
-                                    insCmd.ExecuteNonQuery();
-                                    if (isActor)
-                                    {
-                                        //Logger.ReportInfo("Saving Actor Name '" + (listItem as Actor).Person.Name+"'");
-                                        val2.Value = (listItem as Actor).Person.Name;
-                                        insActorCmd.ExecuteNonQuery();
-                                    }
+                                    //Logger.ReportInfo("Saving Actor Name '" + (listItem as Actor).Person.Name+"'");
+                                    val2.Value = (listItem as Actor).Person.Name;
+                                    QueueCommand(insActorCmd);
                                 }
-                                tran.Commit();
                             }
+
                         }
                     }
                     //finally, update the recent list
