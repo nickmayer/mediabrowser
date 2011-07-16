@@ -20,7 +20,8 @@ namespace MediaBrowser.Library.Persistance {
 
     public class SqliteItemRepository : SQLiteRepository, IItemRepository {
 
-        private static Guid MIGRATE_MARKER = new Guid("0FD78B4C-B9DA-4249-B880-3696761AE3B4");
+        const string CURRENT_SCHEMA_VERSION = "2.5.0.0";
+
         private Dictionary<Type, SQLInfo> ItemSQL = new Dictionary<Type, SQLInfo>();
 
         protected static class SQLizer
@@ -320,15 +321,18 @@ namespace MediaBrowser.Library.Persistance {
                 AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(SqliteResolver);
             }
 
-            SQLizer.Init(Path.Combine(ApplicationPaths.AppConfigPath, "ServiceStack.Text.dll"));
+            //SQLizer.Init(Path.Combine(ApplicationPaths.AppConfigPath, "ServiceStack.Text.dll"));
 
             return new SqliteItemRepository(dbPath);
 
         }
 
-
         // Used to save playstate 
         ItemRepository itemRepo; 
+
+        // Display repo
+        SQLiteDisplayRepository displayRepo;
+        bool displayPrefsInSQL = false;
 
         private SqliteItemRepository(string dbPath) {
 
@@ -342,6 +346,7 @@ namespace MediaBrowser.Library.Persistance {
             connection.Open();
 
             itemRepo = new ItemRepository();
+            displayRepo = new SQLiteDisplayRepository(Path.Combine(ApplicationPaths.AppUserSettingsPath, "display.db"));
 
 
             string playStateDBPath = Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate.db");
@@ -349,11 +354,12 @@ namespace MediaBrowser.Library.Persistance {
             string[] queries = {"create table if not exists provider_data (guid, full_name, data)",
                                 "create unique index if not exists idx_provider on provider_data(guid, full_name)",
                                 "create table if not exists items (guid primary key, data)",
-                                "create index if not exists idx_items(guid)",
+                                "create index if not exists idx_items on items(guid)",
                                 "create table if not exists children (guid, child)", 
                                 "create unique index if not exists idx_children on children(guid, child)",
                                 "create table if not exists list_items(guid, property, value)",
                                 "create index if not exists idx_list on list_items(guid, property)",
+                                "create table if not exists schema_version (table_name primary key, version)",
                                 //"create table if not exists recent_list(top_parent, child, date_added)",
                                 //"create index if not exists idx_recent on recent_list(top_parent, child)",
                                 "attach database '"+playStateDBPath+"' as playstate_db",
@@ -367,13 +373,14 @@ namespace MediaBrowser.Library.Persistance {
 
             foreach (var query in queries) {
                 try {
-
                     connection.Exec(query);
                 } catch (Exception e) {
                     Logger.ReportInfo(e.ToString());
                 }
             }
 
+            //until we migrate the display prefs, we need to go get them the old way
+            displayPrefsInSQL = SchemaVersion("display_prefs") == CURRENT_SCHEMA_VERSION;
 
             alive = true; // tell writer to keep going
             Async.Queue("Sqlite Writer", DelayedWriter);
@@ -381,8 +388,32 @@ namespace MediaBrowser.Library.Persistance {
             if (Kernel.LoadContext == MBLoadContext.Service) //don't want to be migrating simultaneously in service and core...
             {
                 MigratePlayState();
+                MigrateDisplayPrefs();
             }
         }
+
+        private string SchemaVersion(string tableName)
+        {
+            string version = "";
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "select version from schema_version where table_name = @1";
+            cmd.AddParam("@1", tableName);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    version = reader.GetString(0);
+                }
+            }
+            return version;
+        }
+
+        private void SetSchemaVersion(string tableName, string version)
+        {
+            connection.Exec("replace into schema_version (table_name, version) values('" + tableName + "','" + version + "')");
+        }
+
 
         private string GetPath(string type, string root) {
             string path = Path.Combine(root, type);
@@ -391,7 +422,7 @@ namespace MediaBrowser.Library.Persistance {
             return path;
         }
 
-        private void MigrateData()
+        private void MigrateItems()
         {
             var guids = new List<Guid>();
             var cmd = connection.CreateCommand();
@@ -413,25 +444,37 @@ namespace MediaBrowser.Library.Persistance {
         }
 
 
-        private void MigratePlayState() {
-            if (RetrievePlayState(MIGRATE_MARKER).Id != MIGRATE_MARKER) { //haven't migrated
+        private void MigratePlayState()
+        {
+            if (SchemaVersion("play_states") != CURRENT_SCHEMA_VERSION)
+            { //haven't migrated
                 //delay this to allow playstate dictionary to load in old repo
                 Async.Queue("Playstate Migration", () =>
-                //using (ItemRepository repo = new ItemRepository())
-                {
-                    Logger.ReportInfo("Attempting to migrate playstates to SQL");
-                    int cnt = 0;
-                    foreach (PlaybackStatus ps in itemRepo.AllPlayStates)
                     {
-                        //Logger.ReportVerbose("Saving playstate for " + ps.Id);
-                        SavePlayState(ps);
-                        cnt++;
-                    }
-                    Logger.ReportInfo("Successfully migrated " + cnt + " playstate items.");
-                    var migrateMarker = new PlaybackStatus();
-                    migrateMarker.Id = MIGRATE_MARKER;
-                    SavePlayState(migrateMarker);
-                }, 5000);
+                        Logger.ReportInfo("Attempting to migrate playstates to SQL");
+                        int cnt = 0;
+                        foreach (PlaybackStatus ps in itemRepo.AllPlayStates)
+                        {
+                            //Logger.ReportVerbose("Saving playstate for " + ps.Id);
+                            SavePlayState(ps);
+                            cnt++;
+                        }
+                        Logger.ReportInfo("Successfully migrated " + cnt + " playstate items.");
+                        SetSchemaVersion("play_states", CURRENT_SCHEMA_VERSION);
+                    }, 5000);
+            }
+        }
+
+        private void MigrateDisplayPrefs()
+        {
+            if (SchemaVersion("display_prefs") != CURRENT_SCHEMA_VERSION)
+            {
+                //need to migrate
+                Logger.ReportInfo("Attempting to migrate display preferences to SQL");
+                int num = displayRepo.MigrateDisplayPrefs();
+                Logger.ReportInfo("Migrated " + num + " display preferences.");
+                SetSchemaVersion("display_prefs", CURRENT_SCHEMA_VERSION);
+                displayPrefsInSQL = true;
             }
         }
 
@@ -741,12 +784,15 @@ namespace MediaBrowser.Library.Persistance {
         }
 
         public DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp) {
-            return itemRepo.RetrieveDisplayPreferences(dp);
+            if (!displayPrefsInSQL)
+                return itemRepo.RetrieveDisplayPreferences(dp);
+            else
+                return displayRepo.RetrieveDisplayPreferences(dp);
         }
 
 
         public void SaveDisplayPreferences(DisplayPreferences prefs) {
-            itemRepo.SaveDisplayPreferences(prefs);
+                displayRepo.SaveDisplayPreferences(prefs);
         }
 
         public BaseItem RetrieveItem(Guid id) {

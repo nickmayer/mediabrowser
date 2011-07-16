@@ -105,6 +105,7 @@
     <Compile Include="Library\Metadata\MetadataProviders.cs" />
     <Compile Include="Library\Network\DownloadPolicy.cs" />
     <Compile Include="Library\Network\RSSFeed.cs" />
+    <Compile Include="Library\Persistance\SQLiteDisplayRepository.cs" />
     <Compile Include="Library\Persistance\FileBasedDictionary.cs" />
     <Compile Include="Library\Persistance\IPersistableChangeNotifiable.cs" />
     <Compile Include="Library\RemoteControl\IPlaybackController.cs" />

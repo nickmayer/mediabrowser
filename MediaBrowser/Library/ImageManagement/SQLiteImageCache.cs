@@ -152,7 +152,7 @@ namespace MediaBrowser.Library.ImageManagement
 
         private int TranslateWidth(int realWidth)
         {
-            if (realWidth > 1100)
+            if (realWidth > 1100 || realWidth < 570)
                 return realWidth;
             else return 570;
         }
