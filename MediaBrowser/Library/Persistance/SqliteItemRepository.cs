@@ -332,7 +332,6 @@ namespace MediaBrowser.Library.Persistance {
 
         // Display repo
         SQLiteDisplayRepository displayRepo;
-        bool displayPrefsInSQL = false;
 
         private SqliteItemRepository(string dbPath) {
 
@@ -345,7 +344,7 @@ namespace MediaBrowser.Library.Persistance {
             connection = new SQLiteConnection(connectionstr.ConnectionString);
             connection.Open();
 
-            itemRepo = new ItemRepository();
+            //itemRepo = new ItemRepository();
             displayRepo = new SQLiteDisplayRepository(Path.Combine(ApplicationPaths.AppUserSettingsPath, "display.db"));
 
 
@@ -379,17 +378,14 @@ namespace MediaBrowser.Library.Persistance {
                 }
             }
 
-            //until we migrate the display prefs, we need to go get them the old way
-            displayPrefsInSQL = SchemaVersion("display_prefs") == CURRENT_SCHEMA_VERSION;
-
             alive = true; // tell writer to keep going
             Async.Queue("Sqlite Writer", DelayedWriter);
 
-            if (Kernel.LoadContext == MBLoadContext.Service) //don't want to be migrating simultaneously in service and core...
-            {
-                MigratePlayState();
-                MigrateDisplayPrefs();
-            }
+            //if (Kernel.LoadContext == MBLoadContext.Service) //don't want to be migrating simultaneously in service and core...
+            //{
+            //    MigratePlayState();
+            //    MigrateDisplayPrefs();
+            //}
         }
 
         private string SchemaVersion(string tableName)
@@ -474,7 +470,6 @@ namespace MediaBrowser.Library.Persistance {
                 int num = displayRepo.MigrateDisplayPrefs();
                 Logger.ReportInfo("Migrated " + num + " display preferences.");
                 SetSchemaVersion("display_prefs", CURRENT_SCHEMA_VERSION);
-                displayPrefsInSQL = true;
             }
         }
 
@@ -501,7 +496,7 @@ namespace MediaBrowser.Library.Persistance {
 
         public ThumbSize RetrieveThumbSize(Guid id)
         {
-            return itemRepo.RetrieveThumbSize(id);
+            return displayRepo.RetrieveThumbSize(id);
         }
 
         public void SavePlayState(PlaybackStatus playState) {
@@ -784,9 +779,6 @@ namespace MediaBrowser.Library.Persistance {
         }
 
         public DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp) {
-            if (!displayPrefsInSQL)
-                return itemRepo.RetrieveDisplayPreferences(dp);
-            else
                 return displayRepo.RetrieveDisplayPreferences(dp);
         }
 
@@ -1078,6 +1070,7 @@ namespace MediaBrowser.Library.Persistance {
             guidParam.Value = guid;
 
             using (var reader = cmd.ExecuteReader()) {
+                //Logger.ReportInfo("Retrieving " + reader.RecordsAffected + " providers for " + guid);
                 while (reader.Read()) {
                     using (var ms = new MemoryStream(reader.GetBytes(0))) {
 

@@ -159,6 +159,23 @@ namespace MediaBrowser.Library.Persistance
             return cnt;
         }
 
+        public ThumbSize RetrieveThumbSize(Guid id)
+        {
+            int w = 0, h = 0;
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "select thumb_constraint_width, thumb_constraint_height from display_prefs where guid = @guid";
+            cmd.AddParam("@guid", id);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    w = reader.GetInt32(0);
+                    h = reader.GetInt32(1);
+                }
+            }
+            return new ThumbSize(w, h);
+        }
 
     }
 }
