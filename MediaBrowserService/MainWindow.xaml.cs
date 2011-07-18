@@ -637,7 +637,15 @@ namespace MediaBrowserService
                 //need to go through the file-based repo and re-save
                 foreach (var id in oldRepo.AllItems)
                 {
-                    newRepo.SaveItem(oldRepo.RetrieveItem(id));
+                    try
+                    {
+                        newRepo.SaveItem(oldRepo.RetrieveItem(id));
+                    }
+                    catch (Exception e)
+                    {
+                        //this could fail if some items have already been refreshed before we migrated them
+                        Logger.ReportException("Could not migrate item " + id, e);
+                    }
                 }
             }
 
