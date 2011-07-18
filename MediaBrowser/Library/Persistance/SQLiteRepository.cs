@@ -89,7 +89,7 @@ namespace MediaBrowser.Library.Persistance
         protected SQLiteConnection connection;
         protected List<SQLiteCommand> delayedCommands = new List<SQLiteCommand>();
 
-        public void ShutdownDatabase()
+        public virtual void ShutdownDatabase()
         {
             try
             {

@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0024";
+        const string VERSION = "1.0026";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -288,12 +288,14 @@ namespace MediaBrowser.Library.Localization
         public string FontsMissingDial = "CustomFonts.mcml as been patched with missing values";
         public string StyleMissingDial = "{0} has been patched with missing values";
         public string ManualRefreshDial = "Library Update Started.  Will proceed in the background.";
-        public string ForcedRebuildDial = "Your library is currently being re-built by the service.  Some information may be incomplete until this finishes.";
-        public string ForcedRebuildCapDial = "Library Rebuild";
+        public string ForcedRebuildDial = "Your library is currently being migrated by the service.  The service will re-start when it is finished and you may then run Media Browser.";
+        public string ForcedRebuildCapDial = "Library Migration";
         public string RefreshFailedDial = "The last service refresh process failed.  Please run a manual refresh from the service.";
         public string RefreshFailedCapDial = "Service Refresh Failed";
         public string RebuildNecDial = "This version of Media Browser requires a re-build of your library.  It has started automatically in the service.  Some information may be incomplete until this process finishes.";
+        public string MigrateNecDial = "This version of Media Browser requires a migration of your library.  It has started automatically in the service.  The service will restart when it is complete and you may then run Media Browser.";
         public string RebuildFailedDial = "There was an error attempting to tell the service to re-build your library.  Please run the service and do a manual refresh with the cache clear options selected.";
+        public string MigrateFailedDial = "There was an error attempting to tell the service to re-build your library.  Please run the service and do a manual refresh with the cache clear options selected.";
         public string RefreshFolderDial = "Refresh all contents too?";
         public string RefreshFolderCapDial = "Refresh Folder";
 

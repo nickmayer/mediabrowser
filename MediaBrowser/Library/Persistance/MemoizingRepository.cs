@@ -114,5 +114,20 @@ namespace MediaBrowser.Library.Persistance {
             return repository.ClearEntireCache();
         }
 
+        public void MigratePlayState(ItemRepository repo)
+        {
+            repository.MigratePlayState(repo);
+        }
+
+        public void MigrateDisplayPrefs(ItemRepository repo)
+        {
+            repository.MigrateDisplayPrefs(repo);
+        }
+
+        public void MigrateItems()
+        {
+            repository.MigrateItems();
+        }
+
     }
 }

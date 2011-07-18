@@ -579,14 +579,79 @@ namespace MediaBrowserService
                     Logger.ReportInfo("Service Started");
                     _mainLoop = Async.Every(60 * 1000, () => MainIteration()); //repeat every minute
                 }
-                catch  //some sort of error - release
+                catch (Exception e) //some sort of error - release
                 {
                     if (_hasHandle)
                     {
                         _mutex.ReleaseMutex();
                     }
+                    Logger.ReportException("Error initializing service.", e);
+                    _forceClose = true;
+                    this.Close();
                 }
             }
+        }
+
+        public void Migrate25()
+        {
+            //version 2.5 migration
+            Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
+            {
+                gbManual.IsEnabled = false;
+                refreshProgress.Value = 0;
+                refreshProgress.Visibility = Visibility.Visible;
+                _refreshRunning = true;
+                _refreshCanceled = false;
+                _refreshCanceledTime = DateTime.MinValue;
+                _config.RefreshFailed = false;
+                _config.ForceRebuildInProgress = true;
+                _config.Save();
+                _refreshStartTime = DateTime.Now;
+                lblSvcActivity.Content = "Migration Running...";
+                lblSvcActivity.Foreground = Brushes.Black;
+                lblNextSvcRefresh.Foreground = Brushes.Black;
+                notifyIcon.ContextMenu.MenuItems["refresh"].Enabled = false;
+                notifyIcon.ContextMenu.MenuItems["exit"].Enabled = false;
+                notifyIcon.ContextMenu.MenuItems["refresh"].Text = "Migration Running...";
+                notifyIcon.Icon = RefreshIcons[0];
+                lblNextSvcRefresh.Content = "";
+            }));
+
+            UpdateProgress("PlayStates", .10);
+            var newRepo = Kernel.Instance.ItemRepository;
+            var oldRepo = new MediaBrowser.Library.ItemRepository();
+            Thread.Sleep(5000); //allow old repo to load
+            newRepo.MigratePlayState(oldRepo);
+
+            UpdateProgress("DisplayPrefs", .20);
+            newRepo.MigrateDisplayPrefs(oldRepo);
+
+            UpdateProgress("Items", .80);
+            if (Kernel.Instance.ConfigData.EnableExperimentalSqliteSupport)
+            {
+                //were already using SQL - our repo can migrate itself
+                newRepo.MigrateItems();
+            }
+            else
+            {
+                //need to go through the file-based repo and re-save
+                foreach (var id in oldRepo.AllItems)
+                {
+                    newRepo.SaveItem(oldRepo.RetrieveItem(id));
+                }
+            }
+
+            _refreshRunning = false;
+            _config.ForceRebuildInProgress = true;
+            _config.Save();
+            Kernel.Instance.ConfigData.MBVersion = "2.5.0.0";
+            Kernel.Instance.ConfigData.UseNewSQLRepo = true;
+            Kernel.Instance.ConfigData.Save();
+
+            UpdateProgress("Migration finished. Re-starting...", 1);
+            Thread.Sleep(2000);
+            Restart();
+
         }
 
         public void ForceRebuild()

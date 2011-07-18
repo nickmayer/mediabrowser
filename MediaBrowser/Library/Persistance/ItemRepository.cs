@@ -40,7 +40,7 @@ namespace MediaBrowser.Library {
         public ThumbSize() { } //for the serializer
     }
 
-    class ItemRepository : IItemRepository, IDisposable {
+    public class ItemRepository : IItemRepository, IDisposable {
         public ItemRepository() {
             playbackStatus = new FileBasedDictionary<PlaybackStatus>(GetPath("playstate", userSettingPath));
             thumbSizes = new FileBasedDictionary<ThumbSize>(GetPath("thumbsizes", userSettingPath));
@@ -63,6 +63,36 @@ namespace MediaBrowser.Library {
                 }
                 return ret;
             }
+        }
+
+        public List<Guid> AllItems
+        { //for migration
+            get
+            {
+                var ret = new List<Guid>();
+                string path = GetPath("items", rootPath);
+                foreach (var file in Directory.GetFiles(path))
+                {
+                    ret.Add(new Guid(Path.GetFileName(file)));
+                }
+                return ret;
+            }
+        }
+
+        public bool Backup(string type)
+        {
+            string root = type.ToLower() == "display" || type == "playstate" ? userSettingPath : rootPath;
+            string source = GetPath(type, root);
+            try
+            {
+                Directory.Move(source, source + ".bak");
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Failed to backup " + type, e);
+                return false;
+            }
+            return true;
         }
 
         #region IItemCacheProvider Members
@@ -160,6 +190,21 @@ namespace MediaBrowser.Library {
             return null;
         }
 
+
+        public void MigratePlayState(ItemRepository repo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MigrateDisplayPrefs(ItemRepository repo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MigrateItems()
+        {
+            throw new NotImplementedException();
+        }
 
         public PlaybackStatus RetrievePlayState(Guid id) {
             return playbackStatus[id]; 

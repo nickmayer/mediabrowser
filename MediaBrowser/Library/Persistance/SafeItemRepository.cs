@@ -102,5 +102,20 @@ namespace MediaBrowser.Library.Persistance {
             return SafeFunc(() => repository.ClearEntireCache());
         }
 
+        public void MigratePlayState(ItemRepository repo)
+        {
+            SafeAction(() => repository.MigratePlayState(repo));
+        }
+
+        public void MigrateDisplayPrefs(ItemRepository repo)
+        {
+            SafeAction(() => repository.MigrateDisplayPrefs(repo));
+        }
+
+        public void MigrateItems()
+        {
+            SafeAction(() => repository.MigrateItems());
+        }
+
     }
 }

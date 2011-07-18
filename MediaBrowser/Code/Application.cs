@@ -557,7 +557,7 @@ namespace MediaBrowser
                     {
                         MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
                         ev.Dialog(CurrentInstance.StringData("ForcedRebuildDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 15, true);
-                        
+                        session.Close();
                     }
                     //Check to see if this is the first time this version is run
                     string currentVersion = Kernel.Instance.Version.ToString();
@@ -565,9 +565,14 @@ namespace MediaBrowser
                     {
                         //first time with this version - run routine
                         Logger.ReportInfo("First run for version " + currentVersion);
-                        FirstRunForVersion(currentVersion);
+                        bool okToRun = FirstRunForVersion(currentVersion);
                         //and update
                         Config.MBVersion = currentVersion;
+                        if (!okToRun)
+                        {
+                            Logger.ReportInfo("Closing MB to allow new version migration...");
+                            this.Close();
+                        }
                     }
                     //if the service refresh failed - notify them
                     if (Kernel.Instance.ServiceConfigData.RefreshFailed)
@@ -665,14 +670,23 @@ namespace MediaBrowser
             }
         }
 
-        void FirstRunForVersion(string thisVersion)
+        bool FirstRunForVersion(string thisVersion)
         {
             var oldVerion = new System.Version(Config.MBVersion);
             if (oldVerion < new System.Version(2, 0, 0, 0))
             {
-                Logger.ReportInfo("First run of Media Browser.  Initiating a full refresh of the library.");
-                Async.Queue("First run full refresh", () => FullRefresh(RootFolder, MetadataRefreshOptions.Force));
-                return;
+                Logger.ReportInfo("First run of Media Browser.  Initiating a full refresh of the library in service.");
+                if (MBServiceController.SendCommandToService(IPCCommands.ForceRebuild))
+                {
+                    MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                    ev.Dialog(CurrentInstance.StringData("RebuildNecDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                }
+                else
+                {
+                    MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                    ev.Dialog(CurrentInstance.StringData("RebuildFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                }
+                return true;
             }
             switch (thisVersion)
             {
@@ -694,11 +708,12 @@ namespace MediaBrowser
                     break;
                 case "2.3.1.0":
                 case "2.3.2.0":
-                    if (oldVerion < new System.Version(2, 3, 0, 0))
+                case "2.5.0.0":
+                    if (oldVerion <= new System.Version(2, 3, 0, 0))
                     {
                         MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
                     }
-                    if (oldVerion < new System.Version(2, 3, 1, 0))
+                    if (oldVerion <= new System.Version(2, 3, 1, 0))
                     {
                         Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
                         if (Config.MetadataCheckForUpdateAge < 30) Config.MetadataCheckForUpdateAge = 30; //bump this up
@@ -714,8 +729,24 @@ namespace MediaBrowser
                             ev.Dialog(CurrentInstance.StringData("RebuildFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
                         }
                     }
+                    else
+                    {
+                        //upgrading from 2.3.2 - do the SQL migration
+                        if (MBServiceController.SendCommandToService(IPCCommands.Migrate + "2.5"))
+                        {
+                            MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                            ev.Dialog(LocalizedStrings.Instance.GetString("MigrateNecDial"), LocalizedStrings.Instance.GetString("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        }
+                        else
+                        {
+                            MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                            ev.Dialog(CurrentInstance.StringData("MigrateFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        }
+                        return false; //need to shut-down
+                    }
                     break;
             }
+            return true;
         }
 
         private void MigratePluginSource()

@@ -67,7 +67,7 @@ namespace MediaBrowser.Library {
          * This should be set to "R" (or "SPn") with each official release and then immediately changed back to "R+" (or "SPn+")
          * so future trunk builds will indicate properly.
          * */
-        private const string versionExtension = "R+";
+        private const string versionExtension = "A1";
 
         public const string MBSERVICE_MUTEX_ID = "Global\\{E155D5F4-0DDA-47bb-9392-D407018D24B1}";
         public const string MBCLIENT_MUTEX_ID = "Global\\{9F043CB3-EC8E-41bf-9579-81D5F6E641B9}";
@@ -351,33 +351,26 @@ namespace MediaBrowser.Library {
         static IItemRepository GetRepository(ConfigData config)
         {
             IItemRepository repository = null;
-            if (config.EnableExperimentalSqliteSupport)
+            if (kernel != null && kernel.ItemRepository != null) kernel.ItemRepository.ShutdownDatabase(); //we need to do this for SQLite
+            string sqliteDb = Path.Combine(ApplicationPaths.AppCachePath, "cache.db");
+            string sqliteDll = Path.Combine(ApplicationPaths.AppConfigPath, "system.data.sqlite.dll");
+            if (File.Exists(sqliteDll))
             {
-                if (kernel != null && kernel.ItemRepository != null) kernel.ItemRepository.ShutdownDatabase(); //we need to do this for SQLite
-                string sqliteDb = Path.Combine(ApplicationPaths.AppCachePath, "cache.db");
-                string sqliteDll = Path.Combine(ApplicationPaths.AppConfigPath, "system.data.sqlite.dll");
-                if (File.Exists(sqliteDll))
+                try
                 {
-                    try
-                    {
-                        repository = new SafeItemRepository(
-                            new MemoizingRepository(
-                                SqliteItemRepository.GetRepository(sqliteDb, sqliteDll)
-                            )
-                         );
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.ReportException("Failed to init sqlite!", e);
-                        repository = null;
-                    }
+                    repository = new SafeItemRepository(
+                        new MemoizingRepository(
+                            SqliteItemRepository.GetRepository(sqliteDb, sqliteDll)
+                        )
+                     );
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Failed to init sqlite!", e);
+                    repository = null;
                 }
             }
 
-            if (repository == null)
-            {
-                repository = new SafeItemRepository(new ItemRepository());
-            }
             return repository;
         }
 
