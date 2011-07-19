@@ -92,6 +92,12 @@ namespace Configurator.Code {
         {
             get { return Name + " (v" + Version + ")"; }
         }
+
+        public virtual string UpgradeInfo
+        {
+            get { return ""; }
+        }
+
     }
 
     public class PluginCollection : ObservableCollection<IPlugin> {

@@ -93,7 +93,8 @@ namespace MediaBrowser.Library.Plugins {
                         Name = pluginRoot.SafeGetString("Name"),
                         BaseUrl = GetPath(source),
                         InstallGlobally = XmlConvert.ToBoolean(installGlobally.ToLower()),
-                        PluginClass = pluginRoot.SafeGetString("PluginClass") ?? assumedClass
+                        PluginClass = pluginRoot.SafeGetString("PluginClass") ?? assumedClass,
+                        UpgradeInfo = pluginRoot.SafeGetString("UpgradeInfo")
                     });
                 }
             } else {

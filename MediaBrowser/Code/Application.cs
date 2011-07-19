@@ -581,6 +581,13 @@ namespace MediaBrowser
                         ev.Dialog(CurrentInstance.StringData("RefreshFailedDial"), CurrentInstance.StringData("RefreshFailedCapDial"), DialogButtons.Ok, 15, true);
                         
                     }
+                    //if the service refresh failed - notify them
+                    if (Kernel.Instance.ServiceConfigData.RefreshFailed)
+                    {
+                        MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                        ev.Dialog(CurrentInstance.StringData("RefreshFailedDial"), CurrentInstance.StringData("RefreshFailedCapDial"), DialogButtons.Ok, 15, true);
+                        
+                    }
                     // We check config here instead of in the Updater class because the Config class 
                     // CANNOT be instantiated outside of the application thread.
                     if (Config.EnableUpdates)
@@ -597,23 +604,26 @@ namespace MediaBrowser
                         }, 60000);
                     }
 
+                    // set npv visibility according to current state
+                    if (MediaCenterEnvironment.MediaExperience != null && MediaCenterEnvironment.MediaExperience.Transport != null)
+                    {
+                        ShowNowPlaying = MediaCenterEnvironment.MediaExperience.Transport.PlayState == Microsoft.MediaCenter.PlayState.Playing;
+                    }
+
                     // we need to validate the library so that changes in the RAL will get picked up without having to navigate
                     if (Config.AutoValidate)
                     {
                         Async.Queue("Startup Library Validator", () =>
                         {
-                            using (new Profiler("Startup Validation"))
+                            Kernel.Instance.MajorActivity = true;
+                            foreach (BaseItem item in RootFolder.Children)
                             {
-                                Kernel.Instance.MajorActivity = true;
-                                foreach (BaseItem item in RootFolder.Children)
+                                if (item is Folder)
                                 {
-                                    if (item is Folder)
-                                    {
-                                        (item as Folder).ValidateChildren();
-                                    }
+                                    (item as Folder).ValidateChildren();
                                 }
-                                Kernel.Instance.MajorActivity = false;
                             }
+                            Kernel.Instance.MajorActivity = false;
                         });
                     }
                     //Launch into our entrypoint
