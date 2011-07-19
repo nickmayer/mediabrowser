@@ -679,6 +679,10 @@ namespace MediaBrowserService
                 AllowCancel = false
             };
 
+            //if we're here we are a fresh install and need to update this
+            Kernel.Instance.ConfigData.UseNewSQLRepo = true;
+            Kernel.Instance.ConfigData.Save();
+
             //kick off a manual refresh on a high-priority thread
             Thread manual = new Thread(new ThreadStart(() =>
             {

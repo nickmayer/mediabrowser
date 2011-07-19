@@ -78,9 +78,9 @@ namespace MediaBrowser.Library.Persistance
         protected static System.Reflection.Assembly sqliteAssembly;
         protected static System.Reflection.Assembly SqliteResolver(object sender, ResolveEventArgs args)
         {
-            Logger.ReportInfo(args.Name + " is being resolved!");
             if (args.Name.StartsWith("System.Data.SQLite,"))
             {
+                Logger.ReportInfo(args.Name + " is being resolved to "+sqliteAssembly.FullName);
                 return sqliteAssembly;
             }
             return null;
