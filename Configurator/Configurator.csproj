@@ -300,17 +300,17 @@
     <Resource Include="Images\btn_up.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
-      <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
-      <Name>MediaBrowser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Collapse.png" />
     <Resource Include="Images\Expand.png" />
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Images\splash1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaBrowser\MediaBrowser.csproj">
+      <Project>{C6B27E5F-3D83-4D71-85B9-AF83C8392721}</Project>
+      <Name>MediaBrowser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
