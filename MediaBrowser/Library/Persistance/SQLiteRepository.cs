@@ -104,7 +104,7 @@ namespace MediaBrowser.Library.Persistance
         {
             lock (delayedCommands)
             {
-                delayedCommands.Add(cmd);
+                delayedCommands.Add((cmd.Clone() as SQLiteCommand));
             }
         }
 
