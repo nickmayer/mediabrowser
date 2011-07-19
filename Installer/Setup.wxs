@@ -6,7 +6,7 @@
 <!-- We change the ProductVersion and ProductCode with each release                                      -->
 
 <?define Property_ProductVersion = "2.5.0.0" ?>
-<?define Property_ProductCode = "89A08369-DD80-41c6-966E-A8A057B03FFF" ?>
+<?define Property_ProductCode = "C4A3A20D-048E-4151-A16F-21DB06994465" ?>
 
 <!-- The UpgradeCode always stays the same                                                               -->
 <?define Property_UpgradeCode = "1AA59629-46C2-42d5-AD06-534A20F68296" ?>
@@ -228,6 +228,16 @@
            <util:PermissionEx User="[WIX_ACCOUNT_USERS]" GenericAll="yes"/>
         </CreateFolder>
       </Component>
+      
+      <!-- Install the proper SQLite package -->
+      <Component Id="SQLite32" Guid="77801CA1-BE8B-4A96-83C7-A364694A9362" DiskId="1">
+        <File Id="System.Data.SQLite.32" Name="System.Data.SQLite.dll" Source="..\SQLite\System.Data.SQLite.dll" Checksum="no" />
+        <Condition>Not VersionNT64</Condition>
+      </Component>
+      <Component Id="SQLite64" Guid="EAFE88A3-6ED1-4F65-8AB1-980D42FCCD82" DiskId="1">
+        <File Id="System.Data.SQLite.64" Name="System.Data.SQLite.dll" Source="..\SQLite\x64\System.Data.SQLite.dll" Checksum="no" />
+        <Condition>VersionNT64</Condition>
+      </Component>
     </DirectoryRef>
     
     <!--This is some clean up code for version 2.2.2 - we need to remove the old framegrab plugins or they will cause all kinds of problems-->
@@ -263,6 +273,8 @@
       <ComponentRef Id="Registration7.xml" />
       <ComponentRef Id="MediaBrowserIcon.ico" />
       <ComponentRef Id="MBProgramDataFolder" />
+      <ComponentRef Id="SQLite32" />
+      <ComponentRef Id="SQLite64" />
       <ComponentRef Id="DefaultShortcuts" />
       <ComponentRef Id="OptionalStartmenuFolderShortcut" />
       <ComponentRef Id="OptionalDesktopFolderShortcut" />
