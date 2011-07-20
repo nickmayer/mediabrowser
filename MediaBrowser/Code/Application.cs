@@ -615,15 +615,18 @@ namespace MediaBrowser
                     {
                         Async.Queue("Startup Library Validator", () =>
                         {
-                            Kernel.Instance.MajorActivity = true;
-                            foreach (BaseItem item in RootFolder.Children)
+                            using (new Profiler("Startup Validation"))
                             {
-                                if (item is Folder)
+                                Kernel.Instance.MajorActivity = true;
+                                foreach (BaseItem item in RootFolder.Children)
                                 {
-                                    (item as Folder).ValidateChildren();
+                                    if (item is Folder)
+                                    {
+                                        (item as Folder).ValidateChildren();
+                                    }
                                 }
+                                Kernel.Instance.MajorActivity = false;
                             }
-                            Kernel.Instance.MajorActivity = false;
                         });
                     }
                     //Launch into our entrypoint

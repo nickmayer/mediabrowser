@@ -56,7 +56,7 @@ namespace MediaBrowser.Library.Persistance {
             SafeAction(() => repository.SaveChildren(ownerName, children));
         }
 
-        public IEnumerable<Guid> RetrieveChildren(Guid id) {
+        public IEnumerable<BaseItem> RetrieveChildren(Guid id) {
             return SafeFunc(() => repository.RetrieveChildren(id));
         }
 

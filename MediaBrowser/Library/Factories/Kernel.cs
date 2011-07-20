@@ -75,6 +75,8 @@ namespace MediaBrowser.Library {
         static object sync = new object();
         static Kernel kernel;
 
+        public static bool UseNewSQLRepo = false;
+
         public bool MajorActivity
         {
             get
@@ -379,6 +381,9 @@ namespace MediaBrowser.Library {
              MediaLocationFactory = new MediaBrowser.Library.Factories.MediaLocationFactory(),
              TrailerProviders = new List<ITrailerProvider>() { new LocalTrailerProvider()}
              };
+
+            Kernel.UseNewSQLRepo = config.UseNewSQLRepo;
+            Logger.ReportInfo(Kernel.UseNewSQLRepo ? "==========Using new SQL Repo========" : "========Using OLD SQL Repo=====");
 
             // kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
             kernel.PlaybackControllers.Add(new PlaybackController());
