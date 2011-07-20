@@ -789,7 +789,7 @@ namespace MediaBrowser.Library {
                     tempItem.Name = value;
                     int i = 0; 
                     foreach (var child in Children) {
-                        if (comparer.Compare(tempItem, child.BaseItem) < 0) break;
+                        if (comparer.Compare(tempItem, child.BaseItem) <= 0) break;
                         i++; 
                     }
 
