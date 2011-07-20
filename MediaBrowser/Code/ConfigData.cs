@@ -155,6 +155,7 @@ namespace MediaBrowser
         public int RecentItemCount = 20;
         public int RecentItemDays = 60;
         public string RecentItemOption = "added";
+        public int RecentItemCollapseThresh = 2;
 
         public bool ShowHDIndicatorOnPosters = false;
         public bool ShowRemoteIndicatorOnPosters = true;

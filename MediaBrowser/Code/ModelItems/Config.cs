@@ -688,6 +688,12 @@ namespace MediaBrowser
             set { if (this.data.RecentItemDays != value) { this.data.RecentItemDays = value; Save(); FirePropertyChanged("RecentItemDays"); } }
         }
 
+        public int RecentItemCollapseThresh
+        {
+            get { return this.data.RecentItemCollapseThresh; }
+            set { if (this.data.RecentItemCollapseThresh != value) { this.data.RecentItemCollapseThresh = value; Save(); FirePropertyChanged("RecentItemCollapseThresh"); } }
+        }
+
         public string RecentItemOption
         {
             get { return this.data.RecentItemOption; }

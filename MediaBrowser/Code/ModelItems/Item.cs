@@ -415,7 +415,7 @@ namespace MediaBrowser.Library
                     case "watched":
                         string runTimeStr = "";
                         string watchTimeStr = "";
-                        if (this.PlayState.PositionTicks > 0)
+                        if (this.PlayState != null && this.PlayState.PositionTicks > 0)
                         {
                             TimeSpan watchTime = new TimeSpan(this.PlayState.PositionTicks);
                             watchTimeStr = " " + watchTime.TotalMinutes.ToString("F0") + " ";
@@ -443,8 +443,8 @@ namespace MediaBrowser.Library
         {
             get
             {
-                if (PlayState == null) return "";
-                return PlayState.LastPlayed == DateTime.MinValue ? "" : PlayState.LastPlayed.ToShortDateString();
+                if (PlayState == null) return "(various)";
+                return PlayState.LastPlayed == DateTime.MinValue ? "?" : PlayState.LastPlayed.ToShortDateString();
             }
         }
 

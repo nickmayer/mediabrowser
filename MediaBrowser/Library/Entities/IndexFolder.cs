@@ -17,6 +17,11 @@ namespace MediaBrowser.Library.Entities
             this.ActualChildren.Add(child);
         }
 
+        public void AddChildren(List<BaseItem> children)
+        {
+            this.ActualChildren.AddRange(children);
+        }
+
         public override bool RefreshMetadata(Metadata.MetadataRefreshOptions options)
         {
             return false; //we don't have real metadata...

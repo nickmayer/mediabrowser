@@ -350,84 +350,190 @@ namespace MediaBrowser.Library {
 
         public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize, int maxDays) 
         {
-            DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
-            foreach (var item in folder.RecursiveChildren.OrderByDescending(i => i.DateCreated)) {
-                // skip folders
-                if (!(item is Folder)) {
-                    FolderModel folderModel = null;
-                    if (item.Parent == null)
+            using (new MediaBrowser.Util.Profiler("=== Recently Added for "+this.Name))
+            {
+                DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
+                foreach (var item in folder.Children)
+                {
+                    // recurse folders
+                    if (item is Folder)
                     {
-                        //we don't know what to attach to so attach to us
-                        folderModel = this;
+                        //don't return items inside protected folders
+                        if (item.ParentalAllowed)
+                        {
+                            if (item is Series)
+                            {
+                                //collapse series in the list
+                                SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
+                                FindNewestChildren(item as Folder, episodes, maxSize);
+                                if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                                {
+                                    //collapse into a series folder
+                                    var thisSeries = item as Series;
+                                    DateTime createdTime = episodes.Keys.Max();
+                                    var series = new IndexFolder()
+                                    {
+                                        Id = (folder.Name + thisSeries.Name).GetMD5(),
+                                        DateCreated = createdTime,
+                                        Name = "(" + episodes.Count + " items) " + thisSeries.Name,
+                                        Overview = thisSeries.Overview,
+                                        MpaaRating = thisSeries.MpaaRating,
+                                        Genres = thisSeries.Genres,
+                                        ImdbRating = thisSeries.ImdbRating,
+                                        Studios = thisSeries.Studios,
+                                        PrimaryImagePath = thisSeries.PrimaryImagePath,
+                                        SecondaryImagePath = thisSeries.SecondaryImagePath,
+                                        BannerImagePath = thisSeries.BannerImagePath,
+                                        BackdropImagePaths = thisSeries.BackdropImagePaths,
+                                        Parent = folder
+                                    };
+
+                                    foreach (var pair in episodes)
+                                    {
+                                        series.AddChild(pair.Value.BaseItem);
+                                    }
+                                    var seriesModel = ItemFactory.Instance.Create(series);
+                                    seriesModel.PhysicalParent = this;
+                                    while (foundNames.ContainsKey(createdTime))
+                                    {
+                                        // break ties 
+                                        createdTime = createdTime.AddMilliseconds(1);
+                                    }
+                                    foundNames.Add(createdTime, seriesModel);
+                                }
+                                else
+                                {
+                                    FindNewestChildren(item as Folder, foundNames, maxSize);
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
-                        folderModel.PhysicalParent = this;
-                    }
-                    DateTime creationTime = item.DateCreated;
-                    //only if added less than specified ago
-                    if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
-                    {
-                        while (foundNames.ContainsKey(creationTime))
+                        FolderModel folderModel = null;
+                        if (item.Parent == null)
                         {
-                            // break ties 
-                            creationTime = creationTime.AddMilliseconds(1);
+                            //we don't know what to attach to so attach to us
+                            folderModel = this;
                         }
-                        Item modelItem = ItemFactory.Instance.Create(item);
-                        modelItem.PhysicalParent = folderModel;
-                        item.Parent = folderModel.Folder;
-                        foundNames.Add(creationTime, modelItem);
-                        if (foundNames.Count >= maxSize)
+                        else
                         {
-                            return; //we're done
-                        }
-                    }
-                }
-                
-            }
-        }
-
-        public void FindRecentWatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
-        {
-            DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
-            foreach (var item in folder.Children)
-            {
-                // skip folders
-                if (item is Folder)
-                {
-                    //don't return items inside protected folders
-                    if (item.ParentalAllowed)
-                    {
-                        FindRecentWatchedChildren(item as Folder, foundNames, maxSize);
-                    }
-                }
-                else
-                {
-                    if (item is Video) {
-                        Video i = item as Video;
-                        DateTime watchedTime = i.PlaybackStatus.LastPlayed;
-                        if (i.PlaybackStatus.PlayCount > 0 && DateTime.Compare(watchedTime, daysAgo) > 0)
-                        {
-                            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+                            folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
                             folderModel.PhysicalParent = this;
-                            //only get ones watched within last 60 days
-                            while (foundNames.ContainsKey(watchedTime))
+                        }
+                        DateTime creationTime = item.DateCreated;
+                        //only if added less than specified ago
+                        if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
+                        {
+                            while (foundNames.ContainsKey(creationTime))
                             {
                                 // break ties 
-                                watchedTime = watchedTime.AddMilliseconds(1);
+                                creationTime = creationTime.AddMilliseconds(1);
                             }
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;
-                            item.Parent = folder;
-                            foundNames.Add(watchedTime, modelItem);
-                            if (foundNames.Count > maxSize)
+                            item.Parent = folderModel.Folder;
+                            var ignore = item.BackdropImages; //force these to load so they will inherit
+                            foundNames.Add(creationTime, modelItem);
+                            if (foundNames.Count >= maxSize)
                             {
                                 foundNames.RemoveAt(0);
                             }
                         }
                     }
+                }
+            }
+        }
 
+        public void FindRecentWatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
+        {
+            using (new MediaBrowser.Util.Profiler("=== Recently Watched for "+this.Name))
+            {
+                DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+                foreach (var item in folder.Children)
+                {
+                    // recurse folders
+                    if (item is Folder)
+                    {
+                        //don't return items inside protected folders
+                        if (item.ParentalAllowed)
+                        {
+                            if (item is Series)
+                            {
+                                //collapse series in the list
+                                SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
+                                FindRecentWatchedChildren(item as Folder, episodes, maxSize);
+                                if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                                {
+                                    //collapse into a series folder
+                                    var thisSeries = item as Series;
+                                    DateTime watchedTime = episodes.Keys.Max();
+                                    var series = new IndexFolder()
+                                    {
+                                        Id = (folder.Name + thisSeries.Name).GetMD5(),
+                                        Name = "(" + episodes.Count + " items) " + thisSeries.Name,
+                                        Overview = thisSeries.Overview,
+                                        MpaaRating = thisSeries.MpaaRating,
+                                        Genres = thisSeries.Genres,
+                                        ImdbRating = thisSeries.ImdbRating,
+                                        Studios = thisSeries.Studios,
+                                        PrimaryImagePath = thisSeries.PrimaryImagePath,
+                                        SecondaryImagePath = thisSeries.SecondaryImagePath,
+                                        BannerImagePath = thisSeries.BannerImagePath,
+                                        BackdropImagePaths = thisSeries.BackdropImagePaths,
+                                        Parent = folder
+                                    };
+
+                                    foreach (var pair in episodes)
+                                    {
+                                        series.AddChild(pair.Value.BaseItem);
+                                    }
+                                    var seriesModel = ItemFactory.Instance.Create(series);
+                                    seriesModel.PhysicalParent = this;
+                                    while (foundNames.ContainsKey(watchedTime))
+                                    {
+                                        // break ties 
+                                        watchedTime = watchedTime.AddMilliseconds(1);
+                                    }
+                                    foundNames.Add(watchedTime, seriesModel);
+                                }
+                                else
+                                {
+
+                                    FindRecentWatchedChildren(item as Folder, foundNames, maxSize);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (item is Video)
+                        {
+                            Video i = item as Video;
+                            DateTime watchedTime = i.PlaybackStatus.LastPlayed;
+                            if (i.PlaybackStatus.PlayCount > 0 && DateTime.Compare(watchedTime, daysAgo) > 0)
+                            {
+                                FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+                                folderModel.PhysicalParent = this;
+                                //only get ones watched within last 60 days
+                                while (foundNames.ContainsKey(watchedTime))
+                                {
+                                    // break ties 
+                                    watchedTime = watchedTime.AddMilliseconds(1);
+                                }
+                                Item modelItem = ItemFactory.Instance.Create(item);
+                                modelItem.PhysicalParent = folderModel;
+                                item.Parent = folder;
+                                var ignore = item.BackdropImages; //force these to load so they will inherit
+                                foundNames.Add(watchedTime, modelItem);
+                                if (foundNames.Count > maxSize)
+                                {
+                                    foundNames.RemoveAt(0);
+                                }
+                            }
+                        }
+
+                    }
                 }
 
             }
@@ -444,7 +550,50 @@ namespace MediaBrowser.Library {
                     //don't return items inside protected folders
                     if (item.ParentalAllowed)
                     {
-                        FindRecentUnwatchedChildren(item as Folder, foundNames, maxSize);
+                        if (item is Series)
+                        {
+                            //collapse series in the list
+                            SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
+                            FindRecentWatchedChildren(item as Folder, episodes, maxSize);
+                            if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                            {
+                                //collapse into a series folder
+                                var thisSeries = item as Series;
+                                DateTime createdTime = episodes.Keys.Max();
+                                var series = new IndexFolder()
+                                {
+                                    Id = (folder.Name + thisSeries.Name).GetMD5(),
+                                    DateCreated = createdTime,
+                                    Name = "(" + episodes.Count + " items) " + thisSeries.Name,
+                                    Overview = thisSeries.Overview,
+                                    MpaaRating = thisSeries.MpaaRating,
+                                    Genres = thisSeries.Genres,
+                                    ImdbRating = thisSeries.ImdbRating,
+                                    Studios = thisSeries.Studios,
+                                    PrimaryImagePath = thisSeries.PrimaryImagePath,
+                                    SecondaryImagePath = thisSeries.SecondaryImagePath,
+                                    BannerImagePath = thisSeries.BannerImagePath,
+                                    BackdropImagePaths = thisSeries.BackdropImagePaths,
+                                    Parent = folder
+                                };
+
+                                foreach (var pair in episodes)
+                                {
+                                    series.AddChild(pair.Value.BaseItem);
+                                }
+                                var seriesModel = ItemFactory.Instance.Create(series);
+                                seriesModel.PhysicalParent = this;
+                                while (foundNames.ContainsKey(createdTime))
+                                {
+                                    createdTime = createdTime.AddMilliseconds(1);
+                                }
+                                foundNames.Add(createdTime, seriesModel);
+                            }
+                            else
+                            {
+                                FindRecentUnwatchedChildren(item as Folder, foundNames, maxSize);
+                            }
+                        }
                     }
                 }
                 else
@@ -460,6 +609,7 @@ namespace MediaBrowser.Library {
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folder;
+                            var ignore = item.BackdropImages; //force to load so they will inherit
                             while (foundNames.ContainsKey(creationTime)) {
                                 creationTime = creationTime.AddMilliseconds(1);
                             }
