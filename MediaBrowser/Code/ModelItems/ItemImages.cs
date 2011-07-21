@@ -142,6 +142,14 @@ namespace MediaBrowser.Library
             }
         }
 
+        public string PrimaryBackdropImagePath
+        {
+            get
+            {
+                return BaseItem.BackdropImagePath ?? "";
+            }
+        }
+
         List<AsyncImageLoader> backdropImages = null;
         public List<Image> BackdropImages
         {
