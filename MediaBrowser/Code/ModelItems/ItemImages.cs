@@ -150,6 +150,14 @@ namespace MediaBrowser.Library
             }
         }
 
+        public List<string> BackdropImagePaths
+        {
+            get
+            {
+                return BaseItem.BackdropImagePaths ?? new List<string>();
+            }
+        }
+
         List<AsyncImageLoader> backdropImages = null;
         public List<Image> BackdropImages
         {
