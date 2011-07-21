@@ -166,6 +166,7 @@ namespace MediaBrowserService
         void restore_Click(object sender, EventArgs e)
         {
             Show();
+            Activate();
             WindowState = storedWindowState;
         }
 
@@ -296,6 +297,7 @@ namespace MediaBrowserService
         void notifyIcon_Click(object sender, EventArgs e)
         {
             Show();
+            Activate();
             WindowState = storedWindowState;
         }
 
@@ -348,7 +350,7 @@ namespace MediaBrowserService
         private void UpdateRefreshElapsed()
         {
             //this is called in a timer loop while refresh running
-            if (this.Visibility == Visibility.Visible && _refreshRunning)
+            if (this.Visibility == Visibility.Visible && _refreshRunning &&  !_refreshCanceled && !_config.RefreshFailed)
             {
                 //we only care about this if the interface is actually visible
                 Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
@@ -851,7 +853,20 @@ namespace MediaBrowserService
         bool FullRefresh(AggregateFolder folder, MetadataRefreshOptions options, ServiceRefreshOptions manualOptions)
         {
             int phases = manualOptions.AnyImageOptionsSelected || manualOptions.MigrateOption ? 3 : 2;
-            double totalIterations = folder.AllRecursiveChildren.Count() * phases;
+            double totalIterations = 0;
+            //this will trap any circular references in the library tree
+            try
+            {
+                Async.RunWithTimeout(() => { totalIterations = folder.AllRecursiveChildren.Count() * phases; }, 30000);
+            }
+            catch (TimeoutException)
+            {
+                Logger.ReportError("ERROR DURING REFRESH.  Timed out attempting to retrieve count of all items.  Most likely there is a circular reference in your library.  Look for *.lnk files that might be pointing back to a parent of the folder that contatians that link.");
+                _config.RefreshFailed = true;
+                _config.Save();
+                return false;
+            }
+            
             if (totalIterations == 0) return true; //nothing to do
 
             int currentIteration = 0;
