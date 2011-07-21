@@ -443,8 +443,8 @@ namespace MediaBrowser.Library
         {
             get
             {
-                if (PlayState == null) return "(various)";
-                return PlayState.LastPlayed == DateTime.MinValue ? "?" : PlayState.LastPlayed.ToShortDateString();
+                if (PlayState == null) return "";
+                return PlayState.LastPlayed == DateTime.MinValue ? "" : PlayState.LastPlayed.ToShortDateString();
             }
         }
 
