@@ -5,7 +5,7 @@
     <Grid>
         <Label Height="44" Margin="58,12,58,0" Name="label1" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" HorizontalContentAlignment="Center" Content="Excuse Me..."></Label>
         <TextBlock Margin="35,62,33,57" Name="tbMessage" FontSize="14" Text="This is a message..." TextWrapping="Wrap" />
-        <Button Height="35" HorizontalAlignment="Right" Margin="0,0,46,12" Name="btnOK" VerticalAlignment="Bottom" Width="85" FontSize="14" IsDefault="True" Click="btnOK_Click">OK</Button>
+        <Button Height="35" HorizontalAlignment="Right" Margin="0,0,46,12" Name="btnOK" VerticalAlignment="Bottom" Width="85" FontSize="14" IsDefault="True" Click="btnOK_Click" Content="Close"></Button>
         <CheckBox Height="21" Margin="70,0,230,17.81" Name="cbxDontShowAgain" VerticalAlignment="Bottom" FontSize="14">Don't show this message again</CheckBox>
     </Grid>
 </Window>
