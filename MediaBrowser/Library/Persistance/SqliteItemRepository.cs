@@ -669,8 +669,9 @@ namespace MediaBrowser.Library.Persistance {
 
             //fill in series
             SeriesDict[tableName] = seriesList;
-            //create our Unknown Index
-            children.Add(new Index(constructor("<Unknown>"), unknownItems));
+            //create our Unknown Index - if there were any
+            if (unknownItems.Count > 0)
+                children.Add(new Index(constructor("<Unknown>"), unknownItems));
 
             //now retrieve the values for the main indicies
             cmd = connection.CreateCommand(); //new command
