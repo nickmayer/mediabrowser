@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Library\Configuration\ApplicationPaths.cs" />
+    <Compile Include="Library\Entities\GenericItem.cs" />
     <Compile Include="Library\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Library\Factories\Kernel.cs" />
     <Compile Include="Library\Filesystem\AttributedContents.cs" />
