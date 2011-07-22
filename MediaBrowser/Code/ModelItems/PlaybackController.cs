@@ -446,7 +446,7 @@ namespace MediaBrowser
                     returnedToApp = true;
                 }
             }
-            Logger.ReportVerbose("Out of updatestatus");
+            //Logger.ReportVerbose("Out of updatestatus");
         }
 
         static bool? isWindows7;

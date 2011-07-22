@@ -119,6 +119,7 @@ namespace MediaBrowser.Library.Playables
             SetWindowPlacement(mceWnd, ref wp);
             ExternalSplashForm.Hide();
             SetForegroundWindow(mceWnd);
+            Application.CurrentInstance.RunPostPlayProcesses(); //finally call the post play
         }
 
         private void GiveFocusToExtPlayer(Process player)
