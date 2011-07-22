@@ -211,6 +211,7 @@ namespace MediaBrowser
             public string Command { get; set; }
             public string Args { get; set; }
             public bool MinimizeMCE = true; //whether or not to minimize MCE when starting external player
+            public bool ShowSplashScreen = true; //whether or not to show the MB splash screen
 
             public override string ToString()
             {

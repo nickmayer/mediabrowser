@@ -87,23 +87,26 @@ namespace MediaBrowser.Library.Playables
             string args = string.Format(p.Args, path);
             Process player = Process.Start(p.Command, args);
             MarkWatched();
-            Async.Queue("Ext Player Mgmt", () => ManageExtPlayer(player, p.MinimizeMCE));
+            Async.Queue("Ext Player Mgmt", () => ManageExtPlayer(player, p.MinimizeMCE, p.ShowSplashScreen));
         }
 
-        private void ManageExtPlayer(Process player, bool minimizeMCE)
+        private void ManageExtPlayer(Process player, bool minimizeMCE, bool showSplash)
         {
 
             //minimize MCE if indicated
             IntPtr mceWnd = FindWindow(null, "Windows Media Center");
             WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
             GetWindowPlacement(mceWnd, ref wp);
-            if (minimizeMCE)
+            if (showSplash)
             {
                 //throw up a form to cover the desktop if we minimize and we are in the primary monitor
                 if (System.Windows.Forms.Screen.FromHandle(mceWnd).Primary)
                 {
                     ExternalSplashForm.Display();
                 }
+            }
+            if (minimizeMCE)
+            {
                 wp.showCmd = 2; // 1- Normal; 2 - Minimize; 3 - Maximize;
                 SetWindowPlacement(mceWnd, ref wp);
             }

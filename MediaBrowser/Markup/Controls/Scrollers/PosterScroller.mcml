@@ -21,6 +21,7 @@
 			<Font Name="LabelFont" Font="$Required"/>
 			<Font Name="UnwatchedCountFont" Font="$Required"/>
 			<cor:Boolean Name="CenterFocus" Boolean="false" />
+      <cor:Boolean Name="RightFocus" Boolean="false" />
 		</Properties>
 		<Locals>
       <cor:Int32 Name="Startup" />
@@ -32,6 +33,7 @@
 			<ScrollingData Name="VScrollingData" />
 			<ScrollingData Name="HScrollingData" EndPaddingRelativeTo="Far" EndPadding="400" BeginPadding="100" BeginPaddingRelativeTo="Near"/>
 			<ScrollingData Name="CenterScollingData" LockedAlignment="0.5" LockedPosition="0.5"/>
+			<ScrollingData Name="RightScollingData" LockedAlignment="0.75" LockedPosition="0.75"/>
 			<ScrollingData Name="ScrollingData" />
 			
 			<Environment Name="Environment" />
@@ -87,6 +89,7 @@
         <Conditions>
           <Equality Source="[Application.IsMouseActive]" Value="false"/>
           <Equality Source="[CenterFocus]" Value="false" />
+          <Equality Source="[RightFocus]" Value="false" />
           <!--<Equality Source="[NoEndPadding]" Value="false" />-->
         </Conditions>
         <Actions>
@@ -102,6 +105,17 @@
         <Actions>
           <Set Target="[ScrollingData.LockedAlignment]" Value=".5" />
           <Set Target="[ScrollingData.LockedPosition]" Value=".5" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
+          <Equality Source="[RightFocus]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ScrollingData.LockedAlignment]" Value=".75" />
+          <Set Target="[ScrollingData.LockedPosition]" Value=".75" />
         </Actions>
       </Rule>
 
@@ -142,6 +156,7 @@
 				<Conditions>
 					<Equality Source="[Folder.DisplayPrefs.VerticalScroll.Value]" Value="false" />	
 					<Equality Source="[CenterFocus]"  Value="false"/>
+					<Equality Source="[RightFocus]"  Value="false"/>
 				</Conditions>
 				<Actions>
 					<Set Target="[ScrollingData]" Value="[HScrollingData]" />	
@@ -155,6 +170,16 @@
 				</Conditions>
 				<Actions>
 					<Set Target="[ScrollingData]" Value="[CenterScollingData]" />
+				</Actions>
+			</Changed>
+			
+			<Changed Source="[Folder.DisplayPrefs.VerticalScroll.Value]" InitialEvaluate="true">
+				<Conditions>
+					<Equality Source="[Folder.DisplayPrefs.VerticalScroll.Value]" Value="false" />
+					<Equality Source="[RightFocus]"  Value="true"/>
+				</Conditions>
+				<Actions>
+					<Set Target="[ScrollingData]" Value="[RightScollingData]" />
 				</Actions>
 			</Changed>
 			

@@ -1242,6 +1242,7 @@ sortorder: {2}
                     txtPlayerCommand.Text = mediaPlayer.Command;
                     lblPlayerArgs.Text = mediaPlayer.Args;
                     cbxMinMCE.IsChecked = mediaPlayer.MinimizeMCE;
+                    cbxSplash.IsChecked = mediaPlayer.ShowSplashScreen;
                     infoPlayerPanel.Visibility = Visibility.Visible;
                     btnRemovePlayer.IsEnabled = true;
                 }
@@ -1386,6 +1387,16 @@ sortorder: {2}
             if (player != null)
             {
                 player.MinimizeMCE = (bool)cbxMinMCE.IsChecked;
+                SaveConfig();
+            }
+        }
+
+        private void cbxSplash_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigData.ExternalPlayer player = lstExternalPlayers.SelectedItem as ConfigData.ExternalPlayer;
+            if (player != null)
+            {
+                player.ShowSplashScreen = (bool)cbxSplash.IsChecked;
                 SaveConfig();
             }
         }
