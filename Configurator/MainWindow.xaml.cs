@@ -153,12 +153,24 @@ namespace Configurator
                     }));
             });
 
+            SupportImprovementNag();
 
             Async.Queue("Startup Validations", () =>
             {
                 RefreshEntryPoints(false);
                 ValidateMBAppDataFolderPermissions();
             });
+        }
+
+        private void SupportImprovementNag()
+        {
+            if (!config.SuppressStatsNag && !config.SendStats)
+            {
+                config.SuppressStatsNag = WarnDialog.Show("Please consider checking the option to participate in our User Support Enhancement Program under the Help and Support section.  Only OS version and memory size are collected and only used to help target our future efforts.  Thank you for your support.");
+                config.Save();
+                hdrHelpAbout_MouseDown(this, null);
+                PopUpMsg.DisplayMessage("Click 'basic' above to setup your library...");
+            }
         }
 
         private void ForceUpgradeCheck()
@@ -1408,6 +1420,14 @@ sortorder: {2}
             SaveConfig();
         }
 
+        private void cbxSendStats_Click(object sender, RoutedEventArgs e)
+        {
+            config.SendStats = (bool)cbxSendStats.IsChecked;
+            if (config.SendStats) config.EnableUpdates = true; //need this on too
+            SaveConfig();
+        }
+
+
 
         #endregion
 
@@ -1915,6 +1935,7 @@ sortorder: {2}
             config.EnableTraceLogging = (bool)cbxEnableLogging.IsChecked;
             SaveConfig();
         }
+
 
         private void openLogsFolder_Click(object sender, RoutedEventArgs e)
         {

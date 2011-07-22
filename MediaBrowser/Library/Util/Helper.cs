@@ -521,6 +521,27 @@ namespace MediaBrowser.LibraryManagement
             return MACAddress;
         }
 
+        /// <summary>
+        /// Get the machine's physical memory in GB
+        /// </summary>
+        /// <returns></returns>
+        public static double GetPhysicalMemory()
+        {
+            double totalCapacity = 0;
+            ObjectQuery objectQuery = new ObjectQuery("select * from Win32_PhysicalMemory");
+            ManagementObjectSearcher searcher = new
+            ManagementObjectSearcher(objectQuery);
+            ManagementObjectCollection vals = searcher.Get();
+
+            foreach (ManagementObject val in vals)
+            {
+                totalCapacity += System.Convert.ToDouble(val.GetPropertyValue("Capacity"));
+            }
+            return totalCapacity / 1073741824;
+        }
+    
+
+
         public static int SystemIdleTime
         {
             get

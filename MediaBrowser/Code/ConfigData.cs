@@ -203,6 +203,12 @@ namespace MediaBrowser
         [Comment("The number of days to retain log files.  Files older than this will be deleted periodically")]
         public int LogFileRetentionDays = 30;
 
+        [Comment("Whether to send os and memory stats during update check")]
+        public bool SendStats = false;
+
+        [Comment("Suppress the statistics nag msg")]
+        public bool SuppressStatsNag = false;
+
         public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 
         public class ExternalPlayer

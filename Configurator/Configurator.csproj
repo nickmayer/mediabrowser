@@ -57,6 +57,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="WarnDialog.xaml.cs">
+      <DependentUpon>WarnDialog.xaml</DependentUpon>
+    </Compile>
+    <Page Include="WarnDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Reference Include="Microsoft.MediaCenter, Version=6.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\VistaDlls\Microsoft.MediaCenter.dll</HintPath>

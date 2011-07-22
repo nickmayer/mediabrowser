@@ -13,6 +13,7 @@ using System.Reflection;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library;
+using MediaBrowser.LibraryManagement;
 
 
 // XML File structure
@@ -56,7 +57,7 @@ namespace MediaBrowser.Util
         const int UPDATE_CHECK_INTERVAL_DAYS = 2;
 
         // This should be replaced with the real location of the version info XML.
-        private const string infoURL = "http://www.mediabrowser.tv/version-info.xml?key={0}";
+        private const string infoURL = "http://www.mediabrowser.tv/version-info.xml?key={0}&os={1}&mem={2}&mac={3}";
 
         // Blocking call to check the XML file up in the cloud to see if we need an update.
         // This is really meant to be called as its own thread.
@@ -76,8 +77,11 @@ namespace MediaBrowser.Util
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(new XmlTextReader(string.Format(infoURL, Config.Instance.SupporterKey)));
+                string url = Kernel.Instance.ConfigData.SendStats ?
+                    string.Format(infoURL, Config.Instance.SupporterKey,Kernel.isVista ? "V" : "7",Helper.GetPhysicalMemory(), Helper.GetMACAddress()) :
+                    string.Format(infoURL, Config.Instance.SupporterKey);
 
+                doc.Load(new XmlTextReader(url));
                 XmlNode node;
 
                 if (appRef.Config.EnableBetas)
