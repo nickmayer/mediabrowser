@@ -13,6 +13,7 @@ namespace MediaBrowser.Library.ImageManagement
         ImageSize GetSize(Guid id);
         MemoryStream GetImageStream(Guid id, int width);
         MemoryStream GetImageStream(Guid id);
+        void DeleteResizedImages();
         void ClearCache(Guid id);
         string Path { get; }
     }

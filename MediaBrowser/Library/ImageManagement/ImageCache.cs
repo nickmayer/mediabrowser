@@ -153,30 +153,32 @@ namespace MediaBrowser.Library.ImageManagement {
                 }
             }
 
-            // Shrink the lib, get rid of old resized images
-            foreach (var item in imageInfoCache.Values) {
+        }
 
-                if (item.PrimaryImage == null) {
+        public void DeleteResizedImages()
+        {
+            // Shrink the lib, get rid of old resized images
+            foreach (var item in imageInfoCache.Values)
+            {
+
+                if (item.PrimaryImage == null)
+                {
                     DeleteImageSet(item);
                     continue;
-                } 
+                }
 
-                item.ResizedImages = item.ResizedImages.OrderBy(_ => _.Date.Ticks).ToList();
-                for (int i = item.ResizedImages.Count - 1; i >= 0; i--) {
-                    var current = item.ResizedImages[i];
-                    // only keep 4 resizes. 
-                    if (current.Date < DateTime.UtcNow.AddDays(-60) || item.ResizedImages.Count > 4) {
-                        try {
-                            File.Delete(current.Path);
-                            item.ResizedImages.RemoveAt(i);
-                        } catch (Exception ex) {
-                            Logger.ReportException("Failed to delete stale image: " + current.Path + "  you will have to delete it manually", ex);
-                        }
+                foreach (var image in item.ResizedImages)
+                {
+                    try
+                    {
+                        File.Delete(image.Path);
                     }
-
+                    catch (Exception ex)
+                    {
+                        Logger.ReportException("Failed to delete stale image: " + image.Path + "  you will have to delete it manually", ex);
+                    }
                 }
             }
-
         }
 
         private void AddToCache(IMediaLocation item) {
@@ -268,6 +270,9 @@ namespace MediaBrowser.Library.ImageManagement {
         public string GetImagePath(Guid id, int width, int height) {
             ImageSet set = GetImageSet(id);
             if (set != null && set.PrimaryImage != null) {
+                //just cache one size - mulitples not buying us anything but more files and space
+                return set.PrimaryImage.Path;
+                //
                 lock (set) {
                     var image = set.ResizedImages.FirstOrDefault(info => info.Width == width && info.Height == height);
                     if (image != null) {

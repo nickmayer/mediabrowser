@@ -618,36 +618,48 @@ namespace MediaBrowserService
                 lblNextSvcRefresh.Content = "";
             }));
 
-            UpdateProgress("PlayStates", .10);
-            var newRepo = Kernel.Instance.ItemRepository;
-            var oldRepo = new MediaBrowser.Library.ItemRepository();
-            Thread.Sleep(5000); //allow old repo to load
-            newRepo.MigratePlayState(oldRepo);
-
-            UpdateProgress("DisplayPrefs", .20);
-            newRepo.MigrateDisplayPrefs(oldRepo);
-
-            UpdateProgress("Items", .80);
-            if (Kernel.Instance.ConfigData.EnableExperimentalSqliteSupport)
+            try
             {
-                //were already using SQL - our repo can migrate itself
-                newRepo.MigrateItems();
-            }
-            else
-            {
-                //need to go through the file-based repo and re-save
-                foreach (var id in oldRepo.AllItems)
+                UpdateProgress("PlayStates", .10);
+                var newRepo = Kernel.Instance.ItemRepository;
+                var oldRepo = new MediaBrowser.Library.ItemRepository();
+                Thread.Sleep(5000); //allow old repo to load
+                newRepo.MigratePlayState(oldRepo);
+
+                UpdateProgress("DisplayPrefs", .20);
+                newRepo.MigrateDisplayPrefs(oldRepo);
+
+                UpdateProgress("Images", .40);
+                MediaBrowser.Library.ImageManagement.ImageCache.Instance.DeleteResizedImages();
+
+                UpdateProgress("Items", .80);
+                if (Kernel.Instance.ConfigData.EnableExperimentalSqliteSupport)
                 {
-                    try
+                    //were already using SQL - our repo can migrate itself
+                    newRepo.MigrateItems();
+                }
+                else
+                {
+                    //need to go through the file-based repo and re-save
+                    foreach (var id in oldRepo.AllItems)
                     {
-                        newRepo.SaveItem(oldRepo.RetrieveItem(id));
-                    }
-                    catch (Exception e)
-                    {
-                        //this could fail if some items have already been refreshed before we migrated them
-                        Logger.ReportException("Could not migrate item " + id, e);
+                        try
+                        {
+                            newRepo.SaveItem(oldRepo.RetrieveItem(id));
+                        }
+                        catch (Exception e)
+                        {
+                            //this could fail if some items have already been refreshed before we migrated them
+                            Logger.ReportException("Could not migrate item " + id, e);
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error in migration - will need to re-build cache.", e);
+                ForceRebuild();
+                return;
             }
 
             _refreshRunning = false;
@@ -680,8 +692,9 @@ namespace MediaBrowserService
                 AllowCancel = false
             };
 
-            //if we're here we are a fresh install and need to update this
+            //if we're here we are a fresh install or failed migration and need to update this
             Kernel.Instance.ConfigData.UseNewSQLRepo = true;
+            Kernel.Instance.ConfigData.MBVersion = "2.5.0.0";
             Kernel.Instance.ConfigData.Save();
 
             //kick off a manual refresh on a high-priority thread
@@ -820,6 +833,8 @@ namespace MediaBrowserService
                 }
                 finally
                 {
+                    Kernel.Instance.ReLoadRoot(); // re-dump this to stay clean
+                    _refreshRunning = false;
                     Logger.ReportInfo("Full Refresh Finished");
                     Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                     {
@@ -834,8 +849,6 @@ namespace MediaBrowserService
                         Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
                         notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                     }));
-                    Kernel.Instance.ReLoadRoot(); // re-dump this to stay clean
-                    _refreshRunning = false;
 
                     if (onSchedule)
                     {

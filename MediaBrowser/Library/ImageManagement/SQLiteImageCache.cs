@@ -281,6 +281,11 @@ namespace MediaBrowser.Library.ImageManagement
             throw new NotImplementedException();
         }
 
+        public void DeleteResizedImages()
+        {
+            throw new NotImplementedException();
+        }
+
         public string Path
         {
             get { throw new NotImplementedException(); }
