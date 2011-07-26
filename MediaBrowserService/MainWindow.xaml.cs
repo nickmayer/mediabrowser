@@ -694,6 +694,7 @@ namespace MediaBrowserService
 
             //if we're here we are a fresh install or failed migration and need to update this
             Kernel.Instance.ConfigData.UseNewSQLRepo = true;
+            Kernel.UseNewSQLRepo = true;
             Kernel.Instance.ConfigData.MBVersion = "2.5.0.0";
             Kernel.Instance.ConfigData.Save();
 
@@ -742,6 +743,12 @@ namespace MediaBrowserService
 
         void FullRefresh(bool force, ServiceRefreshOptions manualOptions)
         {
+            if (new System.Version(Kernel.Instance.ConfigData.MBVersion) < new System.Version(2, 5))
+            {
+                //we need to migrate before attempting a refresh
+                Migrate25();
+            }
+
             _refreshRunning = true;
             Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
             {
@@ -823,7 +830,6 @@ namespace MediaBrowserService
                     }
 
                     MBServiceController.SendCommandToCore(IPCCommands.ReloadItems);
-                    Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(UpdateStatus));
 
                 }
                 catch (Exception ex)
@@ -834,6 +840,7 @@ namespace MediaBrowserService
                 finally
                 {
                     Kernel.Instance.ReLoadRoot(); // re-dump this to stay clean
+                    refreshElapsed.Change(-1,0); //kill the progress timer
                     _refreshRunning = false;
                     Logger.ReportInfo("Full Refresh Finished");
                     Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
@@ -848,6 +855,7 @@ namespace MediaBrowserService
                         notifyIcon.ContextMenu.MenuItems["refresh"].Text = "Refresh Now";
                         Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MediaBrowserService;component/MBService.ico")).Stream;
                         notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                        UpdateStatus();
                     }));
 
                     if (onSchedule)
@@ -867,10 +875,11 @@ namespace MediaBrowserService
         {
             int phases = manualOptions.AnyImageOptionsSelected || manualOptions.MigrateOption ? 3 : 2;
             double totalIterations = 0;
+            UpdateProgress("Determining Library Size", 0);
             //this will trap any circular references in the library tree
             try
             {
-                Async.RunWithTimeout(() => { totalIterations = folder.AllRecursiveChildren.Count() * phases; }, 30000);
+                Async.RunWithTimeout(() => { totalIterations = folder.AllRecursiveChildren.Count() * phases; }, 600000);
             }
             catch (TimeoutException)
             {

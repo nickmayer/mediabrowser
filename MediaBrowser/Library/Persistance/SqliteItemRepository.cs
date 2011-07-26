@@ -453,6 +453,18 @@ namespace MediaBrowser.Library.Persistance {
             if (BackupDatabase()) Logger.ReportInfo("Database backed up successfully");
             var guids = new List<Guid>();
             var cmd = connection.CreateCommand();
+            //test to see if it is an old repo (data won't exist in a new one)
+            cmd.CommandText = "select data from items";
+            try
+            {
+                using (var reader = cmd.ExecuteReader()) { reader.Read(); }
+            }
+            catch (Exception e)
+            {
+                Logger.ReportInfo("Brand new repo db.  Nothing to migrate. " + e.Message);
+                return;
+            }
+
             cmd.CommandText = "select guid from items";
 
             using (var reader = cmd.ExecuteReader())
@@ -844,7 +856,14 @@ namespace MediaBrowser.Library.Persistance {
                         var data = reader.GetBytes(0);
                         using (var stream = new MemoryStream(data))
                         {
-                            item = Serializer.Deserialize<BaseItem>(stream);
+                            try
+                            {
+                                item = Serializer.Deserialize<BaseItem>(stream);
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Unable to deserialize object during legacy retrieval (" + id + ").", e);
+                            }
                         }
                     }
                 }

@@ -74,7 +74,7 @@ namespace MediaBrowser
         public string ImageByNameLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
         public Vector3 OverScanScaling = new Vector3() {X=1, Y=1, Z=1};
         public Inset OverScanPadding = new Inset();
-        public bool EnableTraceLogging = false;
+        public bool EnableTraceLogging = true;
         public Size DefaultPosterSize = new Size() {Width=220, Height=330};
         public Size GridSpacing = new Size();
         public float MaximumAspectRatioDistortion = 0.2F;

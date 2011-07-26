@@ -67,7 +67,7 @@ namespace MediaBrowser.Library {
          * This should be set to "R" (or "SPn") with each official release and then immediately changed back to "R+" (or "SPn+")
          * so future trunk builds will indicate properly.
          * */
-        private const string versionExtension = "A1";
+        private const string versionExtension = "A3";
 
         public const string MBSERVICE_MUTEX_ID = "Global\\{E155D5F4-0DDA-47bb-9392-D407018D24B1}";
         public const string MBCLIENT_MUTEX_ID = "Global\\{9F043CB3-EC8E-41bf-9579-81D5F6E641B9}";
@@ -383,7 +383,7 @@ namespace MediaBrowser.Library {
              };
 
             Kernel.UseNewSQLRepo = config.UseNewSQLRepo;
-            Logger.ReportInfo(Kernel.UseNewSQLRepo ? "==========Using new SQL Repo========" : "========Using OLD SQL Repo=====");
+            Logger.ReportInfo(Kernel.UseNewSQLRepo ? "==========Using new SQL Repo========" : "========Using OLD Repo=====");
 
             // kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
             kernel.PlaybackControllers.Add(new PlaybackController());
