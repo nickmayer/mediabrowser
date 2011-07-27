@@ -686,8 +686,8 @@
                   <FlowLayout Orientation="Horizontal" AllowWrap="true"/>
                 </Layout>
                 <Children>
-                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,45"/>
-                  <Text Name="MediaInfo" Font="Arial, 12" Color="[ValueColor]" WordWrap="true" />
+                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,48"/>
+                  <Text Name="MediaInfo" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
                 </Children>
               </Panel>
 

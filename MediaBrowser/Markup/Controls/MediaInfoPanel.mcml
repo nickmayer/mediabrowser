@@ -16,6 +16,7 @@
         <Actions>
           <Set Target="[VideoImage.Content]" Value="[Item.MediaInfo.VideoCodecImage]"/>
           <Set Target="[AudioImage.Content]" Value="[Item.MediaInfo.AudioCodecImage]"/>
+          <Set Target="[ChannelImage.Content]" Value="[Item.MediaInfo.AudioChannelImage]"/>
           <Set Target="[AspectImage.Content]" Value="[Item.AspectRatioImage]"/>
           <Set Target="[HDImage.Content]" Value="[Item.HDTypeImage]"/>
           <Set Target="[MediaImage.Content]" Value="[Item.MediaTypeImage]"/>
@@ -36,7 +37,7 @@
           <Graphic Name="AspectImage" Visible="true" SizingPolicy="SizeToContent" MaintainAspectRatio="true" MaximumSize="[MaxIconSize]" />
 
           <Graphic Name="AudioImage" Visible="true" SizingPolicy="SizeToContent" MaintainAspectRatio="true" MaximumSize="[MaxIconSize]" />
-          
+          <Graphic Name="ChannelImage" Visible="true" SizingPolicy="SizeToContent" MaintainAspectRatio="true" MaximumSize="[MaxIconSize]" />
         </Children>
       </Panel>
     </Content>
