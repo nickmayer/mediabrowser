@@ -107,6 +107,14 @@ namespace MediaBrowser.Library.Entities
             }
         }
 
+        public string AudioProfile
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.AudioFormat) ? OverrideData.AudioProfile : PluginData.AudioProfile;
+            }
+        }
+
         public int VideoBitRate
         {
             get
@@ -144,14 +152,6 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 return !string.IsNullOrEmpty(OverrideData.AudioChannelCount) ? OverrideData.AudioChannelCount : PluginData.AudioChannelCount;
-            }
-        }
-
-        public string AudioProfile
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(OverrideData.AudioProfile) ? OverrideData.AudioProfile : PluginData.AudioProfile;
             }
         }
 
