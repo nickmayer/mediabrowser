@@ -2169,6 +2169,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static byte[] SpinImageButton {
+            get {
+                object obj = ResourceManager.GetObject("SpinImageButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] SpinnerText {
             get {
                 object obj = ResourceManager.GetObject("SpinnerText", resourceCulture);
