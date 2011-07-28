@@ -10,21 +10,25 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MediaBrowser.Library;
 
 namespace Configurator
 {
     /// <summary>
     /// Interaction logic for WarnDialog.xaml
     /// </summary>
-    public partial class WarnDialog : Window
+    public partial class SuppImproveDialog : Window
     {
-        public WarnDialog()
+        public SuppImproveDialog()
         {
             InitializeComponent();
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
+            Kernel.Instance.ConfigData.SendStats = true;
+            Kernel.Instance.ConfigData.Save();
+            MainWindow.Instance.cbxSendStats.IsChecked = true;
             this.Close();
         }
 
@@ -35,7 +39,7 @@ namespace Configurator
 
         public static bool Show(string msg, bool allowDontShow)
         {
-            WarnDialog dlg = new WarnDialog();
+            SuppImproveDialog dlg = new SuppImproveDialog();
             dlg.tbMessage.Text = msg;
             dlg.cbxDontShowAgain.Visibility = allowDontShow ? Visibility.Visible : Visibility.Hidden;
             dlg.ShowDialog();

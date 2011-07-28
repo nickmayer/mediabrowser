@@ -43,7 +43,7 @@ namespace Configurator
     public partial class MainWindow : Window
     {
 
-        ConfigData config;
+        public ConfigData config;
         Ratings ratings = new Ratings();
         PermissionDialog waitWin;
         PopupMsg PopUpMsg;
@@ -68,20 +68,18 @@ namespace Configurator
             PopUpMsg = new PopupMsg(alertText);
             config = Kernel.Instance.ConfigData;
             //put this check here because it will run before the first run of MB and we need it now
-            if (Config.Instance.MBVersion != Kernel.Instance.Version.ToString() && Kernel.Instance.Version.ToString() == "2.3.0.0")
+            if (config.MBVersion != Kernel.Instance.Version.ToString() && Kernel.Instance.Version.ToString() == "2.3.0.0")
             {
                 try
                 {
-                    Config.Instance.PluginSources.RemoveAt(config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
                     config.PluginSources.RemoveAt(config.PluginSources.FindIndex(s => s.ToLower() == "http://www.mediabrowser.tv/plugins/plugin_info.xml"));
                 }
                 catch
                 {
                     //wasn't there - no biggie
                 }
-                if (Config.Instance.PluginSources.Find(s => s == "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml") == null)
+                if (config.PluginSources.Find(s => s == "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml") == null)
                 {
-                    Config.Instance.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
                     config.PluginSources.Add("http://www.mediabrowser.tv/plugins/multi/plugin_info.xml");
                     Logger.ReportInfo("Plug-in Source migrated to multi-version source");
                 }
@@ -166,10 +164,8 @@ namespace Configurator
         {
             if (!config.SuppressStatsNag && !config.SendStats)
             {
-                config.SuppressStatsNag = WarnDialog.Show("Please consider checking the option to participate in our User Support Enhancement Program under the Help and Support section.  Only OS version and memory size are collected and only used to help target our future efforts.  Thank you for your support.");
+                config.SuppressStatsNag = SuppImproveDialog.Show("Please consider participating in our User Support Enhancement Program.  Only OS version and memory size are collected and only used to help target our future efforts.  Thank you for your support.");
                 config.Save();
-                hdrHelpAbout_MouseDown(this, null);
-                PopUpMsg.DisplayMessage("Click 'basic' above to setup your library...");
             }
         }
 
@@ -440,6 +436,7 @@ namespace Configurator
             cbxOptionAutoEnter.IsChecked = config.AutoEnterSingleDirs;
             cbxScreenSaver.IsChecked = config.EnableScreenSaver;
             tbxSSTimeout.Text = config.ScreenSaverTimeOut.ToString();
+            cbxSendStats.IsChecked = config.SendStats;
 
             cbxOptionUnwatchedCount.IsChecked      = config.ShowUnwatchedCount;
             cbxOptionUnwatchedOnFolder.IsChecked   = config.ShowWatchedTickOnFolders;

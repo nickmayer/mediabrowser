@@ -57,10 +57,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="WarnDialog.xaml.cs">
-      <DependentUpon>WarnDialog.xaml</DependentUpon>
+    <Compile Include="SuppImproveDialog.xaml.cs">
+      <DependentUpon>SuppImproveDialog.xaml</DependentUpon>
     </Compile>
-    <Page Include="WarnDialog.xaml">
+    <Page Include="SuppImproveDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
