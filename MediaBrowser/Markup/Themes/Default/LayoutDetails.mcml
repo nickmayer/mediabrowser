@@ -190,7 +190,7 @@
 													/>
                 </Content>
               </Repeater>
-              <mip:MediaInfoPanel Name="MediaInfo" Item="[Item.SelectedChild]" MaxIconSize="0,45"/>
+              <mip:MediaInfoPanel Name="MediaInfo" Item="[Item.SelectedChild]" MaxIconSize="0,48"/>
             </Children>
           </Panel>
 

@@ -107,6 +107,14 @@ namespace MediaBrowser.Library.Entities
             }
         }
 
+        public string AudioProfile
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(OverrideData.AudioFormat) ? OverrideData.AudioProfile : PluginData.AudioProfile;
+            }
+        }
+
         public int VideoBitRate
         {
             get
@@ -144,14 +152,6 @@ namespace MediaBrowser.Library.Entities
             get
             {
                 return !string.IsNullOrEmpty(OverrideData.AudioChannelCount) ? OverrideData.AudioChannelCount : PluginData.AudioChannelCount;
-            }
-        }
-
-        public string AudioProfile
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(OverrideData.AudioProfile) ? OverrideData.AudioProfile : PluginData.AudioProfile;
             }
         }
 
@@ -244,7 +244,8 @@ namespace MediaBrowser.Library.Entities
 
         #region Properties Video
 
-        protected static Dictionary<string, string> VideoImageNames = new Dictionary<string, string>() {
+        protected static Dictionary<string, string> VideoImageNames = new Dictionary<string, string>()
+        {
             {"divx 5","divx"},
             {"divx 4","divx"},
             {"divx 3 low","divx"},
@@ -407,11 +408,38 @@ namespace MediaBrowser.Library.Entities
 
         #region Properties Audio
 
-        protected static Dictionary<string, string> AudioImageNames = new Dictionary<string, string>() {
+        protected static Dictionary<string, string> AudioImageNames = new Dictionary<string, string>() 
+        {
+            {"aac","Aac"},
+            {"ac-3","Ac3"},
+            {"ac-3 dolby digital","Ac3"},     		
+            {"e-ac-3","DDPlus"},
+            {"ac-3 truehd","DDTrueHD"},
+            {"truehd","DDTrueHD"},
+            {"dts","DTS_DS"},
+            {"dts 96/24","DTS_9624"},
+            {"dts es","DTS_ES"},
+            {"dts hra","DTS_HD_HRA"},
+            {"dts ma","DTS_HD_MA"},
+            {"flac","Flac"},
             {"mpeg audio","MpegAudio"},
             {"mpeg audio layer 1","MpegAudio"},
             {"mpeg audio layer 2","MpegAudio"},
-            {"mpeg audio layer 3","Mp3"},
+            {"mpeg audio layer 3","Mp3"},       
+            {"wma","Wma"},
+            {"wma2","Wma"},
+            {"wma3","Wma"},            
+            {"vorbis","Vorbis"},
+			
+            //Legacy values not needed with change to seperate channel icons 
+            {"ac-3 1","DD_10"},
+            {"ac-3 2","DD_20"},
+            {"ac-3 3","DD_30"},
+            {"ac-3 6","DD_51"},
+            {"ac-3 dolby digital 1","DD_10"},
+            {"ac-3 dolby digital 2","DD_20"},
+            {"ac-3 dolby digital 3","DD_30"},
+            {"ac-3 dolby digital 6","DD_51"},
             {"e-ac-3 5","DDPlus_50"},
             {"e-ac-3 6","DDPlus_51"},
             {"e-ac-3 7","DDPlus_61"},
@@ -423,20 +451,7 @@ namespace MediaBrowser.Library.Entities
             {"ac-3 truehd 5","DDTrueHD_50"},
             {"ac-3 truehd 6","DDTrueHD_51"},
             {"ac-3 truehd 7","DDTrueHD_61"},
-            {"ac-3 truehd 8","DDTrueHD_71"},
-            {"ac-3 1","DD_10"},
-            {"ac-3 2","DD_20"},
-            {"ac-3 3","DD_30"},
-            {"ac-3 6","DD_51"},
-            {"ac-3 dolby digital 1","DD_10"},
-            {"ac-3 dolby digital 2","DD_20"},
-            {"ac-3 dolby digital 3","DD_30"},
-            {"ac-3 dolby digital 6","DD_51"},
-            {"e-ac-3","DDPlus"},
-            {"truehd","DDTrueHD"},
-            {"ac-3 truehd","DDTrueHD"},
-            {"ac-3","Ac3"},
-            {"ac-3 dolby digital","Ac3"},            
+            {"ac-3 truehd 8","DDTrueHD_71"},            
             {"dts 1","DTS_DS_10"},
             {"dts 2","DTS_DS_20"},
             {"dts 6","DTS_DS_51"},
@@ -451,22 +466,13 @@ namespace MediaBrowser.Library.Entities
             {"dts ma 5","DTS_HD_MA_50"},
             {"dts ma 6","DTS_HD_MA_51"},
             {"dts ma 7","DTS_HD_MA_61"},
-            {"dts ma 8","DTS_HD_MA_71"},
-            {"dts 96/24","DTS_9624"},
-            {"dts es","DTS_ES"},
-            {"dts hra","DTS_HD_HRA"},
-            {"dts ma","DTS_HD_MA"},		
-            {"dts","Dts"},
-            {"wma","Wma"},
-            {"wma2","Wma"},
-            {"wma3","Wma"},
-            {"aac","Aac"},
-            {"flac","Flac"},
-            {"vorbis","Vorbis"}
+            {"dts ma 8","DTS_HD_MA_71"}
+
         };
         protected string AudioImageName {
             get {
-                if (AudioImageNames.ContainsKey(AudioCombinedString.ToLower())) return "codec_"+AudioImageNames[AudioCombinedString.ToLower()];
+                //if (AudioImageNames.ContainsKey(AudioCombinedString.ToLower())) return "codec_"+AudioImageNames[AudioCombinedString.ToLower()];
+                //Removed to allow change to seperate channel icons
                 if (AudioImageNames.ContainsKey(AudioProfileString.ToLower())) return "codec_"+AudioImageNames[AudioProfileString.ToLower()];
                 return "codec_"+AudioProfileString.ToLower(); //not found...
             }
@@ -488,6 +494,22 @@ namespace MediaBrowser.Library.Entities
                     return string.Format("{0}", this.AudioFormat);
                 else
                     return "";
+            }
+        }
+
+        protected string ChannelImageName
+        {
+            get
+            {
+                return "channels_"+AudioChannelString.ToLower();
+            }
+        }
+
+        public Image AudioChannelImage
+        {
+            get
+            {
+                return Helper.GetMediaInfoImage(ChannelImageName);
             }
         }
 

@@ -120,7 +120,7 @@
             </Layout>
             <Children>
               <ts:TitleSet Name="TitleSet" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" Font="font://f:PD_TitleFont" SubFont="font://f:PD_SubTitleFont"/>
-              <mi:MovieInfo Name="MovieInfo" Application="[Application]" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" />
+              <mi:MovieInfo Name="MovieInfo" Application="[Application]" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" DisplayMediaInfo="false" />
               <lw:LastWatched Name="LastWatched" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" Font="font://f:PD_LastWatchedFont"/>
             </Children>
           </Panel>

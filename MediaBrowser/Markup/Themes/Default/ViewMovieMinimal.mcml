@@ -8,6 +8,7 @@
 	  xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
 	  xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
+    xmlns:sib="resx://MediaBrowser/MediaBrowser.Resources/SpinImageButton"  
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
 	  xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
 	  xmlns:mp="resx://MediaBrowser/MediaBrowser.Resources/MPAARating"
@@ -406,7 +407,7 @@
                   <ib:ImageButton Name="PlayTrailersButton" Text="[Application.LocalStrings.#PlayTrailersDetail!cor:String]" Command="[PlayTrailersCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconTrailer" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <ib:ImageButton Name="NextItemButton" Text="[Application.LocalStrings.#NextItemDetail!cor:String]" Command="[NextItemCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconNext" Size="200,50" Font="font://f:MM_ButtonFont"/>
                   <ib:ImageButton Name="PreviousItemButton" Text="[Application.LocalStrings.#PreviousItemDetail!cor:String]" Command="[PreviousItemCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconPrevious" Size="200,50" Font="font://f:MM_ButtonFont"/>
-                  <ib:ImageButton Name="RefreshMovieButton" Text="[Application.LocalStrings.#RefreshDetail!cor:String]" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
+                  <sib:SpinImageButton Name="RefreshMovieButton" Text="[Application.LocalStrings.#RefreshDetail!cor:String]" Command="[RefreshMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconRefresh" Size="200,50" Font="font://f:MM_ButtonFont" />
                   <ib:ImageButton Name="DeleteMovieButton" Text="[Application.LocalStrings.#DeleteDetail!cor:String]" Command="[DeleteMovieCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/IconDelete" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                   <ib:ImageButton Name="CacheMovieButton" Text="[Application.LocalStrings.#CacheDetail!cor:String]" Command="[NullCommand]" Icon="resx://MediaBrowser/MediaBrowser.Resources/Lines" Size="200,50" Font="font://f:MM_ButtonFont" Visible="false" />
                 </Children>
@@ -637,7 +638,7 @@
       <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]"/>
       <Binding Target="[OutOfText.Content]" Source="[Application.LocalStrings.#OutOfDetail!cor:String]">
         <Transformer>
-          <FormatTransformer Format="{0} 10"/>
+          <FormatTransformer Format=" {0} 10"/>
         </Transformer>
       </Binding>
       <Binding Target="[DirectorText.Content]" Source="[Application.LocalStrings.#DirectorDetail!cor:String]"/>
@@ -686,8 +687,8 @@
                   <FlowLayout Orientation="Horizontal" AllowWrap="true"/>
                 </Layout>
                 <Children>
-                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,45"/>
-                  <Text Name="MediaInfo" Font="Arial, 12" Color="[ValueColor]" WordWrap="true" />
+                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,48"/>
+                  <Text Name="MediaInfo" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
                 </Children>
               </Panel>
 

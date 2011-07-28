@@ -151,9 +151,9 @@
           </dt:ScrollableText>
           
           <!-- Media Info -->
-          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[SelectedItem]" >
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[SelectedItem]" MaxIconSize="0,54" >
             <LayoutInput>
-              <AnchorLayoutInput Bottom="Parent, 1, -90" Right="ListPane, 0, -10"/>
+              <AnchorLayoutInput Bottom="Parent, 1, -98" Right="ListPane, 0, -12"/>
             </LayoutInput>
           </mip:MediaInfoPanel>
 

@@ -396,6 +396,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap aspect_125 {
+            get {
+                object obj = ResourceManager.GetObject("aspect_125", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap aspect_133 {
             get {
                 object obj = ResourceManager.GetObject("aspect_133", resourceCulture);
@@ -690,6 +697,62 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap channels_1 {
+            get {
+                object obj = ResourceManager.GetObject("channels_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap channels_2 {
+            get {
+                object obj = ResourceManager.GetObject("channels_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap channels_3 {
+            get {
+                object obj = ResourceManager.GetObject("channels_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap channels_4 {
+            get {
+                object obj = ResourceManager.GetObject("channels_4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap channels_5 {
+            get {
+                object obj = ResourceManager.GetObject("channels_5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap channels_6 {
+            get {
+                object obj = ResourceManager.GetObject("channels_6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap channels_7 {
+            get {
+                object obj = ResourceManager.GetObject("channels_7", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap channels_8 {
+            get {
+                object obj = ResourceManager.GetObject("channels_8", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] CheckBox {
             get {
                 object obj = ResourceManager.GetObject("CheckBox", resourceCulture);
@@ -746,34 +809,6 @@ namespace MediaBrowser {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_dd_10 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dd_10", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dd_20 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dd_20", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dd_30 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dd_30", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dd_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dd_51", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap codec_ddplus {
             get {
                 object obj = ResourceManager.GetObject("codec_ddplus", resourceCulture);
@@ -781,65 +816,9 @@ namespace MediaBrowser {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_ddplus_50 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddplus_50", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_ddplus_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddplus_51", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_ddplus_61 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddplus_61", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_ddplus_71 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddplus_71", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap codec_ddtruehd {
             get {
                 object obj = ResourceManager.GetObject("codec_ddtruehd", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_ddtruehd_50 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddtruehd_50", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_ddtruehd_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddtruehd_51", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_ddtruehd_61 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddtruehd_61", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_ddtruehd_71 {
-            get {
-                object obj = ResourceManager.GetObject("codec_ddtruehd_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -865,37 +844,9 @@ namespace MediaBrowser {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_dts_9624_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_9624_51", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap codec_dts_ds {
             get {
                 object obj = ResourceManager.GetObject("codec_dts_ds", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_ds_10 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_ds_10", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_ds_20 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_ds_20", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_ds_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_ds_51", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -907,20 +858,6 @@ namespace MediaBrowser {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_dts_es_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_es_51", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_es_61 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_es_61", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap codec_dts_hd_hra {
             get {
                 object obj = ResourceManager.GetObject("codec_dts_hd_hra", resourceCulture);
@@ -928,72 +865,9 @@ namespace MediaBrowser {
             }
         }
         
-        internal static System.Drawing.Bitmap codec_dts_hd_hra_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_hra_51", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_hra_61 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_hra_61", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_hra_71 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_hra_71", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap codec_dts_hd_ma {
             get {
                 object obj = ResourceManager.GetObject("codec_dts_hd_ma", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_ma_30 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_ma_30", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_ma_40 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_ma_40", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_ma_50 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_ma_50", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_ma_51 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_ma_51", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_ma_61 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_ma_61", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap codec_dts_hd_ma_71 {
-            get {
-                object obj = ResourceManager.GetObject("codec_dts_hd_ma_71", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2291,6 +2165,13 @@ namespace MediaBrowser {
         internal static byte[] Sounds {
             get {
                 object obj = ResourceManager.GetObject("Sounds", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SpinImageButton {
+            get {
+                object obj = ResourceManager.GetObject("SpinImageButton", resourceCulture);
                 return ((byte[])(obj));
             }
         }

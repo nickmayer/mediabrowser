@@ -1,6 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5165DE70-E8D8-4A3C-BF07-4429BAF4F802}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBrowser", "MediaBrowser\MediaBrowser.csproj", "{C6B27E5F-3D83-4D71-85B9-AF83C8392721}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMediaBrowser", "TestMediaBrowser\TestMediaBrowser.csproj", "{8312AF5D-16DD-41C4-8323-BD0CCFBE1F12}"
@@ -12,11 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvrmsMetadataProvider", "DvrmsMetadataProvider\DvrmsMetadataProvider.csproj", "{F26A475A-29C2-4E1E-BCB6-5338E5E88279}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmTrailerPlugin", "FilmTrailerPlugin\FilmTrailerPlugin.csproj", "{35EBAE61-52FD-4217-8B53-0757C9E1BB6A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5165DE70-E8D8-4A3C-BF07-4429BAF4F802}"
-	ProjectSection(SolutionItems) = preProject
-		LICENSE.txt = LICENSE.txt
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogViewer", "LogViewer\LogViewer.csproj", "{862DAC43-E0A6-4424-92BF-DF8FC3DF45BF}"
 EndProject

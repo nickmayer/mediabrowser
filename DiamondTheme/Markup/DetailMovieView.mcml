@@ -217,9 +217,9 @@
                 </Children>
               </Graphic>
 
-              <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" >
+              <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,55" >
                 <LayoutInput>
-                  <AnchorLayoutInput Bottom="Parent, 1, -85" Right="Parent, 1, -20"/>
+                  <AnchorLayoutInput Bottom="Parent, 1, -89" Right="Parent, 1, -28"/>
                 </LayoutInput>
               </mip:MediaInfoPanel>
 
