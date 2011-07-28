@@ -144,14 +144,23 @@ namespace MediaBrowser.Library.Persistance
                 lock (connection)
                 {
                     //Logger.ReportInfo("Executing " + copy.Count + " commands");
-                    var tran = connection.BeginTransaction();
-                    foreach (var command in copy)
+                    using (var tran = connection.BeginTransaction())
                     {
-                        command.Transaction = tran;
-                        //Logger.ReportInfo("About to execute for:  "+ command.Parameters[1].Value+"  "+command.Parameters[14].Value + command.CommandText);
-                        command.ExecuteNonQuery();
+                        foreach (var command in copy)
+                        {
+                            command.Transaction = tran;
+                            //Logger.ReportInfo("About to execute for:  "+ command.Parameters[1].Value+"  "+command.Parameters[14].Value + command.CommandText);
+                            try
+                            {
+                                command.ExecuteNonQuery();
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Failed to execute SQL Stmt: " + command.CommandText, e);
+                            }
+                        }
+                        tran.Commit();
                     }
-                    tran.Commit();
                 }
 
             }
