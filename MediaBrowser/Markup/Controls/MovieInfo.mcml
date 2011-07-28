@@ -20,6 +20,7 @@
       <cor:Boolean Name="DisplayGenres" Boolean="true" />
       <cor:Boolean Name="DisplayDirector" Boolean="true" />
       <cor:Boolean Name="DisplayWriter" Boolean="true" />
+      <cor:Boolean Name="DisplayMediaInfoPanel" Boolean="true" />
       <cor:Boolean Name="DisplayMediaInfo" Boolean="true" />
     </Properties>
     <Rules>
@@ -84,7 +85,7 @@
           <gl:GenreList Name="Genres" SourceData="[Model.Genres]" Font="font://f:TD_MI_GenreFont" Visible="[DisplayGenres]"/>
           <d:Directors Name="Directors" Application="[Application]" Item="[Model]" TitleFont="font://f:TD_MI_DirectorTitleFont" Font="font://f:TD_MI_DirectorFont" Visible="[DisplayDirector]"/>
           <w:Writers Name="Writers" Application="[Application]" Item="[Model]" TitleFont="font://f:TD_MI_WriterTitleFont" Font="font://f:TD_MI_WriterFont" Visible="[DisplayWriter]"/>
-          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Model]" Visible="[DisplayMediaInfo]" MaxIconSize="0,48"/>
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Model]" Visible="[DisplayMediaInfoPanel]" MaxIconSize="0,48"/>
           <Text Name="MediaInfo" Font="Arial, 13" Color="color://s:FontColorMedium" Visible="[DisplayMediaInfo]" />
         </Children>
       </Panel>

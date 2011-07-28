@@ -109,7 +109,7 @@
             <Children>
               <ts:TitleSet Name="TitleSet" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" Layout="Scale" Font="font://f:CV_TitleFont" SubFont="font://f:CV_SubTitleFont"/>
               <mi:MovieInfo Name="MovieInfo" Application="[Application]" Model="[SelectedItem]" ModelFast="[PreSelectedItem]"
-									DisplayGenres="false" DisplayDirector="false" DisplayWriter="false" DisplayMediaInfo="false" />
+									DisplayGenres="false" DisplayDirector="false" DisplayWriter="false" DisplayMediaInfoPanel="false" DisplayMediaInfo="false" />
             </Children>
           </Panel>
 
