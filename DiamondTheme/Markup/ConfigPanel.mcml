@@ -28,7 +28,6 @@
       <BooleanChoice Name="InfoBoxPoster" Value="[Config.InfoBoxPoster]" />
       <BooleanChoice Name="AutoExtenderLayout" Value="[Config.AutoExtenderLayout]" />
       <BooleanChoice Name="DiamondDisplayWeather" Value="[Config.DiamondDisplayWeather]" />
-      <!--<BooleanChoice Name="DiamondColorMediaInfo" Value="[Config.DiamondColorMediaInfo]" />-->
       <IntRangedValue Name="AlphaOpacity" Value="[Config.AlphaOpacity]" MaxValue="100" MinValue="0" Step="1"/>
       <!-- END OF CONFIG OPTIONS -->
     </Locals>
@@ -43,7 +42,6 @@
       <Binding Source="[DisplayGlassOverlay.Value]" Target="[Config.DisplayGlassOverlay]" />
       <Binding Source="[AutoExtenderLayout.Value]" Target="[Config.AutoExtenderLayout]" />
       <Binding Source="[DiamondDisplayWeather.Value]" Target="[Config.DiamondDisplayWeather]" />
-      <!--<Binding Source="[DiamondColorMediaInfo.Value]" Target="[Config.DiamondColorMediaInfo]" />-->
       <Binding Source="[AlphaOpacity.Value]" Target="[Config.AlphaOpacity]" />
       <!-- END OF OPTION BINDINGS -->
     </Rules>
@@ -60,7 +58,6 @@
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinCoverflowViews!cor:String]" Checked="[InfoBoxCoverflow]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinThumbstripViews!cor:String]" Checked="[InfoBoxThumbstrip]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
               <cb:CheckBox Label="[Application.LocalStrings.#DisplayInfoboxinPosterViews!cor:String]" Checked="[InfoBoxPoster]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>
-              <!--<cb:CheckBox Label="Display Colour MediaInfo Icons" Checked="[DiamondColorMediaInfo]" FocusItem="[FocusItem]" Margins="[CMargin]" Font="[Font]"/>-->
               </Children>
           </Panel>
           <Panel Layout="VerticalFlow" MaximumSize="550,400">
