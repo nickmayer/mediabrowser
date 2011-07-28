@@ -638,7 +638,7 @@
       <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]"/>
       <Binding Target="[OutOfText.Content]" Source="[Application.LocalStrings.#OutOfDetail!cor:String]">
         <Transformer>
-          <FormatTransformer Format="{0} 10"/>
+          <FormatTransformer Format=" {0} 10"/>
         </Transformer>
       </Binding>
       <Binding Target="[DirectorText.Content]" Source="[Application.LocalStrings.#DirectorDetail!cor:String]"/>
