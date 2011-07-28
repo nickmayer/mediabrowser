@@ -122,9 +122,9 @@
             </LayoutInput>
           </dt:ScrollableText>
           <!-- Media Info -->
-          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[SelectedItem]" >
+          <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[SelectedItem]" MaxIconSize="0,55" >
             <LayoutInput>
-              <AnchorLayoutInput Bottom="Parent, 1, -90" Right="Overlay, 1, -25"/>
+              <AnchorLayoutInput Bottom="Parent, 1, -98" Right="Overlay, 1, -23"/>
             </LayoutInput>
           </mip:MediaInfoPanel>
 
