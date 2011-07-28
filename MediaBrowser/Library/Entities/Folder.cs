@@ -289,7 +289,7 @@ namespace MediaBrowser.Library.Entities {
                     var folder = item as Folder;
                     if (folder != null)
                     {
-                        foreach (var subitem in folder.RecursiveChildren)
+                        foreach (var subitem in folder.AllRecursiveChildren)
                         {
                             yield return subitem;
                         }
