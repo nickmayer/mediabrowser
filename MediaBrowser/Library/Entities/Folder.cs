@@ -145,7 +145,7 @@ namespace MediaBrowser.Library.Entities {
                 // so don't lock up the object during.
                 foreach (var item in this.Children) {
                     var video = item as Video;
-                    if (video != null && video.PlaybackStatus.PlayCount == 0) {
+                    if (video != null && !video.PlaybackStatus.WasPlayed) {
                         count++;
                     } else {
                         var folder = item as Folder;
