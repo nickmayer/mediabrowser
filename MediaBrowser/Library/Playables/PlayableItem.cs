@@ -50,6 +50,8 @@ namespace MediaBrowser.Library
         public abstract void Prepare(bool resume);
         public abstract string Filename { get; }
 
+        protected bool PlayCountIncremented = false;
+
 
 
         public void Play(PlaybackStatus playstate, bool resume)
@@ -71,6 +73,7 @@ namespace MediaBrowser.Library
         {
             try
             {
+                PlayCountIncremented = false; //reset
 
                 if (!RunningOnExtender || !Config.Instance.EnableTranscode360 || Helper.IsExtenderNativeVideo(this.Filename))
                     PlayAndGoFullScreen(this.Filename);
@@ -125,7 +128,6 @@ namespace MediaBrowser.Library
             Play(file);
             if (!QueueItem)
                 PlaybackController.GoToFullScreen();
-            MarkWatched();
 
             PlaybackController.OnProgress += new EventHandler<PlaybackStateEventArgs>(PlaybackController_OnProgress);
         }
@@ -155,6 +157,7 @@ namespace MediaBrowser.Library
             {
                 PlayState.LastPlayed = DateTime.Now;
                 PlayState.PlayCount = PlayState.PlayCount + 1;
+                PlayState.PositionTicks = 0;
                 PlayState.Save();
             }
         }
@@ -162,7 +165,7 @@ namespace MediaBrowser.Library
         public virtual bool UpdatePosition(string title, long positionTicks)
         {
             //I wonder if the below is slowing us down during playback - commenting out -ebr
-            //Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
+            Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
 
             if (PlayState == null)
             {
@@ -172,6 +175,12 @@ namespace MediaBrowser.Library
             var currentTitle = Path.GetFileNameWithoutExtension(this.fileToPlay);
             if (title == currentTitle)
             {
+                if (!PlayCountIncremented) //the first time we are called with a valid position mark us as being watched
+                {
+                    PlayState.PlayCount++;
+                    PlayState.LastPlayed = DateTime.Now;
+                    PlayCountIncremented = true;
+                }
                 PlayState.PositionTicks = positionTicks;
                 PlayState.Save();
                 return true;

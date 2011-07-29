@@ -489,6 +489,7 @@ namespace MediaBrowser.Library
             FirePropertyChanged("ShowUnwatched");
             FirePropertyChanged("UnwatchedCountString");
             FirePropertyChanged("PlayState");
+            FirePropertyChanged("InProgress");
         }
 
         #endregion
@@ -500,6 +501,14 @@ namespace MediaBrowser.Library
             get
             {
                 return UnwatchedCount == 0;
+            }
+        }
+
+        public bool InProgress
+        {
+            get
+            {
+                return CanResume;
             }
         }
 
@@ -560,6 +569,7 @@ namespace MediaBrowser.Library
                     if (value && PlayState.PlayCount == 0)
                     {
                         PlayState.PlayCount = 1;
+                        PlayState.PositionTicks = 0; 
                         //remove ourselves from the unwatched list as well
                         if (this.PhysicalParent != null)
                         {
@@ -571,6 +581,7 @@ namespace MediaBrowser.Library
                     else
                     {
                         PlayState.PlayCount = 0;
+                        PlayState.PositionTicks = 0;
                         //remove ourselves from the watched list as well
                         if (this.PhysicalParent != null)
                         {
