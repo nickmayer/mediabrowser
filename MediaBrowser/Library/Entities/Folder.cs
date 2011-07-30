@@ -223,7 +223,8 @@ namespace MediaBrowser.Library.Entities {
             {
                 foreach (var item in index)
                 {
-                    item.RefreshMetadata();
+                    if (item.PrimaryImage == null) //this will keep us from blanking out images that are already there and the source is not available
+                        item.RefreshMetadata();
                 }
             });
 

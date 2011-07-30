@@ -350,7 +350,7 @@ namespace MediaBrowser.Library {
 
         public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize, int maxDays) 
         {
-            using (new MediaBrowser.Util.Profiler("=== Recently Added for "+this.Name))
+            //using (new MediaBrowser.Util.Profiler("=== Recently Added for "+this.Name))
             {
                 DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
                 foreach (var item in folder.Children)
@@ -447,7 +447,7 @@ namespace MediaBrowser.Library {
 
         public void FindRecentWatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
         {
-            using (new MediaBrowser.Util.Profiler("=== Recently Watched for "+this.Name))
+            //using (new MediaBrowser.Util.Profiler("=== Recently Watched for "+this.Name))
             {
                 DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
                 foreach (var item in folder.Children)
