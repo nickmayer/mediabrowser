@@ -60,9 +60,12 @@ namespace MediaBrowser.Library.Playables
         private static object lck = new object();
         private static Dictionary<MediaType, ConfigData.ExternalPlayer> configuredPlayers = null;
         private string path;
+        private TimeSpan duration;
         public PlayableExternal(Media media)
         {
-            this.path = (media as Video).VideoFiles.ToArray()[0];
+            Video video = (media as Video);
+            this.path = video.VideoFiles.ToArray()[0];
+            this.duration = TimeSpan.FromMinutes(video.RunningTime.Value);
         }
 
         public PlayableExternal(string path) {
@@ -76,17 +79,16 @@ namespace MediaBrowser.Library.Playables
             get { return path; }
         }
 
-
+        private DateTime startTime;
         protected override void PlayInternal(bool resume)
         {
             
             PlaybackController.Stop(); //stop whatever is playing
-            
+            startTime = DateTime.Now; //grab this so we can attempt to determine how long we are playing the item
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);
             Process player = Process.Start(p.Command, args);
-            MarkWatched();
             Async.Queue("Ext Player Mgmt", () => ManageExtPlayer(player, p.MinimizeMCE, p.ShowSplashScreen));
         }
 
@@ -114,6 +116,12 @@ namespace MediaBrowser.Library.Playables
             Async.Queue("Ext Player Focus",() => GiveFocusToExtPlayer(player));
             //and wait for it to exit
             player.WaitForExit();
+            //mark as watched based on if we were running long enough to play the item
+            TimeSpan elapsed = DateTime.Now - startTime;
+            if (duration == TimeSpan.FromMinutes(0) || elapsed.Ticks >= (duration.Ticks * Config.Instance.MaxResumePct))
+            {
+                MarkWatched();
+            }
             //now re-store MCE 
             wp.showCmd = 1; // 1- Normal; 2 - Minimize; 3 - Maximize;
             SetWindowPlacement(mceWnd, ref wp);
