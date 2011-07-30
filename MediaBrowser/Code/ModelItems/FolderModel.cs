@@ -361,45 +361,45 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is Series)
+                            if (item is IContainer)
                             {
                                 //collapse series in the list
-                                SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
-                                FindNewestChildren(item as Folder, episodes, maxSize);
-                                if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                                SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
+                                FindNewestChildren(item as Folder, subItems, maxSize);
+                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                                 {
-                                    //collapse into a series folder
-                                    var thisSeries = item as Series;
-                                    DateTime createdTime = episodes.Keys.Max();
-                                    var series = new IndexFolder()
+                                    //collapse into a container
+                                    var thisContainer = item as IContainer;
+                                    DateTime createdTime = subItems.Keys.Max();
+                                    var container = new IndexFolder()
                                     {
-                                        Id = (folder.Name + thisSeries.Name).GetMD5(),
+                                        Id = (folder.Name + thisContainer.Name).GetMD5(),
                                         DateCreated = createdTime,
-                                        Name = "(" + episodes.Count + " items) " + thisSeries.Name,
-                                        Overview = thisSeries.Overview,
-                                        MpaaRating = thisSeries.MpaaRating,
-                                        Genres = thisSeries.Genres,
-                                        ImdbRating = thisSeries.ImdbRating,
-                                        Studios = thisSeries.Studios,
-                                        PrimaryImagePath = thisSeries.PrimaryImagePath,
-                                        SecondaryImagePath = thisSeries.SecondaryImagePath,
-                                        BannerImagePath = thisSeries.BannerImagePath,
-                                        BackdropImagePaths = thisSeries.BackdropImagePaths,
+                                        Name = "(" + subItems.Count + " items) " + thisContainer.Name,
+                                        Overview = thisContainer.Overview,
+                                        MpaaRating = thisContainer.MpaaRating,
+                                        Genres = thisContainer.Genres,
+                                        ImdbRating = thisContainer.ImdbRating,
+                                        Studios = thisContainer.Studios,
+                                        PrimaryImagePath = thisContainer.PrimaryImagePath,
+                                        SecondaryImagePath = thisContainer.SecondaryImagePath,
+                                        BannerImagePath = thisContainer.BannerImagePath,
+                                        BackdropImagePaths = thisContainer.BackdropImagePaths,
                                         Parent = folder
                                     };
 
-                                    foreach (var pair in episodes)
+                                    foreach (var pair in subItems)
                                     {
-                                        series.AddChild(pair.Value.BaseItem);
+                                        container.AddChild(pair.Value.BaseItem);
                                     }
-                                    var seriesModel = ItemFactory.Instance.Create(series);
-                                    seriesModel.PhysicalParent = this;
+                                    var containerModel = ItemFactory.Instance.Create(container);
+                                    containerModel.PhysicalParent = this;
                                     while (foundNames.ContainsKey(createdTime))
                                     {
                                         // break ties 
                                         createdTime = createdTime.AddMilliseconds(1);
                                     }
-                                    foundNames.Add(createdTime, seriesModel);
+                                    foundNames.Add(createdTime, containerModel);
                                 }
                                 else
                                 {
@@ -458,44 +458,44 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is Series)
+                            if (item is IContainer)
                             {
                                 //collapse series in the list
-                                SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
-                                FindRecentWatchedChildren(item as Folder, episodes, maxSize);
-                                if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                                SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
+                                FindRecentWatchedChildren(item as Folder, subItems, maxSize);
+                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                                 {
-                                    //collapse into a series folder
-                                    var thisSeries = item as Series;
-                                    DateTime watchedTime = episodes.Keys.Max();
-                                    var series = new IndexFolder()
+                                    //collapse into a container folder
+                                    var thisContainer = item as IContainer;
+                                    DateTime watchedTime = subItems.Keys.Max();
+                                    var container = new IndexFolder()
                                     {
-                                        Id = (folder.Name + thisSeries.Name).GetMD5(),
-                                        Name = "(" + episodes.Count + " items) " + thisSeries.Name,
-                                        Overview = thisSeries.Overview,
-                                        MpaaRating = thisSeries.MpaaRating,
-                                        Genres = thisSeries.Genres,
-                                        ImdbRating = thisSeries.ImdbRating,
-                                        Studios = thisSeries.Studios,
-                                        PrimaryImagePath = thisSeries.PrimaryImagePath,
-                                        SecondaryImagePath = thisSeries.SecondaryImagePath,
-                                        BannerImagePath = thisSeries.BannerImagePath,
-                                        BackdropImagePaths = thisSeries.BackdropImagePaths,
+                                        Id = (folder.Name + thisContainer.Name).GetMD5(),
+                                        Name = "(" + subItems.Count + " items) " + thisContainer.Name,
+                                        Overview = thisContainer.Overview,
+                                        MpaaRating = thisContainer.MpaaRating,
+                                        Genres = thisContainer.Genres,
+                                        ImdbRating = thisContainer.ImdbRating,
+                                        Studios = thisContainer.Studios,
+                                        PrimaryImagePath = thisContainer.PrimaryImagePath,
+                                        SecondaryImagePath = thisContainer.SecondaryImagePath,
+                                        BannerImagePath = thisContainer.BannerImagePath,
+                                        BackdropImagePaths = thisContainer.BackdropImagePaths,
                                         Parent = folder
                                     };
 
-                                    foreach (var pair in episodes)
+                                    foreach (var pair in subItems)
                                     {
-                                        series.AddChild(pair.Value.BaseItem);
+                                        container.AddChild(pair.Value.BaseItem);
                                     }
-                                    var seriesModel = ItemFactory.Instance.Create(series);
-                                    seriesModel.PhysicalParent = this;
+                                    var containerModel = ItemFactory.Instance.Create(container);
+                                    containerModel.PhysicalParent = this;
                                     while (foundNames.ContainsKey(watchedTime))
                                     {
                                         // break ties 
                                         watchedTime = watchedTime.AddMilliseconds(1);
                                     }
-                                    foundNames.Add(watchedTime, seriesModel);
+                                    foundNames.Add(watchedTime, containerModel);
                                 }
                                 else
                                 {
@@ -550,44 +550,44 @@ namespace MediaBrowser.Library {
                     //don't return items inside protected folders
                     if (item.ParentalAllowed)
                     {
-                        if (item is Series)
+                        if (item is IContainer)
                         {
                             //collapse series in the list
-                            SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
-                            FindRecentWatchedChildren(item as Folder, episodes, maxSize);
-                            if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                            SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
+                            FindRecentWatchedChildren(item as Folder, subItems, maxSize);
+                            if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                             {
                                 //collapse into a series folder
-                                var thisSeries = item as Series;
-                                DateTime createdTime = episodes.Keys.Max();
-                                var series = new IndexFolder()
+                                var thisContainer = item as IContainer;
+                                DateTime createdTime = subItems.Keys.Max();
+                                var container = new IndexFolder()
                                 {
-                                    Id = (folder.Name + thisSeries.Name).GetMD5(),
+                                    Id = (folder.Name + thisContainer.Name).GetMD5(),
                                     DateCreated = createdTime,
-                                    Name = "(" + episodes.Count + " items) " + thisSeries.Name,
-                                    Overview = thisSeries.Overview,
-                                    MpaaRating = thisSeries.MpaaRating,
-                                    Genres = thisSeries.Genres,
-                                    ImdbRating = thisSeries.ImdbRating,
-                                    Studios = thisSeries.Studios,
-                                    PrimaryImagePath = thisSeries.PrimaryImagePath,
-                                    SecondaryImagePath = thisSeries.SecondaryImagePath,
-                                    BannerImagePath = thisSeries.BannerImagePath,
-                                    BackdropImagePaths = thisSeries.BackdropImagePaths,
+                                    Name = "(" + subItems.Count + " items) " + thisContainer.Name,
+                                    Overview = thisContainer.Overview,
+                                    MpaaRating = thisContainer.MpaaRating,
+                                    Genres = thisContainer.Genres,
+                                    ImdbRating = thisContainer.ImdbRating,
+                                    Studios = thisContainer.Studios,
+                                    PrimaryImagePath = thisContainer.PrimaryImagePath,
+                                    SecondaryImagePath = thisContainer.SecondaryImagePath,
+                                    BannerImagePath = thisContainer.BannerImagePath,
+                                    BackdropImagePaths = thisContainer.BackdropImagePaths,
                                     Parent = folder
                                 };
 
-                                foreach (var pair in episodes)
+                                foreach (var pair in subItems)
                                 {
-                                    series.AddChild(pair.Value.BaseItem);
+                                    container.AddChild(pair.Value.BaseItem);
                                 }
-                                var seriesModel = ItemFactory.Instance.Create(series);
-                                seriesModel.PhysicalParent = this;
+                                var containerModel = ItemFactory.Instance.Create(container);
+                                containerModel.PhysicalParent = this;
                                 while (foundNames.ContainsKey(createdTime))
                                 {
                                     createdTime = createdTime.AddMilliseconds(1);
                                 }
-                                foundNames.Add(createdTime, seriesModel);
+                                foundNames.Add(createdTime, containerModel);
                             }
                             else
                             {
