@@ -608,7 +608,7 @@ namespace MediaBrowser.Library.Persistance {
         }
 
         // used to track series objects during indexing so we can group episodes in their series
-        private Dictionary<string, Dictionary<Guid, Series>> SeriesDict = new Dictionary<string, Dictionary<Guid, Series>>();
+        private Dictionary<string, Dictionary<Guid, IContainer>> ContainerDict = new Dictionary<string, Dictionary<Guid, IContainer>>();
 
         public IList<Index> RetrieveIndex(Folder folder, string property, Func<string, BaseItem> constructor)
         {
@@ -632,7 +632,7 @@ namespace MediaBrowser.Library.Persistance {
             cmd.CommandText = "Insert into "+tableName+" (child) values(@1)";
             var childParam = cmd.Parameters.Add("@1", DbType.Guid);
 
-            var seriesList = new Dictionary<Guid, Series>();  //initialize this for our index
+            var containerList = new Dictionary<Guid, IContainer>();  //initialize this for our index
             SQLInfo.ColDef col = new SQLInfo.ColDef();
             Type currentType = null;
 
@@ -644,10 +644,10 @@ namespace MediaBrowser.Library.Persistance {
                 {
                     if (child is IShow && !(child is Season)) // && (allowEpisodes && !(child is Series)) || (!allowEpisodes && !(child is Episode)))
                     {
-                        if (child is Episode)
+                        if (child is IGroupInIndex)
                         {
                             //add the series object
-                            seriesList[child.Id] = child.OurSeries;
+                            containerList[child.Id] = (child as IGroupInIndex).MainContainer;
                         }
 
                         //determine if property has any value
@@ -674,7 +674,7 @@ namespace MediaBrowser.Library.Persistance {
                         else
                         {
                             //add to Unknown
-                            AddItemToIndex("<Unknown>", unknownItems, seriesList, child);
+                            AddItemToIndex("<Unknown>", unknownItems, containerList, child);
                         }
                     }
                 }
@@ -682,7 +682,7 @@ namespace MediaBrowser.Library.Persistance {
             }
 
             //fill in series
-            SeriesDict[tableName] = seriesList;
+            ContainerDict[tableName] = containerList;
             //create our Unknown Index - if there were any
             if (unknownItems.Count > 0)
                 children.Add(new Index(constructor("<Unknown>"), unknownItems));
@@ -716,7 +716,7 @@ namespace MediaBrowser.Library.Persistance {
         public List<BaseItem> RetrieveSubIndex(string childTable, string property, object value)
         {
             List<BaseItem> children = new List<BaseItem>();
-            Dictionary<Guid, Series> seriesList = SeriesDict[childTable];
+            Dictionary<Guid, IContainer> containerList = ContainerDict[childTable];
 
             bool listColumn = false;
             try
@@ -745,49 +745,48 @@ namespace MediaBrowser.Library.Persistance {
             {
                 while (reader.Read())
                 {
-                    AddItemToIndex(value.ToString(), children, seriesList, GetItem(reader, (string)reader["obj_type"]));
+                    AddItemToIndex(value.ToString(), children, containerList, GetItem(reader, (string)reader["obj_type"]));
                 }
             }
             return children;
         }
 
-        private void AddItemToIndex(string indexName, List<BaseItem> index, Dictionary<Guid, Series> seriesList, BaseItem child)
+        private void AddItemToIndex(string indexName, List<BaseItem> index, Dictionary<Guid, IContainer> seriesList, BaseItem child)
         {
-            if (child is Episode)
+            if (child is IGroupInIndex)
             {
-                //we want to group these by series - find or create a series head
-                Episode episode = child as Episode;
-                Series currentSeries = seriesList[child.Id];
+                //we want to group these by their main containers - find or create a head
+                IContainer currentContainer = seriesList[child.Id];
 
-                if (currentSeries == null)
+                if (currentContainer == null)
                 {
-                    //couldn't find our series...
-                    currentSeries = new Series()
+                    //couldn't find our container...
+                    currentContainer = new Series()
                     {
                         Id = Guid.NewGuid(),
                         Name = "<Unknown>"
                     };
                 }
-                IndexFolder series = (IndexFolder)index.Find(i => i.Id == (indexName + currentSeries.Name).GetMD5());
-                if (series == null)
+                IndexFolder container = (IndexFolder)index.Find(i => i.Id == (indexName + currentContainer.Name).GetMD5());
+                if (container == null)
                 {
-                    series = new IndexFolder()
+                    container = new IndexFolder()
                     {
-                        Id = (indexName + currentSeries.Name).GetMD5(),
-                        Name = currentSeries.Name,
-                        Overview = currentSeries.Overview,
-                        MpaaRating = currentSeries.MpaaRating,
-                        Genres = currentSeries.Genres,
-                        ImdbRating = currentSeries.ImdbRating,
-                        Studios = currentSeries.Studios,
-                        PrimaryImagePath = currentSeries.PrimaryImagePath,
-                        SecondaryImagePath = currentSeries.SecondaryImagePath,
-                        BannerImagePath = currentSeries.BannerImagePath,
-                        BackdropImagePaths = currentSeries.BackdropImagePaths
+                        Id = (indexName + currentContainer.Name).GetMD5(),
+                        Name = currentContainer.Name,
+                        Overview = currentContainer.Overview,
+                        MpaaRating = currentContainer.MpaaRating,
+                        Genres = currentContainer.Genres,
+                        ImdbRating = currentContainer.ImdbRating,
+                        Studios = currentContainer.Studios,
+                        PrimaryImagePath = currentContainer.PrimaryImagePath,
+                        SecondaryImagePath = currentContainer.SecondaryImagePath,
+                        BannerImagePath = currentContainer.BannerImagePath,
+                        BackdropImagePaths = currentContainer.BackdropImagePaths
                     };
-                    index.Add(series);
+                    index.Add(container);
                 }
-                series.AddChild(episode);
+                container.AddChild(child);
             }
             else
             {

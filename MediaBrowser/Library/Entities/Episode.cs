@@ -6,7 +6,7 @@ using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Entities.Attributes;
 
 namespace MediaBrowser.Library.Entities {
-    public class Episode : Show {
+    public class Episode : Show, IGroupInIndex {
 
         [Persist]
         public string EpisodeNumber { get; set; }
@@ -105,5 +105,14 @@ namespace MediaBrowser.Library.Entities {
             }
             return changed;
         }
+
+        #region IGroupInIndex Members
+
+        public IContainer MainContainer
+        {
+            get { return OurSeries; }
+        }
+
+        #endregion
     }
 }

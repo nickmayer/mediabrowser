@@ -5,7 +5,7 @@ using System.Text;
 using MediaBrowser.Library.Persistance;
 
 namespace MediaBrowser.Library.Entities {
-    public class Series : Folder, IShow {
+    public class Series : Folder, IContainer {
 
         [Persist]
         public string MpaaRating { get; set; }
