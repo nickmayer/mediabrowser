@@ -91,6 +91,11 @@ namespace MediaBrowser
             set { if (_ScreenSaverActive != value) { _ScreenSaverActive = value; FirePropertyChanged("ScreenSaverActive"); } }
         }
 
+        public string CurrentScreenSaver
+        {
+            get { return Kernel.Instance.ScreenSaverUI; }
+        }
+
         public List<string> ConfigPanelNames
         {
             get

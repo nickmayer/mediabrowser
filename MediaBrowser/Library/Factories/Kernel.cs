@@ -649,6 +649,8 @@ namespace MediaBrowser.Library {
         private List<Type> externalPlayableItems = new List<Type>();
         private List<Type> externalPlayableFolders = new List<Type>();
 
+        public string ScreenSaverUI = "";
+
         public List<Type> ExternalPlayableItems { get { return externalPlayableItems; } }
         public List<Type> ExternalPlayableFolders { get { return externalPlayableFolders; } }
 

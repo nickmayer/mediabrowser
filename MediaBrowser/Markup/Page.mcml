@@ -22,6 +22,11 @@
 
 
       <Default Target="[ViewDefault.Source]" Value="[Application.CurrentTheme.PageArea]" />
+      <Default Target="[ScreenSaver.Source]" Value="[Application.CurrentScreenSaver]" >
+        <Conditions>
+          <Equality Source="[Application.CurrentScreenSaver]" ConditionOp="NotEquals" Value="" />
+        </Conditions>
+      </Default>
 
       <!-- END Configuration Checks & Display Setup -->
 
@@ -34,10 +39,31 @@
           <Animation Animation="animation://an:PageHide" />
         </Animations>
         <Children>
-          <Panel Name="ScreenSaver" Visible="[Application.ScreenSaverActive]">
+          <me:DefaultScreenSaver Name="ScreenSaver" Folder="[Folder]" Application="[Application]" >
             <LayoutInput>
               <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
             </LayoutInput>
+
+          </me:DefaultScreenSaver>
+          <pd:Page Name="ViewDefault" Folder="[Folder]" Application="[Application]" ThemeConfig ="[ThemeConfig]" Visible="true" >
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
+            </LayoutInput>
+          </pd:Page>
+        </Children>
+      </ColorFill>
+
+    </Content>
+
+  </UI>
+
+  <UI Name="DefaultScreenSaver">
+    <Properties>
+      <a:Application Name="Application" Application="$Required"/>
+      <lib:FolderModel Name="Folder" FolderModel="$Required"/>
+    </Properties>
+    <Content>
+          <Panel Name="ScreenSaver" Visible="[Application.ScreenSaverActive]">
             <Children>
               <ColorFill Content="Black" >
                 <Children>
@@ -54,16 +80,7 @@
             </Children>
          
           </Panel>
-          <pd:Page Name="ViewDefault" Folder="[Folder]" Application="[Application]" ThemeConfig ="[ThemeConfig]" Visible="true" >
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Top="Parent,0" Bottom="Parent,1" Right="Parent,1"/>
-            </LayoutInput>
-          </pd:Page>
-        </Children>
-      </ColorFill>
-
     </Content>
-
   </UI>
 
 

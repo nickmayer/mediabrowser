@@ -37,6 +37,7 @@ namespace MediaBrowser.Library.Plugins {
     public static class PluginClasses
     {
         public const string Themes = "Themes";
+        public const string ScreenSavers = "ScreenSavers";
         public const string Other = "Other";
     }
 }
