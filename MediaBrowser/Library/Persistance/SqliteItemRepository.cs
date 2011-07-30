@@ -540,6 +540,7 @@ namespace MediaBrowser.Library.Persistance {
                     state.PlaylistPosition = reader.GetInt32(3);
                     state.LastPlayed = reader.GetDateTime(4);
                 }
+                else state = null;
             }
 
             return state;
@@ -559,6 +560,7 @@ namespace MediaBrowser.Library.Persistance {
             cmd.AddParam("@playlistPosition", playState.PlaylistPosition);
             cmd.AddParam("@lastPlayed", playState.LastPlayed);
 
+            //Logger.ReportInfo("Saving Playstate: " + playState.Id + " / " + playState.PlayCount + " / " + playState.LastPlayed);
             QueueCommand(cmd);
         }
 
