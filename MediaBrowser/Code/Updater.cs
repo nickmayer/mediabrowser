@@ -79,7 +79,7 @@ namespace MediaBrowser.Util
                 XmlDocument doc = new XmlDocument();
                 string url = Kernel.Instance.ConfigData.SendStats ?
                     string.Format(infoURL, Config.Instance.SupporterKey,Kernel.isVista ? "V" : "7",Helper.GetPhysicalMemory(), Helper.GetMACAddress()) :
-                    string.Format(infoURL, Config.Instance.SupporterKey);
+                    string.Format(infoURL, Config.Instance.SupporterKey,null,null,null);
 
                 doc.Load(new XmlTextReader(url));
                 XmlNode node;
