@@ -20,6 +20,7 @@ namespace MediaBrowser.Library
         public const string CancelRefresh = "cancelrefresh";
         public const string ForceRebuild = "forcerebuild";
         public const string Migrate = "migrate";
+        public const string Refresh = "refresh";
 
     }
 }

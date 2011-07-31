@@ -12,5 +12,12 @@ namespace MediaBrowserService
     /// </summary>
     public partial class App : Application
     {
+        public static string[] Args;
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            //get command line args
+            Args = e.Args;
+        }
     }
 }

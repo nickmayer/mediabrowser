@@ -548,6 +548,7 @@ namespace MediaBrowserService
                         _hasHandle = _mutex.WaitOne(5000, false);
                         if (_hasHandle == false)
                         {
+                            if (App.Args.Length > 0 && App.Args[0].ToLower() == "/refresh") MBServiceController.SendCommandToService(IPCCommands.Refresh); //send on command
                             _forceClose = true;
                             this.Close(); //another instance exists
                             return;
@@ -579,6 +580,8 @@ namespace MediaBrowserService
                     }
                     Logger.ReportInfo("Service Started");
                     _mainLoop = Async.Every(60 * 1000, () => MainIteration()); //repeat every minute
+
+                    if (App.Args.Length > 0 && App.Args[0].ToLower() == "/refresh") RefreshNow(); //kick off refresh if requested
                 }
                 catch (Exception e) //some sort of error - release
                 {
@@ -591,6 +594,11 @@ namespace MediaBrowserService
                     this.Close();
                 }
             }
+        }
+
+        public void RefreshNow()
+        {
+            btnRefresh_Click(this, null);
         }
 
         public void Migrate25()

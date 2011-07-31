@@ -76,6 +76,10 @@ namespace MediaBrowserService
                                     Logger.ReportInfo("Migrating library due to request from client.");
                                     MainWindow.Instance.Migrate25();
                                     break;
+                                case IPCCommands.Refresh:
+                                    Logger.ReportInfo("Refreshing now due to request from client.");
+                                    MainWindow.Instance.RefreshNow();
+                                    break;
                                 case IPCCommands.CloseConnection:
                                     //exit this connection
                                     Logger.ReportInfo("Client requested we stop listening.");
