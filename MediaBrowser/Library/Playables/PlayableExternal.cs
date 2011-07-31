@@ -85,6 +85,7 @@ namespace MediaBrowser.Library.Playables
             
             PlaybackController.Stop(); //stop whatever is playing
             startTime = DateTime.Now; //grab this so we can attempt to determine how long we are playing the item
+            //MediaBrowser.Library.Logging.Logger.ReportInfo("Playing external.  Duration: " + duration);
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
             string args = string.Format(p.Args, path);
@@ -118,8 +119,10 @@ namespace MediaBrowser.Library.Playables
             player.WaitForExit();
             //mark as watched based on if we were running long enough to play the item
             TimeSpan elapsed = DateTime.Now - startTime;
-            if (duration == TimeSpan.FromMinutes(0) || elapsed.Ticks >= (duration.Ticks * Config.Instance.MaxResumePct))
+            //MediaBrowser.Library.Logging.Logger.ReportInfo("finished playing.  played for: " + elapsed);
+            if (duration == TimeSpan.FromMinutes(0) || elapsed.Ticks >= (duration.Ticks * (double)(Convert.ToDouble(Config.Instance.MaxResumePct)/100)))
             {
+                //MediaBrowser.Library.Logging.Logger.ReportInfo("marking watched");
                 MarkWatched();
             }
             //now re-store MCE 
