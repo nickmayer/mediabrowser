@@ -583,7 +583,7 @@ namespace MediaBrowser.LibraryManagement
         /// </summary>
         /// <param name="location">the location to check (assumed to be a network location)</param>
         /// <param name="timeout">milliseconds to wait if not avail</param>
-        internal static bool WaitForLocation(string location, int timeout)
+        public static bool WaitForLocation(string location, int timeout)
         {
             double elapsed = 0;
             string dir = Path.HasExtension(location) ? Path.GetDirectoryName(location) : location; //try and be sure it is a directory (will give parent if already directory)
