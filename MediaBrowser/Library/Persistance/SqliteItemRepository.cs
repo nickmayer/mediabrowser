@@ -824,7 +824,11 @@ namespace MediaBrowser.Library.Persistance {
                 {
                     while (reader.Read())
                     {
-                        children.Add(GetItem(reader, (string)reader["obj_type"]));
+                        var item = GetItem(reader, (string)reader["obj_type"]);
+                        if (item != null)
+                        {
+                            children.Add(item);
+                        }
                     }
                 }
             }
