@@ -331,6 +331,7 @@ namespace MediaBrowser.Library.Entities {
         }
 
         bool ValidateChildrenImpl() {
+
             location = null;
             // cache a copy of the children
 
@@ -376,7 +377,7 @@ namespace MediaBrowser.Library.Entities {
 
             foreach (var item in currentChildren.Values.Where(item => item != null)) {
                 changed = true;
-                Logger.ReportInfo("Removing missing item from library: "+item.Path);
+                Logger.ReportInfo("Removing missing item from library: ("+item.Id+") "+item.Path);
                 lock (ActualChildren) {
                     ActualChildren.RemoveAll(current => current.Id == item.Id);
                 }
@@ -416,7 +417,7 @@ namespace MediaBrowser.Library.Entities {
                 items = GetNonCachedChildren();
 
                 if (allowCache) {
-                    SaveChildren(items);
+                    SaveChildren(items, true);
                 }
             }
 
@@ -455,12 +456,20 @@ namespace MediaBrowser.Library.Entities {
            
         }
 
-        void SaveChildren(IList<BaseItem> items) {
+        void SaveChildren(IList<BaseItem> items)
+        {
+            SaveChildren(items, false);
+        }
+
+        void SaveChildren(IList<BaseItem> items, bool saveIndvidualChidren) {
             Kernel.Instance.ItemRepository.SaveChildren(Id, items.Select(i => i.Id));
-            //this is unecessary and very expensive - no reason to save every child because one of them changed...
-            //foreach (var item in items) {
-            //    Kernel.Instance.ItemRepository.SaveItem(item);
-            //}
+            if (saveIndvidualChidren)
+            {
+                foreach (var item in items)
+                {
+                    Kernel.Instance.ItemRepository.SaveItem(item);
+                }
+            }
         }
 
         void SetParent(List<BaseItem> items) {
