@@ -209,8 +209,9 @@ namespace MediaBrowser.Library.Entities {
                 case "Studios":
                     return s => Studio.GetStudio(s);
 
+                default:
+                    return i => GenericItem.GetItem(i);
             }
-            return null;
         }
 
         public IList<Index> IndexBy(string property)
