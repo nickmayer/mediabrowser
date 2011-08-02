@@ -65,7 +65,7 @@ namespace MediaBrowser.Library.Playables
         {
             Video video = (media as Video);
             this.path = video.VideoFiles.ToArray()[0];
-            this.duration = TimeSpan.FromMinutes(video.RunningTime.Value);
+            this.duration = TimeSpan.FromMinutes(video.RunningTime ?? 0);
         }
 
         public PlayableExternal(string path) {

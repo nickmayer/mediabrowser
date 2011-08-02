@@ -36,7 +36,11 @@ namespace MediaBrowser.Library.Entities {
             return list;
         }
 
-        
+        public BaseItem FindVirtualChild(Guid id)
+        {
+            return virtualChildren.Find(i => i.Id == id);
+        }
+
         
         //public override bool RefreshMetadata(MediaBrowser.Library.Metadata.MetadataRefreshOptions options) {
         //    // these are root folders they support no metadata
