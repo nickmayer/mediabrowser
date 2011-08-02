@@ -350,16 +350,19 @@ namespace MediaBrowserService
         private void UpdateRefreshElapsed()
         {
             //this is called in a timer loop while refresh running
-            if (this.Visibility == Visibility.Visible && _refreshRunning &&  !_refreshCanceled && !_config.RefreshFailed)
+            if (_refreshRunning &&  !_config.RefreshFailed)
             {
-                //we only care about this if the interface is actually visible
                 Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
                 {
-                    double pctDone = refreshProgress.Value;
-                    var elapsed = DateTime.Now - _refreshStartTime;
-                    var estCompl = pctDone > .75 ? TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds) : TimeSpan.MaxValue;
-                    string estString = pctDone > .75 ? " Est. Remaining Time: " + String.Format("{0:00}:{1:00}:{2:00}", estCompl.Hours, estCompl.Minutes, estCompl.Seconds) : "";
-                    lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}", elapsed.Hours, elapsed.Minutes, elapsed.Seconds) + estString;
+                    if (this.Visibility == Visibility.Visible)
+                    {
+                        //we only care about this part if the interface is actually visible
+                        double pctDone = refreshProgress.Value;
+                        var elapsed = DateTime.Now - _refreshStartTime;
+                        var estCompl = pctDone > .75 ? TimeSpan.FromMilliseconds((elapsed.TotalMilliseconds * (1 / pctDone)) - elapsed.TotalMilliseconds) : TimeSpan.MaxValue;
+                        string estString = pctDone > .75 ? " Est. Remaining Time: " + String.Format("{0:00}:{1:00}:{2:00}", estCompl.Hours, estCompl.Minutes, estCompl.Seconds) : "";
+                        lblSvcActivity.Content = "Refresh Running... Elapsed Time: " + String.Format("{0:00}:{1:00}:{2:00}", elapsed.Hours, elapsed.Minutes, elapsed.Seconds) + estString;
+                    }
                     currentRefreshIcon = currentRefreshIcon == 0 ? 1 : 0;
                     notifyIcon.Icon = RefreshIcons[currentRefreshIcon];
                 }));
