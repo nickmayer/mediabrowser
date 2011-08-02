@@ -129,14 +129,14 @@ namespace MediaBrowser.Library.Persistance
             try
             {
 
+                if (delayedCommands.Count == 0)
+                {
+                    // Logger.ReportInfo("Delayed writer idle");
+                    return;  //no reason to go through this if no cmds...
+                }
                 List<SQLiteCommand> copy;
                 lock (delayedCommands)
                 {
-                    if (delayedCommands.Count == 0)
-                    {
-                       // Logger.ReportInfo("Delayed writer idle");
-                        return;  //no reason to go through this if no cmds...
-                    }
                     copy = delayedCommands.ToList();
                     delayedCommands.Clear();
                 }
@@ -159,7 +159,15 @@ namespace MediaBrowser.Library.Persistance
                                 Logger.ReportException("Failed to execute SQL Stmt: " + command.CommandText, e);
                             }
                         }
-                        tran.Commit();
+                        try
+                        {
+                            tran.Commit();
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Failed to commit transaction.", e);
+                            tran.Rollback();
+                        }
                     }
                 }
 
