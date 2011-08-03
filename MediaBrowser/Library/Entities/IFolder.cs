@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 namespace MediaBrowser.Library.Entities {
-    interface IFolder {
+    public interface IFolder {
         IList<BaseItem> Children { get; }
         event EventHandler<ChildrenChangedEventArgs> ChildrenChanged;
         void EnsureChildrenLoaded();

@@ -214,7 +214,7 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        public IList<Index> IndexBy(string property)
+        public virtual IList<Index> IndexBy(string property)
         {
 
             if (string.IsNullOrEmpty(property)) throw new ArgumentException("Index type should not be none!");

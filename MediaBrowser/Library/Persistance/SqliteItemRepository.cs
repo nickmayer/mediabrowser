@@ -782,7 +782,8 @@ namespace MediaBrowser.Library.Persistance {
                         PrimaryImagePath = currentContainer.PrimaryImagePath,
                         SecondaryImagePath = currentContainer.SecondaryImagePath,
                         BannerImagePath = currentContainer.BannerImagePath,
-                        BackdropImagePaths = currentContainer.BackdropImagePaths
+                        BackdropImagePaths = currentContainer.BackdropImagePaths,
+                        DisplayMediaType = currentContainer.DisplayMediaType,
                     };
                     index.Add(container);
                 }
