@@ -388,17 +388,12 @@ namespace MediaBrowser.Library.Entities {
             return changed;
         }
 
-        public void ReCacheAllImages(ThumbSize s)
+        public void ReCacheAllImages()
         {
             string ignore;
             if (this.PrimaryImage != null)
             {
-                //Logger.ReportInfo("Caching image for " + Name + " at " + s.Width + "x" + s.Height);
-                this.PrimaryImage.ClearLocalImages(); //be sure these are gone and we are sure to re-load
-                if (s != null && s.Width > 0 && s.Height > 0)
-                    ignore = this.PrimaryImage.GetLocalImagePath(s.Width, s.Height); //force to re-cache at display size
-                else
-                    ignore = this.PrimaryImage.GetLocalImagePath(); //no size - cache at original size
+                ignore = this.PrimaryImage.GetLocalImagePath(); //no size - cache at original size
             }
 
             foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in this.BackdropImages)

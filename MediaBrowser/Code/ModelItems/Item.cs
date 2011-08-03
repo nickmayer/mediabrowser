@@ -618,8 +618,7 @@ namespace MediaBrowser.Library
                 primaryImage = null;
                 bannerImage = null;
                 primaryImageSmall = null;
-                ThumbSize s = baseItem.Parent != null ? baseItem.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-                baseItem.ReCacheAllImages(s);
+                baseItem.ReCacheAllImages();
                 Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => this.FireAllPropertiesChanged());
             });
         }

@@ -646,8 +646,7 @@ namespace MediaBrowser.Library {
                     {
                         this.folder.ValidateChildren(); //need to look for new/deleted items if not auto
                     }
-                    ThumbSize size = this.folder.Parent != null ? this.folder.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-                    this.folder.ReCacheAllImages(size);
+                    this.folder.ReCacheAllImages();
                     if (includeChildren)
                     {
                         //and now all our children
@@ -655,8 +654,7 @@ namespace MediaBrowser.Library {
                         {
                             Logger.ReportInfo("refreshing " + item.Name);
                             item.RefreshMetadata(MetadataRefreshOptions.Force);
-                            ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-                            //item.ReCacheAllImages(s);
+                            item.ReCacheAllImages();
                         }
                     }
                 }

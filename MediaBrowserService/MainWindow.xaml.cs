@@ -968,9 +968,8 @@ namespace MediaBrowserService
                         {
                             if (manualOptions.IncludeImagesOption) //main images
                             {
-                                ThumbSize s = item.Parent != null ? item.Parent.ThumbDisplaySize : new ThumbSize(0, 0);
-                                Logger.ReportInfo("Caching all images for " + item.Name + ". Stored primary image size: " + s.Width + "x" + s.Height);
-                                item.ReCacheAllImages(s);
+                                Logger.ReportInfo("Caching all images for " + item.Name );
+                                item.ReCacheAllImages();
                             }
                             if (manualOptions.MigrateOption) //migrate main images
                             {
