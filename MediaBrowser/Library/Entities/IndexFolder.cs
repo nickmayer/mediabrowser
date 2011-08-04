@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MediaBrowser.Library.Entities
 {
-    class IndexFolder : Series
+    public class IndexFolder : Series
     {
         public override void ValidateChildren()
         {
