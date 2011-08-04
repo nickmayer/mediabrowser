@@ -396,7 +396,7 @@ namespace MediaBrowser.Library.Persistance {
             base.ShutdownDatabase();
         }
 
-        private bool BackupDatabase()
+        public bool BackupDatabase()
         {
             bool success = true;
             FlushWriter();
@@ -449,8 +449,6 @@ namespace MediaBrowser.Library.Persistance {
 
         public void MigrateItems()
         {
-            Logger.ReportInfo("Attempting to backup cache db...");
-            if (BackupDatabase()) Logger.ReportInfo("Database backed up successfully");
             var guids = new List<Guid>();
             var cmd = connection.CreateCommand();
             //test to see if it is an old repo (data won't exist in a new one)

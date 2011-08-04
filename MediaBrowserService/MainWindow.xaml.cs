@@ -631,10 +631,17 @@ namespace MediaBrowserService
 
             try
             {
-                UpdateProgress("PlayStates", .10);
-                var newRepo = Kernel.Instance.ItemRepository;
+                var newRepo = Kernel.Instance.ItemRepository as MediaBrowser.Library.Persistance.SqliteItemRepository;
                 var oldRepo = new MediaBrowser.Library.ItemRepository();
-                Thread.Sleep(5000); //allow old repo to load
+                UpdateProgress("Preparing...", .03);
+                Thread.Sleep(15000); //allow old repo to load
+                if (Kernel.Instance.ConfigData.EnableExperimentalSqliteSupport)
+                {
+                    UpdateProgress("Backing up DB", .05);
+                    Logger.ReportInfo("Attempting to backup cache db...");
+                    if (newRepo.BackupDatabase()) Logger.ReportInfo("Database backed up successfully");
+                }
+                UpdateProgress("PlayStates", .10);
                 newRepo.MigratePlayState(oldRepo);
 
                 UpdateProgress("DisplayPrefs", .20);

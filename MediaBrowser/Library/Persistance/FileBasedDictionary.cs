@@ -191,9 +191,12 @@ namespace MediaBrowser.Library.Persistance {
         {
             get
             {
-                foreach (var obj in dictionary.Values)
+                lock (dictionary)
                 {
-                    yield return obj.Data;
+                    foreach (var obj in dictionary.Values)
+                    {
+                        yield return obj.Data;
+                    }
                 }
             }
         }
