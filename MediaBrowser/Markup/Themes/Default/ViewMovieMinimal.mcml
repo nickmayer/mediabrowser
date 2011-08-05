@@ -439,7 +439,7 @@
     </Properties>
     <Locals>
       <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandleHomeEndKeys="true" HandlePageKeys="true" HandlePageCommands="true" HandleMouseWheel="true"/>
-      <ScrollingData Name="ScrollingData" BeginPadding="5" />
+      <ScrollingData Name="ScrollingData" />
       <Command Name="ScrollUpCommand" />
       <Command Name="ScrollDownCommand" />
 
@@ -517,7 +517,7 @@
               <DockLayoutInput Position="Client"/>
             </LayoutInput>
             <Children>
-              <Scroller Name="ActorScroller" FadeSize="5" ScrollingData="[ScrollingData]" Orientation="Vertical">
+              <Scroller Name="ActorScroller" FadeSize="-5" ScrollingData="[ScrollingData]" Orientation="Vertical">
                 <LayoutInput>
                   <AnchorLayoutInput Horizontal="Fill" Vertical="Near"/>
                 </LayoutInput>
