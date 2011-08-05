@@ -301,7 +301,7 @@ namespace MediaBrowser.Library.Providers
                             break;
                     }
                 }
-                movie.MediaInfo.OverrideData.AudioStreamCount = doc.SelectNodes("Title/MediaInfo/Audio").Count;
+                movie.MediaInfo.OverrideData.AudioStreamCount = doc.SelectNodes("Title/MediaInfo/Audio/Codec[text() != '']").Count;
                 movie.MediaInfo.OverrideData.AudioChannelCount = doc.SafeGetString("Title/MediaInfo/Audio/Channels", "");
                 movie.MediaInfo.OverrideData.AudioBitRate = doc.SafeGetInt32("Title/MediaInfo/Audio/BitRate");
                 string video = doc.SafeGetString("Title/MediaInfo/Video/Codec", "");

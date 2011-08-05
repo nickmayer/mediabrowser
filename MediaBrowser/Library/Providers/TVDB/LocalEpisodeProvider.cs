@@ -189,7 +189,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     }
                 }
             }
-            if (episode.MediaInfo.AudioStreamCount == 0) episode.MediaInfo.OverrideData.AudioStreamCount = metadataDoc.SelectNodes("Item/MediaInfo/Audio").Count;
+            if (episode.MediaInfo.AudioStreamCount == 0) episode.MediaInfo.OverrideData.AudioStreamCount = metadataDoc.SelectNodes("Item/MediaInfo/Audio/Codec[text() != '']").Count;
             if (string.IsNullOrEmpty(episode.MediaInfo.AudioChannelCount)) episode.MediaInfo.OverrideData.AudioChannelCount = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Channels", "");
             if (episode.MediaInfo.AudioBitRate == 0) episode.MediaInfo.OverrideData.AudioBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Audio/BitRate");
             if (string.IsNullOrEmpty(episode.MediaInfo.VideoCodec))

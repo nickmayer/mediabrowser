@@ -211,7 +211,7 @@ namespace MediaBrowser.Library.Providers
             if (doc != null)
             {
                 moviedbId = id;
-                // This is problamatic for forign films we want to keep the alt title. 
+                // This is problematic for foreign films we want to keep the alt title. 
                 //if (store.Name == null)
                 //    store.Name = doc.SafeGetString("//movie/title");
 
@@ -308,7 +308,7 @@ namespace MediaBrowser.Library.Providers
         private static Dictionary<string, string> CreateGenreMap()
         {
             Dictionary<string, string> ret = new Dictionary<string, string>();
-            // some of the genres in the moviedb may be deamed too specific/detailed
+            // some of the genres in the moviedb may be deemed too specific/detailed
             // they certainly don't align to those of other sources 
             // this collection will let us map them to alternative names or "" to ignore them
             /* these are the imdb genres that should probably be our common targets
