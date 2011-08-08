@@ -138,7 +138,14 @@ namespace MediaBrowser.Library.Providers
                 }
                 if (movie.ImdbID == null)
                 {
-                    movie.ImdbID = doc.SafeGetString("Title/IMDbId");
+                    if (!string.IsNullOrEmpty(doc.SafeGetString("Title/IMDB")))
+                    {
+                        movie.ImdbID = doc.SafeGetString("Title/IMDB");
+                    }
+                    else
+                    {
+                        movie.ImdbID = doc.SafeGetString("Title/IMDbId");
+                    }
                 }
 
 
