@@ -304,6 +304,19 @@ namespace MediaBrowser.Library.Entities
             }
         }
 
+        public string VideoResolutionExtendedString
+        {
+            get
+            {
+                if (this.VideoFrameRateString != null && this.VideoFrameRateString != "")
+                {
+                    return string.Format("{0} {1} {2}", this.VideoResolutionString, Kernel.Instance.StringData.GetString("AtStr"), this.VideoFrameRateString);
+                }
+                else
+                    return this.VideoResolutionString;
+            }
+        }
+
         public string ScanTypeString
         {
             get
@@ -314,6 +327,7 @@ namespace MediaBrowser.Library.Entities
                     return "";
             }
         }
+
         public string ScanTypeChar
         {
             get
@@ -398,7 +412,7 @@ namespace MediaBrowser.Library.Entities
             {
                 if (this.VideoRateStr != null && this.VideoRateStr != "")
                 {
-                    return string.Format("{0} {1}", this.VideoCodec, this.VideoRateStr);
+                    return string.Format("{0} {1} {2}", this.VideoCodec, Kernel.Instance.StringData.GetString("AtStr"), this.VideoRateStr);
                 }
                 else
                     return this.VideoCodec;
@@ -408,7 +422,7 @@ namespace MediaBrowser.Library.Entities
 
         #region Properties Audio
 
-        protected static Dictionary<string, string> AudioImageNames = new Dictionary<string, string>() 
+        protected static Dictionary<string, string> AudioImageNames = new Dictionary<string, string>()
         {
             {"aac","Aac"},
             {"ac-3","Ac3"},
@@ -555,7 +569,7 @@ namespace MediaBrowser.Library.Entities
             {
                 if (this.AudioRateStr != null && this.AudioRateStr != "")
                 {
-                    return string.Format("{0} {1}", this.AudioProfileString, this.AudioRateStr);
+                    return string.Format("{0} {1} {2}", this.AudioProfileString, Kernel.Instance.StringData.GetString("AtStr"), this.AudioRateStr);
                 }
                 else
                     return this.AudioProfileString;

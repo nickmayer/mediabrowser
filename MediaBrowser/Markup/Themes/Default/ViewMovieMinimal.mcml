@@ -8,7 +8,7 @@
 	  xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
 	  xmlns:sb="resx://MediaBrowser/MediaBrowser.Resources/SimpleButton"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ImageButton"
-    xmlns:sib="resx://MediaBrowser/MediaBrowser.Resources/SpinImageButton"  
+    xmlns:sib="resx://MediaBrowser/MediaBrowser.Resources/SpinImageButton"
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
 	  xmlns:sr="resx://MediaBrowser/MediaBrowser.Resources/StarRating"
 	  xmlns:mp="resx://MediaBrowser/MediaBrowser.Resources/MPAARating"
@@ -629,10 +629,12 @@
       <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
       <Changed Source="[Item.MediaInfo]" InitialEvaluate="true">
         <Actions>
-          <Set Target="[MediaInfo.Content]" Value="[Item.MediaInfo.CombinedInfo]"/>
+          <Set Target="[MediaInfoResolution.Content]" Value="[Item.MediaInfo.VideoResolutionExtendedString]"/>
+          <Set Target="[MediaInfoVideo.Content]" Value="[Item.MediaInfo.VideoCodecExtendedString]"/>
+          <Set Target="[MediaInfoAudio.Content]" Value="[Item.MediaInfo.AudioCodecExtendedString]"/>
         </Actions>
       </Changed>
-
+ 
       <Binding Target="[MediaInfoPane.Visible]" Source="[Item.HasMediaInfo]" />
 
       <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]"/>
@@ -684,11 +686,13 @@
 
               <Panel Margins="0,0,0,0" Name="MediaInfoPane" >
                 <Layout>
-                  <FlowLayout Orientation="Horizontal" AllowWrap="true"/>
+                  <FlowLayout Orientation="Horizontal" AllowWrap="true" Spacing="10,0" />
                 </Layout>
                 <Children>
                   <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,48"/>
-                  <Text Name="MediaInfo" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
+                  <Text Name="MediaInfoResolution" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
+                  <Text Name="MediaInfoVideo" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
+                  <Text Name="MediaInfoAudio" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
                 </Children>
               </Panel>
 

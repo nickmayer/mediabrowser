@@ -306,6 +306,7 @@ namespace MediaBrowser.Library.Localization
         public string MinutesStr = "mins"; //Minutes abbreviation
         public string KBsStr = "Kbps";  //Kilobytes per second
         public string FrameRateStr = "fps";  //Frames per second
+        public string AtStr = "at";  //x at y, e.g. 1920x1080 at 25 fps
 
         //Profiler
         public string WelcomeProf = "Welcome to Media Browser";
