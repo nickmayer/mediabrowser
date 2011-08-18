@@ -18,17 +18,22 @@ namespace MediaBrowser.Library.Logging {
                     return "Configurator-";
                 }
                 else
-                {
-                    switch (Kernel.LoadContext)
+                    if (AppDomain.CurrentDomain.FriendlyName.ToLower().Contains("mbmigrate"))
                     {
-                        case MBLoadContext.Service:
-                            return "MBService-";
-                        case MBLoadContext.Core:
-                            return "MBCore-";
-                        default:
-                            return "Unknown-";
+                        return "Migration-";
                     }
-                }
+                    else
+                    {
+                        switch (Kernel.LoadContext)
+                        {
+                            case MBLoadContext.Service:
+                                return "MBService-";
+                            case MBLoadContext.Core:
+                                return "MBCore-";
+                            default:
+                                return "Unknown-";
+                        }
+                    }
             }
         }
 

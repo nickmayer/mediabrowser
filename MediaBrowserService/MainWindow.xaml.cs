@@ -574,13 +574,13 @@ namespace MediaBrowserService
                     RefreshInterface();
                     lblSinceDate.Content = "Since: "+_startTime;
                     CoreCommunications.StartListening(); //start listening for commands from core/configurator
-                    if (Kernel.Instance.ConfigData.UseSQLImageCache)
-                    {
-                        //start the image server
-                        Logger.ReportInfo("Starting SQL Image server on port: " + imagePort);
-                        imageServer = new ImageCacheProxy(imagePort, 10);
-                        imageServer.Start();
-                    }
+                    //if (Kernel.Instance.ConfigData.UseSQLImageCache)
+                    //{
+                    //    //start the image server
+                    //    Logger.ReportInfo("Starting SQL Image server on port: " + imagePort);
+                    //    imageServer = new ImageCacheProxy(imagePort, 10);
+                    //    imageServer.Start();
+                    //}
                     Logger.ReportInfo("Service Started");
                     _mainLoop = Async.Every(60 * 1000, () => MainIteration()); //repeat every minute
 
@@ -631,7 +631,7 @@ namespace MediaBrowserService
 
             try
             {
-                var newRepo = Kernel.Instance.ItemRepository as MediaBrowser.Library.Persistance.SqliteItemRepository;
+                var newRepo = Kernel.Instance.ItemRepository;
                 var oldRepo = new MediaBrowser.Library.ItemRepository();
                 UpdateProgress("Preparing...", .03);
                 Thread.Sleep(15000); //allow old repo to load
@@ -684,7 +684,7 @@ namespace MediaBrowserService
             _config.ForceRebuildInProgress = true;
             _config.Save();
             Kernel.Instance.ConfigData.MBVersion = "2.5.0.0";
-            Kernel.Instance.ConfigData.UseNewSQLRepo = true;
+            //Kernel.Instance.ConfigData.UseNewSQLRepo = true;
             Kernel.Instance.ConfigData.Save();
 
             UpdateProgress("Migration finished. Re-starting...", 1);
@@ -711,8 +711,8 @@ namespace MediaBrowserService
             };
 
             //if we're here we are a fresh install or failed migration and need to update this
-            Kernel.Instance.ConfigData.UseNewSQLRepo = true;
-            Kernel.UseNewSQLRepo = true;
+            //Kernel.Instance.ConfigData.UseNewSQLRepo = true;
+            //Kernel.UseNewSQLRepo = true;
             Kernel.Instance.ConfigData.MBVersion = "2.5.0.0";
             Kernel.Instance.ConfigData.Save();
 

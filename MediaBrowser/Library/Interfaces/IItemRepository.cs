@@ -17,6 +17,7 @@ namespace MediaBrowser.Library
         IEnumerable<BaseItem> RetrieveChildren(Guid id);
         IList<Index> RetrieveIndex(Folder folder, string property, Func<string, BaseItem> constructor);
         List<BaseItem> RetrieveSubIndex(string childTable, string property, object value);
+        bool BackupDatabase();
 
         PlaybackStatus RetrievePlayState(Guid id);
         DisplayPreferences RetrieveDisplayPreferences(DisplayPreferences dp);

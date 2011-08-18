@@ -36,6 +36,11 @@ namespace MediaBrowser.Library.Persistance {
             return rval;
         }
 
+        public bool BackupDatabase()
+        {
+            return repository.BackupDatabase();
+        }
+
         public IEnumerable<IMetadataProvider> RetrieveProviders(Guid guid) {
             return Memoize(guid, providers, repository.RetrieveProviders); 
         }

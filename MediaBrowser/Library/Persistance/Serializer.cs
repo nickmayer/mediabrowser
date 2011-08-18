@@ -227,16 +227,19 @@ namespace MediaBrowser.Library.Persistance {
  
 
         private object DeserializeInternal(BinaryReader br) {
+            int ndx = 0;
+            object obj = null;
             try {
-                object obj = constructor.DynamicInvoke();
+                obj = constructor.DynamicInvoke();
 
                 for (int i = 0; i < persistables.Length; i++) {
+                    ndx = i;
                     persistables[i].Deserialize(br, obj);
                 }
 
                 return obj;
             } catch (Exception exception) {
-                throw new SerializationException("Failed to deserialize object, corrupt stream.", exception);
+                throw new SerializationException("Failed to deserialize object, corrupt stream. ("+exception != null && obj != null ? exception.Message + " Type: "+obj.GetType().Name +" Attribute: "+persistables[ndx].MemberInfo.Name : "", exception);
             }
         }
 
