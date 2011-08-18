@@ -30,18 +30,6 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        public override List<string> Studios
-        {
-            get
-            {
-                return OurSeries.Studios;
-            }
-            set
-            {
-                base.Studios = value;
-            }
-        }
-
         public Season Season {
             get {
                 return Parent as Season;
