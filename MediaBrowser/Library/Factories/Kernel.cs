@@ -47,7 +47,8 @@ namespace MediaBrowser.Library {
         Service = 0x1,
         Core = 0x2,
         Other = 0x4,
-        All = Service | Core | Other
+        Configurator = 0x8,
+        All = Service | Core | Other | Configurator
     }
 
     /// <summary>
@@ -67,7 +68,7 @@ namespace MediaBrowser.Library {
          * This should be set to "R" (or "SPn") with each official release and then immediately changed back to "R+" (or "SPn+")
          * so future trunk builds will indicate properly.
          * */
-        private const string versionExtension = "B1";
+        private const string versionExtension = "B2";
 
         public const string MBSERVICE_MUTEX_ID = "Global\\{E155D5F4-0DDA-47bb-9392-D407018D24B1}";
         public const string MBCLIENT_MUTEX_ID = "Global\\{9F043CB3-EC8E-41bf-9579-81D5F6E641B9}";
@@ -75,7 +76,7 @@ namespace MediaBrowser.Library {
         static object sync = new object();
         static Kernel kernel;
 
-        public static bool UseNewSQLRepo = false;
+        //public static bool UseNewSQLRepo = false;
 
         public bool MajorActivity
         {
@@ -145,7 +146,7 @@ namespace MediaBrowser.Library {
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
 
-                if (LoadContext != MBLoadContext.Service)
+                if (LoadContext == MBLoadContext.Core || LoadContext == MBLoadContext.Configurator)
                 {
                     Async.Queue("Start Service", () =>
                     {
@@ -332,6 +333,9 @@ namespace MediaBrowser.Library {
                     else
                         if (assemblyName.Contains("ehexthost"))
                             _loadContext = MBLoadContext.Core;
+                        else
+                            if (assemblyName.Contains("configurator"))
+                                _loadContext = MBLoadContext.Configurator;
                             else
                                 _loadContext = MBLoadContext.Other;
                 }
@@ -382,8 +386,7 @@ namespace MediaBrowser.Library {
              TrailerProviders = new List<ITrailerProvider>() { new LocalTrailerProvider()}
              };
 
-            Kernel.UseNewSQLRepo = config.UseNewSQLRepo;
-            Logger.ReportInfo(Kernel.UseNewSQLRepo ? "==========Using new SQL Repo========" : "========Using OLD Repo=====");
+            //Kernel.UseNewSQLRepo = config.UseNewSQLRepo;
 
             // kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
             kernel.PlaybackControllers.Add(new PlaybackController());
