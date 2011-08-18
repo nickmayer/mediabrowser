@@ -886,7 +886,6 @@
   <data name="ButtonNewFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\button\buttonnewfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="aspect_125" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\aspect_125.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -1141,5 +1140,8 @@
   </data>
   <data name="SpinImageButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\Controls\Buttons\SpinImageButton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="media_3d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\MediaInfo\media_3d.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

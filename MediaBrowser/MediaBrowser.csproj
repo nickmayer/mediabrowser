@@ -431,6 +431,7 @@
     <Content Include="Images\MediaInfo\Legacy Channels\codec_dts_hd_ma_51.png" />
     <Content Include="Images\MediaInfo\Legacy Channels\codec_dts_hd_ma_61.png" />
     <Content Include="Images\MediaInfo\Legacy Channels\codec_dts_hd_ma_71.png" />
+    <Content Include="Images\MediaInfo\media_3d.png" />
     <Content Include="Images\MediaInfo\media_3gp.png" />
     <Content Include="Images\MediaInfo\media_asf.png" />
     <Content Include="Images\MediaInfo\media_avi.png" />
