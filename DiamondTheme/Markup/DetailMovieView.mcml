@@ -464,15 +464,15 @@
               <Panel Layout="HorizontalFlow">
                 <Children>
                   <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#VResMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
-                  <Text Content="[Item.MediaInfo.VideoResolutionString]" Color="[ValueColor]" Font="[ValueFont]"/>
+                  <Text Content="[Item.MediaInfo.VideoResolutionExtendedString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
               </Panel>
-              <Panel Layout="HorizontalFlow">
+         <!-- <Panel Layout="HorizontalFlow">
                 <Children>
                   <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#VFrameRateMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
                   <Text Content="[Item.MediaInfo.VideoFrameRateString]" Color="[ValueColor]" Font="[ValueFont]"/>
                 </Children>
-              </Panel>
+              </Panel> -->
               <Panel Layout="HorizontalFlow">
                 <Children>
                   <Text Font="[TitleFont]" Color="[AttributeColor]" Content="[Application.LocalStrings.#ACodecMedia!cor:String.ToUpper]"                         MinimumSize="[MinSize]"/>
