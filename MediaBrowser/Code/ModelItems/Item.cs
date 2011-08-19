@@ -226,12 +226,23 @@ namespace MediaBrowser.Library
             }
         }
 
+        public string HDTypeString
+        {
+            get
+            {
+                if (HDType != 0)
+                {
+                return HDType.ToString() + this.MediaInfo.ScanTypeChar;
+                }
+                else return "";
+            }
+        }
+
         public Microsoft.MediaCenter.UI.Image HDTypeImage
         {
             get
             {
-
-                return Helper.GetMediaInfoImage("HDType_" + this.HDType.ToString() + this.MediaInfo.ScanTypeChar);
+                return Helper.GetMediaInfoImage("HDType_" + this.HDTypeString);
             }
         }
 
