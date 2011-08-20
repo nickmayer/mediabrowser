@@ -476,6 +476,7 @@ namespace MediaBrowser.Library {
             {
                 case MBLoadContext.Core:
                 case MBLoadContext.Other:
+                case MBLoadContext.Configurator:
                     //tell the service to re-load the config
                     MBServiceController.SendCommandToService(IPCCommands.ReloadConfig);
                     break;
