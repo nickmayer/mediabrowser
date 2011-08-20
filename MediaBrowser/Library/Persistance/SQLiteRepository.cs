@@ -93,6 +93,7 @@ namespace MediaBrowser.Library.Persistance
         {
             try
             {
+                FlushWriter();
                 connection.Close();
             }
             catch { }
@@ -148,7 +149,7 @@ namespace MediaBrowser.Library.Persistance
                     {
                         foreach (var command in copy)
                         {
-                            command.Transaction = tran;
+                            //command.Transaction = tran;
                             //Logger.ReportInfo("About to execute for:  "+ command.Parameters[1].Value+"  "+command.Parameters[14].Value + command.CommandText);
                             try
                             {
@@ -161,7 +162,9 @@ namespace MediaBrowser.Library.Persistance
                         }
                         try
                         {
+                            //Logger.ReportInfo("Committing " + copy.Count + " statements...");
                             tran.Commit();
+                            //Logger.ReportInfo("Done.");
                         }
                         catch (Exception e)
                         {

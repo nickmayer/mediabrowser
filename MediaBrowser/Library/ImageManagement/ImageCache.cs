@@ -115,7 +115,7 @@ namespace MediaBrowser.Library.ImageManagement {
         static Dictionary<Guid, object> FileLocks = new Dictionary<Guid, object>();
 
         class Instansiator {
-            public static IImageCache Instance = Kernel.Instance.ConfigData.UseSQLImageCache ? (IImageCache)new SQLiteImageCache(System.IO.Path.Combine(ApplicationPaths.AppCachePath,"imagecache.db")) : (IImageCache)new ImageCache(ApplicationPaths.AppImagePath);
+            public static IImageCache Instance = (IImageCache)new ImageCache(ApplicationPaths.AppImagePath);
         }
        
 

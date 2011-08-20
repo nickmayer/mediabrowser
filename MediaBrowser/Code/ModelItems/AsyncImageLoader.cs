@@ -157,7 +157,7 @@ namespace MediaBrowser.Code.ModelItems {
           
 
             Image newImage = null;
-            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory && !Kernel.Instance.ConfigData.UseSQLImageCache )
+            if (Kernel.Instance.ConfigData.CacheAllImagesInMemory)
             {
                 //defunct code..
                 //if (Kernel.Instance.ConfigData.UseSQLImageCache)
@@ -190,7 +190,7 @@ namespace MediaBrowser.Code.ModelItems {
 
                 if (newImage == null) {
                     //Logger.ReportVerbose("Loading image : " + localPath);
-                    string imageRef = Kernel.Instance.ConfigData.UseSQLImageCache ? localPath : "file://" + localPath;
+                    string imageRef = "file://" + localPath;
                     newImage = new Image(imageRef);
                 }
 

@@ -214,6 +214,9 @@
       <Component Id="MediaBrowserService.exe" Guid="D19774DD-253A-47E2-94FA-3EFB220E2B77" DiskId="1">
         <File Id="MediaBrowserService.exe" Name="MediaBrowserService.exe" Source="..\MediaBrowserService\bin\$(var.BuildType)\MediaBrowserService.exe" Checksum="no"/>
       </Component>
+      <Component Id="MBMigrate.exe" Guid="D66E860A-24F2-44A5-B9E1-BD24BF3D7146" DiskId="1">
+        <File Id="MBMigrate.exe" Name="MBMigrate.exe" Source="..\MBMigrate\bin\$(var.BuildType)\MBMigrate.exe" Checksum="no"/>
+      </Component>
     </DirectoryRef>
 
     <!-- This component is installed so the default ProgramData\MediaBrowser is created during installerion -->
@@ -267,6 +270,7 @@
       <ComponentRef Id="Configurator.exe" />
       <ComponentRef Id="MediaBrowserService.exe" />
       <ComponentRef Id="MediaBrowser.dll" />
+      <ComponentRef Id="MBMigrate.exe" />
 			<ComponentRef Id="Application.png" />
       <ComponentRef Id="ApplicationInactive.png" />
       <ComponentRef Id="RegistrationVista.xml" />
@@ -407,11 +411,11 @@
 			<Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
-<!--
-      <Custom Action="CA_StartService_Cmd" After="InstallFinalize">
+
+      <Custom Action="CA_Migrate" After="InstallFinalize">
          <![CDATA[NOT REMOVE]]>
       </Custom>
--->
+
 		</InstallExecuteSequence>
 
 		<!-- The InstallUISequence table describes the order that actions will be executed when the user     -->
@@ -503,9 +507,12 @@
      <Property Id="OPTIONALDESKTOPSHORTCUT">1</Property>
      <Property Id="OPTIONALSTARTMENUSHORTCUT">1</Property>  
      <!--<Property Id="OPTIONALMBSTARTUPSHORTCUT">1</Property>-->
-     <Property Id="OPTIONALMBSERVICESTARTUPSHORTCUT">1</Property> 
+     <Property Id="OPTIONALMBSERVICESTARTUPSHORTCUT">1</Property>
     <Property Id="LAUNCHAPPONEXIT">1</Property>
 
+    <!-- CustomAction to run migration after the setup finishes -->
+    <CustomAction Id="CA_Migrate" FileKey="MBMigrate.exe" ExeCommand="" Execute="immediate" Return="check" Impersonate="yes"/>
+    
     <!-- CustomAction to condtionally launch the configurator after the setup finishes -->
     <CustomAction Id="StartAppOnExit" BinaryKey="WixCA" DllEntry="WixShellExec" Execute="immediate" Return="check" Impersonate="yes"/>
     <Property Id="WixShellExecTarget" Value="[#Configurator.exe]"/>

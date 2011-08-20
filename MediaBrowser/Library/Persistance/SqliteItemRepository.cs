@@ -334,6 +334,7 @@ namespace MediaBrowser.Library.Persistance {
 
         private SqliteItemRepository(string dbPath) {
 
+            Logger.ReportInfo("==========Using new SQL Repo========");
             dbFileName = dbPath;
 
             SQLiteConnectionStringBuilder connectionstr = new SQLiteConnectionStringBuilder();
@@ -382,11 +383,6 @@ namespace MediaBrowser.Library.Persistance {
             alive = true; // tell writer to keep going
             Async.Queue("Sqlite Writer", DelayedWriter);
 
-            //if (Kernel.LoadContext == MBLoadContext.Service) //don't want to be migrating simultaneously in service and core...
-            //{
-            //    MigratePlayState();
-            //    MigrateDisplayPrefs();
-            //}
         }
 
         public override void ShutdownDatabase()
@@ -399,10 +395,9 @@ namespace MediaBrowser.Library.Persistance {
         public bool BackupDatabase()
         {
             bool success = true;
-            FlushWriter();
-            connection.Close();
             try
             {
+                connection.Close();
                 File.Copy(dbFileName, dbFileName + ".bak", true);
             }
             catch (Exception e)
@@ -478,9 +473,10 @@ namespace MediaBrowser.Library.Persistance {
                 var item = RetrieveItemOld(id);
                 if (item != null)
                 {
-                    Logger.ReportVerbose("Migrating " + item.Name);
+                    Logger.ReportInfo("Migrating " + item.Name);
                     SaveItem(item);
                     cnt++;
+                    Thread.Sleep(20); //allow the delayed writer to keep up...
                 }
             }
             Logger.ReportInfo("==== Migrated " + cnt + " items.");
@@ -797,22 +793,22 @@ namespace MediaBrowser.Library.Persistance {
 
             List<BaseItem> children = new List<BaseItem>();
 
-            if (!Kernel.UseNewSQLRepo)
-            {
-                var cached = RetrieveChildrenOld(id);
-                if (cached != null)
-                {
-                    foreach (var guid in cached)
-                    {
-                        var item = RetrieveItem(guid);
-                        if (item != null)
-                        {
-                            children.Add(item);
-                        }
-                    }
-                }
-            }
-            else
+            //if (!Kernel.UseNewSQLRepo)
+            //{
+            //    var cached = RetrieveChildrenOld(id);
+            //    if (cached != null)
+            //    {
+            //        foreach (var guid in cached)
+            //        {
+            //            var item = RetrieveItem(guid);
+            //            if (item != null)
+            //            {
+            //                children.Add(item);
+            //            }
+            //        }
+            //    }
+            //}
+            //else
             {
                 var cmd = connection.CreateCommand();
                 cmd.CommandText = "select * from items where guid in (select child from children where guid = @guid)";
@@ -866,7 +862,7 @@ namespace MediaBrowser.Library.Persistance {
                             }
                             catch (Exception e)
                             {
-                                Logger.ReportException("Unable to deserialize object during legacy retrieval (" + id + ").", e);
+                                Logger.ReportException("Unable to deserialize object during legacy retrieval - probably old data (" + id + ").", e);
                             }
                         }
                     }
@@ -880,13 +876,12 @@ namespace MediaBrowser.Library.Persistance {
             BaseItem item = null;
             //using (new MediaBrowser.Util.Profiler("===========RetrieveItem============="))
             {
-                if (!Kernel.UseNewSQLRepo)
+                //if (!Kernel.UseNewSQLRepo)
+                //{
+                //    item = RetrieveItemOld(id);
+                //}
+                //else
                 {
-                    item = RetrieveItemOld(id);
-                }
-                else
-                {
-                    //test
                     var cmd2 = connection.CreateCommand();
                     cmd2.CommandText = "select * from items where guid = @guid";
                     cmd2.AddParam("@guid", id);

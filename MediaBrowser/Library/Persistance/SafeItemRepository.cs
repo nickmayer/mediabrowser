@@ -36,6 +36,11 @@ namespace MediaBrowser.Library.Persistance {
 
         }
 
+        public bool BackupDatabase()
+        {
+            return SafeFunc(() => repository.BackupDatabase());
+        }
+
         public IEnumerable<IMetadataProvider> RetrieveProviders(Guid guid) {
             return SafeFunc(() => repository.RetrieveProviders(guid));
         }

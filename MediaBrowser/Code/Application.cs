@@ -749,18 +749,22 @@ namespace MediaBrowser
                     }
                     else
                     {
-                        //upgrading from 2.3.2 - do the SQL migration
-                        if (MBServiceController.SendCommandToService(IPCCommands.Migrate + "2.5"))
-                        {
-                            MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                            ev.Dialog(LocalizedStrings.Instance.GetString("MigrateNecDial"), LocalizedStrings.Instance.GetString("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
-                        }
-                        else
-                        {
-                            MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                            ev.Dialog(CurrentInstance.StringData("MigrateFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
-                        }
-                        return false; //need to shut-down
+                        //upgrading from 2.3.2 - item migration should have already occurred...
+                        Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
+                        var oldRepo = new ItemRepository();
+                        Kernel.Instance.ItemRepository.MigrateDisplayPrefs(oldRepo);
+                        Async.Queue("Playstate Migration",() => Kernel.Instance.ItemRepository.MigratePlayState(oldRepo),15000); //delay to allow repo to load
+                        //if (MBServiceController.SendCommandToService(IPCCommands.Migrate + "2.5"))
+                        //{
+                        //    MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                        //    ev.Dialog(LocalizedStrings.Instance.GetString("MigrateNecDial"), LocalizedStrings.Instance.GetString("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        //}
+                        //else
+                        //{
+                        //    MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
+                        //    ev.Dialog(CurrentInstance.StringData("MigrateFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
+                        //}
+                        //return false; //need to shut-down
                     }
                     break;
             }
@@ -1334,7 +1338,19 @@ namespace MediaBrowser
             if (item.IsPlayable)
             {
                 currentPlaybackController = item.PlaybackController;
-                item.Resume();
+                //async this so it doesn't slow us down if the service isn't responding for some reason
+                MediaBrowser.Library.Threading.Async.Queue("Cancel Svc Refresh", () =>
+                {
+                    MBServiceController.SendCommandToService(IPCCommands.CancelRefresh); //tell service to stop
+                });
+                //put this on a thread so that we can run it sychronously, but not tie up the UI
+                MediaBrowser.Library.Threading.Async.Queue("Resume Action", () =>
+                {
+                    if (Application.CurrentInstance.RunPrePlayProcesses(item, false))
+                    {
+                        item.Resume();
+                    }
+                });
             }
         }
 

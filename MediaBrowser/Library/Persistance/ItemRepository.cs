@@ -190,6 +190,10 @@ namespace MediaBrowser.Library {
             return null;
         }
 
+        public bool BackupDatabase()
+        {
+            return true;
+        }
 
         public void MigratePlayState(ItemRepository repo)
         {

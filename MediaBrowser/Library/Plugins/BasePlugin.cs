@@ -98,9 +98,9 @@ namespace MediaBrowser.Library.Plugins {
 
         public virtual MBLoadContext InitDirective { 
             get {
-                //by default, any plug-in that produces an interface should only init in core
+                //by default, any plug-in that produces an interface should only init in core and the configurator
                 if (InstallGlobally)
-                    return MBLoadContext.Core | MBLoadContext.Other;
+                    return MBLoadContext.Core | MBLoadContext.Configurator;
                 else
                     return MBLoadContext.All; 
             } 

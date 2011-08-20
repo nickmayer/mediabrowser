@@ -375,7 +375,7 @@ namespace MediaBrowser.Library {
                                     {
                                         Id = (folder.Name + thisContainer.Name).GetMD5(),
                                         DateCreated = createdTime,
-                                        Name = "(" + subItems.Count + " items) " + thisContainer.Name,
+                                        Name =  thisContainer.Name + " (" + subItems.Count + " items)",
                                         Overview = thisContainer.Overview,
                                         MpaaRating = thisContainer.MpaaRating,
                                         Genres = thisContainer.Genres,
@@ -471,7 +471,7 @@ namespace MediaBrowser.Library {
                                     var container = new IndexFolder()
                                     {
                                         Id = (folder.Name + thisContainer.Name).GetMD5(),
-                                        Name = "(" + subItems.Count + " items) " + thisContainer.Name,
+                                        Name = thisContainer.Name + " (" + subItems.Count + " items)",
                                         Overview = thisContainer.Overview,
                                         MpaaRating = thisContainer.MpaaRating,
                                         Genres = thisContainer.Genres,
@@ -554,7 +554,7 @@ namespace MediaBrowser.Library {
                         {
                             //collapse series in the list
                             SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
-                            FindRecentWatchedChildren(item as Folder, subItems, maxSize);
+                            FindRecentUnwatchedChildren(item as Folder, subItems, maxSize);
                             if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                             {
                                 //collapse into a series folder
@@ -564,7 +564,7 @@ namespace MediaBrowser.Library {
                                 {
                                     Id = (folder.Name + thisContainer.Name).GetMD5(),
                                     DateCreated = createdTime,
-                                    Name = "(" + subItems.Count + " items) " + thisContainer.Name,
+                                    Name = thisContainer.Name + " (" + subItems.Count + " items)",
                                     Overview = thisContainer.Overview,
                                     MpaaRating = thisContainer.MpaaRating,
                                     Genres = thisContainer.Genres,
