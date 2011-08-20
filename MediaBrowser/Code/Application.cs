@@ -750,6 +750,7 @@ namespace MediaBrowser
                     else
                     {
                         //upgrading from 2.3.2 - item migration should have already occurred...
+                        Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
                         var oldRepo = new ItemRepository();
                         Kernel.Instance.ItemRepository.MigrateDisplayPrefs(oldRepo);
                         Async.Queue("Playstate Migration",() => Kernel.Instance.ItemRepository.MigratePlayState(oldRepo),15000); //delay to allow repo to load
