@@ -124,12 +124,15 @@ namespace MediaBrowser.Library
             else
             {
                 //just a single one required
-                backdropImageIndex = randomizer.Next(baseItem.BackdropImages.Count);
-                backdropImage = new AsyncImageLoader(
-                    () => baseItem.BackdropImages[backdropImageIndex],
-                    null,
-                    () => this.FirePropertyChanged("BackdropImage"));
-                backdropImage.LowPriority = true;
+                if (baseItem.BackdropImages.Count > 0)
+                {
+                    backdropImageIndex = randomizer.Next(baseItem.BackdropImages.Count);
+                    backdropImage = new AsyncImageLoader(
+                        () => baseItem.BackdropImages[backdropImageIndex],
+                        null,
+                        () => this.FirePropertyChanged("BackdropImage"));
+                    backdropImage.LowPriority = true;
+                }
             }
         }
 
