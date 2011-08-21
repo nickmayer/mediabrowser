@@ -134,7 +134,7 @@ namespace MediaBrowser.Library {
                 if (!string.IsNullOrEmpty(config.UserSettingsPath) && Directory.Exists(config.UserSettingsPath)) {
                     ApplicationPaths.SetUserSettingsPath(config.UserSettingsPath);
                 }
-                
+
                 // Its critical to have the logger initialized early so initialization 
                 //   routines can use the right logger.
                 if (Logger.LoggerInstance != null) {
@@ -146,6 +146,28 @@ namespace MediaBrowser.Library {
                 var kernel = GetDefaultKernel(config, directives);
                 Kernel.Instance = kernel;
 
+                // setup IBN if not there
+                string ibnLocation = Config.Instance.ImageByNameLocation;
+                if (string.IsNullOrEmpty(ibnLocation))
+                    ibnLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
+                if (!Directory.Exists(ibnLocation))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(ibnLocation);
+                        Directory.CreateDirectory(Path.Combine(ibnLocation, "Genre"));
+                        Directory.CreateDirectory(Path.Combine(ibnLocation, "People"));
+                        Directory.CreateDirectory(Path.Combine(ibnLocation, "Studio"));
+                        Directory.CreateDirectory(Path.Combine(ibnLocation, "Year"));
+                        Directory.CreateDirectory(Path.Combine(ibnLocation, "General"));
+                        Directory.CreateDirectory(Path.Combine(ibnLocation, "MediaInfo"));
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Unable to create IBN location.", e);
+                    }
+                }
+                
                 if (LoadContext == MBLoadContext.Core || LoadContext == MBLoadContext.Configurator)
                 {
                     Async.Queue("Start Service", () =>
