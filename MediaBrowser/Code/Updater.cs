@@ -57,7 +57,7 @@ namespace MediaBrowser.Util
         const int UPDATE_CHECK_INTERVAL_DAYS = 2;
 
         // This should be replaced with the real location of the version info XML.
-        private const string infoURL = "http://www.mediabrowser.tv/version-info.xml?key={0}&os={1}&mem={2}&mac={3}";
+        private const string infoURL = "http://www.mediabrowser.tv/version-info.xml?key={0}&os={1}&mem={2}&mac={3}&mbver={4}";
 
         // Blocking call to check the XML file up in the cloud to see if we need an update.
         // This is really meant to be called as its own thread.
@@ -78,8 +78,8 @@ namespace MediaBrowser.Util
             {
                 XmlDocument doc = new XmlDocument();
                 string url = Kernel.Instance.ConfigData.SendStats ?
-                    string.Format(infoURL, Config.Instance.SupporterKey,Kernel.isVista ? "V" : "7",Helper.GetPhysicalMemory(), Helper.GetMACAddress()) :
-                    string.Format(infoURL, Config.Instance.SupporterKey,null,null,null);
+                    string.Format(infoURL, Config.Instance.SupporterKey,Kernel.isVista ? "V" : "7",Helper.GetPhysicalMemory(), Helper.GetMACAddress(),Kernel.Instance.VersionStr) :
+                    string.Format(infoURL, Config.Instance.SupporterKey,null,null,null,null);
 
                 doc.Load(new XmlTextReader(url));
                 XmlNode node;
