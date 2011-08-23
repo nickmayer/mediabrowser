@@ -98,6 +98,10 @@ namespace MediaBrowser.Library {
                 {
                     return UnwatchedItems;
                 }
+                else if (Application.CurrentInstance.RecentItemOption == "inprogress")
+                {
+                    return InProgressItems;
+                }
                 else
                 {
                     return NewestItems;
@@ -124,6 +128,16 @@ namespace MediaBrowser.Library {
             get {
                 if (folder != null && folder.ParentalAllowed) {
                     return GetNewestItems(Config.Instance.RecentItemCount);
+                } else {
+                    return new List<Item>(); //return empty list if folder is protected
+                }
+            }
+        }
+
+        public List<Item> InProgressItems {
+            get {
+                if (folder != null && folder.ParentalAllowed) {
+                    return GetInProgressItems(Config.Instance.RecentItemCount);
                 } else {
                     return new List<Item>(); //return empty list if folder is protected
                 }
@@ -216,6 +230,30 @@ namespace MediaBrowser.Library {
             return recentUnwatchedItems;
         }
 
+        List<Item> inProgressItems = null;
+        public List<Item> GetInProgressItems(int count)
+        {
+            if (inProgressItems == null)
+            {
+                inProgressItems = new List<Item>();
+                if (folder != null)
+                {
+                    Async.Queue("In progress Loader", () =>
+                    {
+                        var items = new SortedList<DateTime, Item>();
+                        FindInProgressChildren(folder, items, count);
+                        inProgressItems = items.Values.Select(i => i).Reverse().ToList();
+                        Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                        {
+                            FirePropertyChanged("RecentItems");
+                            FirePropertyChanged("QuickListItems");
+                        });
+                    }, null, true);
+                }
+            }
+            return inProgressItems;
+        }
+
         public void AddNewlyWatched(Item item)
         {
             //called when we watch something so add to top of list (this way we don't have to re-build whole thing)
@@ -235,6 +273,31 @@ namespace MediaBrowser.Library {
                 else
                 { //need to build a list - we will get added automatically
                     GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                }
+                FirePropertyChanged("RecentItems");
+                FirePropertyChanged("QuickListItems");
+            }
+        }
+
+        public void AddInProgress(Item item)
+        {
+            //called when we start watching something so add to top of list (this way we don't have to re-build whole thing)
+            if (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed)
+            {
+                if (inProgressItems != null) //already have a list
+                {
+                    //first we need to remove ourselves if we're already in the list (can't search with item cuz we were cloned)
+                    Item us = inProgressItems.Find(i => i.Id == item.Id);
+                    if (us != null)
+                    {
+                        inProgressItems.Remove(us);
+                    }
+                    //then add at the top and tell the UI to update
+                    inProgressItems.Insert(0, item);
+                }
+                else
+                { //need to build a list - we will get added automatically
+                    GetInProgressItems(Config.Instance.RecentItemCount);
                 }
                 FirePropertyChanged("RecentItems");
                 FirePropertyChanged("QuickListItems");
@@ -512,6 +575,100 @@ namespace MediaBrowser.Library {
                             Video i = item as Video;
                             DateTime watchedTime = i.PlaybackStatus.LastPlayed;
                             if (i.PlaybackStatus.PlayCount > 0 && DateTime.Compare(watchedTime, daysAgo) > 0)
+                            {
+                                FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
+                                folderModel.PhysicalParent = this;
+                                //only get ones watched within last 60 days
+                                while (foundNames.ContainsKey(watchedTime))
+                                {
+                                    // break ties 
+                                    watchedTime = watchedTime.AddMilliseconds(1);
+                                }
+                                Item modelItem = ItemFactory.Instance.Create(item);
+                                modelItem.PhysicalParent = folderModel;
+                                item.Parent = folder;
+                                var ignore = item.BackdropImages; //force these to load so they will inherit
+                                foundNames.Add(watchedTime, modelItem);
+                                if (foundNames.Count > maxSize)
+                                {
+                                    foundNames.RemoveAt(0);
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        public void FindInProgressChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
+        {
+            //using (new MediaBrowser.Util.Profiler("=== Recently Watched for "+this.Name))
+            {
+                DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+                foreach (var item in folder.Children)
+                {
+                    // recurse folders
+                    if (item is Folder)
+                    {
+                        //don't return items inside protected folders
+                        if (item.ParentalAllowed)
+                        {
+                            if (item is IContainer)
+                            {
+                                //collapse series in the list
+                                SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
+                                FindInProgressChildren(item as Folder, subItems, maxSize);
+                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
+                                {
+                                    //collapse into a container folder
+                                    var thisContainer = item as IContainer;
+                                    DateTime watchedTime = subItems.Keys.Max();
+                                    var container = new IndexFolder()
+                                    {
+                                        Id = (folder.Name + thisContainer.Name).GetMD5(),
+                                        Name = thisContainer.Name + " (" + subItems.Count + " items)",
+                                        Overview = thisContainer.Overview,
+                                        MpaaRating = thisContainer.MpaaRating,
+                                        Genres = thisContainer.Genres,
+                                        ImdbRating = thisContainer.ImdbRating,
+                                        Studios = thisContainer.Studios,
+                                        PrimaryImagePath = thisContainer.PrimaryImagePath,
+                                        SecondaryImagePath = thisContainer.SecondaryImagePath,
+                                        BannerImagePath = thisContainer.BannerImagePath,
+                                        BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                        Parent = folder
+                                    };
+
+                                    foreach (var pair in subItems)
+                                    {
+                                        container.AddChild(pair.Value.BaseItem);
+                                    }
+                                    var containerModel = ItemFactory.Instance.Create(container);
+                                    containerModel.PhysicalParent = this;
+                                    while (foundNames.ContainsKey(watchedTime))
+                                    {
+                                        // break ties 
+                                        watchedTime = watchedTime.AddMilliseconds(1);
+                                    }
+                                    foundNames.Add(watchedTime, containerModel);
+                                }
+                                else
+                                {
+
+                                    FindInProgressChildren(item as Folder, foundNames, maxSize);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (item is Video)
+                        {
+                            Video i = item as Video;
+                            DateTime watchedTime = i.PlaybackStatus.LastPlayed;
+                            if (i.PlaybackStatus.InProgress)
                             {
                                 FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
                                 folderModel.PhysicalParent = this;

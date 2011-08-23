@@ -16,7 +16,7 @@ namespace MediaBrowser.Library.Localization
     [Serializable]
     public class BaseStrings
     {
-        const string VERSION = "1.0028";
+        const string VERSION = "1.0030";
         const string ENFILE = "strings-en.xml";
 
         public string Version = VERSION; //this is used to see if we have changed and need to re-save
@@ -174,8 +174,10 @@ namespace MediaBrowser.Library.Localization
         //EHS        
         public string RecentlyWatchedEHS = "recently watched";
         public string RecentlyAddedEHS = "recently added";
+        public string InProgressEHS = "in progress";
         public string WatchedEHS = "Watched";
         public string AddedEHS = "Added";
+        public string InProgressCapEHS = "In Progress";
         public string AddedOnEHS = "Added on";
         public string OnEHS = "on";
         public string OfEHS = "of";

@@ -366,7 +366,7 @@ namespace MediaBrowser.Library
                     }
                     this.PlayableItem.QueueItem = queue;
                     this.PlayableItem.Play(this.PlayState, resume);
-                    if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to recent watched list if not a whole folder
+                    if (!this.IsFolder && this.TopParent != null) this.TopParent.AddInProgress(this); //add to in progress list if not a whole folder
                 }
             }
             catch (Exception)
