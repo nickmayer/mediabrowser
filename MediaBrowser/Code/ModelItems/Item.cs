@@ -424,6 +424,7 @@ namespace MediaBrowser.Library
                 switch (Application.CurrentInstance.RecentItemOption)
                 {
                     case "watched":
+                    case "inprogress":
                         string runTimeStr = "";
                         string watchTimeStr = "";
                         if (this.PlayState != null && this.PlayState.PositionTicks > 0)
