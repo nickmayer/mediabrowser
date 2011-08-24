@@ -433,6 +433,7 @@ namespace MediaBrowser.Library {
                                 {
                                     //collapse into a container
                                     var thisContainer = item as IContainer;
+                                    var ignore = item.BackdropImages; //force these to load so they will inherit
                                     DateTime createdTime = subItems.Keys.Max();
                                     var container = new IndexFolder()
                                     {
@@ -496,7 +497,8 @@ namespace MediaBrowser.Library {
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folderModel.Folder;
-                            var ignore = item.BackdropImages; //force these to load so they will inherit
+                            var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                            //ignore = item.BackdropImages;
                             foundNames.Add(creationTime, modelItem);
                             if (foundNames.Count >= maxSize)
                             {
@@ -530,6 +532,7 @@ namespace MediaBrowser.Library {
                                 {
                                     //collapse into a container folder
                                     var thisContainer = item as IContainer;
+                                    var ignore = item.BackdropImages; //force these to load so they will inherit
                                     DateTime watchedTime = subItems.Keys.Max();
                                     var container = new IndexFolder()
                                     {
@@ -587,7 +590,8 @@ namespace MediaBrowser.Library {
                                 Item modelItem = ItemFactory.Instance.Create(item);
                                 modelItem.PhysicalParent = folderModel;
                                 item.Parent = folder;
-                                var ignore = item.BackdropImages; //force these to load so they will inherit
+                                var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                                //ignore = item.BackdropImages;
                                 foundNames.Add(watchedTime, modelItem);
                                 if (foundNames.Count > maxSize)
                                 {
@@ -624,6 +628,7 @@ namespace MediaBrowser.Library {
                                 {
                                     //collapse into a container folder
                                     var thisContainer = item as IContainer;
+                                    var ignore = item.BackdropImages; //force these to load so they will inherit
                                     DateTime watchedTime = subItems.Keys.Max();
                                     var container = new IndexFolder()
                                     {
@@ -681,7 +686,7 @@ namespace MediaBrowser.Library {
                                 Item modelItem = ItemFactory.Instance.Create(item);
                                 modelItem.PhysicalParent = folderModel;
                                 item.Parent = folder;
-                                var ignore = item.BackdropImages; //force these to load so they will inherit
+                                var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
                                 foundNames.Add(watchedTime, modelItem);
                                 if (foundNames.Count > maxSize)
                                 {
@@ -716,6 +721,7 @@ namespace MediaBrowser.Library {
                             {
                                 //collapse into a series folder
                                 var thisContainer = item as IContainer;
+                                var ignore = item.BackdropImages; //force these to load so they will inherit
                                 DateTime createdTime = subItems.Keys.Max();
                                 var container = new IndexFolder()
                                 {
@@ -766,7 +772,7 @@ namespace MediaBrowser.Library {
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folder;
-                            var ignore = item.BackdropImages; //force to load so they will inherit
+                            var ignore = item.Parent.BackdropImages; //force to load so they will inherit
                             while (foundNames.ContainsKey(creationTime)) {
                                 creationTime = creationTime.AddMilliseconds(1);
                             }
