@@ -107,11 +107,14 @@ namespace MediaBrowser.Library
 
         private void getPrimaryBackdropImage()
         {
-            backdropImage = new AsyncImageLoader(
-                () => baseItem.BackdropImage,
-                null,
-                () => this.FirePropertyChanged("BackdropImage"));
-            backdropImage.LowPriority = true;
+            if (backdropImage == null)
+            {
+                backdropImage = new AsyncImageLoader(
+                    () => baseItem.BackdropImage,
+                    null,
+                    () => this.FirePropertyChanged("BackdropImage"));
+                backdropImage.LowPriority = true;
+            }
         }
 
         private void getRandomBackdropImage()
