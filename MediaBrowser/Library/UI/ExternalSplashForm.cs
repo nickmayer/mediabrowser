@@ -14,12 +14,6 @@ namespace MediaBrowser.Library
     {
         private delegate void VoidDelegate();
         static Form theForm;
-        private static Bitmap _backgroundImage = new Bitmap(Resources.mblogo1000);
-
-        public static void Display()
-        {
-            Display(_backgroundImage);
-        }
 
         public static void Display(Bitmap bgImage)
         {

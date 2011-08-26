@@ -69,6 +69,7 @@ namespace MediaBrowser
         //tracks whether to show recently added or watched items
         public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; } }
         private bool pluginUpdatesAvailable = false;
+        public System.Drawing.Bitmap ExtSplashBmp;
 
         public bool PluginUpdatesAvailable
         {
@@ -606,6 +607,17 @@ namespace MediaBrowser
                     if (MediaCenterEnvironment.MediaExperience != null && MediaCenterEnvironment.MediaExperience.Transport != null)
                     {
                         ShowNowPlaying = MediaCenterEnvironment.MediaExperience.Transport.PlayState == Microsoft.MediaCenter.PlayState.Playing;
+                    }
+
+                    // setup image to use in external splash screen
+                    string splashFilename = Path.Combine(Path.Combine(ApplicationPaths.AppIBNPath,"General"),"splash.png");
+                    if (File.Exists(splashFilename))
+                    {
+                        ExtSplashBmp = new System.Drawing.Bitmap(splashFilename);
+                    }
+                    else
+                    {
+                        ExtSplashBmp = new System.Drawing.Bitmap(Resources.mblogo1000);
                     }
 
                     // we need to validate the library so that changes in the RAL will get picked up without having to navigate

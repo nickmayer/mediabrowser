@@ -105,7 +105,7 @@ namespace MediaBrowser.Library.Playables
                 //throw up a form to cover the desktop if we minimize and we are in the primary monitor
                 if (System.Windows.Forms.Screen.FromHandle(mceWnd).Primary)
                 {
-                    ExternalSplashForm.Display();
+                    ExternalSplashForm.Display(Application.CurrentInstance.ExtSplashBmp);
                 }
             }
             if (minimizeMCE)

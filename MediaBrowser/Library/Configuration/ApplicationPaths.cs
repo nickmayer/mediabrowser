@@ -187,5 +187,19 @@ namespace MediaBrowser.Library.Configuration {
             }
         }
 
+        private static string _ibnPath;
+        public static string AppIBNPath
+        {
+            get {
+                if (_ibnPath == null)
+                {
+                    _ibnPath = Config.Instance.ImageByNameLocation;
+                    if (string.IsNullOrEmpty(_ibnPath))
+                        _ibnPath = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
+                }
+                return _ibnPath;
+            }
+        }
+
     }
 }
