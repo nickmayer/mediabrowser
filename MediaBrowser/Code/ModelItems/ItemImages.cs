@@ -91,7 +91,7 @@ namespace MediaBrowser.Library
                     }
                     else
                     {
-                        if (Config.Instance.RotateBackdrops)
+                        if (Config.Instance.RotateBackdrops && backdropImages.Count > 1)
                             GetNextBackDropImage();
                         else
                             getPrimaryBackdropImage();
