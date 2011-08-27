@@ -424,11 +424,19 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is IContainer)
+                            if (item is IContainer && !(item is Season))
                             {
                                 //collapse series in the list
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindNewestChildren(item as Folder, subItems, maxSize);
+                                if (item is Series)
+                                {
+                                    //we need to go another level into series to get actual items
+                                    foreach (var seriesChild in (item as Folder).Children)
+                                    {
+                                        if (seriesChild is Season) FindNewestChildren(seriesChild as Folder, subItems, maxSize);
+                                    }
+                                }
                                 if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                                 {
                                     //collapse into a container
@@ -523,11 +531,19 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is IContainer)
+                            if (item is IContainer && !(item is Season))
                             {
                                 //collapse series in the list
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindRecentWatchedChildren(item as Folder, subItems, maxSize);
+                                if (item is Series)
+                                {
+                                    //we need to go another level into series to get actual items
+                                    foreach (var seriesChild in (item as Folder).Children)
+                                    {
+                                        if (seriesChild is Season) FindRecentWatchedChildren(seriesChild as Folder, subItems, maxSize);
+                                    }
+                                }
                                 if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                                 {
                                     //collapse into a container folder
@@ -619,11 +635,19 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is IContainer)
+                            if (item is IContainer && !(item is Season))
                             {
                                 //collapse series in the list
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindInProgressChildren(item as Folder, subItems, maxSize);
+                                if (item is Series)
+                                {
+                                    //we need to go another level into series to get actual items
+                                    foreach (var seriesChild in (item as Folder).Children)
+                                    {
+                                        if (seriesChild is Season) FindInProgressChildren(seriesChild as Folder, subItems, maxSize);
+                                    }
+                                }
                                 if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                                 {
                                     //collapse into a container folder
@@ -712,11 +736,19 @@ namespace MediaBrowser.Library {
                     //don't return items inside protected folders
                     if (item.ParentalAllowed)
                     {
-                        if (item is IContainer)
+                        if (item is IContainer && !(item is Season))
                         {
                             //collapse series in the list
                             SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                             FindRecentUnwatchedChildren(item as Folder, subItems, maxSize);
+                            if (item is Series)
+                            {
+                                //we need to go another level into series to get actual items
+                                foreach (var seriesChild in (item as Folder).Children)
+                                {
+                                    if (seriesChild is Season) FindRecentUnwatchedChildren(seriesChild as Folder, subItems, maxSize);
+                                }
+                            }
                             if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                             {
                                 //collapse into a series folder
