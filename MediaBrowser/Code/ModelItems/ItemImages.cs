@@ -91,10 +91,7 @@ namespace MediaBrowser.Library
                     }
                     else
                     {
-                        if (Config.Instance.RotateBackdrops && backdropImages.Count > 1)
-                            GetNextBackDropImage();
-                        else
-                            getPrimaryBackdropImage();
+                        getPrimaryBackdropImage();
                     }
                 }
                 if (backdropImage != null) //may not have had time to fill this in yet - if not, a propertychanged event will fire it again
