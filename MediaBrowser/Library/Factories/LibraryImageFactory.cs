@@ -18,25 +18,31 @@ namespace MediaBrowser.Library.Factories {
         public static LibraryImageFactory Instance = new LibraryImageFactory();
 
         private LibraryImageFactory() {
-            // scrub off any image that is older than 3 weeks and is resized
-            Async.Queue(Async.STARTUP_QUEUE, () => {
-                var location = Kernel.Instance.MediaLocationFactory.Create(MediaBrowser.Library.Configuration.ApplicationPaths.AppImagePath) as IFolderMediaLocation;
-                if (location != null) {
-                    foreach (var file in location.Children) {
-                        if (!(file is IFolderMediaLocation) && file.DateCreated < DateTime.Now.AddDays(-21)) { 
-                            if (Regex.IsMatch(file.Name, "\\d+x\\d+")) {
-                                try {
-                                    System.IO.File.Delete(file.Path);
-                                }
-                                catch(Exception ex){
-                                    Logger.ReportException("Failed to clean up cache file " + file.Path, ex);
-                                }
-                            }
-                        }
-                    }
-                    ClearCache();
-                }
-            });
+            // scrub off any image that is older than 3 weeks and is resized -- Aaack - maybe this is why images disappear on folks! -ebr
+            //Async.Queue(Async.STARTUP_QUEUE, () => {
+            //    var location = Kernel.Instance.MediaLocationFactory.Create(MediaBrowser.Library.Configuration.ApplicationPaths.AppImagePath) as IFolderMediaLocation;
+            //    if (location != null)
+            //    {
+            //        foreach (var file in location.Children)
+            //        {
+            //            if (!(file is IFolderMediaLocation) && file.DateCreated < DateTime.Now.AddDays(-21))
+            //            {
+            //                if (Regex.IsMatch(file.Name, "\\d+x\\d+"))
+            //                {
+            //                    try
+            //                    {
+            //                        System.IO.File.Delete(file.Path);
+            //                    }
+            //                    catch (Exception ex)
+            //                    {
+            //                        Logger.ReportException("Failed to clean up cache file " + file.Path, ex);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        ClearCache();
+            //    }
+            //});
         }
 
         Dictionary<string, LibraryImage> cache = new Dictionary<string, LibraryImage>();
