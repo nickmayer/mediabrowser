@@ -184,7 +184,6 @@ namespace MediaBrowser.Library.Persistance
         public void FlushWriter()
         {
             InternalFlush();
-            flushing.WaitOne();
         }
 
 
