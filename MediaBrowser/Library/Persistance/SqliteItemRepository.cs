@@ -61,12 +61,15 @@ namespace MediaBrowser.Library.Persistance {
                     if (col.ColType == typeof(MediaType))
                         return Enum.Parse(typeof(MediaType), (string)data);
                     else
-                        if (col.ColType == typeof(Guid))
-                        {
-                            return new Guid((string)data);
-                        }
+                        if (col.ColType == typeof(MediaBrowser.Library.Network.DownloadPolicy))
+                            return Enum.Parse(typeof(MediaBrowser.Library.Network.DownloadPolicy), (string)data);
                         else
-                            return data;
+                            if (col.ColType == typeof(Guid))
+                            {
+                                return new Guid((string)data);
+                            }
+                            else
+                                return data;
                 } else
                     if (typ == typeof(Int64)) {
                         if (col.ColType == typeof(DateTime))
@@ -108,6 +111,9 @@ namespace MediaBrowser.Library.Persistance {
 
                     case "mediatype":
                         return ((MediaType)data).ToString();
+
+                    case "downloadpolicy":
+                        return ((MediaBrowser.Library.Network.DownloadPolicy)data).ToString();
 
                     case "int":
                     case "int16":
