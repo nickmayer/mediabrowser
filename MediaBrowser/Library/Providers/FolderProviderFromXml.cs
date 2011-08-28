@@ -101,13 +101,14 @@ namespace MediaBrowser.Library.Providers
                 }
                 
                 
-                string back = doc.SafeGetString("Title/Covers/Back");
-                if ((back != null) && (back.Length > 0))
-                {
-                    back = Path.Combine(location, back);
-                    if (File.Exists(back))
-                        Item.SecondaryImagePath = back;
-                }
+                //using this for logos now
+                //string back = doc.SafeGetString("Title/Covers/Back");
+                //if ((back != null) && (back.Length > 0))
+                //{
+                //    back = Path.Combine(location, back);
+                //    if (File.Exists(back))
+                //        Item.SecondaryImagePath = back;
+                //}
                
                 //Folder level security data
                 if (folder.CustomRating == null)
