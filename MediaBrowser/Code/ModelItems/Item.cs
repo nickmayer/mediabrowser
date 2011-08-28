@@ -427,6 +427,7 @@ namespace MediaBrowser.Library
                     case "inprogress":
                         string runTimeStr = "";
                         string watchTimeStr = "";
+                        string lastPlayedStr = LastPlayedString;
                         if (this.PlayState != null && this.PlayState.PositionTicks > 0)
                         {
                             TimeSpan watchTime = new TimeSpan(this.PlayState.PositionTicks);
@@ -440,8 +441,12 @@ namespace MediaBrowser.Library
                                 runTimeStr = Kernel.Instance.StringData.GetString("MinutesStr"); //have watched time but not running time so tack on 'mins'
                             }
                         }
+                        else if (this is FolderModel)
+                        {
+                            lastPlayedStr = Kernel.Instance.StringData.GetString("VariousEHS");
+                        }
                         return Kernel.Instance.StringData.GetString("WatchedEHS") + watchTimeStr + runTimeStr + " " +
-                            Kernel.Instance.StringData.GetString("OnEHS") + " " + LastPlayedString;
+                            Kernel.Instance.StringData.GetString("OnEHS") + " " + lastPlayedStr;
                     default:
                         return Kernel.Instance.StringData.GetString("AddedOnEHS") + " " + CreatedDateString;
                 }

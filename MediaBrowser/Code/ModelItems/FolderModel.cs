@@ -475,7 +475,14 @@ namespace MediaBrowser.Library {
                                 }
                                 else
                                 {
-                                    FindNewestChildren(item as Folder, foundNames, maxSize);
+                                    foreach (var pair in subItems)
+                                    {
+                                        foundNames.Add(pair.Key, pair.Value);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -581,8 +588,14 @@ namespace MediaBrowser.Library {
                                 }
                                 else
                                 {
-
-                                    FindRecentWatchedChildren(item as Folder, foundNames, maxSize);
+                                    foreach (var pair in subItems)
+                                    {
+                                        foundNames.Add(pair.Key, pair.Value);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -685,8 +698,14 @@ namespace MediaBrowser.Library {
                                 }
                                 else
                                 {
-
-                                    FindInProgressChildren(item as Folder, foundNames, maxSize);
+                                    foreach (var pair in subItems)
+                                    {
+                                        foundNames.Add(pair.Key, pair.Value);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -786,7 +805,14 @@ namespace MediaBrowser.Library {
                             }
                             else
                             {
-                                FindRecentUnwatchedChildren(item as Folder, foundNames, maxSize);
+                                foreach (var pair in subItems)
+                                {
+                                    foundNames.Add(pair.Key, pair.Value);
+                                    if (foundNames.Count >= maxSize)
+                                    {
+                                        foundNames.RemoveAt(0);
+                                    }
+                                }
                             }
                         }
                     }
