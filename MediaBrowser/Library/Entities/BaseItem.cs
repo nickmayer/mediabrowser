@@ -81,10 +81,9 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
-        //secondary images will fall back to parent (used for logos for TV primarily)
         public LibraryImage SecondaryImage {
             get {
-                return SearchParents<LibraryImage>(this, item => item.GetImage(item.SecondaryImagePath, false));
+                return GetImage(SecondaryImagePath) ?? PrimaryImage;
             }
         }
 
@@ -395,11 +394,6 @@ namespace MediaBrowser.Library.Entities {
             if (this.PrimaryImage != null)
             {
                 ignore = this.PrimaryImage.GetLocalImagePath(); //no size - cache at original size
-            }
-
-            if (this.SecondaryImage != null)
-            {
-                ignore = this.SecondaryImage.GetLocalImagePath(); //no size - cache at original size
             }
 
             foreach (MediaBrowser.Library.ImageManagement.LibraryImage image in this.BackdropImages)

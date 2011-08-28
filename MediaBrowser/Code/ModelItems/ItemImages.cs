@@ -294,6 +294,10 @@ namespace MediaBrowser.Library
         {
             get
             {
+                if (baseItem.SecondaryImagePath == null)
+                {
+                    return PrimaryImage;
+                }
                 EnsureSecondaryImageIsSet();
                 return secondaryImage.Image;
             }
@@ -305,7 +309,7 @@ namespace MediaBrowser.Library
             {
                 secondaryImage = new AsyncImageLoader(
                     () => baseItem.SecondaryImage,
-                    BlankImage,
+                    DefaultImage,
                     SecondaryImageChanged);
                 var ignore = secondaryImage.Image;
             }
@@ -563,7 +567,6 @@ namespace MediaBrowser.Library
         static Image DefaultActorImage = new Image("resx://MediaBrowser/MediaBrowser.Resources/MissingPerson");
         static Image DefaultStudioImage = new Image("resx://MediaBrowser/MediaBrowser.Resources/BlankGraphic");
         static Image DefaultFolderImage = new Image("resx://MediaBrowser/MediaBrowser.Resources/folder");
-        static Image BlankImage = new Image("resx://Mediabrowser/Mediabrowser.Resources/BlankImage");
 
         public Image DefaultImage
         {
