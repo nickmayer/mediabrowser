@@ -168,6 +168,7 @@ namespace MediaBrowser.Library.Entities {
 
             foreach (var item in RecursiveChildren) {
                 if (searchFunction(item) && !item.IsTrailer && (!Config.Instance.ExcludeRemoteContentInSearch || !item.IsRemoteContent)) {
+                    var ignore = item.BackdropImages; //force these to load
                     items[item.Id] = item;
                 }
             }
