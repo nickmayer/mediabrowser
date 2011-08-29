@@ -435,7 +435,7 @@ namespace Configurator
             cbxOptionHideFrame.IsChecked = config.HideFocusFrame;
             cbxOptionAutoEnter.IsChecked = config.AutoEnterSingleDirs;
             cbxScreenSaver.IsChecked = config.EnableScreenSaver;
-            tbxSSTimeout.Text = config.ScreenSaverTimeOut.ToString();
+            lblSSTimeout.Content = config.ScreenSaverTimeOut.ToString()+" Mins";
             cbxSendStats.IsChecked = config.SendStats;
 
             cbxOptionUnwatchedCount.IsChecked      = config.ShowUnwatchedCount;
@@ -1339,6 +1339,13 @@ sortorder: {2}
             SaveConfig();
         }
 
+        private void cbxScreenSaver_Click(object sender, RoutedEventArgs e)
+        {
+            config.EnableScreenSaver = (bool)cbxScreenSaver.IsChecked;
+            SaveConfig();
+
+        }
+
         private void cbxOptionAspectRatio_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)cbxOptionAspectRatio.IsChecked)
@@ -2004,16 +2011,25 @@ sortorder: {2}
             base.OnPreviewTextInput(e);
         }
 
-        private void tbxSSTimeout_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Int32.TryParse(tbxSSTimeout.Text, out config.ScreenSaverTimeOut);
-            SaveConfig();
-        }
-
         private void tbxSSTimeout_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !Char.IsDigit(e.Text[0]);
             base.OnPreviewTextInput(e);
+        }
+
+        private void btnSSTimeUp_Click(object sender, RoutedEventArgs e)
+        {
+            config.ScreenSaverTimeOut++;
+            config.Save();
+            lblSSTimeout.Content = config.ScreenSaverTimeOut.ToString() + " Mins";
+        }
+
+        private void btnSSTimeDn_Click(object sender, RoutedEventArgs e)
+        {
+            config.ScreenSaverTimeOut--;
+            if (config.ScreenSaverTimeOut < 1) config.ScreenSaverTimeOut = 1;
+            config.Save();
+            lblSSTimeout.Content = config.ScreenSaverTimeOut.ToString() + " Mins";
         }
 
 
@@ -2056,6 +2072,7 @@ sortorder: {2}
                 config.Save();
             }
         }
+
 
     }
 

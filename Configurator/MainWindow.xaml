@@ -190,9 +190,10 @@
                                 <CheckBox Height="22" Margin="10,76,10,0" Name="cbxOptionAspectRatio" VerticalAlignment="Top" ToolTip="Stretch folder image to fill display area" Click="cbxOptionAspectRatio_Click">Override Poster Aspect Ratio</CheckBox>
                                 <CheckBox Height="22" Margin="10,98,10,0" Name="cbxOptionHideFrame" VerticalAlignment="Top" ToolTip="Hide focus frame around posters." Click="cbxOptionHideFrame_Click">Hide Focus Frame</CheckBox>
                                 <CheckBox Height="22" Margin="10,120,10,0" Name="cbxOptionAutoEnter" VerticalAlignment="Top" Click="cbxOptionAutoEnter_Click" ToolTip="Automatically bypass an item with only one folder in it and continue to the contents of that folder." >Auto Enter Single Folder Items</CheckBox>
-                                <CheckBox Height="22" Margin="10,0,0,13" Name="cbxScreenSaver" ToolTip="Activate a screen saver after configured minutes of inactivity." VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="115">Screen Saver</CheckBox>
-                                <TextBox Height="23.38" HorizontalContentAlignment="Right" Margin="125,0,0,12" Name="tbxSSTimeout" ToolTip="Minutes of inactivity required for screen saver to activate." VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="33" />
-                                <Label Height="28" HorizontalAlignment="Right" Margin="0,0,47,12" Name="label15" VerticalAlignment="Bottom" Width="47">Mins</Label>
+                                <CheckBox Height="22" Margin="10,0,0,13" Name="cbxScreenSaver" ToolTip="Activate a screen saver after configured minutes of inactivity." Click="cbxScreenSaver_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="115">Screen Saver</CheckBox>
+                                <Label Height="28" Name="lblSSTimeout" HorizontalAlignment="Right" Margin="0,0,85,12" VerticalAlignment="Bottom" Width="55">Mins</Label>
+                                <Button Content="+" Height="20" Margin="179,142,0,0" Name="btnSSTimeUp" VerticalAlignment="Top" FontSize="10" FontWeight="Bold" FontFamily="Arial" Click="btnSSTimeUp_Click" HorizontalAlignment="Left" Width="18" />
+                                <Button Content="-" FontFamily="Arial" FontSize="10" FontWeight="Bold" Height="20" HorizontalAlignment="Left" Margin="199,142,0,0" Name="btnSSTimeDn" VerticalAlignment="Top" Width="18" Click="btnSSTimeDn_Click" />
                             </Grid>
                         </GroupBox>
                         <GroupBox Header="Media Tracking" HorizontalAlignment="Left" Margin="20,0,0,37.38" Name="groupBox2" Width="270" Height="145.38" VerticalAlignment="Bottom">
