@@ -71,11 +71,6 @@ namespace MediaBrowserService
                                     Logger.ReportInfo("Forcing re-build of library due to request from client.");
                                     MainWindow.Instance.ForceRebuild();
                                     break;
-                                case IPCCommands.Migrate+"2.5":
-                                    //Migrate for 2.5
-                                    Logger.ReportInfo("Migrating library due to request from client.");
-                                    MainWindow.Instance.Migrate25();
-                                    break;
                                 case IPCCommands.Refresh:
                                     Logger.ReportInfo("Refreshing now due to request from client.");
                                     MainWindow.Instance.RefreshNow();

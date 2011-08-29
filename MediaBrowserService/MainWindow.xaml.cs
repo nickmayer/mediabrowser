@@ -604,95 +604,6 @@ namespace MediaBrowserService
             btnRefresh_Click(this, null);
         }
 
-        public void Migrate25()
-        {
-            //version 2.5 migration
-            Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
-            {
-                gbManual.IsEnabled = false;
-                refreshProgress.Value = 0;
-                refreshProgress.Visibility = Visibility.Visible;
-                _refreshRunning = true;
-                _refreshCanceled = false;
-                _refreshCanceledTime = DateTime.MinValue;
-                _config.RefreshFailed = false;
-                _config.ForceRebuildInProgress = true;
-                _config.Save();
-                _refreshStartTime = DateTime.Now;
-                lblSvcActivity.Content = "Migration Running...";
-                lblSvcActivity.Foreground = Brushes.Black;
-                lblNextSvcRefresh.Foreground = Brushes.Black;
-                notifyIcon.ContextMenu.MenuItems["refresh"].Enabled = false;
-                notifyIcon.ContextMenu.MenuItems["exit"].Enabled = false;
-                notifyIcon.ContextMenu.MenuItems["refresh"].Text = "Migration Running...";
-                notifyIcon.Icon = RefreshIcons[0];
-                lblNextSvcRefresh.Content = "";
-            }));
-
-            try
-            {
-                var newRepo = Kernel.Instance.ItemRepository;
-                var oldRepo = new MediaBrowser.Library.ItemRepository();
-                UpdateProgress("Preparing...", .03);
-                Thread.Sleep(15000); //allow old repo to load
-                if (Kernel.Instance.ConfigData.EnableExperimentalSqliteSupport)
-                {
-                    UpdateProgress("Backing up DB", .05);
-                    Logger.ReportInfo("Attempting to backup cache db...");
-                    if (newRepo.BackupDatabase()) Logger.ReportInfo("Database backed up successfully");
-                }
-                UpdateProgress("PlayStates", .10);
-                newRepo.MigratePlayState(oldRepo);
-
-                UpdateProgress("DisplayPrefs", .20);
-                newRepo.MigrateDisplayPrefs(oldRepo);
-
-                UpdateProgress("Images", .40);
-                MediaBrowser.Library.ImageManagement.ImageCache.Instance.DeleteResizedImages();
-
-                UpdateProgress("Items", .80);
-                if (Kernel.Instance.ConfigData.EnableExperimentalSqliteSupport)
-                {
-                    //were already using SQL - our repo can migrate itself
-                    newRepo.MigrateItems();
-                }
-                else
-                {
-                    //need to go through the file-based repo and re-save
-                    foreach (var id in oldRepo.AllItems)
-                    {
-                        try
-                        {
-                            newRepo.SaveItem(oldRepo.RetrieveItem(id));
-                        }
-                        catch (Exception e)
-                        {
-                            //this could fail if some items have already been refreshed before we migrated them
-                            Logger.ReportException("Could not migrate item " + id, e);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.ReportException("Error in migration - will need to re-build cache.", e);
-                ForceRebuild();
-                return;
-            }
-
-            _refreshRunning = false;
-            _config.ForceRebuildInProgress = true;
-            _config.Save();
-            Kernel.Instance.ConfigData.MBVersion = "2.5.0.0";
-            //Kernel.Instance.ConfigData.UseNewSQLRepo = true;
-            Kernel.Instance.ConfigData.Save();
-
-            UpdateProgress("Migration finished. Re-starting...", 1);
-            Thread.Sleep(2000);
-            Restart();
-
-        }
-
         public void ForceRebuild()
         {
             //force a re-build of the entire library - used when new version requires cache clear
@@ -761,12 +672,6 @@ namespace MediaBrowserService
 
         void FullRefresh(bool force, ServiceRefreshOptions manualOptions)
         {
-            if (new System.Version(Kernel.Instance.ConfigData.MBVersion) < new System.Version(2, 5))
-            {
-                //we need to migrate before attempting a refresh
-                Migrate25();
-            }
-
             _refreshRunning = true;
             Dispatcher.Invoke(DispatcherPriority.Background, (System.Windows.Forms.MethodInvoker)(() =>
             {
