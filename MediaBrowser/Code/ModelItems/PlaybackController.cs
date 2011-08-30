@@ -366,6 +366,7 @@ namespace MediaBrowser
 
         long position;
         string title;
+        long? duration = null;
         private void UpdateStatus()
         {
             var transport = MediaTransport;
@@ -373,33 +374,37 @@ namespace MediaBrowser
             if (transport != null)
             {
                 state = transport.PlayState;
+                //changed this to get the "Name" property instead.  That makes it compatable with DVD playback as well.
+                string title = null;
+                try
+                {
+                    title = MediaExperience.MediaMetadata["Name"] as string;
+                    title = title.Substring(title.IndexOf(':') + 1); //strip off "dvd:" or "file:"
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Failed to get name on current media item!", e);
+                }
+
+                if (title != this.title) duration = null;  //changed items we were playing
+
                 long position = transport.Position.Ticks;
-                long duration = 0;
                 try
                 {
                     //only track position for a reasonable portion of the video
-                    duration = (TimeSpan.Parse((string)MediaExperience.MediaMetadata["Duration"])).Ticks;
-                    //Logger.ReportInfo("position "+position+ " Value "+duration);
+                    if (duration == null) //only need to do this once per item
+                        duration = (TimeSpan.Parse((string)MediaExperience.MediaMetadata["Duration"])).Ticks;
+                    //Logger.ReportInfo("position "+position+ " duration "+duration);
                     if (duration > 0)
                     {
-                        decimal pctIn = Decimal.Divide(position,duration) * 100;
+                        decimal pctIn = Decimal.Divide(position,duration.Value) * 100;
                         //Logger.ReportInfo("pctIn: " + pctIn + " duration: " + duration);
                         if (pctIn < Config.Instance.MinResumePct || pctIn > Config.Instance.MaxResumePct) position = 0; //don't track in very begginning or very end
                     }
                 }
                 catch { } // couldn't get duration - no biggie just don't blow chow
 
-                string title = null;
-                try
-                {
-                    title = MediaExperience.MediaMetadata["Title"] as string;
-                }
-                catch (Exception e)
-                {
-                    Logger.ReportException("Failed to get title on current media item!", e);
-                }
-
-                if (title != null && progressHandler != null && (this.title != title || this.position != position) && (duration / TimeSpan.TicksPerMinute) >= Config.Instance.MinResumeDuration)
+                if (title != null && progressHandler != null && (this.title != title || this.position != position) && (duration == 0 || (duration / TimeSpan.TicksPerMinute) >= Config.Instance.MinResumeDuration))
                 {
 
                     //Logger.ReportVerbose("progressHandler was called with : position =" + position.ToString() + " title :" + title);

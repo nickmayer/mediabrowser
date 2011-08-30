@@ -274,6 +274,9 @@ namespace MediaBrowser.Library {
                 { //need to build a list - we will get added automatically
                     GetRecentWatchedItems(Config.Instance.RecentItemCount);
                 }
+
+                inProgressItems = null;  // this will need to be re-built
+                
                 FirePropertyChanged("RecentItems");
                 FirePropertyChanged("QuickListItems");
             }

@@ -40,6 +40,7 @@ namespace MediaBrowser.Library
 
         static Transcoder transcoder;
         private string fileToPlay;
+        private string currentTitle;
         protected PlaybackStatus PlayState { get; private set; }
         public PlayableItem()
         {
@@ -125,6 +126,7 @@ namespace MediaBrowser.Library
         private void PlayAndGoFullScreen(string file)
         {
             this.fileToPlay = file;
+            this.currentTitle = file.Replace('\\','/');
             Play(file);
             if (!QueueItem)
                 PlaybackController.GoToFullScreen();
@@ -165,14 +167,13 @@ namespace MediaBrowser.Library
         public virtual bool UpdatePosition(string title, long positionTicks)
         {
             //I wonder if the below is slowing us down during playback - commenting out -ebr
-            Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
+            //Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
 
             if (PlayState == null)
             {
                 return false;
             }
 
-            var currentTitle = Path.GetFileNameWithoutExtension(this.fileToPlay);
             if (title == currentTitle)
             {
                 if (!PlayCountIncremented) //the first time we are called with a valid position mark us as being watched
