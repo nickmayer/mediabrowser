@@ -571,6 +571,7 @@ namespace MediaBrowser.Library
             FirePropertyChanged("HaveWatched");
             FirePropertyChanged("UnwatchedCount");
             FirePropertyChanged("ShowUnwatched");
+            FirePropertyChanged("InProgress");
             FirePropertyChanged("UnwatchedCountString");
             Logger.ReportVerbose("  ToggleWatched() changed to: " + HaveWatched.ToString());
             //HACK: This sort causes errors in detail lists, further debug necessary
