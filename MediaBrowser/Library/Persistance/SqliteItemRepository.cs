@@ -337,6 +337,8 @@ namespace MediaBrowser.Library.Persistance {
 
         // Display repo
         SQLiteDisplayRepository displayRepo;
+        // Playstate repo
+        FileBasedDictionary<PlaybackStatus> playbackStatus;
 
         private SqliteItemRepository(string dbPath) {
 
@@ -352,11 +354,10 @@ namespace MediaBrowser.Library.Persistance {
             connection = new SQLiteConnection(connectionstr.ConnectionString);
             connection.Open();
 
-            //itemRepo = new ItemRepository();
             displayRepo = new SQLiteDisplayRepository(Path.Combine(ApplicationPaths.AppUserSettingsPath, "display.db"));
+            playbackStatus = new FileBasedDictionary<PlaybackStatus>(GetPath("playstate", ApplicationPaths.AppUserSettingsPath));
 
-
-            string playStateDBPath = Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate.db");
+            //string playStateDBPath = Path.Combine(ApplicationPaths.AppUserSettingsPath, "playstate.db");
 
             string[] queries = {"create table if not exists provider_data (guid, full_name, data)",
                                 "create unique index if not exists idx_provider on provider_data(guid, full_name)",
@@ -369,8 +370,8 @@ namespace MediaBrowser.Library.Persistance {
                                 "create table if not exists schema_version (table_name primary key, version)",
                                 //"create table if not exists recent_list(top_parent, child, date_added)",
                                 //"create index if not exists idx_recent on recent_list(top_parent, child)",
-                                "attach database '"+playStateDBPath+"' as playstate_db",
-                                "create table if not exists playstate_db.play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)",
+                                //"attach database '"+playStateDBPath+"' as playstate_db",
+                                //"create table if not exists playstate_db.play_states (guid primary key, play_count, position_ticks, playlist_position, last_played)",
                                 "pragma temp_store = memory",
                                // @"create table display_prefs (guid primary key, view_type, show_labels, vertical_scroll 
                                //        sort_order, index_by, use_banner, thumb_constraint_width, thumb_constraint_height, use_coverflow, use_backdrop )" 
@@ -524,45 +525,57 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
-        public PlaybackStatus RetrievePlayState(Guid id) {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "select guid, play_count, position_ticks, playlist_position, last_played from playstate_db.play_states where guid = @guid";
-            cmd.AddParam("@guid", id);
-
-            var state = new PlaybackStatus();
-            using (var reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    state.Id = reader.GetGuid(0);
-                    state.PlayCount = reader.GetInt32(1);
-                    state.PositionTicks = reader.GetInt64(2);
-                    state.PlaylistPosition = reader.GetInt32(3);
-                    state.LastPlayed = reader.GetDateTime(4);
-                }
-                else state = null;
-            }
-
-            return state;
+        public PlaybackStatus RetrievePlayState(Guid id)
+        {
+            return playbackStatus[id];
         }
+
+        //public PlaybackStatus RetrievePlayState(Guid id)
+        //{
+        //    var cmd = connection.CreateCommand();
+        //    cmd.CommandText = "select guid, play_count, position_ticks, playlist_position, last_played from playstate_db.play_states where guid = @guid";
+        //    cmd.AddParam("@guid", id);
+
+        //    var state = new PlaybackStatus();
+        //    using (var reader = cmd.ExecuteReader())
+        //    {
+        //        if (reader.Read())
+        //        {
+        //            state.Id = reader.GetGuid(0);
+        //            state.PlayCount = reader.GetInt32(1);
+        //            state.PositionTicks = reader.GetInt64(2);
+        //            state.PlaylistPosition = reader.GetInt32(3);
+        //            state.LastPlayed = reader.GetDateTime(4);
+        //        }
+        //        else state = null;
+        //    }
+
+        //    return state;
+        //}
 
         public ThumbSize RetrieveThumbSize(Guid id)
         {
             return displayRepo.RetrieveThumbSize(id);
         }
 
-        public void SavePlayState(PlaybackStatus playState) {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "replace into playstate_db.play_states(guid, play_count, position_ticks, playlist_position, last_played) values(@guid, @playCount, @positionTicks, @playlistPosition, @lastPlayed)";
-            cmd.AddParam("@guid", playState.Id);
-            cmd.AddParam("@playCount", playState.PlayCount);
-            cmd.AddParam("@positionTicks", playState.PositionTicks);
-            cmd.AddParam("@playlistPosition", playState.PlaylistPosition);
-            cmd.AddParam("@lastPlayed", playState.LastPlayed);
-
-            //Logger.ReportInfo("Saving Playstate: " + playState.Id + " / " + playState.PlayCount + " / " + playState.LastPlayed);
-            QueueCommand(cmd);
+        public void SavePlayState(PlaybackStatus playState)
+        {
+            playbackStatus[playState.Id] = playState;
         }
+
+        //public void SavePlayState(PlaybackStatus playState)
+        //{
+        //    var cmd = connection.CreateCommand();
+        //    cmd.CommandText = "replace into playstate_db.play_states(guid, play_count, position_ticks, playlist_position, last_played) values(@guid, @playCount, @positionTicks, @playlistPosition, @lastPlayed)";
+        //    cmd.AddParam("@guid", playState.Id);
+        //    cmd.AddParam("@playCount", playState.PlayCount);
+        //    cmd.AddParam("@positionTicks", playState.PositionTicks);
+        //    cmd.AddParam("@playlistPosition", playState.PlaylistPosition);
+        //    cmd.AddParam("@lastPlayed", playState.LastPlayed);
+
+        //    //Logger.ReportInfo("Saving Playstate: " + playState.Id + " / " + playState.PlayCount + " / " + playState.LastPlayed);
+        //    QueueCommand(cmd);
+        //}
 
 
         public void SaveChildren(Guid id, IEnumerable<Guid> children) {

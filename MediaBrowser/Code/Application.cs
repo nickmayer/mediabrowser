@@ -758,18 +758,7 @@ namespace MediaBrowser
                         Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
                         var oldRepo = new ItemRepository();
                         Kernel.Instance.ItemRepository.MigrateDisplayPrefs(oldRepo);
-                        Async.Queue("Playstate Migration",() => Kernel.Instance.ItemRepository.MigratePlayState(oldRepo),15000); //delay to allow repo to load
-                        //if (MBServiceController.SendCommandToService(IPCCommands.Migrate + "2.5"))
-                        //{
-                        //    MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                        //    ev.Dialog(LocalizedStrings.Instance.GetString("MigrateNecDial"), LocalizedStrings.Instance.GetString("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
-                        //}
-                        //else
-                        //{
-                        //    MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-                        //    ev.Dialog(CurrentInstance.StringData("MigrateFailedDial"), CurrentInstance.StringData("ForcedRebuildCapDial"), DialogButtons.Ok, 30, true);
-                        //}
-                        //return false; //need to shut-down
+                        //Async.Queue("Playstate Migration",() => Kernel.Instance.ItemRepository.MigratePlayState(oldRepo),15000); //delay to allow repo to load
                     }
                     break;
             }
@@ -1158,6 +1147,7 @@ namespace MediaBrowser
                         session.AddBreadcrumb("DIRECTENTRY");
                     else
                         session.AddBreadcrumb(folder.Name);
+                    folder.NavigatingInto(); //make sure we validate
                     Navigate(folder.Children[0]);
                 }
                 else
