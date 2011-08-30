@@ -79,12 +79,12 @@ namespace MediaBrowser.Library.Playables
             get { return path; }
         }
 
-        private DateTime startTime;
+        //private DateTime startTime;
         protected override void PlayInternal(bool resume)
         {
             
             PlaybackController.Stop(); //stop whatever is playing
-            startTime = DateTime.Now; //grab this so we can attempt to determine how long we are playing the item
+            //startTime = DateTime.Now; //grab this so we can attempt to determine how long we are playing the item
             //MediaBrowser.Library.Logging.Logger.ReportInfo("Playing external.  Duration: " + duration);
             MediaType type  = MediaTypeResolver.DetermineType(path);
             ConfigData.ExternalPlayer p = configuredPlayers[type];
@@ -117,14 +117,14 @@ namespace MediaBrowser.Library.Playables
             Async.Queue("Ext Player Focus",() => GiveFocusToExtPlayer(player));
             //and wait for it to exit
             player.WaitForExit();
-            //mark as watched based on if we were running long enough to play the item
-            TimeSpan elapsed = DateTime.Now - startTime;
-            //MediaBrowser.Library.Logging.Logger.ReportInfo("finished playing.  played for: " + elapsed);
-            if (duration == TimeSpan.FromMinutes(0) || elapsed.Ticks >= (duration.Ticks * (double)(Convert.ToDouble(Config.Instance.MaxResumePct)/100)))
-            {
-                //MediaBrowser.Library.Logging.Logger.ReportInfo("marking watched");
+            //mark as watched based on if we were running long enough to play the item - take this out for now.  I think it will just be too confusing and unreliable
+            //TimeSpan elapsed = DateTime.Now - startTime;
+            //MediaBrowser.Library.Logging.Logger.ReportVerbose("finished playing.  played for: " + elapsed + "("+elapsed.Ticks+" ticks). Duration is " + duration + " Time required to be watched: " + TimeSpan.FromTicks((long)(duration.Ticks * (double)(Convert.ToDouble(Config.Instance.MaxResumePct) / 100))));
+            //if (duration == TimeSpan.FromMinutes(0) || elapsed.Ticks >= (duration.Ticks * (double)(Convert.ToDouble(Config.Instance.MaxResumePct)/100)))
+            //{
+            //    MediaBrowser.Library.Logging.Logger.ReportInfo("marking watched");
                 MarkWatched();
-            }
+            //}
             //now re-store MCE 
             wp.showCmd = 1; // 1- Normal; 2 - Minimize; 3 - Maximize;
             SetWindowPlacement(mceWnd, ref wp);
