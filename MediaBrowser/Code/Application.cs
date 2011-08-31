@@ -1112,6 +1112,8 @@ namespace MediaBrowser
 
         public void Navigate(Item item)
         {
+            currentContextMenu = null; //any sort of navigation should reset our context menu so it will properly re-evaluate on next ref
+            
             if (item.BaseItem is Person)
             {
                 NavigateToActor(item);
@@ -1190,6 +1192,7 @@ namespace MediaBrowser
 
         public void OpenMCMLPage(string page, Dictionary<string, object> properties)
         {
+            currentContextMenu = null; //good chance this has happened as a result of a menu item selection so be sure this is reset
             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ => session.GoToPage(page, properties));
         }
 
