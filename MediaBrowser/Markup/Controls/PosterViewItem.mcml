@@ -51,7 +51,7 @@
           <BooleanTransformer Inverse="true"/>
         </Transformer>
       </Binding>
-      <Changed Source="[Item.InProgress]" >
+      <Changed Source="[Item.InProgress]" InitialEvaluate="true" >
         <Conditions>
           <Equality Source="[Item.InProgress]" Value="true" />
         </Conditions>
@@ -59,7 +59,7 @@
           <Set Target="[UnwatchedGlow.ColorFilter]" Value="Cyan" />
         </Actions>
       </Changed>
-      <Changed Source="[Item.InProgress]" >
+      <Changed Source="[Item.InProgress]" InitialEvaluate="true" >
         <Conditions>
           <Equality Source="[Item.InProgress]" Value="false" />
         </Conditions>
