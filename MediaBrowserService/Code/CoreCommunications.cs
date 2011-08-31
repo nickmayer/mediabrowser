@@ -28,7 +28,14 @@ namespace MediaBrowserService
 
             Async.Queue("MB Connection", () =>
             {
-                using (NamedPipeServerStream pipe = new NamedPipeServerStream(MBServiceController.MBSERVICE_IN_PIPE, PipeDirection.In))
+                System.Security.Principal.SecurityIdentifier sid = new System.Security.Principal.SecurityIdentifier(System.Security.Principal.WellKnownSidType.BuiltinUsersSid, null); 
+
+                PipeSecurity pipeSa = new PipeSecurity();
+                pipeSa.SetAccessRule(new PipeAccessRule(sid,
+                       PipeAccessRights.ReadWrite, AccessControlType.Allow)); 
+
+
+                using (NamedPipeServerStream pipe = new NamedPipeServerStream(MBServiceController.MBSERVICE_IN_PIPE, PipeDirection.In,1,PipeTransmissionMode.Message,PipeOptions.None,1024,1024,pipeSa))
                 {
                     connected = true;
                     bool process = true;
