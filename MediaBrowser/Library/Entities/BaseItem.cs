@@ -108,6 +108,19 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public LibraryImage PrimaryBackdropImage
+        {
+            get
+            {
+                if (BackdropImagePaths != null && BackdropImagePaths.Count != 0)
+                {
+                    return GetImage(BackdropImagePaths[0], Kernel.Instance.ConfigData.ProcessBackdrops);
+                }
+                else return null;
+            }
+        }
+
+
         public List<LibraryImage> BackdropImages {
             get {
                 var images = new List<LibraryImage>();
