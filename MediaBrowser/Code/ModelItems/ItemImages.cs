@@ -112,7 +112,7 @@ namespace MediaBrowser.Library
                 backdropImage = new AsyncImageLoader(
                     () => baseItem.BackdropImage,
                     null,
-                    () => this.FirePropertyChanged("BackdropImage"));
+                    () => this.FirePropertiesChanged("BackdropImage", "PrimaryBackdropImage"));
                 backdropImage.LowPriority = true;
             }
         }
