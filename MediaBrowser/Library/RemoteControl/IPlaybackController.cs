@@ -20,5 +20,6 @@ namespace MediaBrowser.Library.RemoteControl {
         void ProcessCommand(RemoteCommand command);
         bool CanPlay(IEnumerable<string> files);
         bool RequiresExternalPage{ get; }
+        double MetaDuration { set; }
     }
 }

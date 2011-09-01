@@ -96,6 +96,13 @@ namespace MediaBrowser.Library
                 {
                     PlaybackController.Seek(PlayState.PositionTicks);
                 }
+                else
+                {
+                    if (this is PlayableDvd)
+                    {
+                        PlaybackController.Seek(0); //force DVD to start at beginning (player will try to auto-resume)
+                    }
+                }
 
             }
             catch (Exception ex)
@@ -166,14 +173,12 @@ namespace MediaBrowser.Library
 
         public virtual bool UpdatePosition(string title, long positionTicks)
         {
-            //I wonder if the below is slowing us down during playback - commenting out -ebr
-
             if (PlayState == null)
             {
                 return false;
             }
 
-            if (title == currentTitle)
+            if (title.EndsWith(currentTitle))
             {
                 if (!PlayCountIncremented) //the first time we are called with a valid position mark us as being watched
                 {

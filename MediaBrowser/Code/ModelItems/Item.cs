@@ -365,6 +365,7 @@ namespace MediaBrowser.Library
                         Application.CurrentInstance.OpenExternalPlaybackPage(this);
                     }
                     this.PlayableItem.QueueItem = queue;
+                    this.PlayableItem.PlaybackController.MetaDuration = this.BaseItem is Video ? (this.baseItem as Video).RunningTime.Value : 0;
                     this.PlayableItem.Play(this.PlayState, resume);
                     if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to watched list if not a whole folder
                 }

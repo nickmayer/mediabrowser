@@ -367,6 +367,12 @@ namespace MediaBrowser
         long position;
         string title;
         long? duration = null;
+        double metaDuration = 0;
+        public double MetaDuration
+        {
+            set { metaDuration = value; }
+        }
+
         private void UpdateStatus()
         {
             var transport = MediaTransport;
@@ -380,7 +386,7 @@ namespace MediaBrowser
                 {
                     title = MediaExperience.MediaMetadata["Name"] as string;
                     Logger.ReportVerbose("Full title: " + title);
-                    title = title.Substring(title.IndexOf(':') + 1).ToLower(); //strip off "dvd:" or "file:" and lowercase it
+                    title = title.ToLower(); //lowercase it for comparison
                 }
                 catch (Exception e)
                 {
@@ -394,7 +400,12 @@ namespace MediaBrowser
                 {
                     //only track position for a reasonable portion of the video
                     if (duration == null) //only need to do this once per item
+                    {
+                        //first try mediacenter
                         duration = (TimeSpan.Parse((string)MediaExperience.MediaMetadata["Duration"])).Ticks;
+                        if (duration == 0) //not there - see if we have it from meta
+                            duration = (TimeSpan.FromMinutes(metaDuration)).Ticks;
+                    }
                     Logger.ReportVerbose("position "+position+ " duration "+duration);
                     if (duration > 0)
                     {
