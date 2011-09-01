@@ -367,6 +367,7 @@ namespace MediaBrowser.Library.Persistance {
                                 "create unique index if not exists idx_children on children(guid, child)",
                                 "create table if not exists list_items(guid, property, value)",
                                 "create index if not exists idx_list on list_items(guid, property)",
+                                "create unique index if not exists idx_list_constraint on list_items(guid, property, value)",
                                 "create table if not exists schema_version (table_name primary key, version)",
                                 //"create table if not exists recent_list(top_parent, child, date_added)",
                                 //"create index if not exists idx_recent on recent_list(top_parent, child)",
@@ -1050,7 +1051,7 @@ namespace MediaBrowser.Library.Persistance {
                 if (list != null)
                 {
                     var insCmd = connection.CreateCommand();
-                    insCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, @property, @value)";
+                    insCmd.CommandText = "insert or ignore into list_items(guid, property, value) values(@guid, @property, @value)"; // possible another thread beat us to it...
                     insCmd.AddParam("@guid", item.Id);
                     insCmd.AddParam("@property", col.ColName);
                     SQLiteParameter val = new SQLiteParameter("@value");
@@ -1062,7 +1063,7 @@ namespace MediaBrowser.Library.Persistance {
                     SQLiteParameter val2 = new SQLiteParameter("@value2");
                     if (isActor)
                     {
-                        insActorCmd.CommandText = "insert into list_items(guid, property, value) values(@guid, 'ActorName', @value2)";
+                        insActorCmd.CommandText = "insert or ignore into list_items(guid, property, value) values(@guid, 'ActorName', @value2)";
                         insActorCmd.AddParam("@guid", item.Id);
                         insActorCmd.Parameters.Add(val2);
                     }

@@ -145,31 +145,34 @@ namespace MediaBrowser.Library.Persistance
                 lock (connection)
                 {
                     //Logger.ReportInfo("Executing " + copy.Count + " commands");
-                    using (var tran = connection.BeginTransaction())
+                    //using (new MediaBrowser.Util.Profiler("SQL Stmts"))
                     {
-                        foreach (var command in copy)
+                        using (var tran = connection.BeginTransaction())
                         {
-                            //command.Transaction = tran;
-                            //Logger.ReportInfo("About to execute for:  "+ command.Parameters[1].Value+"  "+command.Parameters[14].Value + command.CommandText);
+                            foreach (var command in copy)
+                            {
+                                //command.Transaction = tran;
+                                //Logger.ReportInfo("About to execute for:  "+ command.Parameters[1].Value+"  "+command.Parameters[14].Value + command.CommandText);
+                                try
+                                {
+                                    command.ExecuteNonQuery();
+                                }
+                                catch (Exception e)
+                                {
+                                    Logger.ReportException("Failed to execute SQL Stmt: " + command.CommandText, e);
+                                }
+                            }
                             try
                             {
-                                command.ExecuteNonQuery();
+                                //Logger.ReportInfo("Committing " + copy.Count + " statements...");
+                                tran.Commit();
+                                //Logger.ReportInfo("Done.");
                             }
                             catch (Exception e)
                             {
-                                Logger.ReportException("Failed to execute SQL Stmt: " + command.CommandText, e);
+                                Logger.ReportException("Failed to commit transaction.", e);
+                                tran.Rollback();
                             }
-                        }
-                        try
-                        {
-                            //Logger.ReportInfo("Committing " + copy.Count + " statements...");
-                            tran.Commit();
-                            //Logger.ReportInfo("Done.");
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.ReportException("Failed to commit transaction.", e);
-                            tran.Rollback();
                         }
                     }
                 }
