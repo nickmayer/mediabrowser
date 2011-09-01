@@ -379,7 +379,8 @@ namespace MediaBrowser
                 try
                 {
                     title = MediaExperience.MediaMetadata["Name"] as string;
-                    title = title.Substring(title.IndexOf(':') + 1); //strip off "dvd:" or "file:"
+                    Logger.ReportVerbose("Full title: " + title);
+                    title = title.Substring(title.IndexOf(':') + 1).ToLower(); //strip off "dvd:" or "file:" and lowercase it
                 }
                 catch (Exception e)
                 {
@@ -394,11 +395,11 @@ namespace MediaBrowser
                     //only track position for a reasonable portion of the video
                     if (duration == null) //only need to do this once per item
                         duration = (TimeSpan.Parse((string)MediaExperience.MediaMetadata["Duration"])).Ticks;
-                    //Logger.ReportInfo("position "+position+ " duration "+duration);
+                    Logger.ReportVerbose("position "+position+ " duration "+duration);
                     if (duration > 0)
                     {
                         decimal pctIn = Decimal.Divide(position,duration.Value) * 100;
-                        //Logger.ReportInfo("pctIn: " + pctIn + " duration: " + duration);
+                        Logger.ReportVerbose("pctIn: " + pctIn + " duration: " + duration);
                         if (pctIn < Config.Instance.MinResumePct || pctIn > Config.Instance.MaxResumePct) position = 0; //don't track in very begginning or very end
                     }
                 }
@@ -407,7 +408,7 @@ namespace MediaBrowser
                 if (title != null && progressHandler != null && (this.title != title || this.position != position) && (duration == 0 || (duration / TimeSpan.TicksPerMinute) >= Config.Instance.MinResumeDuration))
                 {
 
-                    //Logger.ReportVerbose("progressHandler was called with : position =" + position.ToString() + " title :" + title);
+                    Logger.ReportVerbose("progressHandler was called with : position =" + position.ToString() + " title :" + title);
                     
                     progressHandler(this, new PlaybackStateEventArgs() { Position = position, Title = title });
                     this.title = title;

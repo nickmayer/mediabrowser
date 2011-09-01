@@ -126,7 +126,7 @@ namespace MediaBrowser.Library
         private void PlayAndGoFullScreen(string file)
         {
             this.fileToPlay = file;
-            this.currentTitle = file.Replace('\\','/');
+            this.currentTitle = file.Replace('\\','/').ToLower();
             Play(file);
             if (!QueueItem)
                 PlaybackController.GoToFullScreen();
@@ -167,7 +167,6 @@ namespace MediaBrowser.Library
         public virtual bool UpdatePosition(string title, long positionTicks)
         {
             //I wonder if the below is slowing us down during playback - commenting out -ebr
-            //Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
 
             if (PlayState == null)
             {
@@ -182,12 +181,14 @@ namespace MediaBrowser.Library
                     PlayState.LastPlayed = DateTime.Now;
                     PlayCountIncremented = true;
                 }
+                Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
                 PlayState.PositionTicks = positionTicks;
                 PlayState.Save();
                 return true;
             }
             else
             {
+                Logger.ReportVerbose("Detaching because title doesn't match.  Current title: " + currentTitle);
                 return false;
             }
         }
