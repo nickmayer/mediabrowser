@@ -56,6 +56,7 @@
       <!-- Item Panel Commands-->
       <Command Name="CmdRecentlyAdded" />
       <Command Name="CmdRecentlyWatched" />
+      <Command Name="CmdInProgress" />
 
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
@@ -81,6 +82,7 @@
           <cor:String String="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
           <cor:String String="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
           <cor:String String="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#InProgressEHS!cor:String]" />
         </Options>
       </Choice>
 
@@ -89,6 +91,7 @@
           <cor:String String="added" />
           <cor:String String="watched" />
           <cor:String String="unwatched" />
+          <cor:String String="inprogress" />
         </Options>
       </Choice>
 
