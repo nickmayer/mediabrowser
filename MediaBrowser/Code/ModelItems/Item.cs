@@ -365,13 +365,14 @@ namespace MediaBrowser.Library
                         Application.CurrentInstance.OpenExternalPlaybackPage(this);
                     }
                     this.PlayableItem.QueueItem = queue;
-                    this.PlayableItem.PlaybackController.MetaDuration = this.BaseItem is Video ? (this.baseItem as Video).RunningTime.Value : 0;
+                    this.PlayableItem.PlaybackController.MetaDuration = this.BaseItem is Video && (this.baseItem as Video).RunningTime != null ? (this.baseItem as Video).RunningTime.Value : 0;
                     this.PlayableItem.Play(this.PlayState, resume);
                     if (!this.IsFolder && this.TopParent != null) this.TopParent.AddNewlyWatched(this); //add to watched list if not a whole folder
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Logger.ReportException("Error playing item " + this.Name, e);
                 MediaCenterEnvironment ev = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
                 ev.Dialog(Application.CurrentInstance.StringData("ContentErrorDial") + "\n" + baseItem.Path, Application.CurrentInstance.StringData("ContentErrorCapDial"), DialogButtons.Ok, 60, true);
             }
