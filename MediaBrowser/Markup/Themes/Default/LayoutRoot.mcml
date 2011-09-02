@@ -580,7 +580,7 @@
                                   />
                       <hb:HeaderButton Label="[Application.LocalStrings.#InProgressCapEHS!cor:String]"
                                        Command="[CmdInProgress]" MaxSize="180,45"
-                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconPlay"
+                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconResume"
                                   />
                     </Children>
                   </Panel>
