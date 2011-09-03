@@ -132,7 +132,7 @@ namespace MediaBrowser.Library {
 
                 // we must set up some paths as well as a side effect (should be refactored) 
                 if (!string.IsNullOrEmpty(config.UserSettingsPath) && Directory.Exists(config.UserSettingsPath)) {
-                    ApplicationPaths.SetUserSettingsPath(config.UserSettingsPath);
+                    ApplicationPaths.SetUserSettingsPath(config.UserSettingsPath.Trim());
                 }
 
                 // Its critical to have the logger initialized early so initialization 
