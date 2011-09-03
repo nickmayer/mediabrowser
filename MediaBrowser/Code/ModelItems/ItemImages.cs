@@ -105,13 +105,17 @@ namespace MediaBrowser.Library
             }
         }
 
+        AsyncImageLoader primaryBackdropImage = null;
         private void getPrimaryBackdropImage()
         {
-            backdropImage = new AsyncImageLoader(
-                () => baseItem.PrimaryBackdropImage,
-                null,
-                () => this.FirePropertiesChanged("BackdropImage", "PrimaryBackdropImage"));
-            backdropImage.LowPriority = true;
+            if (primaryBackdropImage == null)
+            {
+                primaryBackdropImage = backdropImage = new AsyncImageLoader(
+                    () => baseItem.PrimaryBackdropImage,
+                    null,
+                    () => this.FirePropertiesChanged("BackdropImage", "PrimaryBackdropImage"));
+                backdropImage.LowPriority = true;
+            }
         }
 
         private void getRandomBackdropImage()

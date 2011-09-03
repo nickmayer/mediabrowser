@@ -516,7 +516,7 @@ namespace MediaBrowser.Library {
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folderModel.Folder;
                             var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
-                            //ignore = item.BackdropImages;
+                            ignore = item.BackdropImages;
                             foundNames.Add(creationTime, modelItem);
                             if (foundNames.Count >= maxSize)
                             {
@@ -623,7 +623,7 @@ namespace MediaBrowser.Library {
                                 modelItem.PhysicalParent = folderModel;
                                 item.Parent = folder;
                                 var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
-                                //ignore = item.BackdropImages;
+                                ignore = item.BackdropImages;
                                 foundNames.Add(watchedTime, modelItem);
                                 if (foundNames.Count > maxSize)
                                 {
@@ -733,6 +733,7 @@ namespace MediaBrowser.Library {
                                 modelItem.PhysicalParent = folderModel;
                                 item.Parent = folder;
                                 var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                                ignore = item.BackdropImages;
                                 foundNames.Add(watchedTime, modelItem);
                                 if (foundNames.Count > maxSize)
                                 {
@@ -834,7 +835,9 @@ namespace MediaBrowser.Library {
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folder;
                             var ignore = item.Parent.BackdropImages; //force to load so they will inherit
-                            while (foundNames.ContainsKey(creationTime)) {
+                            ignore = item.BackdropImages;
+                            while (foundNames.ContainsKey(creationTime))
+                            {
                                 creationTime = creationTime.AddMilliseconds(1);
                             }
                             foundNames.Add(creationTime, modelItem);
@@ -849,6 +852,7 @@ namespace MediaBrowser.Library {
 
             }
         }
+
         public override void RefreshMetadata() {
             this.RefreshMetadata(true);
         }
