@@ -91,7 +91,7 @@ namespace MediaBrowser.Library
                     }
                     else
                     {
-                        getPrimaryBackdropImage();
+                        getFirstBackdropImage();
                     }
                 }
                 if (backdropImage != null) //may not have had time to fill this in yet - if not, a propertychanged event will fire it again
@@ -113,9 +113,18 @@ namespace MediaBrowser.Library
                 primaryBackdropImage = backdropImage = new AsyncImageLoader(
                     () => baseItem.PrimaryBackdropImage,
                     null,
-                    () => this.FirePropertiesChanged("BackdropImage", "PrimaryBackdropImage"));
+                    () => this.FirePropertiesChanged("PrimaryBackdropImage"));
                 backdropImage.LowPriority = true;
             }
+        }
+
+        private void getFirstBackdropImage()
+        {
+            backdropImage = new AsyncImageLoader(
+                () => baseItem.PrimaryBackdropImage,
+                null,
+                () => this.FirePropertiesChanged("BackdropImage"));
+            backdropImage.LowPriority = true;
         }
 
         private void getRandomBackdropImage()
@@ -145,7 +154,7 @@ namespace MediaBrowser.Library
             get
             {
                 getPrimaryBackdropImage();
-                return backdropImage.Image;
+                return primaryBackdropImage.Image;
             }
         }
 
