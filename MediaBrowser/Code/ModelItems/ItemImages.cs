@@ -198,7 +198,7 @@ namespace MediaBrowser.Library
 
                 lock (backdropImages)
                 {
-                    return backdropImages.Select(async => async.Image).ToList();
+                    return backdropImages.Select(asyncLoader => asyncLoader.Image).ToList();
                 }
             }
         }
