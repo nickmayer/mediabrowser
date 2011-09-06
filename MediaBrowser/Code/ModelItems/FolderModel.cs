@@ -469,6 +469,7 @@ namespace MediaBrowser.Library {
                                     }
                                     var containerModel = ItemFactory.Instance.Create(container);
                                     containerModel.PhysicalParent = this;
+                                    
                                     while (foundNames.ContainsKey(createdTime))
                                     {
                                         // break ties 

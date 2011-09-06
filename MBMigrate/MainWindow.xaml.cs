@@ -117,6 +117,21 @@ namespace MBMigrate
                                         if (children != null) newRepo.SaveChildren(item.Id, children);
                                     }
                                     cnt++;
+                                    if (item is Video && (item as Video).RunningTime != null)
+                                    {
+                                        TimeSpan duration = TimeSpan.FromMinutes((item as Video).RunningTime.Value);
+                                        if (duration.Ticks > 0)
+                                        {
+                                            PlaybackStatus ps = newRepo.RetrievePlayState(item.Id);
+                                            decimal pctIn = Decimal.Divide(ps.PositionTicks, duration.Ticks) * 100;
+                                            if (pctIn > Kernel.Instance.ConfigData.MaxResumePct)
+                                            {
+                                                Logger.ReportInfo("Setting " + item.Name + " to 'Watched' based on last played position.");
+                                                ps.PositionTicks = 0;
+                                                newRepo.SavePlayState(ps);
+                                            }
+                                        }
+                                    }
                                 }
                                     
                             }
