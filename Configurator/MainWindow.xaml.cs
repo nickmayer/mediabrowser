@@ -461,6 +461,7 @@ namespace Configurator
                 ddlWeatherUnits.SelectedItem = "Celsius";
 
             tbxMinResumeDuration.Text = config.MinResumeDuration.ToString();
+            lblRecentItemCollapse.Content = config.RecentItemCollapseThresh;
             sldrMinResumePct.Value = config.MinResumePct;
             sldrMaxResumePct.Value = config.MaxResumePct;
 
@@ -2030,6 +2031,21 @@ sortorder: {2}
             if (config.ScreenSaverTimeOut < 1) config.ScreenSaverTimeOut = 1;
             config.Save();
             lblSSTimeout.Content = config.ScreenSaverTimeOut.ToString() + " Mins";
+        }
+
+        private void btnRICUp_Click(object sender, RoutedEventArgs e)
+        {
+            config.RecentItemCollapseThresh++;
+            config.Save();
+            lblRecentItemCollapse.Content = config.RecentItemCollapseThresh;
+        }
+
+        private void btnRICDn_Click(object sender, RoutedEventArgs e)
+        {
+            config.RecentItemCollapseThresh--;
+            if (config.RecentItemCollapseThresh < 1) config.RecentItemCollapseThresh = 1;
+            config.Save();
+            lblRecentItemCollapse.Content = config.RecentItemCollapseThresh;
         }
 
 
