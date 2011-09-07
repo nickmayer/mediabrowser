@@ -61,7 +61,6 @@
       <!-- Item Panel Commands-->
       <Command Name="CmdRecentlyAdded" />
       <Command Name="CmdRecentlyWatched" />
-      <Command Name="CmdInProgress" />
 
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
@@ -88,7 +87,6 @@
         <Options>
           <cor:String String="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
           <cor:String String="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
-          <cor:String String="[Application.LocalStrings.#InProgressEHS!cor:String]" />
         </Options>
       </Choice>
 
@@ -107,17 +105,6 @@
           <!--<Set Target="[RecentItems.ChosenIndex]" Value="1" />-->
           <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
           <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
-        </Actions>
-      </Changed>
-
-      <Changed Source="[Application]" InitialEvaluate="true" >
-        <Conditions>
-          <Equality Source="[Application.RecentItemOption]" Value="inprogress"/>
-        </Conditions>
-        <Actions>
-          <!--<Set Target="[RecentItems.ChosenIndex]" Value="1" />-->
-          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#InProgressEHS!cor:String]" />
-          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#InProgressEHS!cor:String]" />
         </Actions>
       </Changed>
 
@@ -190,15 +177,6 @@
           <Invoke Target="[SelectedItem.RecentItemsChanged]" />
           <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
           <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
-        </Actions>
-      </Changed>
-
-      <Changed Source="[CmdInProgress.Invoked]">
-        <Actions>
-          <Set Target="[Application.RecentItemOption]" Value="inprogress" />
-          <Invoke Target="[SelectedItem.RecentItemsChanged]" />
-          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#InProgressEHS!cor:String]" />
-          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#InProgressEHS!cor:String]" />
         </Actions>
       </Changed>
 
@@ -577,10 +555,6 @@
                       <hb:HeaderButton Label="[Application.LocalStrings.#WatchedEHS!cor:String]"
                                        Command="[CmdRecentlyWatched]"
                                        BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
-                                  />
-                      <hb:HeaderButton Label="[Application.LocalStrings.#InProgressCapEHS!cor:String]"
-                                       Command="[CmdInProgress]" MaxSize="180,45"
-                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconResume"
                                   />
                     </Children>
                   </Panel>

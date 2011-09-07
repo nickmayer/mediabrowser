@@ -51,22 +51,6 @@
           <BooleanTransformer Inverse="true"/>
         </Transformer>
       </Binding>
-      <Changed Source="[Item.InProgress]" InitialEvaluate="true" >
-        <Conditions>
-          <Equality Source="[Item.InProgress]" Value="true" />
-        </Conditions>
-        <Actions>
-          <Set Target="[UnwatchedGlow.ColorFilter]" Value="Cyan" />
-        </Actions>
-      </Changed>
-      <Changed Source="[Item.InProgress]" InitialEvaluate="true" >
-        <Conditions>
-          <Equality Source="[Item.InProgress]" Value="false" />
-        </Conditions>
-        <Actions>
-          <Set Target="[UnwatchedGlow.ColorFilter]" Value="White" />
-        </Actions>
-      </Changed>
       <Changed Source="[ImageSize]" InitialEvaluate="true" >
         <Actions>
           <Set Target="[GlowSize.Height]" Value="[Item.PreferredImageSmallSize.Height]" >

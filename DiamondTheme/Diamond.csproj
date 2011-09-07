@@ -274,7 +274,9 @@
     <Content Include="Markup\Controls\DiamondTab.mcml" />
     <Content Include="Markup\Controls\DiamondToolBox.mcml" />
     <Content Include="Markup\Controls\Weather.mcml" />
-    <Content Include="Markup\DetailMovieView.mcml" />
+    <Content Include="Markup\DetailMovieView.mcml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Markup\Scrollers\PosterScroller.mcml" />
     <Content Include="Markup\Scrollers\ThumbStripScroller.mcml" />
     <Content Include="Markup\Scrollers\PosterViewItem.mcml" />

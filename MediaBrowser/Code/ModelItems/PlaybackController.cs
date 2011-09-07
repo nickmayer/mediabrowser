@@ -373,7 +373,7 @@ namespace MediaBrowser
             set { metaDuration = value; }
         }
 
-        private void UpdateStatus()
+        protected virtual void UpdateStatus()
         {
             var transport = MediaTransport;
             PlayState state = PlayState.Undefined;

@@ -13,7 +13,7 @@ namespace MediaBrowser.Library.Entities {
         public event EventHandler<EventArgs> WasPlayedChanged;
 
         public bool WasPlayed {
-            get { return (PlayCount > 0 && !CanResume); }
+            get { return (PlayCount > 0); }
             set
             {
                 if (value && !WasPlayed) {
@@ -23,11 +23,6 @@ namespace MediaBrowser.Library.Entities {
                 } 
 
             }
-        }
-
-        public bool InProgress
-        {
-            get { return CanResume; }
         }
 
         public bool CanResume {
