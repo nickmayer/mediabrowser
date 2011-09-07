@@ -96,11 +96,29 @@ namespace Diamond
             }
         }
 
+        public override System.Version LatestVersion
+        {
+            get
+            {
+                return new System.Version(0, 3, 4, 0);
+            }
+            set
+            {
+            }
+        }
+
+        public override System.Version Version
+        {
+            get
+            {
+                return LatestVersion;
+            }
+        }
         public override System.Version RequiredMBVersion
         {
             get
             {
-                return new System.Version(2,5,0,0);
+                return new System.Version(2,2,8,0);
             }
         }
 
@@ -111,7 +129,7 @@ namespace Diamond
         {
             get
             {
-                return new System.Version(2, 5, 0, 0);
+                return new System.Version(2, 2, 8, 0);
             }
         }
 
