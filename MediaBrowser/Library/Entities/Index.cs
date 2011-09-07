@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MediaBrowser.Library.Localization;
 
 /*
  This is a rough index implementation, this name can be an actor or genre or year. 
@@ -76,6 +77,10 @@ namespace MediaBrowser.Library.Entities {
             this.children = children;
             this.Id = Guid.NewGuid();
             this.shadowItem = item;
+            //don't want to allow indexing an index
+            this.IndexByOptions = new Dictionary<string, string>() {
+                    {LocalizedStrings.Instance.GetString("NoneDispPref"), ""} 
+            };
         }
 
         public Index(BaseItem item, string childTable, string property, object value)
@@ -86,6 +91,10 @@ namespace MediaBrowser.Library.Entities {
             this.childTableName = childTable;
             this.propertyValue = value;
             this.shadowItem = item;
+            //don't want to allow indexing an index
+            this.IndexByOptions = new Dictionary<string, string>() {
+                    {LocalizedStrings.Instance.GetString("NoneDispPref"), ""} 
+            };
         }
 
         protected override List<BaseItem> ActualChildren

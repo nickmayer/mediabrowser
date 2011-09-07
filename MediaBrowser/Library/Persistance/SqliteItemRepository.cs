@@ -641,6 +641,7 @@ namespace MediaBrowser.Library.Persistance {
 
         public IList<Index> RetrieveIndex(Folder folder, string property, Func<string, BaseItem> constructor)
         {
+            bool allowEpisodes = property == "Directors" || property == "ProductionYear";
             List<Index> children = new List<Index>();
             var cmd = connection.CreateCommand();
 
@@ -671,7 +672,7 @@ namespace MediaBrowser.Library.Persistance {
 
                 foreach (var child in folder.RecursiveChildren)
                 {
-                    if (child is IShow && !(child is Season)) // && (allowEpisodes && !(child is Series)) || (!allowEpisodes && !(child is Episode)))
+                    if (child is IShow && !(child is Season) && ((allowEpisodes && !(child is Series)) || (!allowEpisodes && !(child is Episode))))
                     {
                         if (child is IGroupInIndex)
                         {

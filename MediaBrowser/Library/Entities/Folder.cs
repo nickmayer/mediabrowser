@@ -33,11 +33,7 @@ namespace MediaBrowser.Library.Entities {
             children = new Lazy<List<BaseItem>>(() => GetChildren(true), () => OnChildrenChanged(null));
         }
 
-        //Dynamic Choice Items - these can be overidden or added to by sub-classes to provide for different options for different item types
-        /// <summary>
-        /// Dictionary of sort options - consists of a localized display string and an IComparer(Baseitem) for the sort
-        /// </summary>
-        public Dictionary<string, IComparer<BaseItem>> SortOrderOptions = new Dictionary<string,IComparer<BaseItem>>() { 
+        private Dictionary<string, IComparer<BaseItem>> sortOrderOptions= new Dictionary<string,IComparer<BaseItem>>() { 
             {LocalizedStrings.Instance.GetString("NameDispPref"), new BaseItemComparer(SortOrder.Name)},
             {LocalizedStrings.Instance.GetString("DateDispPref"), new BaseItemComparer(SortOrder.Date)},
             {LocalizedStrings.Instance.GetString("RatingDispPref"), new BaseItemComparer(SortOrder.Rating)},
@@ -45,10 +41,16 @@ namespace MediaBrowser.Library.Entities {
             {LocalizedStrings.Instance.GetString("UnWatchedDispPref"), new BaseItemComparer(SortOrder.Unwatched)},
             {LocalizedStrings.Instance.GetString("YearDispPref"), new BaseItemComparer(SortOrder.Year)}
         };
+        //Dynamic Choice Items - these can be overidden or added to by sub-classes to provide for different options for different item types
         /// <summary>
-        /// Dictionary of index options - consists of a display value and a property name (must match the property exactly)
+        /// Dictionary of sort options - consists of a localized display string and an IComparer(Baseitem) for the sort
         /// </summary>
-        public Dictionary<string, string> IndexByOptions = new Dictionary<string, string>() { 
+        public virtual Dictionary<string, IComparer<BaseItem>> SortOrderOptions
+        {
+            get { return sortOrderOptions; }
+            set { sortOrderOptions = value; }
+        }
+        private Dictionary<string, string> indexByOptions = new Dictionary<string, string>() { 
             {LocalizedStrings.Instance.GetString("NoneDispPref"), ""}, 
             {LocalizedStrings.Instance.GetString("ActorDispPref"), "Actors"},
             {LocalizedStrings.Instance.GetString("GenreDispPref"), "Genres"},
@@ -56,6 +58,14 @@ namespace MediaBrowser.Library.Entities {
             {LocalizedStrings.Instance.GetString("YearDispPref"), "ProductionYear"},
             {LocalizedStrings.Instance.GetString("StudioDispPref"), "Studios"}
         };
+        /// <summary>
+        /// Dictionary of index options - consists of a display value and a property name (must match the property exactly)
+        /// </summary>
+        public virtual Dictionary<string, string> IndexByOptions
+        {
+            get { return indexByOptions; }
+            set { indexByOptions = value; }
+        }
 
         /// <summary>
         /// By default children are loaded on first access, this operation is slow. So sometimes you may
