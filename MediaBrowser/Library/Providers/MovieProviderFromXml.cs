@@ -12,7 +12,7 @@ using MediaBrowser.Library.Providers.Attributes;
 namespace MediaBrowser.Library.Providers
 {
     [SupportedType(typeof(Movie))]
-    class MovieProviderFromXml : BaseMetadataProvider
+    public class MovieProviderFromXml : BaseMetadataProvider
     {
 
         [Persist]
@@ -46,7 +46,7 @@ namespace MediaBrowser.Library.Providers
             return true;
         }
 
-        private string XmlLocation()
+        protected virtual string XmlLocation()
         {
             string location = Item.Path;
             return Path.Combine(location, "mymovies.xml");

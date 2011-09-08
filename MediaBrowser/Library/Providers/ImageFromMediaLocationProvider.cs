@@ -11,7 +11,7 @@ namespace MediaBrowser.Library.Providers
 {
     [ProviderPriority(15)]
     [SupportedType(typeof(BaseItem))]
-    class ImageFromMediaLocationProvider : BaseMetadataProvider
+    public class ImageFromMediaLocationProvider : BaseMetadataProvider
     {
 
         const string Primary = "folder";
