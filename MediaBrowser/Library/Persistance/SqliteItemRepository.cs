@@ -339,6 +339,7 @@ namespace MediaBrowser.Library.Persistance {
         SQLiteDisplayRepository displayRepo;
         // Playstate repo
         FileBasedDictionary<PlaybackStatus> playbackStatus;
+        const int MAX_RETRIES = 3;
 
         private SqliteItemRepository(string dbPath) {
 
@@ -352,7 +353,24 @@ namespace MediaBrowser.Library.Persistance {
             connectionstr.DataSource = dbPath;
             connectionstr.JournalMode = SQLiteJournalModeEnum.Persist; //maybe better performance...?
             connection = new SQLiteConnection(connectionstr.ConnectionString);
-            connection.Open();
+            int retries = 0;
+            bool connected = false;
+            while (!connected && retries < MAX_RETRIES)
+            {
+                try
+                {
+                    connection.Open();
+                    connected = true;
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error connecting to database! Will retry "+MAX_RETRIES+" times.", e);
+                    retries++;
+                    Thread.Sleep(250);
+                }
+            }
+
+            if (!connected) throw new ApplicationException("CRITICAL ERROR - Unable to connect to database: " + dbPath + ".  Program cannot function.");
 
             displayRepo = new SQLiteDisplayRepository(Path.Combine(ApplicationPaths.AppUserSettingsPath, "display.db"));
             playbackStatus = new FileBasedDictionary<PlaybackStatus>(GetPath("playstate", ApplicationPaths.AppUserSettingsPath));
@@ -1022,6 +1040,8 @@ namespace MediaBrowser.Library.Persistance {
         public void SaveItem(BaseItem item)
         {
             if (item == null) return;
+
+            Logger.ReportVerbose("Saving " + item.Name + ". PrimaryImagePath: " + item.PrimaryImagePath);
 
             if (!ItemSQL.ContainsKey(item.GetType()))
             {
