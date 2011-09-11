@@ -351,7 +351,7 @@ namespace MediaBrowser.Library.Persistance {
             connectionstr.CacheSize = 4096;
             connectionstr.SyncMode = SynchronizationModes.Normal;
             connectionstr.DataSource = dbPath;
-            connectionstr.JournalMode = SQLiteJournalModeEnum.Persist; //maybe better performance...?
+            connectionstr.JournalMode = SQLiteJournalModeEnum.Delete; 
             connection = new SQLiteConnection(connectionstr.ConnectionString);
             int retries = 0;
             bool connected = false;
