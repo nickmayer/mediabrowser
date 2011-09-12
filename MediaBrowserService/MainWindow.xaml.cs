@@ -109,7 +109,7 @@ namespace MediaBrowserService
             var configureOption = new System.Windows.Forms.MenuItem
             {
                 Name = "configure",
-                Text = "Configure..."
+                Text = "Configure Media Browser..."
             };
             configureOption.Click += new EventHandler(configure_Click);
             main.MenuItems.Add(configureOption);

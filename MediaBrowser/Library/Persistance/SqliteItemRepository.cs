@@ -1041,8 +1041,6 @@ namespace MediaBrowser.Library.Persistance {
         {
             if (item == null) return;
 
-            Logger.ReportVerbose("Saving " + item.Name + ". PrimaryImagePath: " + item.PrimaryImagePath);
-
             if (!ItemSQL.ContainsKey(item.GetType()))
             {
                 ItemSQL.Add(item.GetType(), new SQLInfo(item));
