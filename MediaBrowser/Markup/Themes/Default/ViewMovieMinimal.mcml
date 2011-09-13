@@ -722,7 +722,7 @@
             <Children>
               <Panel>
                 <Layout>
-                  <FlowLayout Orientation="Horizontal" Spacing="0,0"/>
+                  <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="0,0"/>
                 </Layout>
                 <Children>
                   <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,5,15,5" />
