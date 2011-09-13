@@ -1144,4 +1144,16 @@
   <data name="media_3d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\media_3d.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ActivityIndicator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Markup\Controls\ActivityIndicator.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Gears" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Special\Gears.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconGears" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Icons\IconGears.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="InfoStrip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Markup\Controls\InfoStrip.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

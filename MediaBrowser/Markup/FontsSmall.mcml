@@ -4,7 +4,7 @@
 	  >
 	<!-- Page -->
 	<Font Name="P_BreadcrumbFont" Font="Segoe Media Center Light, 25"/>
-	<Font Name="P_BreadcrumbSmallFont" Font="Segoe Media Center Light, 11"/>
+	<Font Name="P_BreadcrumbSmallFont" Font="Segoe Media Center, 11"/>
 	<Font Name="P_ConfigButtons" Font="Segoe Media Center Semibold,13"/>
 	<Font Name="P_FindAsYouTypeFont" Font="Segoe Media Center Semibold,75"/>
 	<Font Name="P_ClockFont" Font="Segoe Media Center Semibold,13"/>

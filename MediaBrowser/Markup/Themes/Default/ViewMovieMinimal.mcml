@@ -21,6 +21,7 @@
     xmlns:mip="resx://MediaBrowser/MediaBrowser.Resources/MediaInfoPanel"
     xmlns:pb="resx://MediaBrowser/MediaBrowser.Resources/PersonButton"
     xmlns:db="resx://MediaBrowser/MediaBrowser.Resources/DirectorButton"
+    xmlns:ai="resx://MediaBrowser/MediaBrowser.Resources/ActivityIndicator"
     xmlns:me="Me"
     >
 
@@ -257,6 +258,13 @@
               <AnchorLayoutInput Bottom="DetailBox, 0" Top="DetailBox,0,-2" Left="Parent,0" Right="Parent,1"/>
             </LayoutInput>
           </ColorFill>
+
+          <!-- Activity Indicator -->
+          <ai:ActivityIndicator Name="ActivityInd" Application="[Application]">
+            <LayoutInput>
+              <AnchorLayoutInput Bottom="Parent, 1,-6" Left="Parent, 0,6"/>
+            </LayoutInput>
+          </ai:ActivityIndicator>
 
           <!-- Detail Box (Alpha Gradient Bottom of Screen)-->
           <ColorFill Content="color://s:FillColor"  Name="DetailBox" Alpha="global://s:FilterAlpha">
@@ -625,7 +633,7 @@
       
       <Condition Source="[Item.ImdbRating]" ConditionOp="GreaterThanOrEquals" SourceValue="0" Target="[IMDBRatingPanel.Visible]" Value="true"  />
       <Condition Source="[Item.Directors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[DirectedByPanel.Visible]" Value="true"  />
-
+      <Condition Source="[Item.RunningTimeString]" ConditionOp="Equals" SourceValue="" Target="[RuntimePanel.Visible]" Value="false"/>
       <Condition Source="[Item.ParentalAllowed]" ConditionOp="Equals" SourceValue="false" Target="[PCLock.Visible]" Value="true" />
       <Changed Source="[Item.MediaInfo]" InitialEvaluate="true">
         <Actions>
@@ -640,7 +648,7 @@
       <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]"/>
       <Binding Target="[OutOfText.Content]" Source="[Application.LocalStrings.#OutOfDetail!cor:String]">
         <Transformer>
-          <FormatTransformer Format=" {0} 10"/>
+          <FormatTransformer Format="{0} 10"/>
         </Transformer>
       </Binding>
       <Binding Target="[DirectorText.Content]" Source="[Application.LocalStrings.#DirectorDetail!cor:String]"/>
@@ -650,8 +658,8 @@
       <Binding Target="[FirstAiredText.Content]" Source="[Application.LocalStrings.#FirstAiredDetail!cor:String]"/>
   
       <!-- Add First Aired Date if available -->
-      <Binding   Source="[Item.FirstAired]"     Target="[FirstAired.Content]"/>
-      <Condition Source="[Item.FirstAired]"     ConditionOp="Equals"      SourceValue=""  Target="[FirstAiredPanel.Visible]"     Value="false"/>
+      <Binding Source="[Item.FirstAired]" Target="[FirstAired.Content]"/>
+      <Condition Source="[Item.FirstAired]" ConditionOp="Equals" SourceValue="" Target="[FirstAiredPanel.Visible]" Value="false"/>
 
     </Rules>
     <Content>
@@ -714,12 +722,12 @@
             <Children>
               <Panel>
                 <Layout>
-                  <FlowLayout Orientation="Horizontal" Spacing="10,0"/>
+                  <FlowLayout Orientation="Horizontal" Spacing="0,0"/>
                 </Layout>
                 <Children>
-                  <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,5,0,0" />
-                  <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="10,0,0,0" MaximumSize="0,30"/>
-                  <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
+                  <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,5,15,5" />
+                  <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="0,3,10,2" MaximumSize="0,30"/>
+                  <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" Margins="0,3,0,2" MaximumSize="30,30" />
                 </Children>
 
               </Panel>
@@ -730,7 +738,7 @@
                 </Layout>
                 <Children>
                   <Text Name="IMDBText" Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" MinimumSize="140,0"/>
-                  <Text Name="IMDBRating" Content="" Color="[ValueColor]" Font="font://f:MM_ItemFont"/>
+                  <Text Name="IMDBRating" Content="" Color="[ValueColor]" Font="font://f:MM_ItemFont" Margins="0,0,5,0"/>
                   <Text Name="OutOfText" Font="font://f:MM_ItemFont" Color="[ValueColor]"/>
                   
                 </Children>
@@ -760,18 +768,17 @@
                 </Children>
               </Panel>
 
-              <Panel Name="RuntimePanel" >
+              <Panel Name="RuntimePanel" Visible="true" >
                 <Layout>
                   <FlowLayout Orientation="Horizontal"/>
                 </Layout>
                 <Children>
                   <Text Name="RuntimeText" Font="font://f:MM_ItemTitleFont" Color="[ItemColor]" MinimumSize="140,0"/>
-                  <Text Name="Runtime" Content="[Item.RunningTimeString]"
-										  Font="font://f:MM_ItemFont" Color="[ValueColor]" />
+                  <Text Name="Runtime" Content="[Item.RunningTimeString]" Font="font://f:MM_ItemFont" Color="[ValueColor]"/>
                 </Children>
               </Panel>
 
-              <Panel Name="FirstAiredPanel" >
+              <Panel Name="FirstAiredPanel" Visible="true" >
                 <Layout>
                   <FlowLayout Orientation="Horizontal"/>
                 </Layout>

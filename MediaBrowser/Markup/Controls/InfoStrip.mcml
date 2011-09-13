@@ -1,13 +1,12 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:a="assembly://MediaBrowser/MediaBrowser"
-    xmlns:ai="resx://MediaBrowser/MediaBrowser.Resources/ActivityIndicator"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
     xmlns:me="Me"
       >
 
 
-  <UI Name="InfoMarquee">
+  <UI Name="InfoStrip">
     <Properties>
       <a:Application Name="Application" Application="$Required" />
       <Color Name="Color" Color="White"/>
@@ -15,20 +14,14 @@
 
     <Rules>
       <Binding Source="[Application.Information.DisplayText]" Target="[InfoPanelDisplay.Content]"  />
-      <Binding Source="[Application.Information.MajorActivity]" Target="[ActivityInd.Visible]"  />
     </Rules>
 
     <Content>
       <Panel Layout="Form" >
         <Children>
-          <ai:ActivityIndicator Name="ActivityInd" Application="[Application]" MaximumSize="30,30" Visible="false">
+          <Text Name="InfoPanelDisplay" Font="font://f:P_ClockFont"  Color="[Color]">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0" />
-            </LayoutInput>            
-          </ai:ActivityIndicator>
-          <Text Name="InfoPanelDisplay" Font="font://f:P_ClockFont" Color="[Color]">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0,35" />
+              <FormLayoutInput Left="Parent,0,6" />
             </LayoutInput>
             <Animations>
               <Animation Type="ContentChangeShow">

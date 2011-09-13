@@ -11,7 +11,7 @@
           <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="10,10"/>
         </Layout>
         <Children>
- 			    <me:GreenBallIndicator MaximumSize="40,40" />
+ 			    <me:GreenBallIndicator MaximumSize="35,35" />
           <Text Color="AntiqueWhite" Font="Segoe Media Center, 16" Content="Some of your plug-ins have updates available" />
         </Children>
       </Panel>

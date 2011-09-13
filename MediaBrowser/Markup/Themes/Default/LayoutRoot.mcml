@@ -12,11 +12,9 @@
 		xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMenu"
 	  xmlns:np="resx://MediaBrowser/MediaBrowser.Resources/NowPlayingViewport"
     xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"
-    xmlns:in="resx://MediaBrowser/MediaBrowser.Resources/InfoMarquee"
     xmlns:dp="resx://MediaBrowser/MediaBrowser.Resources/DiamondPagination"
     xmlns:pci="resx://MediaBrowser/MediaBrowser.Resources/PCIndicatorButton"
     xmlns:pv="resx://MediaBrowser/MediaBrowser.Resources/Pivot"
-      
 	  xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
 	  xmlns:s="file://Styles_DoNotEdit.mcml"
 	  xmlns:f="file://Fonts_DoNotEdit.mcml"
@@ -24,8 +22,9 @@
     xmlns:pp="resx://MediaBrowser/MediaBrowser.Resources/PopupPlay"
     xmlns:ib="resx://MediaBrowser/MediaBrowser.Resources/ItemButton"
     xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
-     xmlns:hb="resx://MediaBrowser/MediaBrowser.Resources/HeaderButton"
-      xmlns:me="Me"
+    xmlns:hb="resx://MediaBrowser/MediaBrowser.Resources/HeaderButton"
+    xmlns:is="resx://MediaBrowser/MediaBrowser.Resources/InfoStrip" 
+    xmlns:me="Me"
 	  >
 
 
@@ -494,7 +493,7 @@
                   <AnchorLayoutInput Top="ItemMenuPanel,1,2" Bottom="ItemMenuPanel,1,37" Left="Parent,0" Right="Parent,0.65"/>
                 </LayoutInput>
                 <Children>
-                  <in:InfoMarquee Application="[Application]" />
+                  <is:InfoStrip Application="[Application]" Padding="6,0,0,0" />
                   <ColorFill Layout="Fill" Content="Black" Alpha="0.15" />
                 </Children>
               </Panel>
