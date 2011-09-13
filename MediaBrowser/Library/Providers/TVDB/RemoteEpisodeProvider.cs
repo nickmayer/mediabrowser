@@ -110,9 +110,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     episode.SeasonNumber = doc.SafeGetString("//SeasonNumber");
                     episode.ImdbRating = doc.SafeGetSingle("//Rating", (float)-1, 10);
                     episode.FirstAired = doc.SafeGetString("//FirstAired");
-                    DateTime airDate = DateTime.MinValue;
-                    DateTime.TryParse(episode.FirstAired, out airDate);
-                    episode.ProductionYear = airDate.Year;
+                    DateTime airDate;
+                    episode.ProductionYear = DateTime.TryParse(episode.FirstAired, out airDate) ? airDate.Year : -1;
 
                     string actors = doc.SafeGetString("//GuestStars");
                     if (actors != null) {
