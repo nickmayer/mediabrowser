@@ -26,6 +26,18 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public override string DisplayMediaType
+        {
+            get
+            {
+                return shadowItem.DisplayMediaType;
+            }
+            set
+            {
+                shadowItem.DisplayMediaType = value;
+            }
+        }
+
         public override List<string> BackdropImagePaths {
             get {
                 return shadowItem.BackdropImagePaths;

@@ -213,7 +213,7 @@ namespace MediaBrowser.Library.Entities {
         public string SubTitle { get; set; }
 
         [Persist]
-        public string DisplayMediaType { get; set; }
+        public virtual string DisplayMediaType { get; set; }
 
         [Persist]
         public string CustomRating { get; set; }
