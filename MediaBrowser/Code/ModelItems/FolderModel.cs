@@ -361,15 +361,24 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is IContainer)
+                            if (item is IContainer && !(item is Season))
                             {
                                 //collapse series in the list
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindNewestChildren(item as Folder, subItems, maxSize);
+                                if (item is Series)
+                                {
+                                    //we need to go another level into series to get actual items
+                                    foreach (var seriesChild in (item as Folder).Children)
+                                    {
+                                        if (seriesChild is Season) FindNewestChildren(seriesChild as Folder, subItems, maxSize);
+                                    }
+                                }
                                 if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                                 {
                                     //collapse into a container
                                     var thisContainer = item as IContainer;
+                                    var ignore = item.BackdropImages; //force these to load so they will inherit
                                     DateTime createdTime = subItems.Keys.Max();
                                     var container = new IndexFolder()
                                     {
@@ -403,7 +412,14 @@ namespace MediaBrowser.Library {
                                 }
                                 else
                                 {
-                                    FindNewestChildren(item as Folder, foundNames, maxSize);
+                                    foreach (var pair in subItems)
+                                    {
+                                        foundNames.Add(pair.Key, pair.Value);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -433,7 +449,8 @@ namespace MediaBrowser.Library {
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folderModel.Folder;
-                            var ignore = item.BackdropImages; //force these to load so they will inherit
+                            var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                            ignore = item.BackdropImages;
                             foundNames.Add(creationTime, modelItem);
                             if (foundNames.Count >= maxSize)
                             {
@@ -458,15 +475,24 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is IContainer)
+                            if (item is IContainer && !(item is Season))
                             {
                                 //collapse series in the list
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindRecentWatchedChildren(item as Folder, subItems, maxSize);
+                                if (item is Series)
+                                {
+                                    //we need to go another level into series to get actual items
+                                    foreach (var seriesChild in (item as Folder).Children)
+                                    {
+                                        if (seriesChild is Season) FindRecentWatchedChildren(seriesChild as Folder, subItems, maxSize);
+                                    }
+                                }
                                 if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                                 {
                                     //collapse into a container folder
                                     var thisContainer = item as IContainer;
+                                    var ignore = item.BackdropImages; //force these to load so they will inherit
                                     DateTime watchedTime = subItems.Keys.Max();
                                     var container = new IndexFolder()
                                     {
@@ -499,8 +525,14 @@ namespace MediaBrowser.Library {
                                 }
                                 else
                                 {
-
-                                    FindRecentWatchedChildren(item as Folder, foundNames, maxSize);
+                                    foreach (var pair in subItems)
+                                    {
+                                        foundNames.Add(pair.Key, pair.Value);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -524,7 +556,8 @@ namespace MediaBrowser.Library {
                                 Item modelItem = ItemFactory.Instance.Create(item);
                                 modelItem.PhysicalParent = folderModel;
                                 item.Parent = folder;
-                                var ignore = item.BackdropImages; //force these to load so they will inherit
+                                var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                                ignore = item.BackdropImages;
                                 foundNames.Add(watchedTime, modelItem);
                                 if (foundNames.Count > maxSize)
                                 {
@@ -550,15 +583,24 @@ namespace MediaBrowser.Library {
                     //don't return items inside protected folders
                     if (item.ParentalAllowed)
                     {
-                        if (item is IContainer)
+                        if (item is IContainer && !(item is Season))
                         {
                             //collapse series in the list
                             SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                             FindRecentUnwatchedChildren(item as Folder, subItems, maxSize);
+                            if (item is Series)
+                            {
+                                //we need to go another level into series to get actual items
+                                foreach (var seriesChild in (item as Folder).Children)
+                                {
+                                    if (seriesChild is Season) FindRecentUnwatchedChildren(seriesChild as Folder, subItems, maxSize);
+                                }
+                            }
                             if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
                             {
                                 //collapse into a series folder
                                 var thisContainer = item as IContainer;
+                                var ignore = item.BackdropImages; //force these to load so they will inherit
                                 DateTime createdTime = subItems.Keys.Max();
                                 var container = new IndexFolder()
                                 {
@@ -591,7 +633,14 @@ namespace MediaBrowser.Library {
                             }
                             else
                             {
-                                FindRecentUnwatchedChildren(item as Folder, foundNames, maxSize);
+                                foreach (var pair in subItems)
+                                {
+                                    foundNames.Add(pair.Key, pair.Value);
+                                    if (foundNames.Count >= maxSize)
+                                    {
+                                        foundNames.RemoveAt(0);
+                                    }
+                                }
                             }
                         }
                     }
@@ -609,8 +658,10 @@ namespace MediaBrowser.Library {
                             Item modelItem = ItemFactory.Instance.Create(item);
                             modelItem.PhysicalParent = folderModel;
                             item.Parent = folder;
-                            var ignore = item.BackdropImages; //force to load so they will inherit
-                            while (foundNames.ContainsKey(creationTime)) {
+                            var ignore = item.Parent.BackdropImages; //force to load so they will inherit
+                            ignore = item.BackdropImages;
+                            while (foundNames.ContainsKey(creationTime))
+                            {
                                 creationTime = creationTime.AddMilliseconds(1);
                             }
                             foundNames.Add(creationTime, modelItem);
