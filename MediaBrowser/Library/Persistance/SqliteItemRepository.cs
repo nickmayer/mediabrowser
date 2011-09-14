@@ -502,21 +502,22 @@ namespace MediaBrowser.Library.Persistance {
                     Logger.ReportInfo("Migrating " + item.Name);
                     SaveItem(item);
                     cnt++;
-                    if (item is Video && (item as Video).RunningTime != null)
-                    {
-                        TimeSpan duration = TimeSpan.FromMinutes((item as Video).RunningTime.Value);
-                        if (duration.Ticks > 0)
-                        {
-                            PlaybackStatus ps = RetrievePlayState(id);
-                            decimal pctIn = Decimal.Divide(ps.PositionTicks, duration.Ticks) * 100;
-                            if (pctIn > Kernel.Instance.ConfigData.MaxResumePct)
-                            {
-                                Logger.ReportInfo("Setting " + item.Name + " to 'Watched' based on last played position.");
-                                ps.PositionTicks = 0;
-                                SavePlayState(ps);
-                            }
-                        }
-                    }
+                    // the removal of in-progress handling means we don't need the following yet...
+                    //if (item is Video && (item as Video).RunningTime != null)
+                    //{
+                    //    TimeSpan duration = TimeSpan.FromMinutes((item as Video).RunningTime.Value);
+                    //    if (duration.Ticks > 0)
+                    //    {
+                    //        PlaybackStatus ps = RetrievePlayState(id);
+                    //        decimal pctIn = Decimal.Divide(ps.PositionTicks, duration.Ticks) * 100;
+                    //        if (pctIn > Kernel.Instance.ConfigData.MaxResumePct)
+                    //        {
+                    //            Logger.ReportInfo("Setting " + item.Name + " to 'Watched' based on last played position.");
+                    //            ps.PositionTicks = 0;
+                    //            SavePlayState(ps);
+                    //        }
+                    //    }
+                    //}
                     Thread.Sleep(20); //allow the delayed writer to keep up...
                 }
             }
@@ -1169,8 +1170,8 @@ namespace MediaBrowser.Library.Persistance {
             guidParam.Value = guid;
 
             using (var reader = cmd.ExecuteReader()) {
-                //Logger.ReportInfo("Retrieving " + reader.RecordsAffected + " providers for " + guid);
                 while (reader.Read()) {
+                    //Logger.ReportVerbose("Retrieving Provider: " + reader.GetString(1));
                     using (var ms = new MemoryStream(reader.GetBytes(0))) {
 
                         var data = (IMetadataProvider)Serializer.Deserialize<object>(ms);
