@@ -235,7 +235,7 @@ namespace MediaBrowser
             get { return PlayState == PlayState.Paused; }
         }
 
-        public PlayState PlayState { get; private set; }
+        public PlayState PlayState { get; protected set; }
 
         #endregion
         const int ForceRefreshMillisecs = 5000;

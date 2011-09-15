@@ -82,8 +82,10 @@ namespace MediaBrowser.Library.Playables
         //private DateTime startTime;
         protected override void PlayInternal(bool resume)
         {
-            
-            PlaybackController.Stop(); //stop whatever is playing
+            if (PlaybackController.IsPlaying)
+            {
+                PlaybackController.Stop(); //stop whatever is playing
+            }
             //startTime = DateTime.Now; //grab this so we can attempt to determine how long we are playing the item
             //MediaBrowser.Library.Logging.Logger.ReportInfo("Playing external.  Duration: " + duration);
             MediaType type  = MediaTypeResolver.DetermineType(path);
