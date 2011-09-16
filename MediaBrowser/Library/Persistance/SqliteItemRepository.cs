@@ -383,7 +383,7 @@ namespace MediaBrowser.Library.Persistance {
                                 "create index if not exists idx_items on items(guid)",
                                 "create table if not exists children (guid, child)", 
                                 "create unique index if not exists idx_children on children(guid, child)",
-                                "create table if not exists list_items(guid, property, value)",
+                                "create table if not exists list_items(guid, property, value, sort_order)",
                                 "create index if not exists idx_list on list_items(guid, property)",
                                 "create unique index if not exists idx_list_constraint on list_items(guid, property, value)",
                                 "create table if not exists schema_version (table_name primary key, version)",
@@ -502,21 +502,22 @@ namespace MediaBrowser.Library.Persistance {
                     Logger.ReportInfo("Migrating " + item.Name);
                     SaveItem(item);
                     cnt++;
-                    if (item is Video && (item as Video).RunningTime != null)
-                    {
-                        TimeSpan duration = TimeSpan.FromMinutes((item as Video).RunningTime.Value);
-                        if (duration.Ticks > 0)
-                        {
-                            PlaybackStatus ps = RetrievePlayState(id);
-                            decimal pctIn = Decimal.Divide(ps.PositionTicks, duration.Ticks) * 100;
-                            if (pctIn > Kernel.Instance.ConfigData.MaxResumePct)
-                            {
-                                Logger.ReportInfo("Setting " + item.Name + " to 'Watched' based on last played position.");
-                                ps.PositionTicks = 0;
-                                SavePlayState(ps);
-                            }
-                        }
-                    }
+                    // the removal of in-progress handling means we don't need the following yet...
+                    //if (item is Video && (item as Video).RunningTime != null)
+                    //{
+                    //    TimeSpan duration = TimeSpan.FromMinutes((item as Video).RunningTime.Value);
+                    //    if (duration.Ticks > 0)
+                    //    {
+                    //        PlaybackStatus ps = RetrievePlayState(id);
+                    //        decimal pctIn = Decimal.Divide(ps.PositionTicks, duration.Ticks) * 100;
+                    //        if (pctIn > Kernel.Instance.ConfigData.MaxResumePct)
+                    //        {
+                    //            Logger.ReportInfo("Setting " + item.Name + " to 'Watched' based on last played position.");
+                    //            ps.PositionTicks = 0;
+                    //            SavePlayState(ps);
+                    //        }
+                    //    }
+                    //}
                     Thread.Sleep(20); //allow the delayed writer to keep up...
                 }
             }
@@ -990,7 +991,7 @@ namespace MediaBrowser.Library.Persistance {
             // and our list columns
             //this is an optimization - we go get all the list values for this item in one statement
             var listCmd = connection.CreateCommand();
-            listCmd.CommandText = "select property, value from list_items where guid = @guid and property != 'ActorName' order by property";
+            listCmd.CommandText = "select property, value from list_items where guid = @guid and property != 'ActorName' order by property, sort_order";
             listCmd.AddParam("@guid", item.Id);
             string currentProperty = "";
             System.Collections.IList list = null;
@@ -1085,11 +1086,13 @@ namespace MediaBrowser.Library.Persistance {
                 if (list != null)
                 {
                     var insCmd = connection.CreateCommand();
-                    insCmd.CommandText = "insert or ignore into list_items(guid, property, value) values(@guid, @property, @value)"; // possible another thread beat us to it...
+                    insCmd.CommandText = "insert or ignore into list_items(guid, property, value, sort_order) values(@guid, @property, @value, @order)"; // possible another thread beat us to it...
                     insCmd.AddParam("@guid", item.Id);
                     insCmd.AddParam("@property", col.ColName);
                     SQLiteParameter val = new SQLiteParameter("@value");
                     insCmd.Parameters.Add(val);
+                    SQLiteParameter ord = new SQLiteParameter("@order");
+                    insCmd.Parameters.Add(ord);
 
                     //special handling for actors because they are saved serialized - we also need to save them in a query-able form...
                     var insActorCmd = connection.CreateCommand();
@@ -1097,14 +1100,17 @@ namespace MediaBrowser.Library.Persistance {
                     SQLiteParameter val2 = new SQLiteParameter("@value2");
                     if (isActor)
                     {
-                        insActorCmd.CommandText = "insert or ignore into list_items(guid, property, value) values(@guid, 'ActorName', @value2)";
+                        insActorCmd.CommandText = "insert or ignore into list_items(guid, property, value, sort_order) values(@guid, 'ActorName', @value2, @order)";
                         insActorCmd.AddParam("@guid", item.Id);
                         insActorCmd.Parameters.Add(val2);
+                        insActorCmd.Parameters.Add(ord);
                     }
 
+                    int order = 0;
                     foreach (var listItem in list)
                     {
                         val.Value = SQLizer.Encode(new SQLInfo.ColDef() { ColType = col.InternalType, InternalType = listItem.GetType() }, listItem);
+                        ord.Value = order;
                         QueueCommand(insCmd);
                         if (isActor)
                         {
@@ -1112,6 +1118,7 @@ namespace MediaBrowser.Library.Persistance {
                             val2.Value = (listItem as Actor).Person.Name;
                             QueueCommand(insActorCmd);
                         }
+                        order++;
                     }
 
                 }
@@ -1163,8 +1170,8 @@ namespace MediaBrowser.Library.Persistance {
             guidParam.Value = guid;
 
             using (var reader = cmd.ExecuteReader()) {
-                //Logger.ReportInfo("Retrieving " + reader.RecordsAffected + " providers for " + guid);
                 while (reader.Read()) {
+                    //Logger.ReportVerbose("Retrieving Provider: " + reader.GetString(1));
                     using (var ms = new MemoryStream(reader.GetBytes(0))) {
 
                         var data = (IMetadataProvider)Serializer.Deserialize<object>(ms);

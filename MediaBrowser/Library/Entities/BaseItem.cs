@@ -207,10 +207,10 @@ namespace MediaBrowser.Library.Entities {
 
 
         [Persist]
-        public string Overview { get; set; }
+        public virtual string Overview { get; set; }
 
         [Persist]
-        public string SubTitle { get; set; }
+        public virtual string SubTitle { get; set; }
 
         [Persist]
         public virtual string DisplayMediaType { get; set; }
