@@ -171,7 +171,7 @@
                 </Layout>
                 <Children>
                   <sr:StarRating Name="StarRating" Margins="0,2,0,3" />
-                  <mp:MPAARating Name="MPAARating" Margins="15,0,0,0" MaximumSize="0,30"/>
+                  <mp:MPAARating Name="MPAARating" Margins="15,0,0,0" Padding="0,1,0,1" MaximumSize="0,30"/>
                 </Children>
               </Panel>
               <Text Name="TxtRuntime" Color="color://s:FontColorMedium" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>
