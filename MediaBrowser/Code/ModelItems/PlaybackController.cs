@@ -482,7 +482,7 @@ namespace MediaBrowser
 
         bool returnedToApp = true;
 
-        private void PlayStateChanged()
+        protected void PlayStateChanged()
         {
             FirePropertyChanged("PlayState");
             FirePropertyChanged("IsPlaying");
