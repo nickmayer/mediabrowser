@@ -464,6 +464,7 @@
     <Content Include="Images\Root\flashHorT.png" />
     <Content Include="Images\Root\poster-frame.png" />
     <Content Include="Images\Root\rootscrollhilitefocus.png" />
+    <Content Include="Images\Special\Gears.png" />
     <Content Include="Images\Special\GreenBallDark.png" />
     <Content Include="Images\Special\GreenBallGlow.png" />
     <Content Include="Images\Special\GreenBallLight.png" />
@@ -528,19 +529,12 @@
     <Content Include="Images\RadioButton\RadioNoFocus.png" />
     <Content Include="Images\RadioButton\RadioSelectFocus.png" />
     <Content Include="Images\RadioButton\RadioSelectNoFocus.png" />
-    <Content Include="Images\Ratings\Rated-G.gif" />
     <Content Include="Images\Ratings\Rated-G_full.png" />
-    <Content Include="Images\Ratings\Rated-NC-17.gif" />
     <Content Include="Images\Ratings\Rated-NC-17_full.png" />
-    <Content Include="Images\Ratings\Rated-NR.gif" />
     <Content Include="Images\Ratings\Rated-NR_full.png" />
-    <Content Include="Images\Ratings\Rated-PG-13.gif" />
     <Content Include="Images\Ratings\Rated-PG-13_full.png" />
-    <Content Include="Images\Ratings\Rated-PG.gif" />
     <Content Include="Images\Ratings\Rated-PG_full.png" />
-    <Content Include="Images\Ratings\Rated-R.gif" />
     <Content Include="Images\Ratings\Rated-R_full.png" />
-    <Content Include="Images\Ratings\Rated-Unrated.gif" />
     <Content Include="Images\Ratings\TV-14.png" />
     <Content Include="Images\Ratings\TV-G.png" />
     <Content Include="Images\Ratings\TV-MA.png" />
@@ -834,6 +828,7 @@
     <Compile Include="Library\Util\CustomResourceManager.cs" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Images.mcml" />
+    <Content Include="Markup\Controls\ActivityIndicator.mcml" />
     <Content Include="Markup\Controls\Backdrop.mcml" />
     <Content Include="Markup\Controls\Buttons\PCIndicatorButton.mcml" />
     <Content Include="Markup\Controls\Buttons\DirectorButton.mcml" />
@@ -850,6 +845,7 @@
     <Content Include="Markup\Controls\Buttons\HeaderButton.mcml" />
     <Content Include="Markup\Controls\DiamondPagination.mcml" />
     <None Include="Markup\Controls\EdgeDetection.mcml" />
+    <Content Include="Markup\Controls\InfoStrip.mcml" />
     <Content Include="Markup\Controls\Popups\ContextMenu.mcml" />
     <Content Include="Markup\Controls\Popups\NumberPad.mcml" />
     <Content Include="Markup\Controls\Scrollers\DiamondPagination.mcml" />
