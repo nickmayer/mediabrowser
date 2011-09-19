@@ -27,7 +27,7 @@
     <Content>
       <Panel>
         <Layout>
-          <FlowLayout Orientation="Horizontal" Spacing="1,1" AllowWrap="true"/>
+          <FlowLayout Orientation="Horizontal" Spacing="0,0" AllowWrap="true"/>
         </Layout>
         <Children>
           <Graphic Name="MediaImage" Visible="true" SizingPolicy="SizeToContent" MaintainAspectRatio="true" MaximumSize="[MaxIconSize]" />

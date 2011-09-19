@@ -389,6 +389,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static byte[] ActivityIndicator {
+            get {
+                object obj = ResourceManager.GetObject("ActivityIndicator", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] Animations {
             get {
                 object obj = ResourceManager.GetObject("Animations", resourceCulture);
@@ -1301,6 +1308,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap Gears {
+            get {
+                object obj = ResourceManager.GetObject("Gears", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] GenreButton {
             get {
                 object obj = ResourceManager.GetObject("GenreButton", resourceCulture);
@@ -1441,6 +1455,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap IconGears {
+            get {
+                object obj = ResourceManager.GetObject("IconGears", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap IconMusic {
             get {
                 object obj = ResourceManager.GetObject("IconMusic", resourceCulture);
@@ -1563,6 +1584,13 @@ namespace MediaBrowser {
         internal static byte[] InfoMarquee {
             get {
                 object obj = ResourceManager.GetObject("InfoMarquee", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] InfoStrip {
+            get {
+                object obj = ResourceManager.GetObject("InfoStrip", resourceCulture);
                 return ((byte[])(obj));
             }
         }

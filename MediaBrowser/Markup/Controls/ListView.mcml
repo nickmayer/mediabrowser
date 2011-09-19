@@ -123,7 +123,7 @@
 						<Children>
 							<Panel Layout="HorizontalFlow" Margins="0,5,0,0" >
 								<Children>
-									<Text Name="List_Counter" Content="0" Color="color://s:FontColorLight" Font="[Font]" />
+									<Text Name="List_Counter" Content="0" Color="color://s:FontColorMedium" Font="[Font]" />
 									<Text Name="List_Total" Content="0" Color="color://s:FontColorMedium" Font="[Font]" Margins="0,0,20,0" />
 								</Children>
 							</Panel>

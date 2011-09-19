@@ -65,20 +65,20 @@
           
           <Panel>
             <Layout>
-              <FlowLayout Orientation="Horizontal" Spacing="10,0"/>
+              <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="0,0"/>
             </Layout>
             <Children>
-              <sr:StarRating Name="StarRating" />
-              <mp:MPAARating Name="MPAARating" MaximumSize="0,30"/>
+              <sr:StarRating Name="StarRating" Margins="0,2,15,3"/>
+              <mp:MPAARating Name="MPAARating" Padding="0,1,0,1" MaximumSize="0,30"/>
             </Children>
           </Panel>
           <Panel>
             <Layout>
-              <FlowLayout Orientation="Horizontal" Spacing="10,0"/>
+              <FlowLayout Orientation="Horizontal" Spacing="0,0"/>
             </Layout>
             <Children>
-              <Text Name="ProductionYear" Content=""  Font="font://f:TD_MI_ProductionYearFont" Color="color://s:FontColorLight"/>
-              <Text Name="TxtRuntime" Color="color://s:FontColorLight" WordWrap="true" Font="font://f:TD_MI_RuntimeFont" Margins="0,0,0,0"/>
+              <Text Name="ProductionYear" Content=""  Font="font://f:TD_MI_ProductionYearFont" Color="color://s:FontColorLight" Margins="0,0,10,0"/>
+              <Text Name="TxtRuntime" Color="color://s:FontColorLight" WordWrap="true" Font="font://f:TD_MI_RuntimeFont" Margins="0,2,0,0"/>
             </Children>
           </Panel>
 

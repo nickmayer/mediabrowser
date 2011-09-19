@@ -199,24 +199,6 @@
   <data name="MPAARating" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\controls\mpaarating.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Rated_G" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\ratings\rated-g.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Rated_NC_17" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\ratings\rated-nc-17.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Rated_NR" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\ratings\rated-nr.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Rated_PG" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\ratings\rated-pg.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Rated_PG_13" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\ratings\rated-pg-13.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Rated_R" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\ratings\rated-r.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="FocusSelector" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\controls\focusselector.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -1143,5 +1125,36 @@
   </data>
   <data name="media_3d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\MediaInfo\media_3d.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ActivityIndicator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Markup\Controls\ActivityIndicator.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Gears" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Special\Gears.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconGears" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Icons\IconGears.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="InfoStrip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Markup\Controls\InfoStrip.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Rated_G" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Ratings\rated-g.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rated_NC_17" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Ratings\rated-nc-17.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rated_NR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Ratings\rated-nr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rated_PG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Ratings\rated-pg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rated_PG_13" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Ratings\rated-pg-13.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rated_R" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Ratings\rated-r.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -216,8 +216,8 @@
               <FormLayoutInput Bottom="MyItems,0" Left="Parent,0,20"/>
             </LayoutInput>
             <Children>
-              <Text Content="-1" Name="CurrentItem" Color="color://s:FontColorLight" Font="font://f:SV_CounterFont"></Text>
-              <Text Content=" | " Color="color://s:FontColorLight" Font="font://f:SV_CounterFont"></Text>
+              <Text Content="-1" Name="CurrentItem" Color="color://s:FontColorMedium" Font="font://f:SV_CounterFont"></Text>
+              <Text Content=" | " Color="color://s:FontColorMedium" Font="font://f:SV_CounterFont"></Text>
               <Text Content="-1" Name="TotalItems" Color="color://s:FontColorMedium" Font="font://f:SV_CounterFont"></Text>
             </Children>
           </Panel>

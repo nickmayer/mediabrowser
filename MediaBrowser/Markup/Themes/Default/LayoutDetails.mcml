@@ -167,11 +167,11 @@
               <Text Name="Title2" Color="color://s:FontColorLight" Font="font://f:DV_SubTitleFont" Margins="0,-5,0,0"/>
               <Panel Name="StarMPAA">
                 <Layout>
-                  <FlowLayout Orientation="Horizontal" Spacing="10,0"/>
+                  <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="0,0"/>
                 </Layout>
                 <Children>
-                  <sr:StarRating Name="StarRating" Margins="0,5,0,0" />
-                  <mp:MPAARating Name="MPAARating" Margins="10,0,0,0" MaximumSize="0,30"/>
+                  <sr:StarRating Name="StarRating" Margins="0,2,0,3" />
+                  <mp:MPAARating Name="MPAARating" Margins="15,0,0,0" Padding="0,1,0,1" MaximumSize="0,30"/>
                 </Children>
               </Panel>
               <Text Name="TxtRuntime" Color="color://s:FontColorMedium" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>
