@@ -314,6 +314,7 @@
     <Content Include="Images\Icons\IconRemote.png" />
     <Content Include="Images\Icons\IconWatched.png" />
     <Content Include="Images\Lock.png" />
+    <Content Include="Images\Locked.png" />
     <Content Include="Images\mblogo1000.png" />
     <Content Include="Images\MediaInfo\aspect_125.png" />
     <Content Include="Images\MediaInfo\aspect_133.png" />
@@ -557,6 +558,7 @@
     <Content Include="Images\Star\Star_Empty.png" />
     <Content Include="Images\Star\Star_Half.png" />
     <Content Include="Images\UnLock1.png" />
+    <Content Include="Images\UnLocked.png" />
     <Content Include="Images\Unwatched\Tick.png" />
     <Content Include="Images\Unwatched\TickPoster.png" />
     <Content Include="Images\Unwatched\TickPosterBase.png" />
@@ -830,7 +832,9 @@
     <Content Include="Markup\Base\Images.mcml" />
     <Content Include="Markup\Controls\ActivityIndicator.mcml" />
     <Content Include="Markup\Controls\Backdrop.mcml" />
-    <Content Include="Markup\Controls\Buttons\PCIndicatorButton.mcml" />
+    <Content Include="Markup\Controls\Buttons\PCIndicatorButton.mcml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Markup\Controls\Buttons\DirectorButton.mcml" />
     <Content Include="Markup\Controls\Buttons\GenreButton.mcml" />
     <Content Include="Markup\Controls\Buttons\ImageButton.mcml" />

@@ -1693,6 +1693,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap Locked {
+            get {
+                object obj = ResourceManager.GetObject("Locked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap mblogo1000 {
             get {
                 object obj = ResourceManager.GetObject("mblogo1000", resourceCulture);
@@ -2424,6 +2431,13 @@ namespace MediaBrowser {
         internal static System.Drawing.Bitmap UnLock1 {
             get {
                 object obj = ResourceManager.GetObject("UnLock1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap UnLocked {
+            get {
+                object obj = ResourceManager.GetObject("UnLocked", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -66,7 +66,7 @@
           <Equality Source="[Application.Config.ParentalControlUnlocked]" Value="true"/>
         </Conditions>
         <Actions>
-          <Set Target="[LockImg.Content]"  Value="image://i:UnLock" />
+          <Set Target="[LockImg.Content]"  Value="image://i:UnLocked" />
         </Actions>
       </Changed>
 
@@ -86,7 +86,7 @@
         <Children>
           <Panel >
             <Children>
-              <Graphic Name="LockImg" Content="image://i:Lock" MaximumSize="[Size]" MinimumSize="[Size]" MaintainAspectRatio="true" ></Graphic>
+              <Graphic Name="LockImg" Content="image://i:Locked" MaximumSize="[Size]" MinimumSize="[Size]" MaintainAspectRatio="true" ></Graphic>
             </Children>
           </Panel>
         </Children>

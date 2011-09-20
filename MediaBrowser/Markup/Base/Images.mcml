@@ -21,6 +21,8 @@
 	<Image Name="IndexImg" Source="resx://MediaBrowser/MediaBrowser.Resources/Index"/>
   <Image Name="BackShadow" Source="resx://MediaBrowser/MediaBrowser.Resources/BackShadow" NineGrid="65,65,65,65"/>
   <Image Name="Starburst" Source="resx://MediaBrowser/MediaBrowser.Resources/Starburst"/>
+  <Image Name="Locked" Source="resx://MediaBrowser/MediaBrowser.Resources/Locked"/>
+  <Image Name="UnLocked" Source="resx://MediaBrowser/MediaBrowser.Resources/UnLocked"/>
 
   <Image Name="HDLogo" Source="resx://MediaBrowser/MediaBrowser.Resources/HD" />
 	<Image Name="HDLogo1080" Source="resx://MediaBrowser/MediaBrowser.Resources/hd1080" />
