@@ -161,7 +161,7 @@ namespace MediaBrowser.Library
             catch { }
             this.IndexBy = br.SafeReadString();
             if (!Config.Instance.RememberIndexing)
-                this.IndexBy = "None";
+                this.IndexBy = Localization.LocalizedStrings.Instance.GetString("NoneDispPref");
             this.useBanner.Value = br.ReadBoolean();
             this.thumbConstraint.Value = new Size(br.ReadInt32(), br.ReadInt32());
 
