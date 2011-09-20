@@ -683,7 +683,9 @@ namespace MediaBrowser.Library {
 
         public override void RefreshMetadata(bool displayMsg)
         {
-            bool includeChildren = Application.DisplayDialog(Localization.LocalizedStrings.Instance.GetString("RefreshFolderDial"), Localization.LocalizedStrings.Instance.GetString("RefreshFolderCapDial"), Microsoft.MediaCenter.DialogButtons.Yes | Microsoft.MediaCenter.DialogButtons.No, 10000) == Microsoft.MediaCenter.DialogResult.Yes;
+            bool includeChildren = folder.DefaultIncludeChildrenRefresh;
+            if (folder.PromptForChildRefresh)
+                includeChildren = Application.DisplayDialog(Localization.LocalizedStrings.Instance.GetString("RefreshFolderDial"), Localization.LocalizedStrings.Instance.GetString("RefreshFolderCapDial"), Microsoft.MediaCenter.DialogButtons.Yes | Microsoft.MediaCenter.DialogButtons.No, 10000) == Microsoft.MediaCenter.DialogResult.Yes;
 
             //first do us
             base.RefreshMetadata(false);

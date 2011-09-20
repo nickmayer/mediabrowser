@@ -121,6 +121,18 @@ namespace MediaBrowser
             set { if (this.data.ProcessBackdrops != value) { this.data.ProcessBackdrops = value; Save(); FirePropertyChanged("ProcessBackdrops"); } }
         }
 
+        public bool AskIncludeChildrenRefresh
+        {
+            get { return this.data.AskIncludeChildrenRefresh; }
+            set { if (this.data.AskIncludeChildrenRefresh != value) { this.data.AskIncludeChildrenRefresh = value; Save(); FirePropertyChanged("AskIncludeChildrenRefresh"); } }
+        }
+
+        public bool DefaultIncludeChildrenRefresh
+        {
+            get { return this.data.DefaultIncludeChildrenRefresh; }
+            set { if (this.data.DefaultIncludeChildrenRefresh != value) { this.data.DefaultIncludeChildrenRefresh = value; Save(); FirePropertyChanged("DefaultIncludeChildrenRefresh"); } }
+        }
+
         public bool IsFirstRun
         {
             get { return this.data.IsFirstRun; }

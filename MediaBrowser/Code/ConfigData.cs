@@ -189,6 +189,9 @@ namespace MediaBrowser
         public bool EnableScreenSaver = true; //enable default screen saver functionality
         public int ScreenSaverTimeOut = 10; //minutes of inactivity for screen saver to kick in
 
+        public bool AskIncludeChildrenRefresh = true; //prompt to include children on a folder refresh
+        public bool DefaultIncludeChildrenRefresh = true; //if we don't prompt, are children included?
+
         public int NetworkAvailableTimeOut = 5000; //milliseconds to wait for network to be available on validations
 
         //public bool UseSQLImageCache = false; //switch to use the new SQLite image cache

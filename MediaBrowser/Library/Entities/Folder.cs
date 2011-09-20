@@ -104,6 +104,22 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public virtual bool PromptForChildRefresh
+        {
+            get
+            {
+                return Kernel.Instance.ConfigData.AskIncludeChildrenRefresh;
+            }
+        }
+
+        public virtual bool DefaultIncludeChildrenRefresh
+        {
+            get
+            {
+                return Kernel.Instance.ConfigData.DefaultIncludeChildrenRefresh;
+            }
+        }
+
         /// <summary>
         /// Returns a safe clone of the children
         /// </summary>
