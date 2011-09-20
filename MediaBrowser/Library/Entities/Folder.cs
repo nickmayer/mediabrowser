@@ -266,7 +266,7 @@ namespace MediaBrowser.Library.Entities {
         /// that are not hidden by parental controls.  Use for UI operations.
         ///   Safe for multithreaded use, since it operates on list clones
         /// </summary>
-        public IEnumerable<BaseItem> RecursiveChildren {
+        public virtual IEnumerable<BaseItem> RecursiveChildren {
             get {
                 foreach (var item in Children) {
                     if (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed)
@@ -289,7 +289,7 @@ namespace MediaBrowser.Library.Entities {
         /// ignoring parental controls (use only from refresh operations)
         ///   Safe for multithreaded use, since it operates on list clones
         /// </summary>
-        public IEnumerable<BaseItem> AllRecursiveChildren
+        public virtual IEnumerable<BaseItem> AllRecursiveChildren
         {
             get
             {
@@ -467,12 +467,12 @@ namespace MediaBrowser.Library.Entities {
            
         }
 
-        void SaveChildren(IList<BaseItem> items)
+        protected void SaveChildren(IList<BaseItem> items)
         {
             SaveChildren(items, false);
         }
 
-        void SaveChildren(IList<BaseItem> items, bool saveIndvidualChidren) {
+        protected void SaveChildren(IList<BaseItem> items, bool saveIndvidualChidren) {
             Kernel.Instance.ItemRepository.SaveChildren(Id, items.Select(i => i.Id));
             if (saveIndvidualChidren)
             {

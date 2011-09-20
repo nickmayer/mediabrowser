@@ -123,6 +123,12 @@ namespace MediaBrowser.Library
                                     Application.CurrentInstance.BackToRoot();
                                 }
 
+                                // set npv visibility according to current state
+                                if (Application.MediaCenterEnvironment.MediaExperience != null && Application.MediaCenterEnvironment.MediaExperience.Transport != null)
+                                {
+                                    Application.CurrentInstance.ShowNowPlaying = Application.MediaCenterEnvironment.MediaExperience.Transport.PlayState == Microsoft.MediaCenter.PlayState.Playing;
+                                }
+
                                 //tell MC to navigate to us
                                 Microsoft.MediaCenter.Hosting.AddInHost.Current.ApplicationContext.ReturnToApplication();
                                 break;
