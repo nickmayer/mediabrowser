@@ -159,7 +159,11 @@ namespace MediaBrowser.Library
                 this.SortOrder = br.SafeReadString();
             }
             catch { }
-            this.IndexBy = br.SafeReadString();
+            try
+            {
+                this.IndexBy = br.SafeReadString();
+            }
+            catch { }
             if (!Config.Instance.RememberIndexing)
                 this.IndexBy = Localization.LocalizedStrings.Instance.GetString("NoneDispPref");
             this.useBanner.Value = br.ReadBoolean();
