@@ -1141,7 +1141,7 @@ namespace MediaBrowser
             {
                 if (!Config.Instance.RememberIndexing)
                 {
-                    folder.DisplayPrefs.IndexBy = "None";
+                    folder.DisplayPrefs.IndexBy = MediaBrowser.Library.Localization.LocalizedStrings.Instance.GetString("NoneDispPref");
                 }
                 if (Config.Instance.AutoEnterSingleDirs && (folder.Folder.Children.Count == 1))
                 {
