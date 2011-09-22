@@ -154,7 +154,14 @@ namespace MBMigrate
                     catch { }
                 }
                 UpdateProgress("Finishing up...",1);
-                newRepo.ShutdownDatabase(); //be sure all writes are flushed
+                try
+                {
+                    Async.RunWithTimeout(newRepo.ShutdownDatabase, 30000); //be sure all writes are flushed
+                }
+                catch
+                {
+                    Logger.ReportWarning("Timed out attempting to close out DB.  Assuming all is ok and moving on...");
+                }
             }
             else Logger.ReportInfo("Nothing to Migrate.  Version is: " + _config.MBVersion);
             
