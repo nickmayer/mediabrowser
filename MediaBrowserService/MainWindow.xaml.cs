@@ -786,8 +786,11 @@ namespace MediaBrowserService
                         ClearLogFiles(Kernel.Instance.ConfigData.LogFileRetentionDays);
                         if (_config.SleepAfterScheduledRefresh)
                         {
-                            Logger.ReportInfo("Putting computer to sleep...");
-                            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+                            Async.Queue("Sleep After Refresh", () =>
+                            {
+                                Logger.ReportInfo("Putting computer to sleep...");
+                                System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+                            }, 10000);
                         }
                     }
                 }
