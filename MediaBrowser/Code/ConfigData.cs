@@ -210,6 +210,9 @@ namespace MediaBrowser
         [Comment("Suppress the statistics nag msg")]
         public bool SuppressStatsNag = false;
 
+        [Comment("This is a hack until I can rewrite some file date processing")]
+        public bool EnableShortcutDateHack = true;
+
         public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 
         public class ExternalPlayer

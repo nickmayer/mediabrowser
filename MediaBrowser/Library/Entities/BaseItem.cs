@@ -337,9 +337,19 @@ namespace MediaBrowser.Library.Entities {
             if (item.Path != null)
                 Debug.Assert(item.Path.ToLower() == this.Path.ToLower());
             Debug.Assert(item.GetType() == this.GetType());
-
-            bool changed = this.DateModified != item.DateModified;
-            changed |= this.DateCreated != item.DateCreated;
+            bool changed = false;
+            //the following is to get around an anomoly with how directory creation dates seem to be returned from the actual item vs a shortcut to it
+            //  I will attempt to re-write the date generations in a future release -ebr
+            if (Kernel.Instance.ConfigData.EnableShortcutDateHack) 
+            {
+                changed = this.DateModified.ToShortDateString() != item.DateModified.ToShortDateString();
+                changed |= this.DateCreated.ToShortDateString() != item.DateCreated.ToShortDateString();
+            }
+            else
+            {
+                changed = this.DateModified != item.DateModified;
+                changed |= this.DateCreated != item.DateCreated;
+            }
             changed |= this.defaultName != item.defaultName;
             //if (changed && Debugger.IsAttached) Debugger.Break();
 
