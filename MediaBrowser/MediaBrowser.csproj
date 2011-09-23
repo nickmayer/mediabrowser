@@ -905,7 +905,9 @@
     <Content Include="Markup\StylesBlack.mcml" />
     <Content Include="Markup\Themes\Default\Splash.mcml" />
     <Content Include="Markup\Themes\Default\ParentalPINEntry.mcml" />
-    <Content Include="Markup\Themes\Default\Selectors\PageDefault.mcml" />
+    <Content Include="Markup\Themes\Default\Selectors\PageDefault.mcml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Markup\Themes\Default\ViewMovieDefault.mcml" />
     <Content Include="Markup\Themes\Default\ViewMovieMinimal.mcml" />
     <Content Include="Markup\Themes\Default\Selectors\PageDetailArea.mcml" />

@@ -120,6 +120,7 @@
           <Modified Source="[Popup.Invoked]" />
         </Conditions>
         <Actions>
+          <Invoke Target="[Application.ResetContextMenu]" />
           <Set Target="[ContextMenu.Visible]" Value="true"/>
           <Invoke Target="[ContextMenu.NavigateInto]" />
           <Set Target="[FindAsYouTypePanel.Visible]" Value="false" />
