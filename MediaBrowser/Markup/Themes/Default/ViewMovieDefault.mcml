@@ -410,8 +410,8 @@
                   <FlowLayout Orientation="Horizontal" Spacing="0,0"/>
                 </Layout>
                 <Children>
-                  <Text Name="ProductionYear" Content="" Font="Verdana,18,Bold" Color="color://s:FontColorLight"/>
-                  <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,2,15,3" />
+                  <Text Name="ProductionYear" Content="" Font="Verdana,18,Bold" Color="color://s:FontColorLight" Margins="0,0,10,0"/>
+                  <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,4,15,4" />
                   <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="0,0,10,0" MaximumSize="0,30"/>
                   <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="30,30" />
                 </Children>

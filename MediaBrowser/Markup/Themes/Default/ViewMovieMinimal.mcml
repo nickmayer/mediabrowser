@@ -725,8 +725,8 @@
                   <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="0,0"/>
                 </Layout>
                 <Children>
-                  <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,5,15,5" />
-                  <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="0,3,10,2" Padding="0,1,0,1" MaximumSize="0,30"/>
+                  <sr:StarRating Name="StarRating" Value="[Item.ImdbRating]" Margins="0,7,17,6" />
+                  <mp:MPAARating Name="MPAARating" Value="[Item.MpaaRating]" Margins="3,3,10,2" Padding="0,1,0,1" MaximumSize="0,30"/>
                   <Graphic Name="PCLock" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" Margins="0,3,0,2" MaximumSize="30,30" />
                 </Children>
 
