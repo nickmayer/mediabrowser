@@ -384,7 +384,7 @@ namespace MediaBrowser.Library {
                                     {
                                         Id = (folder.Name + thisContainer.Name).GetMD5(),
                                         DateCreated = createdTime,
-                                        Name =  thisContainer.Name + " (" + subItems.Count + " items)",
+                                        Name = thisContainer.Name + " (" + subItems.Count + " items)",
                                         Overview = thisContainer.Overview,
                                         MpaaRating = thisContainer.MpaaRating,
                                         Genres = thisContainer.Genres,
@@ -412,6 +412,24 @@ namespace MediaBrowser.Library {
                                 }
                                 else
                                 {
+                                    foreach (var pair in subItems)
+                                    {
+                                        foundNames.Add(pair.Key, pair.Value);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (!(item is Series))
+                                {
+                                    //regular folder or box set - go into it
+                                    (item as Folder).ValidateChildren(); //make sure we find the new stuff first
+                                    SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
+                                    FindNewestChildren(item as Folder, subItems, maxSize);
                                     foreach (var pair in subItems)
                                     {
                                         foundNames.Add(pair.Key, pair.Value);
@@ -535,6 +553,24 @@ namespace MediaBrowser.Library {
                                     }
                                 }
                             }
+                            else
+                            {
+                                if (!(item is Series))
+                                {
+                                    //regular folder or box set - go into it
+                                    (item as Folder).ValidateChildren(); //make sure we find the new stuff first
+                                    SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
+                                    FindRecentWatchedChildren(item as Folder, subItems, maxSize);
+                                    foreach (var pair in subItems)
+                                    {
+                                        foundNames.Add(pair.Key, pair.Value);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     else
@@ -633,6 +669,24 @@ namespace MediaBrowser.Library {
                             }
                             else
                             {
+                                foreach (var pair in subItems)
+                                {
+                                    foundNames.Add(pair.Key, pair.Value);
+                                    if (foundNames.Count >= maxSize)
+                                    {
+                                        foundNames.RemoveAt(0);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!(item is Series))
+                            {
+                                //regular folder or box set - go into it
+                                (item as Folder).ValidateChildren(); //make sure we find the new stuff first
+                                SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
+                                FindRecentUnwatchedChildren(item as Folder, subItems, maxSize);
                                 foreach (var pair in subItems)
                                 {
                                     foundNames.Add(pair.Key, pair.Value);
