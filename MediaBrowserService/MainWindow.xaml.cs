@@ -651,7 +651,7 @@ namespace MediaBrowserService
                 return; //get out of here fast
             }
 
-            var verylate = (_config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(_config.FullRefreshInterval * 3)) && _firstIteration);
+            var verylate = false; // taking this out because starting a refresh on an MB start can cause a lot of conflicts (_config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(_config.FullRefreshInterval * 3)) && _firstIteration);
             var overdue = _config.LastFullRefresh.Date <= DateTime.Now.Date.AddDays(-(_config.FullRefreshInterval));
 
             _firstIteration = false; //re set this so an interval of 0 doesn't keep firing us off
