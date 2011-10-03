@@ -326,10 +326,9 @@ namespace MediaBrowser.LibraryManagement
             return (Config.Instance.InitialFolder==path) || (Config.Instance.InitialFolder == Helper.MY_VIDEOS && path == Helper.MyVideosPath);
         }
 
-        private static readonly Regex alphaNumeric = new Regex("[^a-zA-Z0-9]");
         public static bool IsAlphaNumeric(string str)
         {
-            return (!alphaNumeric.IsMatch(str));
+            return (str.ToCharArray().All(c => Char.IsLetter(c) || Char.IsNumber(c)));
         }
 
         public static string RemoveInvalidFileChars(string filename) {
