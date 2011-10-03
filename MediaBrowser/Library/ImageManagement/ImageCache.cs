@@ -270,9 +270,6 @@ namespace MediaBrowser.Library.ImageManagement {
         public string GetImagePath(Guid id, int width, int height) {
             ImageSet set = GetImageSet(id);
             if (set != null && set.PrimaryImage != null) {
-                //just cache one size - mulitples not buying us anything but more files and space
-                return set.PrimaryImage.Path;
-                //
                 lock (set) {
                     var image = set.ResizedImages.FirstOrDefault(info => info.Width == width && info.Height == height);
                     if (image != null) {
