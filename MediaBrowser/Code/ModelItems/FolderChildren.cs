@@ -73,14 +73,6 @@ namespace MediaBrowser.Code.ModelItems {
             using (var profiler = new Profiler("Verify Children (UI Triggered) " + children.folder.Name))
             {
 
-                //if we are a top-level folder optionally
-                //wait just a bit before we verify - in case a server was asleep or something
-                if (Application.CurrentInstance.RootFolder.Children.Contains(children.folder))
-                {
-                    if (Config.Instance.ValidationDelay > 998) return; //just abort if they set this really high so we don't hold up threads
-                    Thread.Sleep(Config.Instance.ValidationDelay * 1000); //default is 0 seconds (no delay)
-                }
-
                 // This is hairy, I do not want to change sigs, I also do not want to trigger expensive metadata refreshes UNLESS we detect changes in the folder.
 
                 bool changed = false;

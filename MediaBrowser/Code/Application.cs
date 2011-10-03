@@ -695,8 +695,8 @@ namespace MediaBrowser
 
         bool FirstRunForVersion(string thisVersion)
         {
-            var oldVerion = new System.Version(Config.MBVersion);
-            if (oldVerion < new System.Version(2, 0, 0, 0))
+            var oldVersion = new System.Version(Config.MBVersion);
+            if (oldVersion < new System.Version(2, 0, 0, 0))
             {
                 Logger.ReportInfo("First run of Media Browser.  Initiating a full refresh of the library in service.");
                 if (MBServiceController.SendCommandToService(IPCCommands.ForceRebuild))
@@ -723,7 +723,7 @@ namespace MediaBrowser
                 case "2.2.8.0":
                 case "2.2.9.0":
                     //set validationDelay to "0" - user can change it back if they wish or are directed to
-                    Config.ValidationDelay = 0;
+                    //Config.ValidationDelay = 0; removed in future version
                     break;
                 case "2.3.0.0":
                     //re-set plugin source if not already done by configurator...
@@ -732,11 +732,12 @@ namespace MediaBrowser
                 case "2.3.1.0":
                 case "2.3.2.0":
                 case "2.5.0.0":
-                    if (oldVerion <= new System.Version(2, 3, 0, 0))
+                case "2.5.1.0":
+                    if (oldVersion <= new System.Version(2, 3, 0, 0))
                     {
                         MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
                     }
-                    if (oldVerion <= new System.Version(2, 3, 1, 0))
+                    if (oldVersion <= new System.Version(2, 3, 1, 0))
                     {
                         Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
                         if (Config.MetadataCheckForUpdateAge < 30) Config.MetadataCheckForUpdateAge = 30; //bump this up
@@ -753,6 +754,7 @@ namespace MediaBrowser
                         }
                     }
                     else
+                        if (oldVersion < new System.Version(2,5,0,0))
                     {
                         //upgrading from 2.3.2 - item migration should have already occurred...
                         Config.EnableTraceLogging = true; //turn this on by default since we now have levels and retention/clearing
