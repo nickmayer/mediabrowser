@@ -920,7 +920,9 @@
     <Content Include="Markup\MovieDetailsPage.mcml" />
     <Content Include="Markup\Themes\Default\LayoutPoster.mcml" />
     <Content Include="Markup\StylesDefault.mcml" />
-    <Content Include="Registration7.xml" />
+    <Content Include="Registration7.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="RegistrationVista.xml" />
   </ItemGroup>
   <ItemGroup>
