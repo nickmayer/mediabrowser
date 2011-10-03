@@ -15,6 +15,7 @@
     xmlns:edge="resx://MediaBrowser/MediaBrowser.Resources/EdgeDetection"
     xmlns:ai="resx://MediaBrowser/MediaBrowser.Resources/ActivityIndicator"
     xmlns:is="resx://MediaBrowser/MediaBrowser.Resources/InfoStrip"
+    xmlns:an="resx://MediaBrowser/MediaBrowser.Resources/Animations"      
     xmlns:me="Me"
       >
 
@@ -420,6 +421,9 @@
 
     <Content>
       <Panel Layout="Center">
+        <Animations>
+          <Animation Animation="animation://an:PageHide" />
+        </Animations>
         <Children>
           <Clip Layout="Form" Padding="[Application.Config.OverScanPadding]" Scale="[Application.Config.OverScanScaling]" CenterPointPercent="0.5,0.5,0.5">
             <Children>

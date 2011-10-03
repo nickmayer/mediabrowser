@@ -35,9 +35,9 @@
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
-        <Animations>
+        <!--<Animations>
           <Animation Animation="animation://an:PageHide" />
-        </Animations>
+        </Animations>-->
         <Children>
           <me:DefaultScreenSaver Name="ScreenSaver" Folder="[Folder]" Application="[Application]" >
             <LayoutInput>
