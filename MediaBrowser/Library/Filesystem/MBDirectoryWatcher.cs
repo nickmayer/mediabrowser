@@ -15,10 +15,12 @@ namespace MediaBrowser.Library.Filesystem
         private List<FileSystemWatcher> fileSystemWatchers = null;
         private Timer initialTimer;
         private Timer secondaryTimer;
-        private System.DateTime lastRefresh;
+        private System.DateTime lastRefresh = DateTime.MinValue;
         private string[] watchedFolders;
 
         private Folder folder;
+        private string lastChangedDirectory = "Nothing";
+        private string lastRefreshedDirectory = "Nothing";
 
         public MBDirectoryWatcher(Folder aFolder, bool watchChanges)
         {
@@ -90,13 +92,13 @@ namespace MediaBrowser.Library.Filesystem
             this.initialTimer = new Timer();
             this.initialTimer.Enabled = false;
             this.initialTimer.Tick += new EventHandler(InitialTimer_Timeout);
-            this.initialTimer.Interval = 5000; // 5 seconds            
+            this.initialTimer.Interval =30000; // 30 seconds            
 
-            //after that, if events are still occurring wait 60 seconds so we don't continually refresh during long file operations
+            //after that, if events are still occurring wait 90 seconds so we don't continually refresh during long file operations
             this.secondaryTimer = new Timer();
             this.secondaryTimer.Enabled = false;
             this.secondaryTimer.Tick += new EventHandler(SecondaryTimer_Timeout);
-            this.secondaryTimer.Interval = 90000; // 90 seconds            
+            this.secondaryTimer.Interval = 120000; // 120 seconds            
         }        
 
         private void InitFileSystemWatcher(string[] watchedFolders, bool watchChanges)
@@ -125,18 +127,20 @@ namespace MediaBrowser.Library.Filesystem
             }            
         }
 
-        private void WatchedFolderUpdated(string FullPath, WatcherChangeTypes changeType)
+        private void WatchedFolderUpdated(string FullPath, FileSystemEventArgs e)
         {
             try
             {
                 if (Directory.Exists(FullPath))
                 {
+                    lastChangedDirectory = Path.GetDirectoryName(e.FullPath).ToLower();
+                    lastChangedDirectory = lastChangedDirectory.Replace("\\metadata", ""); //if chg was to metadata directory for TV look at parent
                     if (System.DateTime.Now > lastRefresh.AddMilliseconds(120000))
                     {
-                        //initial change event - wait 5 seconds and then update
+                        //initial change event - wait 30 seconds and then update
                         this.initialTimer.Enabled = true;
                         lastRefresh = System.DateTime.Now;
-                        Logger.ReportInfo("A change of type \"" + changeType.ToString() + "\" has occured in " + FullPath);
+                        Logger.ReportInfo("A change of type \"" + e.ChangeType.ToString() + "\" has occured in " + lastChangedDirectory);
                     }
                     else
                     {
@@ -164,22 +168,22 @@ namespace MediaBrowser.Library.Filesystem
 
         private void WatchedFolderChanged(object sender, FileSystemEventArgs e)
         {            
-            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e.ChangeType);
+            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e);
         }
 
         private void WatchedFolderCreation(object sender, FileSystemEventArgs e)
         {
-            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e.ChangeType);
+            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e);
         }
 
         private void WatchedFolderDeletion(object sender, FileSystemEventArgs e)
         {
-            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e.ChangeType);
+            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e);
         }
 
         private void WatchedFolderRename(object sender, FileSystemEventArgs e)
         {
-            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e.ChangeType);
+            WatchedFolderUpdated(((FileSystemWatcher)sender).Path, e);
         }
 
         private void InitialTimer_Timeout(object sender, EventArgs e)
@@ -196,22 +200,58 @@ namespace MediaBrowser.Library.Filesystem
 
         private void RefreshFolder()
         {
-            Async.Queue("File Watcher Refresher", () =>
+            //if ((Application.CurrentInstance.CurrentFolder.Name == folder.Name || Application.CurrentInstance.CurrentItem.Name == folder.Name) &&
+            //    lastChangedDirectory != lastRefreshedDirectory)
             {
-                Logger.ReportInfo("Refreshing " + Application.CurrentInstance.CurrentFolder.Name + " due to change in " + folder.Name);
-                folder.ValidateChildren();
-                foreach (var item in folder.RecursiveChildren)
+                Async.Queue("File Watcher Refresher", () =>
                 {
-                    if (item is Folder) (item as Folder).ValidateChildren();
-                }
-                //Refresh whatever folder we are currently viewing plus all parents up the tree
-                FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
-                while (aFolder != Application.CurrentInstance.RootFolderModel && aFolder != null)
+                    Logger.ReportInfo("Refreshing " + Application.CurrentInstance.CurrentFolder.Name + " due to change in " + folder.Name);
+                    Logger.ReportInfo("  Directory changed was: " + lastChangedDirectory);
+                    lastRefreshedDirectory = lastChangedDirectory;
+                    folder.ValidateChildren();
+                    foreach (var item in folder.RecursiveChildren)
+                    {
+                        if (item is Folder) (item as Folder).ValidateChildren();
+                    }
+                    //and go back through to find the item that actually changed and update its metadata - as long as it wasn't the root that changed
+                    if (!isTopLevel(folder.FolderMediaLocation as VirtualFolderMediaLocation, lastChangedDirectory))
+                    {
+                        foreach (var item in folder.RecursiveChildren)
+                        {
+                            if (item.Path.ToLower().StartsWith(lastChangedDirectory))
+                            {
+                                Logger.ReportInfo("Refreshing metadata on " + item.Name + "(" + item.Path + ") because change was in " + lastChangedDirectory);
+                                item.RefreshMetadata(Metadata.MetadataRefreshOptions.Force);
+                                item.ReCacheAllImages();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Logger.ReportInfo("Not refreshing all items because change was at root level: " + lastChangedDirectory);
+                    }
+                    //Refresh whatever folder we are currently viewing plus all parents up the tree
+                    FolderModel aFolder = Application.CurrentInstance.CurrentFolder;
+                    while (aFolder != Application.CurrentInstance.RootFolderModel && aFolder != null)
+                    {
+                        aFolder.RefreshUI();
+                        aFolder = aFolder.PhysicalParent;
+                    }
+                    Application.CurrentInstance.RootFolderModel.RefreshUI();
+                });
+            }
+        }
+
+        private bool isTopLevel(VirtualFolderMediaLocation location, string changed)
+        {
+            if (location != null)
+            {
+                foreach (var dir in location.VirtualFolder.Folders)
                 {
-                    aFolder.RefreshUI();
-                    aFolder = aFolder.PhysicalParent;
+                    if (dir.ToLower() == changed) return true;
                 }
-            });
+            }
+            return false;
         }
         
     }

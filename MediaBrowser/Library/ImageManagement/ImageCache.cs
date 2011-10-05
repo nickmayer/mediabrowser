@@ -362,10 +362,39 @@ namespace MediaBrowser.Library.ImageManagement {
         private static void DeleteImageSet(ImageSet imageSet) {
             try {
                 if (imageSet.PrimaryImage != null) {
-                    File.Delete(imageSet.PrimaryImage.Path);
+                    int retries = 0;
+                    bool successful = false;
+                    while (retries < 3 && !successful)
+                    {
+                        try
+                        {
+                            File.Delete(imageSet.PrimaryImage.Path);
+                            successful = true;
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error attempting to delete image: " + imageSet.PrimaryImage.Path + ". Will retry...", e);
+                            retries++;
+                        }
+                    }
                 }
                 foreach (var resized in imageSet.ResizedImages) {
-                    File.Delete(resized.Path);
+                    int retries = 0;
+                    bool successful = false;
+                    while (retries < 3 && !successful)
+                    {
+                        try
+                        {
+                            File.Delete(resized.Path);
+                            successful = true;
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error attempting to delete image: " + resized.Path + ". Will retry...", e);
+                            retries++;
+                        }
+                    }
+                    
                 }
             } finally {
                 imageSet.ResizedImages = new List<ImageInfo>();

@@ -414,7 +414,13 @@ namespace MediaBrowser.Library {
                                 {
                                     foreach (var pair in subItems)
                                     {
-                                        foundNames.Add(pair.Key, pair.Value);
+                                        var key = pair.Key;
+                                        while (foundNames.ContainsKey(key))
+                                        {
+                                            // break ties 
+                                            key = key.AddMilliseconds(1);
+                                        }
+                                        foundNames.Add(key, pair.Value);
                                         if (foundNames.Count >= maxSize)
                                         {
                                             foundNames.RemoveAt(0);
@@ -432,7 +438,13 @@ namespace MediaBrowser.Library {
                                     FindNewestChildren(item as Folder, subItems, maxSize);
                                     foreach (var pair in subItems)
                                     {
-                                        foundNames.Add(pair.Key, pair.Value);
+                                        var key = pair.Key;
+                                        while (foundNames.ContainsKey(key))
+                                        {
+                                            // break ties 
+                                            key = key.AddMilliseconds(1);
+                                        }
+                                        foundNames.Add(key, pair.Value);
                                         if (foundNames.Count >= maxSize)
                                         {
                                             foundNames.RemoveAt(0);
@@ -545,7 +557,13 @@ namespace MediaBrowser.Library {
                                 {
                                     foreach (var pair in subItems)
                                     {
-                                        foundNames.Add(pair.Key, pair.Value);
+                                        var key = pair.Key;
+                                        while (foundNames.ContainsKey(key))
+                                        {
+                                            // break ties 
+                                            key = key.AddMilliseconds(1);
+                                        }
+                                        foundNames.Add(key, pair.Value);
                                         if (foundNames.Count >= maxSize)
                                         {
                                             foundNames.RemoveAt(0);
@@ -563,7 +581,13 @@ namespace MediaBrowser.Library {
                                     FindRecentWatchedChildren(item as Folder, subItems, maxSize);
                                     foreach (var pair in subItems)
                                     {
-                                        foundNames.Add(pair.Key, pair.Value);
+                                        var key = pair.Key;
+                                        while (foundNames.ContainsKey(key))
+                                        {
+                                            // break ties 
+                                            key = key.AddMilliseconds(1);
+                                        }
+                                        foundNames.Add(key, pair.Value);
                                         if (foundNames.Count >= maxSize)
                                         {
                                             foundNames.RemoveAt(0);
@@ -772,27 +796,12 @@ namespace MediaBrowser.Library {
         public void RefreshUI()
         {
             Logger.ReportVerbose("Forced Refresh of UI on "+this.Name+" called from: "+new StackTrace().GetFrame(1).GetMethod().Name);
+
+
             //this could take a bit so kick this off in the background
             Async.Queue("Refresh UI", () =>
             {
-                //turn on our auto validate while we do this
-                bool autoValidateSetting = Config.Instance.AutoValidate;
-                Kernel.Instance.ConfigData.AutoValidate = true;
-                //force an update of the children
-                this.folder.ValidateChildren();
-                this.folderChildren.RefreshChildren();
-                this.folderChildren.Sort();
-                //if auto validate is off, we need to refresh everything
-                if (autoValidateSetting == false)
-                {
-                    foreach (BaseItem item in this.folder.RecursiveChildren)
-                    {
-                        if (item is Folder)
-                        {
-                            (item as Folder).ValidateChildren();
-                        }
-                    }
-                }
+
                 if (this.IsRoot)
                 {
                     //if this is the root page - also the recent items
@@ -802,18 +811,16 @@ namespace MediaBrowser.Library {
                         {
                             folder.newestItems = null; //force it to go get the real items
                             folder.GetNewestItems(Config.Instance.RecentItemCount);
-                            folder.recentWatchedItems = null;
-                            folder.GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                            folder.recentUnwatchedItems = null;
                         }
                     }
                     catch (Exception ex)
                     {
                         Logger.ReportException("Invalid root folder type", ex);
                     }
-                    this.SelectedChildChanged(); //make sure recent list changes
+                    //this.SelectedChildChanged(); //make sure recent list changes
                 }
-                //FireChildrenChangedEvents(); //force UI to update
-                Config.Instance.AutoValidate = autoValidateSetting; //reset
+                this.FireChildrenChangedEvents();
             }, null, true);
         }
 
@@ -830,12 +837,6 @@ namespace MediaBrowser.Library {
             folderChildren = folderChildren.Clone();
             folderChildren.ListenForChanges();
 
-            //force the recent lists to re-build
-            this.newestItems = null;
-            this.recentUnwatchedItems = null;
-            this.recentWatchedItems = null;
-            this.folderOverviewCache = null;
-            RecentItemsChanged();
 
             FirePropertyChanged("Children");
             FirePropertyChanged("SelectedChildIndex");
