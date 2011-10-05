@@ -329,18 +329,26 @@ namespace MediaBrowser
 
         void ScreenSaverTimer_Tick(object sender, EventArgs e)
         {
-            if (Config.EnableScreenSaver && !this.PlaybackController.IsPlaying)
+            if (Config.EnableScreenSaver) 
             {
-                if (Helper.SystemIdleTime > Config.ScreenSaverTimeOut * 60000)
+                if (!this.PlaybackController.IsPlaying)
                 {
-                    this.ScreenSaverActive = true;
-                    //increase the frequency of this tick so we will turn off quickly
-                    ScreenSaverTimer.Interval = 500;
+                    if (Helper.SystemIdleTime > Config.ScreenSaverTimeOut * 60000)
+                    {
+                        this.ScreenSaverActive = true;
+                        //increase the frequency of this tick so we will turn off quickly
+                        ScreenSaverTimer.Interval = 500;
+                    }
+                    else
+                    {
+                        this.ScreenSaverActive = false;
+                        ScreenSaverTimer.Interval = 60000; //move back to every minute
+                    }
                 }
                 else
                 {
-                    this.ScreenSaverActive = false;
-                    ScreenSaverTimer.Interval = 60000; //move back to every minute
+                    //something playing - be sure we don't kick off right after it ends
+                    ScreenSaverTimer.Interval = Config.ScreenSaverTimeOut * 60000;
                 }
             }
         }
@@ -634,6 +642,12 @@ namespace MediaBrowser
                                     {
                                         (item as Folder).ValidateChildren();
                                     }
+                                }
+                                foreach (BaseItem item in RootFolder.RecursiveChildren)
+                                {
+                                    //refresh new items
+                                    if ((DateTime.Now - item.DateModified).TotalDays < 2)
+                                        item.RefreshMetadata();
                                 }
                                 Kernel.Instance.MajorActivity = false;
                             }
