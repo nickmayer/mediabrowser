@@ -809,7 +809,7 @@ namespace MediaBrowser
         public void ReLoad()
         {
             //force a re-load of all our data
-            this.RootFolderModel.RefreshUI();
+            this.RootFolderModel.RefreshChildren();
         }
            
 

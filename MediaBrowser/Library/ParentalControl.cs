@@ -347,9 +347,13 @@ namespace MediaBrowser.Library
                 if (Config.Instance.HideParentalDisAllowed)
                 {
                     if (Application.CurrentInstance.CurrentFolder != null && Application.CurrentInstance.CurrentFolder != Application.CurrentInstance.RootFolderModel)
-                        Application.CurrentInstance.CurrentFolder.RefreshUI();
+                    {
+                        Application.CurrentInstance.CurrentFolder.RefreshChildren();
+                    }
                     if (Application.CurrentInstance.RootFolderModel != null)
-                        Application.CurrentInstance.RootFolderModel.RefreshUI();
+                    {
+                        Application.CurrentInstance.RootFolderModel.RefreshChildren();
+                    }
                 }
             }
             else
@@ -425,9 +429,7 @@ namespace MediaBrowser.Library
             if (Config.Instance.HideParentalDisAllowed)
             {
                 Application.CurrentInstance.BackToRoot(); //back up to home screen
-                Application.CurrentInstance.RootFolderModel.RefreshUI();
-                //if (Application.CurrentInstance.RootFolderModel != null)
-                //    Application.CurrentInstance.RootFolderModel.RefreshUI();
+                Application.CurrentInstance.RootFolderModel.RefreshChildren();
             }
             Application.CurrentInstance.Information.AddInformationString(Application.CurrentInstance.StringData("LibraryReLockedProf")); //and display a message
             //env.Dialog("Library Has Been Re-Locked for Parental Control.", "Unlock Time Expired", DialogButtons.Ok, 60, true);

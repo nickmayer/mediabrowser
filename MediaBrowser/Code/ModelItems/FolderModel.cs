@@ -793,6 +793,17 @@ namespace MediaBrowser.Library {
 
         }
 
+        public void RefreshChildren()
+        {
+            Async.Queue("Child Refresh", () =>
+            {
+                this.folder.ValidateChildren();
+                this.folderChildren.RefreshChildren();
+                this.folderChildren.Sort();
+                this.RefreshUI();
+            });
+        }
+
         public void RefreshUI()
         {
             Logger.ReportVerbose("Forced Refresh of UI on "+this.Name+" called from: "+new StackTrace().GetFrame(1).GetMethod().Name);
