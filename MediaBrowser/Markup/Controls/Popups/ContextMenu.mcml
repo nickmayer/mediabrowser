@@ -51,6 +51,7 @@
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[Input.CreateInterestOnFocus]" Value="true" />
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="true" />
       <Binding Target="[ListRepeater.Source]" Source="[Application.ContextMenu]" />
 
       <Default Target="[Title.Content]" Value="[Application.LocalStrings.#PlayMenuCMenu!cor:String]" >
@@ -58,6 +59,15 @@
           <Equality Source="[MenuType]" Value="Play" />
         </Conditions>
       </Default>
+
+      <Changed Source="[Input.DeepMouseFocus]" >
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Close.Invoke]" />
+        </Actions>
+      </Changed>
 
       <Changed Source="[Application.CurrentItem]"  InitialEvaluate="true">
         <Conditions>
