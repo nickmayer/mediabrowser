@@ -40,11 +40,6 @@
       <Choice Name="Model">
         <Options>
           <cor:String String="[Application.LocalStrings.#GeneralDetail!cor:String]" />
-        </Options>
-      </Choice>
-      <Choice Name="ModelWithActors">
-        <Options>
-          <cor:String String="[Application.LocalStrings.#GeneralDetail!cor:String]" />
           <cor:String String="[Application.LocalStrings.#ActorsDetail!cor:String]" />
         </Options>
       </Choice>
@@ -116,9 +111,7 @@
         </Actions>
       </Rule>
 
-      <Condition Source="[Item.Actors.Count]" ConditionOp="LessThan" SourceValue="1" Target="[ActorScroller.Visible]" Value="false" />
-      <Condition Source="[Item.Actors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[Model]" Value="[ModelWithActors]" />
-      <Condition Source="[Item.Actors.Count]" ConditionOp="GreaterThan" SourceValue="0" Target="[FullConfigNav.Model]" Value="[ModelWithActors]" />
+      <Default Target="[FullConfigNav.Model]" Value="[Model]" />
 
       <!-- Play Rules -->
       <Rule ConditionLogicalOp ="Or">
