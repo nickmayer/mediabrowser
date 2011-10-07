@@ -390,7 +390,16 @@ namespace MediaBrowser
                 }
                 catch (Exception e)
                 {
-                    Logger.ReportException("Failed to get name on current media item!", e);
+                    Logger.ReportException("Failed to get name on current media item! Trying Title...", e);
+                    try
+                    {
+                        title = MediaExperience.MediaMetadata["Title"] as string;
+                        Logger.ReportVerbose("Full title: " + title);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.ReportException("That didn't work either.  Giving up...", ex);
+                    }
                 }
 
                 if (title != this.title) duration = null;  //changed items we were playing
