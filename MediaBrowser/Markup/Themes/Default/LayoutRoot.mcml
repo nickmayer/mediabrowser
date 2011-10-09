@@ -243,26 +243,26 @@
 
 
       <!-- Playback Control -->
-      <Rule ConditionLogicalOp="And">
+      <Changed Source="[Application.ShowNowPlaying]" InitialEvaluate="true" >
         <Conditions>
-          <Equality Source="[Application.PlaybackController.IsStopped]" Value="true"/>
+          <Equality Source="[Application.ShowNowPlaying]" Value="true" />
         </Conditions>
         <Actions>
-          <Set Target="[NowPlaying.Visible]" Value="false" />
-          <Set Target="[PanelPoster.Visible]" Value="true" />
-          <Set Target="[RecentListPanel.Navigation]" Value="ContainHorizontal" />
-        </Actions>
-      </Rule>
-      <Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[Application.PlaybackController.IsPlaying]" Value="true"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[NowPlaying.Visible]" Value="true" />
+          <Set Target="[NowPlaying.Visible]" Value="[Application.ShowNowPlaying]" />
           <Set Target="[PanelPoster.Visible]" Value="false" />
           <Set Target="[RecentListPanel.Navigation]" Value="None" />
         </Actions>
-      </Rule>
+      </Changed>
+      <Changed Source="[Application.ShowNowPlaying]" >
+        <Conditions>
+          <Equality Source="[Application.ShowNowPlaying]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[NowPlaying.Visible]" Value="[Application.ShowNowPlaying]" />
+          <Set Target="[PanelPoster.Visible]" Value="true" />
+          <Set Target="[RecentListPanel.Navigation]" Value="ContainHorizontal" />
+        </Actions>
+      </Changed>
 
       <Rule>
         <Conditions>

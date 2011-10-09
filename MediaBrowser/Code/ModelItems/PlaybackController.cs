@@ -70,7 +70,13 @@ namespace MediaBrowser
 
         public PlaybackController()
         {
-            PlayState = PlayState.Undefined;
+            PlayState = MediaTransport.PlayState;
+            if (PlayState == PlayState.Playing)
+            {
+                Logger.ReportVerbose("Something already playing on controller creation...");
+                OnProgress += new EventHandler<PlaybackStateEventArgs>(ExternalItem_OnProgress);
+            }
+
             governatorThread = new Thread(GovernatorThreadProc);
             governatorThread.IsBackground = true;
             governatorThread.Start();
@@ -85,6 +91,10 @@ namespace MediaBrowser
             returnedToApp = false;
         }
 
+        void ExternalItem_OnProgress(object sender, PlaybackStateEventArgs e)
+        {
+           //do nothing - we are used when something is already playing when we are created
+        }
 
         public virtual void PlayMedia(string path)
         {
@@ -205,6 +215,7 @@ namespace MediaBrowser
 
             if (mce != null)
             {
+                Logger.ReportVerbose("Going fullscreen...");
                 mce.GoToFullScreen();
             }
             else
