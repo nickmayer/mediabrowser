@@ -954,7 +954,14 @@ namespace MediaBrowser.Library {
                     requestState.downloadDest.Close();
 
                     // Initialise the Plugin
-                    InitialisePlugin(requestState.downloadDest.Name);
+                    try
+                    {
+                        InitialisePlugin(requestState.downloadDest.Name);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Failed to initialize plugin.", e);
+                    }
 
                     //Callback to GUI to report download has completed
                     if (requestState.doneCB != null) {
