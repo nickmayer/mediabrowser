@@ -70,7 +70,7 @@ namespace MediaBrowser
 
         public PlaybackController()
         {
-            PlayState = MediaTransport.PlayState;
+            PlayState = MediaTransport == null ? PlayState.Undefined : MediaTransport.PlayState;
             if (PlayState == PlayState.Playing)
             {
                 Logger.ReportVerbose("Something already playing on controller creation...");
