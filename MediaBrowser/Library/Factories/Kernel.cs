@@ -68,7 +68,7 @@ namespace MediaBrowser.Library {
          * This should be set to "R" (or "SPn") with each official release and then immediately changed back to "R+" (or "SPn+")
          * so future trunk builds will indicate properly.
          * */
-        private const string versionExtension = "B3";
+        private const string versionExtension = "B3a";
 
         public const string MBSERVICE_MUTEX_ID = "Global\\{E155D5F4-0DDA-47bb-9392-D407018D24B1}";
         public const string MBCLIENT_MUTEX_ID = "Global\\{9F043CB3-EC8E-41bf-9579-81D5F6E641B9}";
@@ -411,7 +411,8 @@ namespace MediaBrowser.Library {
             //Kernel.UseNewSQLRepo = config.UseNewSQLRepo;
 
             // kernel.StringData.Save(); //save this in case we made mods (no other routine saves this data)
-            kernel.PlaybackControllers.Add(new PlaybackController());
+            if (LoadContext == MBLoadContext.Core)
+                kernel.PlaybackControllers.Add(new PlaybackController());
        
 
             // set up assembly resolution hooks, so earlier versions of the plugins resolve properly 

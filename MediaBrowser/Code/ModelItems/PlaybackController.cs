@@ -70,19 +70,16 @@ namespace MediaBrowser
 
         public PlaybackController()
         {
-            if (MediaBrowser.Library.Kernel.LoadContext == Library.MBLoadContext.Core)
+            PlayState = MediaTransport.PlayState;
+            if (PlayState == PlayState.Playing)
             {
-                PlayState = MediaTransport.PlayState;
-                if (PlayState == PlayState.Playing)
-                {
-                    Logger.ReportVerbose("Something already playing on controller creation...");
-                    OnProgress += new EventHandler<PlaybackStateEventArgs>(ExternalItem_OnProgress);
-                }
-
-                governatorThread = new Thread(GovernatorThreadProc);
-                governatorThread.IsBackground = true;
-                governatorThread.Start();
+                Logger.ReportVerbose("Something already playing on controller creation...");
+                OnProgress += new EventHandler<PlaybackStateEventArgs>(ExternalItem_OnProgress);
             }
+
+            governatorThread = new Thread(GovernatorThreadProc);
+            governatorThread.IsBackground = true;
+            governatorThread.Start();
         }
 
 
