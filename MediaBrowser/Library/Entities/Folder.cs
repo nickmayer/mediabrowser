@@ -364,7 +364,16 @@ namespace MediaBrowser.Library.Entities {
 
             var childrenCopy = ActualChildren.ToList(); //changed this to reference actual children so it wouldn't keep mucking up hidden ones -ebr
 
-            var validChildren = GetChildren(false);
+            List<BaseItem> validChildren;
+            try
+            {
+                validChildren = GetChildren(false);
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error Validating Children.", e);
+                return false;
+            }
             var currentChildren = new Dictionary<Guid, BaseItem>();
             // in case some how we have a non distinct list 
             foreach (var item in childrenCopy) {
