@@ -103,6 +103,11 @@ namespace MediaBrowser.Library.Persistance {
             SafeAction(() => repository.ShutdownDatabase());
         }
 
+        public int ClearCache(string objType)
+        {
+            return SafeFunc(() => repository.ClearCache(objType));
+        }
+
         public bool ClearEntireCache() {
             return SafeFunc(() => repository.ClearEntireCache());
         }

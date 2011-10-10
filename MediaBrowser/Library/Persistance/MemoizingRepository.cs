@@ -115,6 +115,11 @@ namespace MediaBrowser.Library.Persistance {
             repository.ShutdownDatabase();
         }
 
+        public int ClearCache(string objType)
+        {
+            return repository.ClearCache(objType);
+        }
+
         public bool ClearEntireCache() {
             return repository.ClearEntireCache();
         }

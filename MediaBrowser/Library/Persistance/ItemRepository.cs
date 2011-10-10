@@ -351,6 +351,10 @@ namespace MediaBrowser.Library {
             return path;
         }
 
+        public int ClearCache(string objType)
+        {
+            throw new NotImplementedException();
+        }
 
         public bool ClearEntireCache() {
             bool success = true;
