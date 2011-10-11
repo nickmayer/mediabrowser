@@ -39,6 +39,7 @@ namespace MediaBrowser.Library
             ratings.Add("TV-G", 1);
             ratings.Add("TV-Y", 1);
             ratings.Add("TV-Y7", 1);
+            ratings.Add("TV-Y7-FV", 1);
             ratings.Add("PG", 2);
             ratings.Add("10+", 2);
             ratings.Add("TV-PG", 2);

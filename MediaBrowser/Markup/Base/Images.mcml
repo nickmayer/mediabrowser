@@ -44,7 +44,7 @@
 	<Image Name="TV-Y" Source="resx://MediaBrowser/MediaBrowser.Resources/TV_Y" />
 	<Image Name="TV-14" Source="resx://MediaBrowser/MediaBrowser.Resources/TV_14" />
 	<Image Name="TV-PG" Source="resx://MediaBrowser/MediaBrowser.Resources/TV_PG" />
-	<Image Name="TV-V7-FV" Source="resx://MediaBrowser/MediaBrowser.Resources/TV_V7_FV" />
+	<Image Name="TV-Y7-FV" Source="resx://MediaBrowser/MediaBrowser.Resources/TV_Y7_FV" />
 	
 	<Image Name="RadioButtonOn" Source="resx://MediaBrowser/MediaBrowser.Resources/RadioButtonOn" />
 	<Image Name="RadioButtonOff" Source="resx://MediaBrowser/MediaBrowser.Resources/RadioButtonOff" />

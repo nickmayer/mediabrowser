@@ -48,7 +48,7 @@
 			
 			<Condition Source="[MPAARating]" SourceValue="TV-14" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-14" />
 			<Condition Source="[MPAARating]" SourceValue="TV-PG" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-PG" />
-			<Condition Source="[MPAARating]" SourceValue="TV-V7-FV" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-V7-FV" />
+			<Condition Source="[MPAARating]" SourceValue="TV-Y7-FV" ConditionOp="Equals" Target="[Image.Content]" Value="image://i:TV-Y7-FV" />
 			
 		</Rules>
 		
