@@ -255,6 +255,9 @@ namespace MediaBrowser.Library
                 switch (AspectRatioString)
                 {
                     //handle special cases
+                    case "5:4":
+                        aspectImageName = "125";
+                        break;
                     case "4:3":
                         aspectImageName = "133";
                         break;
