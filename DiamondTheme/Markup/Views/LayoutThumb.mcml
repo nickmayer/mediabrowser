@@ -124,7 +124,7 @@
           <!-- Media Info -->
           <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[SelectedItem]" MaxIconSize="0,55" >
             <LayoutInput>
-              <AnchorLayoutInput Bottom="Parent, 1, -97" Right="Overlay, 1, -23"/>
+              <AnchorLayoutInput Bottom="Parent, 1, -97" Right="Overlay, 1, -22"/>
             </LayoutInput>
           </mip:MediaInfoPanel>
 
