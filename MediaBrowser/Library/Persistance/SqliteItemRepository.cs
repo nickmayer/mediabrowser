@@ -1213,6 +1213,26 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
+        public int ClearCache(string objType)
+        {
+            int ret = -1;
+            lock (connection)
+            {
+                try
+                {
+
+                    ret = connection.Exec("delete from items where obj_type like '%" + objType + "'");
+                    connection.Exec("vacuum");
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error trying to clear cache of object type: " + objType, e);
+                }
+            }
+            return ret;
+        }
+
+
         public bool ClearEntireCache() {
             lock (connection) {
                 var tran = connection.BeginTransaction();

@@ -31,6 +31,8 @@ namespace MediaBrowser.Library
         void SaveDisplayPreferences(DisplayPreferences prefs);
         void ShutdownDatabase();
 
+        int ClearCache(string objType);
+
         bool ClearEntireCache();
         
     }

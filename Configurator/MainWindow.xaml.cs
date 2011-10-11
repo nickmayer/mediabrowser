@@ -1080,7 +1080,14 @@ sortorder: {2}
             //called when the upgrade process finishes - we just hide progress bar and re-enable
             this.IsEnabled = true;
             IPlugin plugin = pluginList.SelectedItem as IPlugin;
-            PluginManager.Instance.RefreshInstalledPlugins(); //refresh list
+            try
+            {
+                PluginManager.Instance.RefreshInstalledPlugins(); //refresh list
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error refreshing plugins after upgrade", e);
+            }
             if (plugin != null)
             {
                 Logger.ReportInfo(plugin.Name + " Upgraded to v" + PluginManager.Instance.GetLatestVersion(plugin));

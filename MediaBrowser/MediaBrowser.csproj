@@ -283,6 +283,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="DevInstall.cmd" />
     <None Include="MediaBrowser.snk" />
     <None Include="Migrated rules for MediaBrowser.ruleset" />
