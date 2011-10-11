@@ -244,21 +244,21 @@ namespace MediaBrowser.Library.Providers
                 }
 
                 movie.Directors = null;
-                foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Director']/name"))
+                foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Director']"))
                 {
                     if (movie.Directors == null)
                         movie.Directors = new List<string>();
-                    string name = n.InnerText.Trim();
+                    string name = n.SafeGetString("@name");
                     if (!string.IsNullOrEmpty(name))
                         movie.Directors.Add(name);
                 }
 
                 movie.Writers = null;
-                foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Author']/name"))
+                foreach (XmlNode n in doc.SelectNodes("//cast/person[@job='Author']"))
                 {
                     if (movie.Writers == null)
                         movie.Writers = new List<string>();
-                    string name = n.InnerText.Trim();
+                    string name = n.SafeGetString("@name");
                     if (!string.IsNullOrEmpty(name))
                         movie.Writers.Add(name);
                 }
