@@ -281,7 +281,9 @@
     <Content Include="Markup\Scrollers\ThumbStripScroller.mcml" />
     <Content Include="Markup\Scrollers\PosterViewItem.mcml" />
     <Content Include="Markup\Selectors\ThumbStripSelector.mcml" />
-    <Content Include="Markup\Selectors\Page.mcml" />
+    <Content Include="Markup\Selectors\Page.mcml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Markup\Selectors\PageDetailArea.mcml" />
     <Content Include="Markup\Views\LayoutThumbStripStreamlined.mcml" />
     <Content Include="Markup\Views\LayoutCoverflow2.mcml" />

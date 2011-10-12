@@ -469,7 +469,6 @@ namespace MediaBrowser.Library.Entities {
             // don't bomb out on invalid folders - its correct to say we have no children
             if (this.FolderMediaLocation != null) {
                 //if we point to a network location, be sure it is available first
-                //if this.FolderMediaLocation.Path
                 foreach (var location in this.FolderMediaLocation.Children) {
                     if (location != null) {
                         if (!networkChecked && location.Path.StartsWith("\\\\"))
