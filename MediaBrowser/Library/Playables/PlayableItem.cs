@@ -41,6 +41,7 @@ namespace MediaBrowser.Library
         static Transcoder transcoder;
         private string fileToPlay;
         private string currentTitle;
+        private string alternateTitle;
         protected PlaybackStatus PlayState { get; private set; }
         public PlayableItem()
         {
@@ -134,6 +135,7 @@ namespace MediaBrowser.Library
         {
             this.fileToPlay = file;
             this.currentTitle = file.Replace('\\','/').ToLower();
+            this.alternateTitle = Path.GetFileNameWithoutExtension(file).ToLower();
             Play(file);
             if (!QueueItem)
                 PlaybackController.GoToFullScreen();
@@ -178,7 +180,7 @@ namespace MediaBrowser.Library
                 return false;
             }
 
-            if (title.EndsWith(currentTitle))
+            if (title.EndsWith(currentTitle) || title == alternateTitle)
             {
                 if (!PlayCountIncremented) //the first time we are called with a valid position mark us as being watched
                 {
