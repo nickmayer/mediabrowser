@@ -970,70 +970,77 @@ namespace MediaBrowser.Library.Persistance {
                 Logger.ReportException("Error trying to create instance of type: " + itemType, e);
                 return null;
             }
-            SQLInfo itemSQL;
-            if (!ItemSQL.TryGetValue(item.GetType(), out itemSQL))
+            if (item != null)
             {
-                itemSQL = new SQLInfo(item);
-                ItemSQL.Add(item.GetType(), itemSQL);
-                //make sure our schema matches
-                itemSQL.FixUpSchema(connection);
-            }
-            foreach (var col in itemSQL.AtomicColumns)
-            {
-                var data = SQLizer.Extract(reader, col);
-                if (data != null)
-                    if (col.MemberType == MemberTypes.Property)
-                        col.PropertyInfo.SetValue(item, data, null);
-                    else
-                        col.FieldInfo.SetValue(item, data);
+                SQLInfo itemSQL;
+                if (!ItemSQL.TryGetValue(item.GetType(), out itemSQL))
+                {
+                    itemSQL = new SQLInfo(item);
+                    ItemSQL.Add(item.GetType(), itemSQL);
+                    //make sure our schema matches
+                    itemSQL.FixUpSchema(connection);
+                }
+                foreach (var col in itemSQL.AtomicColumns)
+                {
+                    var data = SQLizer.Extract(reader, col);
+                    if (data != null)
+                        if (col.MemberType == MemberTypes.Property)
+                            col.PropertyInfo.SetValue(item, data, null);
+                        else
+                            col.FieldInfo.SetValue(item, data);
 
-            }
-            // and our list columns
-            //this is an optimization - we go get all the list values for this item in one statement
-            var listCmd = connection.CreateCommand();
-            listCmd.CommandText = "select property, value from list_items where guid = @guid and property != 'ActorName' order by property, sort_order";
-            listCmd.AddParam("@guid", item.Id);
-            string currentProperty = "";
-            System.Collections.IList list = null;
-            SQLInfo.ColDef column = new SQLInfo.ColDef();
-            using (var listReader = listCmd.ExecuteReader())
-            {
-                while (listReader.Read())
+                }
+                // and our list columns
+                //this is an optimization - we go get all the list values for this item in one statement
+                var listCmd = connection.CreateCommand();
+                listCmd.CommandText = "select property, value from list_items where guid = @guid and property != 'ActorName' order by property, sort_order";
+                listCmd.AddParam("@guid", item.Id);
+                string currentProperty = "";
+                System.Collections.IList list = null;
+                SQLInfo.ColDef column = new SQLInfo.ColDef();
+                using (var listReader = listCmd.ExecuteReader())
                 {
-                    string property = listReader.GetString(0);
-                    if (property != currentProperty)
+                    while (listReader.Read())
                     {
-                        //new column...
-                        if (list != null)
+                        string property = listReader.GetString(0);
+                        if (property != currentProperty)
                         {
-                            //fill in the last one
-                            if (column.MemberType == MemberTypes.Property)
-                                column.PropertyInfo.SetValue(item, list, null);
-                            else
-                                column.FieldInfo.SetValue(item, list);
+                            //new column...
+                            if (list != null)
+                            {
+                                //fill in the last one
+                                if (column.MemberType == MemberTypes.Property)
+                                    column.PropertyInfo.SetValue(item, list, null);
+                                else
+                                    column.FieldInfo.SetValue(item, list);
+                            }
+                            currentProperty = property;
+                            column = itemSQL.Columns.Find(c => c.ColName == property);
+                            list = (System.Collections.IList)column.ColType.GetConstructor(new Type[] { }).Invoke(null);
+                            //Logger.ReportVerbose("Added list item '" + listReader[0] + "' to " + col.ColName);
                         }
-                        currentProperty = property;
-                        column = itemSQL.Columns.Find(c => c.ColName == property);
-                        list = (System.Collections.IList)column.ColType.GetConstructor(new Type[] { }).Invoke(null);
-                        //Logger.ReportVerbose("Added list item '" + listReader[0] + "' to " + col.ColName);
+                        try
+                        {
+                            list.Add(SQLizer.Extract(listReader, new SQLInfo.ColDef() { ColName = "value", ColType = column.InternalType }));
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error adding item to list " + column.ColName + " on item " + item.Name, e);
+                        }
                     }
-                    try
+                    if (list != null)
                     {
-                        list.Add(SQLizer.Extract(listReader, new SQLInfo.ColDef() { ColName = "value", ColType = column.InternalType }));
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.ReportException("Error adding item to list " + column.ColName + " on item " + item.Name, e);
+                        //fill in the last one
+                        if (column.MemberType == MemberTypes.Property)
+                            column.PropertyInfo.SetValue(item, list, null);
+                        else
+                            column.FieldInfo.SetValue(item, list);
                     }
                 }
-                if (list != null)
-                {
-                    //fill in the last one
-                    if (column.MemberType == MemberTypes.Property)
-                        column.PropertyInfo.SetValue(item, list, null);
-                    else
-                        column.FieldInfo.SetValue(item, list);
-                }
+            }
+            else
+            {
+                Logger.ReportWarning("Ignoring invalid item " + itemType + ".  Would not instantiate in current environment.");
             }
             return item;
         }
@@ -1175,7 +1182,7 @@ namespace MediaBrowser.Library.Persistance {
                     using (var ms = new MemoryStream(reader.GetBytes(0))) {
 
                         var data = (IMetadataProvider)Serializer.Deserialize<object>(ms);
-                        providers.Add(data);
+                        if (data != null) providers.Add(data);
                     }
                 }
             }

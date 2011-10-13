@@ -104,6 +104,7 @@ namespace MediaBrowser.Library.Persistance {
         /// <returns></returns>
         public static T Deserialize<T>(BinaryReader reader) where T : class, new() { 
             Type type = GetCachedType(reader.ReadString());
+            if (type == null) return null; //probably an old type or from plugin that is no longer installed
 
             long startPos = reader.BaseStream.Position;
 
@@ -144,6 +145,7 @@ namespace MediaBrowser.Library.Persistance {
         /// <returns></returns>
         public static T Instantiate<T>(string aType) where T : class, new() { 
             Type type = GetCachedType(aType);
+            if (type == null) return null; //old type or from plugin that is not installed
 
             T instance;
 
