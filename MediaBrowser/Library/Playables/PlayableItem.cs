@@ -168,7 +168,6 @@ namespace MediaBrowser.Library
             {
                 PlayState.LastPlayed = DateTime.Now;
                 PlayState.PlayCount = PlayState.PlayCount + 1;
-                PlayState.PositionTicks = 0;
                 PlayState.Save();
             }
         }
@@ -182,20 +181,20 @@ namespace MediaBrowser.Library
 
             if (title.EndsWith(currentTitle) || title == alternateTitle)
             {
-                if (!PlayCountIncremented) //the first time we are called with a valid position mark us as being watched
+                if (!PlayCountIncremented && positionTicks > 0) //the first time we are called with a valid position mark us as being watched
                 {
                     PlayState.PlayCount++;
                     PlayState.LastPlayed = DateTime.Now;
                     PlayCountIncremented = true;
                 }
-                Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
+                //Logger.ReportVerbose("Updating the position for " + title + " position " + positionTicks);
                 PlayState.PositionTicks = positionTicks;
                 PlayState.Save();
                 return true;
             }
             else
             {
-                Logger.ReportVerbose("Detaching because title doesn't match.  Current title: " + currentTitle);
+                Logger.ReportVerbose("Detaching because title doesn't match.  Current title: " + currentTitle + " Alternate Title: "+alternateTitle);
                 return false;
             }
         }
