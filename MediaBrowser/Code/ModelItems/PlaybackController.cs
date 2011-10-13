@@ -406,6 +406,7 @@ namespace MediaBrowser
                     {
                         title = MediaExperience.MediaMetadata["Title"] as string;
                         Logger.ReportVerbose("Full title: " + title);
+                        title = title.ToLower();
                     }
                     catch (Exception ex)
                     {
