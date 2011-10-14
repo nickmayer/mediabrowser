@@ -913,7 +913,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Markup\Themes\Default\ViewMovieDefault.mcml" />
-    <Content Include="Markup\Themes\Default\ViewMovieMinimal.mcml" />
+    <Content Include="Markup\Themes\Default\ViewMovieMinimal.mcml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Markup\Themes\Default\Selectors\PageDetailArea.mcml" />
     <Content Include="Markup\Themes\Default\LayoutDetails.mcml" />
     <Content Include="Markup\Page.mcml">

@@ -685,15 +685,19 @@
                 </Content>
               </Repeater>
 
-              <Panel Margins="0,0,0,0" Name="MediaInfoPane" >
-                <Layout>
-                  <FlowLayout Orientation="Horizontal" AllowWrap="true" Spacing="10,0" />
-                </Layout>
+              <Panel Layout="VerticalFlow" Name="MediaInfoPane" >
                 <Children>
-                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" MaxIconSize="0,48"/>
-                  <Text Name="MediaInfoResolution" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
-                  <Text Name="MediaInfoVideo" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
-                  <Text Name="MediaInfoAudio" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
+                  <mip:MediaInfoPanel Name="MediaInfoPanel" Item="[Item]" Margins="0,2,0,2" MaxIconSize="0,48"/>
+                  <Panel>
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal" AllowWrap="true" Spacing="10,0" />
+                    </Layout>
+                    <Children>
+                      <Text Name="MediaInfoResolution" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
+                      <Text Name="MediaInfoVideo" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
+                      <Text Name="MediaInfoAudio" Font="Arial, 13" Color="[ValueColor]" WordWrap="true" />
+                    </Children>
+                  </Panel>
                 </Children>
               </Panel>
 
