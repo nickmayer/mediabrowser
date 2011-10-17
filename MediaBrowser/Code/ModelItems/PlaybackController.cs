@@ -396,7 +396,7 @@ namespace MediaBrowser
                 try
                 {
                     title = MediaExperience.MediaMetadata["Name"] as string;
-                    Logger.ReportVerbose("Full title: " + title);
+                    //Logger.ReportVerbose("Full title: " + title);
                     title = title.ToLower(); //lowercase it for comparison
                 }
                 catch (Exception e)
@@ -405,7 +405,7 @@ namespace MediaBrowser
                     try
                     {
                         title = MediaExperience.MediaMetadata["Title"] as string;
-                        Logger.ReportVerbose("Full title: " + title);
+                        //Logger.ReportVerbose("Full title: " + title);
                         title = title.ToLower();
                     }
                     catch (Exception ex)
