@@ -11,6 +11,7 @@ using System.ServiceModel;
 using System.Runtime.Serialization;
 using WebProxy.WCFInterfaces;
 using MediaBrowser.Library.Logging;
+using MediaBrowser.Library.Extensions;
 
 namespace WebProxy {
 
