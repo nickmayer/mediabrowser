@@ -102,7 +102,26 @@ namespace MediaBrowser.Library {
                 {
                     return NewestItems;
                 }
-            } 
+            }
+            set
+            {
+                if (Application.CurrentInstance.RecentItemOption == "watched")
+                {
+                    recentWatchedItems = null;
+                    var ignore = RecentItems;
+                }
+                else if (Application.CurrentInstance.RecentItemOption == "unwatched")
+                {
+                    recentWatchedItems = null;
+                    var ignore = UnwatchedItems;
+                }
+                else
+                {
+                    newestItems = null;
+                    var ignore = NewestItems;
+                }
+
+            }
         }
 
         public List<Item> RecentItems
@@ -433,7 +452,6 @@ namespace MediaBrowser.Library {
                                 if (!(item is Series))
                                 {
                                     //regular folder or box set - go into it
-                                    (item as Folder).ValidateChildren(); //make sure we find the new stuff first
                                     SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                     FindNewestChildren(item as Folder, subItems, maxSize);
                                     foreach (var pair in subItems)
@@ -576,7 +594,6 @@ namespace MediaBrowser.Library {
                                 if (!(item is Series))
                                 {
                                     //regular folder or box set - go into it
-                                    (item as Folder).ValidateChildren(); //make sure we find the new stuff first
                                     SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                     FindRecentWatchedChildren(item as Folder, subItems, maxSize);
                                     foreach (var pair in subItems)
@@ -708,7 +725,6 @@ namespace MediaBrowser.Library {
                             if (!(item is Series))
                             {
                                 //regular folder or box set - go into it
-                                (item as Folder).ValidateChildren(); //make sure we find the new stuff first
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindRecentUnwatchedChildren(item as Folder, subItems, maxSize);
                                 foreach (var pair in subItems)

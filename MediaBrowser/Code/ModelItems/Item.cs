@@ -476,6 +476,7 @@ namespace MediaBrowser.Library
             {
                 return new List<Item>();
             }
+            set { }
         }
 
 
