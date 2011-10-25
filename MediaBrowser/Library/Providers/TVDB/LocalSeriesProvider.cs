@@ -52,7 +52,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
             XmlDocument metadataDoc = new XmlDocument();
             metadataDoc.Load(metadataFile);
 
-            var seriesNode = metadataDoc.SelectSingleNode("Series");
+            var seriesNode = metadataDoc.SelectSingleNode("//Series");
             if (seriesNode == null) {
                 // support for sams metadata scraper 
                 seriesNode = metadataDoc.SelectSingleNode("Item");
@@ -63,7 +63,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 return;
             }
 
-            string id = seriesNode.SafeGetString("id");
+            string id = series.TVDBSeriesId = seriesNode.SafeGetString("id");
 
             var p = seriesNode.SafeGetString("banner");
             if (p != null) {
@@ -100,15 +100,18 @@ namespace MediaBrowser.Library.Providers.TVDB {
             }
 
             //used for backwards compatibility. Will fetch actors stored in the <Actors> tag
-            string actors = seriesNode.SafeGetString("Actors");
-            if (actors != null)
+            if (series.Actors == null || series.Actors.Count == 0)
             {
-                if (series.Actors == null)
-                    series.Actors = new List<Actor>();
-
-                foreach (string n in actors.Trim('|').Split('|'))
+                string actors = seriesNode.SafeGetString("Actors");
+                if (actors != null)
                 {
-                    series.Actors.Add(new Actor { Name = n });
+                    if (series.Actors == null)
+                        series.Actors = new List<Actor>();
+
+                    foreach (string n in actors.Trim('|').Split('|'))
+                    {
+                        series.Actors.Add(new Actor { Name = n });
+                    }
                 }
             }
 

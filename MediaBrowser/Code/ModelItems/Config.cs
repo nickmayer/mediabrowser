@@ -818,6 +818,12 @@ namespace MediaBrowser
             set { if (this.data.AutoValidate != value) { this.data.AutoValidate = value; Save(); FirePropertyChanged("AutoValidate"); } }
         }
 
+        public bool SaveLocalMeta
+        {
+            get { return this.data.SaveLocalMeta; }
+            set { if (this.data.SaveLocalMeta != value) { this.data.SaveLocalMeta = value; Save(); FirePropertyChanged("SaveLocalMeta"); } }
+        }
+
         public LogSeverity MinLoggingSeverity
         {
             get { return this.data.MinLoggingSeverity; }

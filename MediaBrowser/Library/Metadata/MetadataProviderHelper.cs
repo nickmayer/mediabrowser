@@ -35,7 +35,8 @@ namespace MediaBrowser.Library.Metadata {
             return new Type[] { 
                 typeof(VirtualFolderProvider),
                 typeof(ImageFromMediaLocationProvider),
-                typeof(ImageByNameProvider), 
+                typeof(ImageByNameProvider),
+                typeof(MBMovieProviderFromXml),
                 typeof(MovieProviderFromXml),
                 typeof(FolderProviderFromXml),
                 typeof(LocalEpisodeProvider), 

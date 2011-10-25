@@ -12,12 +12,13 @@ using MediaBrowser.Library.Providers.Attributes;
 using MediaBrowser.Library.Persistance;
 using MediaBrowser.Library.Logging;
 using MediaBrowser.LibraryManagement;
+using MediaBrowser.Library.ImageManagement;
 
 namespace MediaBrowser.Library.Providers
 {
     [RequiresInternet]
     [SupportedType(typeof(Movie))]
-    class MovieDbProvider : BaseMetadataProvider
+    public class MovieDbProvider : BaseMetadataProvider
     {
         private static string search = @"http://api.themoviedb.org/2.1/Movie.search/en/xml/{1}/{0}";
         private static string getInfo = @"http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/{1}/{0}";
@@ -27,6 +28,7 @@ namespace MediaBrowser.Library.Providers
             new Regex(@"(?<name>.*)") // last resort matches the whole string as the name
         };
 
+        protected const string LOCAL_META_FILE_NAME = "MBMovie.xml";
 
         #region IMetadataProvider Members
 
@@ -47,7 +49,7 @@ namespace MediaBrowser.Library.Providers
             if (DateTime.Today.Subtract(Item.DateCreated).TotalDays > 180 && downloadDate != DateTime.MinValue)
                 return false; // don't trigger a refresh data for item that are more than 6 months old and have been refreshed before
 
-            if (DateTime.Today.Subtract(downloadDate).TotalDays < Config.Instance.MetadataCheckForUpdateAge) // only refresh every 14 days
+            if (HasLocalMeta() || DateTime.Today.Subtract(downloadDate).TotalDays < Config.Instance.MetadataCheckForUpdateAge) // only refresh every 14 days
                 return false;
 
             return true;
@@ -56,8 +58,22 @@ namespace MediaBrowser.Library.Providers
 
         public override void Fetch()
         {
-            FetchMovieData();
-            downloadDate = DateTime.Today;
+            if (!Kernel.Instance.ConfigData.SaveLocalMeta || !HasLocalMeta())
+            {
+                FetchMovieData();
+                downloadDate = DateTime.Today;
+            }
+            else
+            {
+                Logger.ReportVerbose("MovieDBProvider not fetching because local meta exists for " + Item.Name);
+            }
+        }
+
+        private bool HasLocalMeta()
+        {
+            //need at least the xml and folder.jpg/png
+            return File.Exists(System.IO.Path.Combine(Item.Path,LOCAL_META_FILE_NAME)) && (File.Exists(System.IO.Path.Combine(Item.Path,"folder.jpg")) ||
+                File.Exists(System.IO.Path.Combine(Item.Path,"folder.png")));
         }
 
         private void FetchMovieData()
@@ -70,6 +86,10 @@ namespace MediaBrowser.Library.Providers
             {
                 Item.Name = matchedName;
                 FetchMovieData(id);
+            }
+            else
+            {
+                Logger.ReportWarning("MovieDBProvider could not find " + Item.Name + ". Check name on themoviedb.org.");
             }
         }
 
@@ -101,6 +121,7 @@ namespace MediaBrowser.Library.Providers
                 name = name.Replace(".", " ");
                 name = name.Replace("  ", " ");
                 name = name.Replace("_", " ");
+                name = name.Replace("-", "");
                 matchedName = null;
                 possibles = null;
                 return AttemptFindId(name, year, out matchedName, out possibles);
@@ -204,13 +225,34 @@ namespace MediaBrowser.Library.Providers
 
         void FetchMovieData(string id)
         {
-            Movie movie = Item as Movie;
 
             string url = string.Format(getInfo, id, ApiKey);
+            moviedbId = id;
             XmlDocument doc = Helper.Fetch(url);
+            ProcessDocument(doc, false);
+            //and save locally
+            if (Kernel.Instance.ConfigData.SaveLocalMeta)
+            {
+                try
+                {
+                    var movieNode = doc.SelectSingleNode("//movie"); //grab just movie node
+                    doc.RemoveAll(); //strip out other stuff
+                    doc.AppendChild(movieNode); //and put just the movie back in
+                    doc.Save(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME));
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error saving local meta file " + System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME), e);
+
+                }
+            }
+        }
+
+        protected virtual void ProcessDocument(XmlDocument doc, bool ignoreImages) 
+        {
+            Movie movie = Item as Movie;
             if (doc != null)
             {
-                moviedbId = id;
                 // This is problematic for foreign films we want to keep the alt title. 
                 //if (store.Name == null)
                 //    store.Name = doc.SafeGetString("//movie/title");
@@ -275,17 +317,6 @@ namespace MediaBrowser.Library.Providers
                         movie.Actors.Add(new Actor { Name = name, Role = role });
                 }
 
-
-                string img = doc.SafeGetString("//movie/images/image[@type='poster' and @size='original']/@url");
-                if (img != null)
-                    movie.PrimaryImagePath = img;
-
-                movie.BackdropImagePaths = new List<string>();
-                foreach (XmlNode n in doc.SelectNodes("//movie/images/image[@type='backdrop' and @size='original']/@url"))
-                {
-                    movie.BackdropImagePaths.Add(n.InnerText);
-                }
-
                 XmlNodeList nodes = doc.SelectNodes("//movie/categories/category[@type='genre']/@name");
                 List<string> genres = new List<string>();
                 foreach (XmlNode node in nodes)
@@ -296,10 +327,64 @@ namespace MediaBrowser.Library.Providers
                 }
                 movie.Genres = genres;
 
-
-                return;
+                if (!ignoreImages)
+                {
+                    string img = doc.SafeGetString("//movie/images/image[@type='poster' and @size='" + Kernel.Instance.ConfigData.FetchedPosterSize + "']/@url");
+                    if (img != null)
+                    {
+                        if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                        {
+                            //download and save locally
+                            RemoteImage cover = new RemoteImage() { Path = img };
+                            string ext = Path.GetExtension(img).ToLower();
+                            string fn = (Path.Combine(Item.Path,"folder" + ext));
+                            try
+                            {
+                                cover.DownloadImage().Save(fn, ext == ".png" ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+                                movie.PrimaryImagePath = fn;
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Error downloading and saving image " + fn, e);
+                            }
+                        }
+                        else
+                        {
+                            movie.PrimaryImagePath = img;
+                        }
+                    }
+                    movie.BackdropImagePaths = new List<string>();
+                    int bdNo = 0;
+                    RemoteImage bd;
+                    foreach (XmlNode n in doc.SelectNodes("//movie/images/image[@type='backdrop' and @size='original']/@url"))
+                    {
+                        if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                        {
+                            bd = new RemoteImage() { Path = n.InnerText };
+                            string ext = Path.GetExtension(n.InnerText).ToLower();
+                            string fn = Path.Combine(Item.Path,"backdrop" + (bdNo > 0 ? bdNo.ToString() : "") + ext);
+                            try
+                            {
+                                bd.DownloadImage().Save( fn, ext == ".png" ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+                                movie.BackdropImagePaths.Add(fn);
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Error downloading/saving image " + n.InnerText, e);
+                            }
+                            bdNo++;
+                            if (bdNo >= Kernel.Instance.ConfigData.MaxBackdrops) break;
+                        }
+                        else
+                        {
+                            movie.BackdropImagePaths.Add(n.InnerText);
+                        }
+                    }
+                }
             }
         }
+        
+            
 
         #endregion
 

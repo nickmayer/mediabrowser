@@ -211,6 +211,16 @@ namespace MediaBrowser
         [Comment("This is a hack until I can rewrite some file date processing")]
         public bool EnableShortcutDateHack = true;
 
+        [Comment("Save metadata locally so it doesn't have to be re-fetched from the inet")]
+        public bool SaveLocalMeta = true;
+
+        [Comment("Save backdrops at the season level (if false will inherit from series)")]
+        public bool SaveSeasonBackdrops = false;
+
+        public int MaxBackdrops = 4; //maximum number of backdrops to be saved by the inet providers
+
+        public string FetchedPosterSize = "mid"; //mid, original or thumb
+
         public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 
         public class ExternalPlayer

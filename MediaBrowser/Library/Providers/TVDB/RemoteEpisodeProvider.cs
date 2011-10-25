@@ -8,6 +8,7 @@ using MediaBrowser.Library.Persistance;
 using System.Xml;
 using System.Diagnostics;
 using MediaBrowser.Library.Logging;
+using System.IO;
 
 namespace MediaBrowser.Library.Providers.TVDB {
 
@@ -25,6 +26,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
         [Persist]
         DateTime downloadDate = DateTime.MinValue;
 
+        protected const string LOCAL_META_FOLDER_NAME = "metadata";
+
         Episode Episode { get { return (Episode)Item; } } 
 
         public override bool NeedsRefresh() {
@@ -33,22 +36,33 @@ namespace MediaBrowser.Library.Providers.TVDB {
             if (Config.Instance.MetadataCheckForUpdateAge == -1 && downloadDate != DateTime.MinValue)
                 Logger.ReportInfo("MetadataCheckForUpdateAge = -1 wont clear and check for updated metadata");
 
-            fetch = seriesId != GetSeriesId(); 
-            fetch |= (
-                Config.Instance.MetadataCheckForUpdateAge != -1 &&
-                seriesId != null &&
-                DateTime.Today.Subtract(downloadDate).TotalDays > Config.Instance.MetadataCheckForUpdateAge &&
-                DateTime.Today.Subtract(Item.DateCreated).TotalDays < 180
-                );
+            if (!HasLocalMeta())
+            {
+                fetch = seriesId != GetSeriesId();
+                fetch |= (
+                    Config.Instance.MetadataCheckForUpdateAge != -1 &&
+                    seriesId != null &&
+                    DateTime.Today.Subtract(downloadDate).TotalDays > Config.Instance.MetadataCheckForUpdateAge &&
+                    DateTime.Today.Subtract(Item.DateCreated).TotalDays < 180
+                    );
+            }
             
             return fetch;
         }
 
         public override void Fetch() {
-            seriesId = GetSeriesId();
+            if (!HasLocalMeta())
+            {
+                seriesId = GetSeriesId();
 
-            if (seriesId != null) {
-                if (FetchEpisodeData()) downloadDate = DateTime.Today;
+                if (seriesId != null)
+                {
+                    if (FetchEpisodeData()) downloadDate = DateTime.Today;
+                }
+            }
+            else
+            {
+                Logger.ReportInfo("Episode provider not fetching because local meta exists: " + Item.Name);
             }
         }
 
@@ -97,8 +111,16 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
                     var p = doc.SafeGetString("//filename");
                     if (p != null)
-                        Item.PrimaryImagePath = TVUtils.BannerUrl + p;
-
+                    {
+                        if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                        {
+                            Item.PrimaryImagePath = TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + p, Path.Combine(MetaFolderName, Path.GetFileNameWithoutExtension(p)));
+                        }
+                        else
+                        {
+                            Item.PrimaryImagePath = TVUtils.BannerUrl + p;
+                        }
+                    }
 
                     Item.Overview = doc.SafeGetString("//Overview");
                     if (UsingAbsoluteData)
@@ -136,6 +158,19 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         episode.Writers = new List<string>(writers.Trim('|').Split('|'));
                     }
 
+                    if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                    {
+                        try
+                        {
+                            if (!Directory.Exists(MetaFolderName)) Directory.CreateDirectory(MetaFolderName);
+                            doc.Save(MetaFileName);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error saving local series meta.", e);
+                        }
+                    }
+
                     Logger.ReportVerbose("TvDbProvider: Success");
                     return true;
                 }
@@ -159,8 +194,27 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 seriesId = (parent as Series).TVDBSeriesId;
             }
             return seriesId;
-        }      
+        }
+        private bool HasLocalMeta()
+        {
+            return (File.Exists(MetaFileName));
+        }
 
+        private string MetaFileName
+        {
+            get
+            {
+                return Path.Combine(MetaFolderName, Path.GetFileNameWithoutExtension(Item.Path) + ".xml");
+            }
+        }
+
+        private string MetaFolderName
+        {
+            get
+            {
+                return Path.Combine(Path.GetDirectoryName(Item.Path), LOCAL_META_FOLDER_NAME);
+            }
+        }
 
     }
 }

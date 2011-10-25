@@ -29,8 +29,7 @@ namespace MediaBrowser.Library.ImageManagement {
             if (info.CreationTimeUtc > now || info.LastWriteTimeUtc > now )
             {
                 //something goofy with these dates...
-                MediaBrowser.Library.Logging.Logger.ReportInfo("Bad date info for image "+Path+". Create date: " + info.CreationTimeUtc + " Mod date: " + info.LastWriteTimeUtc);
-                return false;
+                MediaBrowser.Library.Logging.Logger.ReportWarning("Bad date info for image "+Path+". Create date: " + info.CreationTimeUtc + " Mod date: " + info.LastWriteTimeUtc);
             }
             return date < Max(info.CreationTimeUtc, info.LastWriteTimeUtc);
         }

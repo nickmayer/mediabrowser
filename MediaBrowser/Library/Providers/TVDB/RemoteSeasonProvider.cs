@@ -7,6 +7,7 @@ using MediaBrowser.Library.Providers.Attributes;
 using MediaBrowser.Library.Persistance;
 using System.Diagnostics;
 using System.Xml;
+using System.IO;
 using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library.Providers.TVDB {
@@ -22,29 +23,39 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
         Season Season { get { return (Season)Item;  } }
 
-
         public override bool NeedsRefresh() {
             bool fetch = false;
 
             if (Config.Instance.MetadataCheckForUpdateAge == -1 && downloadDate != DateTime.MinValue)
                 Logger.ReportInfo("MetadataCheckForUpdateAge = -1 wont clear and check for updated metadata");
 
-            fetch = seriesId != GetSeriesId();
-            fetch |= (
-                Config.Instance.MetadataCheckForUpdateAge != -1 &&
-                seriesId != null &&
-                DateTime.Today.Subtract(downloadDate).TotalDays > Config.Instance.MetadataCheckForUpdateAge &&
-                DateTime.Today.Subtract(Item.DateCreated).TotalDays < 180
-                );
+            if (!HasLocalMeta())
+            {
+                fetch = seriesId != GetSeriesId();
+                fetch |= (
+                    Config.Instance.MetadataCheckForUpdateAge != -1 &&
+                    seriesId != null &&
+                    DateTime.Today.Subtract(downloadDate).TotalDays > Config.Instance.MetadataCheckForUpdateAge &&
+                    DateTime.Today.Subtract(Item.DateCreated).TotalDays < 180
+                    );
+            }
 
             return fetch;
         }
 
         public override void Fetch() {
-            seriesId = GetSeriesId();
+            if (!HasLocalMeta())
+            {
+                seriesId = GetSeriesId();
 
-            if (seriesId != null) {
-                if (FetchSeasonData()) downloadDate = DateTime.Today;
+                if (seriesId != null)
+                {
+                    if (FetchSeasonData()) downloadDate = DateTime.Today;
+                }
+            }
+            else
+            {
+                Logger.ReportInfo("Season provider not fetching because local meta exists: " + Item.Name);
             }
         }
 
@@ -72,7 +83,14 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     if (n != null) {
                         n = n.SelectSingleNode("./BannerPath");
                         if (n != null)
-                            season.PrimaryImagePath = TVUtils.BannerUrl + n.InnerText;
+                            if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                            {
+                                season.PrimaryImagePath = TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(season.Path, "folder"));
+                            }
+                            else
+                            {
+                                season.PrimaryImagePath = TVUtils.BannerUrl + n.InnerText;
+                            }
                     }
 
 
@@ -80,7 +98,14 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     if (n != null) {
                         n = n.SelectSingleNode("./BannerPath");
                         if (n != null)
-                            Item.BannerImagePath = TVUtils.BannerUrl + n.InnerText;
+                            if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                            {
+                                season.BannerImagePath = TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(season.Path, "banner"));
+                            }
+                            else
+                            {
+                                season.BannerImagePath = TVUtils.BannerUrl + n.InnerText;
+                            }
                     }
 
 
@@ -88,9 +113,17 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     if (n != null) {
                         n = n.SelectSingleNode("./BannerPath");
                         if (n != null && Item.BackdropImagePath == null) {
-                            Item.BackdropImagePath = TVUtils.BannerUrl + n.InnerText;
+                            if (Kernel.Instance.ConfigData.SaveLocalMeta && Kernel.Instance.ConfigData.SaveSeasonBackdrops)
+                            {
+                                season.BackdropImagePath = TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(Item.Path, "backdrop"));
+                            }
+                            else
+                            {
+                                Item.BackdropImagePath = TVUtils.BannerUrl + n.InnerText;
+                            }
                         }
-                    } else {
+                    } else if (!Kernel.Instance.ConfigData.SaveLocalMeta) //if saving local - season will inherit from series
+                    {
                         // not necessarily accurate but will give a different bit of art to each season
                         XmlNodeList lst = banners.SelectNodes("//Banner[BannerType='fanart']");
                         if (lst.Count > 0) {
@@ -123,6 +156,14 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 seriesId = parent.TVDBSeriesId;
             }
             return seriesId;
-        }      
+        }
+        
+        private bool HasLocalMeta()
+        {
+            //just folder.jpg/png
+            return (File.Exists(System.IO.Path.Combine(Item.Path, "folder.jpg")) ||
+                File.Exists(System.IO.Path.Combine(Item.Path, "folder.png")));
+        }
+
     }
 }

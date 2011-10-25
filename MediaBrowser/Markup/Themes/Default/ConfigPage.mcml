@@ -121,7 +121,7 @@
       <BooleanChoice Name="DefaultVerticalScroll" Value="[Application.Config.DefaultVerticalScroll]" />
       <BooleanChoice Name="UseAutoPlayForIso" Value="[Application.Config.UseAutoPlayForIso]" />
       <BooleanChoice Name="YearSortAsc" Value="[Application.Config.YearSortAsc]" />
-      <!--<BooleanChoice Name="AutoValidate" Value="[Application.Config.AutoValidate]" />-->
+      <BooleanChoice Name="SaveLocalMeta" Value="[Application.Config.SaveLocalMeta]" />
       <EditableText Name="InitialFolder" Value="[Application.Config.InitialFolder]" />
       <EditableText Name="ImageByNameLocation" Value="[Application.Config.ImageByNameLocation]" />
       <EditableText Name="ExtenderNativeTypes" Value="[Application.Config.ExtenderNativeTypes]" />
@@ -405,7 +405,7 @@
       <Binding Source="[SortReplaceCharacters.Value]" Target="[Config.SortReplaceCharacters]" />
       <Binding Source="[SortReplaceWords.Value]" Target="[Config.SortReplaceWords]" />
       <Binding Source="[YearSortAsc.Value]" Target="[Config.YearSortAsc]" />
-      <!--<Binding Source="[AutoValidate.Value]" Target="[Config.AutoValidate]" />-->
+      <Binding Source="[SaveLocalMeta.Value]" Target="[Config.SaveLocalMeta]" />
 
       <Binding Source="[PlaylistLimit.Value]" Target="[Config.PlaylistLimit]" />
       <Binding Source="[BreadcrumbCount.Value]" Target="[Config.BreadcrumbCountLimit]" />
@@ -583,6 +583,7 @@
 									-->
                       <me:TextHeader Text="[Application.LocalStrings.#MetadataConfig!cor:String]" />
                       <cb:CheckBox Label="[Application.LocalStrings.#EnableInternetProvidersConfig!cor:String]" Checked="[AllowInternetMetadataProviders]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
+                      <cb:CheckBox Label="[Application.LocalStrings.#SaveLocalMetaConfig!cor:String]" Padding="40,0,0,0" Checked="[SaveLocalMeta]" FocusItem="[FocusItem]" Margins="[CMargin]"   Font="font://f:CP_ConfigItemFont"/>
                       <me:TextHeader Text="[Application.LocalStrings.#UpdatesConfig!cor:String]" />
                       <cb:CheckBox Label="[Application.LocalStrings.#AutomaticUpdatesConfig!cor:String]" Checked="[EnableUpdates]" Margins="[CMargin]" FocusItem="[FocusItem]"   Font="font://f:CP_ConfigItemFont"/>
                       <!--<cb:CheckBox Label="[Application.LocalStrings.#BetaUpdatesConfig!cor:String]" Checked="[EnableBetas]" Margins="[CMargin]"  FocusItem="[FocusItem]"  Font="font://f:CP_ConfigItemFont"/>-->

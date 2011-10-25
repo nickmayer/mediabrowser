@@ -8,6 +8,8 @@ using MediaBrowser.LibraryManagement;
 using System.Net;
 using System.Xml;
 using System.Diagnostics;
+using MediaBrowser.Library.ImageManagement;
+using MediaBrowser.Library.Logging;
 
 namespace MediaBrowser.Library.Providers.TVDB {
     static class TVUtils {
@@ -193,6 +195,22 @@ namespace MediaBrowser.Library.Providers.TVDB {
             return null;
         }
 
+        public static string FetchAndSaveImage(string source, string dest)
+        {
+            RemoteImage img = new RemoteImage() { Path = source };
+            string ext = Path.GetExtension(source).ToLower();
+            string fn = dest + ext;
+            try
+            {
+                img.DownloadImage().Save(fn, ext == ".png" ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+                return fn;
+            }
+            catch (Exception e)
+            {
+                Logger.ReportException("Error downloading and saving image " + fn, e);
+                return null;
+            }
+        }
 
     }
 }

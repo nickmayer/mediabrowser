@@ -7,6 +7,7 @@ using MediaBrowser.Library.Entities;
 using MediaBrowser.Library.Persistance;
 using System.Xml;
 using System.Web;
+using System.IO;
 using System.Diagnostics;
 using MediaBrowser.Library.Logging;
 
@@ -19,6 +20,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
         private static readonly string seriesQuery = "GetSeries.php?seriesname={0}";
         private static readonly string seriesGet = "http://www.thetvdb.com/api/{0}/series/{1}/{2}.xml";
         private static readonly string getActors = "http://www.thetvdb.com/api/{0}/series/{1}/actors.xml";
+
+        protected const string LOCAL_META_FILE_NAME = "Series.xml";
 
         [Persist]
         string seriesId;
@@ -35,7 +38,8 @@ namespace MediaBrowser.Library.Providers.TVDB {
             if (Config.Instance.MetadataCheckForUpdateAge == -1 && downloadDate != DateTime.MinValue)
                 Logger.ReportInfo("MetadataCheckForUpdateAge = -1 wont clear and check for updated metadata");
 
-            if (!HasCompleteMetadata()) {
+            if (!HasLocalMeta())
+            {
                 fetch = seriesId != GetSeriesId();
                 fetch |= (
                     Config.Instance.MetadataCheckForUpdateAge != -1 &&
@@ -44,26 +48,38 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     DateTime.Today.Subtract(Item.DateCreated).TotalDays < 180
                     );
             }
-
             return fetch;
         }
 
 
         public override void Fetch() {
-            seriesId = GetSeriesId();
+            if (!HasLocalMeta())
+            {
+                seriesId = GetSeriesId();
 
-            // we may want to consider giving up on this item if we find no series id 
+                // we may want to consider giving up on this item if we find no series id 
 
-            if (!string.IsNullOrEmpty(seriesId)) {
-                if (!HasCompleteMetadata() && FetchSeriesData()) {
-                    downloadDate = DateTime.Today;
-                    Series.TVDBSeriesId = seriesId;
-                } else {
-                    if (!HasCompleteMetadata()) {
-                        seriesId = null;
+                if (!string.IsNullOrEmpty(seriesId))
+                {
+                    if (!HasCompleteMetadata() && FetchSeriesData())
+                    {
+                        downloadDate = DateTime.Today;
+                        Series.TVDBSeriesId = seriesId;
+                    }
+                    else
+                    {
+                        if (!HasCompleteMetadata())
+                        {
+                            seriesId = null;
+                        }
                     }
                 }
             }
+            else
+            {
+                Logger.ReportInfo("Series provider not fetching because local meta exists: " + Item.Name);
+            }
+
         }
 
         private bool FetchSeriesData() {
@@ -102,6 +118,17 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     if (docActors != null)
                     {
                         series.Actors = null;
+                        XmlNode actorsNode = null;
+                        if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                        {
+                            //add to the main doc for saving
+                            var seriesNode = doc.SelectSingleNode("//Series");
+                            if (seriesNode != null)
+                            {
+                                actorsNode = doc.CreateNode(XmlNodeType.Element, "Actors", null);
+                                seriesNode.AppendChild(actorsNode);
+                            }
+                        }
                         foreach (XmlNode p in docActors.SelectNodes("Actors/Actor"))
                         {
                             if (series.Actors == null)
@@ -110,6 +137,12 @@ namespace MediaBrowser.Library.Providers.TVDB {
                             string actorRole = p.SafeGetString("Role");
                             if (!string.IsNullOrEmpty(name))
                                 series.Actors.Add(new Actor { Name = actorName, Role = actorRole });
+
+                            if (Kernel.Instance.ConfigData.SaveLocalMeta && actorsNode != null)
+                            {
+                                //add to main doc for saving
+                                actorsNode.AppendChild(doc.ImportNode(p,true));
+                            }
                         }
                     }
 
@@ -135,7 +168,18 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         }
                     }
                 }
-                
+
+                if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                {
+                    try
+                    {
+                        doc.Save(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME));
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ReportException("Error saving local series meta.", e);
+                    }
+                }
             }
             if ((!string.IsNullOrEmpty(seriesId)) && ((series.PrimaryImagePath == null) || (series.BackdropImagePath == null))) {
                 XmlDocument banners = TVUtils.Fetch(string.Format("http://www.thetvdb.com/api/" + TVUtils.TVDBApiKey + "/series/{0}/banners.xml", seriesId));
@@ -145,20 +189,57 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     if (n != null) {
                         n = n.SelectSingleNode("./BannerPath");
                         if (n != null)
-                            series.PrimaryImagePath = TVUtils.BannerUrl + n.InnerText;
+                        {
+                            if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                            {
+                                series.PrimaryImagePath = TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(Item.Path, "folder"));
+                            }
+                            else
+                            {
+                                series.PrimaryImagePath = TVUtils.BannerUrl + n.InnerText;
+                            }
+                        }
                     }
 
-
-                    n = banners.SelectSingleNode("//Banner[BannerType='fanart']");
+                    n = banners.SelectSingleNode("//Banner[BannerType='series']");
                     if (n != null) {
                         n = n.SelectSingleNode("./BannerPath");
-                        if (n != null && series.BackdropImage == null) {
-                            series.BackdropImagePath = TVUtils.BannerUrl + n.InnerText;
+                        if (n != null)
+                        {
+                            if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                            {
+                                series.BannerImagePath =TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(Item.Path, "banner"));
+                            }
+                            else
+                            {
+                                series.BannerImagePath = TVUtils.BannerUrl + n.InnerText;
+                            }
                         }
+                    }
 
+                    int bdNo = 0;
+                    foreach (XmlNode b in banners.SelectNodes("//Banner[BannerType='fanart']"))
+                    {
+                        series.BackdropImagePaths = new List<string>();
+                        var p = b.SelectSingleNode("./BannerPath");
+                        if (p != null)
+                        {
+                            if (Kernel.Instance.ConfigData.SaveLocalMeta)
+                            {
+                                series.BackdropImagePaths.Add(TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + p.InnerText, Path.Combine(Item.Path, "backdrop" + (bdNo > 0 ? bdNo.ToString() : ""))));
+                                bdNo++;
+                                if (bdNo >= Kernel.Instance.ConfigData.MaxBackdrops) break;
+                            }
+                            else
+                            {
+                                series.BackdropImagePaths.Add(TVUtils.BannerUrl + p.InnerText);
+                            }
+
+                        }
                     }
                 }
             }
+
 
             return success;
         }
@@ -169,6 +250,12 @@ namespace MediaBrowser.Library.Providers.TVDB {
                                 && (Series.Genres != null) && (Series.MpaaRating != null) && (Series.TVDBSeriesId != null);
         }
 
+        private bool HasLocalMeta()
+        {
+            //need at least the xml and folder.jpg/png
+            return File.Exists(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME)) && (File.Exists(System.IO.Path.Combine(Item.Path, "folder.jpg")) ||
+                File.Exists(System.IO.Path.Combine(Item.Path, "folder.png")));
+        }
 
         private string GetSeriesId() {
             string seriesId = Series.TVDBSeriesId;

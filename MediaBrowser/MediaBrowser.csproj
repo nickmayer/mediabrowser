@@ -130,6 +130,7 @@
     <Compile Include="Library\Persistance\SQLiteDisplayRepository.cs" />
     <Compile Include="Library\Persistance\FileBasedDictionary.cs" />
     <Compile Include="Library\Persistance\IPersistableChangeNotifiable.cs" />
+    <Compile Include="Library\Providers\MBMovieProviderFromXml.cs" />
     <Compile Include="Library\RemoteControl\IPlaybackController.cs" />
     <Compile Include="Library\Entities\Actor.cs" />
     <Compile Include="Library\Entities\Attributes\NotSourcedFromProvider.cs" />

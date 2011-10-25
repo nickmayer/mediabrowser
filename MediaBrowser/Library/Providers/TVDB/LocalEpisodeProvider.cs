@@ -51,7 +51,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
             XmlDocument metadataDoc = new XmlDocument();
             metadataDoc.Load(metadataFile);
 
-            var p = metadataDoc.SafeGetString("Item/filename");
+            var p = metadataDoc.SafeGetString("//filename");
             if (p != null && p.Length > 0)
             {
                 string image = System.IO.Path.Combine(metadataFolder, System.IO.Path.GetFileName(p));
@@ -85,16 +85,16 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
             //if added date is in xml override the file/folder date
             DateTime added = DateTime.MinValue;
-            DateTime.TryParse(metadataDoc.SafeGetString("Item/Added"), out added);
+            DateTime.TryParse(metadataDoc.SafeGetString("//Added"), out added);
             if (added > DateTime.MinValue) episode.DateCreated = added;
                
 
-            episode.Overview = metadataDoc.SafeGetString("Item/Overview");
-            episode.EpisodeNumber = metadataDoc.SafeGetString("Item/EpisodeNumber");
-            episode.Name = episode.EpisodeNumber + " - " + metadataDoc.SafeGetString("Item/EpisodeName");
-            episode.SeasonNumber = metadataDoc.SafeGetString("Item/SeasonNumber");
-            episode.ImdbRating = metadataDoc.SafeGetSingle("Item/Rating", (float)-1, 10);
-            episode.FirstAired = metadataDoc.SafeGetString("Item/FirstAired");
+            episode.Overview = metadataDoc.SafeGetString("//Overview");
+            episode.EpisodeNumber = metadataDoc.SafeGetString("//EpisodeNumber");
+            episode.Name = episode.EpisodeNumber + " - " + metadataDoc.SafeGetString("//EpisodeName");
+            episode.SeasonNumber = metadataDoc.SafeGetString("//SeasonNumber");
+            episode.ImdbRating = metadataDoc.SafeGetSingle("//Rating", (float)-1, 10);
+            episode.FirstAired = metadataDoc.SafeGetString("//FirstAired");
             DateTime airDate;
             int y = DateTime.TryParse(episode.FirstAired, out airDate) ? airDate.Year : -1;
             if (y > 1850) {
@@ -102,17 +102,17 @@ namespace MediaBrowser.Library.Providers.TVDB {
             }
 
 
-            string writers = metadataDoc.SafeGetString("Item/Writer");
+            string writers = metadataDoc.SafeGetString("//Writer");
             if (writers != null)
                 episode.Writers = new List<string>(writers.Trim('|').Split('|'));
 
 
-            string directors = metadataDoc.SafeGetString("Item/Director");
+            string directors = metadataDoc.SafeGetString("//Director");
             if (directors != null)
                 episode.Directors = new List<string>(directors.Trim('|').Split('|'));
 
 
-            var actors = ActorListFromString(metadataDoc.SafeGetString("Item/GuestStars"));
+            var actors = ActorListFromString(metadataDoc.SafeGetString("//GuestStars"));
             if (actors != null) {
                 if (episode.Actors == null)
                     episode.Actors = new List<Actor>();
@@ -121,7 +121,7 @@ namespace MediaBrowser.Library.Providers.TVDB {
 
             if (string.IsNullOrEmpty(episode.DisplayMediaType))
             {
-                episode.DisplayMediaType = metadataDoc.SafeGetString("Item/Type", "");
+                episode.DisplayMediaType = metadataDoc.SafeGetString("//Type", "");
                 switch (episode.DisplayMediaType.ToLower())
                 {
                     case "blu-ray":
@@ -139,12 +139,12 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 }
             }
             if (episode.AspectRatio == null)
-                episode.AspectRatio = metadataDoc.SafeGetString("Item/AspectRatio");
+                episode.AspectRatio = metadataDoc.SafeGetString("//AspectRatio");
 
             if (episode.MediaInfo == null) episode.MediaInfo = new MediaInfoData();
             
                 //we need to decode metabrowser strings to format and profile
-                string audio = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Codec", "");
+                string audio = metadataDoc.SafeGetString("//MediaInfo/Audio/Codec", "");
                 if (audio != "")
                 {
                     switch (audio.ToLower())
@@ -189,9 +189,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                     }
                 }
             
-            episode.MediaInfo.OverrideData.AudioStreamCount = metadataDoc.SelectNodes("Item/MediaInfo/Audio/Codec[text() != '']").Count;
-            episode.MediaInfo.OverrideData.AudioChannelCount = metadataDoc.SafeGetString("Item/MediaInfo/Audio/Channels", "");
-            episode.MediaInfo.OverrideData.AudioBitRate = metadataDoc.SafeGetInt32("Item/MediaInfo/Audio/BitRate");
+            episode.MediaInfo.OverrideData.AudioStreamCount = metadataDoc.SelectNodes("//MediaInfo/Audio/Codec[text() != '']").Count;
+            episode.MediaInfo.OverrideData.AudioChannelCount = metadataDoc.SafeGetString("//MediaInfo/Audio/Channels", "");
+            episode.MediaInfo.OverrideData.AudioBitRate = metadataDoc.SafeGetInt32("//MediaInfo/Audio/BitRate");
             
                 string video = metadataDoc.SafeGetString("Item/MediaInfo/Video/Codec", "");
                 if (video != "")
