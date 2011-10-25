@@ -170,6 +170,7 @@ namespace MediaBrowser.Library.Persistance {
                 {
                     if (!dbCols.Contains(col.ColName))
                     {
+                        Logger.ReportInfo("Discovered new attribute: " + col.ColName + " on object type: "+ ObjType+". Adding to schema.");
                         connection.Exec("Alter table items add column "+col.ColName);
                     }
                 }
