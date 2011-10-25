@@ -238,7 +238,9 @@ namespace MediaBrowser.Library.Providers
                     var movieNode = doc.SelectSingleNode("//movie"); //grab just movie node
                     doc.RemoveAll(); //strip out other stuff
                     doc.AppendChild(movieNode); //and put just the movie back in
+                    Kernel.IgnoreFileSystemMods = true;
                     doc.Save(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME));
+                    Kernel.IgnoreFileSystemMods = false;
                 }
                 catch (Exception e)
                 {
@@ -330,6 +332,10 @@ namespace MediaBrowser.Library.Providers
                 if (!ignoreImages)
                 {
                     string img = doc.SafeGetString("//movie/images/image[@type='poster' and @size='" + Kernel.Instance.ConfigData.FetchedPosterSize + "']/@url");
+                    if (img == null)
+                    {
+                        img = doc.SafeGetString("//movie/images/image[@type='poster' and @size='original']/@url"); //couldn't find preferred size
+                    }
                     if (img != null)
                     {
                         if (Kernel.Instance.ConfigData.SaveLocalMeta)
@@ -340,7 +346,9 @@ namespace MediaBrowser.Library.Providers
                             string fn = (Path.Combine(Item.Path,"folder" + ext));
                             try
                             {
+                                Kernel.IgnoreFileSystemMods = true;
                                 cover.DownloadImage().Save(fn, ext == ".png" ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+                                Kernel.IgnoreFileSystemMods = false;
                                 movie.PrimaryImagePath = fn;
                             }
                             catch (Exception e)
@@ -365,7 +373,9 @@ namespace MediaBrowser.Library.Providers
                             string fn = Path.Combine(Item.Path,"backdrop" + (bdNo > 0 ? bdNo.ToString() : "") + ext);
                             try
                             {
-                                bd.DownloadImage().Save( fn, ext == ".png" ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+                                Kernel.IgnoreFileSystemMods = true;
+                                bd.DownloadImage().Save(fn, ext == ".png" ? System.Drawing.Imaging.ImageFormat.Png : System.Drawing.Imaging.ImageFormat.Jpeg);
+                                Kernel.IgnoreFileSystemMods = false;
                                 movie.BackdropImagePaths.Add(fn);
                             }
                             catch (Exception e)

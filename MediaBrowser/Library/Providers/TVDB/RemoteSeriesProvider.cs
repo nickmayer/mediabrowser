@@ -173,7 +173,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                 {
                     try
                     {
+                        Kernel.IgnoreFileSystemMods = true;
                         doc.Save(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME));
+                        Kernel.IgnoreFileSystemMods = false;
                     }
                     catch (Exception e)
                     {
@@ -192,7 +194,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         {
                             if (Kernel.Instance.ConfigData.SaveLocalMeta)
                             {
+                                Kernel.IgnoreFileSystemMods = true;
                                 series.PrimaryImagePath = TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(Item.Path, "folder"));
+                                Kernel.IgnoreFileSystemMods = false;
                             }
                             else
                             {
@@ -208,7 +212,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         {
                             if (Kernel.Instance.ConfigData.SaveLocalMeta)
                             {
-                                series.BannerImagePath =TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(Item.Path, "banner"));
+                                Kernel.IgnoreFileSystemMods = true;
+                                series.BannerImagePath = TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + n.InnerText, Path.Combine(Item.Path, "banner"));
+                                Kernel.IgnoreFileSystemMods = false;
                             }
                             else
                             {
@@ -226,7 +232,9 @@ namespace MediaBrowser.Library.Providers.TVDB {
                         {
                             if (Kernel.Instance.ConfigData.SaveLocalMeta)
                             {
+                                Kernel.IgnoreFileSystemMods = true;
                                 series.BackdropImagePaths.Add(TVUtils.FetchAndSaveImage(TVUtils.BannerUrl + p.InnerText, Path.Combine(Item.Path, "backdrop" + (bdNo > 0 ? bdNo.ToString() : ""))));
+                                Kernel.IgnoreFileSystemMods = false;
                                 bdNo++;
                                 if (bdNo >= Kernel.Instance.ConfigData.MaxBackdrops) break;
                             }

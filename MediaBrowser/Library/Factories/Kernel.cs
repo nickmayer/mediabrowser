@@ -76,7 +76,7 @@ namespace MediaBrowser.Library {
         static object sync = new object();
         static Kernel kernel;
 
-        //public static bool UseNewSQLRepo = false;
+        public static bool IgnoreFileSystemMods = false;
 
         public bool MajorActivity
         {

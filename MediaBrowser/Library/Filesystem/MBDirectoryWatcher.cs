@@ -129,40 +129,47 @@ namespace MediaBrowser.Library.Filesystem
 
         private void WatchedFolderUpdated(string FullPath, FileSystemEventArgs e)
         {
-            try
+            if (!Kernel.IgnoreFileSystemMods)
             {
-                if (Directory.Exists(FullPath))
+                try
                 {
-                    lastChangedDirectory = Path.GetDirectoryName(e.FullPath).ToLower();
-                    lastChangedDirectory = lastChangedDirectory.Replace("\\metadata", ""); //if chg was to metadata directory for TV look at parent
-                    if (System.DateTime.Now > lastRefresh.AddMilliseconds(120000))
+                    if (Directory.Exists(FullPath))
                     {
-                        //initial change event - wait 30 seconds and then update
-                        this.initialTimer.Enabled = true;
-                        lastRefresh = System.DateTime.Now;
-                        Logger.ReportInfo("A change of type \"" + e.ChangeType.ToString() + "\" has occured in " + lastChangedDirectory);
-                    }
-                    else
-                    {
-                        //another change within 120 seconds kick off timer if not already
-                        if (!secondaryTimer.Enabled)
+                        lastChangedDirectory = Path.GetDirectoryName(e.FullPath).ToLower();
+                        lastChangedDirectory = lastChangedDirectory.Replace("\\metadata", ""); //if chg was to metadata directory for TV look at parent
+                        if (System.DateTime.Now > lastRefresh.AddMilliseconds(120000))
                         {
-                            this.secondaryTimer.Enabled = true;
-                            Logger.ReportInfo("Another change within 120 seconds on " + FullPath);
+                            //initial change event - wait 30 seconds and then update
+                            this.initialTimer.Enabled = true;
+                            lastRefresh = System.DateTime.Now;
+                            Logger.ReportInfo("A change of type \"" + e.ChangeType.ToString() + "\" has occured in " + lastChangedDirectory);
                         }
                         else
                         {
-                            //multiple changes - reset timer so that we wait 90 seconds after last change
-                            this.secondaryTimer.Stop();
-                            this.secondaryTimer.Enabled = false;
-                            this.secondaryTimer.Enabled = true;
+                            //another change within 120 seconds kick off timer if not already
+                            if (!secondaryTimer.Enabled)
+                            {
+                                this.secondaryTimer.Enabled = true;
+                                Logger.ReportInfo("Another change within 120 seconds on " + FullPath);
+                            }
+                            else
+                            {
+                                //multiple changes - reset timer so that we wait 90 seconds after last change
+                                this.secondaryTimer.Stop();
+                                this.secondaryTimer.Enabled = false;
+                                this.secondaryTimer.Enabled = true;
+                            }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Logger.ReportException("Error adding VF to queue. ", ex);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Logger.ReportException("Error adding VF to queue. ", ex);
+                Logger.ReportVerbose("Ignoring change to " + FullPath);
             }
         }
 
