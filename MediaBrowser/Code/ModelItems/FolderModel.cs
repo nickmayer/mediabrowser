@@ -372,6 +372,7 @@ namespace MediaBrowser.Library {
             //using (new MediaBrowser.Util.Profiler("=== Recently Added for "+this.Name))
             {
                 DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
+                HashSet<Guid> foundIds = new HashSet<Guid>();
                 foreach (var item in folder.Children)
                 {
                     // recurse folders
@@ -380,7 +381,7 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is IContainer && !(item is Season))
+                            if (item is IContainer && !(item is Season) && !foundIds.Contains((folder.Name + item.Name).GetMD5()))
                             {
                                 //collapse series in the list
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
@@ -390,7 +391,55 @@ namespace MediaBrowser.Library {
                                     //we need to go another level into series to get actual items
                                     foreach (var seriesChild in (item as Folder).Children)
                                     {
-                                        if (seriesChild is Season) FindNewestChildren(seriesChild as Folder, subItems, maxSize);
+                                        if (seriesChild is Season)
+                                        {
+                                            SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
+                                            FindNewestChildren(seriesChild as Folder, episodes, maxSize);
+                                            if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                                            {
+                                                //collapse into a season
+                                                var thisContainer = seriesChild as Season;
+                                                var ignore = seriesChild.BackdropImages; //force these to load so they will inherit
+                                                DateTime createdTime = episodes.Keys.Max();
+                                                var container = new IndexFolder()
+                                                {
+                                                    Id = (item.Name + thisContainer.Name).GetMD5(),
+                                                    DateCreated = createdTime,
+                                                    Name = thisContainer.Name + " (" + episodes.Count + " items)",
+                                                    Overview = thisContainer.Overview,
+                                                    MpaaRating = thisContainer.MpaaRating,
+                                                    Genres = thisContainer.Genres,
+                                                    ImdbRating = thisContainer.ImdbRating,
+                                                    Studios = thisContainer.Studios,
+                                                    PrimaryImagePath = thisContainer.PrimaryImagePath,
+                                                    SecondaryImagePath = thisContainer.SecondaryImagePath,
+                                                    BannerImagePath = thisContainer.BannerImagePath,
+                                                    BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                                    Parent = folder
+                                                };
+
+                                                foreach (var pair in episodes)
+                                                {
+                                                    container.AddChild(pair.Value.BaseItem);
+                                                }
+                                                var containerModel = ItemFactory.Instance.Create(container);
+                                                containerModel.PhysicalParent = this;
+                                                while (subItems.ContainsKey(createdTime))
+                                                {
+                                                    // break ties 
+                                                    createdTime = createdTime.AddMilliseconds(1);
+                                                }
+                                                subItems.Add(createdTime, containerModel);
+
+                                            }
+                                            else
+                                            {
+                                                foreach (var pair in episodes)
+                                                {
+                                                    subItems.Add(pair.Key, pair.Value);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
@@ -428,21 +477,26 @@ namespace MediaBrowser.Library {
                                         createdTime = createdTime.AddMilliseconds(1);
                                     }
                                     foundNames.Add(createdTime, containerModel);
+                                    foundIds.Add(container.Id);
                                 }
                                 else
                                 {
                                     foreach (var pair in subItems)
                                     {
-                                        var key = pair.Key;
-                                        while (foundNames.ContainsKey(key))
+                                        if (!foundIds.Contains(pair.Value.Id))
                                         {
-                                            // break ties 
-                                            key = key.AddMilliseconds(1);
-                                        }
-                                        foundNames.Add(key, pair.Value);
-                                        if (foundNames.Count >= maxSize)
-                                        {
-                                            foundNames.RemoveAt(0);
+                                            var key = pair.Key;
+                                            while (foundNames.ContainsKey(key))
+                                            {
+                                                // break ties 
+                                                key = key.AddMilliseconds(1);
+                                            }
+                                            foundNames.Add(key, pair.Value);
+                                            foundIds.Add(pair.Value.Id);
+                                            if (foundNames.Count >= maxSize)
+                                            {
+                                                foundNames.RemoveAt(0);
+                                            }
                                         }
                                     }
                                 }
@@ -456,16 +510,20 @@ namespace MediaBrowser.Library {
                                     FindNewestChildren(item as Folder, subItems, maxSize);
                                     foreach (var pair in subItems)
                                     {
-                                        var key = pair.Key;
-                                        while (foundNames.ContainsKey(key))
+                                        if (!foundIds.Contains(pair.Value.Id)) //avoid dups
                                         {
-                                            // break ties 
-                                            key = key.AddMilliseconds(1);
-                                        }
-                                        foundNames.Add(key, pair.Value);
-                                        if (foundNames.Count >= maxSize)
-                                        {
-                                            foundNames.RemoveAt(0);
+                                            var key = pair.Key;
+                                            while (foundNames.ContainsKey(key))
+                                            {
+                                                // break ties 
+                                                key = key.AddMilliseconds(1);
+                                            }
+                                            foundNames.Add(key, pair.Value);
+                                            foundIds.Add(pair.Value.Id);
+                                            if (foundNames.Count >= maxSize)
+                                            {
+                                                foundNames.RemoveAt(0);
+                                            }
                                         }
                                     }
                                 }
@@ -474,35 +532,39 @@ namespace MediaBrowser.Library {
                     }
                     else
                     {
-                        FolderModel folderModel = null;
-                        if (item.Parent == null)
+                        if (!foundIds.Contains(item.Id)) //avoid dups
                         {
-                            //we don't know what to attach to so attach to us
-                            folderModel = this;
-                        }
-                        else
-                        {
-                            folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
-                            folderModel.PhysicalParent = this;
-                        }
-                        DateTime creationTime = item.DateCreated;
-                        //only if added less than specified ago
-                        if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
-                        {
-                            while (foundNames.ContainsKey(creationTime))
+                            FolderModel folderModel = null;
+                            if (item.Parent == null)
                             {
-                                // break ties 
-                                creationTime = creationTime.AddMilliseconds(1);
+                                //we don't know what to attach to so attach to us
+                                folderModel = this;
                             }
-                            Item modelItem = ItemFactory.Instance.Create(item);
-                            modelItem.PhysicalParent = folderModel;
-                            item.Parent = folderModel.Folder;
-                            var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
-                            ignore = item.BackdropImages;
-                            foundNames.Add(creationTime, modelItem);
-                            if (foundNames.Count >= maxSize)
+                            else
                             {
-                                foundNames.RemoveAt(0);
+                                folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
+                                folderModel.PhysicalParent = this;
+                            }
+                            DateTime creationTime = item.DateCreated;
+                            //only if added less than specified ago
+                            if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
+                            {
+                                while (foundNames.ContainsKey(creationTime))
+                                {
+                                    // break ties 
+                                    creationTime = creationTime.AddMilliseconds(1);
+                                }
+                                Item modelItem = ItemFactory.Instance.Create(item);
+                                modelItem.PhysicalParent = folderModel;
+                                item.Parent = folderModel.Folder;
+                                var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                                ignore = item.BackdropImages;
+                                foundNames.Add(creationTime, modelItem);
+                                foundIds.Add(item.Id);
+                                if (foundNames.Count >= maxSize)
+                                {
+                                    foundNames.RemoveAt(0);
+                                }
                             }
                         }
                     }
@@ -515,6 +577,7 @@ namespace MediaBrowser.Library {
             //using (new MediaBrowser.Util.Profiler("=== Recently Watched for "+this.Name))
             {
                 DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+                HashSet<Guid> foundIds = new HashSet<Guid>();
                 foreach (var item in folder.Children)
                 {
                     // recurse folders
@@ -523,7 +586,7 @@ namespace MediaBrowser.Library {
                         //don't return items inside protected folders
                         if (item.ParentalAllowed)
                         {
-                            if (item is IContainer && !(item is Season))
+                            if (item is IContainer && !(item is Season) && !foundIds.Contains((folder.Name + item.Name).GetMD5()))
                             {
                                 //collapse series in the list
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
@@ -533,7 +596,62 @@ namespace MediaBrowser.Library {
                                     //we need to go another level into series to get actual items
                                     foreach (var seriesChild in (item as Folder).Children)
                                     {
-                                        if (seriesChild is Season) FindRecentWatchedChildren(seriesChild as Folder, subItems, maxSize);
+                                        if (seriesChild is Season)
+                                        {
+                                            SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
+                                            FindRecentWatchedChildren(seriesChild as Folder, episodes, maxSize);
+                                            if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                                            {
+                                                //collapse into a season
+                                                var thisContainer = seriesChild as Season;
+                                                var ignore = seriesChild.BackdropImages; //force these to load so they will inherit
+                                                DateTime createdTime = episodes.Keys.Max();
+                                                var container = new IndexFolder()
+                                                {
+                                                    Id = (item.Name + thisContainer.Name).GetMD5(),
+                                                    DateCreated = createdTime,
+                                                    Name = thisContainer.Name + " (" + episodes.Count + " items)",
+                                                    Overview = thisContainer.Overview,
+                                                    MpaaRating = thisContainer.MpaaRating,
+                                                    Genres = thisContainer.Genres,
+                                                    ImdbRating = thisContainer.ImdbRating,
+                                                    Studios = thisContainer.Studios,
+                                                    PrimaryImagePath = thisContainer.PrimaryImagePath,
+                                                    SecondaryImagePath = thisContainer.SecondaryImagePath,
+                                                    BannerImagePath = thisContainer.BannerImagePath,
+                                                    BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                                    Parent = folder
+                                                };
+
+                                                foreach (var pair in episodes)
+                                                {
+                                                    container.AddChild(pair.Value.BaseItem);
+                                                }
+                                                var containerModel = ItemFactory.Instance.Create(container);
+                                                containerModel.PhysicalParent = this;
+                                                while (subItems.ContainsKey(createdTime))
+                                                {
+                                                    // break ties 
+                                                    createdTime = createdTime.AddMilliseconds(1);
+                                                }
+                                                subItems.Add(createdTime, containerModel);
+
+                                            }
+                                            else
+                                            {
+                                                foreach (var pair in episodes)
+                                                {
+                                                    var key = pair.Key;
+                                                    while (subItems.ContainsKey(key))
+                                                    {
+                                                        // break ties 
+                                                        key = key.AddMilliseconds(1);
+                                                    }
+                                                    subItems.Add(key, pair.Value);
+                                                }
+                                            }
+                                        }
+
                                     }
                                 }
                                 if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
@@ -570,21 +688,26 @@ namespace MediaBrowser.Library {
                                         watchedTime = watchedTime.AddMilliseconds(1);
                                     }
                                     foundNames.Add(watchedTime, containerModel);
+                                    foundIds.Add(container.Id);
                                 }
                                 else
                                 {
                                     foreach (var pair in subItems)
                                     {
-                                        var key = pair.Key;
-                                        while (foundNames.ContainsKey(key))
+                                        if (!foundIds.Contains(pair.Value.Id))
                                         {
-                                            // break ties 
-                                            key = key.AddMilliseconds(1);
-                                        }
-                                        foundNames.Add(key, pair.Value);
-                                        if (foundNames.Count >= maxSize)
-                                        {
-                                            foundNames.RemoveAt(0);
+                                            var key = pair.Key;
+                                            while (foundNames.ContainsKey(key))
+                                            {
+                                                // break ties 
+                                                key = key.AddMilliseconds(1);
+                                            }
+                                            foundNames.Add(key, pair.Value);
+                                            foundIds.Add(pair.Value.Id);
+                                            if (foundNames.Count >= maxSize)
+                                            {
+                                                foundNames.RemoveAt(0);
+                                            }
                                         }
                                     }
                                 }
@@ -598,16 +721,20 @@ namespace MediaBrowser.Library {
                                     FindRecentWatchedChildren(item as Folder, subItems, maxSize);
                                     foreach (var pair in subItems)
                                     {
-                                        var key = pair.Key;
-                                        while (foundNames.ContainsKey(key))
+                                        if (!foundIds.Contains(pair.Value.Id))
                                         {
-                                            // break ties 
-                                            key = key.AddMilliseconds(1);
-                                        }
-                                        foundNames.Add(key, pair.Value);
-                                        if (foundNames.Count >= maxSize)
-                                        {
-                                            foundNames.RemoveAt(0);
+                                            var key = pair.Key;
+                                            while (foundNames.ContainsKey(key))
+                                            {
+                                                // break ties 
+                                                key = key.AddMilliseconds(1);
+                                            }
+                                            foundNames.Add(key, pair.Value);
+                                            foundIds.Add(pair.Value.Id);
+                                            if (foundNames.Count >= maxSize)
+                                            {
+                                                foundNames.RemoveAt(0);
+                                            }
                                         }
                                     }
                                 }
@@ -616,7 +743,7 @@ namespace MediaBrowser.Library {
                     }
                     else
                     {
-                        if (item is Video)
+                        if (item is Video && !foundIds.Contains(item.Id))
                         {
                             Video i = item as Video;
                             DateTime watchedTime = i.PlaybackStatus.LastPlayed;
@@ -652,6 +779,7 @@ namespace MediaBrowser.Library {
         public void FindRecentUnwatchedChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
         {
             DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-Config.Instance.RecentItemDays)));
+            HashSet<Guid> foundIds = new HashSet<Guid>();
             foreach (var item in folder.Children)
             {
                 // skip folders
@@ -660,7 +788,7 @@ namespace MediaBrowser.Library {
                     //don't return items inside protected folders
                     if (item.ParentalAllowed)
                     {
-                        if (item is IContainer && !(item is Season))
+                        if (item is IContainer && !(item is Season) && !foundIds.Contains((folder.Name + item.Name).GetMD5()))
                         {
                             //collapse series in the list
                             SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
@@ -670,7 +798,62 @@ namespace MediaBrowser.Library {
                                 //we need to go another level into series to get actual items
                                 foreach (var seriesChild in (item as Folder).Children)
                                 {
-                                    if (seriesChild is Season) FindRecentUnwatchedChildren(seriesChild as Folder, subItems, maxSize);
+                                    if (seriesChild is Season)
+                                    {
+                                        SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
+                                        FindRecentUnwatchedChildren(seriesChild as Folder, episodes, maxSize);
+                                        if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
+                                        {
+                                            //collapse into a season
+                                            var thisContainer = seriesChild as Season;
+                                            var ignore = seriesChild.BackdropImages; //force these to load so they will inherit
+                                            DateTime createdTime = episodes.Keys.Max();
+                                            var container = new IndexFolder()
+                                            {
+                                                Id = (item.Name + thisContainer.Name).GetMD5(),
+                                                DateCreated = createdTime,
+                                                Name = thisContainer.Name + " (" + episodes.Count + " items)",
+                                                Overview = thisContainer.Overview,
+                                                MpaaRating = thisContainer.MpaaRating,
+                                                Genres = thisContainer.Genres,
+                                                ImdbRating = thisContainer.ImdbRating,
+                                                Studios = thisContainer.Studios,
+                                                PrimaryImagePath = thisContainer.PrimaryImagePath,
+                                                SecondaryImagePath = thisContainer.SecondaryImagePath,
+                                                BannerImagePath = thisContainer.BannerImagePath,
+                                                BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                                Parent = folder
+                                            };
+
+                                            foreach (var pair in episodes)
+                                            {
+                                                container.AddChild(pair.Value.BaseItem);
+                                            }
+                                            var containerModel = ItemFactory.Instance.Create(container);
+                                            containerModel.PhysicalParent = this;
+                                            while (subItems.ContainsKey(createdTime))
+                                            {
+                                                // break ties 
+                                                createdTime = createdTime.AddMilliseconds(1);
+                                            }
+                                            subItems.Add(createdTime, containerModel);
+
+                                        }
+                                        else
+                                        {
+                                            foreach (var pair in episodes)
+                                            {
+                                                var key = pair.Key;
+                                                while (subItems.ContainsKey(key))
+                                                {
+                                                    // break ties 
+                                                    key = key.AddMilliseconds(1);
+                                                }
+                                                subItems.Add(key, pair.Value);
+                                            }
+                                        }
+                                    }
+
                                 }
                             }
                             if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
@@ -707,15 +890,26 @@ namespace MediaBrowser.Library {
                                     createdTime = createdTime.AddMilliseconds(1);
                                 }
                                 foundNames.Add(createdTime, containerModel);
+                                foundIds.Add(container.Id);
                             }
                             else
                             {
                                 foreach (var pair in subItems)
                                 {
-                                    foundNames.Add(pair.Key, pair.Value);
-                                    if (foundNames.Count >= maxSize)
+                                    if (!foundIds.Contains(pair.Value.Id))
                                     {
-                                        foundNames.RemoveAt(0);
+                                        var key = pair.Key;
+                                        while (foundNames.ContainsKey(key))
+                                        {
+                                            // break ties 
+                                            key = key.AddMilliseconds(1);
+                                        }
+                                        foundNames.Add(key, pair.Value);
+                                        foundIds.Add(pair.Value.Id);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
                                     }
                                 }
                             }
@@ -729,10 +923,20 @@ namespace MediaBrowser.Library {
                                 FindRecentUnwatchedChildren(item as Folder, subItems, maxSize);
                                 foreach (var pair in subItems)
                                 {
-                                    foundNames.Add(pair.Key, pair.Value);
-                                    if (foundNames.Count >= maxSize)
+                                    if (!foundIds.Contains(pair.Value.Id))
                                     {
-                                        foundNames.RemoveAt(0);
+                                        var key = pair.Key;
+                                        while (foundNames.ContainsKey(key))
+                                        {
+                                            // break ties 
+                                            key = key.AddMilliseconds(1);
+                                        }
+                                        foundNames.Add(key, pair.Value);
+                                        foundIds.Add(pair.Value.Id);
+                                        if (foundNames.Count >= maxSize)
+                                        {
+                                            foundNames.RemoveAt(0);
+                                        }
                                     }
                                 }
                             }
@@ -741,7 +945,7 @@ namespace MediaBrowser.Library {
                 }
                 else
                 {
-                    if (item is Video)
+                    if (item is Video && !foundIds.Contains(item.Id))
                     {
                         Video i = item as Video;
                         if (i.PlaybackStatus.WasPlayed == false && DateTime.Compare(item.DateCreated,daysAgo) > 0)
@@ -759,6 +963,7 @@ namespace MediaBrowser.Library {
                                 creationTime = creationTime.AddMilliseconds(1);
                             }
                             foundNames.Add(creationTime, modelItem);
+                            foundIds.Add(item.Id);
                             if (foundNames.Count > maxSize)
                             {
                                 foundNames.RemoveAt(0);
