@@ -46,7 +46,7 @@ namespace MediaBrowser.Library
                 foreach (BaseItem item in Application.CurrentInstance.RootFolder.Children)
                 {
                     String itemGUID = item.Id.ToString();
-                    if (entryPointPath.ToLower() == item.Path.ToLower() || entryPointPath.ToLower() == itemGUID.ToLower())
+                    if (entryPointPath.ToLower() == itemGUID.ToLower() || entryPointPath.ToLower() == item.Path.ToLower())
                     {
                         return item;
                     }
