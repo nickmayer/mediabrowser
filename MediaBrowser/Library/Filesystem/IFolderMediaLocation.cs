@@ -11,5 +11,6 @@ namespace MediaBrowser.Library.Filesystem {
         IMediaLocation GetChild(string name);
 
         bool ContainsChild(string name);
+        bool IsUnavailable(string location);
     }
 }

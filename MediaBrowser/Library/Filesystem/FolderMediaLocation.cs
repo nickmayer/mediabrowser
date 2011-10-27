@@ -14,7 +14,8 @@ namespace MediaBrowser.Library.Filesystem {
 
         private IFolderMediaLocation location;
         Lazy<IList<IMediaLocation>> children;
-        Lazy<Dictionary<string, IMediaLocation>> index; 
+        Lazy<Dictionary<string, IMediaLocation>> index;
+        protected List<string> unavailableLocations = new List<string>();
 
         internal FolderMediaLocation(FileInfo info, IFolderMediaLocation parent)
             : this(info, parent, null) 
@@ -31,6 +32,13 @@ namespace MediaBrowser.Library.Filesystem {
             } else {
                 this.location = location;
             }
+        }
+
+        public bool IsUnavailable(string location) {
+            foreach(var path in unavailableLocations) {
+                if (location.ToLower().StartsWith(path)) return true;
+            }
+            return false;
         }
 
         protected override void SetName()

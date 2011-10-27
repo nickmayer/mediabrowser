@@ -371,7 +371,6 @@ namespace MediaBrowser.Library.Entities {
                 currentChildren[item.Id] = item;
             }
 
-
             bool changed = false;
             foreach (var item in validChildren) {
                 BaseItem currentChild;
@@ -402,12 +401,22 @@ namespace MediaBrowser.Library.Entities {
                 }
             }
 
-            foreach (var item in currentChildren.Values.Where(item => item != null)) {
-                changed = true;
-                Logger.ReportInfo("Removing missing item from library: ("+item.Id+") "+item.Path);
-                lock (ActualChildren) {
-                    ActualChildren.RemoveAll(current => current.Id == item.Id);
+            foreach (var item in currentChildren.Values.Where(item => item != null))
+            {
+                if (FolderMediaLocation.IsUnavailable(item.Path))
+                {
+                    Logger.ReportInfo("Not removing missing item " + item.Name + " because it's location is unavailable.");
                 }
+                else
+                {
+                    changed = true;
+                    Logger.ReportInfo("Removing missing item from library: (" + item.Id + ") " + item.Path);
+                    lock (ActualChildren)
+                    {
+                        ActualChildren.RemoveAll(current => current.Id == item.Id);
+                    }
+                }
+
             }
 
             // this is a rare concurrency bug workaround - which I already fixed (it protects against regressions)
@@ -455,26 +464,23 @@ namespace MediaBrowser.Library.Entities {
         protected virtual List<BaseItem> GetNonCachedChildren() {
 
             List<BaseItem> items = new List<BaseItem>();
-            bool networkChecked = false;
 
             // don't bomb out on invalid folders - its correct to say we have no children
             if (this.FolderMediaLocation != null) {
-                //if we point to a network location, be sure it is available first
                 foreach (var location in this.FolderMediaLocation.Children) {
                     if (location != null) {
-                        if (!networkChecked && location.Path.StartsWith("\\\\"))
+                        try
                         {
-                            //network location - test to be sure it is accessible
-                            if (!Helper.WaitForLocation(location.Path, Kernel.Instance.ConfigData.NetworkAvailableTimeOut))
-                            {
-                                throw new Exception("Network location unavailable attempting to validate " + this.Name + ". ABORTING to avoid cache corruption.");
+                            var item = Kernel.Instance.GetItem(location);
+                            if (item != null) {
+                                items.Add(item);
                             }
-                            networkChecked = true;
                         }
-                        var item = Kernel.Instance.GetItem(location);
-                        if (item != null) {
-                            items.Add(item);
+                        catch (Exception e)
+                        {
+                            Logger.ReportException("Error trying to load item from file system: " + location.Path, e);
                         }
+
                     }
                 }
             }
@@ -493,7 +499,7 @@ namespace MediaBrowser.Library.Entities {
             {
                 foreach (var item in items)
                 {
-                    Kernel.Instance.ItemRepository.SaveItem(item);
+                    Kernel.Instance.ItemRepository.SaveItem(item); 
                 }
             }
         }
