@@ -225,6 +225,7 @@ namespace MediaBrowser.Library.ImageManagement {
        
         System.Drawing.Image ProcessImage(System.Drawing.Image image)
         {
+            if (Debugger.IsAttached && System.Threading.Thread.CurrentThread.Name == "Application") Debugger.Break(); //we don't want this happening on app thread...
             if (canBeProcessed && Kernel.Instance.ImageProcessor != null) {
                 return Kernel.Instance.ImageProcessor(image, item);
             } else {

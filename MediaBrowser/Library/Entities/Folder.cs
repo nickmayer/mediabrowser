@@ -405,7 +405,7 @@ namespace MediaBrowser.Library.Entities {
             {
                 if (FolderMediaLocation.IsUnavailable(item.Path))
                 {
-                    Logger.ReportInfo("Not removing missing item " + item.Name + " because it's location is unavailable.");
+                    Logger.ReportInfo("Not removing missing item " + item.Name + " because its location is unavailable.");
                 }
                 else
                 {
