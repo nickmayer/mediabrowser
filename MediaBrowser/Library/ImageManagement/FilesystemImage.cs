@@ -5,7 +5,9 @@ using System.Text;
 using System.IO;
 using MediaBrowser.Library.Filesystem;
 using MediaBrowser.Library.Persistance;
+using MediaBrowser.Library.Logging;
 using System.Drawing;
+
 
 namespace MediaBrowser.Library.ImageManagement {
     public class FilesystemImage : LibraryImage{
@@ -31,7 +33,8 @@ namespace MediaBrowser.Library.ImageManagement {
                 //something goofy with these dates...
                 MediaBrowser.Library.Logging.Logger.ReportWarning("Bad date info for image "+Path+". Create date: " + info.CreationTimeUtc + " Mod date: " + info.LastWriteTimeUtc);
             }
-            return date < Max(info.CreationTimeUtc, info.LastWriteTimeUtc);
+            //if (date < info.LastWriteTimeUtc) Logger.ReportVerbose("Image out of date ("+this.Path+"). provided date: " + date + " created date: " + info.CreationTimeUtc + " modified date: " + info.LastWriteTimeUtc);
+            return date < info.LastWriteTimeUtc;
         }
 
         protected override System.Drawing.Image OriginalImage {

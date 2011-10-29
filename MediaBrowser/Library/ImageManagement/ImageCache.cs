@@ -238,7 +238,7 @@ namespace MediaBrowser.Library.ImageManagement {
 
             var info = new ImageInfo(imageSet);
             info.ImageFormat = imageFormat;
-            info.Date = item.DateCreated;
+            info.Date = item.DateModified > item.DateCreated ? item.DateModified : item.DateCreated;
 
             //upgrade logic
             if (width == -1 || height == -1) {
