@@ -136,6 +136,7 @@ namespace MediaBrowser.Library.ImageManagement {
                                 if (ImageOutOfDate(info.Date))
                                 {
                                     ClearLocalImages();
+                                    EnsureLoaded(); //and cause to re-cache
                                 }
                             }
                         });
@@ -225,8 +226,8 @@ namespace MediaBrowser.Library.ImageManagement {
        
         System.Drawing.Image ProcessImage(System.Drawing.Image image)
         {
-            if (Debugger.IsAttached && System.Threading.Thread.CurrentThread.Name == "Application") Debugger.Break(); //we don't want this happening on app thread...
-            if (canBeProcessed && Kernel.Instance.ImageProcessor != null) {
+            if (canBeProcessed && Kernel.Instance.ImageProcessor != null && System.Threading.Thread.CurrentThread.Name != "Application") //never allow processor on app thread - just have to catch it next time
+            {
                 return Kernel.Instance.ImageProcessor(image, item);
             } else {
                 return image;
