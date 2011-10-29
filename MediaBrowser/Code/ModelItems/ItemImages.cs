@@ -343,14 +343,19 @@ namespace MediaBrowser.Library
                     if (primaryImage.IsLoaded &&
                         preferredImageSmallSize != null &&
                         (preferredImageSmallSize.Width > 0 ||
-                        preferredImageSmallSize.Height > 0)) {
+                        preferredImageSmallSize.Height > 0))
+                    {
 
-                        if (primaryImageSmall == null) {
+                        if (primaryImageSmall == null)
+                        {
                             LoadSmallPrimaryImage();
                         }
                     }
-
-                    return primaryImageSmall != null ? primaryImageSmall.Image : null;
+                    else
+                    {
+                        //Logger.ReportWarning("Primary image small size not set: " + Name);
+                    }
+                    return primaryImageSmall != null ? primaryImageSmall.Image : PrimaryImage;
                 } else {
                     return DefaultImage;
                 }
