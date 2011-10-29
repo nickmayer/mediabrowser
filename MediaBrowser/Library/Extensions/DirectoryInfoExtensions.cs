@@ -13,13 +13,13 @@ namespace MediaBrowser.Library.Extensions {
             try {
                 created = info.CreationTimeUtc;
             } catch (Exception e) {
-                Logger.ReportException("You have a bad creation file date in the system for " + info.FullName + " this can be an issue on some linux shares", e);
+                Logger.ReportException("You have a bad creation file date in the system for " + info.FullName + " this can be an issue on some linux shares or if the location is unavailable", e);
                 created = DateTime.MinValue;
             }
             try {
                 modified = info.LastWriteTimeUtc;
             } catch (Exception e) {
-                Logger.ReportException("You have a bad modification file date in the system for " + info.FullName + " this can be an issue on some linux shares", e);
+                Logger.ReportException("You have a bad modification file date in the system for " + info.FullName + " this can be an issue on some linux shares or if the location is unavailable", e);
                 modified = DateTime.MinValue;
             }
             return new FileInfo()
