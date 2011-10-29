@@ -360,6 +360,7 @@ namespace MediaBrowser.Library.Entities {
         bool ValidateChildrenImpl() {
 
             location = null;
+            int unavailableItems = 0;
             // cache a copy of the children
 
             var childrenCopy = ActualChildren.ToList(); //changed this to reference actual children so it wouldn't keep mucking up hidden ones -ebr
@@ -406,6 +407,7 @@ namespace MediaBrowser.Library.Entities {
                 if (FolderMediaLocation.IsUnavailable(item.Path))
                 {
                     Logger.ReportInfo("Not removing missing item " + item.Name + " because its location is unavailable.");
+                    unavailableItems++;
                 }
                 else
                 {
@@ -420,8 +422,8 @@ namespace MediaBrowser.Library.Entities {
             }
 
             // this is a rare concurrency bug workaround - which I already fixed (it protects against regressions)
-            if (!changed && childrenCopy.Count != validChildren.Count) {
-                //Debug.Assert(false,"For some reason we have duplicate items in our folder, fixing this up!");
+            if (!changed && childrenCopy.Count != (validChildren.Count + unavailableItems)) {
+                Logger.ReportWarning("For some reason we have duplicate items in folder "+Name+", fixing this up!");
                 childrenCopy = childrenCopy
                     .Distinct(i => i.Id)
                     .ToList();
