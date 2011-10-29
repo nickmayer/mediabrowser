@@ -236,7 +236,8 @@ namespace MediaBrowser.Library.Providers
                 try
                 {
                     var movieNode = doc.SelectSingleNode("//movie"); //grab just movie node
-                    doc.RemoveAll(); //strip out other stuff
+                    doc.RemoveChild(doc.DocumentElement); //strip out other stuff
+                    //doc.CreateXmlDeclaration("1.0", "utf-8", null);
                     doc.AppendChild(movieNode); //and put just the movie back in
                     Kernel.IgnoreFileSystemMods = true;
                     doc.Save(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME));
