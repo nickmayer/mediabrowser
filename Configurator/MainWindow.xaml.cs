@@ -65,6 +65,7 @@ namespace Configurator
             Kernel.Init(KernelLoadDirective.ShadowPlugins);
            
             InitializeComponent();
+            pluginList.MouseDoubleClick += pluginList_DoubleClicked;
             PopUpMsg = new PopupMsg(alertText);
             config = Kernel.Instance.ConfigData;
             //put this check here because it will run before the first run of MB and we need it now
@@ -718,68 +719,71 @@ sortorder: {2}
 
         private void RefreshEntryPoints(bool RefreshPlugins)
         {
-            EntryPointManager epm = null;
-
-            try
+            Async.Queue("Configurator ep refresh", () =>
             {
-                epm = new EntryPointManager();
-            }
-            catch (Exception ex)
-            {
-                //Write to error log, don't prompt user.
-                Logger.ReportError("Error starting Entry Point Manager in RefreshEntryPoints(). " + ex.Message);
-                return;
-            }
-
-            try
-            {
-                List<EntryPointItem> entryPoints = new List<EntryPointItem>();
+                EntryPointManager epm = null;
 
                 try
                 {
-                    Logger.ReportInfo("Reloading Virtual children");
-                    if (RefreshPlugins)
-                    {
-                        Kernel.Init(KernelLoadDirective.ShadowPlugins);
-                    }
-
-                    Kernel.Instance.RootFolder.ValidateChildren();
+                    epm = new EntryPointManager();
                 }
                 catch (Exception ex)
                 {
-                    Logger.ReportError("Error validating children. " + ex.Message, ex);
-                    throw new Exception("Error validating children. " + ex.Message);
+                    //Write to error log, don't prompt user.
+                    Logger.ReportError("Error starting Entry Point Manager in RefreshEntryPoints(). " + ex.Message);
+                    return;
                 }
 
-                foreach (var folder in Kernel.Instance.RootFolder.Children)                
+                try
                 {
-                    String displayName = folder.Name;
-                    if (displayName == null || displayName.Length <= 0)
-                        continue;
+                    List<EntryPointItem> entryPoints = new List<EntryPointItem>();
 
-                    String path = string.Empty;
-
-                    if (folder.GetType() == typeof(Folder) && folder.Path != null && folder.Path.Length > 1)
+                    try
                     {
-                        path = folder.Path;
+                        Logger.ReportInfo("Reloading Virtual children");
+                        if (RefreshPlugins)
+                        {
+                            Kernel.Init(KernelLoadDirective.ShadowPlugins);
+                        }
+
+                        Kernel.Instance.RootFolder.ValidateChildren();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        path = folder.Id.ToString();
+                        Logger.ReportError("Error validating children. " + ex.Message, ex);
+                        throw new Exception("Error validating children. " + ex.Message);
                     }
 
-                    EntryPointItem ep = new EntryPointItem(displayName, path);
-                    entryPoints.Add(ep);                    
+                    foreach (var folder in Kernel.Instance.RootFolder.Children)
+                    {
+                        String displayName = folder.Name;
+                        if (displayName == null || displayName.Length <= 0)
+                            continue;
+
+                        String path = string.Empty;
+
+                        if (folder.GetType() == typeof(Folder) && folder.Path != null && folder.Path.Length > 1)
+                        {
+                            path = folder.Path;
+                        }
+                        else
+                        {
+                            path = folder.Id.ToString();
+                        }
+
+                        EntryPointItem ep = new EntryPointItem(displayName, path);
+                        entryPoints.Add(ep);
+                    }
+
+                    epm.ValidateEntryPoints(entryPoints);
                 }
-
-                epm.ValidateEntryPoints(entryPoints);
-            }
-            catch (Exception ex)
-            {
-                String msg = "Error Refreshing Entry Points. " + ex.Message;
-                Logger.ReportError(msg, ex);
-                MessageBox.Show(msg);
-            }
+                catch (Exception ex)
+                {
+                    String msg = "Error Refreshing Entry Points. " + ex.Message;
+                    Logger.ReportError(msg, ex);
+                    //MessageBox.Show(msg);
+                }
+            });
         }
 
         private void btnRename_Click(object sender, RoutedEventArgs e)
@@ -958,6 +962,11 @@ sortorder: {2}
                 //enable the infoPanel
                 infoPanel.IsEnabled = true;
             }
+        }
+
+        private void pluginList_DoubleClicked(object sender, RoutedEventArgs e)
+        {
+            configurePlugin_Click(sender, e);
         }
 
         private void pluginList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1661,11 +1670,13 @@ sortorder: {2}
 
         private void configurePlugin_Click(object sender, RoutedEventArgs e)
         {
-            if (pluginList.SelectedItem != null)            
+            if (pluginList.SelectedItem != null && (pluginList.SelectedItem as Plugin).IsConfigurable)
+            {
                 ((Plugin)pluginList.SelectedItem).Configure();
-            
-            this.RefreshEntryPoints(true);
-            KernelModified = true;
+
+                this.RefreshEntryPoints(true);
+                KernelModified = true;
+            }
         }
 
         private void podcastDetails(bool display)
