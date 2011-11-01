@@ -384,6 +384,7 @@ namespace MediaBrowser.Library {
                             if (item is IContainer && !(item is Season) && !foundIds.Contains((folder.Name + item.Name).GetMD5()))
                             {
                                 //collapse series in the list
+                                bool containsSeasons = false;
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindNewestChildren(item as Folder, subItems, maxSize);
                                 if (item is Series)
@@ -430,7 +431,7 @@ namespace MediaBrowser.Library {
                                                     createdTime = createdTime.AddMilliseconds(1);
                                                 }
                                                 subItems.Add(createdTime, containerModel);
-
+                                                containsSeasons = true;
                                             }
                                             else
                                             {
@@ -442,7 +443,7 @@ namespace MediaBrowser.Library {
                                         }
                                     }
                                 }
-                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
+                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh || (containsSeasons && subItems.Count > 0)) // always roll series so seasons don't end up on main list
                                 {
                                     //collapse into a container
                                     var thisContainer = item as IContainer;
@@ -589,6 +590,7 @@ namespace MediaBrowser.Library {
                             if (item is IContainer && !(item is Season) && !foundIds.Contains((folder.Name + item.Name).GetMD5()))
                             {
                                 //collapse series in the list
+                                bool containsSeasons = false;
                                 SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                                 FindRecentWatchedChildren(item as Folder, subItems, maxSize);
                                 if (item is Series)
@@ -635,7 +637,7 @@ namespace MediaBrowser.Library {
                                                     createdTime = createdTime.AddMilliseconds(1);
                                                 }
                                                 subItems.Add(createdTime, containerModel);
-
+                                                containsSeasons = true;
                                             }
                                             else
                                             {
@@ -654,7 +656,7 @@ namespace MediaBrowser.Library {
 
                                     }
                                 }
-                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
+                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh || (containsSeasons && subItems.Count > 0)) // always roll series so seasons don't end up on main list
                                 {
                                     //collapse into a container folder
                                     var thisContainer = item as IContainer;
@@ -791,6 +793,7 @@ namespace MediaBrowser.Library {
                         if (item is IContainer && !(item is Season) && !foundIds.Contains((folder.Name + item.Name).GetMD5()))
                         {
                             //collapse series in the list
+                            bool containsSeasons = false;
                             SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
                             FindRecentUnwatchedChildren(item as Folder, subItems, maxSize);
                             if (item is Series)
@@ -837,7 +840,7 @@ namespace MediaBrowser.Library {
                                                 createdTime = createdTime.AddMilliseconds(1);
                                             }
                                             subItems.Add(createdTime, containerModel);
-
+                                            containsSeasons = true;
                                         }
                                         else
                                         {
@@ -856,7 +859,7 @@ namespace MediaBrowser.Library {
 
                                 }
                             }
-                            if (subItems.Count >= Config.Instance.RecentItemCollapseThresh)
+                            if (subItems.Count >= Config.Instance.RecentItemCollapseThresh || (containsSeasons && subItems.Count > 0)) // always roll series so seasons don't end up on main list
                             {
                                 //collapse into a series folder
                                 var thisContainer = item as IContainer;
