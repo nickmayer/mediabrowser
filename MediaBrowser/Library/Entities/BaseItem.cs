@@ -416,6 +416,7 @@ namespace MediaBrowser.Library.Entities {
             string ignore;
             if (this.PrimaryImage != null)
             {
+                PrimaryImage.ClearLocalImages();
                 ignore = this.PrimaryImage.GetLocalImagePath(); //no size - cache at original size
             }
 
