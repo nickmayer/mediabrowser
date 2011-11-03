@@ -404,7 +404,7 @@ namespace MediaBrowser.Library.Entities {
 
             foreach (var item in currentChildren.Values.Where(item => item != null))
             {
-                if (FolderMediaLocation.IsUnavailable(item.Path))
+                if (FolderMediaLocation != null && FolderMediaLocation.IsUnavailable(item.Path))
                 {
                     Logger.ReportInfo("Not removing missing item " + item.Name + " because its location is unavailable.");
                     unavailableItems++;
