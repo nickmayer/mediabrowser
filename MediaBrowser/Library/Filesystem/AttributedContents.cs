@@ -23,11 +23,15 @@ namespace MediaBrowser.Library.Filesystem {
                 var type = line.Substring(0, colonPos).Trim();
                 var data = line.Substring(colonPos + 1).Trim();
 
-                if (!info.ContainsKey(type)) {
-                    info[type] = new List<string>();
-                }
+                if (!string.IsNullOrEmpty(data)) // don't put empty values in
+                {
+                    if (!info.ContainsKey(type))
+                    {
+                        info[type] = new List<string>();
+                    }
 
-                info[type].Add(data);
+                    info[type].Add(data);
+                }
             }
         }
 
