@@ -974,12 +974,15 @@ namespace MediaBrowser.Library.Persistance {
             if (item != null)
             {
                 SQLInfo itemSQL;
-                if (!ItemSQL.TryGetValue(item.GetType(), out itemSQL))
+                lock (ItemSQL)
                 {
-                    itemSQL = new SQLInfo(item);
-                    ItemSQL.Add(item.GetType(), itemSQL);
-                    //make sure our schema matches
-                    itemSQL.FixUpSchema(connection);
+                    if (!ItemSQL.TryGetValue(item.GetType(), out itemSQL))
+                    {
+                        itemSQL = new SQLInfo(item);
+                        ItemSQL.Add(item.GetType(), itemSQL);
+                        //make sure our schema matches
+                        itemSQL.FixUpSchema(connection);
+                    }
                 }
                 foreach (var col in itemSQL.AtomicColumns)
                 {
