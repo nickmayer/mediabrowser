@@ -1185,8 +1185,7 @@ namespace MediaBrowser
             }
             else
             {
-                currentPlaybackController = item.PlaybackController;
-                item.Resume();
+                Resume(item);
             }
         }
 

@@ -878,7 +878,9 @@
     </Content>
     <Content Include="Markup\Controls\RadioGroup.mcml" />
     <Content Include="Markup\Controls\Scrollers\AutoScroller.mcml" />
-    <Content Include="Markup\Controls\Scrollers\PosterScroller.mcml" />
+    <Content Include="Markup\Controls\Scrollers\PosterScroller.mcml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Markup\Controls\Scrollers\ScrollableText.mcml" />
     <Content Include="Markup\Controls\Spinners\ColorSpinner.mcml" />
     <Content Include="Markup\Controls\Spinners\SimpleSpinner.mcml" />
