@@ -260,6 +260,8 @@ namespace MediaBrowser.Library.Providers
                 //if (store.Name == null)
                 //    store.Name = doc.SafeGetString("//movie/title");
 
+                movie.Name = doc.SafeGetString("//movie/name");
+
                 movie.Overview = doc.SafeGetString("//movie/overview");
                 if (movie.Overview != null)
                     movie.Overview = movie.Overview.Replace("\n\n", "\n");
