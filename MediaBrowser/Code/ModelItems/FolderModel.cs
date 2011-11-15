@@ -416,6 +416,7 @@ namespace MediaBrowser.Library {
                                                     SecondaryImagePath = thisContainer.SecondaryImagePath,
                                                     BannerImagePath = thisContainer.BannerImagePath,
                                                     BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                                    DisplayMediaType = thisContainer.DisplayMediaType,
                                                     Parent = folder
                                                 };
 
@@ -463,6 +464,7 @@ namespace MediaBrowser.Library {
                                         SecondaryImagePath = thisContainer.SecondaryImagePath,
                                         BannerImagePath = thisContainer.BannerImagePath,
                                         BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                        DisplayMediaType = thisContainer.DisplayMediaType,
                                         Parent = folder
                                     };
 
@@ -622,6 +624,7 @@ namespace MediaBrowser.Library {
                                                     SecondaryImagePath = thisContainer.SecondaryImagePath,
                                                     BannerImagePath = thisContainer.BannerImagePath,
                                                     BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                                    DisplayMediaType = thisContainer.DisplayMediaType,
                                                     Parent = folder
                                                 };
 
@@ -675,6 +678,7 @@ namespace MediaBrowser.Library {
                                         SecondaryImagePath = thisContainer.SecondaryImagePath,
                                         BannerImagePath = thisContainer.BannerImagePath,
                                         BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                        DisplayMediaType = thisContainer.DisplayMediaType,
                                         Parent = folder
                                     };
 
@@ -825,6 +829,7 @@ namespace MediaBrowser.Library {
                                                 SecondaryImagePath = thisContainer.SecondaryImagePath,
                                                 BannerImagePath = thisContainer.BannerImagePath,
                                                 BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                                DisplayMediaType = thisContainer.DisplayMediaType,
                                                 Parent = folder
                                             };
 
@@ -879,6 +884,7 @@ namespace MediaBrowser.Library {
                                     SecondaryImagePath = thisContainer.SecondaryImagePath,
                                     BannerImagePath = thisContainer.BannerImagePath,
                                     BackdropImagePaths = thisContainer.BackdropImagePaths,
+                                    DisplayMediaType = thisContainer.DisplayMediaType,
                                     Parent = folder
                                 };
 
