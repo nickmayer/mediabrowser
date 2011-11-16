@@ -331,7 +331,7 @@ namespace MediaBrowser
         {
             if (Config.EnableScreenSaver) 
             {
-                if (!this.PlaybackController.IsPlaying)
+                if (!this.PlaybackController.IsPlaying && !this.PlaybackController.IsPaused)
                 {
                     if (Helper.SystemIdleTime > Config.ScreenSaverTimeOut * 60000)
                     {
@@ -347,8 +347,11 @@ namespace MediaBrowser
                 }
                 else
                 {
-                    //something playing - be sure we don't kick off right after it ends
-                    ScreenSaverTimer.Interval = Config.ScreenSaverTimeOut * 60000;
+                    if (!this.ScreenSaverActive)
+                    {
+                        //something playing - be sure we don't kick off right after it ends
+                        ScreenSaverTimer.Interval = Config.ScreenSaverTimeOut * 60000;
+                    }
                 }
             }
         }
