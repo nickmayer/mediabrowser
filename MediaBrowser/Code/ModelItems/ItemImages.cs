@@ -447,6 +447,123 @@ namespace MediaBrowser.Library
             }
         }
 
+        AsyncImageLoader logoImage = null;
+        public Image LogoImage
+        {
+            get
+            {
+                if (!HasLogoImage)
+                {
+                    return null;
+                }
+                EnsureLogoImageIsSet();
+                return logoImage.Image;
+            }
+        }
+
+        private void EnsureLogoImageIsSet()
+        {
+            if (logoImage == null)
+            {
+                logoImage = new AsyncImageLoader(
+                    () => baseItem.LogoImage,
+                    DefaultImage,
+                    LogoImageChanged);
+                var ignore = logoImage.Image;
+            }
+        }
+
+        void LogoImageChanged()
+        {
+            FirePropertyChanged("LogoImage");
+        }
+
+        public bool HasLogoImage
+        {
+            get
+            {
+                return baseItem.LogoImagePath != null || (PhysicalParent != null ? PhysicalParent.HasLogoImage : false);
+            }
+        }
+
+
+        AsyncImageLoader artImage = null;
+        public Image ArtImage
+        {
+            get
+            {
+                if (!HasArtImage)
+                {
+                    return null;
+                }
+                EnsureArtImageIsSet();
+                return artImage.Image;
+            }
+        }
+
+        private void EnsureArtImageIsSet()
+        {
+            if (artImage == null)
+            {
+                artImage = new AsyncImageLoader(
+                    () => baseItem.ArtImage,
+                    DefaultImage,
+                    ArtImageChanged);
+                var ignore = artImage.Image;
+            }
+        }
+
+        void ArtImageChanged()
+        {
+            FirePropertyChanged("ArtImage");
+        }
+
+        public bool HasArtImage
+        {
+            get
+            {
+                return baseItem.ArtImagePath != null || (PhysicalParent != null ? PhysicalParent.HasArtImage : false);
+            }
+        }
+
+        AsyncImageLoader thumbnailImage = null;
+        public Image ThumbnailImage
+        {
+            get
+            {
+                if (!HasThumbnailImage)
+                {
+                    return null;
+                }
+                EnsureThumbnailImageIsSet();
+                return thumbnailImage.Image;
+            }
+        }
+
+        private void EnsureThumbnailImageIsSet()
+        {
+            if (thumbnailImage == null)
+            {
+                thumbnailImage = new AsyncImageLoader(
+                    () => baseItem.ThumbnailImage,
+                    DefaultImage,
+                    ThumbnailImageChanged);
+                var ignore = thumbnailImage.Image;
+            }
+        }
+
+        void ThumbnailImageChanged()
+        {
+            FirePropertyChanged("ThumbnailImage");
+        }
+
+        public bool HasThumbnailImage
+        {
+            get
+            {
+                return baseItem.ThumbnailImagePath != null;
+            }
+        }
 
         public bool HasPrimaryImage
         {

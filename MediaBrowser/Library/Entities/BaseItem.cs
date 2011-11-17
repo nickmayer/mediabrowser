@@ -47,6 +47,12 @@ namespace MediaBrowser.Library.Entities {
         [Persist]
         public virtual string SecondaryImagePath { get; set; }
         [Persist]
+        public virtual string LogoImagePath { get; set; }
+        [Persist]
+        public virtual string ArtImagePath { get; set; }
+        [Persist]
+        public virtual string ThumbnailImagePath { get; set; }
+        [Persist]
         public virtual string BannerImagePath { get; set; }
 
         public string BackdropImagePath {
@@ -87,10 +93,30 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        public LibraryImage ThumbnailImage {
+            get {
+                return GetImage(ThumbnailImagePath) ?? PrimaryImage;
+            }
+        }
+
         // banner images will fall back to parent
         public LibraryImage BannerImage {
             get {
                 return SearchParents<LibraryImage>(this, item => item.GetImage(item.BannerImagePath, Kernel.Instance.ConfigData.ProcessBanners));
+            }
+        }
+
+        // logo images will fall back to parent
+        public LibraryImage LogoImage {
+            get {
+                return SearchParents<LibraryImage>(this, item => item.GetImage(item.LogoImagePath));
+            }
+        }
+
+        // art images will fall back to parent
+        public LibraryImage ArtImage {
+            get {
+                return SearchParents<LibraryImage>(this, item => item.GetImage(item.ArtImagePath));
             }
         }
 

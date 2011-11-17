@@ -17,6 +17,9 @@ namespace MediaBrowser.Library.Providers
         const string Primary = "folder";
         const string Banner = "banner";
         const string Backdrop = "backdrop";
+        const string Logo = "logo";
+        const string Art = "art";
+        const string Thumbnail = "thumb";
         
 
         [Persist]
@@ -25,6 +28,12 @@ namespace MediaBrowser.Library.Providers
         string bannerPath;
         [Persist]
         string primaryPath;
+        [Persist]
+        string logoPath;
+        [Persist]
+        string artPath;
+        [Persist]
+        string thumbPath;
 
 
         protected virtual string Location { get { return Item.Path == null ? "" : Item.Path.ToLower(); } }
@@ -43,6 +52,9 @@ namespace MediaBrowser.Library.Providers
             if (isDir)
             {
                 Item.BannerImagePath = bannerPath = FindImage(Banner);
+                Item.LogoImagePath = logoPath = FindImage(Logo);
+                Item.ArtImagePath = artPath = FindImage(Art);
+                Item.ThumbnailImagePath = thumbPath = FindImage(Thumbnail);
                 backdropPaths = FindImages(Backdrop);
                 if (backdropPaths.Count > 0) {
                     Item.BackdropImagePaths = backdropPaths;
