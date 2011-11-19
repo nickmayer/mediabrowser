@@ -91,14 +91,14 @@ namespace MediaBrowser.Library.Persistance
 
         public virtual void ShutdownDatabase()
         {
+            alive = false;
+            Thread.Sleep(1000); //wait for it to shutdown
             try
             {
                 FlushWriter();
                 connection.Close();
             }
             catch { }
-            alive = false;
-            Thread.Sleep(1000); //wait for it to shutdown
         }
 
         protected void QueueCommand(SQLiteCommand cmd)
@@ -186,7 +186,9 @@ namespace MediaBrowser.Library.Persistance
 
         public void FlushWriter()
         {
+            flushing.Reset();
             InternalFlush();
+            flushing.Set();
         }
 
 
