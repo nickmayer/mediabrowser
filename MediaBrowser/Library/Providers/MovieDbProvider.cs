@@ -49,9 +49,21 @@ namespace MediaBrowser.Library.Providers
             if (DateTime.Today.Subtract(Item.DateCreated).TotalDays > 180 && downloadDate != DateTime.MinValue)
                 return false; // don't trigger a refresh data for item that are more than 6 months old and have been refreshed before
 
-            if (HasLocalMeta() || DateTime.Today.Subtract(downloadDate).TotalDays < Config.Instance.MetadataCheckForUpdateAge) // only refresh every 14 days
+            if (DateTime.Today.Subtract(downloadDate).TotalDays < Config.Instance.MetadataCheckForUpdateAge) // only refresh every n days
                 return false;
 
+            if (Kernel.Instance.ConfigData.SaveLocalMeta && File.Exists(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME)))
+            {
+                try
+                {
+                    //clear the local meta file so it will re-download
+                    File.Delete(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME));
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Unable to delete local meta file in MovieDBProvider.", e);
+                }
+            }
             return true;
         }
 
