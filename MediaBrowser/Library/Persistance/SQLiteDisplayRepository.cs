@@ -18,7 +18,10 @@ namespace MediaBrowser.Library.Persistance
 {
     public class SQLiteDisplayRepository : SQLiteRepository
     {
-        public SQLiteDisplayRepository(string dbPath) {
+        const int MAX_RETRIES = 5;
+
+        public SQLiteDisplayRepository(string dbPath)
+        {
 
             SQLiteConnectionStringBuilder connectionstr = new SQLiteConnectionStringBuilder();
             connectionstr.PageSize = 4096;
@@ -27,7 +30,25 @@ namespace MediaBrowser.Library.Persistance
             connectionstr.DataSource = dbPath;
             connectionstr.JournalMode = SQLiteJournalModeEnum.Persist; //maybe better performance...?
             connection = new SQLiteConnection(connectionstr.ConnectionString);
-            connection.Open();
+            int retries = 0;
+            bool connected = false;
+            while (!connected && retries < MAX_RETRIES)
+            {
+                try
+                {
+                    connection.Open();
+                    connected = true;
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error connecting to database! Will retry " + MAX_RETRIES + " times.", e);
+                    retries++;
+                    Thread.Sleep(250);
+                }
+            }
+
+            if (!connected) throw new ApplicationException("CRITICAL ERROR - Unable to connect to database: " + dbPath + ".  Program cannot function.");
+
 
             string[] queries = {
                                "create table if not exists display_prefs (guid primary key, view_type, show_labels, vertical_scroll, sort_order, index_by, use_banner, thumb_constraint_width, thumb_constraint_height, use_coverflow, use_backdrop )",
