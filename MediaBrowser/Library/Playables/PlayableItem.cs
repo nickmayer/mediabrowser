@@ -97,13 +97,6 @@ namespace MediaBrowser.Library
                 {
                     PlaybackController.Seek(PlayState.PositionTicks);
                 }
-                else
-                {
-                    if (this is PlayableDvd)
-                    {
-                        PlaybackController.Seek(0); //force DVD to start at beginning (player will try to auto-resume)
-                    }
-                }
 
             }
             catch (Exception ex)
