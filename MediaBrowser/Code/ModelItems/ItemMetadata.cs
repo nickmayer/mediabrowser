@@ -316,9 +316,13 @@ namespace MediaBrowser.Library {
             {
                 List<string> studios = null;
                 var show = baseItem as IShow;
-                if (show != null && show.Studios != null)
+                if (show != null) 
                 {
-                    studios = show.Studios;
+                    if (show.Studios != null)
+                        studios = show.Studios;
+                    else
+                        if (baseItem.Parent != null && baseItem.Parent is IShow)
+                            studios = (baseItem.Parent as IShow).Studios;
                 }
 
                 return studios ?? new List<string>();
