@@ -7,6 +7,7 @@ namespace MediaBrowser.Library.RemoteControl {
         void GoToFullScreen();
         bool IsPaused { get; }
         bool IsPlaying { get; }
+        bool IsPlayingVideo { get; }
         bool IsStopped { get; }
         event EventHandler<PlaybackStateEventArgs> OnProgress;
         void PlayDVD(string path);

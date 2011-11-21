@@ -331,7 +331,7 @@ namespace MediaBrowser
         {
             if (Config.EnableScreenSaver) 
             {
-                if (!this.PlaybackController.IsPlaying && !this.PlaybackController.IsPaused)
+                if (!this.PlaybackController.IsPlayingVideo && !this.PlaybackController.IsPaused)
                 {
                     if (Helper.SystemIdleTime > Config.ScreenSaverTimeOut * 60000)
                     {

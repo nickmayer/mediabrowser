@@ -230,6 +230,10 @@ namespace MediaBrowser
 
         #region Playback status
 
+        public virtual bool IsPlayingVideo
+        {
+            get { return IsPlaying; }
+        }
 
         public virtual bool IsPlaying
         {
@@ -507,6 +511,7 @@ namespace MediaBrowser
         {
             FirePropertyChanged("PlayState");
             FirePropertyChanged("IsPlaying");
+            FirePropertyChanged("IsPlayingVideo");
             FirePropertyChanged("IsStopped");
             FirePropertyChanged("IsPaused");
         }
