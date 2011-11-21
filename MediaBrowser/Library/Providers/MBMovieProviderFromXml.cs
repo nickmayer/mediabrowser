@@ -32,6 +32,7 @@ namespace MediaBrowser.Library.Providers
             if (modTime <= lastWriteTime)
                return false;
 
+            Logger.ReportVerbose("XML changed for " + Item.Name + " mod time: " + modTime + " last update time: " + lastWriteTime);
             return true;
         }
 
@@ -48,7 +49,7 @@ namespace MediaBrowser.Library.Providers
                 XmlDocument doc = new XmlDocument();
                 doc.Load(metaFile);
                 ProcessDocument(doc, true);
-                lastWriteTime = new FileInfo(metaFile).LastWriteTimeUtc;
+                lastWriteTime = new FileInfo(metaFile).LastWriteTimeUtc + TimeSpan.FromMinutes(1); //fudge this slightly because the system sometimes reports this a few seconds behind
             }
         }
 

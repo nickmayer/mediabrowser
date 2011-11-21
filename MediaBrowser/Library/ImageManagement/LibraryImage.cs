@@ -135,6 +135,7 @@ namespace MediaBrowser.Library.ImageManagement {
                             {
                                 if (ImageOutOfDate(info.Date))
                                 {
+                                    Logger.ReportVerbose("Image out of date for " + item.Name + " mod date: " + info.Date);
                                     ClearLocalImages();
                                     EnsureLoaded(); //and cause to re-cache
                                 }
