@@ -29,6 +29,7 @@ namespace MediaBrowser.Library.Providers
         };
 
         protected const string LOCAL_META_FILE_NAME = "MBMovie.xml";
+        protected bool forceDownload = false;
 
         #region IMetadataProvider Members
 
@@ -52,28 +53,18 @@ namespace MediaBrowser.Library.Providers
             if (DateTime.Today.Subtract(downloadDate).TotalDays < Config.Instance.MetadataCheckForUpdateAge) // only refresh every n days
                 return false;
 
-            if (Kernel.Instance.ConfigData.SaveLocalMeta && File.Exists(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME)))
-            {
-                try
-                {
-                    //clear the local meta file so it will re-download
-                    File.Delete(System.IO.Path.Combine(Item.Path, LOCAL_META_FILE_NAME));
-                }
-                catch (Exception e)
-                {
-                    Logger.ReportException("Unable to delete local meta file in MovieDBProvider.", e);
-                }
-            }
+            forceDownload = true; //tell the provider to re-download even if meta already there
             return true;
         }
 
 
         public override void Fetch()
         {
-            if (!Kernel.Instance.ConfigData.SaveLocalMeta || !HasLocalMeta())
+            if (forceDownload || !Kernel.Instance.ConfigData.SaveLocalMeta || !HasLocalMeta())
             {
+                forceDownload = false; //reset
                 FetchMovieData();
-                downloadDate = DateTime.Today;
+                downloadDate = DateTime.UtcNow;
             }
             else
             {
