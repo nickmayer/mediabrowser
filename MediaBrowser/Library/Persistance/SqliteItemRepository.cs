@@ -1185,8 +1185,15 @@ namespace MediaBrowser.Library.Persistance {
                     //Logger.ReportVerbose("Retrieving Provider: " + reader.GetString(1));
                     using (var ms = new MemoryStream(reader.GetBytes(0))) {
 
-                        var data = (IMetadataProvider)Serializer.Deserialize<object>(ms);
-                        if (data != null) providers.Add(data);
+                        try
+                        {
+                            var data = (IMetadataProvider)Serializer.Deserialize<object>(ms);
+                            if (data != null) providers.Add(data);
+                        }
+                        catch (SerializationException e)
+                        {
+                            Logger.ReportException("Corrupt provider: " + ms.ToString(), e);
+                        }
                     }
                 }
             }
@@ -1213,7 +1220,6 @@ namespace MediaBrowser.Library.Persistance {
                     cmd.AddParam("@guid", guid);
                     cmd.AddParam("@full_name", provider.GetType().FullName);
                     var dataParam = cmd.AddParam("@data");
-
 
                     using (var ms = new MemoryStream()) {
                         Serializer.Serialize(ms, (object)provider);
