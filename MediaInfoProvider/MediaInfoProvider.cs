@@ -77,7 +77,6 @@ namespace MediaInfoProvider
                 Logger.ReportInfo("MediaInfo is disabled - probably due to previous error");
                 return;
             }
-            if (video.MediaType == MediaType.Wtv) return; //can't process .WTV files
 
             if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && (video.MediaType == MediaType.BluRay || video.MediaType == MediaType.DVD)))
             {
@@ -85,6 +84,10 @@ namespace MediaInfoProvider
                 using (new MediaBrowser.Util.Profiler("Media Info extraction"))
                 {
                     filename = FindVideoFile();
+                    if (video.MediaType == MediaType.Wtv) {
+                        Logger.ReportInfo("Mediainfo not scanning WTV file: "+filename);
+                        return;
+                    }
                     if (Plugin.PluginOptions.Instance.BadFiles.Contains(filename)) {
                         Logger.ReportInfo("Mediainfo not scanning known bad file: "+filename);
                         return;
