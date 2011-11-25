@@ -20,7 +20,7 @@ namespace MediaBrowser.Library.Providers
     [SupportedType(typeof(Movie))]
     public class MovieDbProvider : BaseMetadataProvider
     {
-        private static string search = @"http://api.themoviedb.org/2.1/Movie.search/en/xml/{1}/{0}";
+        private static string search = @"http://api.themoviedb.org/2.1/Movie.search/{2}/xml/{1}/{0}";
         private static string getInfo = @"http://api.themoviedb.org/2.1/Movie.getInfo/{2}/xml/{1}/{0}";
         private static readonly string ApiKey = "f6bd687ffa63cd282b6ff2c6877f2669";
         static readonly Regex[] nameMatches = new Regex[] {
@@ -117,27 +117,43 @@ namespace MediaBrowser.Library.Providers
             }
 
             Logger.ReportInfo("MovieDbProvider: Finding id for movie data: " + name);
-            string id = AttemptFindId(name, year, out matchedName, out possibles);
+            string language = Kernel.Instance.ConfigData.PreferredMetaDataLanguage.ToLower();
+            string id = AttemptFindId(name, year, out matchedName, out possibles, language);
             if (id == null)
             {
-                // try with dot and _ turned to space
-                name = name.Replace(".", " ");
-                name = name.Replace("  ", " ");
-                name = name.Replace("_", " ");
-                name = name.Replace("-", "");
-                matchedName = null;
-                possibles = null;
-                return AttemptFindId(name, year, out matchedName, out possibles);
+                //try in english if wasn't before
+                if (language != "en")
+                {
+                    id = AttemptFindId(name, year, out matchedName, out possibles, "en");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        // try with dot and _ turned to space
+                        name = name.Replace(".", " ");
+                        name = name.Replace("  ", " ");
+                        name = name.Replace("_", " ");
+                        name = name.Replace("-", "");
+                        matchedName = null;
+                        possibles = null;
+                        id = AttemptFindId(name, year, out matchedName, out possibles, language);
+                        if (id == null && language != "en")
+                        {
+                            //finally again, in english
+                            id = AttemptFindId(name, year, out matchedName, out possibles, "en");
+                        }
+                    }
+                }
             }
-            else
-                return id;
+            return id;
         }
 
-        public static string AttemptFindId(string name, string year, out string matchedName, out string[] possibles)
+        public static string AttemptFindId(string name, string year, out string matchedName, out string[] possibles, string language)
         {
 
             string id = null;
-            string url = string.Format(search, UrlEncode(name), ApiKey);
+            string url = string.Format(search, UrlEncode(name), ApiKey, language);
             XmlDocument doc = Helper.Fetch(url);
             List<string> possibleTitles = new List<string>();
             if (doc != null)
