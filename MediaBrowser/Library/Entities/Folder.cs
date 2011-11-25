@@ -548,12 +548,14 @@ namespace MediaBrowser.Library.Entities {
         void Sort(IComparer<BaseItem> sortFunction, bool notifyChange) {
             this.sortFunction = sortFunction;
             lock (ActualChildren) {
+                //Logger.ReportVerbose("=====sorting actual children for " + Name);
                 ActualChildren.Sort(sortFunction);
             }
             if (notifyChange && ChildrenChanged != null)
                 {
                     ChildrenChanged(this, null);
                 }
+            //Logger.ReportVerbose("=====FINISHED sorting actual children for " + Name);
         }
 
         List<BaseItem> GetCachedChildren() {

@@ -537,17 +537,6 @@ namespace MediaBrowser.Library {
                     {
                         if (!foundIds.Contains(item.Id)) //avoid dups
                         {
-                            FolderModel folderModel = null;
-                            if (item.Parent == null)
-                            {
-                                //we don't know what to attach to so attach to us
-                                folderModel = this;
-                            }
-                            else
-                            {
-                                folderModel = ItemFactory.Instance.Create(item.Parent) as FolderModel;
-                                folderModel.PhysicalParent = this;
-                            }
                             DateTime creationTime = item.DateCreated;
                             //only if added less than specified ago
                             if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
@@ -558,9 +547,8 @@ namespace MediaBrowser.Library {
                                     creationTime = creationTime.AddMilliseconds(1);
                                 }
                                 Item modelItem = ItemFactory.Instance.Create(item);
-                                modelItem.PhysicalParent = folderModel;
-                                item.Parent = folderModel.Folder;
-                                var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                                modelItem.PhysicalParent = this;
+                                var ignore = item.Parent != null ? item.Parent.BackdropImages : null; //force these to load so they will inherit
                                 ignore = item.BackdropImages;
                                 foundNames.Add(creationTime, modelItem);
                                 foundIds.Add(item.Id);
@@ -755,8 +743,6 @@ namespace MediaBrowser.Library {
                             DateTime watchedTime = i.PlaybackStatus.LastPlayed;
                             if (i.PlaybackStatus.PlayCount > 0 && DateTime.Compare(watchedTime, daysAgo) > 0)
                             {
-                                FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
-                                folderModel.PhysicalParent = this;
                                 //only get ones watched within last 60 days
                                 while (foundNames.ContainsKey(watchedTime))
                                 {
@@ -764,9 +750,9 @@ namespace MediaBrowser.Library {
                                     watchedTime = watchedTime.AddMilliseconds(1);
                                 }
                                 Item modelItem = ItemFactory.Instance.Create(item);
-                                modelItem.PhysicalParent = folderModel;
-                                item.Parent = folder;
-                                var ignore = item.Parent.BackdropImages; //force these to load so they will inherit
+                                modelItem.PhysicalParent = this;
+                                //item.Parent = folder;
+                                var ignore = item.Parent != null ? item.Parent.BackdropImages : null; //force these to load so they will inherit
                                 ignore = item.BackdropImages;
                                 foundNames.Add(watchedTime, modelItem);
                                 if (foundNames.Count > maxSize)
@@ -959,13 +945,11 @@ namespace MediaBrowser.Library {
                         Video i = item as Video;
                         if (i.PlaybackStatus.WasPlayed == false && DateTime.Compare(item.DateCreated,daysAgo) > 0)
                         {
-                            FolderModel folderModel = ItemFactory.Instance.Create(folder) as FolderModel;
-                            folderModel.PhysicalParent = this;
                             DateTime creationTime = item.DateCreated;
                             Item modelItem = ItemFactory.Instance.Create(item);
-                            modelItem.PhysicalParent = folderModel;
-                            item.Parent = folder;
-                            var ignore = item.Parent.BackdropImages; //force to load so they will inherit
+                            modelItem.PhysicalParent = this;
+                            //item.Parent = folder;
+                            var ignore = item.Parent != null ? item.Parent.BackdropImages : null; //force to load so they will inherit
                             ignore = item.BackdropImages;
                             while (foundNames.ContainsKey(creationTime))
                             {
@@ -1071,7 +1055,6 @@ namespace MediaBrowser.Library {
                 return;
             }
 
-            Logger.ReportVerbose("Children Changed for " + this.Name);
 
             //   the only way to get the binder to update the underlying children is to 
             //   change the refrence to the property bound, otherwise the binder thinks 
@@ -1324,7 +1307,7 @@ namespace MediaBrowser.Library {
                     if (this.actualThumbSize.Value.Height != 1)
                         ThumbConstraint_PropertyChanged(null, null);
 
-                    if (displayPrefs.IndexBy != "None") {
+                    if (displayPrefs.IndexBy != "None" && displayPrefs.IndexBy != "") {
                         IndexByChoice_ChosenChanged(this, null);
                     }
                 }

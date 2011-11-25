@@ -141,7 +141,7 @@ namespace MediaBrowser.Code.ModelItems {
                 childVerifier.Inject(this);
             }
 
-            Sort();
+            //Sort();
         }
 
         public void ListenForChanges() {
@@ -196,6 +196,7 @@ namespace MediaBrowser.Code.ModelItems {
         {
             if (folder != null && !folderIsIndexed) {
                 this.sortFunction = sortFunction;
+                Logger.ReportVerbose("Sorting " + folder.Name);
                 Async.Queue("Background Sorter", () => folder.Sort(sortFunction));
             }
         }
