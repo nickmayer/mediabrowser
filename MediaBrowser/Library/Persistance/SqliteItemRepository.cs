@@ -1192,7 +1192,7 @@ namespace MediaBrowser.Library.Persistance {
                         }
                         catch (SerializationException e)
                         {
-                            Logger.ReportException("Corrupt provider: " + ms.ToString(), e);
+                            Logger.ReportException("Corrupt provider: " + reader.GetString(0), e);
                         }
                     }
                 }
