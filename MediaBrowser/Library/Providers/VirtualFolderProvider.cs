@@ -54,6 +54,7 @@ namespace MediaBrowser.Library.Providers
                 //firstTime = false;
                 changed |= imagePath != virtualFolder.ImagePath;
                 changed |= Item.PrimaryImagePath == null && virtualFolder.ImagePath != null;
+                changed |= Item.SortName != virtualFolder.SortName;
             }
             return changed;
         }
