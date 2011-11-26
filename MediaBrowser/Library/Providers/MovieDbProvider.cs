@@ -29,6 +29,7 @@ namespace MediaBrowser.Library.Providers
         };
 
         protected const string LOCAL_META_FILE_NAME = "MBMovie.xml";
+        protected const string ALT_META_FILE_NAME = "MyMovies.xml";
         protected bool forceDownload = false;
 
         #region IMetadataProvider Members
@@ -53,6 +54,9 @@ namespace MediaBrowser.Library.Providers
             if (DateTime.Today.Subtract(downloadDate).TotalDays < Config.Instance.MetadataCheckForUpdateAge) // only refresh every n days
                 return false;
 
+            if (HasAltMeta())
+                return false; //never refresh if has meta from other source
+
             forceDownload = true; //tell the provider to re-download even if meta already there
             return true;
         }
@@ -74,9 +78,14 @@ namespace MediaBrowser.Library.Providers
 
         private bool HasLocalMeta()
         {
-            //need at least the xml and folder.jpg/png
-            return File.Exists(System.IO.Path.Combine(Item.Path,LOCAL_META_FILE_NAME)) && (File.Exists(System.IO.Path.Combine(Item.Path,"folder.jpg")) ||
-                File.Exists(System.IO.Path.Combine(Item.Path,"folder.png")));
+            //need at least the xml and folder.jpg/png or a mymovies put in by someone else
+            return HasAltMeta() || (File.Exists(System.IO.Path.Combine(Item.Path,LOCAL_META_FILE_NAME)) && (File.Exists(System.IO.Path.Combine(Item.Path,"folder.jpg")) ||
+                File.Exists(System.IO.Path.Combine(Item.Path,"folder.png"))));
+        }
+
+        private bool HasAltMeta()
+        {
+            return File.Exists(System.IO.Path.Combine(Item.Path, ALT_META_FILE_NAME));
         }
 
         private void FetchMovieData()
