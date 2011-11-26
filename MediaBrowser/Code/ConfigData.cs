@@ -212,7 +212,7 @@ namespace MediaBrowser
         public bool EnableShortcutDateHack = true;
 
         [Comment("Save metadata locally so it doesn't have to be re-fetched from the inet")]
-        public bool SaveLocalMeta = true;
+        public bool SaveLocalMeta = false;
 
         [Comment("Save backdrops at the season level (if false will inherit from series)")]
         public bool SaveSeasonBackdrops = false;
