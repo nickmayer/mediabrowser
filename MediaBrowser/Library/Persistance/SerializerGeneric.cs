@@ -91,13 +91,15 @@ namespace MediaBrowser.Library.Persistance {
         }
 
         public static T Deserialize(BinaryReader br) {
-            try {
                 T obj = new T();
+            try {
 
                 for (int i = 0; i < persistables.Length; i++) {
                     persistables[i].Deserialize(br, obj);
                 }
                 return obj;
+            } catch (EndOfStreamException) {
+                return obj; //partial object probably okay...
             } catch (Exception exception) {
                 throw new SerializationException("Failed to deserialize object, corrupt stream.", exception);
             }

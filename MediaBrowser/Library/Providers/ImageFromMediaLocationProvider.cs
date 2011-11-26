@@ -11,6 +11,7 @@ namespace MediaBrowser.Library.Providers
 {
     [ProviderPriority(15)]
     [SupportedType(typeof(BaseItem))]
+    [SkipSerializationValidation]
     public class ImageFromMediaLocationProvider : BaseMetadataProvider
     {
 
