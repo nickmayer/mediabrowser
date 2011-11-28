@@ -1055,6 +1055,11 @@ namespace MediaBrowser
         public FolderModel CurrentFolder; //used to keep track of the current folder so we can update the UI if needed
         public FolderModel RootFolderModel; //used to keep track of root folder as foldermodel for same reason
 
+        public FolderModel CurrentFolderModel
+        {
+            get { return CurrentFolder; }
+        }
+
         private void OpenFolderPage(FolderModel folder)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
