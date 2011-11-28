@@ -76,6 +76,7 @@ namespace MediaBrowser.Library.Plugins {
             if (doc != null) {
                 foreach (XmlNode pluginRoot in doc.SelectNodes(@"Plugins//Plugin")) {
                     string installGlobally = pluginRoot.SafeGetString("InstallGlobally") ?? "false"; //get this safely in case its not there
+                    string isPremium = pluginRoot.SafeGetString("IsPremium") ?? "true"; //get this safely in case its not there
                     string requiredVersion = pluginRoot.SafeGetString("RequiredMBVersion") ?? "2.0.0.0"; //get this safely in case its not there
                     string testedVersion = pluginRoot.SafeGetString("TestedMBVersion") ?? "2.0.0.0"; //get this safely in case its not there
                     string richURL = pluginRoot.SafeGetString("RichDescURL") ?? ""; //get this safely in case its not there
@@ -94,7 +95,8 @@ namespace MediaBrowser.Library.Plugins {
                         BaseUrl = GetPath(source),
                         InstallGlobally = XmlConvert.ToBoolean(installGlobally.ToLower()),
                         PluginClass = pluginRoot.SafeGetString("PluginClass") ?? assumedClass,
-                        UpgradeInfo = pluginRoot.SafeGetString("UpgradeInfo")
+                        UpgradeInfo = pluginRoot.SafeGetString("UpgradeInfo"),
+                        IsPremium = XmlConvert.ToBoolean(isPremium.ToLower())
                     });
                 }
             } else {

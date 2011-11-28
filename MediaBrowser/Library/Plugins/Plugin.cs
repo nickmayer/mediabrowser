@@ -123,6 +123,11 @@ namespace MediaBrowser.Library.Plugins {
             get { return pluginInterface.IsConfigurable; }
         }
 
+        public virtual bool IsPremium
+        {
+            get { return pluginInterface.IsPremium; }
+        }
+
         public virtual bool InstallGlobally
         {
             get { return pluginInterface.InstallGlobally; }

@@ -15,10 +15,10 @@
                 <DataTrigger Binding="{Binding Path=Installed}" Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
                 </DataTrigger>
-                <!--<DataTrigger Binding="{Binding Path=UpdateAvail}" Value="True">
+                <!--<DataTrigger Binding="{Binding Path=IsPremium}" Value="True">
                     <Setter Property="Foreground">
                         <Setter.Value>
-                            <SolidColorBrush Color="Red"/>
+                            <SolidColorBrush Color="Green"/>
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>-->
@@ -119,6 +119,8 @@
         <Label Content="{Binding Path=SelectedItem.RequiredMBVersion, ElementName=pluginList, Mode=Default}" Margin="516,0,384,56" Name="reqdMBVersion" Height="28" VerticalAlignment="Bottom" FontSize="14" />
         <TextBlock Height="107" HorizontalAlignment="Right" Margin="200,250,326,0" Name="txtNoSelection" VerticalAlignment="Top" Width="300" Text="Please Select a Plug-in" FontSize="22" Foreground="LightGray" FontWeight="Bold" TextWrapping="Wrap" TextAlignment="Center" />
         <WebBrowser Name="RichDescFrame" Margin="359,35,20,120"  Navigating="RichDescFrame_Navigating" LoadCompleted="RichDescFrame_LoadCompleted" Visibility="Hidden"/>
-        <CheckBox Height="16" HorizontalAlignment="Left" Margin="37,63,0,0" Name="cbxShowAll" VerticalAlignment="Top" Width="181" ToolTip="If not checked, only the latest version of each plugin will appear in the list." Checked="cbxShowAll_Checked" Unchecked="cbxShowAll_Checked">Show All Versions</CheckBox>
+        <CheckBox Height="16" HorizontalAlignment="Left" Margin="37,63,0,0" Name="cbxShowAll" VerticalAlignment="Top" Width="124" ToolTip="If not checked, only the latest version of each plugin will appear in the list." Checked="cbxShowAll_Checked" Unchecked="cbxShowAll_Checked">Show All Versions</CheckBox>
+        <Label Content="This Plug-in requires paid registration" FontSize="14" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="773,0,0,60" Name="lblRegRequired" VerticalAlignment="Bottom" Width="272" Foreground="Red" Visibility="Hidden" />
+        <CheckBox Content="Show Free Only " Height="16" HorizontalAlignment="Left" Margin="212,63,0,0" Name="cbxFreeOnly" ToolTip="Checking this will filter out plugins that require registration." VerticalAlignment="Top" Width="124" Checked="cbxFreeOnly_Checked" Unchecked="cbxFreeOnly_Checked" />
     </Grid>
 </Window>

@@ -83,11 +83,13 @@ namespace MediaBrowser.Library.Plugins {
             set;
         }
 
+
         public virtual MBLoadContext InitDirective { get; set; }
         public virtual string PluginClass { get; set; }
 		public virtual bool Installed { get; set; }
         public virtual bool UpdateAvail { get; set; }
         public virtual bool IsLatestVersion { get; set; }
-        public string ListDisplayString { get { return Name + " (v" + Version + ")"; } }
+        public virtual bool IsPremium { get; set; }
+        public string ListDisplayString { get { return Name + " (v" + Version + ")"+(IsPremium ? " $" : ""); } }
     }
 }

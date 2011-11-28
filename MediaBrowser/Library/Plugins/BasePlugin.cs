@@ -9,6 +9,26 @@ namespace MediaBrowser.Library.Plugins {
     /// This is the class plugins should inherit off, it implements gathering basic version info
     /// </summary>
     public abstract class BasePlugin : IPlugin {
+
+        protected static List<string> knownPremiumPlugins = new List<string>() {
+            "CoverArt",
+            "Media Browser Intros",
+            "Pearl Theme",
+            "Jade Theme",
+            "Lotus Theme",
+            "Sapphire Theme",
+            "Supremacy Theme",
+            "Regency Theme",
+            "Ascendancy Theme",
+            "Imperium Theme",
+            "Kismet Theme",
+            "Centrality Theme",
+            "Maelstrom Theme",
+            "Harmony Theme",
+            "Vanilla Theme",
+            "Neo Theme"
+        };
+
         #region IPlugin Members
 
         public abstract void Init(Kernel kernel);
@@ -86,7 +106,15 @@ namespace MediaBrowser.Library.Plugins {
         {
             get
             {
-                return Name + " (v" + Version + ")";
+                return Name + " (v" + Version + ")"+premiumInd;
+            }
+        }
+
+        protected virtual string premiumInd
+        {
+            get
+            {
+                return IsPremium ? "$" : "";
             }
         }
 
@@ -126,6 +154,13 @@ namespace MediaBrowser.Library.Plugins {
             }
         }
 
+        /// <summary>
+        /// Override to return true if plugin requries paid registration
+        /// </summary>
+        public virtual bool IsPremium
+        {
+            get { return knownPremiumPlugins.Contains(this.Name); }
+        }
 
         #endregion
 

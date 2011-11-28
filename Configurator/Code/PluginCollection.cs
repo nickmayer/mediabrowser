@@ -88,6 +88,12 @@ namespace Configurator.Code {
             set;
         }
 
+        public virtual bool IsPremium
+        {
+            get;
+            set;
+        }
+
         public string ListDisplayString
         {
             get { return Name + " (v" + Version + ")"; }

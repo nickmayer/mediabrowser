@@ -35,7 +35,7 @@ namespace Configurator {
         private void PluginFilter(object sender, FilterEventArgs e)
         {
             var plugin = e.Item as IPlugin;
-            e.Accepted = plugin.IsLatestVersion;
+            e.Accepted = (plugin.IsLatestVersion || cbxShowAll.IsChecked.Value) && (!plugin.IsPremium || !cbxFreeOnly.IsChecked.Value);
         }
 
         private void FilterPluginList()
@@ -49,10 +49,7 @@ namespace Configurator {
             {
                 src.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
             }
-            else
-            {
-                src.Filter += PluginFilter;
-            }
+            src.Filter += PluginFilter;
             pluginList.ItemsSource = src.View;
             pluginList.SelectedItem = null; //since we're collapsed, come up with no selection
         }
@@ -139,12 +136,14 @@ namespace Configurator {
                         
                     }
                 }
+                lblRegRequired.Visibility = plugin.IsPremium ? Visibility.Visible : Visibility.Hidden;
 
             }
             else // no selection
             {
                 RichDescFrame.Visibility = lblReq.Visibility = lblVer.Visibility = Visibility.Hidden;
                 txtNoSelection.Visibility = Visibility.Visible;
+                lblRegRequired.Visibility = Visibility.Hidden;
                 InstallButton.IsEnabled = false;
             }
         }
@@ -192,6 +191,11 @@ namespace Configurator {
         }
 
         private void cbxShowAll_Checked(object sender, RoutedEventArgs e)
+        {
+            FilterPluginList();
+        }
+
+        private void cbxFreeOnly_Checked(object sender, RoutedEventArgs e)
         {
             FilterPluginList();
         }
