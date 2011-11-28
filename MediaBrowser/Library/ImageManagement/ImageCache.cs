@@ -317,7 +317,7 @@ namespace MediaBrowser.Library.ImageManagement {
 
             lock (imageSet) {
                 if (imageSet != null) {
-                    DeleteImageSet(imageSet);
+                    ClearImageSet(imageSet);
                 }
 
                 ImageInfo info = new ImageInfo(imageSet);
@@ -357,6 +357,12 @@ namespace MediaBrowser.Library.ImageManagement {
                 return info.Path;
             }
             
+        }
+
+        private static void ClearImageSet(ImageSet imageSet)
+        {
+            imageSet.PrimaryImage = null;
+            imageSet.ResizedImages = new List<ImageInfo>();
         }
 
         private static void DeleteImageSet(ImageSet imageSet) {
@@ -468,7 +474,9 @@ namespace MediaBrowser.Library.ImageManagement {
             var set = GetImageSet(id); 
             if (set != null) {
                 lock (set) {
-                    DeleteImageSet(set);
+                    //try just clearing our refs instead of actually deleting because items may be pointing to them
+                    ClearImageSet(set);
+                    //DeleteImageSet(set);
                 }
             }
         }
