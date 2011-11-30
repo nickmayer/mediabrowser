@@ -77,7 +77,6 @@ namespace MediaInfoProvider
                 Logger.ReportInfo("MediaInfo is disabled - probably due to previous error");
                 return;
             }
-
             if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && (video.MediaType == MediaType.BluRay || video.MediaType == MediaType.DVD)))
             {
 
@@ -85,11 +84,11 @@ namespace MediaInfoProvider
                 {
                     filename = FindVideoFile();
                     if (video.MediaType == MediaType.Wtv) {
-                        Logger.ReportInfo("Mediainfo not scanning WTV file: "+filename);
+                        Logger.ReportInfo("MediaInfo not scanning WTV file");
                         return;
                     }
                     if (Plugin.PluginOptions.Instance.BadFiles.Contains(filename)) {
-                        Logger.ReportInfo("Mediainfo not scanning known bad file: "+filename);
+                        Logger.ReportInfo("MediaInfo not scanning known bad file: "+filename);
                         return;
                     }
                     int timeout = Kernel.LoadContext == MBLoadContext.Core ? 30000 : Plugin.ServiceTimeout; //only allow 30 seconds in core but configurable for service
@@ -348,13 +347,14 @@ namespace MediaInfoProvider
         public override bool NeedsRefresh()
         {
             string videoFilename = FindVideoFile();
+
             bool force = false;
             if (Plugin.PluginOptions.Instance.FormerBadFiles.Contains(videoFilename))
             {
                 Plugin.PluginOptions.Instance.FormerBadFiles.Remove(videoFilename);
                 Plugin.PluginOptions.Save();
                 force = true; //force if we are a former bad file
-            }
+            } 
             return enabled && Item is Video && ( force || filename != videoFilename);
         }
 
