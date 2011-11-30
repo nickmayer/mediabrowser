@@ -117,9 +117,9 @@
     <Content Include="Images\Icons\IconGears.png" />
     <None Include="Images\Icons\IconRT.png" />
     <Content Include="Images\Icons\IconRemote.png" />
-    <None Include="Images\MediaInfo\HD.png" />
-    <None Include="Images\MediaInfo\hd720.png" />
-    <None Include="Images\MediaInfo\hd1080.png" />
+    <Content Include="Images\MediaInfo\HD.png" />
+    <Content Include="Images\MediaInfo\hd720.png" />
+    <Content Include="Images\MediaInfo\hd1080.png" />
     <Content Include="Images\MediaInfo\aspect_125-2.png" />
     <Content Include="Images\MediaInfo\aspect_125.png" />
     <Content Include="Images\MediaInfo\aspect_133-2.png" />
@@ -201,6 +201,7 @@
     <Content Include="Images\MediaInfo\media_dvd.png" />
     <Content Include="Images\MediaInfo\media_dvrms.png" />
     <Content Include="Images\MediaInfo\media_flv.png" />
+    <Content Include="Images\MediaInfo\media_hd.png" />
     <Content Include="Images\MediaInfo\media_hddvd.png" />
     <Content Include="Images\MediaInfo\media_iso.png" />
     <Content Include="Images\MediaInfo\media_m2ts.png" />
@@ -246,9 +247,9 @@
     <Content Include="Images\Icons\IconWatched.png" />
     <Content Include="Images\Overlays\DiamondMainBG.png" />
     <Content Include="Images\RectLight.png" />
-    <None Include="Images\Icons\Star\star_empty.png" />
-    <None Include="Images\Icons\Star\star_half.png" />
-    <None Include="Images\Icons\Star\star_full.png" />
+    <Content Include="Images\Icons\Star\star_empty.png" />
+    <Content Include="Images\Icons\Star\star_half.png" />
+    <Content Include="Images\Icons\Star\star_full.png" />
     <Content Include="Markup\Base\DiamondStylesDefault.mcml" />
     <Content Include="Markup\Base\DiamondFontsDefault.mcml" />
     <Content Include="Markup\Base\DiamondFontsSmall.mcml" />

@@ -1770,6 +1770,13 @@ namespace MediaBrowser {
             }
         }
         
+        internal static System.Drawing.Bitmap media_hd {
+            get {
+                object obj = ResourceManager.GetObject("media_hd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap media_hddvd {
             get {
                 object obj = ResourceManager.GetObject("media_hddvd", resourceCulture);

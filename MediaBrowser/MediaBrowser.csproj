@@ -443,6 +443,7 @@
     <Content Include="Images\MediaInfo\media_dvd.png" />
     <Content Include="Images\MediaInfo\media_dvrms.png" />
     <Content Include="Images\MediaInfo\media_flv.png" />
+    <Content Include="Images\MediaInfo\media_hd.png" />
     <Content Include="Images\MediaInfo\media_hddvd.png" />
     <Content Include="Images\MediaInfo\media_iso.png" />
     <Content Include="Images\MediaInfo\media_m2ts.png" />
@@ -456,12 +457,12 @@
     <Content Include="Images\MediaInfo\media_wtv.png" />
     <Content Include="Images\plainborder.png" />
     <Content Include="Images\Ratings\Rated-Custom.png" />
-    <None Include="Images\Ratings\Rated-G.png" />
-    <None Include="Images\Ratings\Rated-NC-17.png" />
-    <None Include="Images\Ratings\Rated-NR.png" />
-    <None Include="Images\Ratings\Rated-PG.png" />
-    <None Include="Images\Ratings\Rated-PG-13.png" />
-    <None Include="Images\Ratings\Rated-R.png" />
+    <Content Include="Images\Ratings\Rated-G.png" />
+    <Content Include="Images\Ratings\Rated-NC-17.png" />
+    <Content Include="Images\Ratings\Rated-NR.png" />
+    <Content Include="Images\Ratings\Rated-PG.png" />
+    <Content Include="Images\Ratings\Rated-PG-13.png" />
+    <Content Include="Images\Ratings\Rated-R.png" />
     <Content Include="Images\Ratings\Rated-Unrated.png" />
     <Content Include="Images\Icons\IconFloral.png" />
     <Content Include="Images\Root\flashHorB.png" />
