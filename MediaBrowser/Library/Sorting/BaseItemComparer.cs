@@ -72,7 +72,7 @@ namespace MediaBrowser.Library {
                 if (Config.Instance.EnableAlphanumericSorting)
                     compare = AlphaNumericCompare(name1, name2);
                 else
-                    compare = name1.CompareTo(name2);
+                    compare = String.Compare(name1,name2,StringComparison.InvariantCultureIgnoreCase);
             }
 
             return compare;
@@ -173,7 +173,7 @@ namespace MediaBrowser.Library {
                     
                     result = thisNumericChunk.CompareTo(thatNumericChunk);
                 } else {
-                    result = str1.CompareTo(str2);
+                    result = String.Compare(str1,str2,StringComparison.InvariantCultureIgnoreCase);
                 }
 
                 if (result != 0) {
