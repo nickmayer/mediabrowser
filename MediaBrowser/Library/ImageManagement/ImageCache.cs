@@ -323,7 +323,7 @@ namespace MediaBrowser.Library.ImageManagement {
                 ImageInfo info = new ImageInfo(imageSet);
                 info.Width = image.Width;
                 info.Height = image.Height;
-                info.ImageFormat = (Kernel.Instance.ConfigData.UseBMPsInCache && image.Width > 1000) ? ImageFormat.Bmp : image.RawFormat;
+                info.ImageFormat = image.RawFormat.Equals(ImageFormat.MemoryBmp) ? ImageFormat.Png : image.RawFormat; //image was processed - may have transparency
                 info.Date = DateTime.UtcNow;
                 imageSet.PrimaryImage = info;
                 try {
@@ -339,6 +339,7 @@ namespace MediaBrowser.Library.ImageManagement {
 
                     // weird bug, some images on tvdb will not save as jpegs 
                     try {
+                        //Logger.ReportVerbose("Saving as png..");
                         info.ImageFormat = ImageFormat.Png;
                         image.Save(info.Path, ImageFormat.Png);
                     } 
