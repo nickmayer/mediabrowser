@@ -118,7 +118,7 @@
       <!-- Bindings -->
       <Binding Source="[Folder.IsRoot]" Target="[ConfigBtn.Visible]"/>
       <Binding Source="[SelectedIndex.Value]" Target="[Folder.SelectedChildIndex]" />
-      <Binding Source="[SelectedItem.PreferredImage]" Target="[CurrentPoster.Content]"/>
+      <Binding Source="[Application.CurrentItem.PreferredImage]" Target="[CurrentPoster.Content]"/>
       <!--<Binding Target="[PopupPlay.Item]" Source="[Folder.SelectedChild]" />
       <Binding Target="[PopupPlay.Visible]" Source="[Application.DisplayPopupPlay]" />-->
       <Binding Target="[Repeater.Source]" Source="[Folder.Children]"/>
@@ -520,15 +520,12 @@
               </Panel>
 
               <!-- Poster Box -->
-              <Panel Name="PanelPoster" Layout="Center" Padding="10,10,10,15">
+              <Panel Name="PanelPoster" Layout="Center" Padding="0,0,0,0">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0,20" Right="Parent,0.30" Top="Parent,0.25" Bottom="Parent,0.65"/>
+                  <FormLayoutInput Left="Parent,0,20" Right="Parent,0.30,10" Top="Parent,0.15" Bottom="Parent,0.7,25"/>
                 </LayoutInput>
                 <Children>
-                  <Graphic Name="Frame" Content="image://me:PosterFrame"
-                           MaintainAspectRatio="false" Margins="-25,-10,-25,-15" />
-                  <Graphic Name="CurrentPoster"
-                           MaintainAspectRatio="true"  >
+                  <Graphic Name="CurrentPoster" MaintainAspectRatio="true"  >
                   </Graphic>
                 </Children>
               </Panel>
@@ -588,11 +585,10 @@
                 </LayoutInput>
               </ColorFill>
 
-
               <!-- Recent Items -->
               <Clip Name="RecentListPanel" Navigation="ContainHorizontal,RememberFocus">
                 <LayoutInput>
-                  <FormLayoutInput Left="Parent,0.33" Top="recentlyAdded,1,65" Right="Parent,.33, 680"
+                  <FormLayoutInput Left="Parent,0.33" Top="recentlyAdded,1,65" Right="Parent,1,-30"
                                    Bottom="Parent, 0.7,0"/>
                 </LayoutInput>
                 <Layout>
@@ -847,7 +843,7 @@
       <a:Application Name="Application" Application="$Required" />
       <lib:Item Name="Item" Item="$Required" />
       <Index Name="Index" Index="$Required"/>
-      <Size Name="MinSize" Size="670,95"/>
+      <Size Name="MinSize" Size="868,95"/>
     </Properties>
 
     <Locals>
@@ -913,8 +909,8 @@
     </Rules>
 
     <Content>
-      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="7,5,7,3"
-               MinimumSize="[MinSize]" MaximumSize="[MinSize]" Margins="0,0,0,0">
+      <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="8,5,8,3"
+               MinimumSize="[MinSize]" MaximumSize="[MinSize]" Margins="8,0,8,0">
         <Children>
           <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >
             <LayoutInput>
