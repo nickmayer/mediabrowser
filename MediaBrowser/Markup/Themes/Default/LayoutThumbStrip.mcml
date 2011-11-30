@@ -185,7 +185,7 @@
         <Children>
 
 
-          <Panel Name="DetailsSection" MouseInteractive="true" Padding="5,5,0,0" >
+          <Panel Name="DetailsSection" MouseInteractive="true" Padding="0,5,0,0" >
             <LayoutInput>
               <FormLayoutInput Left="Parent,0,30" Right="Backdrop,0" Top="Parent,0,130" />
             </LayoutInput>
@@ -201,13 +201,13 @@
           <st:ScrollableText Name="Summary" Font="font://f:SV_SummaryFont" Color="color://s:FontColorMedium" FocusColor="color://s:FontColorLight">
           <!--<sy:SummaryNonScrolling Name="Summary" Model="[SelectedItem]"  ModelFast="[PreSelectedItem]" Color="color://s:FontColorLight" Font="font://f:SV_SummaryFont">-->
             <LayoutInput>
-              <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Counters,0,-10"></FormLayoutInput>
+              <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1,-5" Bottom="Counters,0,28"></FormLayoutInput>
             </LayoutInput>
           </st:ScrollableText>
 
           <as:AutoScrollText ScrollSpeed="[Application.Config.AutoScrollSpeed]" ScrollDelay="[Application.Config.AutoScrollDelay]" Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:SV_SummaryFont">
             <LayoutInput>
-              <FormLayoutInput Left="DetailsSection,0" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Counters,0,-10"></FormLayoutInput>
+              <FormLayoutInput Left="DetailsSection,0,-5" Top="DetailsSection,1" Right="DetailsSection,1" Bottom="Counters,0,10"></FormLayoutInput>
             </LayoutInput>
           </as:AutoScrollText>
 

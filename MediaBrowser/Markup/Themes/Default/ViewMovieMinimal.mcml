@@ -635,8 +635,8 @@
           <Set Target="[MediaInfoAudio.Content]" Value="[Item.MediaInfo.AudioCodecExtendedString]"/>
         </Actions>
       </Changed>
- 
-      <Binding Target="[MediaInfoPane.Visible]" Source="[Item.HasMediaInfo]" />
+
+      <!--<Binding Target="[MediaInfoPane.Visible]" Source="[Item.HasMediaInfo]" />-->
 
       <Binding Target="[IMDBText.Content]" Source="[Application.LocalStrings.#IMDBRatingDetail!cor:String]"/>
       <Binding Target="[OutOfText.Content]" Source="[Application.LocalStrings.#OutOfDetail!cor:String]">

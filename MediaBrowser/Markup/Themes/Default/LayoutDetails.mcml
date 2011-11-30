@@ -164,7 +164,7 @@
             </Layout>
             <Children>
               <Text Name="Title1" Color="color://s:FontColorLight" Font="font://f:DV_TitleFont"/>
-              <Text Name="Title2" Color="color://s:FontColorLight" Font="font://f:DV_SubTitleFont" Margins="0,-5,0,0"/>
+              <Text Name="Title2" Color="color://s:FontColorLight" Font="font://f:DV_SubTitleFont" Margins="0,0,0,0"/>
               <Panel Name="StarMPAA">
                 <Layout>
                   <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="0,0"/>
