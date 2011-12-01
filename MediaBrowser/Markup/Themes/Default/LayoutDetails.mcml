@@ -33,9 +33,9 @@
       <lib:Item Name="SelectedItem" Item="[Item.SelectedChild]"/>
 
       <!-- Layouts for Episodes -->
-      <AnchorLayoutInput Name="LayoutInfo" Top="Parent,0.05" Right="Parent, 1, -60"/>
-      <AnchorLayoutInput Name="LayoutInfo2" Left="MyItems,1, 10" Right="Parent,1,-60" Top="PosterPanel,1,10" Bottom="Parent,1" Horizontal="Far" />
-      <AnchorLayoutInput Name="LayoutPoster" Top="InfoPanel,1,10" Bottom="InfoPanel,1,300" Left="MyItems,1, 10"  Right="Parent, 1, -60"  Horizontal="Far"/>
+      <AnchorLayoutInput Name="LayoutInfo" Top="Parent,0.05" Right="Parent, 1, -45"/>
+      <AnchorLayoutInput Name="LayoutInfo2" Left="MyItems,1, 10" Right="Parent,1,-45" Top="PosterPanel,1,10" Bottom="Parent,1" Horizontal="Far" />
+      <AnchorLayoutInput Name="LayoutPoster" Top="InfoPanel,1,10" Bottom="InfoPanel,1,300" Left="MyItems,1, 10"  Right="Parent, 1, -45"  Horizontal="Far"/>
 
     </Locals>
 
@@ -147,17 +147,18 @@
               <AnchorLayoutInput Left="MyItems,0" Top="MyItems,.9" Right="MyItems,1" Bottom="Parent,1"/>
             </LayoutInput>
           </ColorFill>
+          
           <!-- Details List -->
-          <lv:ListView Visible="true" Application="[Application]" Folder="[Item]" Name="MyItems" Font="font://f:DV_ListButtonFont" FocusOrder="0">
+          <lv:ListView Visible="true" Application="[Application]" Folder="[Item]" Name="MyItems" Font="font://f:DV_ListButtonFont" FocusOrder="0" Padding="0,0,0,-22">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0,15" Top="Parent,0.04" Right="Parent,.4" Bottom="Parent,1" ></FormLayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Top="Parent,0.04,-12" Right="Parent,.4" Bottom="Parent,1,-21" ></FormLayoutInput>
             </LayoutInput>
           </lv:ListView>
 
           <!-- Title and details information -->
           <Panel Name="InfoPanel" >
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0.05"  Bottom="PosterPanel, 0, -10" Left="Parent,.42" Right="Parent, 1, -60" Horizontal="Far"/>
+              <AnchorLayoutInput Top="Parent,0.05"  Bottom="PosterPanel, 0, -10" Left="Parent,.42" Right="Parent, 1, -45" Horizontal="Far"/>
             </LayoutInput>
             <Layout>
               <FlowLayout Orientation="Vertical" ItemAlignment="Far" Spacing="2,2"/>
@@ -174,7 +175,15 @@
                   <mp:MPAARating Name="MPAARating" Margins="15,0,0,0" Padding="0,1,0,1" MaximumSize="0,30"/>
                 </Children>
               </Panel>
-              <Text Name="TxtRuntime" Color="color://s:FontColorMedium" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="0,0,0,0"/>
+              <Panel Name="LastWatchedRuntime">
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" ItemAlignment="Far" Spacing="0,0"/>
+                </Layout>
+                <Children>
+                  <Text Name="LastWatched" Color="color://s:FontColorLight" Font="font://f:DV_LastWatchedFont" Margins="0,0,0,0"/>
+                  <Text Name="TxtRuntime" Color="color://s:FontColorMedium" WordWrap="true" Font="font://f:DV_RuntimeFont" Margins="10,0,0,0"/> 
+                </Children>
+              </Panel>
               <Repeater Name="GenreRepeater" Source="[Item.SelectedChild.Genres]" >
                 <Layout>
                   <FlowLayout Orientation="Horizontal" AllowWrap="false" Spacing="25,0"/>
@@ -194,17 +203,15 @@
             </Children>
           </Panel>
 
-          <!-- Last watched and summary -->
+          <!-- Summary -->
           <Panel Name="InfoPanel2" >
             <LayoutInput>
-              <AnchorLayoutInput Left="MyItems,1, 30" Right="PosterPanel,0,-60" Top="InfoPanel,1,10" Bottom="Parent,1" Horizontal="Far" />
+              <AnchorLayoutInput Left="MyItems,1, 30" Right="PosterPanel,0,-45" Top="InfoPanel,1,10" Bottom="Parent,1" Horizontal="Far" />
             </LayoutInput>
             <Layout>
               <FlowLayout Orientation="Vertical" ItemAlignment="Far" Spacing="5,5"/>
             </Layout>
             <Children>
-
-              <Text Name="LastWatched" Color="color://s:FontColorLight" Font="font://f:DV_LastWatchedFont"/>
               <st:ScrollableText Name="Summary" Font="font://f:DV_SummaryFont" Color="color://s:FontColorMedium" FocusColor="color://s:FontColorLight"/>
               <!-- MaximumSize is required here. Without it, sometimes the ScrollPage will not auto reset after a full cycle.-->
               <as:AutoScrollText ScrollSpeed="[Application.Config.AutoScrollSpeed]" ScrollDelay="[Application.Config.AutoScrollDelay]" Name="AutoScrollOverview" Text="[SelectedItem.Overview]" Font="font://f:DV_SummaryFont" MaximumSize="0,275"/>
@@ -214,7 +221,7 @@
 
           <Panel Name="NewItems" Visible="false">
             <LayoutInput>
-              <AnchorLayoutInput Left="MyItems,1, 30" Right="PosterPanel,0,-60" Top="InfoPanel,1,10" Bottom="Parent,1,-100" Horizontal="Near"/>
+              <AnchorLayoutInput Left="MyItems,1, 30" Right="PosterPanel,0,-45" Top="InfoPanel,1,10" Bottom="Parent,1,-100" Horizontal="Near"/>
             </LayoutInput>
             <Children>
               <me:NewItemList Application="[Application]" Name="NewItemList"/>
@@ -228,7 +235,7 @@
               <FlowLayout ItemAlignment="Far" Orientation="Vertical" />
             </Layout>
             <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0.45" Left="Parent,0.82" Bottom="Parent, 1" Right="Parent, 1, -60" Horizontal="Far"/>
+              <AnchorLayoutInput Top="Parent,0.45" Left="Parent,0.82" Bottom="Parent, 1, -20" Right="Parent, 1, -45" Horizontal="Far"/>
             </LayoutInput>
             <Children>
               <Graphic Name="Preview" MaintainAspectRatio="true"  SizingPolicy="SizeToConstraint"/>
