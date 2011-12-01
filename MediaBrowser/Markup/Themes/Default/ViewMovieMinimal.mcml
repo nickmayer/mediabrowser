@@ -100,6 +100,25 @@
           <Set Target="[BackdropPanel.Alpha]" Value="1"/>
         </Actions>
       </Changed>
+
+      <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Item.HasBackdropImage]" Value="true"/>
+          <Equality Source="[Item.ItemTypeString]" ConditionOp="NotEquals" Value="Movie"/>
+        </Conditions>
+        <Actions>
+          <Set Value="true" Target="[Preview.Visible]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Item.HasBackdropImage]" InitialEvaluate="true" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Item.HasBackdropImage]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Value="true" Target="[Preview.Visible]"/>
+        </Actions>
+      </Changed> 
       
       <Rule >
         <Conditions>
@@ -280,7 +299,7 @@
 
           <!-- Movie Backdrop -->
 
-          <ColorFill Visible="true" Name="BackdropPanel" Content="Transparent" Alpha="0.2">
+          <ColorFill Visible="true" Name="BackdropPanel" Content="Transparent" Alpha="0.4">
             <LayoutInput>
               <FormLayoutInput Top="Parent,0,-20" Left="Parent,0,-50" Bottom="Parent,1,10" Right="Parent,1,50" />
             </LayoutInput>
