@@ -159,7 +159,7 @@
           <!-- Now Playing View -->
           <np:NowPlayingViewport Name="NowPlaying" Application="[Application]">
             <LayoutInput>
-              <FormLayoutInput Top="TitleText,1,10" Right="Parent,1,495" />
+              <FormLayoutInput Top="TitleText,0,78" Right="Parent,1,495" />
             </LayoutInput>
           </np:NowPlayingViewport>
           
@@ -198,7 +198,7 @@
           <!-- Time Panel -->
           <Clip Name="TimeText" FadeSize="40" Orientation="Vertical" FadeAmount="0.7" FarOffset="25" CenterPointPercent="100,100,0" Visible="false">
             <LayoutInput>
-              <AnchorLayoutInput Bottom="TitleText,1"  Left="Parent,0" />
+              <AnchorLayoutInput Top="TitleText,0"  Left="Parent,0" />
             </LayoutInput>
             <Children>
               <Panel  Layout="HorizontalFlow" Padding="20,0,100,0">
@@ -227,7 +227,7 @@
                              NextItemCommand="[NextItemCommand]"
                              PreviousItemCommand="[PreviousItemCommand]">            
             <LayoutInput>
-              <AnchorLayoutInput Left="Parent,0,0" Top="TitleText,1,10" />
+              <AnchorLayoutInput Left="Parent,0,0" Top="TitleText,0,78" />
             </LayoutInput>
           </me:CommandButtons>
 
