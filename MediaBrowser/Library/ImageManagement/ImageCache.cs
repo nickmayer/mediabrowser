@@ -163,7 +163,7 @@ namespace MediaBrowser.Library.ImageManagement {
 
                 if (item.PrimaryImage == null)
                 {
-                    DeleteImageSet(item);
+                    DeleteImageSet(item, true);
                     continue;
                 }
 
@@ -366,7 +366,7 @@ namespace MediaBrowser.Library.ImageManagement {
             imageSet.ResizedImages = new List<ImageInfo>();
         }
 
-        private static void DeleteImageSet(ImageSet imageSet) {
+        private static void DeleteImageSet(ImageSet imageSet, bool includeResized) {
             try {
                 if (imageSet.PrimaryImage != null) {
                     int retries = 0;
@@ -385,23 +385,27 @@ namespace MediaBrowser.Library.ImageManagement {
                         }
                     }
                 }
-                foreach (var resized in imageSet.ResizedImages) {
-                    int retries = 0;
-                    bool successful = false;
-                    while (retries < 3 && !successful)
+                if (includeResized)
+                {
+                    foreach (var resized in imageSet.ResizedImages)
                     {
-                        try
+                        int retries = 0;
+                        bool successful = false;
+                        while (retries < 3 && !successful)
                         {
-                            File.Delete(resized.Path);
-                            successful = true;
+                            try
+                            {
+                                File.Delete(resized.Path);
+                                successful = true;
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Error attempting to delete image: " + resized.Path + ". Will retry...", e);
+                                retries++;
+                            }
                         }
-                        catch (Exception e)
-                        {
-                            Logger.ReportException("Error attempting to delete image: " + resized.Path + ". Will retry...", e);
-                            retries++;
-                        }
+
                     }
-                    
                 }
             } finally {
                 imageSet.ResizedImages = new List<ImageInfo>();
@@ -475,9 +479,8 @@ namespace MediaBrowser.Library.ImageManagement {
             var set = GetImageSet(id); 
             if (set != null) {
                 lock (set) {
-                    //try just clearing our refs instead of actually deleting because items may be pointing to them
-                    ClearImageSet(set);
-                    //DeleteImageSet(set);
+                    //only delete primary image because already loaded items may be pointing to the others
+                    DeleteImageSet(set, false);
                 }
             }
         }
