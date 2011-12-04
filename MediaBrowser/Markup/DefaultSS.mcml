@@ -14,6 +14,25 @@
       <a:Application Name="Application" Application="$Required"/>
       <lib:FolderModel Name="Folder" FolderModel="$Required"/>
     </Properties>
+    <Locals>
+      <!--The following should block input from reaching the MB interface while we are active-->
+      <KeyHandler Name="KeyEater" Handle="true" Key="Any"/>
+      <ClickHandler Name="MouseEater" HandlePrimaryMouseButton="true" HandleEnterSpaceKeys="true"/>
+      <ShortcutHandler Name="BackEater" Handle="true" Shortcut="Back"/>
+      <ShortcutHandler Name="EnterEater" Handle="true" Shortcut="Enter"/>
+    </Locals>
+    <Rules>
+
+      <Changed Source="[Application.ScreenSaverActive]" InitialEvaluate="true" >
+        <Conditions>
+          <Equality Source="[Application.ScreenSaverActive]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScreenSaver.NavigateInto]" />
+        </Actions>
+      </Changed>
+    </Rules>
+    
     <Content>
       <Panel Name="ScreenSaver" Visible="[Application.ScreenSaverActive]">
         <Children>

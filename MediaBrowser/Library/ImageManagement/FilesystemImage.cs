@@ -32,9 +32,10 @@ namespace MediaBrowser.Library.ImageManagement {
             {
                 //something goofy with these dates...
                 MediaBrowser.Library.Logging.Logger.ReportWarning("Bad date info for image "+Path+". Create date: " + info.CreationTimeUtc + " Mod date: " + info.LastWriteTimeUtc);
+                return false;
             }
-            //if (date < info.LastWriteTimeUtc) Logger.ReportVerbose("Image out of date ("+this.Path+"). provided date: " + date + " created date: " + info.CreationTimeUtc + " modified date: " + info.LastWriteTimeUtc);
-            return date < info.LastWriteTimeUtc;
+            //if (date < info.LastWriteTimeUtc) System.Diagnostics.Debugger.Break();
+            return date < info.LastWriteTimeUtc - TimeSpan.FromMinutes(20); //fudge this a little to account for differing times on different filesystems
         }
 
         protected override System.Drawing.Image OriginalImage {
