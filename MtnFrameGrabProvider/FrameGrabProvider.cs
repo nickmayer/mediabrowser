@@ -14,7 +14,7 @@ namespace MtnFrameGrabProvider {
     [SupportedType(typeof(Movie))]
     [SupportedType(typeof(Episode))]
     class FrameGrabProvider : BaseMetadataProvider {
-        static MediaType[] supportedMediaTypes = new MediaType[] { MediaType.Avi, MediaType.Mkv, MediaType.Mpg, MediaType.Unknown };
+        static MediaType[] supportedMediaTypes = new MediaType[] { MediaType.Avi, MediaType.Mkv, MediaType.Mpg, MediaType.Mp4, MediaType.Wmv, MediaType.Unknown };
 
         Video Video { get { return (Video)Item; } }
 

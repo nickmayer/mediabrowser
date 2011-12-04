@@ -16,7 +16,7 @@ namespace MtnFrameGrabProvider {
     public class Plugin : BasePlugin {
 
         internal const string PluginName = "High Quality Thumbnails";
-        internal const string PluginDescription = "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net";
+        internal const string PluginDescription = "High quality automatic thumbnails powered by the mtn project. http://moviethumbnail.sourceforge.net\n\nWTV files are not supported.";
         internal const string includedMtnVersion = "2010.11.10";
         public static PluginConfiguration<PluginOptions> PluginOptions { get; set; }
 
@@ -87,7 +87,7 @@ namespace MtnFrameGrabProvider {
         {
             get
             {
-                return new System.Version(2, 3, 1, 0);
+                return new System.Version(2, 5, 1, 0);
             }
         }
         
