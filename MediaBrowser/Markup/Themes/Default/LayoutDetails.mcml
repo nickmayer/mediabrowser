@@ -151,7 +151,7 @@
           <!-- Details List -->
           <lv:ListView Visible="true" Application="[Application]" Folder="[Item]" Name="MyItems" Font="font://f:DV_ListButtonFont" FocusOrder="0" Padding="0,0,0,-22">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0,0" Top="Parent,0.04,-12" Right="Parent,.4" Bottom="Parent,1,-21" ></FormLayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Top="Parent,0.04,-14" Right="Parent,.4" Bottom="Parent,1,-24" ></FormLayoutInput>
             </LayoutInput>
           </lv:ListView>
 
