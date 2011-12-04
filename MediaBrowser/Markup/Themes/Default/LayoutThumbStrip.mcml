@@ -194,7 +194,7 @@
             </Layout>
             <Children>
               <ts:TitleSet Name="TitleSet" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" Font="font://f:SV_TitleFont" SubFont="font://f:SV_SubTitleFont"/>
-              <mi:MovieInfo Name="MovieInfo" Application="[Application]" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" DisplayMediaInfo="false" />
+              <mi:MovieInfo Name="MovieInfo" Application="[Application]" Model="[SelectedItem]" ModelFast="[PreSelectedItem]" DisplayMediaInfo="false" DisplayMediaInfoPanel="false" />
             </Children>
           </Panel>
 
