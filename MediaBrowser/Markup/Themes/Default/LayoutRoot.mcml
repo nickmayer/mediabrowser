@@ -910,7 +910,7 @@
 
     <Content>
       <Graphic Name="Bg" Content="image://i:BlankImage" Layout="Anchor" Padding="8,5,8,3"
-               MinimumSize="[MinSize]" MaximumSize="[MinSize]" Margins="8,0,8,0">
+               MinimumSize="[MinSize]" MaximumSize="[MinSize]" Margins="0,0,0,0">
         <Children>
           <Graphic Name="PCLock" Layout="Form" Visible="false" Content="image://i:Lock" MaintainAspectRatio="true" MaximumSize="25,25" >
             <LayoutInput>
