@@ -80,17 +80,17 @@ namespace MediaInfoProvider
             if (!video.ContainsRippedMedia || (Kernel.LoadContext == MBLoadContext.Service && Plugin.PluginOptions.Instance.AllowBDRips && (video.MediaType == MediaType.BluRay || video.MediaType == MediaType.DVD)))
             {
 
+                filename = FindVideoFile();
+                if (video.MediaType == MediaType.Wtv) {
+                    return;
+                }
+                if (Plugin.PluginOptions.Instance.BadFiles.Contains(filename)) {
+                    Logger.ReportInfo("MediaInfo not scanning known bad file: "+filename);
+                    return;
+                }
+
                 using (new MediaBrowser.Util.Profiler("Media Info extraction"))
                 {
-                    filename = FindVideoFile();
-                    if (video.MediaType == MediaType.Wtv) {
-                        Logger.ReportInfo("MediaInfo not scanning WTV file");
-                        return;
-                    }
-                    if (Plugin.PluginOptions.Instance.BadFiles.Contains(filename)) {
-                        Logger.ReportInfo("MediaInfo not scanning known bad file: "+filename);
-                        return;
-                    }
                     int timeout = Kernel.LoadContext == MBLoadContext.Core ? 30000 : Plugin.ServiceTimeout; //only allow 30 seconds in core but configurable for service
                     if (filename != null)
                     {
