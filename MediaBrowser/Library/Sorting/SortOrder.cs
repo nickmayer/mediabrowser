@@ -10,6 +10,7 @@ namespace MediaBrowser.Library {
         Rating,
         Runtime,
         Unwatched,
-        Year
+        Year,
+        Custom
     }
 }

@@ -6,14 +6,21 @@ using MediaBrowser.Library.Entities;
 namespace MediaBrowser.Library {
     internal class BaseItemComparer : IComparer<BaseItem> {
         private SortOrder order;
+        private string propertyName;
+
         public BaseItemComparer(SortOrder order) {
             this.order = order;
+        }
+
+        public BaseItemComparer(string property) {
+            this.order = SortOrder.Custom;
+            this.propertyName = property;
         }
 
         #region IComparer<BaseItem> Members
 
         public int Compare(BaseItem x, BaseItem y) {
-            int compare;
+            int compare = 0;
 
             switch (order) {
 
@@ -57,6 +64,21 @@ namespace MediaBrowser.Library {
                 case SortOrder.Unwatched:
 
                     compare = ExtractUnwatchedCount(y).CompareTo(ExtractUnwatchedCount(x));
+                    break;
+
+                case SortOrder.Custom:
+
+                    Logging.Logger.ReportVerbose("Sorting on custom field " + propertyName);
+                    var yProp = y.GetType().GetProperty(propertyName);
+                    var xProp = x.GetType().GetProperty(propertyName);
+                    if (yProp == null || xProp == null) break;
+                    var yVal = yProp.GetValue(y, null);
+                    var xVal = xProp.GetValue(x,null);
+                    if (yVal == null && xVal == null) break;
+                    if (yVal == null) return 1;
+                    if (xVal == null) return -1;
+                    Logging.Logger.ReportVerbose("Value x: " + xVal + " Value y: " + yVal);
+                    compare = String.Compare(xVal.ToString(), yVal.ToString(),StringComparison.InvariantCultureIgnoreCase);
                     break;
 
                 default:

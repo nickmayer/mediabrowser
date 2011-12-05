@@ -27,6 +27,8 @@ namespace MediaBrowser.Library.Entities {
         IComparer<BaseItem> sortFunction = new BaseItemComparer(SortOrder.Name);
         object validateChildrenLock = new object();
         public MBDirectoryWatcher directoryWatcher;
+        Type childType;
+
 
         public Folder()
             : base() {
@@ -87,6 +89,20 @@ namespace MediaBrowser.Library.Entities {
         public override void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id) {
             base.Assign(location, parameters, id);
             this.location = location as IFolderMediaLocation;
+        }
+
+        public Type ChildType
+        {
+            get {
+                if (childType == null)
+                {
+                    if (ActualChildren.Count > 0)
+                        childType = ActualChildren[0].GetType();
+                    else
+                        return typeof(BaseItem);
+                }
+                return childType; 
+            }
         }
 
         public override bool PlayAction(Item item)

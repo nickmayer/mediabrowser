@@ -8,6 +8,7 @@ using MediaBrowser.Library.Entities;
 using MediaBrowser.Code.ModelItems;
 using MediaBrowser.Code;
 using System.Threading;
+using System.Reflection;
 using MediaBrowser.Library.Extensions;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.Library.Logging;
@@ -1265,10 +1266,76 @@ namespace MediaBrowser.Library {
             set {
 
                 if (!String.IsNullOrEmpty(value) && (MediaBrowser.LibraryManagement.Helper.IsAlphaNumeric(value))) {
-
                     BaseItemComparer comparer = new BaseItemComparer(SortOrder.Name);
-                    BaseItem tempItem = new BaseItem();
-                    tempItem.Name = value;
+                    BaseItem tempItem = Activator.CreateInstance(this.folder.ChildType) as BaseItem;
+                    if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("NameDispPref"))
+                    {
+                            tempItem.Name = value;
+                    } else
+                        if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("DateDispPref"))
+                        {
+                            //no good way to do this
+                            return;
+                        } else
+                            if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("RatingDispPref"))
+                            {
+                            try
+                            {
+                                if (tempItem is IShow)
+                                {
+                                    comparer = new BaseItemComparer(SortOrder.Rating);
+                                    (tempItem as IShow).ImdbRating = Convert.ToSingle(value);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Error in custom JIL selection", e);
+                            }
+                            } else
+                                if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("RuntimeDispPref"))
+                                {
+                            try
+                            {
+                                if (tempItem is IShow)
+                                {
+                                    comparer = new BaseItemComparer(SortOrder.Runtime);
+                                    (tempItem as IShow).RunningTime = Convert.ToInt32(value);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.ReportException("Error in custom JIL selection", e);
+                            }
+                                } else
+                                    if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("YearDispPref"))
+                                    {
+                                        try
+                                        {
+                                            if (tempItem is IShow)
+                                            {
+                                                comparer = new BaseItemComparer(SortOrder.Year);
+                                                (tempItem as IShow).ProductionYear = Convert.ToInt32(value);
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Logger.ReportException("Error in custom JIL selection", e);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            comparer = new BaseItemComparer(this.displayPrefs.SortOrder); //this won't work if these have been localized...no way around it now
+                                            tempItem.GetType().GetProperty(this.displayPrefs.SortOrder).SetValue(tempItem, value, null);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Logger.ReportException("Error in custom JIL selection", e);
+                                        }
+                                    }
+                
+
                     int i = 0; 
                     foreach (var child in Children) {
                         if (comparer.Compare(tempItem, child.BaseItem) <= 0) break;
