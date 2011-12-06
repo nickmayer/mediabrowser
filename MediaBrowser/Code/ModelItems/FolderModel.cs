@@ -1270,7 +1270,7 @@ namespace MediaBrowser.Library {
                     BaseItem tempItem = Activator.CreateInstance(this.folder.ChildType) as BaseItem;
                     if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("NameDispPref"))
                     {
-                            tempItem.Name = value;
+                        tempItem.Name = this.baseItem is Series && !(this.baseItem is Season) ? "Season "+value : value;
                     } else
                         if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("DateDispPref"))
                         {
