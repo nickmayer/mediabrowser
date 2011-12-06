@@ -37,7 +37,7 @@ namespace MediaBrowser.Util
         {
             stopwatch.Stop();
             string message;
-            if (stopwatch.ElapsedMilliseconds > 3000000)
+            if (stopwatch.ElapsedMilliseconds > 300000)
             {
                 message = string.Format("{1} took {2} minutes.",
                     caller, name, ((float)stopwatch.ElapsedMilliseconds / 60000).ToString("F"));
