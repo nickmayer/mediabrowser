@@ -39,11 +39,10 @@ namespace MediaBrowser.Library.Entities {
         public MediaInfoData MediaInfo { get; set; }
 
         [Persist]
-        public VideoFormat VideoFormat { get; set; }
+        public string VideoFormat { get; set; }
 
         public override void Assign(IMediaLocation location, IEnumerable<InitializationParameter> parameters, Guid id) {
             base.Assign(location, parameters, id);
-            VideoFormat = VideoFormat.Standard;
             if (parameters != null) {
                 foreach (var parameter in parameters) {
                     var mediaTypeParam = parameter as MediaTypeInitializationParameter; 

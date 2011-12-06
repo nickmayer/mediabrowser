@@ -226,7 +226,7 @@ namespace MediaBrowser.Library
                     var video = baseItem as Video;
                     if (video != null)
                     {
-                        videoFormat = video.VideoFormat.ToString().ToLower();
+                        videoFormat = video.VideoFormat;
                     }
                     return videoFormat;
             }
