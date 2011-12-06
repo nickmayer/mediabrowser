@@ -218,6 +218,20 @@ namespace MediaBrowser.Library
             }
         }
 
+        public string VideoFormatString
+        {
+            get
+            {
+                    string videoFormat =  "";
+                    var video = baseItem as Video;
+                    if (video != null)
+                    {
+                        videoFormat = video.VideoFormat.ToString().ToLower();
+                    }
+                    return videoFormat;
+            }
+        }
+
         public Microsoft.MediaCenter.UI.Image MediaTypeImage
         {
             get

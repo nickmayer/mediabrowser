@@ -28,17 +28,6 @@ namespace MediaBrowser.Library.Persistance {
 
         protected static class SQLizer
         {
-            private static System.Reflection.Assembly serviceStackAssembly;
-            private static System.Reflection.Assembly ServiceStackResolver(object sender, ResolveEventArgs args)
-            {
-                Logger.ReportInfo(args.Name + " is being resolved!");
-                if (args.Name.StartsWith("ServiceStack.Text,"))
-                {
-                    return serviceStackAssembly;
-                }
-                return null;
-            }
-
             public static void Init(string path)
             {
                 //if (serviceStackAssembly == null)
@@ -50,9 +39,18 @@ namespace MediaBrowser.Library.Persistance {
 
             public static object Extract(SQLiteDataReader reader, SQLInfo.ColDef col) 
             {
-                var data = reader[col.ColName];
-                var typ = data.GetType();
+                object data = null;
+                try
+                {
+                    data = reader[col.ColName];
+                }
+                catch (Exception e)
+                {
+                    Logger.ReportException("Error reading data for col: " + col.ColName + " type is: " + col.ColType.Name, e);
+                    return null;
+                }
                 if (data is DBNull || data == null) return null;
+                var typ = data.GetType();
 
                 //Logger.ReportVerbose("Extracting: " + col.ColName + " Defined Type: "+col.ColType+"/"+col.NullableType + " Actual Type: "+typ.Name+" Value: "+data);
 
@@ -63,6 +61,9 @@ namespace MediaBrowser.Library.Persistance {
                     else
                         if (col.ColType == typeof(MediaBrowser.Library.Network.DownloadPolicy))
                             return Enum.Parse(typeof(MediaBrowser.Library.Network.DownloadPolicy), (string)data);
+                    else
+                        if (col.ColType == typeof(VideoFormat))
+                            return Enum.Parse(typeof(VideoFormat), (string)data);
                         else
                             if (col.ColType == typeof(Guid))
                             {
@@ -111,6 +112,9 @@ namespace MediaBrowser.Library.Persistance {
 
                     case "mediatype":
                         return ((MediaType)data).ToString();
+
+                    case "videoformat":
+                        return ((VideoFormat)data).ToString();
 
                     case "downloadpolicy":
                         return ((MediaBrowser.Library.Network.DownloadPolicy)data).ToString();
