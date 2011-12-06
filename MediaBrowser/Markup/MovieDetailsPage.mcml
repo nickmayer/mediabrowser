@@ -5,6 +5,7 @@
 	  xmlns:vd="resx://MediaBrowser/MediaBrowser.Resources/ViewMovieDefault"
     xmlns:vm="resx://MediaBrowser/MediaBrowser.Resources/ViewMovieMinimal"
     xmlns:i="resx://MediaBrowser/MediaBrowser.Resources/Images"
+    xmlns:sounds="resx://MediaBrowser/MediaBrowser.Resources/Sounds"
     xmlns:ss="resx://MediaBrowser/MediaBrowser.Resources/DefaultSS"      
     xmlns:me="Me"
     >
@@ -15,6 +16,11 @@
       <a:Application Name="Application" Application="$Required"/>
       <lib:Item Name="Item" Item="$Required"/>
     </Properties>
+
+    <Locals>
+      <KeyHandler Name="TopShortcut" Handle="true" Key="H" Modifiers="Control" HandlerStage="Bubbled"/>
+
+    </Locals>
 
     <Rules>
       <Binding Source="[Application.Config.ShowThemeBackground]" Target="[MainBG.Visible]" />
@@ -31,6 +37,13 @@
       </Default>
 
       <!-- END Configuration Checks & Display Setup -->
+
+      <Changed Source="[TopShortcut.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.BackToRoot]"/>
+          <PlaySound Sound="sound://sounds:Miniselect" />
+        </Actions>
+      </Changed>
 
       <Binding Source="[Application.ScreenSaverActive]" Target="[ScreenSaver.Visible]" />
     </Rules>

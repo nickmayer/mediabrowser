@@ -756,6 +756,7 @@ namespace MediaBrowser
                 case "2.3.2.0":
                 case "2.5.0.0":
                 case "2.5.1.0":
+                case "2.5.2.0":
                     if (oldVersion <= new System.Version(2, 3, 0, 0))
                     {
                         MigratePluginSource(); //still may need to do this (if we came from earlier version than 2.3
