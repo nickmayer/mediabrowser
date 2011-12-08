@@ -442,6 +442,7 @@ namespace Configurator
                 src.Source = configMembers;
                 src.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
                 configMemberList.ItemsSource = src.View;
+                configMemberList.SelectedIndex = -1;
             }
         }
             
@@ -1672,13 +1673,17 @@ sortorder: {2}
 
         private void removePlugin_Click(object sender, RoutedEventArgs e) {
             var plugin = pluginList.SelectedItem as IPlugin;
-            var message = "Would you like to remove the plugin " + plugin.Name + "?";
-            if (
-                  MessageBox.Show(message, "Remove plugin", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes) {
-                PluginManager.Instance.RemovePlugin(plugin);
-                PluginManager.Instance.UpdateAvailableAttributes(plugin, false);
-                RefreshEntryPoints(true);
-                RefreshThemes();
+            if (plugin != null)
+            {
+                var message = "Would you like to remove the plugin " + plugin.Name + "?";
+                if (
+                      MessageBox.Show(message, "Remove plugin", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    PluginManager.Instance.RemovePlugin(plugin);
+                    PluginManager.Instance.UpdateAvailableAttributes(plugin, false);
+                    RefreshEntryPoints(true);
+                    RefreshThemes();
+                }
             }
         }
 
@@ -2058,7 +2063,7 @@ sortorder: {2}
             SaveConfig();
         }
 
-        private void tbxMinResumeDuration_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void tbxNumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !Char.IsDigit(e.Text[0]);
             base.OnPreviewTextInput(e);
@@ -2151,21 +2156,36 @@ sortorder: {2}
                 switch (currentConfigMember.Type.Name)
                 {
                     case "Boolean":
-                        stringGrid.Visibility = Visibility.Hidden;
+                        stringGrid.Visibility = numGrid.Visibility = Visibility.Hidden;
                         cbxBoolMember.Visibility = System.Windows.Visibility.Visible;
                         cbxBoolMember.Content = currentConfigMember.Name;
                         cbxBoolMember.IsChecked = (bool)currentConfigMember.Value;
                         break;
 
                     case "String":
+                        if (currentConfigMember.PresentationStyle == "BrowseFolder")
+                            btnFolderBrowse.Visibility = Visibility.Visible;
+                        else
+                            btnFolderBrowse.Visibility = Visibility.Hidden;
                         lblString.Content = currentConfigMember.Name;
                         tbxString.Text = currentConfigMember.Value.ToString();
                         stringGrid.Visibility = Visibility.Visible;
-                        cbxBoolMember.Visibility = Visibility.Hidden;
+                        cbxBoolMember.Visibility = numGrid.Visibility = Visibility.Hidden;
+                        break;
+
+                    case "Int":
+                    case "Int32":
+                    case "Int16":
+                    case "Double":
+                    case "Single":
+                        lblNum.Content = currentConfigMember.Name;
+                        tbxNum.Text = currentConfigMember.Value.ToString();
+                        numGrid.Visibility = Visibility.Visible;
+                        cbxBoolMember.Visibility = stringGrid.Visibility = Visibility.Hidden;
                         break;
 
                     default:
-                        cbxBoolMember.Visibility = stringGrid.Visibility = System.Windows.Visibility.Hidden;
+                        cbxBoolMember.Visibility = stringGrid.Visibility = numGrid.Visibility = System.Windows.Visibility.Hidden;
                         break;
                 }
 
@@ -2189,7 +2209,39 @@ sortorder: {2}
             if (currentConfigMember != null)
             {
                 currentConfigMember.Value = cbxBoolMember.IsChecked;
+                config.Save();
             }
+        }
+
+        private void tbxNum_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            //called when one of our dynamic member items loses focus - save current member
+            if (currentConfigMember != null)
+            {
+                currentConfigMember.Value = Convert.ToInt32(tbxNum.Text);
+                config.Save();
+            }
+        }
+
+        private void tbxString_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            //called when one of our dynamic member items loses focus - save current member
+            if (currentConfigMember != null)
+            {
+                currentConfigMember.Value = tbxString.Text;
+                config.Save();
+            }
+        }
+
+        private void btnFolderBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            BrowseForFolderDialog dlg = new BrowseForFolderDialog();
+
+            if (true == dlg.ShowDialog(this))
+            {
+                currentConfigMember.Value = tbxString.Text =  dlg.SelectedFolder;
+            }
+
         }
 
 
