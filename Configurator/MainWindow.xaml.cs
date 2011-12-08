@@ -1551,7 +1551,7 @@ sortorder: {2}
         #region Header Selection Methods
         private void eggExpert_Click(object sender, MouseButtonEventArgs e)
         {
-            if (System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Control)
+            if (System.Windows.Forms.Control.ModifierKeys == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift))
             {
                 InitExpertMode();
                 expertTab.Visibility = Visibility.Visible;
