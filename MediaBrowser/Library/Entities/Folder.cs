@@ -344,6 +344,29 @@ namespace MediaBrowser.Library.Entities {
         }
 
         /// <summary>
+        /// A recursive enumerator that walks through all the sub children
+        /// that are folders and not hidden by parental controls.  Use for UI operations.
+        ///   Safe for multithreaded use, since it operates on list clones
+        /// </summary>
+        public virtual IEnumerable<Folder> RecursiveFolders
+        {
+            get
+            {
+                foreach (var item in Children)
+                {
+                    if (item is Folder && (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed))
+                    {
+                        yield return item as Folder;
+                        foreach (var subitem in (item as Folder).RecursiveFolders)
+                        {
+                            yield return subitem;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Protected enumeration through children, 
         ///  this has the potential to block out the item, so its not exposed publicly
         /// </summary>

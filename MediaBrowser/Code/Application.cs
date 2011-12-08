@@ -640,12 +640,9 @@ namespace MediaBrowser
                             {
                                 Kernel.Instance.MajorActivity = true;
                                 RootFolder.RefreshMetadata();
-                                foreach (BaseItem item in RootFolder.Children)
+                                foreach (Folder folder in RootFolder.RecursiveFolders)
                                 {
-                                    if (item is Folder)
-                                    {
-                                        (item as Folder).ValidateChildren();
-                                    }
+                                    folder.ValidateChildren();
                                 }
                                 foreach (BaseItem item in RootFolder.RecursiveChildren)
                                 {
