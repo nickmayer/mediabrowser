@@ -17,7 +17,7 @@ namespace MediaBrowser.Library {
                 else
                     return 1;
             if (Config.Instance.EnableAlphanumericSorting)
-                return BaseItemComparer.AlphaNumericCompare(x.BaseItem.Name, y.BaseItem.Name);
+                return BaseItemComparer.AlphaNumericCompare(x.BaseItem.Name, y.BaseItem.Name,StringComparison.CurrentCultureIgnoreCase);
             else
                 return x.BaseItem.Name.CompareTo(y.BaseItem.Name);
         }

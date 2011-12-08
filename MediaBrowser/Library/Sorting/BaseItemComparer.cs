@@ -7,14 +7,26 @@ namespace MediaBrowser.Library {
     internal class BaseItemComparer : IComparer<BaseItem> {
         private SortOrder order;
         private string propertyName;
+        private StringComparison compareCulture = StringComparison.CurrentCultureIgnoreCase;
 
         public BaseItemComparer(SortOrder order) {
             this.order = order;
         }
 
+        public BaseItemComparer(SortOrder order, StringComparison compare) {
+            this.order = order;
+            this.compareCulture = compare;
+        }
+
         public BaseItemComparer(string property) {
             this.order = SortOrder.Custom;
             this.propertyName = property;
+        }
+
+        public BaseItemComparer(string property, StringComparison compare) {
+            this.order = SortOrder.Custom;
+            this.propertyName = property;
+            this.compareCulture = compare;
         }
 
         #region IComparer<BaseItem> Members
@@ -78,7 +90,7 @@ namespace MediaBrowser.Library {
                     if (yVal == null) return 1;
                     if (xVal == null) return -1;
                     Logging.Logger.ReportVerbose("Value x: " + xVal + " Value y: " + yVal);
-                    compare = String.Compare(xVal.ToString(), yVal.ToString(),StringComparison.InvariantCultureIgnoreCase);
+                    compare = String.Compare(xVal.ToString(), yVal.ToString(),compareCulture);
                     break;
 
                 default:
@@ -92,9 +104,9 @@ namespace MediaBrowser.Library {
                 var name2 = y.SortName ?? y.Name ?? "";
 
                 if (Config.Instance.EnableAlphanumericSorting)
-                    compare = AlphaNumericCompare(name1, name2);
+                    compare = AlphaNumericCompare(name1, name2,compareCulture);
                 else
-                    compare = String.Compare(name1,name2,StringComparison.InvariantCultureIgnoreCase);
+                    compare = String.Compare(name1,name2,compareCulture);
             }
 
             return compare;
@@ -136,7 +148,7 @@ namespace MediaBrowser.Library {
             return false;
         }
 
-        public static int AlphaNumericCompare(string s1, string s2) {
+        public static int AlphaNumericCompare(string s1, string s2, StringComparison compareCulture) {
             // http://dotnetperls.com/Content/Alphanumeric-Sorting.aspx
 
             int len1 = s1.Length;
@@ -195,7 +207,7 @@ namespace MediaBrowser.Library {
                     
                     result = thisNumericChunk.CompareTo(thatNumericChunk);
                 } else {
-                    result = String.Compare(str1,str2,StringComparison.InvariantCultureIgnoreCase);
+                    result = String.Compare(str1,str2,compareCulture);
                 }
 
                 if (result != 0) {

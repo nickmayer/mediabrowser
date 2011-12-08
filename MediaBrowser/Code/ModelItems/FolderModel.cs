@@ -1266,7 +1266,7 @@ namespace MediaBrowser.Library {
             set {
 
                 if (!String.IsNullOrEmpty(value) && (MediaBrowser.LibraryManagement.Helper.IsAlphaNumeric(value))) {
-                    BaseItemComparer comparer = new BaseItemComparer(SortOrder.Name);
+                    BaseItemComparer comparer = new BaseItemComparer(SortOrder.Name, StringComparison.InvariantCultureIgnoreCase);
                     BaseItem tempItem = Activator.CreateInstance(this.folder.ChildType) as BaseItem;
                     if (this.displayPrefs.SortOrder == Localization.LocalizedStrings.Instance.GetString("NameDispPref"))
                     {
