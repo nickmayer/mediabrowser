@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using System.Management;
+using System.Reflection;
 using Microsoft.Win32;
 
 using MediaBrowser;
@@ -33,6 +34,7 @@ using MediaBrowser.Library.Network;
 using MediaBrowser.Library.Plugins;
 using MediaBrowser.Library.Threading;
 using MediaBrowser.LibraryManagement;
+using MediaBrowser.Library.Persistance;
 
 namespace Configurator
 {
@@ -49,6 +51,8 @@ namespace Configurator
         PopupMsg PopUpMsg;
         public bool KernelModified = false;
         public static MainWindow Instance;
+        private List<ConfigMember> configMembers;
+        private ConfigMember currentConfigMember;
 
         public MainWindow()
         { 
@@ -309,7 +313,7 @@ namespace Configurator
         {
             tvwLibraryFolders.BeginInit();
             tvwLibraryFolders.Items.Clear();
-            tabControl1.Cursor = Cursors.Wait;
+            tabMain.Cursor = Cursors.Wait;
             string[] vfs = Directory.GetFiles(ApplicationPaths.AppInitialDirPath,"*.vf");
             foreach (string vfName in vfs)
             {
@@ -324,7 +328,7 @@ namespace Configurator
                 tvwLibraryFolders.Items.Add(aNode);
             }
             tvwLibraryFolders.EndInit();
-            tabControl1.Cursor = Cursors.Arrow;
+            tabMain.Cursor = Cursors.Arrow;
         }
 
         private void getLibrarySubDirectories(string dir, TreeViewItem parent)
@@ -422,6 +426,25 @@ namespace Configurator
                 podcastList.Items.Add(item);
             }
         }
+
+        private void InitExpertMode()
+        {
+            if (configMembers == null)
+            {
+                configMembers = new List<ConfigMember>();
+                foreach (var member in typeof(ConfigData).GetMembers(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    if (XmlSettings<ConfigData>.IsSetting(member) && !XmlSettings<ConfigData>.IsHidden(member))
+                        configMembers.Add(new ConfigMember(member, config));
+                }
+
+                CollectionViewSource src = new CollectionViewSource();
+                src.Source = configMembers;
+                src.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
+                configMemberList.ItemsSource = src.View;
+            }
+        }
+            
 
         #region Config Loading / Saving        
         private void LoadConfigurationSettings()
@@ -1526,6 +1549,17 @@ sortorder: {2}
         #endregion
 
         #region Header Selection Methods
+        private void eggExpert_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Control)
+            {
+                InitExpertMode();
+                expertTab.Visibility = Visibility.Visible;
+                helpTab.Visibility = Visibility.Collapsed;
+                tabMain.SelectedItem = expertTab;
+            }
+        }
+
         private void hdrBasic_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SetHeader(hdrBasic);
@@ -1554,7 +1588,7 @@ sortorder: {2}
         {
             hdrAdvanced.Foreground = hdrBasic.Foreground = hdrHelpAbout.Foreground = new SolidColorBrush(System.Windows.Media.Colors.Gray);
             hdrAdvanced.FontWeight = hdrBasic.FontWeight = hdrHelpAbout.FontWeight = FontWeights.Normal;
-            tabControl1.SelectedIndex = 0;
+            tabMain.SelectedIndex = 0;
         }
         private void SetHeader(System.Windows.Controls.Label label)
         {
@@ -2104,6 +2138,57 @@ sortorder: {2}
             {
                 config.MinLoggingSeverity = (LogSeverity)ddlLoglevel.SelectedItem;
                 config.Save();
+            }
+        }
+
+        private void configMemberList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            currentConfigMember = configMemberList.SelectedItem as ConfigMember;
+            if (currentConfigMember != null)
+            {
+                txtMemberComment.Text = currentConfigMember.Comment;
+                lblDangerous.Visibility = currentConfigMember.IsDangerous ? Visibility.Visible : Visibility.Hidden;
+                switch (currentConfigMember.Type.Name)
+                {
+                    case "Boolean":
+                        stringGrid.Visibility = Visibility.Hidden;
+                        cbxBoolMember.Visibility = System.Windows.Visibility.Visible;
+                        cbxBoolMember.Content = currentConfigMember.Name;
+                        cbxBoolMember.IsChecked = (bool)currentConfigMember.Value;
+                        break;
+
+                    case "String":
+                        lblString.Content = currentConfigMember.Name;
+                        tbxString.Text = currentConfigMember.Value.ToString();
+                        stringGrid.Visibility = Visibility.Visible;
+                        cbxBoolMember.Visibility = Visibility.Hidden;
+                        break;
+
+                    default:
+                        cbxBoolMember.Visibility = stringGrid.Visibility = System.Windows.Visibility.Hidden;
+                        break;
+                }
+
+            }
+            else
+            {
+                txtMemberComment.Text = "";
+                lblDangerous.Visibility = cbxBoolMember.Visibility = stringGrid.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void memberList_Collapse(object sender, RoutedEventArgs e)
+        {
+            //un-select in case current item was collapsed from view
+            configMemberList.SelectedIndex = -1;
+
+        }
+
+        private void cbxBoolMember_Checked(object sender, RoutedEventArgs e)
+        {
+            if (currentConfigMember != null)
+            {
+                currentConfigMember.Value = cbxBoolMember.IsChecked;
             }
         }
 

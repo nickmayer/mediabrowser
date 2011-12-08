@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 
 namespace MediaBrowser.Library.Persistance {
-    abstract class AbstractMember {
+    public abstract class AbstractMember {
 
         MemberInfo memberInfo; 
 

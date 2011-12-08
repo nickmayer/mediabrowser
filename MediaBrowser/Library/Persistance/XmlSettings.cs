@@ -39,6 +39,56 @@ namespace MediaBrowser.Library.Persistance {
 
     }
 
+    [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class GroupAttribute : Attribute {
+
+        string group;
+
+        // This is a positional argument
+        public GroupAttribute(string group) {
+            this.group = group;
+        }
+
+        public string Group {
+            get { return group; }
+        }
+
+    }
+
+    [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class PresentationStyleAttribute : Attribute {
+
+        string presentationStyle;
+
+        // This is a positional argument
+        public PresentationStyleAttribute(string style) {
+            this.presentationStyle = style;
+        }
+
+        public string PresentationStyle {
+            get { return presentationStyle; }
+        }
+
+    }
+
+    [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class HiddenAttribute : Attribute {
+
+        // This is a positional argument
+        public HiddenAttribute() {
+        }
+
+    }
+
+    [global::System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class DangerousAttribute : Attribute {
+
+        // This is a positional argument
+        public DangerousAttribute() {
+        }
+
+    }
+
     public class XmlSettings<T> where T : class, new() {
 
         #region Serializers
@@ -290,7 +340,7 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
-        static List<AbstractMember> SettingMembers(Type type) {
+        private static List<AbstractMember> SettingMembers(Type type) {
 
             // todo: cache this, not really important 
             List<AbstractMember> members = new List<AbstractMember>();
@@ -470,7 +520,7 @@ namespace MediaBrowser.Library.Persistance {
             }
         }
 
-        private string GetComment(MemberInfo field) {
+        public static string GetComment(MemberInfo field) {
             string comment = "";
             var attribs = field.GetCustomAttributes(typeof(CommentAttribute), false);
             if (attribs != null && attribs.Length > 0) {
@@ -479,7 +529,39 @@ namespace MediaBrowser.Library.Persistance {
             return comment;
         }
 
-        private static bool IsSetting(MemberInfo mi) {
+        public static string GetGroup(MemberInfo field) {
+            string group = "General";
+            var attribs = field.GetCustomAttributes(typeof(GroupAttribute), false);
+            if (attribs != null && attribs.Length > 0) {
+                group = ((GroupAttribute)attribs[0]).Group;
+            }
+            return group;
+        }
+
+        public static string GetPresentationStyle(MemberInfo field) {
+            string presentation = "";
+            var attribs = field.GetCustomAttributes(typeof(PresentationStyleAttribute), false);
+            if (attribs != null && attribs.Length > 0) {
+                presentation = ((PresentationStyleAttribute)attribs[0]).PresentationStyle;
+            }
+            return presentation;
+        }
+
+        public static bool IsHidden(MemberInfo mi) {
+
+            var attribs = mi.GetCustomAttributes(typeof(HiddenAttribute), true);
+            bool exists = attribs != null && attribs.Length > 0;
+            return exists && (mi.MemberType == MemberTypes.Field || mi.MemberType == MemberTypes.Property);
+        }
+
+        public static bool IsDangerous(MemberInfo mi) {
+
+            var attribs = mi.GetCustomAttributes(typeof(DangerousAttribute), true);
+            bool exists = attribs != null && attribs.Length > 0;
+            return exists && (mi.MemberType == MemberTypes.Field || mi.MemberType == MemberTypes.Property);
+        }
+
+        public static bool IsSetting(MemberInfo mi) {
 
             var attribs = mi.GetCustomAttributes(typeof(SkipFieldAttribute), true);
             bool ignore = attribs != null && attribs.Length > 0;

@@ -77,6 +77,27 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Code:InvertableBooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+
+        <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Image x:Name="img" Source="Images/Collapse.png" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="img" Property="Source" Value="Images/Expand.png" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -94,7 +115,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid x:Name="tabGrid1">
-            <TabControl Margin="10,90,10,10" x:Name="tabControl1" Background="{x:Null}" SelectionChanged="tabControl1_SelectionChanged">
+            <TabControl Margin="10,90,10,10" x:Name="tabMain" Background="{x:Null}" SelectionChanged="tabControl1_SelectionChanged">
             <TabItem Header="media" x:Name="mediacollectionTab" FontSize="14" FontWeight="Normal" Foreground="#FF323232" IsSelected="True">
                 <Grid>
                     <ListBox HorizontalAlignment="Left" Margin="20,45,0,60" x:Name="folderList" Width="260" SelectionChanged="folderList_SelectionChanged" FontSize="14" ItemTemplate="{StaticResource folderListTemplate}" SelectedIndex="0" ToolTip="These are the items that define your media library.  They will appear as the top-level options in MB." />
@@ -409,6 +430,70 @@
                         <TextBlock Margin="20,10,327,0" VerticalAlignment="Top" Height="25" Width="401">If you need any help, have a look at these resources:</TextBlock>
                     </Grid>
             </TabItem>
+                <TabItem Header="config explorer" Name="expertTab" Visibility="Collapsed" FontSize="14">
+                    <Grid>
+                        <Label Content="W A R N I N G  - Making changes in this area could create an unstable system.  Modify at your own risk." Height="28" HorizontalAlignment="Left" Margin="23,6,0,0" Name="label16" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" Foreground="Red" />
+                        <ListBox Height="338" HorizontalAlignment="Left" Margin="23,50,0,0" Name="configMemberList" VerticalAlignment="Top" Width="247" SelectionChanged="configMemberList_SelectionChanged" >
+                            <ListBox.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                        <!--<ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsBottomLevel}" Value="true">
+                                                <Setter TargetName="gridTemplate" Property="Grid.Background" Value="LightGray" />
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>-->
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition />
+                                                                <RowDefinition />
+                                                            </Grid.RowDefinitions>
+                                                            <Grid Background="White" x:Name="gridTemplate" Height="26" VerticalAlignment="Center">
+                                                                <Grid.Resources>
+                                                                    <Style TargetType="{x:Type TextBlock}">
+                                                                        <Setter Property="FontSize" Value="14" />
+                                                                        <Setter Property="Foreground" Value="Black" />
+                                                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                                                    </Style>
+                                                                </Grid.Resources>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="45" />
+                                                                    <ColumnDefinition Width="33" />
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <ToggleButton x:Name="btnShowHide" IsChecked="False" Margin="3.5" Unchecked="memberList_Collapse" />
+
+                                                                <TextBlock Grid.Column="1" Text="{Binding Path=Name}" Margin="3.5,0" />
+                                                                <!--<TextBlock Grid.Column="2" Text="Total:" />-->
+                                                                <TextBlock Grid.Column="3" Text="{Binding Path=ItemCount}" TextAlignment="Right" Margin="0,0,11,0"  />
+
+                                                            </Grid>
+
+                                                            <ItemsPresenter Visibility="{Binding ElementName=btnShowHide, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}" Grid.Row="1" Margin="11,0,0,3.5" />
+
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </ListBox.GroupStyle>
+                        </ListBox>
+                        <TextBlock Height="60" HorizontalAlignment="Left" Margin="291,50,0,0" Name="txtMemberComment" Text="" VerticalAlignment="Top" Width="423" TextWrapping="Wrap" TextTrimming="WordEllipsis" />
+                        <CheckBox Content="CheckBox" Height="22" HorizontalAlignment="Left" Margin="379,218,0,0" Name="cbxBoolMember" VerticalAlignment="Top" FontSize="14" Width="280" Visibility="Hidden" Checked="cbxBoolMember_Checked" Unchecked="cbxBoolMember_Checked" />
+                        <Grid Height="64" HorizontalAlignment="Left" Margin="318,206,0,0" Name="stringGrid" VerticalAlignment="Top" Width="295" Visibility="Hidden">
+                            <Label Content="Label" Height="28" Name="lblString" Width="225" Margin="6,4,64,32" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="20,35,0,0" Name="tbxString" VerticalAlignment="Top" Width="249" />
+                        </Grid>
+                        <Label Content="Only change this value if you really know what you are doing!" FontSize="14" FontWeight="Bold" Foreground="Red" Height="28" HorizontalAlignment="Left" Margin="291,131,0,0" Name="lblDangerous" VerticalAlignment="Top" Width="451" Visibility="Hidden" />
+                    </Grid>
+                </TabItem>
             </TabControl>
             <TextBlock Height="25" Margin="15,54,318,0" Name="alertText" VerticalAlignment="Top" Text="Some of your plugins have updates available" FontSize="16" Foreground="MidnightBlue" FontWeight="Bold" Opacity="0" IsEnabled="False" Visibility="Hidden" />
         </Grid>
@@ -435,7 +520,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Label Height="33" HorizontalAlignment="Left" Margin="240,15,302,0" Name="hdrHelpAbout" VerticalAlignment="Top" Width="140" Foreground="Gray" FontSize="18" MouseDown="hdrHelpAbout_MouseDown" ToolTip="Click to show support information">help and about</Label>
-        <Image Height="80" HorizontalAlignment="Right" Margin="0,5,10,0" Name="ConfiguratorLogo" Stretch="Fill" VerticalAlignment="Top" Width="302" Source="/Configurator;component/Images/mb_configurator.png" />
+        <Image Height="80" HorizontalAlignment="Right" Margin="0,5,10,0" Name="ConfiguratorLogo" Stretch="Fill" VerticalAlignment="Top" Width="302" Source="/Configurator;component/Images/mb_configurator.png" MouseLeftButtonUp="eggExpert_Click" />
         <Label FontSize="10" Height="21" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,0,10,0" Name="lblVersion" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Width="112">Version 0.0.0.0</Label>
     </Grid>
 </Window>

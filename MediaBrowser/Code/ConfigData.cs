@@ -19,6 +19,74 @@ using MediaBrowser.Code;
 
 namespace MediaBrowser
 {
+    /// <summary>
+    /// Used for the expert config explorer
+    /// </summary>
+    public class ConfigMember
+    {
+        public MemberInfo Info { get; set; }
+        public string Group { get; set; }
+        public string Comment { get; set; }
+        public string Name { get; set; }
+        public string PresentationStyle { get; set; }
+        public bool IsDangerous { get; set; }
+        public Type Type { get; set; }
+        private ConfigData data;
+
+        public ConfigMember(MemberInfo info, ConfigData data)
+        {
+            this.data = data;
+            this.Info = info;
+            this.Name = info.Name;
+            this.Group = XmlSettings<ConfigData>.GetGroup(info);
+            this.Comment = XmlSettings<ConfigData>.GetComment(info);
+            this.PresentationStyle = XmlSettings<ConfigData>.GetPresentationStyle(info);
+            this.IsDangerous = XmlSettings<ConfigData>.IsDangerous(info);
+            if (info.MemberType == MemberTypes.Property)
+            {
+                this.Type = (info as PropertyInfo).PropertyType;
+            }
+            else if (info.MemberType == MemberTypes.Field)
+            {
+                this.Type = (info as FieldInfo).FieldType;
+            }
+
+        }
+
+        public object Value
+        {
+            get
+            {
+                if (Info.MemberType == MemberTypes.Property)
+                {
+                    return (Info as PropertyInfo).GetValue(data, null);
+                }
+                else if (Info.MemberType == MemberTypes.Field)
+                {
+                    return (Info as FieldInfo).GetValue(data);
+                }
+                return null;
+            }
+            set
+            {
+                if (Info.MemberType == MemberTypes.Property)
+                {
+                    (Info as PropertyInfo).SetValue(data, value, null);
+                }
+                else if (Info.MemberType == MemberTypes.Field)
+                {
+                    (Info as FieldInfo).SetValue(data, value);
+                }
+            }
+        }
+
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
+    }
+
     [Serializable]
     public class ConfigData
     {
@@ -45,44 +113,65 @@ namespace MediaBrowser
             set { if (this.keyFile.SupporterKey != value) { this.keyFile.SupporterKey = value; this.keyFile.Save(); } }
         }
 
+        [Dangerous]
         [Comment(@"The version is used to determine if this is the first time a particular version has been run")]
         public string MBVersion = "1.0.0.0"; //default value will tell us if it is a brand new install
+        [Group("Playback")]
         [Comment(@"By default we track a videos position to support resume, this can be disabled by setting this for diagnostic purposes")]
         public bool EnableResumeSupport = true; 
         [Comment(@"Any folder named trailers will be ignored and treated a folder containing trailers")]
         public bool EnableLocalTrailerSupport = true; 
+        [Hidden]
         [Comment(@"If you enable this, make sure System.Data.SQLite.DLL is copied to c:\program data\mediabrowser, make sure you install the right version there is a x32 and x64")]
         public bool EnableExperimentalSqliteSupport = false;
+        [Group("Updates")]
         [Comment(@"If you enable this MB will watch for changes in your file system and update the UI as it happens, may not work properly with SMB shares")]
         public bool EnableDirectoryWatchers = true;
 
+        [Group("Display")]
         [Comment(@"If set to true when sorting by unwatched the unwatched folders will be sorted by name")]
         public bool SortUnwatchedByName = false;
 
+        [Group("Display")]
         [Comment("Show now playing for default mode as text")]
         public bool ShowNowPlayingInText = false;
 
         [Comment("The date auto update last checked for a new version")]
         public DateTime LastAutoUpdateCheck = DateTime.Today.AddYears(-1);
 
+        [Group("Display")]
+        [Comment(@"If disabled, some items (like TV Episodes or items without much metadata) will play instead of show a detail page when selected.")]
         public bool AlwaysShowDetailsPage = true;
+        [Group("Depricated")]
+        [Hidden]
         public bool EnableVistaStopPlayStopHack = true;
+        [Group("Display")]
+        [Comment(@"Show an 'Enhanced Home Screen' for the top level items in MB.")]
         public bool EnableRootPage = true;
+        [Dangerous]
+        [Comment(@"Identifies if this is the very first time MB has been run.  Causes an initial setup routine to be performed.")]
         public bool IsFirstRun = true;
+        [Comment(@"Identifies where MB will look for the special 'IBN' items.  You can change this to point to a location that is shared by multiple machines.")]
         public string ImageByNameLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
         public Vector3 OverScanScaling = new Vector3() {X=1, Y=1, Z=1};
         public Inset OverScanPadding = new Inset();
+        [Comment(@"Turns on logging for all MB components. Recommended you leave this on as it doesn't slow things down and is very helpful in troubleshooting.")]
         public bool EnableTraceLogging = true;
+        [Comment(@"The default size posters will be shown in any new view.")]
         public Size DefaultPosterSize = new Size() {Width=220, Height=330};
+        [Comment(@"The amount of space between posters in lists and grids.")]
         public Size GridSpacing = new Size();
         public float MaximumAspectRatioDistortion = 0.2F;
         public bool EnableTranscode360 = false;
+        [Dangerous]
+        [Comment(@"The extensions of file types that the Xbox 360 can play natively (without transcoding).")]
         public string ExtenderNativeTypes = ".dvr-ms,.wmv";
         public bool ShowThemeBackground = true;
         public bool DimUnselectedPosters = true;
         public bool EnableNestedMovieFolders = true;
         public bool EnableMoviePlaylists = true;
         public int PlaylistLimit = 2;
+        [Hidden]
         public string InitialFolder = ApplicationPaths.AppInitialDirPath;
         public bool EnableUpdates = true;
         public bool EnableBetas = false;
@@ -114,45 +203,71 @@ namespace MediaBrowser
         public double IndexWarningThreshold = 0.1;
         public string PreferredMetaDataLanguage = "en";
         public List<ExternalPlayer> ExternalPlayers = new List<ExternalPlayer>();
+        [Dangerous]
         public string Theme = "Default";
+        [Dangerous]
         public string FontTheme = "Default";
         // I love the clock, but it keeps on crashing the app, so disabling it for now
         public bool ShowClock = false;
         public bool EnableAdvancedCmds = false;
+        [Dangerous]
         public bool Advanced_EnableDelete = false;
         public bool UseAutoPlayForIso = false;
         public bool ShowBackdrop = true;
         public string InitialBreadcrumbName = "Media";
 
         public string UserSettingsPath = null;
+        [Group("Display")]
+        [Dangerous]
         public string ViewTheme = "Default";
+        [Group("Display")]
         public int AlphaBlending = 80;
+        [Group("Display")]
         public bool ShowConfigButton = false;
 
+        [Group("Display")]
         public bool EnableSyncViews = true;
         public string YahooWeatherFeed = "UKXX0085";
         public string YahooWeatherUnit = "c";
+        [Group("Display")]
         public bool ShowRootBackground = true;
 
+
         public string PodcastHome = ApplicationPaths.DefaultPodcastPath;
+        [Group("Display")]
         public bool HideFocusFrame = false;
 
+        [Group("Depricated")]
+        [Hidden]
         public bool EnableProxyLikeCaching = false;
         public int MetadataCheckForUpdateAge = 14;
 
+        [Group("Parental Control")]
         public int ParentalUnlockPeriod = 3;
+        [Group("Parental Control")]
         public bool HideParentalDisAllowed = true; 
+        [Group("Parental Control")]
         public bool ParentalBlockUnrated = false;
+        [Group("Parental Control")]
         public bool UnlockOnPinEntry = true;
+        [Group("Parental Control")]
         public bool ParentalControlEnabled = false;
+        [Group("Parental Control")]
+        [Hidden]
         public string ParentalPIN = "0000";
+        [Group("Parental Control")]
         public int MaxParentalLevel = 3;
 
         public bool EnableMouseHook = false;
 
+        [Group("Display")]
         public int RecentItemCount = 20;
+        [Group("Display")]
         public int RecentItemDays = 60;
+        [Group("Display")]
+        [Dangerous]
         public string RecentItemOption = "added";
+        [Group("Display")]
         public int RecentItemCollapseThresh = 2;
 
         public bool ShowHDIndicatorOnPosters = false;
