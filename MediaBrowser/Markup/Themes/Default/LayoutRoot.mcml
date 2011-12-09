@@ -71,6 +71,8 @@
 
       <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
       <IntRangedValue Name="SelectedIndex" Value="0"/>
+      
+      <cor:Int32 Name="backFocus" Int32="[Folder.SelectedChildIndex]" />
 
       <IntRangedValue Name="NavCount" Value="0" />
       <cor:Int32 Name="NormalKeyRepeat" Int32="250"/>
@@ -79,7 +81,7 @@
       <cor:Int32 Name="AnimDelay" Int32="300" />
       <!-- This must be greater than NormalKeyRepeat-->
       <cor:Int32 Name="SpeedUpDelay" Int32="2"/>
-
+      
       <Command Name="ClosePopupPlay"/>
 
       <Choice Name="RecentItems">
@@ -92,6 +94,7 @@
     </Locals>
 
     <Rules>
+
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
@@ -241,6 +244,16 @@
         </Actions>
       </Changed>
 
+      <!-- Navigate back to correct folder from RAL-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="false"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Repeater.DefaultFocusIndex]"  Value="[backFocus]"/>
+        </Actions>
+      </Rule>
 
       <!-- Playback Control -->
       <Changed Source="[Application.ShowNowPlaying]" InitialEvaluate="true" >

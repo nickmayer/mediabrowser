@@ -171,8 +171,8 @@
                   <FlowLayout Orientation="Horizontal" ItemAlignment="Center" Spacing="0,0"/>
                 </Layout>
                 <Children>
-                  <sr:StarRating Name="StarRating" Margins="0,4,0,4" />
-                  <mp:MPAARating Name="MPAARating" Margins="15,0,0,0" Padding="0,1,0,1" MaximumSize="0,30"/>
+                  <sr:StarRating Name="StarRating" Margins="0,4,0,6" />
+                  <mp:MPAARating Name="MPAARating" Margins="15,0,0,2" Padding="0,1,0,1" MaximumSize="0,30"/>
                 </Children>
               </Panel>
               <Panel Name="LastWatchedRuntime">
