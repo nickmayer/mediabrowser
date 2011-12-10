@@ -931,9 +931,9 @@
             </LayoutInput>
           </Graphic>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
-                   MaintainAspectRatio="true" SizingPolicy="SizeToConstraint">
+                   MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" MaximumSize="155,0">
             <LayoutInput>
-              <AnchorLayoutInput Left="Parent,0" Top="Parent, 0"/>
+              <AnchorLayoutInput Left="Parent,0" Top="Parent, 0" Vertical="Center"/>
             </LayoutInput>
           </Graphic>
           <Panel Name="DescPanel">
