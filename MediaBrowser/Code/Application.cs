@@ -67,7 +67,7 @@ namespace MediaBrowser
         private static string _background;
         private static Timer ScreenSaverTimer;
         //tracks whether to show recently added or watched items
-        public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; } }
+        public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; Kernel.Instance.ConfigData.RecentItemOption = value; } }
         private bool pluginUpdatesAvailable = false;
         public System.Drawing.Bitmap ExtSplashBmp;
 

@@ -474,5 +474,6 @@ namespace MediaBrowser.Library.Entities {
                 this.BannerImage.MigrateFromOldID(); 
             }
         }
+
     }
 }

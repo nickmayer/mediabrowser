@@ -276,6 +276,8 @@ namespace MediaBrowser
         [Group("Display")]
         public int RecentItemCount = 20;
         [Group("Display")]
+        public int RecentItemContainerCount = 50;
+        [Group("Display")]
         public int RecentItemDays = 60;
         [Group("Display")]
         [Dangerous]
