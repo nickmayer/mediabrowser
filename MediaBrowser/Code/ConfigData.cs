@@ -69,13 +69,20 @@ namespace MediaBrowser
             }
             set
             {
-                if (Info.MemberType == MemberTypes.Property)
+                try
                 {
-                    (Info as PropertyInfo).SetValue(data, value, null);
+                    if (Info.MemberType == MemberTypes.Property)
+                    {
+                        (Info as PropertyInfo).SetValue(data, value, null);
+                    }
+                    else if (Info.MemberType == MemberTypes.Field)
+                    {
+                        (Info as FieldInfo).SetValue(data, value);
+                    }
                 }
-                else if (Info.MemberType == MemberTypes.Field)
+                catch (Exception e)
                 {
-                    (Info as FieldInfo).SetValue(data, value);
+                    Logger.ReportException("Error attempting to assign value to member " + Info.Name, e);
                 }
             }
         }
@@ -152,6 +159,7 @@ namespace MediaBrowser
         [Comment(@"Identifies if this is the very first time MB has been run.  Causes an initial setup routine to be performed.")]
         public bool IsFirstRun = true;
         [Comment(@"Identifies where MB will look for the special 'IBN' items.  You can change this to point to a location that is shared by multiple machines.")]
+        [PresentationStyle("BrowseFolder")]
         public string ImageByNameLocation = Path.Combine(ApplicationPaths.AppConfigPath, "ImagesByName");
         public Vector3 OverScanScaling = new Vector3() {X=1, Y=1, Z=1};
         public Inset OverScanPadding = new Inset();
@@ -175,6 +183,8 @@ namespace MediaBrowser
         public string InitialFolder = ApplicationPaths.AppInitialDirPath;
         public bool EnableUpdates = true;
         public bool EnableBetas = false;
+        [Dangerous]
+        [PresentationStyle("BrowseFolder")]
         public string DaemonToolsLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),"DAEMON Tools Lite\\daemon.exe");
         public string DaemonToolsDrive = "E";
         public bool EnableAlphanumericSorting = true;
@@ -196,12 +206,12 @@ namespace MediaBrowser
         public string SortReplaceCharacters = ".|+|%";
         public string SortReplaceWords = "the|a|an";
         public bool AllowInternetMetadataProviders = true;
-        public bool EnableFileWatching = false;
         public int ThumbStripPosterWidth = 550;
         public bool RememberIndexing = false;
         public bool ShowIndexWarning = true;
         public double IndexWarningThreshold = 0.1;
         public string PreferredMetaDataLanguage = "en";
+        [Hidden]
         public List<ExternalPlayer> ExternalPlayers = new List<ExternalPlayer>();
         [Dangerous]
         public string Theme = "Default";
@@ -216,6 +226,8 @@ namespace MediaBrowser
         public bool ShowBackdrop = true;
         public string InitialBreadcrumbName = "Media";
 
+        [PresentationStyle("BrowseFolder")]
+        [Comment(@"Path to save display preferences and playstate information.  Change this to use a shared location for multiple machines.")]
         public string UserSettingsPath = null;
         [Group("Display")]
         [Dangerous]
@@ -233,6 +245,7 @@ namespace MediaBrowser
         public bool ShowRootBackground = true;
 
 
+        [PresentationStyle("BrowseFolder")]
         public string PodcastHome = ApplicationPaths.DefaultPodcastPath;
         [Group("Display")]
         public bool HideFocusFrame = false;
@@ -262,6 +275,8 @@ namespace MediaBrowser
 
         [Group("Display")]
         public int RecentItemCount = 20;
+        [Group("Display")]
+        public int RecentItemContainerCount = 50;
         [Group("Display")]
         public int RecentItemDays = 60;
         [Group("Display")]
@@ -300,7 +315,6 @@ namespace MediaBrowser
 
         public LogSeverity MinLoggingSeverity = LogSeverity.Info;
 
-        public bool UseBMPsInCache = false; //experimental option to use bmps for backdrops to increase speed
         public bool EnableScreenSaver = true; //enable default screen saver functionality
         public int ScreenSaverTimeOut = 10; //minutes of inactivity for screen saver to kick in
 
@@ -326,16 +340,21 @@ namespace MediaBrowser
         [Comment("This is a hack until I can rewrite some file date processing")]
         public bool EnableShortcutDateHack = true;
 
+        [Hidden]
         [Comment("Save metadata locally so it doesn't have to be re-fetched from the inet")]
         public bool SaveLocalMeta = false;
 
+        [Hidden]
         [Comment("Save backdrops at the season level (if false will inherit from series)")]
         public bool SaveSeasonBackdrops = false;
 
+        [Hidden]
         public int MaxBackdrops = 4; //maximum number of backdrops to be saved by the inet providers
 
+        [Hidden]
         public string FetchedPosterSize = "mid"; //mid, original or thumb
 
+        [Dangerous]
         public List<string> PluginSources = new List<string>() { "http://www.mediabrowser.tv/plugins/multi/plugin_info.xml" };
 
         public class ExternalPlayer

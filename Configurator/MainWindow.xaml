@@ -265,7 +265,7 @@
                                 <Label HorizontalAlignment="Left" Margin="8,9.24,0,36.76" Name="label10" Width="155">Min Resumable Length</Label>
                                 <Label Margin="183,9.24,188,36.76" Name="label11">Start</Label>
                                 <Label HorizontalAlignment="Right" Margin="0,9.24,47,36.76" Name="label12" Width="56.88">End</Label>
-                                <TextBox HorizontalAlignment="Left" Margin="23,34,0,17" Name="tbxMinResumeDuration" Width="33" PreviewTextInput="tbxMinResumeDuration_PreviewTextInput" LostFocus="tbxMinResumeDuration_LostFocus"  ToolTip="Any media less than this length will not save resume status" HorizontalContentAlignment="Right" />
+                                <TextBox HorizontalAlignment="Left" Margin="23,34,0,17" Name="tbxMinResumeDuration" Width="33" PreviewTextInput="tbxNumericOnly_PreviewTextInput" LostFocus="tbxMinResumeDuration_LostFocus"  ToolTip="Any media less than this length will not save resume status" HorizontalContentAlignment="Right" />
                                 <Label Margin="62,32,0,14.38" Name="label13" HorizontalAlignment="Left" Width="47">Mins</Label>
                                 <Slider Margin="169,35.38,147,17" Name="sldrMinResumePct" Maximum="100" TickFrequency="5" TickPlacement="TopLeft" SmallChange="1" LargeChange="10" ToolTip="If you haven't watched this far into a video, it won't save resume status" ValueChanged="sldrMinResumePct_ValueChanged" />
                                 <Slider HorizontalAlignment="Right" LargeChange="10" Margin="0,35.38,13,17" Maximum="100" Name="sldrMaxResumePct" SmallChange="1" TickFrequency="5" TickPlacement="TopLeft" Width="100" ToolTip="If you have watched this much or more of a video, it will no longer save resume status" ValueChanged="sldrMaxResumePct_ValueChanged" />
@@ -487,11 +487,16 @@
                         </ListBox>
                         <TextBlock Height="60" HorizontalAlignment="Left" Margin="291,50,0,0" Name="txtMemberComment" Text="" VerticalAlignment="Top" Width="423" TextWrapping="Wrap" TextTrimming="WordEllipsis" />
                         <CheckBox Content="CheckBox" Height="22" HorizontalAlignment="Left" Margin="379,218,0,0" Name="cbxBoolMember" VerticalAlignment="Top" FontSize="14" Width="280" Visibility="Hidden" Checked="cbxBoolMember_Checked" Unchecked="cbxBoolMember_Checked" />
-                        <Grid Height="64" HorizontalAlignment="Left" Margin="318,206,0,0" Name="stringGrid" VerticalAlignment="Top" Width="295" Visibility="Hidden">
-                            <Label Content="Label" Height="28" Name="lblString" Width="225" Margin="6,4,64,32" />
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="20,35,0,0" Name="tbxString" VerticalAlignment="Top" Width="249" />
+                        <Grid Height="64" HorizontalAlignment="Left" Margin="318,206,0,0" Name="stringGrid" VerticalAlignment="Top" Width="396" Visibility="Hidden">
+                            <Label Content="Label" Height="28" Name="lblString" Width="225" Margin="6,7,164,29" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="20,35,0,0" Name="tbxString" PreviewLostKeyboardFocus="tbxString_PreviewLostKeyboardFocus" VerticalAlignment="Top" Width="321" />
+                            <Button Content="..." Height="23" HorizontalAlignment="Left" Margin="349,35,0,0" Name="btnFolderBrowse" VerticalAlignment="Top" Width="29" Visibility="Hidden" Click="btnFolderBrowse_Click" />
                         </Grid>
                         <Label Content="Only change this value if you really know what you are doing!" FontSize="14" FontWeight="Bold" Foreground="Red" Height="28" HorizontalAlignment="Left" Margin="291,131,0,0" Name="lblDangerous" VerticalAlignment="Top" Width="451" Visibility="Hidden" />
+                        <Grid Height="64" HorizontalAlignment="Left" Margin="318,206,0,0" Name="numGrid" VerticalAlignment="Top" Visibility="Hidden" Width="295">
+                            <Label Content="Label" Height="28" Margin="6,4,64,32" Name="lblNum" Width="225" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="20,35,0,0" Name="tbxNum" PreviewTextInput="tbxNumericOnly_PreviewTextInput" PreviewLostKeyboardFocus="tbxNum_PreviewLostKeyboardFocus" VerticalAlignment="Top" Width="55" TextAlignment="Right" />
+                        </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>

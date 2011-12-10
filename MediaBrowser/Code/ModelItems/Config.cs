@@ -512,12 +512,6 @@ namespace MediaBrowser
             set { if (this.data.AllowInternetMetadataProviders != value) { this.data.AllowInternetMetadataProviders = value; Save(); FirePropertyChanged("AllowInternetMetadataProviders"); } }
         }
 
-        public bool EnableFileWatching
-        {
-            get { return this.data.EnableFileWatching; }
-            set { if (this.data.EnableFileWatching != value) { this.data.EnableFileWatching = value; Save(); FirePropertyChanged("EnableFileWatching"); } }
-        }
-
         internal List<ConfigData.ExternalPlayer> ExternalPlayers
         {
             get { return this.data.ExternalPlayers; }

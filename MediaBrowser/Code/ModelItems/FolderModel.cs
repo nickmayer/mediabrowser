@@ -89,38 +89,70 @@ namespace MediaBrowser.Library {
                 return string.IsNullOrEmpty(BaseItem.Overview);
             }
         }
+        protected string lastQuickListType = "";
+        protected List<Item> quickListItems;
 
         public override List<Item> QuickListItems {
             get {
-                if (Application.CurrentInstance.RecentItemOption == "watched") {
-                    return RecentItems;
-                }
-                else if (Application.CurrentInstance.RecentItemOption == "unwatched")
+                if (folder != null)
                 {
-                    return UnwatchedItems;
+                    if (Application.CurrentInstance.RecentItemOption != lastQuickListType)
+                    {
+                        folder.ResetQuickList();
+                        quickListItems = null;
+                    }
+                    if (quickListItems == null)
+                        Async.Queue("Newest Item Loader", () =>
+                        {
+                            quickListItems = folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).ToList();
+                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
+                            {
+                                FirePropertyChanged("RecentItems");
+                                FirePropertyChanged("NewestItems");
+                                FirePropertyChanged("QuickListItems");
+                            });
+                        }, null, true);
+
+                    lastQuickListType = Application.CurrentInstance.RecentItemOption;
                 }
-                else
-                {
-                    return NewestItems;
-                }
+                return quickListItems ?? new List<Item>();
+                //if (Application.CurrentInstance.RecentItemOption == "watched") {
+                //    return RecentItems;
+                //}
+                //else if (Application.CurrentInstance.RecentItemOption == "unwatched")
+                //{
+                //    return UnwatchedItems;
+                //}
+                //else
+                //{
+                //    return NewestItems;
+                //}
             }
             set
             {
-                if (Application.CurrentInstance.RecentItemOption == "watched")
+                folder.ResetQuickList();
+                quickListItems = null;
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                 {
-                    recentWatchedItems = null;
-                    var ignore = RecentItems;
-                }
-                else if (Application.CurrentInstance.RecentItemOption == "unwatched")
-                {
-                    recentWatchedItems = null;
-                    var ignore = UnwatchedItems;
-                }
-                else
-                {
-                    newestItems = null;
-                    var ignore = NewestItems;
-                }
+                    FirePropertyChanged("RecentItems");
+                    FirePropertyChanged("NewestItems");
+                    FirePropertyChanged("QuickListItems");
+                });
+                //if (Application.CurrentInstance.RecentItemOption == "watched")
+                //{
+                //    recentWatchedItems = null;
+                //    var ignore = RecentItems;
+                //}
+                //else if (Application.CurrentInstance.RecentItemOption == "unwatched")
+                //{
+                //    recentWatchedItems = null;
+                //    var ignore = UnwatchedItems;
+                //}
+                //else
+                //{
+                //    newestItems = null;
+                //    var ignore = NewestItems;
+                //}
 
             }
         }
@@ -132,7 +164,8 @@ namespace MediaBrowser.Library {
                 //only want items from non-protected folders
                 if (folder != null && folder.ParentalAllowed)
                 {
-                    return GetRecentWatchedItems(Config.Instance.RecentItemCount);
+                    return QuickListItems;
+                    //return GetRecentWatchedItems(Config.Instance.RecentItemCount);
                 } else {
                     return new List<Item>(); //return empty list if folder is protected
                 }
@@ -143,7 +176,8 @@ namespace MediaBrowser.Library {
         public List<Item> NewestItems {
             get {
                 if (folder != null && folder.ParentalAllowed) {
-                    return GetNewestItems(Config.Instance.RecentItemCount);
+                    return QuickListItems;
+                    //return GetNewestItems(Config.Instance.RecentItemCount);
                 } else {
                     return new List<Item>(); //return empty list if folder is protected
                 }
@@ -157,7 +191,8 @@ namespace MediaBrowser.Library {
                 //only want items from non-protected folders
                 if (folder != null && folder.ParentalAllowed)
                 {
-                    return GetRecentUnwatchedItems(Config.Instance.RecentItemCount);
+                    return QuickListItems;
+                    //return GetRecentUnwatchedItems(Config.Instance.RecentItemCount);
                 }
                 else
                 {
@@ -1035,9 +1070,10 @@ namespace MediaBrowser.Library {
                     {
                         foreach (FolderModel folder in this.Children)
                         {
-                            folder.newestItems = null; //force it to go get the real items
-                            folder.GetNewestItems(Config.Instance.RecentItemCount);
-                            folder.recentUnwatchedItems = null;
+                            folder.QuickListItems = null;
+                            //folder.newestItems = null; //force it to go get the real items
+                            //folder.GetNewestItems(Config.Instance.RecentItemCount);
+                            //folder.recentUnwatchedItems = null;
                         }
                     }
                     catch (Exception ex)
@@ -1232,7 +1268,7 @@ namespace MediaBrowser.Library {
             Application.CurrentInstance.CurrentItemChanged();
         }
 
-        internal override void SetWatched(bool value) {
+        public override void SetWatched(bool value) {
             folder.Watched = value;
         }
 

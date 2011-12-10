@@ -28,7 +28,8 @@ namespace MediaBrowser.Library.Entities {
         object validateChildrenLock = new object();
         public MBDirectoryWatcher directoryWatcher;
         Type childType;
-
+        protected IndexFolder quickListFolder;
+        protected Guid quickListID { get { return (Kernel.Instance.ConfigData.RecentItemOption + this.Name.ToLower() + this.Path.ToLower()).GetMD5(); } }
 
         public Folder()
             : base() {
@@ -149,6 +150,147 @@ namespace MediaBrowser.Library.Entities {
                         return ActualChildren.ToList();
                 }
             }
+        }
+
+        public Folder QuickList
+        {
+            get
+            {
+                if (quickListFolder == null)
+                {
+                    if (this.ParentalAllowed)
+                        using (new MediaBrowser.Util.Profiler("RAL Load for "+this.Name)) UpdateQuickList(); //for now build it every time we may persist it...
+
+                }
+                return quickListFolder ?? new IndexFolder();
+            }
+        }
+
+        public virtual void ResetQuickList()
+        {
+            quickListFolder = null; //it will re-load next time requested
+        }
+
+        public virtual void UpdateQuickList() 
+        {
+            //rebuild the proper list and save to repo
+            List<BaseItem> items = null;
+            string recentItemOption = Kernel.Instance.ConfigData.RecentItemOption;
+            int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
+            Logger.ReportVerbose("Starting RAL ("+recentItemOption+") Build for " + this.Name + 
+                " with "+maxItems +" items." +
+                (Kernel.Instance.ParentalControls.Enabled ? " Applying parental controls to search." : " Ignoring parental controls because turned off."));
+            switch (recentItemOption)
+            {
+                case "watched":
+                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
+                        this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList() :
+                        this.RecursiveChildren.Where(i => i is Video).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList();
+
+                    break;
+
+                case "unwatched":
+                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
+                        this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed) && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList() :
+                        this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList();
+                    break;
+
+                default:
+                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
+                        this.RecursiveChildren.Where(i => i is Media && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList() :
+                        this.RecursiveChildren.Where(i => i is Media).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList();
+                    break;
+
+            }
+            if (items != null)
+            {
+                Logger.ReportVerbose(Kernel.Instance.ConfigData.RecentItemOption + " list for " + this.Name + " loaded with " + items.Count + " items.");
+                List<BaseItem> folderChildren = new List<BaseItem>();
+                //now collapse anything that needs to be and create the child list for the list folder
+                var containers = from item in items
+                                 where item is IGroupInIndex
+                                 group item by (item as IGroupInIndex).MainContainer;
+
+                foreach (var container in containers) 
+                {
+                    Logger.ReportVerbose("Container "+(container.Key == null ? "--Unknown--" : container.Key.Name) + " items: "+container.Count());
+                    if (container.Count() < Kernel.Instance.ConfigData.RecentItemCollapseThresh)
+                    {
+                        //add the items without rolling up
+                        foreach (var i in container)
+                        {
+                            folderChildren.Add(i);
+                        }
+                    }
+                    else
+                    {
+                        var currentContainer = container.Key as IContainer ?? new IndexFolder() { Name = "<Unknown>"};
+                        IndexFolder aContainer = new IndexFolder()
+                            {
+                                Id = (recentItemOption + this.Name.ToLower() + currentContainer.Name.ToLower() + (currentContainer as BaseItem).Path).GetMD5(),
+                                Name = currentContainer.Name + " ("+container.Count()+" Items)",
+                                Overview = currentContainer.Overview,
+                                MpaaRating = currentContainer.MpaaRating,
+                                Genres = currentContainer.Genres,
+                                ImdbRating = currentContainer.ImdbRating,
+                                Studios = currentContainer.Studios,
+                                PrimaryImagePath = currentContainer.PrimaryImagePath,
+                                SecondaryImagePath = currentContainer.SecondaryImagePath,
+                                BannerImagePath = currentContainer.BannerImagePath,
+                                BackdropImagePaths = currentContainer.BackdropImagePaths,
+                                DisplayMediaType = currentContainer.DisplayMediaType,
+                                DateCreated = container.First().DateCreated,
+                                Parent = this
+                            };
+                        if (container.Key is Series)
+                        {
+
+                            //always roll into seasons
+                            var seasons = from episode in container
+                                          group episode by episode.Parent;
+                            foreach (var season in seasons)
+                            {
+                                var currentSeason = season.Key as IContainer;
+                                IndexFolder aSeason = new IndexFolder()
+                                {
+                                    Id = (recentItemOption + this.Name.ToLower() + currentSeason.Name.ToLower() + (currentSeason as BaseItem).Path).GetMD5(),
+                                    Name = currentSeason.Name + " ("+season.Count()+" Items)",
+                                    Overview = currentSeason.Overview,
+                                    MpaaRating = currentSeason.MpaaRating,
+                                    Genres = currentSeason.Genres,
+                                    ImdbRating = currentSeason.ImdbRating,
+                                    Studios = currentSeason.Studios,
+                                    PrimaryImagePath = currentSeason.PrimaryImagePath,
+                                    SecondaryImagePath = currentSeason.SecondaryImagePath,
+                                    BannerImagePath = currentSeason.BannerImagePath,
+                                    BackdropImagePaths = currentSeason.BackdropImagePaths,
+                                    DisplayMediaType = currentSeason.DisplayMediaType,
+                                    DateCreated = season.First().DateCreated,
+                                    Parent = aContainer
+                                };
+                                aSeason.AddChildren(season.ToList());
+                                aContainer.AddChild(aSeason);
+                            }
+                        }
+                        else
+                        {
+                            //not series so just add all children to container
+                            aContainer.AddChildren(container.ToList());
+                        }
+                        //and container to children
+                        folderChildren.Add(aContainer);
+                    }
+                }
+
+                //finally add all the items that don't go in containers
+                folderChildren.AddRange(items.Where(i => (!(i is IGroupInIndex))));
+
+                //and create our quicklist folder
+                quickListFolder = new IndexFolder();
+                quickListFolder.AddChildren(folderChildren);
+
+            }
+
         }
 
         public void Sort(IComparer<BaseItem> sortFunction) {
@@ -597,7 +739,7 @@ namespace MediaBrowser.Library.Entities {
             //Logger.ReportVerbose("=====FINISHED sorting actual children for " + Name);
         }
 
-        List<BaseItem> GetCachedChildren() {
+        protected virtual List<BaseItem> GetCachedChildren() {
             List<BaseItem> items = null;
             //using (new MediaBrowser.Util.Profiler(this.Name + " child retrieval"))
             {
