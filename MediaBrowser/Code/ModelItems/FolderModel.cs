@@ -105,6 +105,18 @@ namespace MediaBrowser.Library {
                         Async.Queue("Newest Item Loader", () =>
                         {
                             quickListItems = folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).ToList();
+                            foreach (var item in quickListItems)
+                            {
+                                if (item.BaseItem is Episode)
+                                {
+                                    //orphaned episodes need to point back to their actual series for some themes
+                                    item.PhysicalParent = ItemFactory.Instance.Create(item.BaseItem.Parent) as FolderModel;
+                                }
+                                else
+                                {
+                                    item.PhysicalParent = this; //otherwise, just point to us
+                                }
+                            }
                             Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                             {
                                 FirePropertyChanged("RecentItems");

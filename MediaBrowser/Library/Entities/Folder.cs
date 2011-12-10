@@ -178,7 +178,7 @@ namespace MediaBrowser.Library.Entities {
             string recentItemOption = Kernel.Instance.ConfigData.RecentItemOption;
             int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
             Logger.ReportVerbose("Starting RAL ("+recentItemOption+") Build for " + this.Name + 
-                " with "+maxItems +" items." +
+                " with "+maxItems +" items out of "+this.RecursiveChildren.Count()+"." +
                 (Kernel.Instance.ParentalControls.Enabled ? " Applying parental controls to search." : " Ignoring parental controls because turned off."));
             switch (recentItemOption)
             {
@@ -250,7 +250,7 @@ namespace MediaBrowser.Library.Entities {
                                           group episode by episode.Parent;
                             foreach (var season in seasons)
                             {
-                                var currentSeason = season.Key as IContainer;
+                                var currentSeason = season.Key as IContainer ?? new IndexFolder() { Name = "<Unknown>" };
                                 IndexFolder aSeason = new IndexFolder()
                                 {
                                     Id = (recentItemOption + this.Name.ToLower() + currentSeason.Name.ToLower() + (currentSeason as BaseItem).Path).GetMD5(),
@@ -266,7 +266,7 @@ namespace MediaBrowser.Library.Entities {
                                     BackdropImagePaths = currentSeason.BackdropImagePaths,
                                     DisplayMediaType = currentSeason.DisplayMediaType,
                                     DateCreated = season.First().DateCreated,
-                                    Parent = aContainer
+                                    Parent = currentSeason == aContainer ? this : aContainer
                                 };
                                 aSeason.AddChildren(season.ToList());
                                 aContainer.AddChild(aSeason);
