@@ -158,7 +158,8 @@ namespace MediaBrowser.Library.Entities {
             {
                 if (quickListFolder == null)
                 {
-                    using (new MediaBrowser.Util.Profiler("RAL Load for "+this.Name)) UpdateQuickList(); //for now build it every time we may persist it...
+                    if (this.ParentalAllowed)
+                        using (new MediaBrowser.Util.Profiler("RAL Load for "+this.Name)) UpdateQuickList(); //for now build it every time we may persist it...
 
                 }
                 return quickListFolder ?? new IndexFolder();
@@ -176,18 +177,28 @@ namespace MediaBrowser.Library.Entities {
             List<BaseItem> items = null;
             string recentItemOption = Kernel.Instance.ConfigData.RecentItemOption;
             int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
+            Logger.ReportVerbose("Starting RAL ("+recentItemOption+") Build for " + this.Name + 
+                " with "+maxItems +" items." +
+                (Kernel.Instance.ParentalControls.Enabled ? " Applying parental controls to search." : " Ignoring parental controls because turned off."));
             switch (recentItemOption)
             {
                 case "watched":
-                    items = this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList();
+                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
+                        this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList() :
+                        this.RecursiveChildren.Where(i => i is Video).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList();
+
                     break;
 
                 case "unwatched":
-                    items = this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList();
+                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
+                        this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed) && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList() :
+                        this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList();
                     break;
 
                 default:
-                    items = this.RecursiveChildren.Where(i => i is Media && i.ParentalAllowed).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList();
+                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
+                        this.RecursiveChildren.Where(i => i is Media && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList() :
+                        this.RecursiveChildren.Where(i => i is Media).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList();
                     break;
 
             }
@@ -228,7 +239,8 @@ namespace MediaBrowser.Library.Entities {
                                 BannerImagePath = currentContainer.BannerImagePath,
                                 BackdropImagePaths = currentContainer.BackdropImagePaths,
                                 DisplayMediaType = currentContainer.DisplayMediaType,
-                                DateCreated = container.First().DateCreated
+                                DateCreated = container.First().DateCreated,
+                                Parent = this
                             };
                         if (container.Key is Series)
                         {
@@ -253,7 +265,8 @@ namespace MediaBrowser.Library.Entities {
                                     BannerImagePath = currentSeason.BannerImagePath,
                                     BackdropImagePaths = currentSeason.BackdropImagePaths,
                                     DisplayMediaType = currentSeason.DisplayMediaType,
-                                    DateCreated = season.First().DateCreated
+                                    DateCreated = season.First().DateCreated,
+                                    Parent = aContainer
                                 };
                                 aSeason.AddChildren(season.ToList());
                                 aContainer.AddChild(aSeason);

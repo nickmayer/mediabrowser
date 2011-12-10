@@ -597,7 +597,7 @@ namespace MediaBrowser.Library
             //this.PhysicalParent.Children.Sort();
         }
 
-        internal virtual void SetWatched(bool value)
+        public virtual void SetWatched(bool value)
         {
             if (IsPlayable)
             {

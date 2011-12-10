@@ -379,6 +379,10 @@ namespace MediaBrowser.Library
             this.unlockedTime = DateTime.UtcNow;
             this.unlockPeriod = Config.Instance.ParentalUnlockPeriod;
             _relockTimer.Start(); //start our re-lock timer
+            if (Config.Instance.HideParentalDisAllowed)
+            {
+                Application.CurrentInstance.RootFolderModel.RefreshChildren();
+            }
         }
 
         private void PromptForPin(ParentalPromptCompletedCallback pe)
