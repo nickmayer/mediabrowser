@@ -60,11 +60,12 @@
       <!-- Item Panel Commands-->
       <Command Name="CmdRecentlyAdded" />
       <Command Name="CmdRecentlyWatched" />
+      <Command Name="CmdRecentlyAddedUnwatched" />
 
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="150" Enabled="true" />
-      <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
+      <!-- this timer is needed to ensure focus stays with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
       <Timer Name="InitialFocusTimer" AutoRepeat="false" Interval="1500" Enabled="false" />
 
       <a:Clock Name="Clock"/>
@@ -88,6 +89,7 @@
         <Options>
           <cor:String String="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
           <cor:String String="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
         </Options>
       </Choice>
 
@@ -107,6 +109,16 @@
           <!--<Set Target="[RecentItems.ChosenIndex]" Value="1" />-->
           <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
           <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Application]" InitialEvaluate="true" >
+        <Conditions>
+          <Equality Source="[Application.RecentItemOption]" Value="unwatched"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
+          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
         </Actions>
       </Changed>
 
@@ -181,8 +193,14 @@
           <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
         </Actions>
       </Changed>
-
-
+      <Changed Source="[CmdRecentlyAddedUnwatched.Invoked]">
+        <Actions>
+          <Set Target="[Application.RecentItemOption]" Value="unwatched" />
+          <Invoke Target="[SelectedItem.RecentItemsChanged]" />
+          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
+          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
+        </Actions>
+      </Changed>
 
       <Changed Source="[RecentItems.ChosenIndex]" >
         <Actions>
@@ -544,7 +562,7 @@
               </Panel>
 
               <!-- Sorting Indicator -->
-              <Panel Name="recentlyAdded">
+              <Panel Name="recentlyAdded" Navigation="PreferFocusOrder">
                 <LayoutInput>
                   <FormLayoutInput Right="Parent,1,-125" Top="Parent,0, 10"  />
                 </LayoutInput>
@@ -558,13 +576,19 @@
                     </Layout>
                     <Children>
                       <hb:HeaderButton Label="[Application.LocalStrings.#AddedEHS!cor:String]"
-                                  Command="[CmdRecentlyAdded]"
-                                  BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
+                                       Command="[CmdRecentlyAdded]"
+                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
                                   />
                       <hb:HeaderButton Label="[Application.LocalStrings.#WatchedEHS!cor:String]"
                                        Command="[CmdRecentlyWatched]"
                                        BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
                                   />
+                      <hb:HeaderButton Label="[Application.LocalStrings.#UnwatchedEHS!cor:String]"
+                                       Command="[CmdRecentlyAddedUnwatched]"
+                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/UnwatchedBase"
+                                       MaxSize="195,45"
+                                       InitialSize="75,45"
+                                  />                      
                     </Children>
                   </Panel>
 
