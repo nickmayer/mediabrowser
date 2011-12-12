@@ -23,7 +23,7 @@ namespace Diamond
     [Serializable]
     public class MyStrings : LocalizedStringData    
     {
-        const string VERSION = "0.3.1.1"; //this is used to see if we have changed and need to re-save
+        const string VERSION = "0.3.1.2"; //this is used to see if we have changed and need to re-save
 
         //these are our strings keyed by property name
         public string DiamondOptionsDesc = "Options for the Diamond Theme.";
@@ -54,8 +54,9 @@ namespace Diamond
         public string EHSGradientOpacity = "EHS Gradient Opacity";
         public string RequireRestart = "*Changes require a restart.*";
 
+        // Now in BaseStrings
         //EHS
-        public string RecentlyAddedUnwatchedEHS = "recently added unwatched";
+        //public string RecentlyAddedUnwatchedEHS = "recently added unwatched";
 
         //Movie Detail Page
         public string DisplayDetail = "Display";
