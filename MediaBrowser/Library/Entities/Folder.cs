@@ -238,6 +238,9 @@ namespace MediaBrowser.Library.Entities {
                                 SecondaryImagePath = currentContainer.SecondaryImagePath,
                                 BannerImagePath = currentContainer.BannerImagePath,
                                 BackdropImagePaths = currentContainer.BackdropImagePaths,
+                                LogoImagePath = currentContainer is Media ? (currentContainer as Media).LogoImagePath : null,
+                                ArtImagePath = currentContainer is Media ? (currentContainer as Media).ArtImagePath : null,
+                                ThumbnailImagePath = currentContainer is Media ? (currentContainer as Media).ThumbnailImagePath : null,
                                 DisplayMediaType = currentContainer.DisplayMediaType,
                                 DateCreated = container.First().DateCreated,
                                 Parent = this
@@ -250,7 +253,7 @@ namespace MediaBrowser.Library.Entities {
                                           group episode by episode.Parent;
                             foreach (var season in seasons)
                             {
-                                var currentSeason = season.Key as IContainer ?? new IndexFolder() { Name = "<Unknown>" };
+                                var currentSeason = season.Key as Series ?? new Season() { Name = "<Unknown>" };
                                 IndexFolder aSeason = new IndexFolder()
                                 {
                                     Id = (recentItemOption + this.Name.ToLower() + currentSeason.Name.ToLower() + (currentSeason as BaseItem).Path).GetMD5(),
@@ -264,6 +267,9 @@ namespace MediaBrowser.Library.Entities {
                                     SecondaryImagePath = currentSeason.SecondaryImagePath,
                                     BannerImagePath = currentSeason.BannerImagePath,
                                     BackdropImagePaths = currentSeason.BackdropImagePaths,
+                                    LogoImagePath = currentSeason.LogoImagePath,
+                                    ArtImagePath = currentSeason.ArtImagePath,
+                                    ThumbnailImagePath = currentSeason.ThumbnailImagePath,
                                     DisplayMediaType = currentSeason.DisplayMediaType,
                                     DateCreated = season.First().DateCreated,
                                     Parent = currentSeason == aContainer ? this : aContainer
