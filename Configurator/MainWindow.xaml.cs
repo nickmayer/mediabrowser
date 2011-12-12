@@ -767,7 +767,8 @@ sortorder: {2}
                         Logger.ReportInfo("Reloading Virtual children");
                         if (RefreshPlugins)
                         {
-                            Kernel.Init(KernelLoadDirective.ShadowPlugins);
+                            //Kernel.Init(KernelLoadDirective.ShadowPlugins);
+                            Kernel.Instance.ReLoadRoot();
                         }
 
                         Kernel.Instance.RootFolder.ValidateChildren();
