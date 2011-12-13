@@ -173,7 +173,7 @@ namespace MediaBrowser.Library.Entities {
 
         public virtual void UpdateQuickList() 
         {
-            //rebuild the proper list and save to repo
+            //rebuild the proper list
             List<BaseItem> items = null;
             string recentItemOption = Kernel.Instance.ConfigData.RecentItemOption;
             int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
@@ -219,6 +219,12 @@ namespace MediaBrowser.Library.Entities {
                         //add the items without rolling up
                         foreach (var i in container)
                         {
+                            //make sure any inherited images get loaded
+                            var ignore = i.Parent != null ? i.Parent.BackdropImages : null;
+                            ignore = i.BackdropImages;
+                            var ignore2 = i.LogoImage;
+                            ignore2 = i.ArtImage;
+                            
                             folderChildren.Add(i);
                         }
                     }
@@ -303,11 +309,13 @@ namespace MediaBrowser.Library.Entities {
             Sort(sortFunction, true);
         }
 
+        //can't change the signature of virtual function so have to use this property to report changes -ebr
+        public bool FolderChildrenChanged = false;
 
         public virtual void ValidateChildren() {
             // we never want 2 threads validating children at the same time
             lock (validateChildrenLock) {
-                ValidateChildrenImpl();
+                FolderChildrenChanged = ValidateChildrenImpl();
             }
         }
 

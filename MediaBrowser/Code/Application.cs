@@ -640,21 +640,24 @@ namespace MediaBrowser
                             {
                                 Kernel.Instance.MajorActivity = true;
                                 RootFolder.RefreshMetadata();
-                                foreach (Folder folder in RootFolder.RecursiveFolders)
-                                {
-                                    folder.ValidateChildren();
-                                }
-                                foreach (BaseItem item in RootFolder.RecursiveChildren)
-                                {
-                                    //refresh new items
-                                    if ((DateTime.Now - item.DateModified).TotalDays < 2)
-                                        item.RefreshMetadata();
-                                }
-                                //finally - we need to invalidate the recent lists to pick up any new items we just found
-                                foreach (Item item in RootFolderModel.Children)
-                                {
-                                    (item as FolderModel).QuickListItems = null; //force to re-load
-                                }
+
+                                //These validations have been moved to the recent list builds since they are needed there anyway
+
+                                //foreach (Folder folder in RootFolder.RecursiveFolders)
+                                //{
+                                //    folder.ValidateChildren();
+                                //}
+                                //foreach (BaseItem item in RootFolder.RecursiveChildren)
+                                //{
+                                //    //refresh new items
+                                //    if ((DateTime.Now - item.DateModified).TotalDays < 2)
+                                //        item.RefreshMetadata();
+                                //}
+                                ////finally - we need to invalidate the recent lists to pick up any new items we just found
+                                //foreach (Item item in RootFolderModel.Children)
+                                //{
+                                //    (item as FolderModel).QuickListItems = null; //force to re-load
+                                //}
                                 Kernel.Instance.MajorActivity = false;
                             }
                         });
