@@ -220,7 +220,7 @@ namespace MediaBrowser.Library {
             //called when we watch something so add to top of list (this way we don't have to re-build whole thing)
             if (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed)
             {
-                if (quickListItems != null) //already have a list
+                if (Config.Instance.RecentItemOption == "watched" && quickListItems != null) //already have a list
                 {
                     //first we need to remove ourselves if we're already in the list (can't search with item cuz we were cloned)
                     Item us = quickListItems.Find(i => i.Id == item.Id);
