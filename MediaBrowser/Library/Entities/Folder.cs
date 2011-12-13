@@ -29,7 +29,7 @@ namespace MediaBrowser.Library.Entities {
         public MBDirectoryWatcher directoryWatcher;
         Type childType;
         protected IndexFolder quickListFolder;
-        protected Guid quickListID { get { return (Kernel.Instance.ConfigData.RecentItemOption + this.Name.ToLower() + this.Path.ToLower()).GetMD5(); } }
+        protected Guid quickListID { get { return (Kernel.Instance.ConfigData.RecentItemOption + this.Name + this.Path).GetMD5(); } }
 
         public Folder()
             : base() {
@@ -152,6 +152,7 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        protected bool reBuildQuickList = false;
         public Folder QuickList
         {
             get
@@ -159,7 +160,19 @@ namespace MediaBrowser.Library.Entities {
                 if (quickListFolder == null)
                 {
                     if (this.ParentalAllowed)
-                        using (new MediaBrowser.Util.Profiler("RAL Load for "+this.Name)) UpdateQuickList(); //for now build it every time we may persist it...
+                    {
+                        if (Kernel.Instance.ConfigData.RecentItemOption == "watched" || Kernel.Instance.ConfigData.RecentItemOption == "unwatched")
+                            reBuildQuickList = true;  //have to re-build these each time
+
+                        if (!reBuildQuickList) quickListFolder = Kernel.Instance.ItemRepository.RetrieveItem(quickListID) as IndexFolder;
+                        if (quickListFolder == null || quickListFolder.Name != "ParentalControl:" + Kernel.Instance.ParentalControls.Enabled)
+                        {
+                            //re-build
+                            using (new MediaBrowser.Util.Profiler("RAL Load for " + this.Name)) UpdateQuickList();
+                            //and then try and load again
+                            quickListFolder = Kernel.Instance.ItemRepository.RetrieveItem(quickListID) as IndexFolder;
+                        }
+                    }
 
                 }
                 return quickListFolder ?? new IndexFolder();
@@ -169,12 +182,14 @@ namespace MediaBrowser.Library.Entities {
         public virtual void ResetQuickList()
         {
             quickListFolder = null; //it will re-load next time requested
+            reBuildQuickList = true;
         }
 
         public virtual void UpdateQuickList() 
         {
             //rebuild the proper list
             List<BaseItem> items = null;
+            int containerNo = 0;
             string recentItemOption = Kernel.Instance.ConfigData.RecentItemOption;
             int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
             Logger.ReportVerbose("Starting RAL ("+recentItemOption+") Build for " + this.Name + 
@@ -184,8 +199,8 @@ namespace MediaBrowser.Library.Entities {
             {
                 case "watched":
                     items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
-                        this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList() :
-                        this.RecursiveChildren.Where(i => i is Video).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList();
+                        this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount > 0 && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList() :
+                        this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount > 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList();
 
                     break;
 
@@ -231,9 +246,10 @@ namespace MediaBrowser.Library.Entities {
                     else
                     {
                         var currentContainer = container.Key as IContainer ?? new IndexFolder() { Name = "<Unknown>"};
-                        IndexFolder aContainer = new IndexFolder()
+                        containerNo++;
+                        IndexFolder aContainer = new IndexFolder(new List<BaseItem>())
                             {
-                                Id = (recentItemOption + this.Name.ToLower() + currentContainer.Name.ToLower() + (currentContainer as BaseItem).Path).GetMD5(),
+                                Id = (recentItemOption + this.Name.ToLower() + containerNo).GetMD5(),
                                 Name = currentContainer.Name + " ("+container.Count()+" Items)",
                                 Overview = currentContainer.Overview,
                                 MpaaRating = currentContainer.MpaaRating,
@@ -260,9 +276,10 @@ namespace MediaBrowser.Library.Entities {
                             foreach (var season in seasons)
                             {
                                 var currentSeason = season.Key as Series ?? new Season() { Name = "<Unknown>" };
-                                IndexFolder aSeason = new IndexFolder()
+                                containerNo++;
+                                IndexFolder aSeason = new IndexFolder(season.ToList())
                                 {
-                                    Id = (recentItemOption + this.Name.ToLower() + currentSeason.Name.ToLower() + (currentSeason as BaseItem).Path).GetMD5(),
+                                    Id = (recentItemOption + this.Name.ToLower() + containerNo).GetMD5(),
                                     Name = currentSeason.Name + " ("+season.Count()+" Items)",
                                     Overview = currentSeason.Overview,
                                     MpaaRating = currentSeason.MpaaRating,
@@ -280,7 +297,8 @@ namespace MediaBrowser.Library.Entities {
                                     DateCreated = season.First().DateCreated,
                                     Parent = currentSeason == aContainer ? this : aContainer
                                 };
-                                aSeason.AddChildren(season.ToList());
+                                Kernel.Instance.ItemRepository.SaveItem(aSeason);
+                                Kernel.Instance.ItemRepository.SaveChildren(aSeason.Id, season.Select(i => i.Id));
                                 aContainer.AddChild(aSeason);
                             }
                         }
@@ -289,6 +307,8 @@ namespace MediaBrowser.Library.Entities {
                             //not series so just add all children to container
                             aContainer.AddChildren(container.ToList());
                         }
+                        Kernel.Instance.ItemRepository.SaveItem(aContainer);
+                        Kernel.Instance.ItemRepository.SaveChildren(aContainer.Id, aContainer.Children.Select(i => i.Id));
                         //and container to children
                         folderChildren.Add(aContainer);
                     }
@@ -298,8 +318,11 @@ namespace MediaBrowser.Library.Entities {
                 folderChildren.AddRange(items.Where(i => (!(i is IGroupInIndex))));
 
                 //and create our quicklist folder
-                quickListFolder = new IndexFolder();
-                quickListFolder.AddChildren(folderChildren);
+                //we save it with the current state of parental controls so we know when we re-load if it is valid
+                IndexFolder quickList = new IndexFolder(folderChildren) { Id = quickListID, Name = "ParentalControl:" + Kernel.Instance.ParentalControls.Enabled };
+                Logger.ReportVerbose(this.Name + " folderChildren: " + folderChildren.Count + " listfolder.children: " + quickList.Children.Count());
+                Kernel.Instance.ItemRepository.SaveItem(quickList);
+                Kernel.Instance.ItemRepository.SaveChildren(quickListID, folderChildren.Select(i => i.Id));
 
             }
 

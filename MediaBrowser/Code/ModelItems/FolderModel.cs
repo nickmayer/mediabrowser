@@ -89,8 +89,9 @@ namespace MediaBrowser.Library {
                 return string.IsNullOrEmpty(BaseItem.Overview);
             }
         }
-        protected string lastQuickListType = "";
+        protected string lastQuickListType = Config.Instance.RecentItemOption;
         protected bool validated = false;
+        protected object quickListLock = new object();
         protected List<Item> quickListItems;
 
         public override List<Item> QuickListItems {
@@ -130,25 +131,32 @@ namespace MediaBrowser.Library {
 
                                 }, null, true);
                             }
-                            quickListItems = folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).ToList();
-                            foreach (var item in quickListItems)
+                            lock (quickListLock)
                             {
-                                if (item.BaseItem is Episode)
+                                Logger.ReportVerbose(this.Name + " Quicklist has " + folder.QuickList.Children.Count + " items");
+                                quickListItems = Config.Instance.RecentItemOption == "watched" ? 
+                                    folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).OrderByDescending(i => i.LastPlayedString).ToList() :
+                                    folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).OrderByDescending(i => i.BaseItem.DateCreated).ToList();
+                                Logger.ReportVerbose(this.Name + " Quicklist created with " + quickListItems.Count + " items");
+                                foreach (var item in quickListItems)
                                 {
-                                    //orphaned episodes need to point back to their actual series for some themes
-                                    item.PhysicalParent = ItemFactory.Instance.Create(item.BaseItem.Parent) as FolderModel;
+                                    if (item.BaseItem is Episode)
+                                    {
+                                        //orphaned episodes need to point back to their actual series for some themes
+                                        item.PhysicalParent = ItemFactory.Instance.Create(item.BaseItem.Parent) as FolderModel;
+                                    }
+                                    else
+                                    {
+                                        item.PhysicalParent = this; //otherwise, just point to us
+                                    }
                                 }
-                                else
+                                Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
                                 {
-                                    item.PhysicalParent = this; //otherwise, just point to us
-                                }
+                                    FirePropertyChanged("RecentItems");
+                                    FirePropertyChanged("NewestItems");
+                                    FirePropertyChanged("QuickListItems");
+                                });
                             }
-                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(_ =>
-                            {
-                                FirePropertyChanged("RecentItems");
-                                FirePropertyChanged("NewestItems");
-                                FirePropertyChanged("QuickListItems");
-                            });
                         }, null, true);
 
                     lastQuickListType = Application.CurrentInstance.RecentItemOption;
