@@ -19,7 +19,7 @@ namespace MediaBrowser.Library.Providers
         const string Banner = "banner";
         const string Backdrop = "backdrop";
         const string Logo = "logo";
-        const string Art = "art";
+        const string Art = "clearart";
         const string Thumbnail = "thumb";
         
 
