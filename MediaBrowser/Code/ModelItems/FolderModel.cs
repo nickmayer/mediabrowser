@@ -90,6 +90,7 @@ namespace MediaBrowser.Library {
             }
         }
         protected string lastQuickListType = "";
+        protected bool validated = false;
         protected List<Item> quickListItems;
 
         public override List<Item> QuickListItems {
@@ -104,6 +105,31 @@ namespace MediaBrowser.Library {
                     if (quickListItems == null)
                         Async.Queue("Newest Item Loader", () =>
                         {
+                            //the first time kick off a validation of our whole tree so we pick up anything new
+                            if (!validated)
+                            {
+                                Async.Queue(this.Name + " Initial Validation", () =>
+                                {
+                                    validated = true;
+                                    var changed = false;
+                                    using (new MediaBrowser.Util.Profiler(this.Name + " Initial validate"))
+                                    {
+                                        folder.ValidateChildren();
+                                        changed = folder.FolderChildrenChanged;
+                                        foreach (var subFolder in folder.RecursiveFolders)
+                                        {
+                                            subFolder.ValidateChildren();
+                                            changed |= subFolder.FolderChildrenChanged;
+                                        }
+                                    }
+                                    if (changed)
+                                    {
+                                        Logger.ReportVerbose(this.Name + " has had changes.");
+                                        QuickListItems = null; //this will force it to re-load
+                                    }
+
+                                }, null, true);
+                            }
                             quickListItems = folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).ToList();
                             foreach (var item in quickListItems)
                             {
