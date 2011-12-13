@@ -111,8 +111,18 @@ namespace MediaBrowser.Library {
                                 Async.Queue(this.Name + " Initial Validation", () =>
                                 {
                                     validated = true;
-                                    using (new MediaBrowser.Util.Profiler(this.Name+" Initial validate")) folder.ValidateChildren();
-                                    if (folder.FolderChildrenChanged)
+                                    var changed = false;
+                                    using (new MediaBrowser.Util.Profiler(this.Name + " Initial validate"))
+                                    {
+                                        folder.ValidateChildren();
+                                        changed = folder.FolderChildrenChanged;
+                                        foreach (var subFolder in folder.RecursiveFolders)
+                                        {
+                                            subFolder.ValidateChildren();
+                                            changed |= subFolder.FolderChildrenChanged;
+                                        }
+                                    }
+                                    if (changed)
                                     {
                                         Logger.ReportVerbose(this.Name + " has had changes.");
                                         QuickListItems = null; //this will force it to re-load
