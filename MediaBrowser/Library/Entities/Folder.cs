@@ -161,7 +161,7 @@ namespace MediaBrowser.Library.Entities {
                 {
                     if (this.ParentalAllowed)
                     {
-                        if (Kernel.Instance.ConfigData.RecentItemOption == "watched" || Kernel.Instance.ConfigData.RecentItemOption == "unwatched")
+                        if (Kernel.Instance.ConfigData.RecentItemOption == "watched")
                             reBuildQuickList = true;  //have to re-build these each time
 
                         if (!reBuildQuickList) quickListFolder = Kernel.Instance.ItemRepository.RetrieveItem(quickListID) as IndexFolder;
