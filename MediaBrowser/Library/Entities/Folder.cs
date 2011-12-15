@@ -195,7 +195,7 @@ namespace MediaBrowser.Library.Entities {
             //rebuild the proper list
             List<BaseItem> items = null;
             int containerNo = 0;
-            int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
+            int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer && Kernel.Instance.ConfigData.RecentItemCollapseThresh <= 6 ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
             Logger.ReportVerbose("Starting RAL ("+recentItemOption+") Build for " + this.Name + 
                 " with "+maxItems +" items out of "+this.RecursiveChildren.Count()+"." +
                 (Kernel.Instance.ParentalControls.Enabled ? " Applying parental controls to search." : " Ignoring parental controls because turned off."));
