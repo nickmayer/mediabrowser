@@ -34,7 +34,7 @@ namespace MediaBrowser.Library.ImageManagement {
                 MediaBrowser.Library.Logging.Logger.ReportWarning("Bad date info for image "+Path+". Create date: " + info.CreationTimeUtc + " Mod date: " + info.LastWriteTimeUtc);
                 return false;
             }
-            //if (date < info.LastWriteTimeUtc) System.Diagnostics.Debugger.Break();
+            if (date < info.LastWriteTimeUtc) Logger.ReportVerbose(Path + " has changed since last cached at " + date + ".  Original image mod time: " + info.LastWriteTimeUtc);
             return date < info.LastWriteTimeUtc - TimeSpan.FromMinutes(20); //fudge this a little to account for differing times on different filesystems
         }
 
