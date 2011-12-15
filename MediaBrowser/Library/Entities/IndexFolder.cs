@@ -7,6 +7,16 @@ namespace MediaBrowser.Library.Entities
 {
     public class IndexFolder : Series
     {
+        public IndexFolder()
+            : base()
+        { }
+
+        public IndexFolder(List<BaseItem> children)
+        {
+            //create an index folder with a specified set of children
+            this.AddChildren(children);
+        }
+
         public override void ValidateChildren()
         {
             return; //never validate as they don't actually exist in the file system in this way
