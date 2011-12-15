@@ -98,7 +98,8 @@ namespace MediaBrowser.Library {
             get {
                 if (folder != null)
                 {
-                    if (Application.CurrentInstance.RecentItemOption != lastQuickListType)
+                    string recentItemOption = Application.CurrentInstance.RecentItemOption;  //save this as it could change during this process
+                    if (recentItemOption != lastQuickListType)
                     {
                         folder.ResetQuickList();
                         quickListItems = null;
@@ -125,7 +126,7 @@ namespace MediaBrowser.Library {
                                     }
                                     if (!changed)
                                     {
-                                        if (Kernel.Instance.ConfigData.RecentItemOption == "unwatched" && quickListItems != null)
+                                        if (recentItemOption == "unwatched" && quickListItems != null)
                                         {
                                             lock (quickListLock)
                                             {
@@ -166,7 +167,7 @@ namespace MediaBrowser.Library {
                             lock (quickListLock)
                             {
                                 Logger.ReportVerbose(this.Name + " Quicklist has " + folder.QuickList.Children.Count + " items");
-                                quickListItems = Config.Instance.RecentItemOption == "watched" ? 
+                                quickListItems = recentItemOption == "watched" ? 
                                     folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).OrderByDescending(i => i.LastPlayedString).ToList() :
                                     folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).OrderByDescending(i => i.BaseItem.DateCreated).ToList();
                                 Logger.ReportVerbose(this.Name + " Quicklist created with " + quickListItems.Count + " items");

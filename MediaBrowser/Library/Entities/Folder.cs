@@ -29,7 +29,6 @@ namespace MediaBrowser.Library.Entities {
         public MBDirectoryWatcher directoryWatcher;
         Type childType;
         protected IndexFolder quickListFolder;
-        protected Guid quickListID { get { return (Kernel.Instance.ConfigData.RecentItemOption + this.Name + this.Path).GetMD5(); } }
 
         public Folder()
             : base() {
@@ -152,6 +151,11 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        protected Guid QuickListID(string option)
+        {
+            return (option + this.Name + this.Path).GetMD5();
+        }
+
         protected bool reBuildQuickList = false;
         public Folder QuickList
         {
@@ -161,16 +165,17 @@ namespace MediaBrowser.Library.Entities {
                 {
                     if (this.ParentalAllowed)
                     {
-                        if (Kernel.Instance.ConfigData.RecentItemOption == "watched")
+                        string recentItemOption = Kernel.Instance.ConfigData.RecentItemOption;
+                        if (recentItemOption == "watched")
                             reBuildQuickList = true;  //have to re-build these each time
 
-                        if (!reBuildQuickList) quickListFolder = Kernel.Instance.ItemRepository.RetrieveItem(quickListID) as IndexFolder;
+                        if (!reBuildQuickList) quickListFolder = Kernel.Instance.ItemRepository.RetrieveItem(QuickListID(recentItemOption)) as IndexFolder;
                         if (quickListFolder == null || quickListFolder.Name != "ParentalControl:" + Kernel.Instance.ParentalControls.Enabled)
                         {
                             //re-build
-                            using (new MediaBrowser.Util.Profiler("RAL Load for " + this.Name)) UpdateQuickList();
+                            using (new MediaBrowser.Util.Profiler("RAL Load for " + this.Name)) UpdateQuickList(recentItemOption);
                             //and then try and load again
-                            quickListFolder = Kernel.Instance.ItemRepository.RetrieveItem(quickListID) as IndexFolder;
+                            quickListFolder = Kernel.Instance.ItemRepository.RetrieveItem(QuickListID(recentItemOption)) as IndexFolder;
                         }
                     }
 
@@ -185,12 +190,11 @@ namespace MediaBrowser.Library.Entities {
             reBuildQuickList = true;
         }
 
-        public virtual void UpdateQuickList() 
+        public virtual void UpdateQuickList(string recentItemOption) 
         {
             //rebuild the proper list
             List<BaseItem> items = null;
             int containerNo = 0;
-            string recentItemOption = Kernel.Instance.ConfigData.RecentItemOption;
             int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
             Logger.ReportVerbose("Starting RAL ("+recentItemOption+") Build for " + this.Name + 
                 " with "+maxItems +" items out of "+this.RecursiveChildren.Count()+"." +
@@ -219,7 +223,7 @@ namespace MediaBrowser.Library.Entities {
             }
             if (items != null)
             {
-                Logger.ReportVerbose(Kernel.Instance.ConfigData.RecentItemOption + " list for " + this.Name + " loaded with " + items.Count + " items.");
+                Logger.ReportVerbose(recentItemOption + " list for " + this.Name + " loaded with " + items.Count + " items.");
                 List<BaseItem> folderChildren = new List<BaseItem>();
                 //now collapse anything that needs to be and create the child list for the list folder
                 var containers = from item in items
@@ -319,10 +323,10 @@ namespace MediaBrowser.Library.Entities {
 
                 //and create our quicklist folder
                 //we save it with the current state of parental controls so we know when we re-load if it is valid
-                IndexFolder quickList = new IndexFolder(folderChildren) { Id = quickListID, Name = "ParentalControl:" + Kernel.Instance.ParentalControls.Enabled };
+                IndexFolder quickList = new IndexFolder(folderChildren) { Id = QuickListID(recentItemOption), Name = "ParentalControl:" + Kernel.Instance.ParentalControls.Enabled };
                 Logger.ReportVerbose(this.Name + " folderChildren: " + folderChildren.Count + " listfolder.children: " + quickList.Children.Count());
                 Kernel.Instance.ItemRepository.SaveItem(quickList);
-                Kernel.Instance.ItemRepository.SaveChildren(quickListID, folderChildren.Select(i => i.Id));
+                Kernel.Instance.ItemRepository.SaveChildren(QuickListID(recentItemOption), folderChildren.Select(i => i.Id));
 
             }
 
