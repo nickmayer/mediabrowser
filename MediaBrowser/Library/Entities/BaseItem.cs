@@ -456,7 +456,23 @@ namespace MediaBrowser.Library.Entities {
                 this.BannerImage.ClearLocalImages();
                 ignore = this.BannerImage.GetLocalImagePath(); //and, finally, banner
             }
+            if (this.LogoImage != null)
+            {
+                this.LogoImage.ClearLocalImages();
+                ignore = this.LogoImage.GetLocalImagePath(); //and, finally, banner
+            }
+            if (this.ArtImage != null)
+            {
+                this.ArtImage.ClearLocalImages();
+                ignore = this.ArtImage.GetLocalImagePath(); //and, finally, banner
+            }
+            if (this.ThumbnailImage != null)
+            {
+                this.ThumbnailImage.ClearLocalImages();
+                ignore = this.ThumbnailImage.GetLocalImagePath(); //and, finally, banner
+            }
         }
+
         public void MigrateAllImages()
         {
             if (this.PrimaryImage != null)
