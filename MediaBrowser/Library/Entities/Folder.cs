@@ -195,29 +195,22 @@ namespace MediaBrowser.Library.Entities {
             //rebuild the proper list
             List<BaseItem> items = null;
             int containerNo = 0;
-            int maxItems = this.ActualChildren.Count > 0 ? this.ActualChildren[0] is IContainer && Kernel.Instance.ConfigData.RecentItemCollapseThresh <= 6 ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
+            int maxItems = this.ActualChildren.Count > 0 ? (this.ActualChildren[0] is IContainer || this.GetType().Name == "MusicMainFolder") && Kernel.Instance.ConfigData.RecentItemCollapseThresh <= 6 ? Kernel.Instance.ConfigData.RecentItemContainerCount : Kernel.Instance.ConfigData.RecentItemCount : Kernel.Instance.ConfigData.RecentItemCount;
             Logger.ReportVerbose("Starting RAL ("+recentItemOption+") Build for " + this.Name + 
-                " with "+maxItems +" items out of "+this.RecursiveChildren.Count()+"." +
-                (Kernel.Instance.ParentalControls.Enabled ? " Applying parental controls to search." : " Ignoring parental controls because turned off."));
+                " with "+maxItems +" items out of "+this.RecursiveChildren.Count()+".");
             switch (recentItemOption)
             {
                 case "watched":
-                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
-                        this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount > 0 && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList() :
-                        this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount > 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList();
+                    items = this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount > 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).Take(maxItems).ToList();
 
                     break;
 
                 case "unwatched":
-                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
-                        this.RecursiveChildren.Where(i => i is Video && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed) && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList() :
-                        this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList();
+                    items = this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount == 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(v => v.DateCreated).Take(maxItems).ToList();
                     break;
 
                 default:
-                    items = Kernel.Instance.ParentalControls.Enabled ? //bypass parental check if not turned on (for speed)
-                        this.RecursiveChildren.Where(i => i is Media && i.ParentalAllowed && (i.Parent != null && i.Parent.ParentalAllowed)).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList() :
-                        this.RecursiveChildren.Where(i => i is Media).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList();
+                    items = this.RecursiveChildren.Where(i => i is Media).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => i.DateCreated).Take(maxItems).ToList();
                     break;
 
             }
