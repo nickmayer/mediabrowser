@@ -151,6 +151,23 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        protected BaseItem lastWatchedItem;
+        public BaseItem LastWatchedItem
+        {
+            get
+            {
+                if (lastWatchedItem == null)
+                {
+                    lastWatchedItem = this.RecursiveChildren.Where(i => i is Video && (i as Video).PlaybackStatus.PlayCount > 0).Distinct(new BaseItemEqualityComparer()).OrderByDescending(i => (i as Video).PlaybackStatus.LastPlayed).First();
+                }
+                return lastWatchedItem;
+            }
+            set
+            {
+                lastWatchedItem = value;
+            }
+        }
+
         protected Guid QuickListID(string option)
         {
             return (option + this.Name + this.Path).GetMD5();

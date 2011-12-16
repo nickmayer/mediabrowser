@@ -89,6 +89,20 @@ namespace MediaBrowser.Library {
                 return string.IsNullOrEmpty(BaseItem.Overview);
             }
         }
+
+        public bool HasLastWatchedItem
+        {
+            get { return folder.LastWatchedItem != null; }
+        }
+
+        public Item LastWatchedItem
+        {
+            get
+            {
+                return ItemFactory.Instance.Create(folder.LastWatchedItem);
+            }
+        }
+
         protected string lastQuickListType = Config.Instance.RecentItemOption;
         protected bool validated = false;
         protected object quickListLock = new object();
@@ -312,6 +326,8 @@ namespace MediaBrowser.Library {
             //called when we watch something so add to top of list (this way we don't have to re-build whole thing)
             if (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed)
             {
+                folder.LastWatchedItem = item.BaseItem;
+                FirePropertyChanged("LastWatchedItem");
                 if (Config.Instance.RecentItemOption == "watched" && quickListItems != null) //already have a list
                 {
                     //first we need to remove ourselves if we're already in the list (can't search with item cuz we were cloned)
@@ -331,6 +347,11 @@ namespace MediaBrowser.Library {
         public void RemoveNewlyWatched(Item item)
         {
             //called when we clear the watched status manually (this way we don't have to re-build whole thing)
+            if (HasLastWatchedItem && folder.LastWatchedItem.Id == item.Id)
+            {
+                folder.LastWatchedItem = null;
+                FirePropertyChanged("LastWatchedItem");
+            }
             if (Config.Instance.RecentItemOption == "watched" && (quickListItems != null)) // have a list
             {
                 Item us = quickListItems.Find(i => i.Id == item.Id);
