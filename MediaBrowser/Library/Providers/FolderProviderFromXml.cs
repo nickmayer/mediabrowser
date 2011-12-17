@@ -52,7 +52,8 @@ namespace MediaBrowser.Library.Providers
         {
             string location = Item.Path;
             //look for specialized name first (for virtual folders) - need to strip out vf name from path...
-            string vlocation = Path.Combine(location.Substring(0,location.LastIndexOf("\\")), Item.Name+".folder.xml");
+            string cleanName = LibraryManagement.Helper.RemoveInvalidFileChars(Item.Name);
+            string vlocation = Path.Combine(location.Substring(0,location.LastIndexOf("\\")), cleanName+".folder.xml");
             //Logger.ReportInfo("Looking for vlocation " + vlocation);
             if (File.Exists(location))
                 return vlocation;

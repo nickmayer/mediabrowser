@@ -70,6 +70,7 @@ namespace MediaBrowser
         public string RecentItemOption { get { return Config.Instance.RecentItemOption; } set { Config.Instance.RecentItemOption = value; Kernel.Instance.ConfigData.RecentItemOption = value; } }
         private bool pluginUpdatesAvailable = false;
         public System.Drawing.Bitmap ExtSplashBmp;
+        private Item lastPlayed;
 
         public bool PluginUpdatesAvailable
         {
@@ -286,6 +287,14 @@ namespace MediaBrowser
             get
             {
                 return CONFIG_ENTRY_POINT.ToLower();
+            }
+        }
+
+        public Item LastPlayedItem
+        {
+            get
+            {
+                return lastPlayed ?? Item.BlankItem;
             }
         }
 
@@ -1355,6 +1364,7 @@ namespace MediaBrowser
                         if (Application.CurrentInstance.RunPrePlayProcesses(item, intros))
                         {
                             item.Play();
+                            this.lastPlayed = item;
                         }
                     });
                 }
@@ -1377,6 +1387,7 @@ namespace MediaBrowser
                     if (Application.CurrentInstance.RunPrePlayProcesses(item, false))
                     {
                         item.Resume();
+                        this.lastPlayed = item;
                     }
                 });
             }

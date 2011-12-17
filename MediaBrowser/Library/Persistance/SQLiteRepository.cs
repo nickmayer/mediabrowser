@@ -159,7 +159,10 @@ namespace MediaBrowser.Library.Persistance
                                 }
                                 catch (Exception e)
                                 {
-                                    Logger.ReportException("Failed to execute SQL Stmt: " + command.CommandText, e);
+                                    string parameters = "";
+                                    foreach (var parm in command.Parameters)
+                                        parameters += " " + parm;
+                                    Logger.ReportException("Failed to execute SQL Stmt: " + command.CommandText + " Parms: "+parameters, e);
                                 }
                             }
                             try

@@ -89,6 +89,20 @@ namespace MediaBrowser.Library {
                 return string.IsNullOrEmpty(BaseItem.Overview);
             }
         }
+
+        public bool HasLastWatchedItem
+        {
+            get { return folder.LastWatchedItem != null; }
+        }
+
+        public Item LastWatchedItem
+        {
+            get
+            {
+                return ItemFactory.Instance.Create(folder.LastWatchedItem);
+            }
+        }
+
         protected string lastQuickListType = Config.Instance.RecentItemOption;
         protected bool validated = false;
         protected object quickListLock = new object();
@@ -98,7 +112,8 @@ namespace MediaBrowser.Library {
             get {
                 if (folder != null)
                 {
-                    if (Application.CurrentInstance.RecentItemOption != lastQuickListType)
+                    string recentItemOption = Application.CurrentInstance.RecentItemOption;  //save this as it could change during this process
+                    if (recentItemOption != lastQuickListType)
                     {
                         folder.ResetQuickList();
                         quickListItems = null;
@@ -125,7 +140,7 @@ namespace MediaBrowser.Library {
                                     }
                                     if (!changed)
                                     {
-                                        if (Kernel.Instance.ConfigData.RecentItemOption == "unwatched" && quickListItems != null)
+                                        if (recentItemOption == "unwatched" && quickListItems != null)
                                         {
                                             lock (quickListLock)
                                             {
@@ -166,7 +181,7 @@ namespace MediaBrowser.Library {
                             lock (quickListLock)
                             {
                                 Logger.ReportVerbose(this.Name + " Quicklist has " + folder.QuickList.Children.Count + " items");
-                                quickListItems = Config.Instance.RecentItemOption == "watched" ? 
+                                quickListItems = recentItemOption == "watched" ? 
                                     folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).OrderByDescending(i => i.LastPlayedString).ToList() :
                                     folder.QuickList.Children.Select(c => ItemFactory.Instance.Create(c)).OrderByDescending(i => i.BaseItem.DateCreated).ToList();
                                 Logger.ReportVerbose(this.Name + " Quicklist created with " + quickListItems.Count + " items");
@@ -311,6 +326,8 @@ namespace MediaBrowser.Library {
             //called when we watch something so add to top of list (this way we don't have to re-build whole thing)
             if (item.ParentalAllowed || !Config.Instance.HideParentalDisAllowed)
             {
+                folder.LastWatchedItem = item.BaseItem;
+                FirePropertyChanged("LastWatchedItem");
                 if (Config.Instance.RecentItemOption == "watched" && quickListItems != null) //already have a list
                 {
                     //first we need to remove ourselves if we're already in the list (can't search with item cuz we were cloned)
@@ -330,6 +347,11 @@ namespace MediaBrowser.Library {
         public void RemoveNewlyWatched(Item item)
         {
             //called when we clear the watched status manually (this way we don't have to re-build whole thing)
+            if (HasLastWatchedItem && folder.LastWatchedItem.Id == item.Id)
+            {
+                folder.LastWatchedItem = null;
+                FirePropertyChanged("LastWatchedItem");
+            }
             if (Config.Instance.RecentItemOption == "watched" && (quickListItems != null)) // have a list
             {
                 Item us = quickListItems.Find(i => i.Id == item.Id);
@@ -421,212 +443,7 @@ namespace MediaBrowser.Library {
             }
             else // normal folder
             {
-                var items = new SortedList<DateTime, Item>();
-                FindNewestChildren(folder, items, 20, -1);
-                folderOverviewCache = string.Join("\n", items.Reverse()
-                    .Select(i => (this.BaseItem.GetType() == typeof(Season) ? i.Value.Name : i.Value.LongName))
-                    .ToArray());
-            }
-        }
-
-        public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize)
-        {
-            FindNewestChildren(folder, foundNames, maxSize, Config.Instance.RecentItemDays);
-        }
-
-        public void FindNewestChildren(Folder folder, SortedList<DateTime, Item> foundNames, int maxSize, int maxDays) 
-        {
-            //using (new MediaBrowser.Util.Profiler("=== Recently Added for "+this.Name))
-            {
-                DateTime daysAgo = DateTime.Now.Subtract(DateTime.Now.Subtract(DateTime.Now.AddDays(-maxDays)));
-                HashSet<Guid> foundIds = new HashSet<Guid>();
-                foreach (var item in folder.Children)
-                {
-                    // recurse folders
-                    if (item is Folder)
-                    {
-                        //don't return items inside protected folders
-                        if (item.ParentalAllowed)
-                        {
-                            if (item is IContainer && !(item is Season) && !foundIds.Contains((folder.Name + item.Name).GetMD5()))
-                            {
-                                //collapse series in the list
-                                bool containsSeasons = false;
-                                SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
-                                FindNewestChildren(item as Folder, subItems, maxSize);
-                                if (item is Series)
-                                {
-                                    //we need to go another level into series to get actual items
-                                    foreach (var seriesChild in (item as Folder).Children)
-                                    {
-                                        if (seriesChild is Season)
-                                        {
-                                            SortedList<DateTime, Item> episodes = new SortedList<DateTime, Item>();
-                                            FindNewestChildren(seriesChild as Folder, episodes, maxSize);
-                                            if (episodes.Count >= Config.Instance.RecentItemCollapseThresh)
-                                            {
-                                                //collapse into a season
-                                                var thisContainer = seriesChild as Season;
-                                                var ignore = seriesChild.BackdropImages; //force these to load so they will inherit
-                                                DateTime createdTime = episodes.Keys.Max();
-                                                var container = new IndexFolder()
-                                                {
-                                                    Id = (item.Name + thisContainer.Name).GetMD5(),
-                                                    DateCreated = createdTime,
-                                                    Name = thisContainer.Name + " (" + episodes.Count + " items)",
-                                                    Overview = thisContainer.Overview,
-                                                    MpaaRating = thisContainer.MpaaRating,
-                                                    Genres = thisContainer.Genres,
-                                                    ImdbRating = thisContainer.ImdbRating,
-                                                    Studios = thisContainer.Studios,
-                                                    PrimaryImagePath = thisContainer.PrimaryImagePath,
-                                                    SecondaryImagePath = thisContainer.SecondaryImagePath,
-                                                    BannerImagePath = thisContainer.BannerImagePath,
-                                                    BackdropImagePaths = thisContainer.BackdropImagePaths,
-                                                    DisplayMediaType = thisContainer.DisplayMediaType,
-                                                    Parent = folder
-                                                };
-
-                                                foreach (var pair in episodes)
-                                                {
-                                                    container.AddChild(pair.Value.BaseItem);
-                                                }
-                                                var containerModel = ItemFactory.Instance.Create(container);
-                                                containerModel.PhysicalParent = this;
-                                                while (subItems.ContainsKey(createdTime))
-                                                {
-                                                    // break ties 
-                                                    createdTime = createdTime.AddMilliseconds(1);
-                                                }
-                                                subItems.Add(createdTime, containerModel);
-                                                containsSeasons = true;
-                                            }
-                                            else
-                                            {
-                                                foreach (var pair in episodes)
-                                                {
-                                                    subItems.Add(pair.Key, pair.Value);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                if (subItems.Count >= Config.Instance.RecentItemCollapseThresh || (containsSeasons && subItems.Count > 0)) // always roll series so seasons don't end up on main list
-                                {
-                                    //collapse into a container
-                                    var thisContainer = item as IContainer;
-                                    var ignore = item.BackdropImages; //force these to load so they will inherit
-                                    DateTime createdTime = subItems.Keys.Max();
-                                    var container = new IndexFolder()
-                                    {
-                                        Id = (folder.Name + thisContainer.Name).GetMD5(),
-                                        DateCreated = createdTime,
-                                        Name = thisContainer.Name + " (" + subItems.Count + " items)",
-                                        Overview = thisContainer.Overview,
-                                        MpaaRating = thisContainer.MpaaRating,
-                                        Genres = thisContainer.Genres,
-                                        ImdbRating = thisContainer.ImdbRating,
-                                        Studios = thisContainer.Studios,
-                                        PrimaryImagePath = thisContainer.PrimaryImagePath,
-                                        SecondaryImagePath = thisContainer.SecondaryImagePath,
-                                        BannerImagePath = thisContainer.BannerImagePath,
-                                        BackdropImagePaths = thisContainer.BackdropImagePaths,
-                                        DisplayMediaType = thisContainer.DisplayMediaType,
-                                        Parent = folder
-                                    };
-
-                                    foreach (var pair in subItems)
-                                    {
-                                        container.AddChild(pair.Value.BaseItem);
-                                    }
-                                    var containerModel = ItemFactory.Instance.Create(container);
-                                    containerModel.PhysicalParent = this;
-                                    while (foundNames.ContainsKey(createdTime))
-                                    {
-                                        // break ties 
-                                        createdTime = createdTime.AddMilliseconds(1);
-                                    }
-                                    foundNames.Add(createdTime, containerModel);
-                                    foundIds.Add(container.Id);
-                                }
-                                else
-                                {
-                                    foreach (var pair in subItems)
-                                    {
-                                        if (!foundIds.Contains(pair.Value.Id))
-                                        {
-                                            var key = pair.Key;
-                                            while (foundNames.ContainsKey(key))
-                                            {
-                                                // break ties 
-                                                key = key.AddMilliseconds(1);
-                                            }
-                                            foundNames.Add(key, pair.Value);
-                                            foundIds.Add(pair.Value.Id);
-                                            if (foundNames.Count >= maxSize)
-                                            {
-                                                foundNames.RemoveAt(0);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (!(item is Series))
-                                {
-                                    //regular folder or box set - go into it
-                                    SortedList<DateTime, Item> subItems = new SortedList<DateTime, Item>();
-                                    FindNewestChildren(item as Folder, subItems, maxSize);
-                                    foreach (var pair in subItems)
-                                    {
-                                        if (!foundIds.Contains(pair.Value.Id)) //avoid dups
-                                        {
-                                            var key = pair.Key;
-                                            while (foundNames.ContainsKey(key))
-                                            {
-                                                // break ties 
-                                                key = key.AddMilliseconds(1);
-                                            }
-                                            foundNames.Add(key, pair.Value);
-                                            foundIds.Add(pair.Value.Id);
-                                            if (foundNames.Count >= maxSize)
-                                            {
-                                                foundNames.RemoveAt(0);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!foundIds.Contains(item.Id)) //avoid dups
-                        {
-                            DateTime creationTime = item.DateCreated;
-                            //only if added less than specified ago
-                            if (maxDays == -1 || DateTime.Compare(creationTime, daysAgo) > 0)
-                            {
-                                while (foundNames.ContainsKey(creationTime))
-                                {
-                                    // break ties 
-                                    creationTime = creationTime.AddMilliseconds(1);
-                                }
-                                Item modelItem = ItemFactory.Instance.Create(item);
-                                modelItem.PhysicalParent = this;
-                                var ignore = item.Parent != null ? item.Parent.BackdropImages : null; //force these to load so they will inherit
-                                ignore = item.BackdropImages;
-                                foundNames.Add(creationTime, modelItem);
-                                foundIds.Add(item.Id);
-                                if (foundNames.Count >= maxSize)
-                                {
-                                    foundNames.RemoveAt(0);
-                                }
-                            }
-                        }
-                    }
-                }
+                folderOverviewCache = string.Join("\n", folder.Children.OrderByDescending(i => i.DateCreated).Select(i => i.LongName).Take(Config.Instance.RecentItemCount).ToArray());
             }
         }
 
