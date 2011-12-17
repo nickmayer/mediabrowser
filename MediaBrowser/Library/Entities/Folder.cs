@@ -168,6 +168,20 @@ namespace MediaBrowser.Library.Entities {
             }
         }
 
+        protected List<BaseItem> newestItems;
+
+        public List<BaseItem> NewestItems
+        {
+            get
+            {
+                if (newestItems == null)
+                {
+                    newestItems = this.Children.OrderByDescending(i => i.DateCreated).Take(Kernel.Instance.ConfigData.RecentItemCount).ToList();
+                }
+                return newestItems;
+            }
+        }
+
         protected Guid QuickListID(string option)
         {
             return (option + this.Name + this.Path).GetMD5();

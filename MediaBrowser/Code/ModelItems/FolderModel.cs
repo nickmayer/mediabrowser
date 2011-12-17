@@ -291,14 +291,18 @@ namespace MediaBrowser.Library {
             }
         }
 
+        protected List<Item> newestItems;
         public List<Item> NewestItems {
             get {
-                if (folder != null && folder.ParentalAllowed) {
-                    return QuickListItems;
-                    //return GetNewestItems(Config.Instance.RecentItemCount);
-                } else {
-                    return new List<Item>(); //return empty list if folder is protected
+                if (newestItems == null)
+                {
+                    if (folder != null && folder.ParentalAllowed)
+                    {
+                        newestItems = folder.NewestItems.Select(i => ItemFactory.Instance.Create(i)).ToList();
+                        foreach (var item in newestItems) item.PhysicalParent = this;
+                    }
                 }
+                return newestItems ?? new List<Item>();
             }
         }
 
