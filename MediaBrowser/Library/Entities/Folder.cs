@@ -221,6 +221,20 @@ namespace MediaBrowser.Library.Entities {
             reBuildQuickList = true;
         }
 
+        protected void RemoveQuicklist()
+        {
+            //remove any persisted lists from the cache
+            quickListFolder = new IndexFolder(new List<BaseItem>()) { Id = QuickListID("added") };
+            Kernel.Instance.ItemRepository.SaveItem(quickListFolder);
+            Kernel.Instance.ItemRepository.SaveChildren(quickListFolder.Id, new List<Guid>());
+            quickListFolder.Id = QuickListID("unwatched");
+            Kernel.Instance.ItemRepository.SaveItem(quickListFolder);
+            Kernel.Instance.ItemRepository.SaveChildren(quickListFolder.Id, new List<Guid>());
+            quickListFolder.Id = QuickListID("watched");
+            Kernel.Instance.ItemRepository.SaveItem(quickListFolder);
+            Kernel.Instance.ItemRepository.SaveChildren(quickListFolder.Id, new List<Guid>());
+        }
+
         public virtual void UpdateQuickList(string recentItemOption) 
         {
             //rebuild the proper list
@@ -685,6 +699,10 @@ namespace MediaBrowser.Library.Entities {
 
             if (changed) {
                 SaveChildren(Children);
+                //we need to blank out the persisted RAL items for the top level folder
+                var item = this;
+                while (item.Parent != Kernel.Instance.RootFolder) item = item.Parent;
+                if (item != null) item.RemoveQuicklist();
                 OnChildrenChanged(new ChildrenChangedEventArgs { FolderContentChanged = true });
             }
             return changed;
