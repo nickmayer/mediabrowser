@@ -68,6 +68,8 @@
       <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
       <IntRangedValue Name="SelectedIndex" Value="0"/>
 
+      <cor:Int32 Name="backFocus" Int32="[Folder.SelectedChildIndex]" />
+
       <IntRangedValue Name="NavCount" Value="0" />
       <cor:Int32 Name="NormalKeyRepeat" Int32="250"/>
       <!-- This must be less than anim delay -->
@@ -279,7 +281,17 @@
           <Set Target="[SelectedItem]" Value="[Folder.SelectedChild]" />
         </Actions>
       </Changed>
-
+      
+      <!-- Navigate back to correct folder from RAL-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="false"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Repeater.DefaultFocusIndex]"  Value="[backFocus]"/>
+        </Actions>
+      </Rule>
 
       <!-- Playback Control -->
       <Rule ConditionLogicalOp="And">
@@ -795,7 +807,7 @@
       <Changed Source="[Clicker.Invoked]">
         <Actions>
           <PlaySound Sound="sound://sounds:Miniselect" />
-          <Invoke Target="[Application.Navigate]" item="[Item]"/>
+          <Invoke Target="[Item.SelectAction]"/>
         </Actions>
       </Changed>
     </Rules>

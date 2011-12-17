@@ -60,17 +60,20 @@
       <!-- Item Panel Commands-->
       <Command Name="CmdRecentlyAdded" />
       <Command Name="CmdRecentlyWatched" />
+      <Command Name="CmdRecentlyAddedUnwatched" />
 
       <ShortcutHandler Name="JumpForward" Shortcut="SkipForward" HandlerStage="Bubbled" Handle="true" />
       <ShortcutHandler Name="JumpBack" Shortcut="SkipBack" HandlerStage="Bubbled" Handle="true"/>
       <Timer Name="RefocusViewTimer" AutoRepeat="false" Interval="150" Enabled="true" />
-      <!-- this timer is needed to ensure focus stas with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
+      <!-- this timer is needed to ensure focus stays with the view properties when the viewType changes, doing it not via a timer doesn't always work-->
       <Timer Name="InitialFocusTimer" AutoRepeat="false" Interval="1500" Enabled="false" />
 
       <a:Clock Name="Clock"/>
 
       <lib:Item Name="SelectedItem" Item="[Folder.SelectedChild]" />
       <IntRangedValue Name="SelectedIndex" Value="0"/>
+      
+      <cor:Int32 Name="backFocus" Int32="[Folder.SelectedChildIndex]" />
 
       <IntRangedValue Name="NavCount" Value="0" />
       <cor:Int32 Name="NormalKeyRepeat" Int32="250"/>
@@ -79,19 +82,21 @@
       <cor:Int32 Name="AnimDelay" Int32="300" />
       <!-- This must be greater than NormalKeyRepeat-->
       <cor:Int32 Name="SpeedUpDelay" Int32="2"/>
-
+      
       <Command Name="ClosePopupPlay"/>
 
       <Choice Name="RecentItems">
         <Options>
           <cor:String String="[Application.LocalStrings.#RecentlyAddedEHS!cor:String]" />
           <cor:String String="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
+          <cor:String String="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
         </Options>
       </Choice>
 
     </Locals>
 
     <Rules>
+
       <!-- Default Values-->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[Repeater]" />
@@ -104,6 +109,16 @@
           <!--<Set Target="[RecentItems.ChosenIndex]" Value="1" />-->
           <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
           <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Application]" InitialEvaluate="true" >
+        <Conditions>
+          <Equality Source="[Application.RecentItemOption]" Value="unwatched"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
+          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
         </Actions>
       </Changed>
 
@@ -178,8 +193,14 @@
           <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyWatchedEHS!cor:String]" />
         </Actions>
       </Changed>
-
-
+      <Changed Source="[CmdRecentlyAddedUnwatched.Invoked]">
+        <Actions>
+          <Set Target="[Application.RecentItemOption]" Value="unwatched" />
+          <Invoke Target="[SelectedItem.RecentItemsChanged]" />
+          <Set Target="[NPVTitle.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
+          <Set Target="[NPVTitle2.Content]" Value="[Application.LocalStrings.#RecentlyAddedUnwatchedEHS!cor:String]" />
+        </Actions>
+      </Changed>
 
       <Changed Source="[RecentItems.ChosenIndex]" >
         <Actions>
@@ -241,6 +262,16 @@
         </Actions>
       </Changed>
 
+      <!-- Navigate back to correct folder from RAL-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.NavigatingForward]" Value="false"/>
+          <Equality Source="[Folder.Children.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Repeater.DefaultFocusIndex]"  Value="[backFocus]"/>
+        </Actions>
+      </Rule>
 
       <!-- Playback Control -->
       <Changed Source="[Application.ShowNowPlaying]" InitialEvaluate="true" >
@@ -531,7 +562,7 @@
               </Panel>
 
               <!-- Sorting Indicator -->
-              <Panel Name="recentlyAdded">
+              <Panel Name="recentlyAdded" Navigation="PreferFocusOrder">
                 <LayoutInput>
                   <FormLayoutInput Right="Parent,1,-125" Top="Parent,0, 10"  />
                 </LayoutInput>
@@ -545,13 +576,19 @@
                     </Layout>
                     <Children>
                       <hb:HeaderButton Label="[Application.LocalStrings.#AddedEHS!cor:String]"
-                                  Command="[CmdRecentlyAdded]"
-                                  BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
+                                       Command="[CmdRecentlyAdded]"
+                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconAdded"
                                   />
                       <hb:HeaderButton Label="[Application.LocalStrings.#WatchedEHS!cor:String]"
                                        Command="[CmdRecentlyWatched]"
                                        BulletImage="resx://MediaBrowser/MediaBrowser.Resources/IconWatched"
                                   />
+                      <hb:HeaderButton Label="[Application.LocalStrings.#UnwatchedEHS!cor:String]"
+                                       Command="[CmdRecentlyAddedUnwatched]"
+                                       BulletImage="resx://MediaBrowser/MediaBrowser.Resources/UnwatchedBase"
+                                       MaxSize="195,45"
+                                       InitialSize="75,45"
+                                  />                      
                     </Children>
                   </Panel>
 
@@ -918,9 +955,9 @@
             </LayoutInput>
           </Graphic>
           <Graphic Name="ItemPoster"  Content="resx://MediaBrowser/Mediabrowser.Resources/MissingPerson"
-                   MaintainAspectRatio="true" SizingPolicy="SizeToConstraint">
+                   MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" MaximumSize="155,0">
             <LayoutInput>
-              <AnchorLayoutInput Left="Parent,0" Top="Parent, 0"/>
+              <AnchorLayoutInput Left="Parent,0" Top="Parent, 0" Vertical="Center"/>
             </LayoutInput>
           </Graphic>
           <Panel Name="DescPanel">
