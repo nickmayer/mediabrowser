@@ -160,8 +160,8 @@ namespace MediaBrowser.Library.Persistance
                                 catch (Exception e)
                                 {
                                     string parameters = "";
-                                    foreach (var parm in command.Parameters)
-                                        parameters += " " + parm;
+                                    foreach (SQLiteParameter parm in command.Parameters)
+                                        parameters += " " + parm.Value;
                                     Logger.ReportException("Failed to execute SQL Stmt: " + command.CommandText + " Parms: "+parameters, e);
                                 }
                             }

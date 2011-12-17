@@ -64,6 +64,8 @@ namespace MediaBrowser.Library.Providers
 
         public override void Fetch()
         {
+            if (HasAltMeta()) return;  //never fetch if external local meta exists
+
             if (forceDownload || !Kernel.Instance.ConfigData.SaveLocalMeta || !HasLocalMeta())
             {
                 forceDownload = false; //reset
